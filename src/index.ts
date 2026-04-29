@@ -44,3 +44,21 @@ export { ReferenceFlags } from "./ir/model.js";
 
 export { OxcParser, ParseError } from "./parser/oxc.js";
 export type { ParseErrorDetail } from "./parser/oxc.js";
+
+export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
+export type { AnalysisResult } from "./analyzer/eslint-compat.js";
+
+export { walk } from "./analyzer/walk.js";
+export type { WalkVisitor } from "./analyzer/walk.js";
+
+export { ScopeImpl, VariableImpl } from "./analyzer/scope.js";
+export { ScopeManager } from "./analyzer/manager.js";
+
+export {
+  collectBindingIdentifiers,
+  declareVariable,
+} from "./analyzer/declare.js";
+export { hoistDeclarations } from "./analyzer/hoisting.js";
+
+export { DiagnosticCollector } from "./util/diagnostic.js";
+export { spanFromOffset } from "./util/span.js";

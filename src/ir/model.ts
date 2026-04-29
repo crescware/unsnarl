@@ -33,6 +33,7 @@ export interface AstNode {
   readonly type: string;
   readonly start?: number;
   readonly end?: number;
+  readonly [key: string]: unknown;
 }
 
 export interface AstIdentifier extends AstNode {
