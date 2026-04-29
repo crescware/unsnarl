@@ -40,7 +40,11 @@
       "type": "switch",
       "isStrict": true,
       "upper": "scope#0",
-      "childScopes": [],
+      "childScopes": [
+        "scope#2",
+        "scope#3",
+        "scope#4"
+      ],
       "variableScope": "scope#0",
       "block": {
         "type": "SwitchStatement",
@@ -52,16 +56,91 @@
       },
       "variables": [],
       "references": [
-        "ref#0",
-        "ref#1",
-        "ref#2",
-        "ref#3"
+        "ref#0"
       ],
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
         "parentType": "Program",
         "key": "body"
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 5,
+          "column": 2,
+          "offset": 53
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases"
+      }
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 8,
+          "column": 2,
+          "offset": 97
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases"
+      }
+    },
+    {
+      "id": "scope#4",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 11,
+          "column": 2,
+          "offset": 140
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases"
       }
     }
   ],
@@ -263,7 +342,7 @@
           "offset": 67
         }
       },
-      "from": "scope#1",
+      "from": "scope#2",
       "resolved": "scope#0:label@4",
       "owners": [
         "scope#0:label@4"
@@ -291,7 +370,7 @@
           "offset": 111
         }
       },
-      "from": "scope#1",
+      "from": "scope#3",
       "resolved": "scope#0:label@4",
       "owners": [
         "scope#0:label@4"
@@ -319,7 +398,7 @@
           "offset": 153
         }
       },
-      "from": "scope#1",
+      "from": "scope#4",
       "resolved": "scope#0:label@4",
       "owners": [
         "scope#0:label@4"

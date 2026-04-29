@@ -124,18 +124,16 @@ function handleEnter(
     case "SwitchStatement": {
       const ctx =
         parent && key !== null ? { parentType: parent.type, key } : null;
-      const scope = manager.push("switch", node as unknown as AstNode, ctx);
-      const cases = node["cases"];
-      if (Array.isArray(cases)) {
-        for (const c of cases) {
-          if (!isNodeLike(c)) {
-            continue;
-          }
-          const consequent = c["consequent"];
-          if (Array.isArray(consequent)) {
-            hoistDeclarations(consequent, scope, raw, diagnostics);
-          }
-        }
+      manager.push("switch", node as unknown as AstNode, ctx);
+      return;
+    }
+    case "SwitchCase": {
+      const ctx =
+        parent && key !== null ? { parentType: parent.type, key } : null;
+      const scope = manager.push("block", node as unknown as AstNode, ctx);
+      const consequent = node["consequent"];
+      if (Array.isArray(consequent)) {
+        hoistDeclarations(consequent, scope, raw, diagnostics);
       }
       return;
     }
@@ -184,6 +182,7 @@ function handleLeave(
     case "ForOfStatement":
     case "ForInStatement":
     case "SwitchStatement":
+    case "SwitchCase":
     case "CatchClause":
       manager.pop();
       return;

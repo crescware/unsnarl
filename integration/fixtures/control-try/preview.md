@@ -45,10 +45,10 @@ flowchart RL
     wr_ref_6(["let attempts<br/>L12"])
   end
   n_scope_0_value_4 -->|set| wr_ref_1
-  wr_ref_1 -->|set| wr_ref_5
+  n_scope_0_value_4 -->|set| wr_ref_5
   n_scope_0_attempts_19 -->|set| wr_ref_0
-  wr_ref_0 -->|set| wr_ref_4
-  wr_ref_4 -->|set| wr_ref_6
+  n_scope_0_attempts_19 -->|set| wr_ref_4
+  n_scope_0_attempts_19 -->|set| wr_ref_6
   n_scope_0_Number_84 -->|read,call| wr_ref_1
   n_scope_0_raw_39 -->|read| wr_ref_1
   wr_ref_5 -->|read| n_scope_0_result_182

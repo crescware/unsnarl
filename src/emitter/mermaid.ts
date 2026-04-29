@@ -194,9 +194,52 @@ export class MermaidEmitter implements Emitter {
             return `else L${line}`;
           }
         }
+        if (ctx.parentType === "SwitchStatement" && ctx.key === "cases") {
+          return `case L${line}`;
+        }
       }
       return null;
     }
+
+    const isAncestorScope = (
+      ancestorId: string,
+      descendantId: string,
+    ): boolean => {
+      let cur: SerializedScope | undefined = scopeMap.get(descendantId);
+      while (cur) {
+        if (cur.id === ancestorId) {
+          return true;
+        }
+        if (!cur.upper) {
+          return false;
+        }
+        cur = scopeMap.get(cur.upper);
+      }
+      return false;
+    };
+
+    const isCaseScope = (scopeId: string): boolean => {
+      const scope = scopeMap.get(scopeId);
+      return (
+        scope?.type === "block" &&
+        scope.blockContext?.parentType === "SwitchStatement" &&
+        scope.blockContext?.key === "cases"
+      );
+    };
+
+    const branchScopeOf = (scopeId: string): string | null => {
+      let cur: SerializedScope | undefined = scopeMap.get(scopeId);
+      while (cur) {
+        if (isCaseScope(cur.id)) {
+          return cur.id;
+        }
+        if (!cur.upper) {
+          return null;
+        }
+        cur = scopeMap.get(cur.upper);
+      }
+      return null;
+    };
 
     function isFunctionSubgraph(scope: SerializedScope): boolean {
       return subgraphOwnerVar.has(scope.id);
@@ -298,6 +341,53 @@ export class MermaidEmitter implements Emitter {
       return stateRef === varId ? nodeId(varId) : writeOpNodeId(stateRef);
     };
 
+    const readOrigins = (
+      varId: string,
+      refOffset: number,
+      refScopeId: string,
+    ): string[] => {
+      const ops = writeOpsByVariable.get(varId) ?? [];
+      const prev = ops.filter((op) => op.offset < refOffset);
+      const last = prev[prev.length - 1];
+      if (!last) {
+        return [nodeId(varId)];
+      }
+      if (isAncestorScope(last.scopeId, refScopeId)) {
+        return [writeOpNodeId(last.refId)];
+      }
+      const lastBranch = branchScopeOf(last.scopeId);
+      if (!lastBranch) {
+        return [writeOpNodeId(last.refId)];
+      }
+      const switchScopeId = scopeMap.get(lastBranch)?.upper;
+      if (!switchScopeId) {
+        return [writeOpNodeId(last.refId)];
+      }
+      const caseScopeIds = new Set<string>();
+      for (const op of prev) {
+        const branch = branchScopeOf(op.scopeId);
+        if (branch && scopeMap.get(branch)?.upper === switchScopeId) {
+          caseScopeIds.add(branch);
+        }
+      }
+      const origins: string[] = [];
+      for (const caseId of caseScopeIds) {
+        let lastOp: WriteOp | null = null;
+        for (const op of prev) {
+          if (op.scopeId === caseId || isAncestorScope(caseId, op.scopeId)) {
+            lastOp = op;
+          }
+        }
+        if (lastOp) {
+          origins.push(writeOpNodeId(lastOp.refId));
+        }
+      }
+      if (origins.length === 0) {
+        return [writeOpNodeId(last.refId)];
+      }
+      return origins;
+    };
+
     const ownerTargetId = (ownerVarId: string, offset: number): string => {
       const ops = writeOpsByVariable.get(ownerVarId) ?? [];
       let last: WriteOp | null = null;
@@ -315,10 +405,23 @@ export class MermaidEmitter implements Emitter {
       if (!head) {
         continue;
       }
-      let prevId = nodeId(head.varId);
-      for (const op of ops) {
+      for (let i = 0; i < ops.length; i++) {
+        const op = ops[i];
+        if (!op) {
+          continue;
+        }
+        let prevId = nodeId(op.varId);
+        for (let j = i - 1; j >= 0; j--) {
+          const candidate = ops[j];
+          if (!candidate) {
+            continue;
+          }
+          if (isAncestorScope(candidate.scopeId, op.scopeId)) {
+            prevId = writeOpNodeId(candidate.refId);
+            break;
+          }
+        }
         lines.push(`  ${prevId} -->|set| ${writeOpNodeId(op.refId)}`);
-        prevId = writeOpNodeId(op.refId);
       }
     }
 
@@ -344,22 +447,30 @@ export class MermaidEmitter implements Emitter {
         continue;
       }
       const label = edgeLabel(r);
-      const fromId = stateRefId(r.id, r.resolved);
+      const fromIds = readOrigins(r.resolved, r.identifier.span.offset, r.from);
       if (r.owners.length > 0) {
         for (const ownerId of r.owners) {
           if (ownerId === r.resolved) {
             continue;
           }
           const targetId = ownerTargetId(ownerId, r.identifier.span.offset);
-          lines.push(`  ${fromId} -->|${label}| ${targetId}`);
+          for (const fromId of fromIds) {
+            lines.push(`  ${fromId} -->|${label}| ${targetId}`);
+          }
         }
       } else {
         const enclosingFn = enclosingFunctionVar(r.from);
         if (enclosingFn) {
-          lines.push(`  ${fromId} -->|${label}| ${returnNodeId(enclosingFn)}`);
+          for (const fromId of fromIds) {
+            lines.push(
+              `  ${fromId} -->|${label}| ${returnNodeId(enclosingFn)}`,
+            );
+          }
         } else {
           needsModuleRoot = true;
-          lines.push(`  ${fromId} -->|${label}| ${MODULE_ROOT_ID}`);
+          for (const fromId of fromIds) {
+            lines.push(`  ${fromId} -->|${label}| ${MODULE_ROOT_ID}`);
+          }
         }
       }
     }
