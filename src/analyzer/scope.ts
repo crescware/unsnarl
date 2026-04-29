@@ -1,8 +1,11 @@
+import { ReferenceFlags } from "../ir/model.js";
 import type {
+  AstExpression,
   AstIdentifier,
   AstNode,
   Definition,
   Reference,
+  ReferenceFlagBits,
   Scope,
   ScopeType,
   Variable,
@@ -60,5 +63,52 @@ export class VariableImpl implements Variable {
 
   unsnarlIsUnused(): boolean {
     return this.references.length === 0;
+  }
+}
+
+export class ReferenceImpl implements Reference {
+  readonly identifier: AstIdentifier;
+  readonly from: Scope;
+  resolved: Variable | null = null;
+  readonly writeExpr: AstExpression | null;
+  readonly init: boolean;
+  readonly unsnarlFlags: ReferenceFlagBits;
+
+  constructor(opts: {
+    identifier: AstIdentifier;
+    from: Scope;
+    flags: ReferenceFlagBits;
+    init: boolean;
+    writeExpr?: AstExpression | null;
+  }) {
+    this.identifier = opts.identifier;
+    this.from = opts.from;
+    this.unsnarlFlags = opts.flags;
+    this.init = opts.init;
+    this.writeExpr = opts.writeExpr ?? null;
+  }
+
+  isRead(): boolean {
+    return (this.unsnarlFlags & ReferenceFlags.Read) !== 0;
+  }
+
+  isWrite(): boolean {
+    return (this.unsnarlFlags & ReferenceFlags.Write) !== 0;
+  }
+
+  isReadOnly(): boolean {
+    return this.isRead() && !this.isWrite();
+  }
+
+  isWriteOnly(): boolean {
+    return this.isWrite() && !this.isRead();
+  }
+
+  isReadWrite(): boolean {
+    return this.isRead() && this.isWrite();
+  }
+
+  isCall(): boolean {
+    return (this.unsnarlFlags & ReferenceFlags.Call) !== 0;
   }
 }

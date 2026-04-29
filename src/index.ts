@@ -49,9 +49,9 @@ export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
 export type { AnalysisResult } from "./analyzer/eslint-compat.js";
 
 export { walk } from "./analyzer/walk.js";
-export type { WalkVisitor } from "./analyzer/walk.js";
+export type { PathEntry, WalkVisitor } from "./analyzer/walk.js";
 
-export { ScopeImpl, VariableImpl } from "./analyzer/scope.js";
+export { ReferenceImpl, ScopeImpl, VariableImpl } from "./analyzer/scope.js";
 export { ScopeManager } from "./analyzer/manager.js";
 
 export {
@@ -60,5 +60,12 @@ export {
 } from "./analyzer/declare.js";
 export { hoistDeclarations } from "./analyzer/hoisting.js";
 
+export { classifyIdentifier } from "./analyzer/classify.js";
+export type { ClassifyResult } from "./analyzer/classify.js";
+
+export { bindReference, resolveInScopeChain } from "./analyzer/resolve.js";
+
 export { DiagnosticCollector } from "./util/diagnostic.js";
 export { spanFromOffset } from "./util/span.js";
+
+export { makeReferenceId, makeScopeId, makeVariableId } from "./ir/id.js";

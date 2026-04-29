@@ -1,10 +1,14 @@
-import type { AstNode, Diagnostic, Scope } from "../ir/model.js";
+import type { AstIdentifier, AstNode, Diagnostic, Scope } from "../ir/model.js";
 import type { ParsedSource, ScopeAnalyzer } from "../pipeline/types.js";
 import { DiagnosticCollector } from "../util/diagnostic.js";
 import { spanFromOffset } from "../util/span.js";
+import { classifyIdentifier } from "./classify.js";
 import { collectBindingIdentifiers, declareVariable } from "./declare.js";
 import { hoistDeclarations } from "./hoisting.js";
 import { ScopeManager } from "./manager.js";
+import { bindReference } from "./resolve.js";
+import { ReferenceImpl } from "./scope.js";
+import type { PathEntry } from "./walk.js";
 import { walk } from "./walk.js";
 
 export interface AnalysisResult {
@@ -38,11 +42,12 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
     hoistInto(program, manager.current(), parsed.raw, diagnostics);
 
     walk(program as unknown as AstNode, {
-      enter(node, parent, key) {
+      enter(node, parent, key, path) {
         handleEnter(
           node as unknown as NodeLike,
           parent as unknown as NodeLike | null,
           key,
+          path,
           manager,
           parsed.raw,
           diagnostics,
@@ -69,10 +74,15 @@ function handleEnter(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
+  path: ReadonlyArray<PathEntry>,
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
 ): void {
+  if (node.type === "Identifier" || node.type === "JSXIdentifier") {
+    handleIdentifierReference(node, parent, key, path, manager);
+    return;
+  }
   switch (node.type) {
     case "FunctionDeclaration":
     case "FunctionExpression":
@@ -270,6 +280,31 @@ function declareForLeft(
       }
     }
   }
+}
+
+function handleIdentifierReference(
+  node: NodeLike,
+  parent: NodeLike | null,
+  key: string | null,
+  path: ReadonlyArray<PathEntry>,
+  manager: ScopeManager,
+): void {
+  const result = classifyIdentifier(
+    parent as unknown as AstNode | null,
+    key,
+    path,
+  );
+  if (result.kind !== "reference") {
+    return;
+  }
+  const ref = new ReferenceImpl({
+    identifier: node as unknown as AstIdentifier,
+    from: manager.current(),
+    flags: result.flags,
+    init: result.init,
+    writeExpr: result.writeExpr,
+  });
+  bindReference(manager.current(), ref);
 }
 
 function isNodeLike(value: unknown): value is NodeLike {
