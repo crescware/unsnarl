@@ -34,8 +34,33 @@ describe("MermaidEmitter", () => {
   test("emits flowchart RL with one node per declared variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
     expect(out).toMatch(/^flowchart RL\n/);
-    expect(out).toContain("a : Variable");
-    expect(out).toContain("b : Variable");
+    expect(out).toContain('"a<br/>L1"');
+    expect(out).toContain('"b<br/>L2"');
+  });
+
+  test("decorates labels per Definition kind", () => {
+    const out = emit(
+      [
+        "import imp from 'x';",
+        "function foo() { return 1; }",
+        "class Bar {}",
+        "function take(p: number) { try { p; } catch (e) { e; } }",
+        "const used = imp;",
+        "const a = take;",
+        "const b = foo;",
+        "const c = Bar;",
+        "const d = used;",
+        "void a; void b; void c; void d;",
+      ].join("\n"),
+    );
+    expect(out).toContain('"import imp<br/>');
+    expect(out).toContain('"foo()<br/>');
+    expect(out).toContain('"class Bar<br/>');
+    expect(out).toContain('"take()<br/>');
+    expect(out).toContain('"param p<br/>');
+    expect(out).toContain('"catch e<br/>');
+    expect(out).toContain('"used<br/>');
+    expect(out).not.toMatch(/" : Variable/);
   });
 
   test("draws a data-flow edge from the source variable to the initialized variable", () => {
@@ -50,7 +75,7 @@ describe("MermaidEmitter", () => {
 
   test("renders a function as a subgraph and routes return through a return node", () => {
     const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
-    expect(out).toMatch(/subgraph n_scope_0_f_9\["f : FunctionName/);
+    expect(out).toMatch(/subgraph n_scope_0_f_9\["f\(\)/);
     expect(out).toContain("direction RL");
     expect(out).toContain("return_scope_0_f_9((return))");
     expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);

@@ -36,8 +36,8 @@ describe("createDefaultPipeline", () => {
       sourcePath: "input.ts",
     });
     expect(out).toMatch(/^flowchart RL\n/);
-    expect(out).toContain("a : Variable");
-    expect(out).toContain("b : Variable");
+    expect(out).toContain('"a<br/>');
+    expect(out).toContain('"b<br/>');
   });
 
   test("throws for unknown formats with available list", () => {

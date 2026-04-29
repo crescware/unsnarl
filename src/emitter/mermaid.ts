@@ -142,9 +142,30 @@ export class MermaidEmitter implements Emitter {
 }
 
 function variableLabel(v: SerializedVariable): string {
-  const kind = v.defs[0]?.type ?? "Variable";
+  const kind = v.defs[0]?.type;
   const line = v.identifiers[0]?.line ?? v.defs[0]?.name.span.line ?? 0;
-  return `${escape(v.name)} : ${kind}<br/>L${line}`;
+  const name = escape(v.name);
+  let head: string;
+  switch (kind) {
+    case "FunctionName":
+      head = `${name}()`;
+      break;
+    case "ClassName":
+      head = `class ${name}`;
+      break;
+    case "ImportBinding":
+      head = `import ${name}`;
+      break;
+    case "Parameter":
+      head = `param ${name}`;
+      break;
+    case "CatchClause":
+      head = `catch ${name}`;
+      break;
+    default:
+      head = name;
+  }
+  return `${head}<br/>L${line}`;
 }
 
 function unresolvedLabel(v: SerializedVariable): string {

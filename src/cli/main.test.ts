@@ -90,7 +90,7 @@ describe("runCli (end-to-end)", () => {
     const r = await captureRun(["--format", "mermaid", inputPath]);
     expect(r.exitCode).toBe(0);
     expect(r.stdout).toMatch(/^flowchart RL\n/);
-    expect(r.stdout).toContain("a : Variable");
+    expect(r.stdout).toContain('"a<br/>');
   });
 
   test("missing input returns exit 2 with usage", async () => {

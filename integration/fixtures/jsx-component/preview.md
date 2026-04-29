@@ -24,12 +24,12 @@ const root = App;
 
 ```mermaid
 flowchart RL
-  n_scope_0_Fragment_9["Fragment : ImportBinding<br/>L1"]
-  n_scope_0_Hello_79["Hello : Variable<br/>L7"]
-  n_scope_0_App_196["App : Variable<br/>L13"]
-  n_scope_0_root_237["root : Variable<br/>L15"]
+  n_scope_0_Fragment_9["import Fragment<br/>L1"]
+  n_scope_0_Hello_79["Hello<br/>L7"]
+  n_scope_0_App_196["App<br/>L13"]
+  n_scope_0_root_237["root<br/>L15"]
   n_scope_0_span_125["(unresolved:span)"]
-  n_scope_1_props_88["props : Parameter<br/>L7"]
+  n_scope_1_props_88["param props<br/>L7"]
   n_scope_1_props_88 -->|read| module_root
   n_scope_0_Fragment_9 -->|read| module_root
   n_scope_0_span_125 -->|read| module_root
