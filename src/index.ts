@@ -25,6 +25,7 @@ export type {
   DefinitionType,
   Diagnostic,
   DiagnosticKind,
+  ImportKind,
   Language,
   Reference,
   ReferenceFlagBits,
