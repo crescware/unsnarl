@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/unused-and-var/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_used_9",
+      "kind": "ImportBinding",
+      "name": "used",
+      "line": 1,
+      "parent": null,
+      "importKind": "named",
+      "importedName": "used",
+      "importSource": "module"
+    },
+    {
+      "id": "n_scope_0_neverCalled_15",
+      "kind": "ImportBinding",
+      "name": "neverCalled",
+      "line": 1,
+      "parent": null,
+      "importKind": "named",
+      "importedName": "neverCalled",
+      "importSource": "module",
+      "unused": true
+    },
+    {
+      "id": "n_scope_0_a_67",
+      "kind": "Variable",
+      "name": "a",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_ignored_83",
+      "kind": "Variable",
+      "name": "ignored",
+      "line": 5,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0,
+      "parent": null
+    },
+    {
+      "id": "mod_module",
+      "kind": "ModuleSource",
+      "name": "module",
+      "line": 1,
+      "parent": null
+    }
+  ],
+  "subgraphs": [],
+  "edges": [
+    {
+      "from": "n_scope_0_used_9",
+      "to": "n_scope_0_a_67",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_67",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "mod_module",
+      "to": "n_scope_0_used_9",
+      "label": "read"
+    },
+    {
+      "from": "mod_module",
+      "to": "n_scope_0_neverCalled_15",
+      "label": "read"
+    }
+  ]
+}

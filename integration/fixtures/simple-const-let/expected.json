@@ -1,0 +1,91 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/simple-const-let/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_greeting_6",
+      "kind": "Variable",
+      "name": "greeting",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_counter_30",
+      "kind": "Variable",
+      "name": "counter",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "n_scope_0_message_97",
+      "kind": "Variable",
+      "name": "message",
+      "line": 6,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "n_scope_0_unused_123",
+      "kind": "Variable",
+      "name": "unused",
+      "line": 7,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "wr_ref_0",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 3,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_2",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_3",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 5,
+      "parent": null,
+      "declarationKind": "let"
+    }
+  ],
+  "subgraphs": [],
+  "edges": [
+    {
+      "from": "n_scope_0_counter_30",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_greeting_6",
+      "to": "n_scope_0_message_97",
+      "label": "read"
+    }
+  ]
+}

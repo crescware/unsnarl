@@ -57,6 +57,17 @@ export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
 export { FlatSerializer } from "./serializer/flat.js";
 
 export { IrEmitter } from "./emitter/ir.js";
+export { JsonEmitter } from "./emitter/json.js";
+export { buildVisualGraph } from "./visual-graph/builder.js";
+export type {
+  Direction,
+  NodeKind,
+  SubgraphKind,
+  VisualEdge,
+  VisualGraph,
+  VisualNode,
+  VisualSubgraph,
+} from "./visual-graph/model.js";
 export { MarkdownEmitter } from "./emitter/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";

@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-let/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "return_scope_0_f_9",
+      "kind": "ReturnSink",
+      "name": "return",
+      "line": 1,
+      "parent": "n_scope_0_f_9"
+    },
+    {
+      "id": "n_scope_1_v_21",
+      "kind": "Variable",
+      "name": "v",
+      "line": 2,
+      "parent": "n_scope_0_f_9",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_0",
+      "kind": "WriteOp",
+      "name": "v",
+      "line": 3,
+      "parent": "n_scope_0_f_9",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_1",
+      "kind": "WriteOp",
+      "name": "v",
+      "line": 4,
+      "parent": "n_scope_0_f_9",
+      "declarationKind": "let"
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "n_scope_0_f_9",
+      "kind": "function",
+      "line": 1,
+      "parent": null,
+      "direction": "RL",
+      "ownerName": "f",
+      "unused": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_v_21",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "return_scope_0_f_9",
+      "label": "read"
+    }
+  ]
+}

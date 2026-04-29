@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-and-class/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_Counter_62",
+      "kind": "ClassName",
+      "name": "Counter",
+      "line": 5,
+      "parent": null
+    },
+    {
+      "id": "n_scope_0_total_94",
+      "kind": "Variable",
+      "name": "total",
+      "line": 9,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_c_119",
+      "kind": "Variable",
+      "name": "c",
+      "line": 10,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "n_scope_0_result_144",
+      "kind": "Variable",
+      "name": "result",
+      "line": 11,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "return_scope_0_add_9",
+      "kind": "ReturnSink",
+      "name": "return",
+      "line": 1,
+      "parent": "n_scope_0_add_9"
+    },
+    {
+      "id": "n_scope_1_a_13",
+      "kind": "Parameter",
+      "name": "a",
+      "line": 1,
+      "parent": "n_scope_0_add_9"
+    },
+    {
+      "id": "n_scope_1_b_24",
+      "kind": "Parameter",
+      "name": "b",
+      "line": 1,
+      "parent": "n_scope_0_add_9"
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "n_scope_0_add_9",
+      "kind": "function",
+      "line": 1,
+      "parent": null,
+      "direction": "RL",
+      "ownerName": "add"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_13",
+      "to": "return_scope_0_add_9",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_24",
+      "to": "return_scope_0_add_9",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_add_9",
+      "to": "n_scope_0_total_94",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_Counter_62",
+      "to": "n_scope_0_c_119",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_total_94",
+      "to": "n_scope_0_result_144",
+      "label": "read"
+    }
+  ]
+}

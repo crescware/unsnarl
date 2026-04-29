@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-stacked/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_label_4",
+      "kind": "Variable",
+      "name": "label",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "n_scope_0_kind_22",
+      "kind": "Variable",
+      "name": "kind",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_result_145",
+      "kind": "Variable",
+      "name": "result",
+      "line": 13,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "wr_ref_1",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 7,
+      "parent": "s_scope_3",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_2",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 10,
+      "parent": "s_scope_4",
+      "declarationKind": "let"
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "s_scope_1",
+      "kind": "switch",
+      "line": 4,
+      "parent": null,
+      "direction": "RL"
+    },
+    {
+      "id": "s_scope_2",
+      "kind": "case",
+      "line": 5,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": "\"a\""
+    },
+    {
+      "id": "s_scope_3",
+      "kind": "case",
+      "line": 6,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": "\"b\""
+    },
+    {
+      "id": "s_scope_4",
+      "kind": "case",
+      "line": 9,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": null
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_1",
+      "label": "fallthrough"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_kind_22",
+      "to": "s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_145",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "n_scope_0_result_145",
+      "label": "read"
+    }
+  ]
+}

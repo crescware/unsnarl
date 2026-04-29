@@ -58,10 +58,11 @@ describe("runCli (end-to-end)", () => {
     expect(r.stdout).toMatch(/--format/);
   });
 
-  test("--list-formats lists ir and mermaid", async () => {
+  test("--list-formats lists ir, json, and mermaid", async () => {
     const r = await captureRun(["--list-formats"]);
     expect(r.exitCode).toBe(0);
     expect(r.stdout).toContain("ir");
+    expect(r.stdout).toContain("json");
     expect(r.stdout).toContain("mermaid");
   });
 

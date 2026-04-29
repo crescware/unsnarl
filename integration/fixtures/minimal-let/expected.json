@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-let/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_count_4",
+      "kind": "Variable",
+      "name": "count",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_0",
+      "kind": "WriteOp",
+      "name": "count",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "let"
+    }
+  ],
+  "subgraphs": [],
+  "edges": [
+    {
+      "from": "n_scope_0_count_4",
+      "to": "wr_ref_0",
+      "label": "set"
+    }
+  ]
+}

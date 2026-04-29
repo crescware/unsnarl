@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/destructuring/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_source_6",
+      "kind": "Variable",
+      "name": "source",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_list_61",
+      "kind": "Variable",
+      "name": "list",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_a_95",
+      "kind": "Variable",
+      "name": "a",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_renamed_101",
+      "kind": "Variable",
+      "name": "renamed",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_d_139",
+      "kind": "Variable",
+      "name": "d",
+      "line": 5,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_first_162",
+      "kind": "Variable",
+      "name": "first",
+      "line": 6,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_third_171",
+      "kind": "Variable",
+      "name": "third",
+      "line": 6,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_rest_181",
+      "kind": "Variable",
+      "name": "rest",
+      "line": 6,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_spread_206",
+      "kind": "Variable",
+      "name": "spread",
+      "line": 7,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_sum_232",
+      "kind": "Variable",
+      "name": "sum",
+      "line": 9,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    }
+  ],
+  "subgraphs": [],
+  "edges": [
+    {
+      "from": "n_scope_0_source_6",
+      "to": "n_scope_0_a_95",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_source_6",
+      "to": "n_scope_0_renamed_101",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_source_6",
+      "to": "n_scope_0_d_139",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_list_61",
+      "to": "n_scope_0_first_162",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_list_61",
+      "to": "n_scope_0_third_171",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_list_61",
+      "to": "n_scope_0_rest_181",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_source_6",
+      "to": "n_scope_0_spread_206",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_95",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_renamed_101",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_d_139",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_first_162",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_third_171",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_rest_181",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_spread_206",
+      "to": "n_scope_0_sum_232",
+      "label": "read"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-component/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_Fragment_9",
+      "kind": "ImportBinding",
+      "name": "Fragment",
+      "line": 1,
+      "parent": null,
+      "importKind": "named",
+      "importedName": "Fragment",
+      "importSource": "react"
+    },
+    {
+      "id": "n_scope_0_root_237",
+      "kind": "Variable",
+      "name": "root",
+      "line": 15,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "n_scope_0_span_125",
+      "kind": "ImplicitGlobalVariable",
+      "name": "span",
+      "line": 9,
+      "parent": null
+    },
+    {
+      "id": "return_scope_0_Hello_79",
+      "kind": "ReturnSink",
+      "name": "return",
+      "line": 7,
+      "parent": "n_scope_0_Hello_79"
+    },
+    {
+      "id": "n_scope_1_props_88",
+      "kind": "Parameter",
+      "name": "props",
+      "line": 7,
+      "parent": "n_scope_0_Hello_79"
+    },
+    {
+      "id": "return_scope_0_App_196",
+      "kind": "ReturnSink",
+      "name": "return",
+      "line": 13,
+      "parent": "n_scope_0_App_196"
+    },
+    {
+      "id": "mod_react",
+      "kind": "ModuleSource",
+      "name": "react",
+      "line": 1,
+      "parent": null
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "n_scope_0_Hello_79",
+      "kind": "function",
+      "line": 7,
+      "parent": null,
+      "direction": "RL",
+      "ownerName": "Hello"
+    },
+    {
+      "id": "n_scope_0_App_196",
+      "kind": "function",
+      "line": 13,
+      "parent": null,
+      "direction": "RL",
+      "ownerName": "App"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Fragment_9",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_span_125",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_props_88",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Hello_79",
+      "to": "return_scope_0_App_196",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_App_196",
+      "to": "n_scope_0_root_237",
+      "label": "read"
+    },
+    {
+      "from": "mod_react",
+      "to": "n_scope_0_Fragment_9",
+      "label": "read"
+    }
+  ]
+}

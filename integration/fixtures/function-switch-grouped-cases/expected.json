@@ -1,0 +1,175 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-switch-grouped-cases/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "return_scope_0_getDayType_9",
+      "kind": "ReturnSink",
+      "name": "return",
+      "line": 1,
+      "parent": "n_scope_0_getDayType_9"
+    },
+    {
+      "id": "n_scope_1_day_20",
+      "kind": "Parameter",
+      "name": "day",
+      "line": 1,
+      "parent": "n_scope_0_getDayType_9"
+    },
+    {
+      "id": "n_scope_1_ret_33",
+      "kind": "Variable",
+      "name": "ret",
+      "line": 2,
+      "parent": "n_scope_0_getDayType_9",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_1",
+      "kind": "WriteOp",
+      "name": "ret",
+      "line": 9,
+      "parent": "s_scope_7",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_2",
+      "kind": "WriteOp",
+      "name": "ret",
+      "line": 13,
+      "parent": "s_scope_9",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_3",
+      "kind": "WriteOp",
+      "name": "ret",
+      "line": 16,
+      "parent": "s_scope_10",
+      "declarationKind": "let"
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "n_scope_0_getDayType_9",
+      "kind": "function",
+      "line": 1,
+      "parent": null,
+      "direction": "RL",
+      "ownerName": "getDayType",
+      "unused": true
+    },
+    {
+      "id": "s_scope_2",
+      "kind": "switch",
+      "line": 3,
+      "parent": "n_scope_0_getDayType_9",
+      "direction": "RL"
+    },
+    {
+      "id": "s_scope_3",
+      "kind": "case",
+      "line": 4,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'mon'"
+    },
+    {
+      "id": "s_scope_4",
+      "kind": "case",
+      "line": 5,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'tue'"
+    },
+    {
+      "id": "s_scope_5",
+      "kind": "case",
+      "line": 6,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'wed'"
+    },
+    {
+      "id": "s_scope_6",
+      "kind": "case",
+      "line": 7,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'thu'"
+    },
+    {
+      "id": "s_scope_7",
+      "kind": "case",
+      "line": 8,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'fri'"
+    },
+    {
+      "id": "s_scope_8",
+      "kind": "case",
+      "line": 11,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'sat'"
+    },
+    {
+      "id": "s_scope_9",
+      "kind": "case",
+      "line": 12,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": "'sun'"
+    },
+    {
+      "id": "s_scope_10",
+      "kind": "case",
+      "line": 15,
+      "parent": "s_scope_2",
+      "direction": "RL",
+      "caseTest": null
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_ret_33",
+      "to": "wr_ref_1",
+      "label": "fallthrough"
+    },
+    {
+      "from": "n_scope_1_ret_33",
+      "to": "wr_ref_2",
+      "label": "fallthrough"
+    },
+    {
+      "from": "n_scope_1_ret_33",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_day_20",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "return_scope_0_getDayType_9",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "return_scope_0_getDayType_9",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "return_scope_0_getDayType_9",
+      "label": "read"
+    }
+  ]
+}

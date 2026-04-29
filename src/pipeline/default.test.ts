@@ -6,9 +6,31 @@ import {
 } from "./default.js";
 
 describe("createDefaultPipeline", () => {
-  test("registers ir, mermaid, and markdown emitters by default", () => {
+  test("registers ir, json, mermaid, and markdown emitters by default", () => {
     const reg = createDefaultEmitterRegistry();
-    expect([...reg.list()].sort()).toEqual(["ir", "markdown", "mermaid"]);
+    expect([...reg.list()].sort()).toEqual([
+      "ir",
+      "json",
+      "markdown",
+      "mermaid",
+    ]);
+  });
+
+  test("end-to-end: emits VisualGraph JSON for the same input", () => {
+    const pipeline = createDefaultPipeline();
+    const out = pipeline.run("const a = 1;\nconst b = a;\n", {
+      format: "json",
+      language: "ts",
+      sourcePath: "input.ts",
+      emit: { pretty: false },
+    });
+    const graph = JSON.parse(out);
+    expect(graph.version).toBe(1);
+    expect(graph.direction).toBe("RL");
+    expect(graph.nodes.map((n: { name: string }) => n.name).sort()).toEqual([
+      "a",
+      "b",
+    ]);
   });
 
   test("end-to-end: parses TS, analyzes, serializes, emits IR JSON", () => {
@@ -48,6 +70,6 @@ describe("createDefaultPipeline", () => {
         language: "ts",
         sourcePath: "x.ts",
       }),
-    ).toThrow(/ir, mermaid/);
+    ).toThrow(/ir, json/);
   });
 });

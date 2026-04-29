@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-const-chain/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_a_6",
+      "kind": "Variable",
+      "name": "a",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_b_21",
+      "kind": "Variable",
+      "name": "b",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_c_36",
+      "kind": "Variable",
+      "name": "c",
+      "line": 3,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_d_60",
+      "kind": "Variable",
+      "name": "d",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    }
+  ],
+  "subgraphs": [],
+  "edges": [
+    {
+      "from": "n_scope_0_a_6",
+      "to": "n_scope_0_b_21",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_21",
+      "to": "n_scope_0_c_36",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_36",
+      "to": "n_scope_0_d_60",
+      "label": "read"
+    }
+  ]
+}

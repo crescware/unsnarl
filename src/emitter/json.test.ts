@@ -1,0 +1,134 @@
+import { describe, expect, test } from "vitest";
+
+import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
+import { OxcParser } from "../parser/oxc.js";
+import { FlatSerializer } from "../serializer/flat.js";
+import { JsonEmitter } from "./json.js";
+
+const parser = new OxcParser();
+const analyzer = new EslintCompatAnalyzer();
+const serializer = new FlatSerializer();
+const emitter = new JsonEmitter();
+
+function emit(code: string, pretty = true): string {
+  const parsed = parser.parse(code, {
+    language: "ts",
+    sourcePath: "input.ts",
+  });
+  const analyzed = analyzer.analyze(parsed);
+  const ir = serializer.serialize({
+    rootScope: analyzed.rootScope,
+    diagnostics: analyzed.diagnostics,
+    raw: analyzed.raw,
+    source: { path: "input.ts", language: "ts" },
+  });
+  return emitter.emit(ir, pretty ? {} : { pretty: false });
+}
+
+describe("JsonEmitter", () => {
+  test("identifies as 'json' with the application/json content type", () => {
+    expect(emitter.format).toBe("json");
+    expect(emitter.contentType).toBe("application/json");
+  });
+
+  test("emits a versioned VisualGraph with nodes/subgraphs/edges arrays", () => {
+    const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
+    expect(graph.version).toBe(1);
+    expect(graph.source).toEqual({ path: "input.ts", language: "ts" });
+    expect(graph.direction).toBe("RL");
+    expect(Array.isArray(graph.nodes)).toBe(true);
+    expect(Array.isArray(graph.subgraphs)).toBe(true);
+    expect(Array.isArray(graph.edges)).toBe(true);
+  });
+
+  test("nodes carry semantic kind and raw attributes, never a precomputed label", () => {
+    const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
+    const a = graph.nodes.find((n: { name: string }) => n.name === "a");
+    expect(a.kind).toBe("Variable");
+    expect(a.declarationKind).toBe("const");
+    expect(a.label).toBeUndefined();
+  });
+
+  test("import nodes record kind / source / imported name", () => {
+    const graph = JSON.parse(
+      emit(
+        [
+          "import def from 'some-default';",
+          "import { other as renamed } from 'some-named';",
+          "void def; void renamed;",
+        ].join("\n"),
+      ),
+    );
+    const def = graph.nodes.find((n: { name: string }) => n.name === "def");
+    expect(def.kind).toBe("ImportBinding");
+    expect(def.importKind).toBe("default");
+    expect(def.importSource).toBe("some-default");
+    expect(def.importedName).toBeNull();
+
+    const renamed = graph.nodes.find(
+      (n: { name: string }) => n.name === "renamed",
+    );
+    expect(renamed.importKind).toBe("named");
+    expect(renamed.importedName).toBe("other");
+
+    const moduleNode = graph.nodes.find(
+      (n: { kind: string; name: string }) =>
+        n.kind === "ModuleSource" && n.name === "some-default",
+    );
+    expect(moduleNode).toBeDefined();
+  });
+
+  test("write ops appear as WriteOp nodes carrying the underlying declaration kind", () => {
+    const graph = JSON.parse(
+      emit("function f() { let v = 0; v = 1; v = 2; return v; }\n"),
+    );
+    const writeOps = graph.nodes.filter(
+      (n: { kind: string }) => n.kind === "WriteOp",
+    );
+    expect(writeOps).toHaveLength(2);
+    for (const op of writeOps) {
+      expect(op.declarationKind).toBe("let");
+      expect(op.name).toBe("v");
+    }
+  });
+
+  test("function bodies become subgraphs of kind 'function' with the owner name", () => {
+    const graph = JSON.parse(emit("function add(a, b) { return a + b; }\n"));
+    const fnSubgraph = graph.subgraphs.find(
+      (s: { kind: string }) => s.kind === "function",
+    );
+    expect(fnSubgraph).toBeDefined();
+    expect(fnSubgraph.ownerName).toBe("add");
+    const returnSink = graph.nodes.find(
+      (n: { kind: string }) => n.kind === "ReturnSink",
+    );
+    expect(returnSink).toBeDefined();
+    expect(returnSink.parent).toBe(fnSubgraph.id);
+  });
+
+  test("switch cases become subgraphs of kind 'case' with caseTest preserved as raw text", () => {
+    const graph = JSON.parse(
+      emit(
+        [
+          'let l = "";',
+          'const k = "a";',
+          "switch (k) {",
+          '  case "a": l = "alpha"; break;',
+          '  default: l = "other"; break;',
+          "}",
+        ].join("\n"),
+      ),
+    );
+    const cases = graph.subgraphs.filter(
+      (s: { kind: string }) => s.kind === "case",
+    );
+    const caseTests = cases.map((c: { caseTest: string | null }) => c.caseTest);
+    expect(caseTests).toContain('"a"');
+    expect(caseTests).toContain(null);
+  });
+
+  test("emits compact JSON when pretty is false", () => {
+    const out = emit("const a = 1;\n", false);
+    expect(out).not.toContain("\n  ");
+  });
+});

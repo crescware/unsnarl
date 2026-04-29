@@ -1,0 +1,188 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-expression/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "nodes": [
+    {
+      "id": "n_scope_0_label_4",
+      "kind": "Variable",
+      "name": "label",
+      "line": 1,
+      "parent": null,
+      "declarationKind": "let"
+    },
+    {
+      "id": "n_scope_0_a_22",
+      "kind": "Variable",
+      "name": "a",
+      "line": 2,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_b_35",
+      "kind": "Variable",
+      "name": "b",
+      "line": 3,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_target_48",
+      "kind": "Variable",
+      "name": "target",
+      "line": 4,
+      "parent": null,
+      "declarationKind": "const"
+    },
+    {
+      "id": "n_scope_0_result_304",
+      "kind": "Variable",
+      "name": "result",
+      "line": 20,
+      "parent": null,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "id": "wr_ref_3",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 8,
+      "parent": "s_scope_2",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_6",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 11,
+      "parent": "s_scope_3",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_8",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 14,
+      "parent": "s_scope_4",
+      "declarationKind": "let"
+    },
+    {
+      "id": "wr_ref_9",
+      "kind": "WriteOp",
+      "name": "label",
+      "line": 17,
+      "parent": "s_scope_5",
+      "declarationKind": "let"
+    },
+    {
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0,
+      "parent": null
+    }
+  ],
+  "subgraphs": [
+    {
+      "id": "s_scope_1",
+      "kind": "switch",
+      "line": 6,
+      "parent": null,
+      "direction": "RL"
+    },
+    {
+      "id": "s_scope_2",
+      "kind": "case",
+      "line": 7,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": "a + b"
+    },
+    {
+      "id": "s_scope_3",
+      "kind": "case",
+      "line": 10,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": "a * b"
+    },
+    {
+      "id": "s_scope_4",
+      "kind": "case",
+      "line": 13,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": "Number.MAX_SAFE_INTEGER"
+    },
+    {
+      "id": "s_scope_5",
+      "kind": "case",
+      "line": 16,
+      "parent": "s_scope_1",
+      "direction": "RL",
+      "caseTest": null
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_6",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_8",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_9",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_target_48",
+      "to": "s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_22",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_35",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "n_scope_0_result_304",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_6",
+      "to": "n_scope_0_result_304",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_8",
+      "to": "n_scope_0_result_304",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_9",
+      "to": "n_scope_0_result_304",
+      "label": "read"
+    }
+  ]
+}
