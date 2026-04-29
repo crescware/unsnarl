@@ -32,7 +32,8 @@
         "ref#2"
       ],
       "through": [],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": null
     }
   ],
   "variables": [

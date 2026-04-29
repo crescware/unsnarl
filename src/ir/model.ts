@@ -86,6 +86,11 @@ export interface Variable {
   unsnarlIsUnused?(): boolean;
 }
 
+export interface BlockContext {
+  parentType: string;
+  key: string;
+}
+
 export interface Scope {
   type: ScopeType;
   isStrict: boolean;
@@ -98,6 +103,7 @@ export interface Scope {
   references: Reference[];
   through: Reference[];
   functionExpressionScope: boolean;
+  unsnarlBlockContext?: BlockContext | null;
 }
 
 export type DiagnosticKind =
@@ -127,6 +133,7 @@ export interface SerializedScope {
   references: ReferenceId[];
   through: ReferenceId[];
   functionExpressionScope: boolean;
+  blockContext: BlockContext | null;
 }
 
 export interface SerializedVariable {

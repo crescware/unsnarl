@@ -21,6 +21,7 @@ export type {
   AstExpression,
   AstIdentifier,
   AstNode,
+  BlockContext,
   Definition,
   DefinitionType,
   Diagnostic,

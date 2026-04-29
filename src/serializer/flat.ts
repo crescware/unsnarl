@@ -153,6 +153,7 @@ function serializeScope(
       .map((r) => referenceIds.get(r))
       .filter((x): x is string => x !== undefined),
     functionExpressionScope: scope.functionExpressionScope,
+    blockContext: scope.unsnarlBlockContext ?? null,
   };
 }
 

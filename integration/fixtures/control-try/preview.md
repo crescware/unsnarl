@@ -29,7 +29,16 @@ flowchart RL
   n_scope_0_raw_39["raw<br/>L3"]
   n_scope_0_result_182["result<br/>L15"]
   n_scope_0_Number_84["global Number<br/>L7"]
-  n_scope_2_err_106["catch err<br/>L8"]
+  subgraph s_scope_1["try L5"]
+    direction RL
+  end
+  subgraph s_scope_2["catch L8"]
+    direction RL
+    n_scope_2_err_106["catch err<br/>L8"]
+  end
+  subgraph s_scope_3["finally L11"]
+    direction RL
+  end
   n_scope_0_attempts_19 -->|write| n_scope_0_attempts_19
   n_scope_0_value_4 -->|write| n_scope_0_value_4
   n_scope_0_Number_84 -->|read,call| n_scope_0_value_4

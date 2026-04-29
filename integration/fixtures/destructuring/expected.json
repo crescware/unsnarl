@@ -50,7 +50,8 @@
       "through": [
         "ref#10"
       ],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": null
     }
   ],
   "variables": [

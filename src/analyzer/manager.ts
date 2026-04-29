@@ -1,4 +1,4 @@
-import type { AstNode, Scope, ScopeType } from "../ir/model.js";
+import type { AstNode, BlockContext, Scope, ScopeType } from "../ir/model.js";
 import { ScopeImpl } from "./scope.js";
 
 export class ScopeManager {
@@ -26,12 +26,17 @@ export class ScopeManager {
     return top;
   }
 
-  push(type: ScopeType, block: AstNode): Scope {
+  push(
+    type: ScopeType,
+    block: AstNode,
+    blockContext: BlockContext | null = null,
+  ): Scope {
     const scope = new ScopeImpl({
       type,
       isStrict: this.current().isStrict,
       upper: this.current(),
       block,
+      blockContext,
     });
     this.stack.push(scope);
     this.allScopes.push(scope);

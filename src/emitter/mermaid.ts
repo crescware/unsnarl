@@ -24,7 +24,7 @@ export class MermaidEmitter implements Emitter {
       scopeMap.set(s.id, s);
     }
 
-    const subgraphScopes = new Map<string, string>();
+    const subgraphOwnerVar = new Map<string, string>();
     for (const v of ir.variables) {
       const def = v.defs[0];
       if (!def) {
@@ -48,20 +48,15 @@ export class MermaidEmitter implements Emitter {
         (s) => s.upper === v.scope && s.block.span.offset === blockOffset,
       );
       if (fnScope) {
-        subgraphScopes.set(v.id, fnScope.id);
+        subgraphOwnerVar.set(fnScope.id, v.id);
       }
     }
-    const scopeToSubgraph = new Map<string, string>();
-    for (const [vid, sid] of subgraphScopes) {
-      scopeToSubgraph.set(sid, vid);
-    }
 
-    const findEnclosingSubgraphVar = (scopeId: string): string | null => {
+    const findEnclosingSubgraphScope = (scopeId: string): string | null => {
       let cur: SerializedScope | undefined = scopeMap.get(scopeId);
       while (cur) {
-        const owner = scopeToSubgraph.get(cur.id);
-        if (owner) {
-          return owner;
+        if (subgraphOwnerVar.has(cur.id)) {
+          return cur.id;
         }
         if (!cur.upper) {
           return null;
@@ -69,6 +64,14 @@ export class MermaidEmitter implements Emitter {
         cur = scopeMap.get(cur.upper);
       }
       return null;
+    };
+
+    const enclosingFunctionVar = (scopeId: string): string | null => {
+      const fnScopeId = findEnclosingSubgraphScope(scopeId);
+      if (fnScopeId === null) {
+        return null;
+      }
+      return subgraphOwnerVar.get(fnScopeId) ?? null;
     };
 
     const hiddenVariables = new Set<string>();
@@ -82,23 +85,12 @@ export class MermaidEmitter implements Emitter {
       }
     }
 
-    const groups = new Map<string | null, string[]>();
-    for (const v of ir.variables) {
-      if (hiddenVariables.has(v.id)) {
-        continue;
-      }
-      const enclosing = findEnclosingSubgraphVar(v.scope);
-      const arr = groups.get(enclosing) ?? [];
-      arr.push(v.id);
-      groups.set(enclosing, arr);
-    }
-
     const returnTargets = new Map<string, SerializedReference[]>();
     for (const r of ir.references) {
       if (r.owners.length > 0) {
         continue;
       }
-      const enclosingFn = findEnclosingSubgraphVar(r.from);
+      const enclosingFn = enclosingFunctionVar(r.from);
       if (!enclosingFn) {
         continue;
       }
@@ -107,27 +99,114 @@ export class MermaidEmitter implements Emitter {
       returnTargets.set(enclosingFn, arr);
     }
 
-    const emitGroup = (group: string | null, indent: string): void => {
-      const vars = groups.get(group) ?? [];
-      for (const vid of vars) {
+    function controlScopeLabel(scope: SerializedScope): string | null {
+      const line = scope.block.span.line;
+      if (scope.type === "catch") {
+        return `catch L${line}`;
+      }
+      if (scope.type === "for") {
+        return `for L${line}`;
+      }
+      if (scope.type === "switch") {
+        return `switch L${line}`;
+      }
+      if (scope.type === "block") {
+        const ctx = scope.blockContext;
+        if (!ctx) {
+          return null;
+        }
+        if (ctx.parentType === "TryStatement") {
+          if (ctx.key === "block") {
+            return `try L${line}`;
+          }
+          if (ctx.key === "finalizer") {
+            return `finally L${line}`;
+          }
+        }
+        if (ctx.parentType === "IfStatement") {
+          if (ctx.key === "consequent") {
+            return `if L${line}`;
+          }
+          if (ctx.key === "alternate") {
+            return `else L${line}`;
+          }
+        }
+      }
+      return null;
+    }
+
+    function isFunctionSubgraph(scope: SerializedScope): boolean {
+      return subgraphOwnerVar.has(scope.id);
+    }
+
+    function isControlSubgraph(scope: SerializedScope): boolean {
+      return controlScopeLabel(scope) !== null;
+    }
+
+    function shouldSubgraph(scope: SerializedScope): boolean {
+      return isFunctionSubgraph(scope) || isControlSubgraph(scope);
+    }
+
+    const subgraphScopeId = (scope: SerializedScope): string => {
+      const ownerVar = subgraphOwnerVar.get(scope.id);
+      if (ownerVar) {
+        return nodeId(ownerVar);
+      }
+      return `s_${sanitize(scope.id)}`;
+    };
+
+    const subgraphLabel = (scope: SerializedScope): string => {
+      const ownerVar = subgraphOwnerVar.get(scope.id);
+      if (ownerVar) {
+        const v = variableMap.get(ownerVar);
+        if (v) {
+          return variableLabel(v);
+        }
+      }
+      return controlScopeLabel(scope) ?? scope.type;
+    };
+
+    const emitScope = (scope: SerializedScope, indent: string): void => {
+      const subgraph = shouldSubgraph(scope);
+      const childIndent = subgraph ? `${indent}  ` : indent;
+      if (subgraph) {
+        lines.push(
+          `${indent}subgraph ${subgraphScopeId(scope)}["${subgraphLabel(scope)}"]`,
+        );
+        lines.push(`${childIndent}direction RL`);
+        const ownerVar = subgraphOwnerVar.get(scope.id);
+        if (ownerVar && returnTargets.has(ownerVar)) {
+          lines.push(`${childIndent}${returnNodeId(ownerVar)}((return))`);
+        }
+      }
+      for (const vid of scope.variables) {
+        if (hiddenVariables.has(vid)) {
+          continue;
+        }
         const v = variableMap.get(vid);
         if (!v) {
           continue;
         }
-        if (subgraphScopes.has(vid)) {
-          lines.push(`${indent}subgraph ${nodeId(vid)}["${variableLabel(v)}"]`);
-          lines.push(`${indent}  direction RL`);
-          if (returnTargets.has(vid)) {
-            lines.push(`${indent}  ${returnNodeId(vid)}((return))`);
-          }
-          emitGroup(vid, `${indent}  `);
-          lines.push(`${indent}end`);
-        } else {
-          lines.push(`${indent}${nodeId(vid)}["${variableLabel(v)}"]`);
+        lines.push(`${childIndent}${nodeId(vid)}["${variableLabel(v)}"]`);
+      }
+      for (const childId of scope.childScopes) {
+        const child = scopeMap.get(childId);
+        if (!child) {
+          continue;
         }
+        emitScope(child, childIndent);
+      }
+      if (subgraph) {
+        lines.push(`${indent}end`);
       }
     };
-    emitGroup(null, "  ");
+
+    const root = ir.scopes.find(
+      (s) => s.type === "module" || s.type === "global",
+    );
+    if (root) {
+      emitScope(root, "  ");
+    }
 
     let needsModuleRoot = false;
     for (const r of ir.references) {
@@ -144,7 +223,7 @@ export class MermaidEmitter implements Emitter {
           lines.push(`  ${fromId} -->|${label}| ${nodeId(ownerId)}`);
         }
       } else {
-        const enclosingFn = findEnclosingSubgraphVar(r.from);
+        const enclosingFn = enclosingFunctionVar(r.from);
         if (enclosingFn) {
           lines.push(`  ${fromId} -->|${label}| ${returnNodeId(enclosingFn)}`);
         } else {

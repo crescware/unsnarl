@@ -1,14 +1,15 @@
 flowchart RL
+  n_scope_0_add_9["add()<br/>L1"]
+  n_scope_0_Counter_62["class Counter<br/>L5"]
+  n_scope_0_total_94["total<br/>L9"]
+  n_scope_0_c_119["c<br/>L10"]
+  n_scope_0_result_144["result<br/>L11"]
   subgraph n_scope_0_add_9["add()<br/>L1"]
     direction RL
     return_scope_0_add_9((return))
     n_scope_1_a_13["a<br/>L1"]
     n_scope_1_b_24["b<br/>L1"]
   end
-  n_scope_0_Counter_62["class Counter<br/>L5"]
-  n_scope_0_total_94["total<br/>L9"]
-  n_scope_0_c_119["c<br/>L10"]
-  n_scope_0_result_144["result<br/>L11"]
   n_scope_1_a_13 -->|read| return_scope_0_add_9
   n_scope_1_b_24 -->|read| return_scope_0_add_9
   n_scope_0_add_9 -->|read,call| n_scope_0_total_94

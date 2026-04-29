@@ -3,6 +3,7 @@ import type {
   AstExpression,
   AstIdentifier,
   AstNode,
+  BlockContext,
   Definition,
   Reference,
   ReferenceFlagBits,
@@ -23,17 +24,20 @@ export class ScopeImpl implements Scope {
   readonly references: Reference[] = [];
   readonly through: Reference[] = [];
   readonly functionExpressionScope: boolean = false;
+  unsnarlBlockContext: BlockContext | null = null;
 
   constructor(opts: {
     type: ScopeType;
     isStrict: boolean;
     upper: Scope | null;
     block: AstNode;
+    blockContext?: BlockContext | null;
   }) {
     this.type = opts.type;
     this.isStrict = opts.isStrict;
     this.upper = opts.upper;
     this.block = opts.block;
+    this.unsnarlBlockContext = opts.blockContext ?? null;
     if (opts.upper) {
       opts.upper.childScopes.push(this);
     }

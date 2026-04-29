@@ -16,6 +16,7 @@ function f() {
 
 ```mermaid
 flowchart RL
+  n_scope_0_f_9["f()<br/>L1"]
   subgraph n_scope_0_f_9["f()<br/>L1"]
     direction RL
     return_scope_0_f_9((return))

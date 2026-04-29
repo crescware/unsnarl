@@ -103,7 +103,9 @@ function handleEnter(
       if (parent && key === "body" && skipBlockScope(parent.type)) {
         return;
       }
-      const scope = manager.push("block", node as unknown as AstNode);
+      const ctx =
+        parent && key !== null ? { parentType: parent.type, key } : null;
+      const scope = manager.push("block", node as unknown as AstNode, ctx);
       const stmts = node["body"];
       if (Array.isArray(stmts)) {
         hoistDeclarations(stmts, scope, raw, diagnostics);
@@ -113,12 +115,16 @@ function handleEnter(
     case "ForStatement":
     case "ForOfStatement":
     case "ForInStatement": {
-      const scope = manager.push("for", node as unknown as AstNode);
+      const ctx =
+        parent && key !== null ? { parentType: parent.type, key } : null;
+      const scope = manager.push("for", node as unknown as AstNode, ctx);
       declareForLeft(node, scope, raw, diagnostics);
       return;
     }
     case "SwitchStatement": {
-      const scope = manager.push("switch", node as unknown as AstNode);
+      const ctx =
+        parent && key !== null ? { parentType: parent.type, key } : null;
+      const scope = manager.push("switch", node as unknown as AstNode, ctx);
       const cases = node["cases"];
       if (Array.isArray(cases)) {
         for (const c of cases) {
@@ -134,7 +140,9 @@ function handleEnter(
       return;
     }
     case "CatchClause": {
-      const scope = manager.push("catch", node as unknown as AstNode);
+      const ctx =
+        parent && key !== null ? { parentType: parent.type, key } : null;
+      const scope = manager.push("catch", node as unknown as AstNode, ctx);
       const param = node["param"];
       if (isNodeLike(param)) {
         const idents = collectBindingIdentifiers(param as unknown as AstNode);

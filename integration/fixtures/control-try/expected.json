@@ -38,7 +38,8 @@
       "through": [
         "ref#2"
       ],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": null
     },
     {
       "id": "scope#1",
@@ -65,7 +66,11 @@
       "through": [
         "ref#2"
       ],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "TryStatement",
+        "key": "block"
+      }
     },
     {
       "id": "scope#2",
@@ -90,7 +95,11 @@
         "ref#5"
       ],
       "through": [],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "TryStatement",
+        "key": "handler"
+      }
     },
     {
       "id": "scope#3",
@@ -112,7 +121,11 @@
         "ref#6"
       ],
       "through": [],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "TryStatement",
+        "key": "finalizer"
+      }
     }
   ],
   "variables": [

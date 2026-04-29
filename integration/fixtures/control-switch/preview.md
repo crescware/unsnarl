@@ -27,6 +27,9 @@ flowchart RL
   n_scope_0_label_4["label<br/>L1"]
   n_scope_0_kind_22["kind<br/>L2"]
   n_scope_0_result_179["result<br/>L15"]
+  subgraph s_scope_1["switch L4"]
+    direction RL
+  end
   n_scope_0_kind_22 -->|read| module_root
   n_scope_0_label_4 -->|write| n_scope_0_label_4
   n_scope_0_label_4 -->|write| n_scope_0_label_4

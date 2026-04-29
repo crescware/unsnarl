@@ -29,7 +29,8 @@
         "ref#0"
       ],
       "through": [],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": null
     },
     {
       "id": "scope#1",
@@ -49,7 +50,8 @@
       "variables": [],
       "references": [],
       "through": [],
-      "functionExpressionScope": false
+      "functionExpressionScope": false,
+      "blockContext": null
     }
   ],
   "variables": [

@@ -121,6 +121,37 @@ describe("MermaidEmitter", () => {
     expect(out).toContain("module_root((module))");
   });
 
+  test("subgraphs try / catch / finally blocks with line numbers", () => {
+    const code = [
+      "let v = 0;",
+      "try {",
+      "  v = 1;",
+      "} catch (err) {",
+      "  v = 2;",
+      "} finally {",
+      "  v = 3;",
+      "}",
+    ].join("\n");
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["try L2"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["catch L4"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["finally L6"\]/);
+  });
+
+  test("subgraphs if / else blocks", () => {
+    const code = "let x = 0;\nif (true) {\n  x = 1;\n} else {\n  x = 2;\n}\n";
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["if L2"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["else L4"\]/);
+  });
+
+  test("subgraphs switch statements", () => {
+    const code =
+      "let l = '';\nconst k = 'a';\nswitch (k) {\n  case 'a': l = 'A'; break;\n  default: l = '?';\n}\n";
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["switch L3"\]/);
+  });
+
   test("expands import declarations into module/intermediate nodes", () => {
     const out = emit(
       [

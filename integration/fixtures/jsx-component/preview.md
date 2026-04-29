@@ -25,6 +25,10 @@ const root = App;
 ```mermaid
 flowchart RL
   n_scope_0_Fragment_9["Fragment<br/>L1"]
+  n_scope_0_Hello_79["Hello()<br/>L7"]
+  n_scope_0_App_196["App()<br/>L13"]
+  n_scope_0_root_237["root<br/>L15"]
+  n_scope_0_span_125["global span<br/>L9"]
   subgraph n_scope_0_Hello_79["Hello()<br/>L7"]
     direction RL
     return_scope_0_Hello_79((return))
@@ -34,8 +38,6 @@ flowchart RL
     direction RL
     return_scope_0_App_196((return))
   end
-  n_scope_0_root_237["root<br/>L15"]
-  n_scope_0_span_125["global span<br/>L9"]
   n_scope_0_Fragment_9 -->|read| return_scope_0_Hello_79
   n_scope_0_span_125 -->|read| return_scope_0_Hello_79
   n_scope_1_props_88 -->|read| return_scope_0_Hello_79

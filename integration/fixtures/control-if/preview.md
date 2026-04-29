@@ -22,6 +22,12 @@ flowchart RL
   n_scope_0_counter_4["counter<br/>L1"]
   n_scope_0_flag_23["flag<br/>L2"]
   n_scope_0_result_97["result<br/>L10"]
+  subgraph s_scope_1["if L4"]
+    direction RL
+  end
+  subgraph s_scope_2["else L6"]
+    direction RL
+  end
   n_scope_0_flag_23 -->|read| module_root
   n_scope_0_counter_4 -->|write| n_scope_0_counter_4
   n_scope_0_counter_4 -->|write| n_scope_0_counter_4
