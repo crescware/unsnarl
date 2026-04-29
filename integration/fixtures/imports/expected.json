@@ -81,7 +81,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -125,7 +127,9 @@
               "column": 0,
               "offset": 32
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -169,7 +173,9 @@
               "column": 0,
               "offset": 32
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -213,7 +219,9 @@
               "column": 0,
               "offset": 86
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -255,6 +263,12 @@
               "column": 0,
               "offset": 125
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 5,
+            "column": 10,
+            "offset": 135
           }
         }
       ]
@@ -297,6 +311,12 @@
               "column": 0,
               "offset": 140
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 6,
+            "column": 10,
+            "offset": 150
           }
         }
       ]
@@ -339,6 +359,12 @@
               "column": 0,
               "offset": 157
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 7,
+            "column": 10,
+            "offset": 167
           }
         }
       ]
@@ -381,6 +407,12 @@
               "column": 0,
               "offset": 176
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 8,
+            "column": 10,
+            "offset": 186
           }
         }
       ]

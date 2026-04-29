@@ -131,7 +131,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -175,6 +177,12 @@
               "column": 0,
               "offset": 73
             }
+          },
+          "initType": "ArrowFunctionExpression",
+          "initSpan": {
+            "line": 7,
+            "column": 14,
+            "offset": 87
           }
         }
       ]
@@ -219,6 +227,12 @@
               "column": 0,
               "offset": 190
             }
+          },
+          "initType": "ArrowFunctionExpression",
+          "initSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 202
           }
         }
       ]
@@ -261,6 +275,12 @@
               "column": 0,
               "offset": 231
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 15,
+            "column": 13,
+            "offset": 244
           }
         }
       ]
@@ -298,7 +318,9 @@
               "offset": 125
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -343,7 +365,9 @@
               "column": 14,
               "offset": 87
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     }

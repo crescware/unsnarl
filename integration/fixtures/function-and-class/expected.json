@@ -100,7 +100,9 @@
               "offset": 0
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -137,7 +139,9 @@
               "offset": 56
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -181,6 +185,12 @@
               "column": 0,
               "offset": 88
             }
+          },
+          "initType": "CallExpression",
+          "initSpan": {
+            "line": 9,
+            "column": 14,
+            "offset": 102
           }
         }
       ]
@@ -223,6 +233,12 @@
               "column": 0,
               "offset": 113
             }
+          },
+          "initType": "NewExpression",
+          "initSpan": {
+            "line": 10,
+            "column": 10,
+            "offset": 123
           }
         }
       ]
@@ -265,6 +281,12 @@
               "column": 0,
               "offset": 138
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 11,
+            "column": 15,
+            "offset": 153
           }
         }
       ]
@@ -310,7 +332,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -355,7 +379,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     }

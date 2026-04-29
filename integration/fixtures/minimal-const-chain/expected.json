@@ -76,6 +76,12 @@
               "column": 0,
               "offset": 0
             }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 1,
+            "column": 10,
+            "offset": 10
           }
         }
       ]
@@ -120,6 +126,12 @@
               "column": 0,
               "offset": 15
             }
+          },
+          "initType": "ArrayExpression",
+          "initSpan": {
+            "line": 2,
+            "column": 10,
+            "offset": 25
           }
         }
       ]
@@ -164,6 +176,12 @@
               "column": 0,
               "offset": 30
             }
+          },
+          "initType": "ObjectExpression",
+          "initSpan": {
+            "line": 3,
+            "column": 10,
+            "offset": 40
           }
         }
       ]
@@ -206,6 +224,12 @@
               "column": 0,
               "offset": 54
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 64
           }
         }
       ]

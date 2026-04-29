@@ -79,7 +79,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -121,7 +123,9 @@
               "column": 0,
               "offset": 0
             }
-          }
+          },
+          "initType": null,
+          "initSpan": null
         }
       ]
     },
@@ -165,6 +169,12 @@
               "column": 0,
               "offset": 61
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 71
           }
         }
       ]
@@ -207,6 +217,12 @@
               "column": 0,
               "offset": 77
             }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 5,
+            "column": 16,
+            "offset": 93
           }
         }
       ]
@@ -244,7 +260,9 @@
               "offset": 98
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     }

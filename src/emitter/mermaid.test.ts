@@ -82,6 +82,19 @@ describe("MermaidEmitter", () => {
     expect(out).toContain("end");
   });
 
+  test("subgraphs arrow functions assigned to a const", () => {
+    const out = emit("const fn = (p: number) => p + 1;\n");
+    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toContain("return_scope_0_fn_6((return))");
+    expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| return_scope_0_fn_6/);
+  });
+
+  test("subgraphs function expressions assigned to a const", () => {
+    const out = emit("const fn = function inner(p: number) { return p; };\n");
+    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toContain("return_scope_0_fn_6((return))");
+  });
+
   test("highlights unused variables with a colorless dashed stroke", () => {
     const out = emit("const a = 1;\nconst unused = 2;\nconst b = a;\n");
     expect(out).toContain("classDef unused stroke-dasharray: 5 5;");

@@ -27,12 +27,25 @@ export class MermaidEmitter implements Emitter {
     const subgraphScopes = new Map<string, string>();
     for (const v of ir.variables) {
       const def = v.defs[0];
-      if (!def || def.type !== "FunctionName") {
+      if (!def) {
+        continue;
+      }
+      let blockOffset: number | null = null;
+      if (def.type === "FunctionName") {
+        blockOffset = def.node.span.offset;
+      } else if (
+        def.type === "Variable" &&
+        def.initSpan !== null &&
+        (def.initType === "FunctionExpression" ||
+          def.initType === "ArrowFunctionExpression")
+      ) {
+        blockOffset = def.initSpan.offset;
+      }
+      if (blockOffset === null) {
         continue;
       }
       const fnScope = ir.scopes.find(
-        (s) =>
-          s.upper === v.scope && s.block.span.offset === def.node.span.offset,
+        (s) => s.upper === v.scope && s.block.span.offset === blockOffset,
       );
       if (fnScope) {
         subgraphScopes.set(v.id, fnScope.id);
@@ -157,9 +170,13 @@ export class MermaidEmitter implements Emitter {
 }
 
 function variableLabel(v: SerializedVariable): string {
-  const kind = v.defs[0]?.type;
-  const line = v.identifiers[0]?.line ?? v.defs[0]?.name.span.line ?? 0;
+  const def = v.defs[0];
+  const kind = def?.type;
+  const line = v.identifiers[0]?.line ?? def?.name.span.line ?? 0;
   const name = escape(v.name);
+  const initType = def?.initType;
+  const isFunctionInit =
+    initType === "ArrowFunctionExpression" || initType === "FunctionExpression";
   let head: string;
   switch (kind) {
     case "FunctionName":
@@ -181,7 +198,7 @@ function variableLabel(v: SerializedVariable): string {
       head = `global ${name}`;
       break;
     default:
-      head = name;
+      head = isFunctionInit ? `${name}()` : name;
   }
   return `${head}<br/>L${line}`;
 }

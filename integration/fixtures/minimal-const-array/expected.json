@@ -72,6 +72,12 @@
               "column": 0,
               "offset": 0
             }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 1,
+            "column": 10,
+            "offset": 10
           }
         }
       ]
@@ -114,6 +120,12 @@
               "column": 0,
               "offset": 15
             }
+          },
+          "initType": "ArrayExpression",
+          "initSpan": {
+            "line": 2,
+            "column": 10,
+            "offset": 25
           }
         }
       ]

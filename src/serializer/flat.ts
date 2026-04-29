@@ -175,15 +175,34 @@ function serializeVariable(
     references: v.references
       .map((r) => referenceIds.get(r))
       .filter((x): x is string => x !== undefined),
-    defs: v.defs.map<SerializedDefinition>((d) => ({
-      type: d.type,
-      name: { name: d.name.name, span: spanOf(d.name, raw) },
-      node: { type: d.node.type, span: spanOf(d.node, raw) },
-      parent:
-        d.parent === null
-          ? null
-          : { type: d.parent.type, span: spanOf(d.parent, raw) },
-    })),
+    defs: v.defs.map<SerializedDefinition>((d) => {
+      let initType: string | null = null;
+      let initSpan: Span | null = null;
+      if (d.node.type === "VariableDeclarator") {
+        const init = d.node["init"];
+        if (
+          init !== null &&
+          typeof init === "object" &&
+          "type" in init &&
+          typeof (init as { type: unknown }).type === "string"
+        ) {
+          const initNode = init as AstNode;
+          initType = initNode.type;
+          initSpan = spanOf(initNode, raw);
+        }
+      }
+      return {
+        type: d.type,
+        name: { name: d.name.name, span: spanOf(d.name, raw) },
+        node: { type: d.node.type, span: spanOf(d.node, raw) },
+        parent:
+          d.parent === null
+            ? null
+            : { type: d.parent.type, span: spanOf(d.parent, raw) },
+        initType,
+        initSpan,
+      };
+    }),
   };
 }
 

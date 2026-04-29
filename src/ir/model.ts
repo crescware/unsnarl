@@ -159,6 +159,8 @@ export interface SerializedDefinition {
   name: { name: string; span: Span };
   node: { type: string; span: Span };
   parent: { type: string; span: Span } | null;
+  initType: string | null;
+  initSpan: Span | null;
 }
 
 export interface SerializedIR {

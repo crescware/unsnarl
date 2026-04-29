@@ -96,6 +96,12 @@
               "column": 0,
               "offset": 0
             }
+          },
+          "initType": "ObjectExpression",
+          "initSpan": {
+            "line": 1,
+            "column": 15,
+            "offset": 15
           }
         }
       ]
@@ -140,6 +146,12 @@
               "column": 0,
               "offset": 55
             }
+          },
+          "initType": "ArrayExpression",
+          "initSpan": {
+            "line": 2,
+            "column": 13,
+            "offset": 68
           }
         }
       ]
@@ -184,6 +196,12 @@
               "column": 0,
               "offset": 87
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 4,
+            "column": 26,
+            "offset": 113
           }
         }
       ]
@@ -228,6 +246,12 @@
               "column": 0,
               "offset": 87
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 4,
+            "column": 26,
+            "offset": 113
           }
         }
       ]
@@ -272,6 +296,12 @@
               "column": 0,
               "offset": 121
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 5,
+            "column": 26,
+            "offset": 147
           }
         }
       ]
@@ -316,6 +346,12 @@
               "column": 0,
               "offset": 155
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 6,
+            "column": 34,
+            "offset": 189
           }
         }
       ]
@@ -360,6 +396,12 @@
               "column": 0,
               "offset": 155
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 6,
+            "column": 34,
+            "offset": 189
           }
         }
       ]
@@ -404,6 +446,12 @@
               "column": 0,
               "offset": 155
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 6,
+            "column": 34,
+            "offset": 189
           }
         }
       ]
@@ -448,6 +496,12 @@
               "column": 0,
               "offset": 195
             }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 7,
+            "column": 22,
+            "offset": 217
           }
         }
       ]
@@ -490,6 +544,12 @@
               "column": 0,
               "offset": 226
             }
+          },
+          "initType": "BinaryExpression",
+          "initSpan": {
+            "line": 9,
+            "column": 12,
+            "offset": 238
           }
         }
       ]
@@ -527,7 +587,9 @@
               "offset": 286
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     }

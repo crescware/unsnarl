@@ -86,7 +86,9 @@
               "offset": 0
             }
           },
-          "parent": null
+          "parent": null,
+          "initType": null,
+          "initSpan": null
         }
       ]
     }
