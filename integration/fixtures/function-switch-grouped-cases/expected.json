@@ -1,0 +1,608 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-switch-grouped-cases/input.ts",
+    "language": "ts"
+  },
+  "raw": "function getDayType(day) {\n  let ret = \"\";\n  switch (day.toLowerCase()) {\n    case 'mon':\n    case 'tue':\n    case 'wed':\n    case 'thu':\n    case 'fri':\n      ret = 'weekday';\n      break;\n    case 'sat':\n    case 'sun':\n      ret = 'weekend';\n      break;\n    default:\n      ret = null;\n      break;\n  }\n  return ret;\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:getDayType@9"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#1:day@20",
+        "scope#1:ret@33"
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false
+    },
+    {
+      "id": "scope#2",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [
+        "scope#3",
+        "scope#4",
+        "scope#5",
+        "scope#6",
+        "scope#7",
+        "scope#8",
+        "scope#9",
+        "scope#10"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 3,
+          "column": 2,
+          "offset": 45
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "BlockStatement",
+        "key": "body",
+        "parentSpanOffset": 25
+      },
+      "fallsThrough": false
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 4,
+          "column": 4,
+          "offset": 78
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": true
+    },
+    {
+      "id": "scope#4",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 5,
+          "column": 4,
+          "offset": 94
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": true
+    },
+    {
+      "id": "scope#5",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 6,
+          "column": 4,
+          "offset": 110
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": true
+    },
+    {
+      "id": "scope#6",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 7,
+          "column": 4,
+          "offset": 126
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": true
+    },
+    {
+      "id": "scope#7",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 8,
+          "column": 4,
+          "offset": 142
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": false
+    },
+    {
+      "id": "scope#8",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 11,
+          "column": 4,
+          "offset": 194
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": true
+    },
+    {
+      "id": "scope#9",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 12,
+          "column": 4,
+          "offset": 210
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": false
+    },
+    {
+      "id": "scope#10",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 15,
+          "column": 4,
+          "offset": 262
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 45
+      },
+      "fallsThrough": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:getDayType@9",
+      "name": "getDayType",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "FunctionName",
+          "name": {
+            "name": "getDayType",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "initType": null,
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": null
+        }
+      ]
+    },
+    {
+      "id": "scope#1:day@20",
+      "name": "day",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 20,
+          "offset": 20
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "Parameter",
+          "name": {
+            "name": "day",
+            "span": {
+              "line": 1,
+              "column": 20,
+              "offset": 20
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 1,
+              "column": 20,
+              "offset": 20
+            }
+          },
+          "parent": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "initType": null,
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": null
+        }
+      ]
+    },
+    {
+      "id": "scope#1:ret@33",
+      "name": "ret",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 33
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "ret",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 33
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 33
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 2,
+              "offset": 29
+            }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 2,
+            "column": 12,
+            "offset": 39
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": "let"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "day",
+        "span": {
+          "line": 3,
+          "column": 10,
+          "offset": 53
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:day@20",
+      "owners": [],
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 45
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "ret",
+        "span": {
+          "line": 9,
+          "column": 6,
+          "offset": 160
+        }
+      },
+      "from": "scope#7",
+      "resolved": "scope#1:ret@33",
+      "owners": [
+        "scope#1:ret@33"
+      ],
+      "writeExpr": {
+        "line": 9,
+        "column": 12,
+        "offset": 166
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "ret",
+        "span": {
+          "line": 13,
+          "column": 6,
+          "offset": 228
+        }
+      },
+      "from": "scope#9",
+      "resolved": "scope#1:ret@33",
+      "owners": [
+        "scope#1:ret@33"
+      ],
+      "writeExpr": {
+        "line": 13,
+        "column": 12,
+        "offset": 234
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "ret",
+        "span": {
+          "line": 16,
+          "column": 6,
+          "offset": 277
+        }
+      },
+      "from": "scope#10",
+      "resolved": "scope#1:ret@33",
+      "owners": [
+        "scope#1:ret@33"
+      ],
+      "writeExpr": {
+        "line": 16,
+        "column": 12,
+        "offset": 283
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "ret",
+        "span": {
+          "line": 19,
+          "column": 9,
+          "offset": 315
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:ret@33",
+      "owners": [],
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:getDayType@9"
+  ],
+  "diagnostics": []
+}
