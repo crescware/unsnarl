@@ -41,6 +41,6 @@ flowchart LR
   n_scope_0_sum_232 -->|read| n_scope_0_rest_181
   n_scope_0_sum_232 -->|read| n_scope_0_Object_286
   n_scope_0_sum_232 -->|read| n_scope_0_spread_206
-  classDef unused fill:#fdd,stroke:#c00;
+  classDef unused stroke-dasharray: 5 5;
   class n_scope_0_sum_232 unused;
 ```

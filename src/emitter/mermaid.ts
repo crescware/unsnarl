@@ -57,7 +57,7 @@ export class MermaidEmitter implements Emitter {
     }
 
     if (ir.unusedVariableIds.length > 0) {
-      lines.push("  classDef unused fill:#fdd,stroke:#c00;");
+      lines.push("  classDef unused stroke-dasharray: 5 5;");
       for (const id of ir.unusedVariableIds) {
         lines.push(`  class ${nodeId(id)} unused;`);
       }

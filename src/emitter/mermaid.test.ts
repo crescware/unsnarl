@@ -74,9 +74,10 @@ describe("MermaidEmitter", () => {
     expect(out).not.toContain("module_root");
   });
 
-  test("highlights unused variables with a classDef", () => {
+  test("highlights unused variables with a colorless dashed stroke", () => {
     const out = emit("const a = 1;\nconst unused = 2;\nconst b = a;\n");
-    expect(out).toContain("classDef unused fill:#fdd,stroke:#c00;");
+    expect(out).toContain("classDef unused stroke-dasharray: 5 5;");
+    expect(out).not.toMatch(/fill:#|stroke:#/);
     expect(out).toMatch(/class n_scope_0_unused_/);
   });
 

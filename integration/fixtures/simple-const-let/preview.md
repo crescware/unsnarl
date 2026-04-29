@@ -26,7 +26,7 @@ flowchart LR
   module_root -->|read,write| n_scope_0_counter_30
   n_scope_0_message_97 -->|read| n_scope_0_greeting_6
   module_root["(module)"]
-  classDef unused fill:#fdd,stroke:#c00;
+  classDef unused stroke-dasharray: 5 5;
   class n_scope_0_message_97 unused;
   class n_scope_0_unused_123 unused;
 ```
