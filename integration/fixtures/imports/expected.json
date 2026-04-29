@@ -399,6 +399,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:def@7",
+      "owner": "scope#0:a@131",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -419,6 +420,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:named@41",
+      "owner": "scope#0:b@146",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -439,6 +441,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:renamed@57",
+      "owner": "scope#0:c@163",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -459,6 +462,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:ns@98",
+      "owner": "scope#0:d@182",
       "writeExpr": null,
       "init": true,
       "flags": {

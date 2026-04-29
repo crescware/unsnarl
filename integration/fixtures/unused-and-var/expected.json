@@ -262,6 +262,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:used@9",
+      "owner": "scope#0:a@67",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -282,6 +283,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:console@98",
+      "owner": null,
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -302,6 +304,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:a@67",
+      "owner": null,
       "writeExpr": null,
       "init": false,
       "flags": {

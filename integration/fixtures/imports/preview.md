@@ -25,11 +25,10 @@ flowchart LR
   n_scope_0_b_146["b : Variable\nL6"]
   n_scope_0_c_163["c : Variable\nL7"]
   n_scope_0_d_182["d : Variable\nL8"]
-  module_root -->|read| n_scope_0_def_7
-  module_root -->|read| n_scope_0_named_41
-  module_root -->|read| n_scope_0_renamed_57
-  module_root -->|read| n_scope_0_ns_98
-  module_root["(module)"]
+  n_scope_0_a_131 -->|read| n_scope_0_def_7
+  n_scope_0_b_146 -->|read| n_scope_0_named_41
+  n_scope_0_c_163 -->|read| n_scope_0_renamed_57
+  n_scope_0_d_182 -->|read| n_scope_0_ns_98
   classDef unused fill:#fdd,stroke:#c00;
   class n_scope_0_a_131 unused;
   class n_scope_0_b_146 unused;

@@ -62,10 +62,16 @@ describe("MermaidEmitter", () => {
     );
   });
 
-  test("falls back to module_root node for caller-less references", () => {
-    const out = emit("const a = 1;\nconst b = a;\n");
+  test("falls back to module_root when there is no owner or enclosing function", () => {
+    const out = emit('console.log("hi");\n');
     expect(out).toContain("module_root");
     expect(out).toContain('module_root["(module)"]');
+  });
+
+  test("uses the initialized variable as the edge source for VariableDeclarator inits", () => {
+    const out = emit("const a = 1;\nconst b = a;\n");
+    expect(out).toMatch(/n_scope_0_b_19 -->\|read\| n_scope_0_a_6/);
+    expect(out).not.toContain("module_root");
   });
 
   test("highlights unused variables with a classDef", () => {

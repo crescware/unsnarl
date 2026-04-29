@@ -35,7 +35,7 @@ flowchart LR
   module_root -->|read| n_scope_0_span_125
   module_root -->|read| n_scope_1_props_88
   module_root -->|read| n_scope_0_Hello_79
-  module_root -->|read| n_scope_0_App_196
+  n_scope_0_root_237 -->|read| n_scope_0_App_196
   module_root["(module)"]
   classDef unused fill:#fdd,stroke:#c00;
   class n_scope_0_root_237 unused;

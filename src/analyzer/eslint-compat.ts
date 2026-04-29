@@ -10,6 +10,7 @@ import { classifyIdentifier } from "./classify.js";
 import { collectBindingIdentifiers, declareVariable } from "./declare.js";
 import { hoistDeclarations } from "./hoisting.js";
 import { ScopeManager } from "./manager.js";
+import { findReferenceOwner } from "./owner.js";
 import { bindReference } from "./resolve.js";
 import { ReferenceImpl } from "./scope.js";
 import { isTypeOnlySubtree } from "./skip-types.js";
@@ -305,6 +306,7 @@ function handleIdentifierReference(
     writeExpr: result.writeExpr,
   });
   bindReference(manager.current(), ref, manager.globalScope);
+  ref.unsnarlOwner = findReferenceOwner(path, manager.current());
 }
 
 function isNodeLike(value: unknown): value is NodeLike {

@@ -31,10 +31,9 @@ flowchart LR
   n_scope_0_add_9 -->|read| n_scope_1_b_24
   n_scope_0_add_9 -->|read| n_scope_1_a_13
   n_scope_0_add_9 -->|read| n_scope_1_b_24
-  module_root -->|read,call| n_scope_0_add_9
-  module_root -->|read,call| n_scope_0_Counter_62
-  module_root -->|read| n_scope_0_total_94
-  module_root["(module)"]
+  n_scope_0_total_94 -->|read,call| n_scope_0_add_9
+  n_scope_0_c_119 -->|read,call| n_scope_0_Counter_62
+  n_scope_0_result_144 -->|read| n_scope_0_total_94
   classDef unused fill:#fdd,stroke:#c00;
   class n_scope_0_c_119 unused;
   class n_scope_0_result_144 unused;

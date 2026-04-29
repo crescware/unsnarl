@@ -39,7 +39,8 @@ export class MermaidEmitter implements Emitter {
     }
 
     for (const r of ir.references) {
-      const fromVarId = findEnclosingVariableId(r, scopeMap, variableMap);
+      const fromVarId =
+        r.owner ?? findEnclosingVariableId(r, scopeMap, variableMap);
       const fromId = fromVarId ? nodeId(fromVarId) : MODULE_ROOT_ID;
       if (!fromVarId) {
         needsModuleRoot = true;

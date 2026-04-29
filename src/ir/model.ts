@@ -65,6 +65,7 @@ export interface Reference {
   isReadWrite(): boolean;
   isCall?(): boolean;
   unsnarlFlags?: ReferenceFlagBits;
+  unsnarlOwner?: Variable | null;
 }
 
 export interface Definition {
@@ -140,6 +141,7 @@ export interface SerializedReference {
   identifier: { name: string; span: Span };
   from: ScopeId;
   resolved: VariableId | null;
+  owner: VariableId | null;
   writeExpr: Span | null;
   init: boolean;
   flags: { read: boolean; write: boolean; call: boolean };

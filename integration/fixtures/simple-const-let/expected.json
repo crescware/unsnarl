@@ -227,6 +227,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:counter@30",
+      "owner": "scope#0:counter@30",
       "writeExpr": {
         "line": 3,
         "column": 10,
@@ -251,6 +252,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:counter@30",
+      "owner": "scope#0:counter@30",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -271,6 +273,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:counter@30",
+      "owner": "scope#0:counter@30",
       "writeExpr": {
         "line": 4,
         "column": 11,
@@ -295,6 +298,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:counter@30",
+      "owner": null,
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -315,6 +319,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:greeting@6",
+      "owner": "scope#0:message@97",
       "writeExpr": null,
       "init": true,
       "flags": {

@@ -21,7 +21,7 @@ flowchart LR
   n_scope_0_a_67["a : Variable\nL4"]
   n_scope_0_ignored_83["ignored : Variable\nL5"]
   n_scope_0_console_98["(unresolved:console)"]
-  module_root -->|read| n_scope_0_used_9
+  n_scope_0_a_67 -->|read| n_scope_0_used_9
   module_root -->|read| n_scope_0_console_98
   module_root -->|read| n_scope_0_a_67
   module_root["(module)"]

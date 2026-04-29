@@ -203,6 +203,7 @@ function serializeReference(
     identifier: { name: r.identifier.name, span: spanOf(r.identifier, raw) },
     from: scopeIds.get(r.from) ?? "",
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
+    owner: r.unsnarlOwner ? (variableIds.get(r.unsnarlOwner) ?? null) : null,
     writeExpr: r.writeExpr ? spanOf(r.writeExpr, raw) : null,
     init: r.init,
     flags: {

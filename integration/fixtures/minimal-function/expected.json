@@ -104,6 +104,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:greet@9",
+      "owner": null,
       "writeExpr": null,
       "init": false,
       "flags": {

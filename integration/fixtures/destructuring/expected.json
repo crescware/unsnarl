@@ -545,6 +545,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:source@6",
+      "owner": "scope#0:a@95",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -565,6 +566,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:source@6",
+      "owner": "scope#0:d@139",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -585,6 +587,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:list@61",
+      "owner": "scope#0:first@162",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -605,6 +608,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:source@6",
+      "owner": "scope#0:spread@206",
       "writeExpr": null,
       "init": true,
       "flags": {
@@ -625,6 +629,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:a@95",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -645,6 +650,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:renamed@101",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -665,6 +671,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:d@139",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -685,6 +692,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:first@162",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -705,6 +713,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:third@171",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -725,6 +734,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:rest@181",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -745,6 +755,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:Object@286",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -765,6 +776,7 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:spread@206",
+      "owner": "scope#0:sum@232",
       "writeExpr": null,
       "init": false,
       "flags": {
