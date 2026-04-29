@@ -1,0 +1,107 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-let/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:count@4"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:count@4",
+      "name": "count",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "count",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "count",
+        "span": {
+          "line": 2,
+          "column": 0,
+          "offset": 15
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:count@4",
+      "writeExpr": {
+        "line": 2,
+        "column": 8,
+        "offset": 23
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

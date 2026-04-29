@@ -1,0 +1,118 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-function/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:greet@9"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:greet@9",
+      "name": "greet",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "FunctionName",
+          "name": {
+            "name": "greet",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "greet",
+        "span": {
+          "line": 4,
+          "column": 0,
+          "offset": 36
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:greet@9",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}
