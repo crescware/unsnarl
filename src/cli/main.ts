@@ -27,11 +27,12 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     return 0;
   }
 
-  const emitters = createDefaultEmitterRegistry(
-    args.mermaidRenderer === null
-      ? {}
-      : { mermaidRenderer: args.mermaidRenderer },
-  );
+  // CLI lets the user omit --mermaid-renderer (= null). The internal API
+  // demands an explicit choice, so the default is resolved here at the
+  // boundary instead of being smuggled into the emitter as undefined.
+  const emitters = createDefaultEmitterRegistry({
+    mermaidRenderer: args.mermaidRenderer ?? "elk",
+  });
   if (args.listFormats) {
     for (const f of emitters.list()) {
       process.stdout.write(`${f}\n`);

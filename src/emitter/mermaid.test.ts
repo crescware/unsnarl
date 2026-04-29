@@ -8,7 +8,7 @@ import { MermaidEmitter } from "./mermaid.js";
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
-const emitter = new MermaidEmitter();
+const emitter = new MermaidEmitter({ renderer: "elk" });
 
 function emit(code: string, language: "ts" | "tsx" | "js" = "ts"): string {
   const parsed = parser.parse(code, {

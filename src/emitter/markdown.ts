@@ -1,6 +1,6 @@
 import type { Language, SerializedIR } from "../ir/model.js";
 import type { EmitOptions, Emitter } from "../pipeline/types.js";
-import { MermaidEmitter } from "./mermaid.js";
+import type { MermaidEmitter } from "./mermaid.js";
 
 export class MarkdownEmitter implements Emitter {
   readonly format = "markdown";
@@ -8,7 +8,7 @@ export class MarkdownEmitter implements Emitter {
 
   private readonly mermaid: MermaidEmitter;
 
-  constructor(mermaid: MermaidEmitter = new MermaidEmitter()) {
+  constructor(mermaid: MermaidEmitter) {
     this.mermaid = mermaid;
   }
 

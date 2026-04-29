@@ -10,19 +10,16 @@ import { createPipeline } from "./pipeline.js";
 import type { EmitterRegistry, Pipeline } from "./types.js";
 
 export interface DefaultRegistryOptions {
-  mermaidRenderer?: MermaidRenderer;
+  mermaidRenderer: MermaidRenderer;
 }
 
 export function createDefaultEmitterRegistry(
-  options: DefaultRegistryOptions = {},
+  options: DefaultRegistryOptions,
 ): EmitterRegistry {
   const reg = new DefaultEmitterRegistry();
   reg.register(new IrEmitter());
   reg.register(new JsonEmitter());
-  const mermaid =
-    options.mermaidRenderer === undefined
-      ? new MermaidEmitter()
-      : new MermaidEmitter({ renderer: options.mermaidRenderer });
+  const mermaid = new MermaidEmitter({ renderer: options.mermaidRenderer });
   reg.register(mermaid);
   reg.register(new MarkdownEmitter(mermaid));
   return reg;
@@ -33,6 +30,7 @@ export function createDefaultPipeline(emitters?: EmitterRegistry): Pipeline {
     parser: new OxcParser(),
     analyzer: new EslintCompatAnalyzer(),
     serializer: new FlatSerializer(),
-    emitters: emitters ?? createDefaultEmitterRegistry(),
+    emitters:
+      emitters ?? createDefaultEmitterRegistry({ mermaidRenderer: "elk" }),
   });
 }

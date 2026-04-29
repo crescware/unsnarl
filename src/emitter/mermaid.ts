@@ -13,13 +13,15 @@ export type MermaidRenderer = "dagre" | "elk";
 
 export interface MermaidEmitterOptions {
   /**
-   * Layout engine for the Mermaid flowchart. `"elk"` (default) gives
-   * cleaner nested-subgraph layouts but requires the `@mermaid-js/layout-elk`
+   * Layout engine for the Mermaid flowchart. `"elk"` gives cleaner
+   * nested-subgraph layouts but requires the `@mermaid-js/layout-elk`
    * loader to be registered in the consuming environment. `"dagre"` is
    * Mermaid's built-in default and is what unconfigured renderers (e.g.
-   * GitHub markdown preview) fall back to.
+   * GitHub markdown preview) fall back to. Required so callers must make
+   * this choice explicitly — the default lives at the CLI / pipeline-default
+   * boundary, not inside the emitter.
    */
-  renderer?: MermaidRenderer;
+  renderer: MermaidRenderer;
 }
 
 export class MermaidEmitter implements Emitter {
@@ -28,8 +30,8 @@ export class MermaidEmitter implements Emitter {
 
   private readonly renderer: MermaidRenderer;
 
-  constructor(options: MermaidEmitterOptions = {}) {
-    this.renderer = options.renderer ?? "elk";
+  constructor(options: MermaidEmitterOptions) {
+    this.renderer = options.renderer;
   }
 
   emit(ir: SerializedIR, _opts: EmitOptions): string {
