@@ -20,12 +20,13 @@ flowchart RL
   n_scope_0_counter_30["counter<br/>L2"]
   n_scope_0_message_97["message<br/>L6"]
   n_scope_0_unused_123["unused<br/>L7"]
-  n_scope_0_counter_30 -->|write| n_scope_0_counter_30
-  n_scope_0_counter_30 -->|read| n_scope_0_counter_30
-  n_scope_0_counter_30 -->|read,write| n_scope_0_counter_30
-  n_scope_0_counter_30 -->|read,write| module_root
+  wr_ref_0(["counter<br/>L3"])
+  wr_ref_2(["counter<br/>L4"])
+  wr_ref_3(["counter<br/>L5"])
+  n_scope_0_counter_30 -->|set| wr_ref_0
+  wr_ref_0 -->|set| wr_ref_2
+  wr_ref_2 -->|set| wr_ref_3
   n_scope_0_greeting_6 -->|read| n_scope_0_message_97
-  module_root((module))
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_message_97 unused;
   class n_scope_0_unused_123 unused;

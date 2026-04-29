@@ -99,6 +99,69 @@ export class MermaidEmitter implements Emitter {
       returnTargets.set(enclosingFn, arr);
     }
 
+    type WriteOp = {
+      refId: string;
+      varId: string;
+      varName: string;
+      line: number;
+      offset: number;
+      scopeId: string;
+    };
+    const refsByVariable = new Map<string, SerializedReference[]>();
+    for (const r of ir.references) {
+      if (!r.resolved) {
+        continue;
+      }
+      const arr = refsByVariable.get(r.resolved) ?? [];
+      arr.push(r);
+      refsByVariable.set(r.resolved, arr);
+    }
+    for (const [, refs] of refsByVariable) {
+      refs.sort((a, b) => a.identifier.span.offset - b.identifier.span.offset);
+    }
+    const writeOpsByVariable = new Map<string, WriteOp[]>();
+    const writeOpsByScope = new Map<string, WriteOp[]>();
+    const writeOpByRef = new Map<string, WriteOp>();
+    for (const v of ir.variables) {
+      if (hiddenVariables.has(v.id)) {
+        continue;
+      }
+      const refs = refsByVariable.get(v.id) ?? [];
+      const ops: WriteOp[] = [];
+      for (const r of refs) {
+        if (!r.flags.write) {
+          continue;
+        }
+        const op: WriteOp = {
+          refId: r.id,
+          varId: v.id,
+          varName: v.name,
+          line: r.identifier.span.line,
+          offset: r.identifier.span.offset,
+          scopeId: r.from,
+        };
+        ops.push(op);
+        writeOpByRef.set(r.id, op);
+        const sopArr = writeOpsByScope.get(op.scopeId) ?? [];
+        sopArr.push(op);
+        writeOpsByScope.set(op.scopeId, sopArr);
+      }
+      if (ops.length > 0) {
+        writeOpsByVariable.set(v.id, ops);
+      }
+    }
+    const stateAt = (varId: string, offset: number): string => {
+      const ops = writeOpsByVariable.get(varId) ?? [];
+      let last: WriteOp | null = null;
+      for (const op of ops) {
+        if (op.offset >= offset) {
+          break;
+        }
+        last = op;
+      }
+      return last ? last.refId : varId;
+    };
+
     function controlScopeLabel(scope: SerializedScope): string | null {
       const line = scope.block.span.line;
       if (scope.type === "catch") {
@@ -194,6 +257,12 @@ export class MermaidEmitter implements Emitter {
         }
         lines.push(`${childIndent}${nodeId(vid)}["${variableLabel(v)}"]`);
       }
+      const ops = writeOpsByScope.get(scope.id) ?? [];
+      for (const op of ops) {
+        lines.push(
+          `${childIndent}${writeOpNodeId(op.refId)}(["${escape(op.varName)}<br/>L${op.line}"])`,
+        );
+      }
       for (const childId of scope.childScopes) {
         const child = scopeMap.get(childId);
         if (!child) {
@@ -213,6 +282,43 @@ export class MermaidEmitter implements Emitter {
       emitScope(root, "  ");
     }
 
+    const stateRefId = (refId: string, varId: string): string => {
+      const op = writeOpByRef.get(refId);
+      if (op) {
+        return writeOpNodeId(op.refId);
+      }
+      const ref = ir.references.find((r) => r.id === refId);
+      if (!ref) {
+        return nodeId(varId);
+      }
+      const stateRef = stateAt(varId, ref.identifier.span.offset);
+      return stateRef === varId ? nodeId(varId) : writeOpNodeId(stateRef);
+    };
+
+    const ownerTargetId = (ownerVarId: string, offset: number): string => {
+      const ops = writeOpsByVariable.get(ownerVarId) ?? [];
+      let last: WriteOp | null = null;
+      for (const op of ops) {
+        if (op.offset > offset) {
+          break;
+        }
+        last = op;
+      }
+      return last ? writeOpNodeId(last.refId) : nodeId(ownerVarId);
+    };
+
+    for (const ops of writeOpsByVariable.values()) {
+      const head = ops[0];
+      if (!head) {
+        continue;
+      }
+      let prevId = nodeId(head.varId);
+      for (const op of ops) {
+        lines.push(`  ${prevId} -->|set| ${writeOpNodeId(op.refId)}`);
+        prevId = writeOpNodeId(op.refId);
+      }
+    }
+
     let needsModuleRoot = false;
     for (const r of ir.references) {
       if (!r.resolved) {
@@ -221,11 +327,28 @@ export class MermaidEmitter implements Emitter {
       if (hiddenVariables.has(r.resolved)) {
         continue;
       }
+      if (r.flags.write) {
+        if (r.flags.call || (r.flags.read && r.owners.length > 0)) {
+          const fromId = stateRefId(r.id, r.resolved);
+          for (const ownerId of r.owners) {
+            if (ownerId === r.resolved) {
+              continue;
+            }
+            const targetId = ownerTargetId(ownerId, r.identifier.span.offset);
+            lines.push(`  ${fromId} -->|${edgeLabel(r)}| ${targetId}`);
+          }
+        }
+        continue;
+      }
       const label = edgeLabel(r);
-      const fromId = nodeId(r.resolved);
+      const fromId = stateRefId(r.id, r.resolved);
       if (r.owners.length > 0) {
         for (const ownerId of r.owners) {
-          lines.push(`  ${fromId} -->|${label}| ${nodeId(ownerId)}`);
+          if (ownerId === r.resolved) {
+            continue;
+          }
+          const targetId = ownerTargetId(ownerId, r.identifier.span.offset);
+          lines.push(`  ${fromId} -->|${label}| ${targetId}`);
         }
       } else {
         const enclosingFn = enclosingFunctionVar(r.from);
@@ -387,6 +510,10 @@ function nodeId(id: string): string {
 
 function returnNodeId(varId: string): string {
   return `return_${sanitize(varId)}`;
+}
+
+function writeOpNodeId(refId: string): string {
+  return `wr_${sanitize(refId)}`;
 }
 
 function sanitize(value: string): string {
