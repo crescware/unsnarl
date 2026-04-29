@@ -490,16 +490,19 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   const ifContainersSeen = new Map<string, VisualSubgraph>();
 
-  const buildScope = (
-    scope: SerializedScope,
-    parentSubgraphId: string | null,
-  ): void => {
+  type Container = { kind: "root" } | { kind: "subgraph"; id: string };
+  const ROOT_CONTAINER: Container = { kind: "root" };
+  const containerParentId = (c: Container): string | null =>
+    c.kind === "root" ? null : c.id;
+
+  const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
-    let myId: string | null = null;
+    let bodyContainer: Container = container;
     if (subgraphHere) {
-      myId = subgraphScopeId(scope);
-      const sg = describeSubgraph(scope, parentSubgraphId);
+      const myId = subgraphScopeId(scope);
+      const sg = describeSubgraph(scope, container);
       subgraphs.push(sg);
+      bodyContainer = { kind: "subgraph", id: myId };
       const ownerVar = subgraphOwnerVar.get(scope.id);
       if (ownerVar && returnTargets.has(ownerVar)) {
         nodes.push({
@@ -511,7 +514,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         });
       }
     }
-    const containerOrLocal = myId ?? parentSubgraphId;
+    const parentForChildren = containerParentId(bodyContainer);
     for (const vid of scope.variables) {
       if (hiddenVariables.has(vid)) {
         continue;
@@ -523,7 +526,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (!v) {
         continue;
       }
-      nodes.push(makeVariableNode(v, containerOrLocal));
+      nodes.push(makeVariableNode(v, parentForChildren));
     }
     const ops = writeOpsByScope.get(scope.id) ?? [];
     for (const op of ops) {
@@ -534,19 +537,19 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         kind: "WriteOp",
         name: op.varName,
         line: op.line,
-        parent: containerOrLocal,
+        parent: parentForChildren,
       };
       if (declarationKind) {
         node.declarationKind = declarationKind;
       }
       nodes.push(node);
     }
-    buildChildren(scope, containerOrLocal);
+    buildChildren(scope, bodyContainer);
   };
 
   const buildChildren = (
     parentScope: SerializedScope,
-    parentSubgraphId: string | null,
+    container: Container,
   ): void => {
     const children: SerializedScope[] = [];
     for (const id of parentScope.childScopes) {
@@ -564,7 +567,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       }
       const ckey = branchContainerKey(child);
       if (ckey === null || !ckey.startsWith("if:")) {
-        buildScope(child, parentSubgraphId);
+        buildScope(child, container);
         i++;
         continue;
       }
@@ -580,7 +583,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       }
       if (group.length < 2) {
         for (const g of group) {
-          buildScope(g, parentSubgraphId);
+          buildScope(g, container);
         }
         i = j;
         continue;
@@ -592,14 +595,18 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         id: containerId,
         kind: "if-else-container",
         line: lineForOffset(offset),
-        parent: parentSubgraphId,
+        parent: containerParentId(container),
         direction: "RL",
         hasElse,
       };
       subgraphs.push(containerSubgraph);
       ifContainersSeen.set(containerId, containerSubgraph);
+      const innerContainer: Container = {
+        kind: "subgraph",
+        id: containerId,
+      };
       for (const g of group) {
-        buildScope(g, containerId);
+        buildScope(g, innerContainer);
       }
       i = j;
     }
@@ -607,9 +614,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   const describeSubgraph = (
     scope: SerializedScope,
-    parentSubgraphId: string | null,
+    container: Container,
   ): VisualSubgraph => {
     const id = subgraphScopeId(scope);
+    const parentId = containerParentId(container);
     if (isFunctionSubgraph(scope)) {
       const ownerVarId = subgraphOwnerVar.get(scope.id);
       const ownerVar = ownerVarId ? variableMap.get(ownerVarId) : undefined;
@@ -618,7 +626,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         id,
         kind: "function",
         line: ownerVar?.identifiers[0]?.line ?? scope.block.span.line,
-        parent: parentSubgraphId,
+        parent: parentId,
         direction: "RL",
         ownerName,
       };
@@ -633,7 +641,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       id,
       kind,
       line: scope.block.span.line,
-      parent: parentSubgraphId,
+      parent: parentId,
       direction: "RL",
     };
     if (kind === "case") {
@@ -646,7 +654,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     (s) => s.type === "module" || s.type === "global",
   );
   if (root) {
-    buildScope(root, null);
+    buildScope(root, ROOT_CONTAINER);
   }
 
   let needsModuleRoot = false;
