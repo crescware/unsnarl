@@ -26,6 +26,7 @@ export class ScopeImpl implements Scope {
   readonly through: Reference[] = [];
   readonly functionExpressionScope: boolean = false;
   unsnarlBlockContext: BlockContext | null = null;
+  unsnarlFallsThrough: boolean = false;
 
   constructor(opts: {
     type: ScopeType;

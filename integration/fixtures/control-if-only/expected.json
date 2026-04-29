@@ -34,7 +34,8 @@
       ],
       "through": [],
       "functionExpressionScope": false,
-      "blockContext": null
+      "blockContext": null,
+      "fallsThrough": false
     },
     {
       "id": "scope#1",
@@ -61,7 +62,8 @@
         "parentType": "IfStatement",
         "key": "consequent",
         "parentSpanOffset": 37
-      }
+      },
+      "fallsThrough": false
     }
   ],
   "variables": [

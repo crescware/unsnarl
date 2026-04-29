@@ -40,7 +40,8 @@
         "ref#2"
       ],
       "functionExpressionScope": false,
-      "blockContext": null
+      "blockContext": null,
+      "fallsThrough": false
     },
     {
       "id": "scope#1",
@@ -72,7 +73,8 @@
         "parentType": "TryStatement",
         "key": "block",
         "parentSpanOffset": 52
-      }
+      },
+      "fallsThrough": false
     },
     {
       "id": "scope#2",
@@ -102,7 +104,8 @@
         "parentType": "TryStatement",
         "key": "handler",
         "parentSpanOffset": 52
-      }
+      },
+      "fallsThrough": false
     },
     {
       "id": "scope#3",
@@ -129,7 +132,8 @@
         "parentType": "TryStatement",
         "key": "finalizer",
         "parentSpanOffset": 52
-      }
+      },
+      "fallsThrough": false
     }
   ],
   "variables": [

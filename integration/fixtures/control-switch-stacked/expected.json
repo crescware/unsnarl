@@ -1,10 +1,10 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/control-switch-break/input.ts",
+    "path": "integration/fixtures/control-switch-stacked/input.ts",
     "language": "ts"
   },
-  "raw": "let label = \"\";\nconst kind = \"a\";\n\nswitch (kind) {\n  case \"a\":\n    label = \"alpha\";\n    break;\n  case \"b\":\n    label = \"beta\";\n    break;\n  default:\n    label = \"other\";\n}\n\nconst result = label;\n",
+  "raw": "let label = \"\";\nconst kind = \"a\";\n\nswitch (kind) {\n  case \"a\":\n  case \"b\":\n    label = \"ab\";\n    break;\n  default:\n    label = \"other\";\n}\n\nconst result = label;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -26,10 +26,10 @@
       "variables": [
         "scope#0:label@4",
         "scope#0:kind@22",
-        "scope#0:result@179"
+        "scope#0:result@145"
       ],
       "references": [
-        "ref#4"
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -84,9 +84,7 @@
         }
       },
       "variables": [],
-      "references": [
-        "ref#1"
-      ],
+      "references": [],
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
@@ -94,7 +92,7 @@
         "key": "cases",
         "parentSpanOffset": 35
       },
-      "fallsThrough": false
+      "fallsThrough": true
     },
     {
       "id": "scope#3",
@@ -106,14 +104,14 @@
       "block": {
         "type": "SwitchCase",
         "span": {
-          "line": 8,
+          "line": 6,
           "column": 2,
-          "offset": 97
+          "offset": 65
         }
       },
       "variables": [],
       "references": [
-        "ref#2"
+        "ref#1"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -134,14 +132,14 @@
       "block": {
         "type": "SwitchCase",
         "span": {
-          "line": 11,
+          "line": 9,
           "column": 2,
-          "offset": 140
+          "offset": 106
         }
       },
       "variables": [],
       "references": [
-        "ref#3"
+        "ref#2"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -168,8 +166,7 @@
       "references": [
         "ref#1",
         "ref#2",
-        "ref#3",
-        "ref#4"
+        "ref#3"
       ],
       "defs": [
         {
@@ -266,14 +263,14 @@
       ]
     },
     {
-      "id": "scope#0:result@179",
+      "id": "scope#0:result@145",
       "name": "result",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 15,
+          "line": 13,
           "column": 6,
-          "offset": 179
+          "offset": 145
         }
       ],
       "references": [],
@@ -283,32 +280,32 @@
           "name": {
             "name": "result",
             "span": {
-              "line": 15,
+              "line": 13,
               "column": 6,
-              "offset": 179
+              "offset": 145
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 15,
+              "line": 13,
               "column": 6,
-              "offset": 179
+              "offset": 145
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 15,
+              "line": 13,
               "column": 0,
-              "offset": 173
+              "offset": 139
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 15,
+            "line": 13,
             "column": 15,
-            "offset": 188
+            "offset": 154
           },
           "importKind": null,
           "importSource": null,
@@ -350,20 +347,20 @@
       "identifier": {
         "name": "label",
         "span": {
-          "line": 6,
+          "line": 7,
           "column": 4,
-          "offset": 67
+          "offset": 79
         }
       },
-      "from": "scope#2",
+      "from": "scope#3",
       "resolved": "scope#0:label@4",
       "owners": [
         "scope#0:label@4"
       ],
       "writeExpr": {
-        "line": 6,
+        "line": 7,
         "column": 12,
-        "offset": 75
+        "offset": 87
       },
       "init": false,
       "flags": {
@@ -379,20 +376,20 @@
       "identifier": {
         "name": "label",
         "span": {
-          "line": 9,
+          "line": 10,
           "column": 4,
-          "offset": 111
+          "offset": 119
         }
       },
-      "from": "scope#3",
+      "from": "scope#4",
       "resolved": "scope#0:label@4",
       "owners": [
         "scope#0:label@4"
       ],
       "writeExpr": {
-        "line": 9,
+        "line": 10,
         "column": 12,
-        "offset": 119
+        "offset": 127
       },
       "init": false,
       "flags": {
@@ -408,44 +405,15 @@
       "identifier": {
         "name": "label",
         "span": {
-          "line": 12,
-          "column": 4,
-          "offset": 153
-        }
-      },
-      "from": "scope#4",
-      "resolved": "scope#0:label@4",
-      "owners": [
-        "scope#0:label@4"
-      ],
-      "writeExpr": {
-        "line": 12,
-        "column": 12,
-        "offset": 161
-      },
-      "init": false,
-      "flags": {
-        "read": false,
-        "write": true,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null
-    },
-    {
-      "id": "ref#4",
-      "identifier": {
-        "name": "label",
-        "span": {
-          "line": 15,
+          "line": 13,
           "column": 15,
-          "offset": 188
+          "offset": 154
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:label@4",
       "owners": [
-        "scope#0:result@179"
+        "scope#0:result@145"
       ],
       "writeExpr": null,
       "init": true,
@@ -459,7 +427,7 @@
     }
   ],
   "unusedVariableIds": [
-    "scope#0:result@179"
+    "scope#0:result@145"
   ],
   "diagnostics": []
 }

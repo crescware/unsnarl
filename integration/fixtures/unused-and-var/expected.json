@@ -37,7 +37,8 @@
         "ref#1"
       ],
       "functionExpressionScope": false,
-      "blockContext": null
+      "blockContext": null,
+      "fallsThrough": false
     }
   ],
   "variables": [

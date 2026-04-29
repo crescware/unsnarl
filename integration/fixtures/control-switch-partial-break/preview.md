@@ -1,4 +1,4 @@
-# integration/fixtures/control-switch-fallthrough/input.ts
+# integration/fixtures/control-switch-partial-break/input.ts
 
 ## Input
 
@@ -11,6 +11,7 @@ switch (kind) {
     label = "alpha";
   case "b":
     label = "beta";
+    break;
   default:
     label = "other";
 }
@@ -24,7 +25,7 @@ const result = label;
 flowchart RL
   n_scope_0_label_4["let label<br/>L1"]
   n_scope_0_kind_22["kind<br/>L2"]
-  n_scope_0_result_157["result<br/>L13"]
+  n_scope_0_result_168["result<br/>L14"]
   subgraph s_scope_1["switch L4"]
     direction RL
     subgraph s_scope_2["case L5"]
@@ -35,16 +36,17 @@ flowchart RL
       direction RL
       wr_ref_2(["let label<br/>L8"])
     end
-    subgraph s_scope_4["case L9"]
+    subgraph s_scope_4["case L10"]
       direction RL
-      wr_ref_3(["let label<br/>L10"])
+      wr_ref_3(["let label<br/>L11"])
     end
   end
   n_scope_0_label_4 -->|set| wr_ref_1
   wr_ref_1 -->|fallthrough| wr_ref_2
-  wr_ref_2 -->|fallthrough| wr_ref_3
+  n_scope_0_label_4 -->|set| wr_ref_3
   n_scope_0_kind_22 -->|read| s_scope_1
-  wr_ref_3 -->|read| n_scope_0_result_157
+  wr_ref_2 -->|read| n_scope_0_result_168
+  wr_ref_3 -->|read| n_scope_0_result_168
   classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_result_157 unused;
+  class n_scope_0_result_168 unused;
 ```

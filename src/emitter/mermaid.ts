@@ -462,7 +462,18 @@ export class MermaidEmitter implements Emitter {
       }
 
       const origins: string[] = [];
+      const isSwitch = containerKey.startsWith("switch:");
       for (const branchId of branchScopeIds) {
+        const branchScope = scopeMap.get(branchId);
+        if (isSwitch && branchScope !== undefined && branchScope.fallsThrough) {
+          const cases = sortedCasesByContainer.get(containerKey);
+          if (cases) {
+            const idx = cases.indexOf(branchScope);
+            if (idx >= 0 && idx < cases.length - 1) {
+              continue;
+            }
+          }
+        }
         let lastOp: WriteOp | null = null;
         for (const op of prev) {
           if (
@@ -512,6 +523,59 @@ export class MermaidEmitter implements Emitter {
       return last ? writeOpNodeId(last.refId) : nodeId(ownerVarId);
     };
 
+    const sortedCasesByContainer = new Map<string, SerializedScope[]>();
+    for (const s of ir.scopes) {
+      const ckey = branchContainerKey(s);
+      if (ckey?.startsWith("switch:")) {
+        const arr = sortedCasesByContainer.get(ckey) ?? [];
+        arr.push(s);
+        sortedCasesByContainer.set(ckey, arr);
+      }
+    }
+    for (const [, arr] of sortedCasesByContainer) {
+      arr.sort((a, b) => a.block.span.offset - b.block.span.offset);
+    }
+
+    const previousFallthroughCase = (
+      caseScope: SerializedScope,
+    ): SerializedScope | null => {
+      const ckey = branchContainerKey(caseScope);
+      if (!ckey) {
+        return null;
+      }
+      const cases = sortedCasesByContainer.get(ckey);
+      if (!cases) {
+        return null;
+      }
+      const idx = cases.indexOf(caseScope);
+      if (idx <= 0) {
+        return null;
+      }
+      const prev = cases[idx - 1];
+      if (!prev) {
+        return null;
+      }
+      return prev.fallsThrough ? prev : null;
+    };
+
+    const lastWriteOpInScopeBefore = (
+      varId: string,
+      scopeId: string,
+      offset: number,
+    ): WriteOp | null => {
+      const ops = writeOpsByVariable.get(varId) ?? [];
+      let last: WriteOp | null = null;
+      for (const op of ops) {
+        if (op.offset >= offset) {
+          break;
+        }
+        if (op.scopeId === scopeId || isAncestorScope(scopeId, op.scopeId)) {
+          last = op;
+        }
+      }
+      return last;
+    };
+
     for (const ops of writeOpsByVariable.values()) {
       const head = ops[0];
       if (!head) {
@@ -523,17 +587,46 @@ export class MermaidEmitter implements Emitter {
           continue;
         }
         let prevId = nodeId(op.varId);
-        for (let j = i - 1; j >= 0; j--) {
-          const candidate = ops[j];
-          if (!candidate) {
-            continue;
+        const opScope = scopeMap.get(op.scopeId);
+        const opBranchKey = opScope ? branchContainerKey(opScope) : null;
+        const isFirstInCase =
+          opScope !== undefined &&
+          opBranchKey !== null &&
+          opBranchKey.startsWith("switch:") &&
+          !ops
+            .slice(0, i)
+            .some(
+              (prevOp) => prevOp !== undefined && prevOp.scopeId === op.scopeId,
+            );
+        if (isFirstInCase && opScope) {
+          const prevCase = previousFallthroughCase(opScope);
+          if (prevCase) {
+            const prevCaseLast = lastWriteOpInScopeBefore(
+              op.varId,
+              prevCase.id,
+              op.offset,
+            );
+            if (prevCaseLast) {
+              prevId = writeOpNodeId(prevCaseLast.refId);
+            }
           }
-          if (isAncestorScope(candidate.scopeId, op.scopeId)) {
-            prevId = writeOpNodeId(candidate.refId);
-            break;
+        } else {
+          for (let j = i - 1; j >= 0; j--) {
+            const candidate = ops[j];
+            if (!candidate) {
+              continue;
+            }
+            if (isAncestorScope(candidate.scopeId, op.scopeId)) {
+              prevId = writeOpNodeId(candidate.refId);
+              break;
+            }
           }
         }
-        lines.push(`  ${prevId} -->|set| ${writeOpNodeId(op.refId)}`);
+        const edgeKind =
+          isFirstInCase && previousFallthroughCase(opScope!)
+            ? "fallthrough"
+            : "set";
+        lines.push(`  ${prevId} -->|${edgeKind}| ${writeOpNodeId(op.refId)}`);
       }
     }
 
@@ -570,6 +663,16 @@ export class MermaidEmitter implements Emitter {
     };
 
     let needsModuleRoot = false;
+    const emittedEdges = new Set<string>();
+    const pushEdge = (from: string, label: string, to: string): void => {
+      const key = `${from} -->|${label}| ${to}`;
+      if (emittedEdges.has(key)) {
+        return;
+      }
+      emittedEdges.add(key);
+      lines.push(`  ${key}`);
+    };
+
     for (const r of ir.references) {
       if (!r.resolved) {
         continue;
@@ -585,7 +688,7 @@ export class MermaidEmitter implements Emitter {
           r.from,
         );
         for (const fromId of fromIds) {
-          lines.push(`  ${fromId} -->|${edgeLabel(r)}| ${predicateTarget}`);
+          pushEdge(fromId, edgeLabel(r), predicateTarget);
         }
         continue;
       }
@@ -597,7 +700,7 @@ export class MermaidEmitter implements Emitter {
               continue;
             }
             const targetId = ownerTargetId(ownerId, r.identifier.span.offset);
-            lines.push(`  ${fromId} -->|${edgeLabel(r)}| ${targetId}`);
+            pushEdge(fromId, edgeLabel(r), targetId);
           }
         }
         continue;
@@ -611,21 +714,19 @@ export class MermaidEmitter implements Emitter {
           }
           const targetId = ownerTargetId(ownerId, r.identifier.span.offset);
           for (const fromId of fromIds) {
-            lines.push(`  ${fromId} -->|${label}| ${targetId}`);
+            pushEdge(fromId, label, targetId);
           }
         }
       } else {
         const enclosingFn = enclosingFunctionVar(r.from);
         if (enclosingFn) {
           for (const fromId of fromIds) {
-            lines.push(
-              `  ${fromId} -->|${label}| ${returnNodeId(enclosingFn)}`,
-            );
+            pushEdge(fromId, label, returnNodeId(enclosingFn));
           }
         } else {
           needsModuleRoot = true;
           for (const fromId of fromIds) {
-            lines.push(`  ${fromId} -->|${label}| ${MODULE_ROOT_ID}`);
+            pushEdge(fromId, label, MODULE_ROOT_ID);
           }
         }
       }

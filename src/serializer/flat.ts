@@ -155,6 +155,7 @@ function serializeScope(
       .filter((x): x is string => x !== undefined),
     functionExpressionScope: scope.functionExpressionScope,
     blockContext: scope.unsnarlBlockContext ?? null,
+    fallsThrough: scope.unsnarlFallsThrough ?? false,
   };
 }
 

@@ -113,6 +113,7 @@ export interface Scope {
   through: Reference[];
   functionExpressionScope: boolean;
   unsnarlBlockContext?: BlockContext | null;
+  unsnarlFallsThrough?: boolean;
 }
 
 export type DiagnosticKind =
@@ -143,6 +144,7 @@ export interface SerializedScope {
   through: ReferenceId[];
   functionExpressionScope: boolean;
   blockContext: BlockContext | null;
+  fallsThrough: boolean;
 }
 
 export interface SerializedVariable {

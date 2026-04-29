@@ -158,7 +158,14 @@ function handleEnter(
       const scope = manager.push("block", node as unknown as AstNode, ctx);
       const consequent = node["consequent"];
       if (Array.isArray(consequent)) {
+        (
+          scope as unknown as { unsnarlFallsThrough: boolean }
+        ).unsnarlFallsThrough = caseFallsThrough(consequent);
         hoistDeclarations(consequent, scope, raw, diagnostics);
+      } else {
+        (
+          scope as unknown as { unsnarlFallsThrough: boolean }
+        ).unsnarlFallsThrough = true;
       }
       return;
     }
@@ -350,6 +357,52 @@ function handleIdentifierReference(
     key,
     path,
   );
+}
+
+function caseFallsThrough(consequent: ReadonlyArray<unknown>): boolean {
+  if (consequent.length === 0) {
+    return true;
+  }
+  const last = consequent[consequent.length - 1];
+  if (!isNodeLike(last)) {
+    return true;
+  }
+  return !isControlExit(last);
+}
+
+function isControlExit(node: NodeLike): boolean {
+  switch (node.type) {
+    case "BreakStatement":
+    case "ContinueStatement":
+    case "ReturnStatement":
+    case "ThrowStatement":
+      return true;
+    case "BlockStatement": {
+      const body = node["body"];
+      if (Array.isArray(body) && body.length > 0) {
+        const last = body[body.length - 1];
+        if (isNodeLike(last)) {
+          return isControlExit(last);
+        }
+      }
+      return false;
+    }
+    case "IfStatement": {
+      const consequent = node["consequent"];
+      const alternate = node["alternate"];
+      if (
+        isNodeLike(consequent) &&
+        isNodeLike(alternate) &&
+        isControlExit(consequent) &&
+        isControlExit(alternate)
+      ) {
+        return true;
+      }
+      return false;
+    }
+    default:
+      return false;
+  }
 }
 
 function isNodeLike(value: unknown): value is NodeLike {

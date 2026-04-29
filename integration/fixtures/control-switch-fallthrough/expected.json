@@ -33,7 +33,8 @@
       ],
       "through": [],
       "functionExpressionScope": false,
-      "blockContext": null
+      "blockContext": null,
+      "fallsThrough": false
     },
     {
       "id": "scope#1",
@@ -64,7 +65,8 @@
         "parentType": "Program",
         "key": "body",
         "parentSpanOffset": 0
-      }
+      },
+      "fallsThrough": false
     },
     {
       "id": "scope#2",
@@ -91,7 +93,8 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 35
-      }
+      },
+      "fallsThrough": true
     },
     {
       "id": "scope#3",
@@ -118,7 +121,8 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 35
-      }
+      },
+      "fallsThrough": true
     },
     {
       "id": "scope#4",
@@ -145,7 +149,8 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 35
-      }
+      },
+      "fallsThrough": true
     }
   ],
   "variables": [

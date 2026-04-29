@@ -36,7 +36,8 @@
       ],
       "through": [],
       "functionExpressionScope": false,
-      "blockContext": null
+      "blockContext": null,
+      "fallsThrough": false
     }
   ],
   "variables": [
