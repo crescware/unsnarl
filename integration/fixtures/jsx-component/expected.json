@@ -4,6 +4,7 @@
     "path": "integration/fixtures/jsx-component/input.tsx",
     "language": "tsx"
   },
+  "raw": "import { Fragment } from \"react\";\n\ninterface Props {\n  label: string;\n}\n\nconst Hello = (props: Props) => (\n  <Fragment>\n    <span className=\"greeting\">{props.label}</span>\n  </Fragment>\n);\n\nconst App = () => <Hello label=\"hi\" />;\n\nconst root = App;\n",
   "scopes": [
     {
       "id": "scope#0",

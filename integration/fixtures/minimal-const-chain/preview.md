@@ -1,6 +1,6 @@
-# minimal-const-chain
+# integration/fixtures/minimal-const-chain/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 const a = "a";

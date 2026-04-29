@@ -4,6 +4,7 @@
     "path": "integration/fixtures/minimal-const-chain/input.ts",
     "language": "ts"
   },
+  "raw": "const a = \"a\";\nconst b = [a];\nconst c = { value: b };\nconst d = c;\n",
   "scopes": [
     {
       "id": "scope#0",

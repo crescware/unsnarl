@@ -1,6 +1,6 @@
-# simple-const-let
+# integration/fixtures/simple-const-let/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 const greeting = "hello";

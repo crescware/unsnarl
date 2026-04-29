@@ -4,6 +4,7 @@
     "path": "integration/fixtures/destructuring/input.ts",
     "language": "ts"
   },
+  "raw": "const source = { a: 1, b: 2, c: 3, nested: { d: 4 } };\nconst list = [10, 20, 30, 40];\n\nconst { a, b: renamed } = source;\nconst { nested: { d } } = source;\nconst [first, , third, ...rest] = list;\nconst { ...spread } = source;\n\nconst sum = a + renamed + d + first + third + rest.length + Object.keys(spread).length;\n",
   "scopes": [
     {
       "id": "scope#0",

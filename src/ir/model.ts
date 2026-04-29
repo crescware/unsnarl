@@ -181,6 +181,7 @@ export interface SerializedDefinition {
 export interface SerializedIR {
   version: 1;
   source: { path: string; language: Language };
+  raw: string;
   scopes: SerializedScope[];
   variables: SerializedVariable[];
   references: SerializedReference[];

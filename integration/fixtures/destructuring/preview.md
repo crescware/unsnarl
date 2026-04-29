@@ -1,6 +1,6 @@
-# destructuring
+# integration/fixtures/destructuring/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 const source = { a: 1, b: 2, c: 3, nested: { d: 4 } };

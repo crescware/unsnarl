@@ -1,6 +1,6 @@
-# minimal-let
+# integration/fixtures/minimal-let/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 let count = 0;

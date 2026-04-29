@@ -11,6 +11,7 @@ const fakeIR: SerializedIR = {
   variables: [],
   references: [],
   unusedVariableIds: [],
+  raw: "",
   diagnostics: [],
 };
 

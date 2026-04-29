@@ -1,6 +1,6 @@
-# minimal-function-chain
+# integration/fixtures/minimal-function-chain/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 function f() {

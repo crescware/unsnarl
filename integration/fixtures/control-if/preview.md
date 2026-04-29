@@ -1,6 +1,6 @@
-# control-if
+# integration/fixtures/control-if/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 let counter = 0;

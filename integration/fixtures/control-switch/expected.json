@@ -4,6 +4,7 @@
     "path": "integration/fixtures/control-switch/input.ts",
     "language": "ts"
   },
+  "raw": "let label = \"\";\nconst kind = \"a\";\n\nswitch (kind) {\n  case \"a\":\n    label = \"alpha\";\n    break;\n  case \"b\":\n    label = \"beta\";\n    break;\n  default:\n    label = \"other\";\n}\n\nconst result = label;\n",
   "scopes": [
     {
       "id": "scope#0",

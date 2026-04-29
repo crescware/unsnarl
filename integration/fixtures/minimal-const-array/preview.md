@@ -1,6 +1,6 @@
-# minimal-const-array
+# integration/fixtures/minimal-const-array/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 const a = "a";

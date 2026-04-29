@@ -1,6 +1,6 @@
-# imports
+# integration/fixtures/imports/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 import def from "some-default";

@@ -10,6 +10,7 @@ const ir: SerializedIR = {
   variables: [],
   references: [],
   unusedVariableIds: [],
+  raw: "",
   diagnostics: [],
 };
 

@@ -4,6 +4,7 @@
     "path": "integration/fixtures/function-and-class/input.ts",
     "language": "ts"
   },
+  "raw": "function add(a: number, b: number) {\n  return a + b;\n}\n\nclass Counter {\n  start = 0;\n}\n\nconst total = add(1, 2);\nconst c = new Counter();\nconst result = total;\n",
   "scopes": [
     {
       "id": "scope#0",

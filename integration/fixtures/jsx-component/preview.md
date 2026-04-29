@@ -1,6 +1,6 @@
-# jsx-component
+# integration/fixtures/jsx-component/input.tsx
 
-## Input (`input.tsx`)
+## Input
 
 ```tsx
 import { Fragment } from "react";

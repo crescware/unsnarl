@@ -1,6 +1,6 @@
-# function-and-class
+# integration/fixtures/function-and-class/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 function add(a: number, b: number) {

@@ -55,6 +55,7 @@ export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
 export { FlatSerializer } from "./serializer/flat.js";
 
 export { JsonEmitter } from "./emitter/json.js";
+export { MarkdownEmitter } from "./emitter/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";
 

@@ -1,6 +1,6 @@
-# function-result-chain
+# integration/fixtures/function-result-chain/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 function f() {

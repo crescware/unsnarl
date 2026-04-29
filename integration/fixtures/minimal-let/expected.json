@@ -4,6 +4,7 @@
     "path": "integration/fixtures/minimal-let/input.ts",
     "language": "ts"
   },
+  "raw": "let count = 0;\ncount = 1;\n",
   "scopes": [
     {
       "id": "scope#0",

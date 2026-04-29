@@ -1,6 +1,6 @@
-# function-let
+# integration/fixtures/function-let/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 function f() {

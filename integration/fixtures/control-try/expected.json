@@ -4,6 +4,7 @@
     "path": "integration/fixtures/control-try/input.ts",
     "language": "ts"
   },
+  "raw": "let value = 0;\nlet attempts = 0;\nconst raw = \"42\";\n\ntry {\n  attempts = 1;\n  value = Number(raw);\n} catch (err) {\n  attempts = -1;\n  value = -1;\n} finally {\n  attempts += 1;\n}\n\nconst result = value + attempts;\n",
   "scopes": [
     {
       "id": "scope#0",

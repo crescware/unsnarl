@@ -4,6 +4,7 @@
     "path": "integration/fixtures/imports/input.ts",
     "language": "ts"
   },
+  "raw": "import def from \"some-default\";\nimport { named, other as renamed } from \"some-named\";\nimport * as ns from \"some-namespace\";\n\nconst a = def;\nconst b = named;\nconst c = renamed;\nconst d = ns;\n",
   "scopes": [
     {
       "id": "scope#0",

@@ -1,6 +1,6 @@
-# control-try
+# integration/fixtures/control-try/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 let value = 0;

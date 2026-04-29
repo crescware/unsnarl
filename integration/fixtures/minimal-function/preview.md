@@ -1,6 +1,6 @@
-# minimal-function
+# integration/fixtures/minimal-function/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 function greet() {

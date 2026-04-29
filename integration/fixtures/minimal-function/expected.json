@@ -4,6 +4,7 @@
     "path": "integration/fixtures/minimal-function/input.ts",
     "language": "ts"
   },
+  "raw": "function greet() {\n  return \"hi\";\n}\ngreet();\n",
   "scopes": [
     {
       "id": "scope#0",

@@ -4,6 +4,7 @@
     "path": "integration/fixtures/function-result-chain/input.ts",
     "language": "ts"
   },
+  "raw": "function f() {\n  const a = \"a\";\n  const b = [a];\n  const c = { value: b };\n  const d = c;\n  return d;\n}\n\nconst g = f();\nconst h = [g];\n",
   "scopes": [
     {
       "id": "scope#0",

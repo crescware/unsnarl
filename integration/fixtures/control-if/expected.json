@@ -4,6 +4,7 @@
     "path": "integration/fixtures/control-if/input.ts",
     "language": "ts"
   },
+  "raw": "let counter = 0;\nconst flag = true;\n\nif (flag) {\n  counter = 1;\n} else {\n  counter = 2;\n}\n\nconst result = counter;\n",
   "scopes": [
     {
       "id": "scope#0",

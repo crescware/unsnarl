@@ -77,6 +77,7 @@ export class FlatSerializer implements IRSerializer {
     return {
       version: 1,
       source: { path: ctx.source.path, language: ctx.source.language },
+      raw: ctx.raw,
       scopes: serializedScopes,
       variables: serializedVariables,
       references: serializedReferences,

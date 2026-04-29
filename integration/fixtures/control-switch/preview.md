@@ -1,6 +1,6 @@
-# control-switch
+# integration/fixtures/control-switch/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 let label = "";

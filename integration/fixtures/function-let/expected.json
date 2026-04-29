@@ -4,6 +4,7 @@
     "path": "integration/fixtures/function-let/input.ts",
     "language": "ts"
   },
+  "raw": "function f() {\n  let v = 0;\n  v = 1;\n  v = 2;\n  return v;\n}\n",
   "scopes": [
     {
       "id": "scope#0",

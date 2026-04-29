@@ -6,9 +6,9 @@ import {
 } from "./default.js";
 
 describe("createDefaultPipeline", () => {
-  test("registers json and mermaid emitters by default", () => {
+  test("registers json, mermaid, and markdown emitters by default", () => {
     const reg = createDefaultEmitterRegistry();
-    expect([...reg.list()].sort()).toEqual(["json", "mermaid"]);
+    expect([...reg.list()].sort()).toEqual(["json", "markdown", "mermaid"]);
   });
 
   test("end-to-end: parses TS, analyzes, serializes, emits JSON", () => {

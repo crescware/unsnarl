@@ -1,6 +1,6 @@
-# unused-and-var
+# integration/fixtures/unused-and-var/input.ts
 
-## Input (`input.ts`)
+## Input
 
 ```ts
 import { used, neverCalled } from "module";
