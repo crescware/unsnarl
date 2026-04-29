@@ -51,6 +51,26 @@ export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
 
 export { FlatSerializer } from "./serializer/flat.js";
 
+export { JsonEmitter } from "./emitter/json.js";
+export { MermaidEmitter } from "./emitter/mermaid.js";
+export { DefaultEmitterRegistry } from "./emitter/registry.js";
+
+export {
+  createDefaultEmitterRegistry,
+  createDefaultPipeline,
+} from "./pipeline/default.js";
+
+export { parseCliArgs, usage as cliUsage } from "./cli/args.js";
+export type {
+  CliArgs,
+  CliLanguage,
+  CliParseFailure,
+  CliParseResult,
+  CliParseSuccess,
+} from "./cli/args.js";
+export { runCli } from "./cli/main.js";
+export { readSourceFile, readStdin } from "./cli/io.js";
+
 export { walk } from "./analyzer/walk.js";
 export type { PathEntry, WalkVisitor } from "./analyzer/walk.js";
 
