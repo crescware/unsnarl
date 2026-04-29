@@ -17,6 +17,7 @@
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
     "check:types": "tsgo -p tsconfig.json --noEmit",
+    "exec": "node dist/cli/main.js",
     "format": "oxlint --fix && oxfmt",
     "test": "vitest"
   },
