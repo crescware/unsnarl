@@ -5,7 +5,7 @@ import type {
   SerializedVariable,
 } from "../ir/model.js";
 import type {
-  VisualEdge,
+  VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
@@ -14,9 +14,14 @@ import type {
 const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(ir: SerializedIR): VisualGraph {
-  const nodes: VisualNode[] = [];
-  const subgraphs: VisualSubgraph[] = [];
-  const edges: VisualEdge[] = [];
+  const graph: VisualGraph = {
+    version: 1,
+    source: { path: ir.source.path, language: ir.source.language },
+    direction: "RL",
+    elements: [],
+    edges: [],
+  };
+  const edges = graph.edges;
 
   const variableMap = new Map<string, SerializedVariable>();
   for (const v of ir.variables) {
@@ -481,33 +486,26 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     return null;
   };
 
-  const ifContainersSeen = new Map<string, VisualSubgraph>();
-
-  type Container = { kind: "root" } | { kind: "subgraph"; id: string };
-  const ROOT_CONTAINER: Container = { kind: "root" };
-  const containerParentId = (c: Container): string | null =>
-    c.kind === "root" ? null : c.id;
+  type Container = { elements: VisualElement[] };
 
   const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
     let bodyContainer: Container = container;
     if (subgraphHere) {
-      const myId = subgraphScopeId(scope);
-      const sg = describeSubgraph(scope, container);
-      subgraphs.push(sg);
-      bodyContainer = { kind: "subgraph", id: myId };
+      const sg = describeSubgraph(scope);
+      container.elements.push(sg);
+      bodyContainer = sg;
       const ownerVar = subgraphOwnerVar.get(scope.id);
       if (ownerVar && returnTargets.has(ownerVar)) {
-        nodes.push({
+        sg.elements.push({
+          type: "node",
           id: returnNodeId(ownerVar),
           kind: "ReturnSink",
           name: "return",
           line: scope.block.span.line,
-          parent: myId,
         });
       }
     }
-    const parentForChildren = containerParentId(bodyContainer);
     for (const vid of scope.variables) {
       if (hiddenVariables.has(vid)) {
         continue;
@@ -516,23 +514,23 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (!v) {
         continue;
       }
-      nodes.push(makeVariableNode(v, parentForChildren));
+      bodyContainer.elements.push(makeVariableNode(v));
     }
     const ops = writeOpsByScope.get(scope.id) ?? [];
     for (const op of ops) {
       const ownerVar = variableMap.get(op.varId);
       const declarationKind = ownerVar?.defs[0]?.declarationKind;
       const node: VisualNode = {
+        type: "node",
         id: writeOpNodeId(op.refId),
         kind: "WriteOp",
         name: op.varName,
         line: op.line,
-        parent: parentForChildren,
       };
       if (declarationKind) {
         node.declarationKind = declarationKind;
       }
-      nodes.push(node);
+      bodyContainer.elements.push(node);
     }
     buildChildren(scope, bodyContainer);
   };
@@ -582,32 +580,24 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
       const hasElse = group.some((g) => g.blockContext?.key === "alternate");
       const containerSubgraph: VisualSubgraph = {
+        type: "subgraph",
         id: containerId,
         kind: "if-else-container",
         line: lineForOffset(offset),
-        parent: containerParentId(container),
         direction: "RL",
         hasElse,
+        elements: [],
       };
-      subgraphs.push(containerSubgraph);
-      ifContainersSeen.set(containerId, containerSubgraph);
-      const innerContainer: Container = {
-        kind: "subgraph",
-        id: containerId,
-      };
+      container.elements.push(containerSubgraph);
       for (const g of group) {
-        buildScope(g, innerContainer);
+        buildScope(g, containerSubgraph);
       }
       i = j;
     }
   };
 
-  const describeSubgraph = (
-    scope: SerializedScope,
-    container: Container,
-  ): VisualSubgraph => {
+  const describeSubgraph = (scope: SerializedScope): VisualSubgraph => {
     const id = subgraphScopeId(scope);
-    const parentId = containerParentId(container);
     if (isFunctionSubgraph(scope)) {
       const ownerVarId = subgraphOwnerVar.get(scope.id);
       if (!ownerVarId) {
@@ -617,12 +607,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       }
       const ownerVar = variableMap.get(ownerVarId);
       return {
+        type: "subgraph",
         id,
         kind: "function",
         line: ownerVar?.identifiers[0]?.line ?? scope.block.span.line,
-        parent: parentId,
         direction: "RL",
         ownerNodeId: nodeId(ownerVarId),
+        elements: [],
       };
     }
     const kind = controlSubgraphKindOf(scope);
@@ -632,11 +623,12 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       );
     }
     const sg: VisualSubgraph = {
+      type: "subgraph",
       id,
       kind,
       line: scope.block.span.line,
-      parent: parentId,
       direction: "RL",
+      elements: [],
     };
     if (kind === "case") {
       sg.caseTest = scope.blockContext?.caseTest ?? null;
@@ -648,7 +640,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     (s) => s.type === "module" || s.type === "global",
   );
   if (root) {
-    buildScope(root, ROOT_CONTAINER);
+    buildScope(root, graph);
   }
 
   let needsModuleRoot = false;
@@ -773,12 +765,12 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   }
 
   if (needsModuleRoot) {
-    nodes.push({
+    graph.elements.push({
+      type: "node",
       id: MODULE_ROOT_ID,
       kind: "ModuleSink",
       name: "module",
       line: 0,
-      parent: null,
     });
   }
 
@@ -826,21 +818,21 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   }
 
   for (const mod of moduleNodes.values()) {
-    nodes.push({
+    graph.elements.push({
+      type: "node",
       id: mod.id,
       kind: "ModuleSource",
       name: mod.source,
       line: mod.line,
-      parent: null,
     });
   }
   for (const inter of intermediates.values()) {
-    nodes.push({
+    graph.elements.push({
+      type: "node",
       id: inter.id,
       kind: "ImportIntermediate",
       name: inter.name,
       line: inter.line,
-      parent: null,
     });
   }
   for (const v of ir.variables) {
@@ -879,28 +871,35 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   for (const id of ir.unusedVariableIds) {
     const target = nodeId(id);
-    for (const n of nodes) {
-      if (n.id === target) {
-        n.unused = true;
-        break;
-      }
+    const node = findNodeById(graph.elements, target);
+    if (node) {
+      node.unused = true;
     }
   }
 
-  return {
-    version: 1,
-    source: { path: ir.source.path, language: ir.source.language },
-    direction: "RL",
-    nodes,
-    subgraphs,
-    edges,
-  };
+  return graph;
 }
 
-function makeVariableNode(
-  v: SerializedVariable,
-  parent: string | null,
-): VisualNode {
+function findNodeById(
+  elements: VisualElement[],
+  id: string,
+): VisualNode | null {
+  for (const e of elements) {
+    if (e.type === "node") {
+      if (e.id === id) {
+        return e;
+      }
+    } else {
+      const found = findNodeById(e.elements, id);
+      if (found) {
+        return found;
+      }
+    }
+  }
+  return null;
+}
+
+function makeVariableNode(v: SerializedVariable): VisualNode {
   const def = v.defs[0];
   const initType = def?.initType ?? null;
   const isFunctionInit =
@@ -910,11 +909,11 @@ function makeVariableNode(
   const importedName = def?.importedName ?? null;
   const importSource = def?.importSource ?? null;
   const node: VisualNode = {
+    type: "node",
     id: nodeId(v.id),
     kind: (def?.type ?? "Variable") as VisualNode["kind"],
     name: v.name,
     line: v.identifiers[0]?.line ?? def?.name.span.line ?? 0,
-    parent,
   };
   if (declarationKind) {
     node.declarationKind = declarationKind;

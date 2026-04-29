@@ -5,25 +5,24 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_count_4",
       "kind": "Variable",
       "name": "count",
       "line": 1,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "wr_ref_0",
       "kind": "WriteOp",
       "name": "count",
       "line": 2,
-      "parent": null,
       "declarationKind": "let"
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_count_4",

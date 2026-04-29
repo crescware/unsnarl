@@ -3,6 +3,7 @@ import type { EmitOptions, Emitter } from "../pipeline/types.js";
 import { buildVisualGraph } from "../visual-graph/builder.js";
 import type {
   VisualEdge,
+  VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
@@ -22,22 +23,7 @@ function renderMermaid(graph: VisualGraph): string {
   const lines: string[] = [`flowchart ${graph.direction}`];
 
   const nodeMap = new Map<string, VisualNode>();
-  for (const n of graph.nodes) {
-    nodeMap.set(n.id, n);
-  }
-
-  const nodesByParent = new Map<string | null, VisualNode[]>();
-  for (const n of graph.nodes) {
-    const arr = nodesByParent.get(n.parent) ?? [];
-    arr.push(n);
-    nodesByParent.set(n.parent, arr);
-  }
-  const subgraphsByParent = new Map<string | null, VisualSubgraph[]>();
-  for (const s of graph.subgraphs) {
-    const arr = subgraphsByParent.get(s.parent) ?? [];
-    arr.push(s);
-    subgraphsByParent.set(s.parent, arr);
-  }
+  collectNodesInto(graph.elements, nodeMap);
 
   function emitNode(n: VisualNode, indent: string): void {
     lines.push(`${indent}${n.id}${nodeSyntax(n)}`);
@@ -47,19 +33,18 @@ function renderMermaid(graph: VisualGraph): string {
     lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg, nodeMap)}"]`);
     const childIndent = `${indent}  `;
     lines.push(`${childIndent}direction ${sg.direction}`);
-    const childNodes = nodesByParent.get(sg.id) ?? [];
-    for (const cn of childNodes) {
-      emitNode(cn, childIndent);
+    for (const e of sg.elements) {
+      if (e.type === "node") {
+        emitNode(e, childIndent);
+      }
     }
-    const childSubgraphs = subgraphsByParent.get(sg.id) ?? [];
-    for (const cs of childSubgraphs) {
-      emitSubgraph(cs, childIndent);
+    for (const e of sg.elements) {
+      if (e.type === "subgraph") {
+        emitSubgraph(e, childIndent);
+      }
     }
     lines.push(`${indent}end`);
   }
-
-  const topNodes = nodesByParent.get(null) ?? [];
-  const topSubgraphs = subgraphsByParent.get(null) ?? [];
 
   // Emit top-level "tree" nodes (anything that isn't a synthetic top-level
   // import/module/sink), then top-level subgraphs, then synthetic top-level
@@ -69,13 +54,15 @@ function renderMermaid(graph: VisualGraph): string {
     n.kind === "ModuleSink" ||
     n.kind === "ModuleSource" ||
     n.kind === "ImportIntermediate";
-  for (const n of topNodes) {
-    if (!synthetic(n)) {
-      emitNode(n, "  ");
+  for (const e of graph.elements) {
+    if (e.type === "node" && !synthetic(e)) {
+      emitNode(e, "  ");
     }
   }
-  for (const sg of topSubgraphs) {
-    emitSubgraph(sg, "  ");
+  for (const e of graph.elements) {
+    if (e.type === "subgraph") {
+      emitSubgraph(e, "  ");
+    }
   }
 
   // Edges originating from a synthetic node (ModuleSource / ImportIntermediate)
@@ -83,7 +70,7 @@ function renderMermaid(graph: VisualGraph): string {
   // merely point INTO a synthetic node (e.g. `n_x -->|read| module_root`) stay
   // with the body edges to preserve the historical ordering.
   const importSources = new Set<string>();
-  for (const n of graph.nodes) {
+  for (const n of nodeMap.values()) {
     if (n.kind === "ModuleSource" || n.kind === "ImportIntermediate") {
       importSources.add(n.id);
     }
@@ -101,9 +88,9 @@ function renderMermaid(graph: VisualGraph): string {
     lines.push(`  ${e.from} -->|${e.label}| ${e.to}`);
   }
 
-  for (const n of topNodes) {
-    if (synthetic(n)) {
-      emitNode(n, "  ");
+  for (const e of graph.elements) {
+    if (e.type === "node" && synthetic(e)) {
+      emitNode(e, "  ");
     }
   }
   for (const e of importEdges) {
@@ -111,7 +98,7 @@ function renderMermaid(graph: VisualGraph): string {
   }
 
   const unusedIds: string[] = [];
-  for (const n of graph.nodes) {
+  for (const n of nodeMap.values()) {
     if (n.unused) {
       unusedIds.push(n.id);
     }
@@ -124,6 +111,19 @@ function renderMermaid(graph: VisualGraph): string {
   }
 
   return `${lines.join("\n")}\n`;
+}
+
+function collectNodesInto(
+  elements: VisualElement[],
+  out: Map<string, VisualNode>,
+): void {
+  for (const e of elements) {
+    if (e.type === "node") {
+      out.set(e.id, e);
+    } else {
+      collectNodesInto(e.elements, out);
+    }
+  }
 }
 
 function nodeSyntax(n: VisualNode): string {

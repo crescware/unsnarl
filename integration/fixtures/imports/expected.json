@@ -5,113 +5,112 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_def_7",
       "kind": "ImportBinding",
       "name": "def",
       "line": 1,
-      "parent": null,
       "importKind": "default",
       "importedName": null,
       "importSource": "some-default"
     },
     {
+      "type": "node",
       "id": "n_scope_0_named_41",
       "kind": "ImportBinding",
       "name": "named",
       "line": 2,
-      "parent": null,
       "importKind": "named",
       "importedName": "named",
       "importSource": "some-named"
     },
     {
+      "type": "node",
       "id": "n_scope_0_renamed_57",
       "kind": "ImportBinding",
       "name": "renamed",
       "line": 2,
-      "parent": null,
       "importKind": "named",
       "importedName": "other",
       "importSource": "some-named"
     },
     {
+      "type": "node",
       "id": "n_scope_0_ns_98",
       "kind": "ImportBinding",
       "name": "ns",
       "line": 3,
-      "parent": null,
       "importKind": "namespace",
       "importedName": null,
       "importSource": "some-namespace"
     },
     {
+      "type": "node",
       "id": "n_scope_0_a_131",
       "kind": "Variable",
       "name": "a",
       "line": 5,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_b_146",
       "kind": "Variable",
       "name": "b",
       "line": 6,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_c_163",
       "kind": "Variable",
       "name": "c",
       "line": 7,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_d_182",
       "kind": "Variable",
       "name": "d",
       "line": 8,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "mod_some_default",
       "kind": "ModuleSource",
       "name": "some-default",
-      "line": 1,
-      "parent": null
+      "line": 1
     },
     {
+      "type": "node",
       "id": "mod_some_named",
       "kind": "ModuleSource",
       "name": "some-named",
-      "line": 2,
-      "parent": null
+      "line": 2
     },
     {
+      "type": "node",
       "id": "mod_some_namespace",
       "kind": "ModuleSource",
       "name": "some-namespace",
-      "line": 3,
-      "parent": null
+      "line": 3
     },
     {
+      "type": "node",
       "id": "import_some_named__other",
       "kind": "ImportIntermediate",
       "name": "other",
-      "line": 2,
-      "parent": null
+      "line": 2
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_def_7",

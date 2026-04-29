@@ -5,117 +5,121 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_value_4",
       "kind": "Variable",
       "name": "value",
       "line": 1,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "n_scope_0_attempts_19",
       "kind": "Variable",
       "name": "attempts",
       "line": 2,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "n_scope_0_raw_39",
       "kind": "Variable",
       "name": "raw",
       "line": 3,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_result_182",
       "kind": "Variable",
       "name": "result",
       "line": 15,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_Number_84",
       "kind": "ImplicitGlobalVariable",
       "name": "Number",
-      "line": 7,
-      "parent": null
+      "line": 7
     },
     {
-      "id": "wr_ref_1",
-      "kind": "WriteOp",
-      "name": "value",
-      "line": 7,
-      "parent": "s_scope_1",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_0",
-      "kind": "WriteOp",
-      "name": "attempts",
-      "line": 6,
-      "parent": "s_scope_1",
-      "declarationKind": "let"
-    },
-    {
-      "id": "n_scope_2_err_106",
-      "kind": "CatchClause",
-      "name": "err",
-      "line": 8,
-      "parent": "s_scope_2",
-      "unused": true
-    },
-    {
-      "id": "wr_ref_5",
-      "kind": "WriteOp",
-      "name": "value",
-      "line": 10,
-      "parent": "s_scope_2",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_4",
-      "kind": "WriteOp",
-      "name": "attempts",
-      "line": 9,
-      "parent": "s_scope_2",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_6",
-      "kind": "WriteOp",
-      "name": "attempts",
-      "line": 12,
-      "parent": "s_scope_3",
-      "declarationKind": "let"
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "try",
       "line": 5,
-      "parent": null,
-      "direction": "RL"
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_1",
+          "kind": "WriteOp",
+          "name": "value",
+          "line": 7,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_0",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 6,
+          "declarationKind": "let"
+        }
+      ]
     },
     {
+      "type": "subgraph",
       "id": "s_scope_2",
       "kind": "catch",
       "line": 8,
-      "parent": null,
-      "direction": "RL"
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_2_err_106",
+          "kind": "CatchClause",
+          "name": "err",
+          "line": 8,
+          "unused": true
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_5",
+          "kind": "WriteOp",
+          "name": "value",
+          "line": 10,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_4",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 9,
+          "declarationKind": "let"
+        }
+      ]
     },
     {
+      "type": "subgraph",
       "id": "s_scope_3",
       "kind": "finally",
       "line": 11,
-      "parent": null,
-      "direction": "RL"
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_6",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 12,
+          "declarationKind": "let"
+        }
+      ]
     }
   ],
   "edges": [

@@ -5,88 +5,94 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_label_4",
       "kind": "Variable",
       "name": "label",
       "line": 1,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "n_scope_0_kind_22",
       "kind": "Variable",
       "name": "kind",
       "line": 2,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_result_190",
       "kind": "Variable",
       "name": "result",
       "line": 16,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
-      "id": "wr_ref_1",
-      "kind": "WriteOp",
-      "name": "label",
-      "line": 6,
-      "parent": "s_scope_2",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_2",
-      "kind": "WriteOp",
-      "name": "label",
-      "line": 9,
-      "parent": "s_scope_3",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_3",
-      "kind": "WriteOp",
-      "name": "label",
-      "line": 12,
-      "parent": "s_scope_4",
-      "declarationKind": "let"
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "switch",
       "line": 4,
-      "parent": null,
-      "direction": "RL"
-    },
-    {
-      "id": "s_scope_2",
-      "kind": "case",
-      "line": 5,
-      "parent": "s_scope_1",
       "direction": "RL",
-      "caseTest": "\"a\""
-    },
-    {
-      "id": "s_scope_3",
-      "kind": "case",
-      "line": 8,
-      "parent": "s_scope_1",
-      "direction": "RL",
-      "caseTest": null
-    },
-    {
-      "id": "s_scope_4",
-      "kind": "case",
-      "line": 11,
-      "parent": "s_scope_1",
-      "direction": "RL",
-      "caseTest": "\"b\""
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "case",
+          "line": 5,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_1",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 6,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "\"a\""
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "kind": "case",
+          "line": 8,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_2",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 9,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": null
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "kind": "case",
+          "line": 11,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_3",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 12,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "\"b\""
+        }
+      ]
     }
   ],
   "edges": [

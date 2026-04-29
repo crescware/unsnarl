@@ -33,11 +33,11 @@ export type SubgraphKind =
   | "for";
 
 export interface VisualNode {
+  type: "node";
   id: string;
   kind: NodeKind;
   name: string;
   line: number;
-  parent: string | null;
   unused?: boolean;
   declarationKind?: VariableDeclarationKind;
   initIsFunction?: boolean;
@@ -47,15 +47,18 @@ export interface VisualNode {
 }
 
 export interface VisualSubgraph {
+  type: "subgraph";
   id: string;
   kind: SubgraphKind;
   line: number;
-  parent: string | null;
   direction: Direction;
   caseTest?: string | null;
   hasElse?: boolean;
   ownerNodeId?: string;
+  elements: VisualElement[];
 }
+
+export type VisualElement = VisualNode | VisualSubgraph;
 
 export interface VisualEdge {
   from: string;
@@ -67,7 +70,6 @@ export interface VisualGraph {
   version: 1;
   source: { path: string; language: Language };
   direction: Direction;
-  nodes: VisualNode[];
-  subgraphs: VisualSubgraph[];
+  elements: VisualElement[];
   edges: VisualEdge[];
 }

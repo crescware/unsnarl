@@ -5,30 +5,29 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_greet_9",
       "kind": "FunctionName",
       "name": "greet",
-      "line": 1,
-      "parent": null
+      "line": 1
     },
     {
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "parent": null
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
-      "parent": null,
       "direction": "RL",
-      "ownerNodeId": "n_scope_0_greet_9"
+      "ownerNodeId": "n_scope_0_greet_9",
+      "elements": []
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0
     }
   ],
   "edges": [

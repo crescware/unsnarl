@@ -5,77 +5,77 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_add_9",
       "kind": "FunctionName",
       "name": "add",
-      "line": 1,
-      "parent": null
+      "line": 1
     },
     {
+      "type": "node",
       "id": "n_scope_0_Counter_62",
       "kind": "ClassName",
       "name": "Counter",
-      "line": 5,
-      "parent": null
+      "line": 5
     },
     {
+      "type": "node",
       "id": "n_scope_0_total_94",
       "kind": "Variable",
       "name": "total",
       "line": 9,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_c_119",
       "kind": "Variable",
       "name": "c",
       "line": 10,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_result_144",
       "kind": "Variable",
       "name": "result",
       "line": 11,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
-      "id": "return_scope_0_add_9",
-      "kind": "ReturnSink",
-      "name": "return",
-      "line": 1,
-      "parent": "s_scope_1"
-    },
-    {
-      "id": "n_scope_1_a_13",
-      "kind": "Parameter",
-      "name": "a",
-      "line": 1,
-      "parent": "s_scope_1"
-    },
-    {
-      "id": "n_scope_1_b_24",
-      "kind": "Parameter",
-      "name": "b",
-      "line": 1,
-      "parent": "s_scope_1"
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
-      "parent": null,
       "direction": "RL",
-      "ownerNodeId": "n_scope_0_add_9"
+      "ownerNodeId": "n_scope_0_add_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_add_9",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_13",
+          "kind": "Parameter",
+          "name": "a",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_24",
+          "kind": "Parameter",
+          "name": "b",
+          "line": 1
+        }
+      ]
     }
   ],
   "edges": [

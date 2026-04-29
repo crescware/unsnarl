@@ -5,26 +5,25 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_a_6",
       "kind": "Variable",
       "name": "a",
       "line": 1,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_b_21",
       "kind": "Variable",
       "name": "b",
       "line": 2,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_a_6",

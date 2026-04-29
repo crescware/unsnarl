@@ -5,96 +5,98 @@
     "language": "tsx"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_Fragment_9",
       "kind": "ImportBinding",
       "name": "Fragment",
       "line": 1,
-      "parent": null,
       "importKind": "named",
       "importedName": "Fragment",
       "importSource": "react"
     },
     {
+      "type": "node",
       "id": "n_scope_0_Hello_79",
       "kind": "Variable",
       "name": "Hello",
       "line": 7,
-      "parent": null,
       "declarationKind": "const",
       "initIsFunction": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_App_196",
       "kind": "Variable",
       "name": "App",
       "line": 13,
-      "parent": null,
       "declarationKind": "const",
       "initIsFunction": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_root_237",
       "kind": "Variable",
       "name": "root",
       "line": 15,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_span_125",
       "kind": "ImplicitGlobalVariable",
       "name": "span",
-      "line": 9,
-      "parent": null
+      "line": 9
     },
     {
-      "id": "return_scope_0_Hello_79",
-      "kind": "ReturnSink",
-      "name": "return",
-      "line": 7,
-      "parent": "s_scope_1"
-    },
-    {
-      "id": "n_scope_1_props_88",
-      "kind": "Parameter",
-      "name": "props",
-      "line": 7,
-      "parent": "s_scope_1"
-    },
-    {
-      "id": "return_scope_0_App_196",
-      "kind": "ReturnSink",
-      "name": "return",
-      "line": 13,
-      "parent": "s_scope_2"
-    },
-    {
-      "id": "mod_react",
-      "kind": "ModuleSource",
-      "name": "react",
-      "line": 1,
-      "parent": null
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
       "line": 7,
-      "parent": null,
       "direction": "RL",
-      "ownerNodeId": "n_scope_0_Hello_79"
+      "ownerNodeId": "n_scope_0_Hello_79",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_Hello_79",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 7
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_props_88",
+          "kind": "Parameter",
+          "name": "props",
+          "line": 7
+        }
+      ]
     },
     {
+      "type": "subgraph",
       "id": "s_scope_2",
       "kind": "function",
       "line": 13,
-      "parent": null,
       "direction": "RL",
-      "ownerNodeId": "n_scope_0_App_196"
+      "ownerNodeId": "n_scope_0_App_196",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_App_196",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 13
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_react",
+      "kind": "ModuleSource",
+      "name": "react",
+      "line": 1
     }
   ],
   "edges": [

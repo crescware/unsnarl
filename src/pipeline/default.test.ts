@@ -27,10 +27,12 @@ describe("createDefaultPipeline", () => {
     const graph = JSON.parse(out);
     expect(graph.version).toBe(1);
     expect(graph.direction).toBe("RL");
-    expect(graph.nodes.map((n: { name: string }) => n.name).sort()).toEqual([
-      "a",
-      "b",
-    ]);
+    expect(
+      graph.elements
+        .filter((e: { type: string }) => e.type === "node")
+        .map((n: { name: string }) => n.name)
+        .sort(),
+    ).toEqual(["a", "b"]);
   });
 
   test("end-to-end: parses TS, analyzes, serializes, emits IR JSON", () => {

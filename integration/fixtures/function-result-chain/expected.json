@@ -5,79 +5,79 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_f_9",
       "kind": "FunctionName",
       "name": "f",
-      "line": 1,
-      "parent": null
+      "line": 1
     },
     {
+      "type": "node",
       "id": "n_scope_0_g_111",
       "kind": "Variable",
       "name": "g",
       "line": 9,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_h_126",
       "kind": "Variable",
       "name": "h",
       "line": 10,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
-      "id": "return_scope_0_f_9",
-      "kind": "ReturnSink",
-      "name": "return",
-      "line": 1,
-      "parent": "s_scope_1"
-    },
-    {
-      "id": "n_scope_1_a_23",
-      "kind": "Variable",
-      "name": "a",
-      "line": 2,
-      "parent": "s_scope_1",
-      "declarationKind": "const"
-    },
-    {
-      "id": "n_scope_1_b_40",
-      "kind": "Variable",
-      "name": "b",
-      "line": 3,
-      "parent": "s_scope_1",
-      "declarationKind": "const"
-    },
-    {
-      "id": "n_scope_1_c_57",
-      "kind": "Variable",
-      "name": "c",
-      "line": 4,
-      "parent": "s_scope_1",
-      "declarationKind": "const"
-    },
-    {
-      "id": "n_scope_1_d_83",
-      "kind": "Variable",
-      "name": "d",
-      "line": 5,
-      "parent": "s_scope_1",
-      "declarationKind": "const"
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
-      "parent": null,
       "direction": "RL",
-      "ownerNodeId": "n_scope_0_f_9"
+      "ownerNodeId": "n_scope_0_f_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_f_9",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_23",
+          "kind": "Variable",
+          "name": "a",
+          "line": 2,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_40",
+          "kind": "Variable",
+          "name": "b",
+          "line": 3,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_c_57",
+          "kind": "Variable",
+          "name": "c",
+          "line": 4,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_d_83",
+          "kind": "Variable",
+          "name": "d",
+          "line": 5,
+          "declarationKind": "const"
+        }
+      ]
     }
   ],
   "edges": [

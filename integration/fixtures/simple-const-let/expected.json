@@ -5,67 +5,66 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_greeting_6",
       "kind": "Variable",
       "name": "greeting",
       "line": 1,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_counter_30",
       "kind": "Variable",
       "name": "counter",
       "line": 2,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "n_scope_0_message_97",
       "kind": "Variable",
       "name": "message",
       "line": 6,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_unused_123",
       "kind": "Variable",
       "name": "unused",
       "line": 7,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "wr_ref_0",
       "kind": "WriteOp",
       "name": "counter",
       "line": 3,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "wr_ref_2",
       "kind": "WriteOp",
       "name": "counter",
       "line": 4,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "wr_ref_3",
       "kind": "WriteOp",
       "name": "counter",
       "line": 5,
-      "parent": null,
       "declarationKind": "let"
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_counter_30",

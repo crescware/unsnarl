@@ -5,61 +5,60 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_used_9",
       "kind": "ImportBinding",
       "name": "used",
       "line": 1,
-      "parent": null,
       "importKind": "named",
       "importedName": "used",
       "importSource": "module"
     },
     {
+      "type": "node",
       "id": "n_scope_0_neverCalled_15",
       "kind": "ImportBinding",
       "name": "neverCalled",
       "line": 1,
-      "parent": null,
       "importKind": "named",
       "importedName": "neverCalled",
       "importSource": "module",
       "unused": true
     },
     {
+      "type": "node",
       "id": "n_scope_0_a_67",
       "kind": "Variable",
       "name": "a",
       "line": 4,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_ignored_83",
       "kind": "Variable",
       "name": "ignored",
       "line": 5,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
+      "type": "node",
       "id": "module_root",
       "kind": "ModuleSink",
       "name": "module",
-      "line": 0,
-      "parent": null
+      "line": 0
     },
     {
+      "type": "node",
       "id": "mod_module",
       "kind": "ModuleSource",
       "name": "module",
-      "line": 1,
-      "parent": null
+      "line": 1
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_used_9",

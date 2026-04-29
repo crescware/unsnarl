@@ -5,90 +5,89 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_source_6",
       "kind": "Variable",
       "name": "source",
       "line": 1,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_list_61",
       "kind": "Variable",
       "name": "list",
       "line": 2,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_a_95",
       "kind": "Variable",
       "name": "a",
       "line": 4,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_renamed_101",
       "kind": "Variable",
       "name": "renamed",
       "line": 4,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_d_139",
       "kind": "Variable",
       "name": "d",
       "line": 5,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_first_162",
       "kind": "Variable",
       "name": "first",
       "line": 6,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_third_171",
       "kind": "Variable",
       "name": "third",
       "line": 6,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_rest_181",
       "kind": "Variable",
       "name": "rest",
       "line": 6,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_spread_206",
       "kind": "Variable",
       "name": "spread",
       "line": 7,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_sum_232",
       "kind": "Variable",
       "name": "sum",
       "line": 9,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     }
   ],
-  "subgraphs": [],
   "edges": [
     {
       "from": "n_scope_0_source_6",

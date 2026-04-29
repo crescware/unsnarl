@@ -5,71 +5,75 @@
     "language": "ts"
   },
   "direction": "RL",
-  "nodes": [
+  "elements": [
     {
+      "type": "node",
       "id": "n_scope_0_counter_4",
       "kind": "Variable",
       "name": "counter",
       "line": 1,
-      "parent": null,
       "declarationKind": "let"
     },
     {
+      "type": "node",
       "id": "n_scope_0_flag_23",
       "kind": "Variable",
       "name": "flag",
       "line": 2,
-      "parent": null,
       "declarationKind": "const"
     },
     {
+      "type": "node",
       "id": "n_scope_0_result_97",
       "kind": "Variable",
       "name": "result",
       "line": 10,
-      "parent": null,
       "declarationKind": "const",
       "unused": true
     },
     {
-      "id": "wr_ref_1",
-      "kind": "WriteOp",
-      "name": "counter",
-      "line": 5,
-      "parent": "s_scope_1",
-      "declarationKind": "let"
-    },
-    {
-      "id": "wr_ref_2",
-      "kind": "WriteOp",
-      "name": "counter",
-      "line": 7,
-      "parent": "s_scope_2",
-      "declarationKind": "let"
-    }
-  ],
-  "subgraphs": [
-    {
+      "type": "subgraph",
       "id": "cont_if_scope_0_37",
       "kind": "if-else-container",
       "line": 4,
-      "parent": null,
       "direction": "RL",
-      "hasElse": true
-    },
-    {
-      "id": "s_scope_1",
-      "kind": "if",
-      "line": 4,
-      "parent": "cont_if_scope_0_37",
-      "direction": "RL"
-    },
-    {
-      "id": "s_scope_2",
-      "kind": "else",
-      "line": 6,
-      "parent": "cont_if_scope_0_37",
-      "direction": "RL"
+      "hasElse": true,
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "if",
+          "line": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_1",
+              "kind": "WriteOp",
+              "name": "counter",
+              "line": 5,
+              "declarationKind": "let"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "else",
+          "line": 6,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_2",
+              "kind": "WriteOp",
+              "name": "counter",
+              "line": 7,
+              "declarationKind": "let"
+            }
+          ]
+        }
+      ]
     }
   ],
   "edges": [
