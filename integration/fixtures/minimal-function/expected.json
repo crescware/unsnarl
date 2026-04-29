@@ -88,7 +88,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

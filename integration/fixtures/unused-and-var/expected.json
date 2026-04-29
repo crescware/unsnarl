@@ -81,7 +81,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "module",
+          "importedName": "used"
         }
       ]
     },
@@ -125,7 +128,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "module",
+          "importedName": "neverCalled"
         }
       ]
     },
@@ -175,7 +181,10 @@
             "line": 4,
             "column": 10,
             "offset": 71
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -223,7 +232,10 @@
             "line": 5,
             "column": 16,
             "offset": 93
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -262,7 +274,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

@@ -53,7 +53,8 @@ describe("MermaidEmitter", () => {
         "void a; void b; void c; void d;",
       ].join("\n"),
     );
-    expect(out).toContain('"import imp<br/>');
+    expect(out).toContain('"imp<br/>');
+    expect(out).not.toContain('"import imp<br/>');
     expect(out).toContain('"foo()<br/>');
     expect(out).toContain('"class Bar<br/>');
     expect(out).toContain('"take()<br/>');
@@ -118,5 +119,37 @@ describe("MermaidEmitter", () => {
   test("falls back to a (module) sink only for module-level owner-less references", () => {
     const out = emit("function f() {}\nf();\n");
     expect(out).toContain("module_root((module))");
+  });
+
+  test("expands import declarations into module/intermediate nodes", () => {
+    const out = emit(
+      [
+        "import def from 'some-default';",
+        "import { named, other as renamed } from 'some-named';",
+        "import * as ns from 'some-namespace';",
+        "const a = def;",
+        "const b = named;",
+        "const c = renamed;",
+        "const d = ns;",
+      ].join("\n"),
+    );
+    expect(out).toContain('mod_some_default["module some-default"]');
+    expect(out).toContain('mod_some_named["module some-named"]');
+    expect(out).toContain('mod_some_namespace["module some-namespace"]');
+    expect(out).toMatch(/import_some_named__other\["import other"\]/);
+    expect(out).toMatch(/mod_some_default -->\|read\| n_scope_0_def_/);
+    expect(out).toMatch(/mod_some_named -->\|read\| n_scope_0_named_/);
+    expect(out).toMatch(/mod_some_named -->\|read\| import_some_named__other/);
+    expect(out).toMatch(
+      /import_some_named__other -->\|read\| n_scope_0_renamed_/,
+    );
+    expect(out).toMatch(/mod_some_namespace -->\|read\| n_scope_0_ns_/);
+    expect(out).toContain('"import ns<br/>');
+    expect(out).toContain('"def<br/>');
+    expect(out).toContain('"named<br/>');
+    expect(out).toContain('"renamed<br/>');
+    expect(out).not.toContain('"import def<br/>');
+    expect(out).not.toContain('"import named<br/>');
+    expect(out).not.toContain('"import renamed<br/>');
   });
 });

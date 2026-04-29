@@ -101,7 +101,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -151,7 +154,10 @@
             "line": 9,
             "column": 10,
             "offset": 115
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -199,7 +205,10 @@
             "line": 10,
             "column": 10,
             "offset": 130
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -249,7 +258,10 @@
             "line": 2,
             "column": 12,
             "offset": 27
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -299,7 +311,10 @@
             "line": 3,
             "column": 12,
             "offset": 44
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -349,7 +364,10 @@
             "line": 4,
             "column": 12,
             "offset": 61
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -399,7 +417,10 @@
             "line": 5,
             "column": 12,
             "offset": 87
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

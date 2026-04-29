@@ -154,6 +154,8 @@ export interface SerializedReference {
   };
 }
 
+export type ImportKind = "default" | "named" | "namespace";
+
 export interface SerializedDefinition {
   type: DefinitionType;
   name: { name: string; span: Span };
@@ -161,6 +163,9 @@ export interface SerializedDefinition {
   parent: { type: string; span: Span } | null;
   initType: string | null;
   initSpan: Span | null;
+  importKind: ImportKind | null;
+  importSource: string | null;
+  importedName: string | null;
 }
 
 export interface SerializedIR {

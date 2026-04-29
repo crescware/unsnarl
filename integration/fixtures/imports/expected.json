@@ -83,7 +83,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "default",
+          "importSource": "some-default",
+          "importedName": null
         }
       ]
     },
@@ -129,7 +132,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "some-named",
+          "importedName": "named"
         }
       ]
     },
@@ -175,7 +181,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "some-named",
+          "importedName": "other"
         }
       ]
     },
@@ -221,7 +230,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "namespace",
+          "importSource": "some-namespace",
+          "importedName": null
         }
       ]
     },
@@ -269,7 +281,10 @@
             "line": 5,
             "column": 10,
             "offset": 135
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -317,7 +332,10 @@
             "line": 6,
             "column": 10,
             "offset": 150
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -365,7 +383,10 @@
             "line": 7,
             "column": 10,
             "offset": 167
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -413,7 +434,10 @@
             "line": 8,
             "column": 10,
             "offset": 186
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

@@ -158,6 +158,82 @@ export class MermaidEmitter implements Emitter {
       lines.push(`  ${MODULE_ROOT_ID}((module))`);
     }
 
+    const moduleNodes = new Map<string, string>();
+    type Intermediate = { id: string; name: string };
+    const intermediates = new Map<string, Intermediate>();
+    const intermediateKey = (source: string, originalName: string): string =>
+      `${source}::${originalName}`;
+
+    for (const v of ir.variables) {
+      if (hiddenVariables.has(v.id)) {
+        continue;
+      }
+      const def = v.defs[0];
+      if (def?.type !== "ImportBinding") {
+        continue;
+      }
+      const source = def.importSource;
+      if (!source) {
+        continue;
+      }
+      if (!moduleNodes.has(source)) {
+        moduleNodes.set(source, `mod_${sanitize(source)}`);
+      }
+      if (
+        def.importKind === "named" &&
+        def.importedName !== null &&
+        def.importedName !== v.name
+      ) {
+        const key = intermediateKey(source, def.importedName);
+        if (!intermediates.has(key)) {
+          intermediates.set(key, {
+            id: `import_${sanitize(key)}`,
+            name: def.importedName,
+          });
+        }
+      }
+    }
+
+    for (const [source, id] of moduleNodes) {
+      lines.push(`  ${id}["module ${escape(source)}"]`);
+    }
+    for (const inter of intermediates.values()) {
+      lines.push(`  ${inter.id}["import ${escape(inter.name)}"]`);
+    }
+    for (const v of ir.variables) {
+      if (hiddenVariables.has(v.id)) {
+        continue;
+      }
+      const def = v.defs[0];
+      if (def?.type !== "ImportBinding") {
+        continue;
+      }
+      const source = def.importSource;
+      if (!source) {
+        continue;
+      }
+      const modId = moduleNodes.get(source);
+      if (!modId) {
+        continue;
+      }
+      const localId = nodeId(v.id);
+      const isRenamed =
+        def.importKind === "named" &&
+        def.importedName !== null &&
+        def.importedName !== v.name;
+      if (isRenamed && def.importedName !== null) {
+        const inter = intermediates.get(
+          intermediateKey(source, def.importedName),
+        );
+        if (inter) {
+          lines.push(`  ${modId} -->|read| ${inter.id}`);
+          lines.push(`  ${inter.id} -->|read| ${localId}`);
+          continue;
+        }
+      }
+      lines.push(`  ${modId} -->|read| ${localId}`);
+    }
+
     if (ir.unusedVariableIds.length > 0) {
       lines.push("  classDef unused stroke-dasharray: 5 5;");
       for (const id of ir.unusedVariableIds) {
@@ -186,7 +262,7 @@ function variableLabel(v: SerializedVariable): string {
       head = `class ${name}`;
       break;
     case "ImportBinding":
-      head = `import ${name}`;
+      head = def?.importKind === "namespace" ? `import ${name}` : name;
       break;
     case "CatchClause":
       head = `catch ${name}`;

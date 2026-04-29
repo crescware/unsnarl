@@ -132,7 +132,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "react",
+          "importedName": "Fragment"
         }
       ]
     },
@@ -182,7 +185,10 @@
             "line": 7,
             "column": 14,
             "offset": 87
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -232,7 +238,10 @@
             "line": 13,
             "column": 12,
             "offset": 202
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -280,7 +289,10 @@
             "line": 15,
             "column": 13,
             "offset": 244
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -319,7 +331,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -365,7 +380,10 @@
             }
           },
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

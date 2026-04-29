@@ -102,7 +102,10 @@
             "line": 1,
             "column": 15,
             "offset": 15
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -152,7 +155,10 @@
             "line": 2,
             "column": 13,
             "offset": 68
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -202,7 +208,10 @@
             "line": 4,
             "column": 26,
             "offset": 113
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -252,7 +261,10 @@
             "line": 4,
             "column": 26,
             "offset": 113
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -302,7 +314,10 @@
             "line": 5,
             "column": 26,
             "offset": 147
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -352,7 +367,10 @@
             "line": 6,
             "column": 34,
             "offset": 189
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -402,7 +420,10 @@
             "line": 6,
             "column": 34,
             "offset": 189
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -452,7 +473,10 @@
             "line": 6,
             "column": 34,
             "offset": 189
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -502,7 +526,10 @@
             "line": 7,
             "column": 22,
             "offset": 217
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -550,7 +577,10 @@
             "line": 9,
             "column": 12,
             "offset": 238
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -589,7 +619,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

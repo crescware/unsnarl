@@ -24,7 +24,7 @@ const root = App;
 
 ```mermaid
 flowchart RL
-  n_scope_0_Fragment_9["import Fragment<br/>L1"]
+  n_scope_0_Fragment_9["Fragment<br/>L1"]
   subgraph n_scope_0_Hello_79["Hello()<br/>L7"]
     direction RL
     return_scope_0_Hello_79((return))
@@ -41,6 +41,8 @@ flowchart RL
   n_scope_1_props_88 -->|read| return_scope_0_Hello_79
   n_scope_0_Hello_79 -->|read| return_scope_0_App_196
   n_scope_0_App_196 -->|read| n_scope_0_root_237
+  mod_react["module react"]
+  mod_react -->|read| n_scope_0_Fragment_9
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_root_237 unused;
 ```

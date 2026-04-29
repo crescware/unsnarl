@@ -94,7 +94,10 @@
           },
           "parent": null,
           "initType": null,
-          "initSpan": null
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -144,7 +147,10 @@
             "line": 2,
             "column": 12,
             "offset": 27
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -194,7 +200,10 @@
             "line": 3,
             "column": 12,
             "offset": 44
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -244,7 +253,10 @@
             "line": 4,
             "column": 12,
             "offset": 61
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     },
@@ -294,7 +306,10 @@
             "line": 5,
             "column": 12,
             "offset": 87
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }

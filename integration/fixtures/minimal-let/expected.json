@@ -77,7 +77,10 @@
             "line": 1,
             "column": 12,
             "offset": 12
-          }
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
         }
       ]
     }
