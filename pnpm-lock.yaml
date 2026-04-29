@@ -12,6 +12,9 @@ importers:
         specifier: 0.128.0
         version: 0.128.0
     devDependencies:
+      '@mermaid-js/layout-elk':
+        specifier: 0.2.1
+        version: 0.2.1(mermaid@11.14.0)
       '@types/node':
         specifier: ^24.12.2
         version: 24.12.2
@@ -150,6 +153,11 @@ packages:
 
   '@jridgewell/sourcemap-codec@1.5.5':
     resolution: {integrity: sha512-cYQ9310grqxueWbl+WuIUIaiUaDcj7WOq5fVhEljNVgRfOUhY9fy2zTvfoqWsnebh8Sl70VScFbICvJnLKB0Og==}
+
+  '@mermaid-js/layout-elk@0.2.1':
+    resolution: {integrity: sha512-MX9jwhMyd5zDcFsYcl3duDUkKhjVRUCGEQrdCeNV5hCIR6+3FuDDbRbFmvVbAu15K1+juzsYGG+K8MDvCY1Amg==}
+    peerDependencies:
+      mermaid: ^11.0.2
 
   '@mermaid-js/parser@1.1.0':
     resolution: {integrity: sha512-gxK9ZX2+Fex5zu8LhRQoMeMPEHbc73UKZ0FQ54YrQtUxE1VVhMwzeNtKRPAu5aXks4FasbMe4xB4bWrmq6Jlxw==}
@@ -1283,6 +1291,9 @@ packages:
   dompurify@3.4.1:
     resolution: {integrity: sha512-JahakDAIg1gyOm7dlgWSDjV4n7Ip2PKR55NIT6jrMfIgLFgWo81vdr1/QGqWtFNRqXP9UV71oVePtjqS2ebnPw==}
 
+  elkjs@0.9.3:
+    resolution: {integrity: sha512-f/ZeWvW/BCXbhGEf1Ujp29EASo/lk1FDnETgNKwJrsVvGZhUWCZyg3xLJjAsxfOmt8KjswHmI5EwCQcPMpOYhQ==}
+
   entities@8.0.0:
     resolution: {integrity: sha512-zwfzJecQ/Uej6tusMqwAqU/6KL2XaB2VZ2Jg54Je6ahNBGNH6Ek6g3jjNCF0fG9EWQKGZNddNjU5F1ZQn/sBnA==}
     engines: {node: '>=20.19.0'}
@@ -1925,6 +1936,12 @@ snapshots:
       mlly: 1.8.2
 
   '@jridgewell/sourcemap-codec@1.5.5': {}
+
+  '@mermaid-js/layout-elk@0.2.1(mermaid@11.14.0)':
+    dependencies:
+      d3: 7.9.0
+      elkjs: 0.9.3
+      mermaid: 11.14.0
 
   '@mermaid-js/parser@1.1.0':
     dependencies:
@@ -2773,6 +2790,8 @@ snapshots:
   dompurify@3.4.1:
     optionalDependencies:
       '@types/trusted-types': 2.0.7
+
+  elkjs@0.9.3: {}
 
   entities@8.0.0: {}
 

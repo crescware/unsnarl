@@ -28,6 +28,7 @@ function getDayType(day) {
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   subgraph wrap_s_scope_1[" "]
     direction TB

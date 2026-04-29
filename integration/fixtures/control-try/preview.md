@@ -23,6 +23,7 @@ const result = value + attempts;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_value_4["let value<br/>L1"]
   n_scope_0_attempts_19["let attempts<br/>L2"]

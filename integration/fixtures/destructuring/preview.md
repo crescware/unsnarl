@@ -17,6 +17,7 @@ const sum = a + renamed + d + first + third + rest.length + Object.keys(spread).
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_source_6["source<br/>L1"]
   n_scope_0_list_61["list<br/>L2"]

@@ -59,7 +59,7 @@ describe("createDefaultPipeline", () => {
       language: "ts",
       sourcePath: "input.ts",
     });
-    expect(out).toMatch(/^flowchart RL\n/);
+    expect(out).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(out).toContain('"a<br/>');
     expect(out).toContain('"b<br/>');
   });

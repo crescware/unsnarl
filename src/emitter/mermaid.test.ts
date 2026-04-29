@@ -33,7 +33,7 @@ describe("MermaidEmitter", () => {
 
   test("emits flowchart RL with one node per declared variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
-    expect(out).toMatch(/^flowchart RL\n/);
+    expect(out).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(out).toContain('"a<br/>L1"');
     expect(out).toContain('"b<br/>L2"');
   });

@@ -23,6 +23,7 @@ const root = App;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_Fragment_9["import Fragment<br/>L1"]
   n_scope_0_root_237["root<br/>L15"]

@@ -26,6 +26,7 @@ const result = classify("a");
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_result_243["result<br/>L18"]
   subgraph wrap_s_scope_1[" "]

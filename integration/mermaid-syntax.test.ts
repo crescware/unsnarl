@@ -1,5 +1,6 @@
 // @vitest-environment jsdom
 
+import elkLayouts from "@mermaid-js/layout-elk";
 import mermaid from "mermaid";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -40,6 +41,7 @@ function discoverFixtures(): FixtureCase[] {
   return out.sort((a, b) => a.name.localeCompare(b.name));
 }
 
+mermaid.registerLayoutLoaders(elkLayouts);
 mermaid.initialize({ startOnLoad: false });
 
 const pipeline = createDefaultPipeline();

@@ -19,6 +19,7 @@ const result = total;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_Counter_62["class Counter<br/>L5"]
   n_scope_0_total_94["total<br/>L9"]

@@ -20,7 +20,17 @@ export class MermaidEmitter implements Emitter {
 }
 
 function renderMermaid(graph: VisualGraph): string {
-  const lines: string[] = [`flowchart ${graph.direction}`];
+  // Use the elk layout engine instead of the default dagre. dagre struggles
+  // with nested subgraphs that share edges across boundaries (function
+  // wrapper containing the FunctionName node and the body subgraph, with
+  // edges from outside reaching into the body) — it produces colliding
+  // routes and inconsistent node-vs-body ordering. elk handles these cases
+  // far better and is registered as a layout loader at module init time
+  // (see src/index.ts).
+  const lines: string[] = [
+    '%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%',
+    `flowchart ${graph.direction}`,
+  ];
 
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);
