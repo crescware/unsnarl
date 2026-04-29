@@ -25,16 +25,24 @@ function renderMermaid(graph: VisualGraph): string {
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);
 
+  // FunctionName nodes that own a function subgraph are absorbed into a
+  // wrapper subgraph alongside the body, so they must NOT also be emitted as
+  // a sibling node at their declaring scope.
+  const wrappedOwnerIds = new Set<string>();
+  collectWrappedOwnerIds(graph.elements, wrappedOwnerIds);
+
+  const wrapperIds: string[] = [];
+
   function emitNode(n: VisualNode, indent: string): void {
     lines.push(`${indent}${n.id}${nodeSyntax(n)}`);
   }
 
-  function emitSubgraph(sg: VisualSubgraph, indent: string): void {
+  function emitPlainSubgraph(sg: VisualSubgraph, indent: string): void {
     lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg, nodeMap)}"]`);
     const childIndent = `${indent}  `;
     lines.push(`${childIndent}direction ${sg.direction}`);
     for (const e of sg.elements) {
-      if (e.type === "node") {
+      if (e.type === "node" && !wrappedOwnerIds.has(e.id)) {
         emitNode(e, childIndent);
       }
     }
@@ -46,6 +54,31 @@ function renderMermaid(graph: VisualGraph): string {
     lines.push(`${indent}end`);
   }
 
+  function emitSubgraph(sg: VisualSubgraph, indent: string): void {
+    if (sg.kind === "function" && sg.ownerNodeId !== undefined) {
+      const ownerNode = nodeMap.get(sg.ownerNodeId);
+      if (ownerNode !== undefined) {
+        // Wrap the FunctionName node and the function body subgraph as
+        // SIBLINGS inside a single wrapper subgraph. The FunctionName node
+        // belongs to the parent scope (it names the function from the
+        // outside), so it must NOT live inside the body subgraph — that
+        // would imply "f references itself from within its own body".
+        // The wrapper exists purely to keep these two siblings adjacent in
+        // the rendered diagram.
+        const wrapId = `wrap_${sg.id}`;
+        wrapperIds.push(wrapId);
+        lines.push(`${indent}subgraph ${wrapId}[" "]`);
+        const wrapIndent = `${indent}  `;
+        lines.push(`${wrapIndent}direction TB`);
+        emitNode(ownerNode, wrapIndent);
+        emitPlainSubgraph(sg, wrapIndent);
+        lines.push(`${indent}end`);
+        return;
+      }
+    }
+    emitPlainSubgraph(sg, indent);
+  }
+
   // Emit top-level "tree" nodes (anything that isn't a synthetic top-level
   // import/module/sink), then top-level subgraphs, then synthetic top-level
   // nodes — preserves the historical Mermaid output ordering and keeps the
@@ -55,7 +88,7 @@ function renderMermaid(graph: VisualGraph): string {
     n.kind === "ModuleSource" ||
     n.kind === "ImportIntermediate";
   for (const e of graph.elements) {
-    if (e.type === "node" && !synthetic(e)) {
+    if (e.type === "node" && !synthetic(e) && !wrappedOwnerIds.has(e.id)) {
       emitNode(e, "  ");
     }
   }
@@ -97,6 +130,16 @@ function renderMermaid(graph: VisualGraph): string {
     lines.push(`  ${e.from} -->|${e.label}| ${e.to}`);
   }
 
+  if (wrapperIds.length > 0) {
+    // Distinct background so the function wrapper is visually separable
+    // from the inner function body subgraph (otherwise both inherit the
+    // same Mermaid cluster fill and the nesting becomes invisible).
+    lines.push("  classDef fnWrap fill:#1a2030,stroke:#5a7d99;");
+    for (const id of wrapperIds) {
+      lines.push(`  class ${id} fnWrap;`);
+    }
+  }
+
   const unusedIds: string[] = [];
   for (const n of nodeMap.values()) {
     if (n.unused) {
@@ -123,6 +166,21 @@ function collectNodesInto(
     } else {
       collectNodesInto(e.elements, out);
     }
+  }
+}
+
+function collectWrappedOwnerIds(
+  elements: VisualElement[],
+  out: Set<string>,
+): void {
+  for (const e of elements) {
+    if (e.type !== "subgraph") {
+      continue;
+    }
+    if (e.kind === "function" && e.ownerNodeId !== undefined) {
+      out.add(e.ownerNodeId);
+    }
+    collectWrappedOwnerIds(e.elements, out);
   }
 }
 
