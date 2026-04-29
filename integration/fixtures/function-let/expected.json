@@ -95,7 +95,8 @@
           "initSpan": null,
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": null
         }
       ]
     },
@@ -150,7 +151,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "let"
         }
       ]
     }

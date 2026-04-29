@@ -41,6 +41,7 @@ export type {
   SerializedVariable,
   Span,
   Variable,
+  VariableDeclarationKind,
   VariableId,
 } from "./ir/model.js";
 

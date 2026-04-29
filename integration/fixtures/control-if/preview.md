@@ -19,16 +19,16 @@ const result = counter;
 
 ```mermaid
 flowchart RL
-  n_scope_0_counter_4["counter<br/>L1"]
+  n_scope_0_counter_4["let counter<br/>L1"]
   n_scope_0_flag_23["flag<br/>L2"]
   n_scope_0_result_97["result<br/>L10"]
   subgraph s_scope_1["if L4"]
     direction RL
-    wr_ref_1(["counter<br/>L5"])
+    wr_ref_1(["let counter<br/>L5"])
   end
   subgraph s_scope_2["else L6"]
     direction RL
-    wr_ref_2(["counter<br/>L7"])
+    wr_ref_2(["let counter<br/>L7"])
   end
   n_scope_0_counter_4 -->|set| wr_ref_1
   wr_ref_1 -->|set| wr_ref_2

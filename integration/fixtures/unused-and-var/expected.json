@@ -85,7 +85,8 @@
           "initSpan": null,
           "importKind": "named",
           "importSource": "module",
-          "importedName": "used"
+          "importedName": "used",
+          "declarationKind": null
         }
       ]
     },
@@ -132,7 +133,8 @@
           "initSpan": null,
           "importKind": "named",
           "importSource": "module",
-          "importedName": "neverCalled"
+          "importedName": "neverCalled",
+          "declarationKind": null
         }
       ]
     },
@@ -185,7 +187,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -236,7 +239,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -278,7 +282,8 @@
           "initSpan": null,
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": null
         }
       ]
     }

@@ -82,7 +82,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -133,7 +134,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     }

@@ -259,8 +259,11 @@ export class MermaidEmitter implements Emitter {
       }
       const ops = writeOpsByScope.get(scope.id) ?? [];
       for (const op of ops) {
+        const ownerVar = variableMap.get(op.varId);
+        const isLet = ownerVar?.defs[0]?.declarationKind === "let";
+        const head = isLet ? `let ${escape(op.varName)}` : escape(op.varName);
         lines.push(
-          `${childIndent}${writeOpNodeId(op.refId)}(["${escape(op.varName)}<br/>L${op.line}"])`,
+          `${childIndent}${writeOpNodeId(op.refId)}(["${head}<br/>L${op.line}"])`,
         );
       }
       for (const childId of scope.childScopes) {
@@ -467,6 +470,7 @@ function variableLabel(v: SerializedVariable): string {
   const initType = def?.initType;
   const isFunctionInit =
     initType === "ArrowFunctionExpression" || initType === "FunctionExpression";
+  const isLet = def?.declarationKind === "let";
   let head: string;
   switch (kind) {
     case "FunctionName":
@@ -485,7 +489,13 @@ function variableLabel(v: SerializedVariable): string {
       head = `global ${name}`;
       break;
     default:
-      head = isFunctionInit ? `${name}()` : name;
+      if (isFunctionInit) {
+        head = `${name}()`;
+      } else if (isLet) {
+        head = `let ${name}`;
+      } else {
+        head = name;
+      }
   }
   return `${head}<br/>L${line}`;
 }

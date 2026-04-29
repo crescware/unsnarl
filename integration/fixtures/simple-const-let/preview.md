@@ -17,12 +17,12 @@ const unused = 99;
 ```mermaid
 flowchart RL
   n_scope_0_greeting_6["greeting<br/>L1"]
-  n_scope_0_counter_30["counter<br/>L2"]
+  n_scope_0_counter_30["let counter<br/>L2"]
   n_scope_0_message_97["message<br/>L6"]
   n_scope_0_unused_123["unused<br/>L7"]
-  wr_ref_0(["counter<br/>L3"])
-  wr_ref_2(["counter<br/>L4"])
-  wr_ref_3(["counter<br/>L5"])
+  wr_ref_0(["let counter<br/>L3"])
+  wr_ref_2(["let counter<br/>L4"])
+  wr_ref_3(["let counter<br/>L5"])
   n_scope_0_counter_30 -->|set| wr_ref_0
   wr_ref_0 -->|set| wr_ref_2
   wr_ref_2 -->|set| wr_ref_3

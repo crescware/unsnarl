@@ -18,9 +18,9 @@ flowchart RL
   subgraph n_scope_0_f_9["f()<br/>L1"]
     direction RL
     return_scope_0_f_9((return))
-    n_scope_1_v_21["v<br/>L2"]
-    wr_ref_0(["v<br/>L3"])
-    wr_ref_1(["v<br/>L4"])
+    n_scope_1_v_21["let v<br/>L2"]
+    wr_ref_0(["let v<br/>L3"])
+    wr_ref_1(["let v<br/>L4"])
   end
   n_scope_1_v_21 -->|set| wr_ref_0
   wr_ref_0 -->|set| wr_ref_1

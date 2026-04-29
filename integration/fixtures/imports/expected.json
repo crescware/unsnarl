@@ -87,7 +87,8 @@
           "initSpan": null,
           "importKind": "default",
           "importSource": "some-default",
-          "importedName": null
+          "importedName": null,
+          "declarationKind": null
         }
       ]
     },
@@ -136,7 +137,8 @@
           "initSpan": null,
           "importKind": "named",
           "importSource": "some-named",
-          "importedName": "named"
+          "importedName": "named",
+          "declarationKind": null
         }
       ]
     },
@@ -185,7 +187,8 @@
           "initSpan": null,
           "importKind": "named",
           "importSource": "some-named",
-          "importedName": "other"
+          "importedName": "other",
+          "declarationKind": null
         }
       ]
     },
@@ -234,7 +237,8 @@
           "initSpan": null,
           "importKind": "namespace",
           "importSource": "some-namespace",
-          "importedName": null
+          "importedName": null,
+          "declarationKind": null
         }
       ]
     },
@@ -285,7 +289,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -336,7 +341,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -387,7 +393,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     },
@@ -438,7 +445,8 @@
           },
           "importKind": null,
           "importSource": null,
-          "importedName": null
+          "importedName": null,
+          "declarationKind": "const"
         }
       ]
     }

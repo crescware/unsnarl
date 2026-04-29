@@ -163,6 +163,8 @@ export interface SerializedReference {
 
 export type ImportKind = "default" | "named" | "namespace";
 
+export type VariableDeclarationKind = "var" | "let" | "const";
+
 export interface SerializedDefinition {
   type: DefinitionType;
   name: { name: string; span: Span };
@@ -173,6 +175,7 @@ export interface SerializedDefinition {
   importKind: ImportKind | null;
   importSource: string | null;
   importedName: string | null;
+  declarationKind: VariableDeclarationKind | null;
 }
 
 export interface SerializedIR {

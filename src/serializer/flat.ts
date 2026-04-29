@@ -223,6 +223,17 @@ function serializeVariable(
           }
         }
       }
+      let declarationKind: SerializedDefinition["declarationKind"] = null;
+      if (
+        d.type === "Variable" &&
+        d.parent !== null &&
+        d.parent.type === "VariableDeclaration"
+      ) {
+        const kind = d.parent["kind"];
+        if (kind === "var" || kind === "let" || kind === "const") {
+          declarationKind = kind;
+        }
+      }
       return {
         type: d.type,
         name: { name: d.name.name, span: spanOf(d.name, raw) },
@@ -236,6 +247,7 @@ function serializeVariable(
         importKind,
         importSource,
         importedName,
+        declarationKind,
       };
     }),
   };

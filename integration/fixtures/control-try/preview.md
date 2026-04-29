@@ -24,25 +24,25 @@ const result = value + attempts;
 
 ```mermaid
 flowchart RL
-  n_scope_0_value_4["value<br/>L1"]
-  n_scope_0_attempts_19["attempts<br/>L2"]
+  n_scope_0_value_4["let value<br/>L1"]
+  n_scope_0_attempts_19["let attempts<br/>L2"]
   n_scope_0_raw_39["raw<br/>L3"]
   n_scope_0_result_182["result<br/>L15"]
   n_scope_0_Number_84["global Number<br/>L7"]
   subgraph s_scope_1["try L5"]
     direction RL
-    wr_ref_1(["value<br/>L7"])
-    wr_ref_0(["attempts<br/>L6"])
+    wr_ref_1(["let value<br/>L7"])
+    wr_ref_0(["let attempts<br/>L6"])
   end
   subgraph s_scope_2["catch L8"]
     direction RL
     n_scope_2_err_106["catch err<br/>L8"]
-    wr_ref_5(["value<br/>L10"])
-    wr_ref_4(["attempts<br/>L9"])
+    wr_ref_5(["let value<br/>L10"])
+    wr_ref_4(["let attempts<br/>L9"])
   end
   subgraph s_scope_3["finally L11"]
     direction RL
-    wr_ref_6(["attempts<br/>L12"])
+    wr_ref_6(["let attempts<br/>L12"])
   end
   n_scope_0_value_4 -->|set| wr_ref_1
   wr_ref_1 -->|set| wr_ref_5
