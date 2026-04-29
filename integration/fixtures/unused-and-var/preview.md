@@ -1,0 +1,31 @@
+# unused-and-var
+
+## Input (`input.ts`)
+
+```ts
+import { used, neverCalled } from "module";
+
+var legacy = 1;
+const a = used;
+const ignored = 99;
+
+console.log(a);
+```
+
+## Mermaid
+
+```mermaid
+flowchart LR
+  n_scope_0_used_9["used : ImportBinding\nL1"]
+  n_scope_0_neverCalled_15["neverCalled : ImportBinding\nL1"]
+  n_scope_0_a_67["a : Variable\nL4"]
+  n_scope_0_ignored_83["ignored : Variable\nL5"]
+  n_scope_0_console_98["(unresolved:console)"]
+  module_root -->|read| n_scope_0_used_9
+  module_root -->|read| n_scope_0_console_98
+  module_root -->|read| n_scope_0_a_67
+  module_root["(module)"]
+  classDef unused fill:#fdd,stroke:#c00;
+  class n_scope_0_neverCalled_15 unused;
+  class n_scope_0_ignored_83 unused;
+```

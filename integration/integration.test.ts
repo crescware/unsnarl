@@ -75,6 +75,34 @@ describe("fixtures (end-to-end pipeline)", () => {
           join(FIXTURE_DIR, fixture.name, "expected.mermaid"),
         );
       });
+
+      test("renders a Markdown preview combining input and mermaid", () => {
+        const mermaid = pipeline.run(code, {
+          format: "mermaid",
+          language: fixture.language,
+          sourcePath,
+        });
+        const codeFenceLang = fixture.language === "tsx" ? "tsx" : "ts";
+        const preview = [
+          `# ${fixture.name}`,
+          "",
+          `## Input (\`${fixture.inputFile}\`)`,
+          "",
+          "```" + codeFenceLang,
+          code.replace(/\n+$/, ""),
+          "```",
+          "",
+          "## Mermaid",
+          "",
+          "```mermaid",
+          mermaid.replace(/\n+$/, ""),
+          "```",
+          "",
+        ].join("\n");
+        expect(preview).toMatchFileSnapshot(
+          join(FIXTURE_DIR, fixture.name, "preview.md"),
+        );
+      });
     });
   }
 });

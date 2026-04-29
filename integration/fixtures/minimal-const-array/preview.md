@@ -1,0 +1,20 @@
+# minimal-const-array
+
+## Input (`input.ts`)
+
+```ts
+const a = "a";
+const b = [a];
+```
+
+## Mermaid
+
+```mermaid
+flowchart LR
+  n_scope_0_a_6["a : Variable\nL1"]
+  n_scope_0_b_21["b : Variable\nL2"]
+  module_root -->|read| n_scope_0_a_6
+  module_root["(module)"]
+  classDef unused fill:#fdd,stroke:#c00;
+  class n_scope_0_b_21 unused;
+```
