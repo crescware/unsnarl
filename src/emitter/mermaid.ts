@@ -853,9 +853,14 @@ function variableLabel(v: SerializedVariable): string {
     case "ClassName":
       head = `class ${name}`;
       break;
-    case "ImportBinding":
-      head = def?.importKind === "namespace" ? `import ${name}` : name;
+    case "ImportBinding": {
+      const isRenamedNamed =
+        def?.importKind === "named" &&
+        def.importedName !== null &&
+        def.importedName !== v.name;
+      head = isRenamedNamed ? name : `import ${name}`;
       break;
+    }
     case "CatchClause":
       head = `catch ${name}`;
       break;

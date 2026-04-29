@@ -16,8 +16,8 @@ console.log(a);
 
 ```mermaid
 flowchart RL
-  n_scope_0_used_9["used<br/>L1"]
-  n_scope_0_neverCalled_15["neverCalled<br/>L1"]
+  n_scope_0_used_9["import used<br/>L1"]
+  n_scope_0_neverCalled_15["import neverCalled<br/>L1"]
   n_scope_0_a_67["a<br/>L4"]
   n_scope_0_ignored_83["ignored<br/>L5"]
   n_scope_0_used_9 -->|read| n_scope_0_a_67

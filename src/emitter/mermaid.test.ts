@@ -53,8 +53,7 @@ describe("MermaidEmitter", () => {
         "void a; void b; void c; void d;",
       ].join("\n"),
     );
-    expect(out).toContain('"imp<br/>');
-    expect(out).not.toContain('"import imp<br/>');
+    expect(out).toContain('"import imp<br/>');
     expect(out).toContain('"foo()<br/>');
     expect(out).toContain('"class Bar<br/>');
     expect(out).toContain('"take()<br/>');
@@ -193,11 +192,9 @@ describe("MermaidEmitter", () => {
     );
     expect(out).toMatch(/mod_some_namespace -->\|read\| n_scope_0_ns_/);
     expect(out).toContain('"import ns<br/>');
-    expect(out).toContain('"def<br/>');
-    expect(out).toContain('"named<br/>');
+    expect(out).toContain('"import def<br/>');
+    expect(out).toContain('"import named<br/>');
     expect(out).toContain('"renamed<br/>');
-    expect(out).not.toContain('"import def<br/>');
-    expect(out).not.toContain('"import named<br/>');
     expect(out).not.toContain('"import renamed<br/>');
   });
 });
@@ -479,6 +476,35 @@ describe("MermaidEmitter rendering: destructuring fan-out", () => {
       /n_scope_0_list_\d+ -->\|read\| n_scope_0_renamed_/,
     );
     expect(out).not.toMatch(/n_scope_0_list_\d+ -->\|read\| n_scope_0_d_\d+/);
+  });
+});
+
+describe("MermaidEmitter rendering: import label prefix rule", () => {
+  const out = emit(
+    [
+      "import def from 'some-default';",
+      "import { named, other as renamed } from 'some-named';",
+      "import * as ns from 'some-namespace';",
+      "void def; void named; void renamed; void ns;",
+    ].join("\n"),
+  );
+
+  test("default imports get an 'import ' prefix on the local node", () => {
+    expect(out).toMatch(/n_scope_0_def_\d+\["import def<br\/>L1"\]/);
+  });
+
+  test("named imports whose local name matches the imported name keep the 'import ' prefix", () => {
+    expect(out).toMatch(/n_scope_0_named_\d+\["import named<br\/>L2"\]/);
+  });
+
+  test("renamed named imports drop the prefix on the local node (the original name lives on the intermediate)", () => {
+    expect(out).toMatch(/n_scope_0_renamed_\d+\["renamed<br\/>L2"\]/);
+    expect(out).not.toMatch(/n_scope_0_renamed_\d+\["import renamed<br\/>/);
+    expect(out).toMatch(/import_some_named__other\["import other<br\/>L2"\]/);
+  });
+
+  test("namespace imports get an 'import ' prefix on the local node", () => {
+    expect(out).toMatch(/n_scope_0_ns_\d+\["import ns<br\/>L3"\]/);
   });
 });
 

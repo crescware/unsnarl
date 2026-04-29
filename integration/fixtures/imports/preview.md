@@ -17,8 +17,8 @@ const d = ns;
 
 ```mermaid
 flowchart RL
-  n_scope_0_def_7["def<br/>L1"]
-  n_scope_0_named_41["named<br/>L2"]
+  n_scope_0_def_7["import def<br/>L1"]
+  n_scope_0_named_41["import named<br/>L2"]
   n_scope_0_renamed_57["renamed<br/>L2"]
   n_scope_0_ns_98["import ns<br/>L3"]
   n_scope_0_a_131["a<br/>L5"]
