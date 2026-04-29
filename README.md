@@ -22,11 +22,11 @@ pnpm install
 
 ## Scripts
 
-| Command | Description |
-|---|---|
-| `pnpm check` | Run all checks (types, lint, knip, test) |
-| `pnpm check:types` | Type check |
-| `pnpm check:lint` | Lint and format check |
-| `pnpm check:knip` | Unused files/exports check |
-| `pnpm test` | Run tests |
-| `pnpm format` | Fix lint and format |
+| Command            | Description                              |
+| ------------------ | ---------------------------------------- |
+| `pnpm check`       | Run all checks (types, lint, knip, test) |
+| `pnpm check:types` | Type check                               |
+| `pnpm check:lint`  | Lint and format check                    |
+| `pnpm check:knip`  | Unused files/exports check               |
+| `pnpm test`        | Run tests                                |
+| `pnpm format`      | Fix lint and format                      |

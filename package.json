@@ -1,9 +1,18 @@
 {
-  "name": "template",
+  "name": "unsnarl",
   "version": "0.0.0",
   "private": true,
+  "bin": {
+    "unsnarl": "./dist/cli/main.js"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
+    "build": "tsgo -p tsconfig.build.json",
     "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test",
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
@@ -12,6 +21,7 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "@types/node": "^24.12.2",
     "@typescript/native-preview": "7.0.0-dev.20260422.1",
     "knip": "6.7.0",
     "oxfmt": "0.47.0",
