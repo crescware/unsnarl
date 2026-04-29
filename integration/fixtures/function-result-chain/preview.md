@@ -19,16 +19,16 @@ const h = [g];
 
 ```mermaid
 flowchart RL
-  subgraph n_scope_0_f_9["f : FunctionName\nL1"]
+  subgraph n_scope_0_f_9["f : FunctionName<br/>L1"]
     direction RL
     return_scope_0_f_9((return))
-    n_scope_1_a_23["a : Variable\nL2"]
-    n_scope_1_b_40["b : Variable\nL3"]
-    n_scope_1_c_57["c : Variable\nL4"]
-    n_scope_1_d_83["d : Variable\nL5"]
+    n_scope_1_a_23["a : Variable<br/>L2"]
+    n_scope_1_b_40["b : Variable<br/>L3"]
+    n_scope_1_c_57["c : Variable<br/>L4"]
+    n_scope_1_d_83["d : Variable<br/>L5"]
   end
-  n_scope_0_g_111["g : Variable\nL9"]
-  n_scope_0_h_126["h : Variable\nL10"]
+  n_scope_0_g_111["g : Variable<br/>L9"]
+  n_scope_0_h_126["h : Variable<br/>L10"]
   n_scope_1_a_23 -->|read| n_scope_1_b_40
   n_scope_1_b_40 -->|read| n_scope_1_c_57
   n_scope_1_c_57 -->|read| n_scope_1_d_83

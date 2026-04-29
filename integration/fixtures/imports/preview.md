@@ -17,14 +17,14 @@ const d = ns;
 
 ```mermaid
 flowchart RL
-  n_scope_0_def_7["def : ImportBinding\nL1"]
-  n_scope_0_named_41["named : ImportBinding\nL2"]
-  n_scope_0_renamed_57["renamed : ImportBinding\nL2"]
-  n_scope_0_ns_98["ns : ImportBinding\nL3"]
-  n_scope_0_a_131["a : Variable\nL5"]
-  n_scope_0_b_146["b : Variable\nL6"]
-  n_scope_0_c_163["c : Variable\nL7"]
-  n_scope_0_d_182["d : Variable\nL8"]
+  n_scope_0_def_7["def : ImportBinding<br/>L1"]
+  n_scope_0_named_41["named : ImportBinding<br/>L2"]
+  n_scope_0_renamed_57["renamed : ImportBinding<br/>L2"]
+  n_scope_0_ns_98["ns : ImportBinding<br/>L3"]
+  n_scope_0_a_131["a : Variable<br/>L5"]
+  n_scope_0_b_146["b : Variable<br/>L6"]
+  n_scope_0_c_163["c : Variable<br/>L7"]
+  n_scope_0_d_182["d : Variable<br/>L8"]
   n_scope_0_def_7 -->|read| n_scope_0_a_131
   n_scope_0_named_41 -->|read| n_scope_0_b_146
   n_scope_0_renamed_57 -->|read| n_scope_0_c_163

@@ -13,7 +13,7 @@ greet();
 
 ```mermaid
 flowchart RL
-  subgraph n_scope_0_greet_9["greet : FunctionName\nL1"]
+  subgraph n_scope_0_greet_9["greet : FunctionName<br/>L1"]
     direction RL
   end
   n_scope_0_greet_9 -->|read,call| module_root

@@ -144,7 +144,7 @@ export class MermaidEmitter implements Emitter {
 function variableLabel(v: SerializedVariable): string {
   const kind = v.defs[0]?.type ?? "Variable";
   const line = v.identifiers[0]?.line ?? v.defs[0]?.name.span.line ?? 0;
-  return `${escape(v.name)} : ${kind}\\nL${line}`;
+  return `${escape(v.name)} : ${kind}<br/>L${line}`;
 }
 
 function unresolvedLabel(v: SerializedVariable): string {

@@ -16,10 +16,10 @@ const unused = 99;
 
 ```mermaid
 flowchart RL
-  n_scope_0_greeting_6["greeting : Variable\nL1"]
-  n_scope_0_counter_30["counter : Variable\nL2"]
-  n_scope_0_message_97["message : Variable\nL6"]
-  n_scope_0_unused_123["unused : Variable\nL7"]
+  n_scope_0_greeting_6["greeting : Variable<br/>L1"]
+  n_scope_0_counter_30["counter : Variable<br/>L2"]
+  n_scope_0_message_97["message : Variable<br/>L6"]
+  n_scope_0_unused_123["unused : Variable<br/>L7"]
   n_scope_0_counter_30 -->|write| n_scope_0_counter_30
   n_scope_0_counter_30 -->|read| n_scope_0_counter_30
   n_scope_0_counter_30 -->|read,write| n_scope_0_counter_30
