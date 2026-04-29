@@ -17,7 +17,7 @@ const sum = a + renamed + d + first + third + rest.length + Object.keys(spread).
 ## Mermaid
 
 ```mermaid
-flowchart LR
+flowchart RL
   n_scope_0_source_6["source : Variable\nL1"]
   n_scope_0_list_61["list : Variable\nL2"]
   n_scope_0_a_95["a : Variable\nL4"]
@@ -29,18 +29,18 @@ flowchart LR
   n_scope_0_spread_206["spread : Variable\nL7"]
   n_scope_0_sum_232["sum : Variable\nL9"]
   n_scope_0_Object_286["(unresolved:Object)"]
-  n_scope_0_a_95 -->|read| n_scope_0_source_6
-  n_scope_0_d_139 -->|read| n_scope_0_source_6
-  n_scope_0_first_162 -->|read| n_scope_0_list_61
-  n_scope_0_spread_206 -->|read| n_scope_0_source_6
-  n_scope_0_sum_232 -->|read| n_scope_0_a_95
-  n_scope_0_sum_232 -->|read| n_scope_0_renamed_101
-  n_scope_0_sum_232 -->|read| n_scope_0_d_139
-  n_scope_0_sum_232 -->|read| n_scope_0_first_162
-  n_scope_0_sum_232 -->|read| n_scope_0_third_171
-  n_scope_0_sum_232 -->|read| n_scope_0_rest_181
-  n_scope_0_sum_232 -->|read| n_scope_0_Object_286
-  n_scope_0_sum_232 -->|read| n_scope_0_spread_206
+  n_scope_0_source_6 -->|read| n_scope_0_a_95
+  n_scope_0_source_6 -->|read| n_scope_0_d_139
+  n_scope_0_list_61 -->|read| n_scope_0_first_162
+  n_scope_0_source_6 -->|read| n_scope_0_spread_206
+  n_scope_0_a_95 -->|read| n_scope_0_sum_232
+  n_scope_0_renamed_101 -->|read| n_scope_0_sum_232
+  n_scope_0_d_139 -->|read| n_scope_0_sum_232
+  n_scope_0_first_162 -->|read| n_scope_0_sum_232
+  n_scope_0_third_171 -->|read| n_scope_0_sum_232
+  n_scope_0_rest_181 -->|read| n_scope_0_sum_232
+  n_scope_0_Object_286 -->|read| n_scope_0_sum_232
+  n_scope_0_spread_206 -->|read| n_scope_0_sum_232
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_sum_232 unused;
 ```

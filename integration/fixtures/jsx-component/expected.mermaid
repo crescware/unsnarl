@@ -1,16 +1,16 @@
-flowchart LR
+flowchart RL
   n_scope_0_Fragment_9["Fragment : ImportBinding\nL1"]
   n_scope_0_Hello_79["Hello : Variable\nL7"]
   n_scope_0_App_196["App : Variable\nL13"]
   n_scope_0_root_237["root : Variable\nL15"]
-  n_scope_1_props_88["props : Parameter\nL7"]
   n_scope_0_span_125["(unresolved:span)"]
-  module_root -->|read| n_scope_1_props_88
-  module_root -->|read| n_scope_0_Fragment_9
-  module_root -->|read| n_scope_0_span_125
-  module_root -->|read| n_scope_1_props_88
-  module_root -->|read| n_scope_0_Hello_79
-  n_scope_0_root_237 -->|read| n_scope_0_App_196
-  module_root["(module)"]
+  n_scope_1_props_88["props : Parameter\nL7"]
+  n_scope_1_props_88 -->|read| module_root
+  n_scope_0_Fragment_9 -->|read| module_root
+  n_scope_0_span_125 -->|read| module_root
+  n_scope_1_props_88 -->|read| module_root
+  n_scope_0_Hello_79 -->|read| module_root
+  n_scope_0_App_196 -->|read| n_scope_0_root_237
+  module_root((module))
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_root_237 unused;

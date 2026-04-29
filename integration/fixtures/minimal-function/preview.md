@@ -12,8 +12,10 @@ greet();
 ## Mermaid
 
 ```mermaid
-flowchart LR
-  n_scope_0_greet_9["greet : FunctionName\nL1"]
-  module_root -->|read,call| n_scope_0_greet_9
-  module_root["(module)"]
+flowchart RL
+  subgraph n_scope_0_greet_9["greet : FunctionName\nL1"]
+    direction RL
+  end
+  n_scope_0_greet_9 -->|read,call| module_root
+  module_root((module))
 ```

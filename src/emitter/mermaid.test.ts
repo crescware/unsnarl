@@ -31,47 +31,30 @@ describe("MermaidEmitter", () => {
     expect(emitter.contentType).toBe("text/vnd.mermaid");
   });
 
-  test("emits flowchart LR with one node per declared variable", () => {
+  test("emits flowchart RL with one node per declared variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
-    expect(out).toMatch(/^flowchart LR\n/);
+    expect(out).toMatch(/^flowchart RL\n/);
     expect(out).toContain("a : Variable");
     expect(out).toContain("b : Variable");
   });
 
-  test("draws an edge labelled with the reference flags", () => {
+  test("draws a data-flow edge from the source variable to the initialized variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
-    expect(out).toMatch(/-->\|read\| n_scope_0_a_6/);
+    expect(out).toMatch(/n_scope_0_a_6 -->\|read\| n_scope_0_b_19/);
   });
 
-  test("attaches read,call edge for function callsites", () => {
-    const out = emit("function f() {}\nf();\n");
-    expect(out).toMatch(/-->\|read,call\|/);
+  test("attaches read,call edge from callee to the variable receiving the call result", () => {
+    const out = emit("function f() {}\nconst x = f();\n");
+    expect(out).toMatch(/n_scope_0_f_9 -->\|read,call\| n_scope_0_x_/);
   });
 
-  test("uses an enclosing function variable as the edge source when nested", () => {
-    const code = `
-      const target = 1;
-      function caller() {
-        return target;
-      }
-    `;
-    const out = emit(code);
-    // caller scope is "function"; its FunctionName "caller" should be the edge source
-    expect(out).toMatch(
-      /n_scope_0_caller_\d+ -->\|read\| n_scope_0_target_\d+/,
-    );
-  });
-
-  test("falls back to module_root when there is no owner or enclosing function", () => {
-    const out = emit('console.log("hi");\n');
-    expect(out).toContain("module_root");
-    expect(out).toContain('module_root["(module)"]');
-  });
-
-  test("uses the initialized variable as the edge source for VariableDeclarator inits", () => {
-    const out = emit("const a = 1;\nconst b = a;\n");
-    expect(out).toMatch(/n_scope_0_b_19 -->\|read\| n_scope_0_a_6/);
-    expect(out).not.toContain("module_root");
+  test("renders a function as a subgraph and routes return through a return node", () => {
+    const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
+    expect(out).toMatch(/subgraph n_scope_0_f_9\["f : FunctionName/);
+    expect(out).toContain("direction RL");
+    expect(out).toContain("return_scope_0_f_9((return))");
+    expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);
+    expect(out).toContain("end");
   });
 
   test("highlights unused variables with a colorless dashed stroke", () => {
@@ -84,5 +67,10 @@ describe("MermaidEmitter", () => {
   test("renders ImplicitGlobalVariable as an unresolved node", () => {
     const out = emit('console.log("hi");\n');
     expect(out).toContain("(unresolved:console)");
+  });
+
+  test("falls back to a (module) sink only for module-level owner-less references", () => {
+    const out = emit('console.log("hi");\n');
+    expect(out).toContain("module_root((module))");
   });
 });

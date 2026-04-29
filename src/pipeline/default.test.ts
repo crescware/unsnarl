@@ -35,7 +35,7 @@ describe("createDefaultPipeline", () => {
       language: "ts",
       sourcePath: "input.ts",
     });
-    expect(out).toMatch(/^flowchart LR\n/);
+    expect(out).toMatch(/^flowchart RL\n/);
     expect(out).toContain("a : Variable");
     expect(out).toContain("b : Variable");
   });

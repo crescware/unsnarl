@@ -15,16 +15,16 @@ console.log(a);
 ## Mermaid
 
 ```mermaid
-flowchart LR
+flowchart RL
   n_scope_0_used_9["used : ImportBinding\nL1"]
   n_scope_0_neverCalled_15["neverCalled : ImportBinding\nL1"]
   n_scope_0_a_67["a : Variable\nL4"]
   n_scope_0_ignored_83["ignored : Variable\nL5"]
   n_scope_0_console_98["(unresolved:console)"]
-  n_scope_0_a_67 -->|read| n_scope_0_used_9
-  module_root -->|read| n_scope_0_console_98
-  module_root -->|read| n_scope_0_a_67
-  module_root["(module)"]
+  n_scope_0_used_9 -->|read| n_scope_0_a_67
+  n_scope_0_console_98 -->|read| module_root
+  n_scope_0_a_67 -->|read| module_root
+  module_root((module))
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_neverCalled_15 unused;
   class n_scope_0_ignored_83 unused;

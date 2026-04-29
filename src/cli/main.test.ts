@@ -89,7 +89,7 @@ describe("runCli (end-to-end)", () => {
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
     const r = await captureRun(["--format", "mermaid", inputPath]);
     expect(r.exitCode).toBe(0);
-    expect(r.stdout).toMatch(/^flowchart LR\n/);
+    expect(r.stdout).toMatch(/^flowchart RL\n/);
     expect(r.stdout).toContain("a : Variable");
   });
 

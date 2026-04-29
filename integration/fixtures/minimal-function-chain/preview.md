@@ -15,16 +15,19 @@ function f() {
 ## Mermaid
 
 ```mermaid
-flowchart LR
-  n_scope_0_f_9["f : FunctionName\nL1"]
-  n_scope_1_a_23["a : Variable\nL2"]
-  n_scope_1_b_40["b : Variable\nL3"]
-  n_scope_1_c_57["c : Variable\nL4"]
-  n_scope_1_d_83["d : Variable\nL5"]
-  n_scope_1_b_40 -->|read| n_scope_1_a_23
-  n_scope_1_c_57 -->|read| n_scope_1_b_40
-  n_scope_1_d_83 -->|read| n_scope_1_c_57
-  n_scope_0_f_9 -->|read| n_scope_1_d_83
+flowchart RL
+  subgraph n_scope_0_f_9["f : FunctionName\nL1"]
+    direction RL
+    return_scope_0_f_9((return))
+    n_scope_1_a_23["a : Variable\nL2"]
+    n_scope_1_b_40["b : Variable\nL3"]
+    n_scope_1_c_57["c : Variable\nL4"]
+    n_scope_1_d_83["d : Variable\nL5"]
+  end
+  n_scope_1_a_23 -->|read| n_scope_1_b_40
+  n_scope_1_b_40 -->|read| n_scope_1_c_57
+  n_scope_1_c_57 -->|read| n_scope_1_d_83
+  n_scope_1_d_83 -->|read| return_scope_0_f_9
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_f_9 unused;
 ```

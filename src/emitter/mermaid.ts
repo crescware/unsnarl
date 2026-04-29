@@ -13,7 +13,8 @@ export class MermaidEmitter implements Emitter {
   readonly contentType = "text/vnd.mermaid";
 
   emit(ir: SerializedIR, _opts: EmitOptions): string {
-    const lines: string[] = ["flowchart LR"];
+    const lines: string[] = ["flowchart RL"];
+
     const variableMap = new Map<string, SerializedVariable>();
     for (const v of ir.variables) {
       variableMap.set(v.id, v);
@@ -23,37 +24,106 @@ export class MermaidEmitter implements Emitter {
       scopeMap.set(s.id, s);
     }
 
-    let needsModuleRoot = false;
-    const declared = ir.variables.filter(
-      (v) => v.defs[0]?.type !== "ImplicitGlobalVariable",
-    );
-    const implicit = ir.variables.filter(
-      (v) => v.defs[0]?.type === "ImplicitGlobalVariable",
-    );
-
-    for (const v of declared) {
-      lines.push(`  ${nodeId(v.id)}["${variableLabel(v)}"]`);
-    }
-    for (const v of implicit) {
-      lines.push(`  ${nodeId(v.id)}["${unresolvedLabel(v)}"]`);
-    }
-
-    for (const r of ir.references) {
-      const fromVarId =
-        r.owner ?? findEnclosingVariableId(r, scopeMap, variableMap);
-      const fromId = fromVarId ? nodeId(fromVarId) : MODULE_ROOT_ID;
-      if (!fromVarId) {
-        needsModuleRoot = true;
+    const subgraphScopes = new Map<string, string>();
+    for (const v of ir.variables) {
+      const def = v.defs[0];
+      if (!def || def.type !== "FunctionName") {
+        continue;
       }
-      const toId = r.resolved
-        ? nodeId(r.resolved)
-        : `${MODULE_ROOT_ID}__${sanitize(r.identifier.name)}`;
+      const fnScope = ir.scopes.find(
+        (s) =>
+          s.upper === v.scope && s.block.span.offset === def.node.span.offset,
+      );
+      if (fnScope) {
+        subgraphScopes.set(v.id, fnScope.id);
+      }
+    }
+    const scopeToSubgraph = new Map<string, string>();
+    for (const [vid, sid] of subgraphScopes) {
+      scopeToSubgraph.set(sid, vid);
+    }
+
+    const findEnclosingSubgraphVar = (scopeId: string): string | null => {
+      let cur: SerializedScope | undefined = scopeMap.get(scopeId);
+      while (cur) {
+        const owner = scopeToSubgraph.get(cur.id);
+        if (owner) {
+          return owner;
+        }
+        if (!cur.upper) {
+          return null;
+        }
+        cur = scopeMap.get(cur.upper);
+      }
+      return null;
+    };
+
+    const groups = new Map<string | null, string[]>();
+    for (const v of ir.variables) {
+      const enclosing = findEnclosingSubgraphVar(v.scope);
+      const arr = groups.get(enclosing) ?? [];
+      arr.push(v.id);
+      groups.set(enclosing, arr);
+    }
+
+    const returnTargets = new Map<string, SerializedReference[]>();
+    for (const r of ir.references) {
+      if (r.owner) {
+        continue;
+      }
+      const enclosingFn = findEnclosingSubgraphVar(r.from);
+      if (!enclosingFn) {
+        continue;
+      }
+      const arr = returnTargets.get(enclosingFn) ?? [];
+      arr.push(r);
+      returnTargets.set(enclosingFn, arr);
+    }
+
+    const emitGroup = (group: string | null, indent: string): void => {
+      const vars = groups.get(group) ?? [];
+      for (const vid of vars) {
+        const v = variableMap.get(vid);
+        if (!v) {
+          continue;
+        }
+        if (subgraphScopes.has(vid)) {
+          lines.push(`${indent}subgraph ${nodeId(vid)}["${variableLabel(v)}"]`);
+          lines.push(`${indent}  direction RL`);
+          if (returnTargets.has(vid)) {
+            lines.push(`${indent}  ${returnNodeId(vid)}((return))`);
+          }
+          emitGroup(vid, `${indent}  `);
+          lines.push(`${indent}end`);
+        } else if (v.defs[0]?.type === "ImplicitGlobalVariable") {
+          lines.push(`${indent}${nodeId(vid)}["${unresolvedLabel(v)}"]`);
+        } else {
+          lines.push(`${indent}${nodeId(vid)}["${variableLabel(v)}"]`);
+        }
+      }
+    };
+    emitGroup(null, "  ");
+
+    let needsModuleRoot = false;
+    for (const r of ir.references) {
       const label = edgeLabel(r);
-      lines.push(`  ${fromId} -->|${label}| ${toId}`);
+      if (r.owner && r.resolved) {
+        lines.push(`  ${nodeId(r.resolved)} -->|${label}| ${nodeId(r.owner)}`);
+      } else if (!r.owner && r.resolved) {
+        const enclosingFn = findEnclosingSubgraphVar(r.from);
+        if (enclosingFn) {
+          lines.push(
+            `  ${nodeId(r.resolved)} -->|${label}| ${returnNodeId(enclosingFn)}`,
+          );
+        } else {
+          needsModuleRoot = true;
+          lines.push(`  ${nodeId(r.resolved)} -->|${label}| ${MODULE_ROOT_ID}`);
+        }
+      }
     }
 
     if (needsModuleRoot) {
-      lines.push(`  ${MODULE_ROOT_ID}["(module)"]`);
+      lines.push(`  ${MODULE_ROOT_ID}((module))`);
     }
 
     if (ir.unusedVariableIds.length > 0) {
@@ -91,33 +161,12 @@ function edgeLabel(r: SerializedReference): string {
   return parts.length > 0 ? parts.join(",") : "ref";
 }
 
-function findEnclosingVariableId(
-  r: SerializedReference,
-  scopeMap: Map<string, SerializedScope>,
-  variableMap: Map<string, SerializedVariable>,
-): string | null {
-  let cur = scopeMap.get(r.from);
-  while (cur && cur.upper) {
-    const upper = scopeMap.get(cur.upper);
-    if (!upper) {
-      return null;
-    }
-    for (const vid of upper.variables) {
-      const v = variableMap.get(vid);
-      if (!v) {
-        continue;
-      }
-      if (v.defs.some((d) => d.node.span.offset === cur!.block.span.offset)) {
-        return vid;
-      }
-    }
-    cur = upper;
-  }
-  return null;
-}
-
 function nodeId(id: string): string {
   return `n_${sanitize(id)}`;
+}
+
+function returnNodeId(varId: string): string {
+  return `return_${sanitize(varId)}`;
 }
 
 function sanitize(value: string): string {
