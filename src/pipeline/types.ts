@@ -1,4 +1,4 @@
-import type { Language, Scope, SerializedIR } from "../ir/model.js";
+import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
 
 export interface ParseOptions {
   language: Language;
@@ -17,9 +17,15 @@ export interface Parser {
   parse(code: string, opts: ParseOptions): ParsedSource;
 }
 
+export interface AnalyzedSource {
+  readonly rootScope: Scope;
+  readonly diagnostics: readonly Diagnostic[];
+  readonly raw: string;
+}
+
 export interface ScopeAnalyzer {
   readonly id: string;
-  analyze(parsed: ParsedSource): Scope;
+  analyze(parsed: ParsedSource): AnalyzedSource;
 }
 
 export interface SourceMeta {
@@ -27,9 +33,16 @@ export interface SourceMeta {
   language: Language;
 }
 
+export interface SerializeContext {
+  readonly rootScope: Scope;
+  readonly source: SourceMeta;
+  readonly diagnostics: readonly Diagnostic[];
+  readonly raw: string;
+}
+
 export interface IRSerializer {
   readonly id: string;
-  serialize(rootScope: Scope, source: SourceMeta): SerializedIR;
+  serialize(ctx: SerializeContext): SerializedIR;
 }
 
 export interface EmitOptions {

@@ -7,10 +7,12 @@ export function createPipeline(config: PipelineConfig): Pipeline {
         language: opts.language,
         sourcePath: opts.sourcePath,
       });
-      const rootScope = config.analyzer.analyze(parsed);
-      const ir = config.serializer.serialize(rootScope, {
-        path: opts.sourcePath,
-        language: opts.language,
+      const analyzed = config.analyzer.analyze(parsed);
+      const ir = config.serializer.serialize({
+        rootScope: analyzed.rootScope,
+        diagnostics: analyzed.diagnostics,
+        raw: analyzed.raw,
+        source: { path: opts.sourcePath, language: opts.language },
       });
       const emitter = config.emitters.get(opts.format);
       if (!emitter) {

@@ -17,7 +17,7 @@ function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
     language,
     sourcePath: `input.${language}`,
   });
-  return analyzer.analyzeWithDiagnostics(parsed);
+  return analyzer.analyze(parsed);
 }
 
 function variableNames(scope: Scope): string[] {

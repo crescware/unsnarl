@@ -1,5 +1,9 @@
-import type { AstIdentifier, AstNode, Diagnostic, Scope } from "../ir/model.js";
-import type { ParsedSource, ScopeAnalyzer } from "../pipeline/types.js";
+import type { AstIdentifier, AstNode, Scope } from "../ir/model.js";
+import type {
+  AnalyzedSource,
+  ParsedSource,
+  ScopeAnalyzer,
+} from "../pipeline/types.js";
 import { DiagnosticCollector } from "../util/diagnostic.js";
 import { spanFromOffset } from "../util/span.js";
 import { classifyIdentifier } from "./classify.js";
@@ -12,11 +16,6 @@ import { isTypeOnlySubtree } from "./skip-types.js";
 import type { PathEntry, WalkAction } from "./walk.js";
 import { walk } from "./walk.js";
 
-export interface AnalysisResult {
-  rootScope: Scope;
-  diagnostics: readonly Diagnostic[];
-}
-
 interface NodeLike {
   type: string;
   start?: number;
@@ -27,11 +26,7 @@ interface NodeLike {
 export class EslintCompatAnalyzer implements ScopeAnalyzer {
   readonly id = "eslint-compat";
 
-  analyze(parsed: ParsedSource): Scope {
-    return this.analyzeWithDiagnostics(parsed).rootScope;
-  }
-
-  analyzeWithDiagnostics(parsed: ParsedSource): AnalysisResult {
+  analyze(parsed: ParsedSource): AnalyzedSource {
     const program = parsed.ast as NodeLike;
     const isModule = parsed.language !== "js";
     const manager = new ScopeManager(
@@ -67,6 +62,7 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
     return {
       rootScope: manager.globalScope,
       diagnostics: diagnostics.list(),
+      raw: parsed.raw,
     };
   }
 }

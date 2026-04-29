@@ -34,7 +34,7 @@ const fakeParser: Parser = {
 
 const fakeAnalyzer: ScopeAnalyzer = {
   id: "fake",
-  analyze: () => fakeScope,
+  analyze: () => ({ rootScope: fakeScope, diagnostics: [], raw: "" }),
 };
 
 const fakeSerializer: IRSerializer = {

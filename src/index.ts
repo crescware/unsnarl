@@ -1,6 +1,7 @@
 export { createPipeline } from "./pipeline/pipeline.js";
 
 export type {
+  AnalyzedSource,
   EmitOptions,
   Emitter,
   EmitterRegistry,
@@ -12,6 +13,7 @@ export type {
   PipelineConfig,
   PipelineRunOptions,
   ScopeAnalyzer,
+  SerializeContext,
   SourceMeta,
 } from "./pipeline/types.js";
 
@@ -46,7 +48,8 @@ export { OxcParser, ParseError } from "./parser/oxc.js";
 export type { ParseErrorDetail } from "./parser/oxc.js";
 
 export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
-export type { AnalysisResult } from "./analyzer/eslint-compat.js";
+
+export { FlatSerializer } from "./serializer/flat.js";
 
 export { walk } from "./analyzer/walk.js";
 export type { PathEntry, WalkVisitor } from "./analyzer/walk.js";
