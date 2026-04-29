@@ -53,15 +53,15 @@ describe("fixtures (end-to-end pipeline)", () => {
       const code = readFileSync(fixture.inputPath, "utf8");
       const sourcePath = `integration/fixtures/${fixture.name}/${fixture.inputFile}`;
 
-      test("emits the expected JSON IR", () => {
+      test("emits the expected IR JSON", () => {
         const out = pipeline.run(code, {
-          format: "json",
+          format: "ir",
           language: fixture.language,
           sourcePath,
           emit: { pretty: true },
         });
         expect(out).toMatchFileSnapshot(
-          join(FIXTURE_DIR, fixture.name, "expected.json"),
+          join(FIXTURE_DIR, fixture.name, "expected.ir.json"),
         );
       });
 

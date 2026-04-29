@@ -31,7 +31,7 @@ const LANGUAGES: ReadonlySet<string> = new Set([
 ] satisfies CliLanguage[]);
 
 export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
-  let format = "json";
+  let format = "ir";
   let stdin = false;
   let language: CliLanguage = "ts";
   let pretty = true;
@@ -129,7 +129,7 @@ export function usage(): string {
   cat foo.ts | unsnarl --stdin --lang ts
 
 Options:
-  -f, --format <id>            Emitter format (default: json)
+  -f, --format <id>            Emitter format (default: ir)
   --stdin                      Read from stdin
   --lang <ts|tsx|js|jsx>       Language for stdin input (default: ts)
   --pretty / --no-pretty       Pretty-print JSON (default: pretty)

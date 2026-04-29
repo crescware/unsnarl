@@ -8,7 +8,7 @@ describe("parseCliArgs", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.args).toMatchObject({
-        format: "json",
+        format: "ir",
         stdin: false,
         language: "ts",
         pretty: true,

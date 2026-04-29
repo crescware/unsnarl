@@ -1,5 +1,5 @@
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
-import { JsonEmitter } from "../emitter/json.js";
+import { IrEmitter } from "../emitter/ir.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";
 import { MermaidEmitter } from "../emitter/mermaid.js";
 import { DefaultEmitterRegistry } from "../emitter/registry.js";
@@ -10,7 +10,7 @@ import type { EmitterRegistry, Pipeline } from "./types.js";
 
 export function createDefaultEmitterRegistry(): EmitterRegistry {
   const reg = new DefaultEmitterRegistry();
-  reg.register(new JsonEmitter());
+  reg.register(new IrEmitter());
   reg.register(new MermaidEmitter());
   reg.register(new MarkdownEmitter());
   return reg;

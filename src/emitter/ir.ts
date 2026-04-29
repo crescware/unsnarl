@@ -1,8 +1,8 @@
 import type { SerializedIR } from "../ir/model.js";
 import type { EmitOptions, Emitter } from "../pipeline/types.js";
 
-export class JsonEmitter implements Emitter {
-  readonly format = "json";
+export class IrEmitter implements Emitter {
+  readonly format = "ir";
   readonly contentType = "application/json";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {

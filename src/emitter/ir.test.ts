@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { SerializedIR } from "../ir/model.js";
-import { JsonEmitter } from "./json.js";
+import { IrEmitter } from "./ir.js";
 
 const ir: SerializedIR = {
   version: 1,
@@ -14,23 +14,23 @@ const ir: SerializedIR = {
   diagnostics: [],
 };
 
-describe("JsonEmitter", () => {
+describe("IrEmitter", () => {
   test("emits pretty JSON by default with a trailing newline", () => {
-    const out = new JsonEmitter().emit(ir, {});
+    const out = new IrEmitter().emit(ir, {});
     expect(out.endsWith("\n")).toBe(true);
     expect(out).toContain('"version": 1');
     expect(JSON.parse(out)).toEqual(ir);
   });
 
   test("emits compact JSON when pretty is false", () => {
-    const out = new JsonEmitter().emit(ir, { pretty: false });
+    const out = new IrEmitter().emit(ir, { pretty: false });
     expect(out).not.toContain("\n  ");
     expect(JSON.parse(out)).toEqual(ir);
   });
 
-  test("identifies as 'json' with the application/json content type", () => {
-    const e = new JsonEmitter();
-    expect(e.format).toBe("json");
+  test("identifies as 'ir' with the application/json content type", () => {
+    const e = new IrEmitter();
+    expect(e.format).toBe("ir");
     expect(e.contentType).toBe("application/json");
   });
 });

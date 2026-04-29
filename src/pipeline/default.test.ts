@@ -6,15 +6,15 @@ import {
 } from "./default.js";
 
 describe("createDefaultPipeline", () => {
-  test("registers json, mermaid, and markdown emitters by default", () => {
+  test("registers ir, mermaid, and markdown emitters by default", () => {
     const reg = createDefaultEmitterRegistry();
-    expect([...reg.list()].sort()).toEqual(["json", "markdown", "mermaid"]);
+    expect([...reg.list()].sort()).toEqual(["ir", "markdown", "mermaid"]);
   });
 
-  test("end-to-end: parses TS, analyzes, serializes, emits JSON", () => {
+  test("end-to-end: parses TS, analyzes, serializes, emits IR JSON", () => {
     const pipeline = createDefaultPipeline();
     const out = pipeline.run("const a = 1;\nconst b = a;\n", {
-      format: "json",
+      format: "ir",
       language: "ts",
       sourcePath: "input.ts",
       emit: { pretty: false },
@@ -48,6 +48,6 @@ describe("createDefaultPipeline", () => {
         language: "ts",
         sourcePath: "x.ts",
       }),
-    ).toThrow(/json, mermaid/);
+    ).toThrow(/ir, mermaid/);
   });
 });
