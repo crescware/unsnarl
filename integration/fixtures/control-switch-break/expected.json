@@ -1,0 +1,369 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-break/input.ts",
+    "language": "ts"
+  },
+  "raw": "let label = \"\";\nconst kind = \"a\";\n\nswitch (kind) {\n  case \"a\":\n    label = \"alpha\";\n    break;\n  case \"b\":\n    label = \"beta\";\n    break;\n  default:\n    label = \"other\";\n}\n\nconst result = label;\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:label@4",
+        "scope#0:kind@22",
+        "scope#0:result@179"
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null
+    },
+    {
+      "id": "scope#1",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 4,
+          "column": 0,
+          "offset": 35
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "Program",
+        "key": "body"
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:label@4",
+      "name": "label",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "label",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 1,
+            "column": 12,
+            "offset": 12
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": "let"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:kind@22",
+      "name": "kind",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 22
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "kind",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 22
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 22
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 16
+            }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 2,
+            "column": 13,
+            "offset": 29
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:result@179",
+      "name": "result",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 15,
+          "column": 6,
+          "offset": 179
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "result",
+            "span": {
+              "line": 15,
+              "column": 6,
+              "offset": 179
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 15,
+              "column": 6,
+              "offset": 179
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 15,
+              "column": 0,
+              "offset": 173
+            }
+          },
+          "initType": "Identifier",
+          "initSpan": {
+            "line": 15,
+            "column": 15,
+            "offset": 188
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "kind",
+        "span": {
+          "line": 4,
+          "column": 8,
+          "offset": 43
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:kind@22",
+      "owners": [],
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "label",
+        "span": {
+          "line": 6,
+          "column": 4,
+          "offset": 67
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:label@4"
+      ],
+      "writeExpr": {
+        "line": 6,
+        "column": 12,
+        "offset": 75
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "label",
+        "span": {
+          "line": 9,
+          "column": 4,
+          "offset": 111
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:label@4"
+      ],
+      "writeExpr": {
+        "line": 9,
+        "column": 12,
+        "offset": 119
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "label",
+        "span": {
+          "line": 12,
+          "column": 4,
+          "offset": 153
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:label@4"
+      ],
+      "writeExpr": {
+        "line": 12,
+        "column": 12,
+        "offset": 161
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "label",
+        "span": {
+          "line": 15,
+          "column": 15,
+          "offset": 188
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:result@179"
+      ],
+      "writeExpr": null,
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:result@179"
+  ],
+  "diagnostics": []
+}

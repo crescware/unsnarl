@@ -1,4 +1,4 @@
-# integration/fixtures/control-switch/input.ts
+# integration/fixtures/control-switch-break/input.ts
 
 ## Input
 
