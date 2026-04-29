@@ -28,7 +28,7 @@ flowchart RL
   subgraph n_scope_0_Hello_79["Hello()<br/>L7"]
     direction RL
     return_scope_0_Hello_79((return))
-    n_scope_1_props_88["param props<br/>L7"]
+    n_scope_1_props_88["props<br/>L7"]
   end
   subgraph n_scope_0_App_196["App()<br/>L13"]
     direction RL

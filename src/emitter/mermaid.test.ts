@@ -57,7 +57,8 @@ describe("MermaidEmitter", () => {
     expect(out).toContain('"foo()<br/>');
     expect(out).toContain('"class Bar<br/>');
     expect(out).toContain('"take()<br/>');
-    expect(out).toContain('"param p<br/>');
+    expect(out).toContain('"p<br/>');
+    expect(out).not.toContain('"param p<br/>');
     expect(out).toContain('"catch e<br/>');
     expect(out).toContain('"used<br/>');
     expect(out).not.toMatch(/" : Variable/);

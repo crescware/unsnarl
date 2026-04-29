@@ -188,9 +188,6 @@ function variableLabel(v: SerializedVariable): string {
     case "ImportBinding":
       head = `import ${name}`;
       break;
-    case "Parameter":
-      head = `param ${name}`;
-      break;
     case "CatchClause":
       head = `catch ${name}`;
       break;
