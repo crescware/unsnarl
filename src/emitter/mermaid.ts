@@ -95,8 +95,6 @@ export class MermaidEmitter implements Emitter {
           }
           emitGroup(vid, `${indent}  `);
           lines.push(`${indent}end`);
-        } else if (v.defs[0]?.type === "ImplicitGlobalVariable") {
-          lines.push(`${indent}${nodeId(vid)}["${unresolvedLabel(v)}"]`);
         } else {
           lines.push(`${indent}${nodeId(vid)}["${variableLabel(v)}"]`);
         }
@@ -162,14 +160,13 @@ function variableLabel(v: SerializedVariable): string {
     case "CatchClause":
       head = `catch ${name}`;
       break;
+    case "ImplicitGlobalVariable":
+      head = `global ${name}`;
+      break;
     default:
       head = name;
   }
   return `${head}<br/>L${line}`;
-}
-
-function unresolvedLabel(v: SerializedVariable): string {
-  return `(unresolved:${escape(v.name)})`;
 }
 
 function edgeLabel(r: SerializedReference): string {

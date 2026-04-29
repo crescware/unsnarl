@@ -89,9 +89,9 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/class n_scope_0_unused_/);
   });
 
-  test("renders ImplicitGlobalVariable as an unresolved node", () => {
+  test("renders ImplicitGlobalVariable as a 'global' node", () => {
     const out = emit('console.log("hi");\n');
-    expect(out).toContain("(unresolved:console)");
+    expect(out).toContain('"global console<br/>');
   });
 
   test("falls back to a (module) sink only for module-level owner-less references", () => {
