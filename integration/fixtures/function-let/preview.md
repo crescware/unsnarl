@@ -1,0 +1,28 @@
+# function-let
+
+## Input (`input.ts`)
+
+```ts
+function f() {
+  let v = 0;
+  v = 1;
+  v = 2;
+  return v;
+}
+```
+
+## Mermaid
+
+```mermaid
+flowchart RL
+  subgraph n_scope_0_f_9["f()<br/>L1"]
+    direction RL
+    return_scope_0_f_9((return))
+    n_scope_1_v_21["v<br/>L2"]
+  end
+  n_scope_1_v_21 -->|write| n_scope_1_v_21
+  n_scope_1_v_21 -->|write| n_scope_1_v_21
+  n_scope_1_v_21 -->|read| return_scope_0_f_9
+  classDef unused stroke-dasharray: 5 5;
+  class n_scope_0_f_9 unused;
+```

@@ -1,0 +1,242 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-let/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:f@9"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#1:v@21"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:f@9",
+      "name": "f",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "FunctionName",
+          "name": {
+            "name": "f",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "initType": null,
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
+        }
+      ]
+    },
+    {
+      "id": "scope#1:v@21",
+      "name": "v",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 21
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "v",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 21
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 21
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 2,
+              "offset": 17
+            }
+          },
+          "initType": "Literal",
+          "initSpan": {
+            "line": 2,
+            "column": 10,
+            "offset": 25
+          },
+          "importKind": null,
+          "importSource": null,
+          "importedName": null
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 3,
+          "column": 2,
+          "offset": 30
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v@21",
+      "owners": [
+        "scope#1:v@21"
+      ],
+      "writeExpr": {
+        "line": 3,
+        "column": 6,
+        "offset": 34
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 4,
+          "column": 2,
+          "offset": 39
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v@21",
+      "owners": [
+        "scope#1:v@21"
+      ],
+      "writeExpr": {
+        "line": 4,
+        "column": 6,
+        "offset": 43
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 5,
+          "column": 9,
+          "offset": 55
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v@21",
+      "owners": [],
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:f@9"
+  ],
+  "diagnostics": []
+}

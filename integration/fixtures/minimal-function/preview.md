@@ -13,7 +13,6 @@ greet();
 
 ```mermaid
 flowchart RL
-  n_scope_0_greet_9["greet()<br/>L1"]
   subgraph n_scope_0_greet_9["greet()<br/>L1"]
     direction RL
   end

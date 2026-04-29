@@ -166,6 +166,8 @@ export class MermaidEmitter implements Emitter {
       return controlScopeLabel(scope) ?? scope.type;
     };
 
+    const subgraphOwnerVarSet = new Set(subgraphOwnerVar.values());
+
     const emitScope = (scope: SerializedScope, indent: string): void => {
       const subgraph = shouldSubgraph(scope);
       const childIndent = subgraph ? `${indent}  ` : indent;
@@ -181,6 +183,9 @@ export class MermaidEmitter implements Emitter {
       }
       for (const vid of scope.variables) {
         if (hiddenVariables.has(vid)) {
+          continue;
+        }
+        if (subgraphOwnerVarSet.has(vid)) {
           continue;
         }
         const v = variableMap.get(vid);

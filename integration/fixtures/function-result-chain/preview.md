@@ -19,7 +19,6 @@ const h = [g];
 
 ```mermaid
 flowchart RL
-  n_scope_0_f_9["f()<br/>L1"]
   n_scope_0_g_111["g<br/>L9"]
   n_scope_0_h_126["h<br/>L10"]
   subgraph n_scope_0_f_9["f()<br/>L1"]

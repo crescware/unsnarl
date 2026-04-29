@@ -20,7 +20,6 @@ const result = total;
 
 ```mermaid
 flowchart RL
-  n_scope_0_add_9["add()<br/>L1"]
   n_scope_0_Counter_62["class Counter<br/>L5"]
   n_scope_0_total_94["total<br/>L9"]
   n_scope_0_c_119["c<br/>L10"]
