@@ -133,10 +133,10 @@ describe("MermaidEmitter", () => {
         "const d = ns;",
       ].join("\n"),
     );
-    expect(out).toContain('mod_some_default["module some-default"]');
-    expect(out).toContain('mod_some_named["module some-named"]');
-    expect(out).toContain('mod_some_namespace["module some-namespace"]');
-    expect(out).toMatch(/import_some_named__other\["import other"\]/);
+    expect(out).toContain('mod_some_default["module some-default<br/>L1"]');
+    expect(out).toContain('mod_some_named["module some-named<br/>L2"]');
+    expect(out).toContain('mod_some_namespace["module some-namespace<br/>L3"]');
+    expect(out).toMatch(/import_some_named__other\["import other<br\/>L2"\]/);
     expect(out).toMatch(/mod_some_default -->\|read\| n_scope_0_def_/);
     expect(out).toMatch(/mod_some_named -->\|read\| n_scope_0_named_/);
     expect(out).toMatch(/mod_some_named -->\|read\| import_some_named__other/);

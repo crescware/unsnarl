@@ -158,8 +158,9 @@ export class MermaidEmitter implements Emitter {
       lines.push(`  ${MODULE_ROOT_ID}((module))`);
     }
 
-    const moduleNodes = new Map<string, string>();
-    type Intermediate = { id: string; name: string };
+    type ModuleNode = { id: string; line: number };
+    type Intermediate = { id: string; name: string; line: number };
+    const moduleNodes = new Map<string, ModuleNode>();
     const intermediates = new Map<string, Intermediate>();
     const intermediateKey = (source: string, originalName: string): string =>
       `${source}::${originalName}`;
@@ -177,7 +178,10 @@ export class MermaidEmitter implements Emitter {
         continue;
       }
       if (!moduleNodes.has(source)) {
-        moduleNodes.set(source, `mod_${sanitize(source)}`);
+        moduleNodes.set(source, {
+          id: `mod_${sanitize(source)}`,
+          line: def.parent?.span.line ?? 0,
+        });
       }
       if (
         def.importKind === "named" &&
@@ -189,16 +193,19 @@ export class MermaidEmitter implements Emitter {
           intermediates.set(key, {
             id: `import_${sanitize(key)}`,
             name: def.importedName,
+            line: def.node.span.line,
           });
         }
       }
     }
 
-    for (const [source, id] of moduleNodes) {
-      lines.push(`  ${id}["module ${escape(source)}"]`);
+    for (const [source, mod] of moduleNodes) {
+      lines.push(`  ${mod.id}["module ${escape(source)}<br/>L${mod.line}"]`);
     }
     for (const inter of intermediates.values()) {
-      lines.push(`  ${inter.id}["import ${escape(inter.name)}"]`);
+      lines.push(
+        `  ${inter.id}["import ${escape(inter.name)}<br/>L${inter.line}"]`,
+      );
     }
     for (const v of ir.variables) {
       if (hiddenVariables.has(v.id)) {
@@ -212,8 +219,8 @@ export class MermaidEmitter implements Emitter {
       if (!source) {
         continue;
       }
-      const modId = moduleNodes.get(source);
-      if (!modId) {
+      const mod = moduleNodes.get(source);
+      if (!mod) {
         continue;
       }
       const localId = nodeId(v.id);
@@ -226,12 +233,12 @@ export class MermaidEmitter implements Emitter {
           intermediateKey(source, def.importedName),
         );
         if (inter) {
-          lines.push(`  ${modId} -->|read| ${inter.id}`);
+          lines.push(`  ${mod.id} -->|read| ${inter.id}`);
           lines.push(`  ${inter.id} -->|read| ${localId}`);
           continue;
         }
       }
-      lines.push(`  ${modId} -->|read| ${localId}`);
+      lines.push(`  ${mod.id} -->|read| ${localId}`);
     }
 
     if (ir.unusedVariableIds.length > 0) {

@@ -23,7 +23,7 @@ flowchart RL
   n_scope_0_used_9 -->|read| n_scope_0_a_67
   n_scope_0_a_67 -->|read| module_root
   module_root((module))
-  mod_module["module module"]
+  mod_module["module module<br/>L1"]
   mod_module -->|read| n_scope_0_used_9
   mod_module -->|read| n_scope_0_neverCalled_15
   classDef unused stroke-dasharray: 5 5;
