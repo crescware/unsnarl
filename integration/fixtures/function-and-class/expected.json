@@ -1,0 +1,510 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-and-class/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:add@9",
+        "scope#0:Counter@62",
+        "scope#0:total@94",
+        "scope#0:c@119",
+        "scope#0:result@144"
+      ],
+      "references": [
+        "ref#4",
+        "ref#5",
+        "ref#6"
+      ],
+      "through": [],
+      "functionExpressionScope": false
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#1:a@13",
+        "scope#1:b@24"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:add@9",
+      "name": "add",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "type": "FunctionName",
+          "name": {
+            "name": "add",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null
+        }
+      ]
+    },
+    {
+      "id": "scope#0:Counter@62",
+      "name": "Counter",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 62
+        }
+      ],
+      "references": [
+        "ref#5"
+      ],
+      "defs": [
+        {
+          "type": "ClassName",
+          "name": {
+            "name": "Counter",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 62
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 56
+            }
+          },
+          "parent": null
+        }
+      ]
+    },
+    {
+      "id": "scope#0:total@94",
+      "name": "total",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 6,
+          "offset": 94
+        }
+      ],
+      "references": [
+        "ref#6"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "total",
+            "span": {
+              "line": 9,
+              "column": 6,
+              "offset": 94
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 6,
+              "offset": 94
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 0,
+              "offset": 88
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:c@119",
+      "name": "c",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 10,
+          "column": 6,
+          "offset": 119
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 10,
+              "column": 6,
+              "offset": 119
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 10,
+              "column": 6,
+              "offset": 119
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 10,
+              "column": 0,
+              "offset": 113
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:result@144",
+      "name": "result",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 11,
+          "column": 6,
+          "offset": 144
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "result",
+            "span": {
+              "line": 11,
+              "column": 6,
+              "offset": 144
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 11,
+              "column": 6,
+              "offset": 144
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 11,
+              "column": 0,
+              "offset": 138
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#1:a@13",
+      "name": "a",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 13,
+          "offset": 13
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "type": "Parameter",
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 1,
+              "column": 13,
+              "offset": 13
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 1,
+              "column": 13,
+              "offset": 13
+            }
+          },
+          "parent": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#1:b@24",
+      "name": "b",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 24,
+          "offset": 24
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "type": "Parameter",
+          "name": {
+            "name": "b",
+            "span": {
+              "line": 1,
+              "column": 24,
+              "offset": 24
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 1,
+              "column": 24,
+              "offset": 24
+            }
+          },
+          "parent": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 1,
+          "column": 13,
+          "offset": 13
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:a@13",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 1,
+          "column": 24,
+          "offset": 24
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:b@24",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 2,
+          "column": 9,
+          "offset": 46
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:a@13",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 2,
+          "column": 13,
+          "offset": 50
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:b@24",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "add",
+        "span": {
+          "line": 9,
+          "column": 14,
+          "offset": 102
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:add@9",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true
+      }
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "Counter",
+        "span": {
+          "line": 10,
+          "column": 14,
+          "offset": 127
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:Counter@62",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true
+      }
+    },
+    {
+      "id": "ref#6",
+      "identifier": {
+        "name": "total",
+        "span": {
+          "line": 11,
+          "column": 15,
+          "offset": 153
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:total@94",
+      "writeExpr": null,
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:c@119",
+    "scope#0:result@144"
+  ],
+  "diagnostics": []
+}

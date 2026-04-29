@@ -1,0 +1,329 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/unused-and-var/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:used@9",
+        "scope#0:neverCalled@15",
+        "scope#0:a@67",
+        "scope#0:ignored@83",
+        "scope#0:console@98"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2"
+      ],
+      "through": [
+        "ref#1"
+      ],
+      "functionExpressionScope": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:used@9",
+      "name": "used",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "ImportBinding",
+          "name": {
+            "name": "used",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:neverCalled@15",
+      "name": "neverCalled",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 15,
+          "offset": 15
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "ImportBinding",
+          "name": {
+            "name": "neverCalled",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:a@67",
+      "name": "a",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 4,
+          "column": 6,
+          "offset": 67
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 4,
+              "column": 6,
+              "offset": 67
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 4,
+              "column": 6,
+              "offset": 67
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 4,
+              "column": 0,
+              "offset": 61
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:ignored@83",
+      "name": "ignored",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 83
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "ignored",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 83
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 83
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 77
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@98",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 7,
+          "column": 0,
+          "offset": 98
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "type": "ImplicitGlobalVariable",
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 7,
+              "column": 0,
+              "offset": 98
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 7,
+              "column": 0,
+              "offset": 98
+            }
+          },
+          "parent": null
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "used",
+        "span": {
+          "line": 4,
+          "column": 10,
+          "offset": 71
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:used@9",
+      "writeExpr": null,
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 7,
+          "column": 0,
+          "offset": 98
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:console@98",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 7,
+          "column": 12,
+          "offset": 110
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@67",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:neverCalled@15",
+    "scope#0:ignored@83"
+  ],
+  "diagnostics": [
+    {
+      "kind": "var-detected",
+      "message": "var declaration is not supported and was skipped.",
+      "span": {
+        "line": 3,
+        "column": 0,
+        "offset": 45
+      }
+    }
+  ]
+}

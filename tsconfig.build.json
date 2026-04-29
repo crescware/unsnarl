@@ -9,5 +9,6 @@
     "sourceMap": true,
     "allowImportingTsExtensions": false
   },
-  "exclude": ["src/**/*.test.ts", "src/__fixtures__/**", "src/__tests__/**"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.ts", "integration/**"]
 }

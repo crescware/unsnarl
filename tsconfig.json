@@ -20,5 +20,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false
   },
-  "include": ["src"]
+  "include": ["src", "integration"],
+  "exclude": ["integration/fixtures/**"]
 }

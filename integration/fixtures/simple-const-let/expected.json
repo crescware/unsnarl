@@ -1,0 +1,332 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/simple-const-let/input.ts",
+    "language": "ts"
+  },
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        }
+      },
+      "variables": [
+        "scope#0:greeting@6",
+        "scope#0:counter@30",
+        "scope#0:message@97",
+        "scope#0:unused@123"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4"
+      ],
+      "through": [],
+      "functionExpressionScope": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:greeting@6",
+      "name": "greeting",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "greeting",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:counter@30",
+      "name": "counter",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 4,
+          "offset": 30
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "counter",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 30
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 30
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 26
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:message@97",
+      "name": "message",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 6,
+          "column": 6,
+          "offset": 97
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "message",
+            "span": {
+              "line": 6,
+              "column": 6,
+              "offset": 97
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 6,
+              "column": 6,
+              "offset": 97
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 6,
+              "column": 0,
+              "offset": 91
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "scope#0:unused@123",
+      "name": "unused",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 7,
+          "column": 6,
+          "offset": 123
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "Variable",
+          "name": {
+            "name": "unused",
+            "span": {
+              "line": 7,
+              "column": 6,
+              "offset": 123
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 7,
+              "column": 6,
+              "offset": 123
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 7,
+              "column": 0,
+              "offset": 117
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 3,
+          "column": 0,
+          "offset": 43
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@30",
+      "writeExpr": {
+        "line": 3,
+        "column": 10,
+        "offset": 53
+      },
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 3,
+          "column": 10,
+          "offset": 53
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@30",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 4,
+          "column": 0,
+          "offset": 66
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@30",
+      "writeExpr": {
+        "line": 4,
+        "column": 11,
+        "offset": 77
+      },
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": true,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 5,
+          "column": 0,
+          "offset": 80
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@30",
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": true,
+        "call": false
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "greeting",
+        "span": {
+          "line": 6,
+          "column": 16,
+          "offset": 107
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:greeting@6",
+      "writeExpr": null,
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:message@97",
+    "scope#0:unused@123"
+  ],
+  "diagnostics": []
+}
