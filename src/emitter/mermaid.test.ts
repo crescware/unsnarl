@@ -201,3 +201,295 @@ describe("MermaidEmitter", () => {
     expect(out).not.toContain('"import renamed<br/>');
   });
 });
+
+function lines(out: string): string[] {
+  return out.split("\n");
+}
+
+function edgesFor(out: string): string[] {
+  return lines(out).filter((l) => l.includes(" -->|"));
+}
+
+function countMatches(out: string, re: RegExp): number {
+  let count = 0;
+  for (const line of lines(out)) {
+    if (re.test(line)) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
+function nodeIdOf(out: string, name: string): string {
+  const re = new RegExp(`(n_scope_0_${name}_\\d+)\\["[^"]*${name}[^"]*"\\]`);
+  const m = out.match(re);
+  if (!m) {
+    throw new Error(`node for "${name}" not found in:\n${out}`);
+  }
+  return m[1] as string;
+}
+
+describe("MermaidEmitter rendering: switch with break", () => {
+  const code = [
+    'let label = "";',
+    'const kind = "a";',
+    "switch (kind) {",
+    '  case "a":',
+    '    label = "alpha";',
+    "    break;",
+    '  case "b":',
+    '    label = "beta";',
+    "    break;",
+    "  default:",
+    '    label = "other";',
+    "    break;",
+    "}",
+    "const result = label;",
+  ].join("\n");
+  const out = emit(code);
+
+  test("each case becomes its own labelled subgraph and no fallthrough edges are drawn", () => {
+    expect(
+      countMatches(out, /^\s*subgraph s_scope_\d+\["case .* L\d+"\]/),
+    ).toBe(2);
+    expect(
+      countMatches(out, /^\s*subgraph s_scope_\d+\["default L\d+"\]/),
+    ).toBe(1);
+    expect(out).not.toContain("|fallthrough|");
+  });
+
+  test("the declaration fans out to every case via one |set| edge each", () => {
+    const decl = "n_scope_0_label_4";
+    const setEdges = edgesFor(out).filter(
+      (l) => l.startsWith(`  ${decl} -->`) && l.includes("|set|"),
+    );
+    expect(setEdges).toHaveLength(3);
+  });
+
+  test("each case fans into result via one |read| edge", () => {
+    const result = nodeIdOf(out, "result");
+    const reads = edgesFor(out).filter(
+      (l) => l.includes("|read|") && l.endsWith(result),
+    );
+    expect(reads).toHaveLength(3);
+  });
+
+  test("the discriminant routes into the switch subgraph, not the module sink", () => {
+    expect(out).toMatch(/n_scope_0_kind_\d+ -->\|read\| s_scope_1\b/);
+    expect(out).not.toMatch(/n_scope_0_kind_\d+ -->\|read\| module_root/);
+  });
+});
+
+describe("MermaidEmitter rendering: switch with fallthrough", () => {
+  const code = [
+    'let label = "";',
+    'const kind = "a";',
+    "switch (kind) {",
+    '  case "a":',
+    '    label = "alpha";',
+    '  case "b":',
+    '    label = "beta";',
+    "  default:",
+    '    label = "other";',
+    "}",
+    "const result = label;",
+  ].join("\n");
+  const out = emit(code);
+
+  test("the declaration only emits one |set| edge, into the head case", () => {
+    const setEdges = edgesFor(out).filter(
+      (l) => l.startsWith(`  n_scope_0_label_4 -->`) && l.includes("|set|"),
+    );
+    expect(setEdges).toHaveLength(1);
+  });
+
+  test("non-terminal cases are stitched together with |fallthrough| edges", () => {
+    const ft = edgesFor(out).filter((l) => l.includes("|fallthrough|"));
+    expect(ft).toHaveLength(2);
+  });
+
+  test("only the terminal case feeds result", () => {
+    const result = nodeIdOf(out, "result");
+    const reads = edgesFor(out).filter(
+      (l) => l.includes("|read|") && l.endsWith(result),
+    );
+    expect(reads).toHaveLength(1);
+  });
+});
+
+describe("MermaidEmitter rendering: if/else", () => {
+  const code = [
+    "let counter = 0;",
+    "const flag = true;",
+    "if (flag) {",
+    "  counter = 1;",
+    "} else {",
+    "  counter = 2;",
+    "}",
+    "const result = counter;",
+  ].join("\n");
+  const out = emit(code);
+
+  test("an outer if-else container subgraph wraps both arms", () => {
+    expect(out).toMatch(/^\s*subgraph cont_if_scope_0_\d+\["if-else L\d+"\]/m);
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L\d+"\]/m);
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["else L\d+"\]/m);
+  });
+
+  test("the predicate identifier feeds the if-else container", () => {
+    expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| cont_if_scope_0_\d+/);
+  });
+
+  test("both branches independently feed result; the declaration does NOT bypass", () => {
+    const result = nodeIdOf(out, "result");
+    const reads = edgesFor(out).filter(
+      (l) => l.includes("|read|") && l.endsWith(result),
+    );
+    expect(reads).toHaveLength(2);
+    expect(out).not.toMatch(
+      new RegExp(`n_scope_0_counter_4 -->\\|read\\| ${result}\\b`),
+    );
+  });
+});
+
+describe("MermaidEmitter rendering: if without else", () => {
+  const code = [
+    "let counter = 0;",
+    "const flag = true;",
+    "if (flag) {",
+    "  counter = 1;",
+    "}",
+    "const result = counter;",
+  ].join("\n");
+  const out = emit(code);
+
+  test("there is no if-else container, just a bare if subgraph", () => {
+    expect(out).not.toContain("if-else L");
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L\d+"\]/m);
+  });
+
+  test("the predicate flows directly into the bare if subgraph", () => {
+    expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| s_scope_1\b/);
+  });
+
+  test("result has two origins: the if-write AND the original declaration", () => {
+    const result = nodeIdOf(out, "result");
+    const reads = edgesFor(out).filter(
+      (l) => l.includes("|read|") && l.endsWith(result),
+    );
+    expect(reads).toHaveLength(2);
+    expect(out).toMatch(
+      new RegExp(`n_scope_0_counter_4 -->\\|read\\| ${result}\\b`),
+    );
+  });
+});
+
+describe("MermaidEmitter rendering: catch parameter placement", () => {
+  test("the catch parameter node lives inside the catch subgraph", () => {
+    const code = [
+      "let v = 0;",
+      "try {",
+      "  v = 1;",
+      "} catch (err) {",
+      "  v = 2;",
+      "} finally {",
+      "  v = 3;",
+      "}",
+    ].join("\n");
+    const out = emit(code);
+    const ls = lines(out);
+    const catchStart = ls.findIndex((l) => l.includes('"catch L4"'));
+    expect(catchStart).toBeGreaterThan(-1);
+    const catchEnd = ls.slice(catchStart).findIndex((l) => l.trim() === "end");
+    expect(catchEnd).toBeGreaterThan(0);
+    const inside = ls.slice(catchStart, catchStart + catchEnd);
+    expect(inside.some((l) => l.includes('"catch err<br/>'))).toBe(true);
+  });
+});
+
+describe("MermaidEmitter rendering: let writes form a state chain", () => {
+  const code = [
+    "function f() {",
+    "  let v = 0;",
+    "  v = 1;",
+    "  v = 2;",
+    "  return v;",
+    "}",
+  ].join("\n");
+  const out = emit(code);
+
+  test("the chain passes through one wr_ref node per assignment, in source order", () => {
+    expect(out).toMatch(/n_scope_1_v_\d+ -->\|set\| wr_ref_0/);
+    expect(out).toMatch(/wr_ref_0 -->\|set\| wr_ref_1/);
+    expect(out).toMatch(/wr_ref_1 -->\|read\| return_scope_0_f_9/);
+  });
+
+  test("there is no v -> v self loop", () => {
+    expect(out).not.toMatch(/n_scope_1_v_\d+ -->\|.*\| n_scope_1_v_\d+/);
+  });
+
+  test("the declaration node uses a rectangle and write ops use stadium", () => {
+    expect(out).toMatch(/n_scope_1_v_\d+\["let v<br\/>L2"\]/);
+    expect(out).toMatch(/wr_ref_0\(\["let v<br\/>L3"\]\)/);
+    expect(out).toMatch(/wr_ref_1\(\["let v<br\/>L4"\]\)/);
+  });
+});
+
+describe("MermaidEmitter rendering: case labels", () => {
+  test("numeric and identifier case tests are rendered verbatim", () => {
+    const out = emit(
+      "const X = 1; let l = 0; const k = 1; switch (k) { case 0: l = 1; break; case X: l = 2; break; }\n",
+    );
+    expect(out).toMatch(/case 0 L\d+/);
+    expect(out).toMatch(/case X L\d+/);
+  });
+
+  test("the default clause label is just 'default L<n>', not 'case default'", () => {
+    const out = emit(
+      'let l = ""; switch (1) { case 1: l = "a"; break; default: l = "b"; }\n',
+    );
+    expect(out).toMatch(/default L\d+/);
+    expect(out).not.toContain("case default");
+  });
+});
+
+describe("MermaidEmitter rendering: destructuring fan-out", () => {
+  const code = [
+    "const source = { a: 1, b: 2, nested: { d: 4 } };",
+    "const list = [10, 20, 30];",
+    "const { a, b: renamed } = source;",
+    "const { nested: { d } } = source;",
+    "const [first, , third] = list;",
+    "const sum = a + renamed + d + first + third;",
+  ].join("\n");
+  const out = emit(code);
+
+  test("the object source fans out to every named/renamed/deep binding individually", () => {
+    expect(out).toMatch(/n_scope_0_source_\d+ -->\|read\| n_scope_0_a_\d+/);
+    expect(out).toMatch(
+      /n_scope_0_source_\d+ -->\|read\| n_scope_0_renamed_\d+/,
+    );
+    expect(out).toMatch(/n_scope_0_source_\d+ -->\|read\| n_scope_0_d_\d+/);
+  });
+
+  test("the array source fans out to its positional bindings, never to object bindings", () => {
+    expect(out).toMatch(/n_scope_0_list_\d+ -->\|read\| n_scope_0_first_/);
+    expect(out).toMatch(/n_scope_0_list_\d+ -->\|read\| n_scope_0_third_/);
+    expect(out).not.toMatch(
+      /n_scope_0_list_\d+ -->\|read\| n_scope_0_renamed_/,
+    );
+    expect(out).not.toMatch(/n_scope_0_list_\d+ -->\|read\| n_scope_0_d_\d+/);
+  });
+});
+
+describe("MermaidEmitter rendering: function parameters are not duplicated", () => {
+  test("each parameter renders exactly one |read| edge into the return sink", () => {
+    const out = emit("function add(a, b) { return a + b; }\n");
+    expect(
+      countMatches(out, /n_scope_1_a_\d+ -->\|read\| return_scope_0_add_9/),
+    ).toBe(1);
+    expect(
+      countMatches(out, /n_scope_1_b_\d+ -->\|read\| return_scope_0_add_9/),
+    ).toBe(1);
+  });
+});
