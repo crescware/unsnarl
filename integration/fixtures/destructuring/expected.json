@@ -664,7 +664,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#1",
@@ -688,7 +689,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#2",
@@ -714,7 +716,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#3",
@@ -738,7 +741,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#4",
@@ -762,7 +766,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#5",
@@ -786,7 +791,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#6",
@@ -810,7 +816,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#7",
@@ -834,7 +841,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#8",
@@ -858,7 +866,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#9",
@@ -882,7 +891,8 @@
         "write": false,
         "call": false,
         "receiver": true
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#10",
@@ -906,7 +916,8 @@
         "write": false,
         "call": false,
         "receiver": true
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#11",
@@ -930,7 +941,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     }
   ],
   "unusedVariableIds": [

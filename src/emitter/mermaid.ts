@@ -218,19 +218,32 @@ export class MermaidEmitter implements Emitter {
       return false;
     };
 
-    const isCaseScope = (scopeId: string): boolean => {
+    const branchContainerKey = (scope: SerializedScope): string | null => {
+      const ctx = scope.blockContext;
+      if (!ctx) {
+        return null;
+      }
+      if (ctx.parentType === "SwitchStatement" && ctx.key === "cases") {
+        return `switch:${scope.upper ?? ""}:${ctx.parentSpanOffset}`;
+      }
+      if (
+        ctx.parentType === "IfStatement" &&
+        (ctx.key === "consequent" || ctx.key === "alternate")
+      ) {
+        return `if:${scope.upper ?? ""}:${ctx.parentSpanOffset}`;
+      }
+      return null;
+    };
+
+    const isBranchScope = (scopeId: string): boolean => {
       const scope = scopeMap.get(scopeId);
-      return (
-        scope?.type === "block" &&
-        scope.blockContext?.parentType === "SwitchStatement" &&
-        scope.blockContext?.key === "cases"
-      );
+      return scope ? branchContainerKey(scope) !== null : false;
     };
 
     const branchScopeOf = (scopeId: string): string | null => {
       let cur: SerializedScope | undefined = scopeMap.get(scopeId);
       while (cur) {
-        if (isCaseScope(cur.id)) {
+        if (isBranchScope(cur.id)) {
           return cur.id;
         }
         if (!cur.upper) {
@@ -274,6 +287,85 @@ export class MermaidEmitter implements Emitter {
 
     const subgraphOwnerVarSet = new Set(subgraphOwnerVar.values());
 
+    const lineForOffset = (offset: number): number => {
+      let line = 1;
+      const limit = Math.min(offset, ir.raw.length);
+      for (let i = 0; i < limit; i++) {
+        if (ir.raw.charCodeAt(i) === 10) {
+          line += 1;
+        }
+      }
+      return line;
+    };
+
+    const ifContainerSubgraphId = (
+      parentScopeId: string,
+      offset: number,
+    ): string => `cont_if_${sanitize(parentScopeId)}_${offset}`;
+
+    const ifContainerLabel = (
+      group: SerializedScope[],
+      offset: number,
+    ): string => {
+      const hasElse = group.some((g) => g.blockContext?.key === "alternate");
+      return `${hasElse ? "if-else" : "if"} L${lineForOffset(offset)}`;
+    };
+
+    const emitChildren = (
+      parentScope: SerializedScope,
+      indent: string,
+    ): void => {
+      const children: SerializedScope[] = [];
+      for (const id of parentScope.childScopes) {
+        const c = scopeMap.get(id);
+        if (c) {
+          children.push(c);
+        }
+      }
+      let i = 0;
+      while (i < children.length) {
+        const child = children[i];
+        if (!child) {
+          i++;
+          continue;
+        }
+        const ckey = branchContainerKey(child);
+        if (ckey === null || !ckey.startsWith("if:")) {
+          emitScope(child, indent);
+          i++;
+          continue;
+        }
+        const group: SerializedScope[] = [child];
+        let j = i + 1;
+        while (j < children.length) {
+          const next = children[j];
+          if (!next || branchContainerKey(next) !== ckey) {
+            break;
+          }
+          group.push(next);
+          j++;
+        }
+        if (group.length < 2) {
+          for (const g of group) {
+            emitScope(g, indent);
+          }
+          i = j;
+          continue;
+        }
+        const offset = child.blockContext?.parentSpanOffset ?? 0;
+        const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
+        lines.push(
+          `${indent}subgraph ${containerId}["${ifContainerLabel(group, offset)}"]`,
+        );
+        lines.push(`${indent}  direction RL`);
+        for (const g of group) {
+          emitScope(g, `${indent}  `);
+        }
+        lines.push(`${indent}end`);
+        i = j;
+      }
+    };
+
     const emitScope = (scope: SerializedScope, indent: string): void => {
       const subgraph = shouldSubgraph(scope);
       const childIndent = subgraph ? `${indent}  ` : indent;
@@ -309,13 +401,7 @@ export class MermaidEmitter implements Emitter {
           `${childIndent}${writeOpNodeId(op.refId)}(["${head}<br/>L${op.line}"])`,
         );
       }
-      for (const childId of scope.childScopes) {
-        const child = scopeMap.get(childId);
-        if (!child) {
-          continue;
-        }
-        emitScope(child, childIndent);
-      }
+      emitChildren(scope, childIndent);
       if (subgraph) {
         lines.push(`${indent}end`);
       }
@@ -355,26 +441,34 @@ export class MermaidEmitter implements Emitter {
       if (isAncestorScope(last.scopeId, refScopeId)) {
         return [writeOpNodeId(last.refId)];
       }
-      const lastBranch = branchScopeOf(last.scopeId);
-      if (!lastBranch) {
+      const lastBranchId = branchScopeOf(last.scopeId);
+      if (!lastBranchId) {
         return [writeOpNodeId(last.refId)];
       }
-      const switchScopeId = scopeMap.get(lastBranch)?.upper;
-      if (!switchScopeId) {
+      const lastBranchScope = scopeMap.get(lastBranchId);
+      if (!lastBranchScope) {
         return [writeOpNodeId(last.refId)];
       }
-      const caseScopeIds = new Set<string>();
-      for (const op of prev) {
-        const branch = branchScopeOf(op.scopeId);
-        if (branch && scopeMap.get(branch)?.upper === switchScopeId) {
-          caseScopeIds.add(branch);
+      const containerKey = branchContainerKey(lastBranchScope);
+      if (containerKey === null) {
+        return [writeOpNodeId(last.refId)];
+      }
+
+      const branchScopeIds: string[] = [];
+      for (const s of ir.scopes) {
+        if (branchContainerKey(s) === containerKey) {
+          branchScopeIds.push(s.id);
         }
       }
+
       const origins: string[] = [];
-      for (const caseId of caseScopeIds) {
+      for (const branchId of branchScopeIds) {
         let lastOp: WriteOp | null = null;
         for (const op of prev) {
-          if (op.scopeId === caseId || isAncestorScope(caseId, op.scopeId)) {
+          if (
+            op.scopeId === branchId ||
+            isAncestorScope(branchId, op.scopeId)
+          ) {
             lastOp = op;
           }
         }
@@ -382,10 +476,28 @@ export class MermaidEmitter implements Emitter {
           origins.push(writeOpNodeId(lastOp.refId));
         }
       }
+
+      if (containerKey.startsWith("if:")) {
+        const hasAlternate = branchScopeIds.some((id) => {
+          const s = scopeMap.get(id);
+          return s?.blockContext?.key === "alternate";
+        });
+        if (!hasAlternate) {
+          const ifOffset = lastBranchScope.blockContext?.parentSpanOffset ?? 0;
+          const before = ops.filter((op) => op.offset < ifOffset);
+          const lastBefore = before[before.length - 1];
+          if (lastBefore) {
+            origins.push(writeOpNodeId(lastBefore.refId));
+          } else {
+            origins.push(nodeId(varId));
+          }
+        }
+      }
+
       if (origins.length === 0) {
         return [writeOpNodeId(last.refId)];
       }
-      return origins;
+      return Array.from(new Set(origins));
     };
 
     const ownerTargetId = (ownerVarId: string, offset: number): string => {
@@ -425,12 +537,56 @@ export class MermaidEmitter implements Emitter {
       }
     }
 
+    const predicateTargetId = (r: SerializedReference): string | null => {
+      const pc = r.predicateContainer;
+      if (!pc) {
+        return null;
+      }
+      if (pc.type === "SwitchStatement") {
+        let cur = scopeMap.get(r.from);
+        while (cur) {
+          if (cur.type === "switch" && cur.block.span.offset === pc.offset) {
+            return `s_${sanitize(cur.id)}`;
+          }
+          if (!cur.upper) {
+            break;
+          }
+          cur = scopeMap.get(cur.upper);
+        }
+        return null;
+      }
+      const containerKey = `if:${r.from}:${pc.offset}`;
+      const branches = ir.scopes.filter(
+        (s) => branchContainerKey(s) === containerKey,
+      );
+      if (branches.length >= 2) {
+        return ifContainerSubgraphId(r.from, pc.offset);
+      }
+      const single = branches[0];
+      if (single) {
+        return `s_${sanitize(single.id)}`;
+      }
+      return null;
+    };
+
     let needsModuleRoot = false;
     for (const r of ir.references) {
       if (!r.resolved) {
         continue;
       }
       if (hiddenVariables.has(r.resolved)) {
+        continue;
+      }
+      const predicateTarget = predicateTargetId(r);
+      if (predicateTarget) {
+        const fromIds = readOrigins(
+          r.resolved,
+          r.identifier.span.offset,
+          r.from,
+        );
+        for (const fromId of fromIds) {
+          lines.push(`  ${fromId} -->|${edgeLabel(r)}| ${predicateTarget}`);
+        }
         continue;
       }
       if (r.flags.write) {

@@ -1,17 +1,19 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/minimal-const-chain/input.ts",
+    "path": "integration/fixtures/control-if-only/input.ts",
     "language": "ts"
   },
-  "raw": "const a = \"a\";\nconst b = [a];\nconst c = { value: b };\nconst d = c;\n",
+  "raw": "let counter = 0;\nconst flag = true;\n\nif (flag) {\n  counter = 1;\n}\n\nconst result = counter;\n",
   "scopes": [
     {
       "id": "scope#0",
       "type": "module",
       "isStrict": true,
       "upper": null,
-      "childScopes": [],
+      "childScopes": [
+        "scope#1"
+      ],
       "variableScope": "scope#0",
       "block": {
         "type": "Program",
@@ -22,53 +24,79 @@
         }
       },
       "variables": [
-        "scope#0:a@6",
-        "scope#0:b@21",
-        "scope#0:c@36",
-        "scope#0:d@60"
+        "scope#0:counter@4",
+        "scope#0:flag@23",
+        "scope#0:result@73"
       ],
       "references": [
         "ref#0",
-        "ref#1",
         "ref#2"
       ],
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null
+    },
+    {
+      "id": "scope#1",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 4,
+          "column": 10,
+          "offset": 47
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 37
+      }
     }
   ],
   "variables": [
     {
-      "id": "scope#0:a@6",
-      "name": "a",
+      "id": "scope#0:counter@4",
+      "name": "counter",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 1,
-          "column": 6,
-          "offset": 6
+          "column": 4,
+          "offset": 4
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1",
+        "ref#2"
       ],
       "defs": [
         {
           "type": "Variable",
           "name": {
-            "name": "a",
+            "name": "counter",
             "span": {
               "line": 1,
-              "column": 6,
-              "offset": 6
+              "column": 4,
+              "offset": 4
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
               "line": 1,
-              "column": 6,
-              "offset": 6
+              "column": 4,
+              "offset": 4
             }
           },
           "parent": {
@@ -82,39 +110,39 @@
           "initType": "Literal",
           "initSpan": {
             "line": 1,
-            "column": 10,
-            "offset": 10
+            "column": 14,
+            "offset": 14
           },
           "importKind": null,
           "importSource": null,
           "importedName": null,
-          "declarationKind": "const"
+          "declarationKind": "let"
         }
       ]
     },
     {
-      "id": "scope#0:b@21",
-      "name": "b",
+      "id": "scope#0:flag@23",
+      "name": "flag",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 2,
           "column": 6,
-          "offset": 21
+          "offset": 23
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0"
       ],
       "defs": [
         {
           "type": "Variable",
           "name": {
-            "name": "b",
+            "name": "flag",
             "span": {
               "line": 2,
               "column": 6,
-              "offset": 21
+              "offset": 23
             }
           },
           "node": {
@@ -122,7 +150,7 @@
             "span": {
               "line": 2,
               "column": 6,
-              "offset": 21
+              "offset": 23
             }
           },
           "parent": {
@@ -130,14 +158,14 @@
             "span": {
               "line": 2,
               "column": 0,
-              "offset": 15
+              "offset": 17
             }
           },
-          "initType": "ArrayExpression",
+          "initType": "Literal",
           "initSpan": {
             "line": 2,
-            "column": 10,
-            "offset": 25
+            "column": 13,
+            "offset": 30
           },
           "importKind": null,
           "importSource": null,
@@ -147,68 +175,14 @@
       ]
     },
     {
-      "id": "scope#0:c@36",
-      "name": "c",
+      "id": "scope#0:result@73",
+      "name": "result",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 3,
+          "line": 8,
           "column": 6,
-          "offset": 36
-        }
-      ],
-      "references": [
-        "ref#2"
-      ],
-      "defs": [
-        {
-          "type": "Variable",
-          "name": {
-            "name": "c",
-            "span": {
-              "line": 3,
-              "column": 6,
-              "offset": 36
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 3,
-              "column": 6,
-              "offset": 36
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 3,
-              "column": 0,
-              "offset": 30
-            }
-          },
-          "initType": "ObjectExpression",
-          "initSpan": {
-            "line": 3,
-            "column": 10,
-            "offset": 40
-          },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:d@60",
-      "name": "d",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 4,
-          "column": 6,
-          "offset": 60
+          "offset": 73
         }
       ],
       "references": [],
@@ -216,34 +190,34 @@
         {
           "type": "Variable",
           "name": {
-            "name": "d",
+            "name": "result",
             "span": {
-              "line": 4,
+              "line": 8,
               "column": 6,
-              "offset": 60
+              "offset": 73
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 4,
+              "line": 8,
               "column": 6,
-              "offset": 60
+              "offset": 73
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 4,
+              "line": 8,
               "column": 0,
-              "offset": 54
+              "offset": 67
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 4,
-            "column": 10,
-            "offset": 64
+            "line": 8,
+            "column": 15,
+            "offset": 82
           },
           "importKind": null,
           "importSource": null,
@@ -257,18 +231,16 @@
     {
       "id": "ref#0",
       "identifier": {
-        "name": "a",
+        "name": "flag",
         "span": {
-          "line": 2,
-          "column": 11,
-          "offset": 26
+          "line": 4,
+          "column": 4,
+          "offset": 41
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:a@6",
-      "owners": [
-        "scope#0:b@21"
-      ],
+      "resolved": "scope#0:flag@23",
+      "owners": [],
       "writeExpr": null,
       "init": false,
       "flags": {
@@ -277,28 +249,35 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 37
+      }
     },
     {
       "id": "ref#1",
       "identifier": {
-        "name": "b",
+        "name": "counter",
         "span": {
-          "line": 3,
-          "column": 19,
-          "offset": 49
+          "line": 5,
+          "column": 2,
+          "offset": 51
         }
       },
-      "from": "scope#0",
-      "resolved": "scope#0:b@21",
+      "from": "scope#1",
+      "resolved": "scope#0:counter@4",
       "owners": [
-        "scope#0:c@36"
+        "scope#0:counter@4"
       ],
-      "writeExpr": null,
+      "writeExpr": {
+        "line": 5,
+        "column": 12,
+        "offset": 61
+      },
       "init": false,
       "flags": {
-        "read": true,
-        "write": false,
+        "read": false,
+        "write": true,
         "call": false,
         "receiver": false
       },
@@ -307,17 +286,17 @@
     {
       "id": "ref#2",
       "identifier": {
-        "name": "c",
+        "name": "counter",
         "span": {
-          "line": 4,
-          "column": 10,
-          "offset": 64
+          "line": 8,
+          "column": 15,
+          "offset": 82
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:c@36",
+      "resolved": "scope#0:counter@4",
       "owners": [
-        "scope#0:d@60"
+        "scope#0:result@73"
       ],
       "writeExpr": null,
       "init": true,
@@ -331,7 +310,7 @@
     }
   ],
   "unusedVariableIds": [
-    "scope#0:d@60"
+    "scope#0:result@73"
   ],
   "diagnostics": []
 }

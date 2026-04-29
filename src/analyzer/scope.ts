@@ -5,6 +5,7 @@ import type {
   AstNode,
   BlockContext,
   Definition,
+  PredicateContainer,
   Reference,
   ReferenceFlagBits,
   Scope,
@@ -75,6 +76,7 @@ export class ReferenceImpl implements Reference {
   readonly from: Scope;
   resolved: Variable | null = null;
   unsnarlOwners: Variable[] = [];
+  unsnarlPredicateContainer: PredicateContainer | null = null;
   readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;

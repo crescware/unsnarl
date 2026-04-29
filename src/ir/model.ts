@@ -53,6 +53,13 @@ export const ReferenceFlags = {
 
 export type ReferenceFlagBits = number;
 
+export type PredicateContainerType = "IfStatement" | "SwitchStatement";
+
+export interface PredicateContainer {
+  type: PredicateContainerType;
+  offset: number;
+}
+
 export interface Reference {
   identifier: AstIdentifier;
   from: Scope;
@@ -68,6 +75,7 @@ export interface Reference {
   isReceiver?(): boolean;
   unsnarlFlags?: ReferenceFlagBits;
   unsnarlOwners?: Variable[];
+  unsnarlPredicateContainer?: PredicateContainer | null;
 }
 
 export interface Definition {
@@ -89,6 +97,7 @@ export interface Variable {
 export interface BlockContext {
   parentType: string;
   key: string;
+  parentSpanOffset: number;
 }
 
 export interface Scope {
@@ -159,6 +168,7 @@ export interface SerializedReference {
     call: boolean;
     receiver: boolean;
   };
+  predicateContainer: PredicateContainer | null;
 }
 
 export type ImportKind = "default" | "named" | "namespace";

@@ -115,7 +115,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     }
   ],
   "unusedVariableIds": [],

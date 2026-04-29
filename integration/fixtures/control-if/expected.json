@@ -60,7 +60,8 @@
       "functionExpressionScope": false,
       "blockContext": {
         "parentType": "IfStatement",
-        "key": "consequent"
+        "key": "consequent",
+        "parentSpanOffset": 37
       }
     },
     {
@@ -86,7 +87,8 @@
       "functionExpressionScope": false,
       "blockContext": {
         "parentType": "IfStatement",
-        "key": "alternate"
+        "key": "alternate",
+        "parentSpanOffset": 37
       }
     }
   ],
@@ -275,6 +277,10 @@
         "write": false,
         "call": false,
         "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 37
       }
     },
     {
@@ -303,7 +309,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#2",
@@ -331,7 +338,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#3",
@@ -355,7 +363,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     }
   ],
   "unusedVariableIds": [

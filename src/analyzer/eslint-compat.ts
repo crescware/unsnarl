@@ -11,6 +11,7 @@ import { collectBindingIdentifiers, declareVariable } from "./declare.js";
 import { hoistDeclarations } from "./hoisting.js";
 import { ScopeManager } from "./manager.js";
 import { findReferenceOwners } from "./owner.js";
+import { findPredicateContainer } from "./predicate.js";
 import { bindReference } from "./resolve.js";
 import { ReferenceImpl } from "./scope.js";
 import { isTypeOnlySubtree } from "./skip-types.js";
@@ -104,7 +105,13 @@ function handleEnter(
         return;
       }
       const ctx =
-        parent && key !== null ? { parentType: parent.type, key } : null;
+        parent && key !== null
+          ? {
+              parentType: parent.type,
+              key,
+              parentSpanOffset: parent.start ?? 0,
+            }
+          : null;
       const scope = manager.push("block", node as unknown as AstNode, ctx);
       const stmts = node["body"];
       if (Array.isArray(stmts)) {
@@ -116,20 +123,38 @@ function handleEnter(
     case "ForOfStatement":
     case "ForInStatement": {
       const ctx =
-        parent && key !== null ? { parentType: parent.type, key } : null;
+        parent && key !== null
+          ? {
+              parentType: parent.type,
+              key,
+              parentSpanOffset: parent.start ?? 0,
+            }
+          : null;
       const scope = manager.push("for", node as unknown as AstNode, ctx);
       declareForLeft(node, scope, raw, diagnostics);
       return;
     }
     case "SwitchStatement": {
       const ctx =
-        parent && key !== null ? { parentType: parent.type, key } : null;
+        parent && key !== null
+          ? {
+              parentType: parent.type,
+              key,
+              parentSpanOffset: parent.start ?? 0,
+            }
+          : null;
       manager.push("switch", node as unknown as AstNode, ctx);
       return;
     }
     case "SwitchCase": {
       const ctx =
-        parent && key !== null ? { parentType: parent.type, key } : null;
+        parent && key !== null
+          ? {
+              parentType: parent.type,
+              key,
+              parentSpanOffset: parent.start ?? 0,
+            }
+          : null;
       const scope = manager.push("block", node as unknown as AstNode, ctx);
       const consequent = node["consequent"];
       if (Array.isArray(consequent)) {
@@ -139,7 +164,13 @@ function handleEnter(
     }
     case "CatchClause": {
       const ctx =
-        parent && key !== null ? { parentType: parent.type, key } : null;
+        parent && key !== null
+          ? {
+              parentType: parent.type,
+              key,
+              parentSpanOffset: parent.start ?? 0,
+            }
+          : null;
       const scope = manager.push("catch", node as unknown as AstNode, ctx);
       const param = node["param"];
       if (isNodeLike(param)) {
@@ -314,6 +345,11 @@ function handleIdentifierReference(
   });
   bindReference(manager.current(), ref, manager.globalScope);
   ref.unsnarlOwners = findReferenceOwners(path, manager.current());
+  ref.unsnarlPredicateContainer = findPredicateContainer(
+    parent as unknown as { type: string; start?: number } | null,
+    key,
+    path,
+  );
 }
 
 function isNodeLike(value: unknown): value is NodeLike {

@@ -283,7 +283,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#1",
@@ -307,7 +308,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#2",
@@ -335,7 +337,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#3",
@@ -357,7 +360,8 @@
         "write": true,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     },
     {
       "id": "ref#4",
@@ -381,7 +385,8 @@
         "write": false,
         "call": false,
         "receiver": false
-      }
+      },
+      "predicateContainer": null
     }
   ],
   "unusedVariableIds": [

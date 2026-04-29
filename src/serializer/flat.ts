@@ -281,5 +281,6 @@ function serializeReference(
       call: r.isCall?.() ?? false,
       receiver: r.isReceiver?.() ?? false,
     },
+    predicateContainer: r.unsnarlPredicateContainer ?? null,
   };
 }
