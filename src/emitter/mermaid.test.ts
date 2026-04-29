@@ -152,6 +152,23 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/subgraph s_scope_\d+\["switch L3"\]/);
   });
 
+  test("encodes double quotes in labels with HTML entity, never with backslash", () => {
+    const code =
+      'let l = "";\nconst k = "a";\nswitch (k) {\n  case "x": l = "x"; break;\n}\n';
+    const out = emit(code);
+    expect(out).not.toContain('\\"');
+    expect(out).toMatch(/case &quot;x&quot;/);
+  });
+
+  test("encodes & < > in case labels with HTML entities", () => {
+    const code =
+      "let l = 0;\nconst a = 1;\nconst b = 2;\nswitch (a) {\n  case (a & b): l = 1; break;\n  case (a < b ? 1 : 0): l = 2; break;\n}\n";
+    const out = emit(code);
+    expect(out).not.toMatch(/case [^"]*&[^a-z]/);
+    expect(out).toContain("&amp;");
+    expect(out).toContain("&lt;");
+  });
+
   test("expands import declarations into module/intermediate nodes", () => {
     const out = emit(
       [
