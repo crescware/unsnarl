@@ -1,53 +1,76 @@
-import { describe, expect, test } from "vitest";
+import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import {
-  createDefaultEmitterRegistry,
-  createDefaultPipeline,
-} from "./default.js";
+import { IrEmitter } from "../emitter/ir.js";
+import { JsonEmitter } from "../emitter/json.js";
+import { MarkdownEmitter } from "../emitter/markdown.js";
+import { MermaidEmitter } from "../emitter/mermaid.js";
+import { createDefaultEmitterRegistry } from "./default.js";
 
-describe("createDefaultPipeline", () => {
-  test("registers ir, mermaid, and markdown emitters by default", () => {
-    const reg = createDefaultEmitterRegistry();
-    expect([...reg.list()].sort()).toEqual(["ir", "markdown", "mermaid"]);
-  });
-
-  test("end-to-end: parses TS, analyzes, serializes, emits IR JSON", () => {
-    const pipeline = createDefaultPipeline();
-    const out = pipeline.run("const a = 1;\nconst b = a;\n", {
+vi.mock("../emitter/ir.js", () => ({
+  IrEmitter: vi.fn(function IrEmitter() {
+    return {
       format: "ir",
-      language: "ts",
-      sourcePath: "input.ts",
-      emit: { pretty: false },
-    });
-    const ir = JSON.parse(out);
-    expect(ir.version).toBe(1);
-    expect(ir.source).toEqual({ path: "input.ts", language: "ts" });
-    expect(ir.variables.map((v: { name: string }) => v.name).sort()).toEqual([
-      "a",
-      "b",
-    ]);
-  });
-
-  test("end-to-end: emits a Mermaid flowchart for the same input", () => {
-    const pipeline = createDefaultPipeline();
-    const out = pipeline.run("const a = 1;\nconst b = a;\n", {
+      contentType: "application/json",
+      emit: vi.fn(),
+    };
+  }),
+}));
+vi.mock("../emitter/json.js", () => ({
+  JsonEmitter: vi.fn(function JsonEmitter() {
+    return {
+      format: "json",
+      contentType: "application/json",
+      emit: vi.fn(),
+    };
+  }),
+}));
+vi.mock("../emitter/mermaid.js", () => ({
+  MermaidEmitter: vi.fn(function MermaidEmitter() {
+    return {
       format: "mermaid",
-      language: "ts",
-      sourcePath: "input.ts",
-    });
-    expect(out).toMatch(/^flowchart RL\n/);
-    expect(out).toContain('"a<br/>');
-    expect(out).toContain('"b<br/>');
+      contentType: "text/vnd.mermaid",
+      emit: vi.fn(),
+    };
+  }),
+}));
+vi.mock("../emitter/markdown.js", () => ({
+  MarkdownEmitter: vi.fn(function MarkdownEmitter() {
+    return {
+      format: "markdown",
+      contentType: "text/markdown",
+      emit: vi.fn(),
+    };
+  }),
+}));
+
+describe("createDefaultEmitterRegistry", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
   });
 
-  test("throws for unknown formats with available list", () => {
-    const pipeline = createDefaultPipeline();
-    expect(() =>
-      pipeline.run("", {
-        format: "yaml",
-        language: "ts",
-        sourcePath: "x.ts",
-      }),
-    ).toThrow(/ir, mermaid/);
+  test("constructs each of the four emitters exactly once", () => {
+    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    expect(IrEmitter).toHaveBeenCalledTimes(1);
+    expect(JsonEmitter).toHaveBeenCalledTimes(1);
+    expect(MermaidEmitter).toHaveBeenCalledTimes(1);
+    expect(MarkdownEmitter).toHaveBeenCalledTimes(1);
+  });
+
+  test("forwards the mermaid renderer choice into MermaidEmitter", () => {
+    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    expect(MermaidEmitter).toHaveBeenCalledWith({ renderer: "elk" });
+
+    vi.clearAllMocks();
+    createDefaultEmitterRegistry({ mermaidRenderer: "dagre" });
+    expect(MermaidEmitter).toHaveBeenCalledWith({ renderer: "dagre" });
+  });
+
+  test("MarkdownEmitter receives the SAME MermaidEmitter instance, not a fresh one", () => {
+    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    const mermaidConstructor = vi.mocked(MermaidEmitter);
+    const markdownConstructor = vi.mocked(MarkdownEmitter);
+    expect(mermaidConstructor.mock.results).toHaveLength(1);
+    const mermaidInstance = mermaidConstructor.mock.results[0]?.value as object;
+    expect(markdownConstructor).toHaveBeenCalledWith(mermaidInstance);
   });
 });

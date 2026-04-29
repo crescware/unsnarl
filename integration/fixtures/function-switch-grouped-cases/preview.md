@@ -28,40 +28,45 @@ function getDayType(day) {
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  subgraph n_scope_0_getDayType_9["getDayType()<br/>L1"]
-    direction RL
-    return_scope_0_getDayType_9((return))
-    n_scope_1_day_20["day<br/>L1"]
-    n_scope_1_ret_33["let ret<br/>L2"]
-    subgraph s_scope_2["switch L3"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_getDayType_9["getDayType()<br/>L1"]
+    subgraph s_scope_1["getDayType()<br/>L1"]
       direction RL
-      subgraph s_scope_3["case 'mon' L4"]
+      return_scope_0_getDayType_9((return))
+      n_scope_1_day_20["day<br/>L1"]
+      n_scope_1_ret_33["let ret<br/>L2"]
+      subgraph s_scope_2["switch L3"]
         direction RL
-      end
-      subgraph s_scope_4["case 'tue' L5"]
-        direction RL
-      end
-      subgraph s_scope_5["case 'wed' L6"]
-        direction RL
-      end
-      subgraph s_scope_6["case 'thu' L7"]
-        direction RL
-      end
-      subgraph s_scope_7["case 'fri' L8"]
-        direction RL
-        wr_ref_1(["let ret<br/>L9"])
-      end
-      subgraph s_scope_8["case 'sat' L11"]
-        direction RL
-      end
-      subgraph s_scope_9["case 'sun' L12"]
-        direction RL
-        wr_ref_2(["let ret<br/>L13"])
-      end
-      subgraph s_scope_10["default L15"]
-        direction RL
-        wr_ref_3(["let ret<br/>L16"])
+        subgraph s_scope_3["case 'mon' L4"]
+          direction RL
+        end
+        subgraph s_scope_4["case 'tue' L5"]
+          direction RL
+        end
+        subgraph s_scope_5["case 'wed' L6"]
+          direction RL
+        end
+        subgraph s_scope_6["case 'thu' L7"]
+          direction RL
+        end
+        subgraph s_scope_7["case 'fri' L8"]
+          direction RL
+          wr_ref_1(["let ret<br/>L9"])
+        end
+        subgraph s_scope_8["case 'sat' L11"]
+          direction RL
+        end
+        subgraph s_scope_9["case 'sun' L12"]
+          direction RL
+          wr_ref_2(["let ret<br/>L13"])
+        end
+        subgraph s_scope_10["default L15"]
+          direction RL
+          wr_ref_3(["let ret<br/>L16"])
+        end
       end
     end
   end
@@ -72,6 +77,8 @@ flowchart RL
   wr_ref_1 -->|read| return_scope_0_getDayType_9
   wr_ref_2 -->|read| return_scope_0_getDayType_9
   wr_ref_3 -->|read| return_scope_0_getDayType_9
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;
   classDef unused stroke-dasharray: 5 5;
   class n_scope_0_getDayType_9 unused;
 ```

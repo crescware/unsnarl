@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-component/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_Fragment_9",
+      "kind": "ImportBinding",
+      "name": "Fragment",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "Fragment",
+      "importSource": "react"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Hello_79",
+      "kind": "Variable",
+      "name": "Hello",
+      "line": 7,
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_App_196",
+      "kind": "Variable",
+      "name": "App",
+      "line": 13,
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_root_237",
+      "kind": "Variable",
+      "name": "root",
+      "line": 15,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_span_125",
+      "kind": "ImplicitGlobalVariable",
+      "name": "span",
+      "line": 9
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 7,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Hello_79",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_Hello_79",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 7
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_props_88",
+          "kind": "Parameter",
+          "name": "props",
+          "line": 7
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "function",
+      "line": 13,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_App_196",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_App_196",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 13
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_react",
+      "kind": "ModuleSource",
+      "name": "react",
+      "line": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Fragment_9",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_span_125",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_props_88",
+      "to": "return_scope_0_Hello_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Hello_79",
+      "to": "return_scope_0_App_196",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_App_196",
+      "to": "n_scope_0_root_237",
+      "label": "read"
+    },
+    {
+      "from": "mod_react",
+      "to": "n_scope_0_Fragment_9",
+      "label": "read"
+    }
+  ]
+}

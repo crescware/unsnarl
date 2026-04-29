@@ -30,6 +30,7 @@ const result = label;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_RED_6["RED<br/>L1"]
   n_scope_0_GREEN_23["GREEN<br/>L2"]

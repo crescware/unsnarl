@@ -65,6 +65,18 @@ describe("fixtures (end-to-end pipeline)", () => {
         );
       });
 
+      test("emits the expected VisualGraph JSON", () => {
+        const out = pipeline.run(code, {
+          format: "json",
+          language: fixture.language,
+          sourcePath,
+          emit: { pretty: true },
+        });
+        expect(out).toMatchFileSnapshot(
+          join(FIXTURE_DIR, fixture.name, "expected.json"),
+        );
+      });
+
       test("emits the expected Mermaid flowchart", () => {
         const out = pipeline.run(code, {
           format: "mermaid",

@@ -1,6 +1,13 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  subgraph n_scope_0_greet_9["greet()<br/>L1"]
-    direction RL
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_greet_9["greet()<br/>L1"]
+    subgraph s_scope_1["greet()<br/>L1"]
+      direction RL
+    end
   end
   n_scope_0_greet_9 -->|read,call| module_root
   module_root((module))
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;

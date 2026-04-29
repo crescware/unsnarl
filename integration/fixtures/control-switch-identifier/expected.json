@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-identifier/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_RED_6",
+      "kind": "Variable",
+      "name": "RED",
+      "line": 1,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_GREEN_23",
+      "kind": "Variable",
+      "name": "GREEN",
+      "line": 2,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_BLUE_42",
+      "kind": "Variable",
+      "name": "BLUE",
+      "line": 3,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_label_59",
+      "kind": "Variable",
+      "name": "label",
+      "line": 5,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_color_77",
+      "kind": "Variable",
+      "name": "color",
+      "line": 6,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_283",
+      "kind": "Variable",
+      "name": "result",
+      "line": 22,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "switch",
+      "line": 8,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "case",
+          "line": 9,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_3",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 10,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "RED"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "kind": "case",
+          "line": 12,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_5",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 13,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "GREEN"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "kind": "case",
+          "line": 15,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_7",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 16,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "BLUE"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_5",
+          "kind": "case",
+          "line": 18,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_8",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 19,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": null
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_5",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_7",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_8",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_RED_6",
+      "to": "n_scope_0_color_77",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_color_77",
+      "to": "s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_RED_6",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_GREEN_23",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_BLUE_42",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_7",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_8",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    }
+  ]
+}

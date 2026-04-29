@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/simple-const-let/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_greeting_6",
+      "kind": "Variable",
+      "name": "greeting",
+      "line": 1,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_counter_30",
+      "kind": "Variable",
+      "name": "counter",
+      "line": 2,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_message_97",
+      "kind": "Variable",
+      "name": "message",
+      "line": 6,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_unused_123",
+      "kind": "Variable",
+      "name": "unused",
+      "line": 7,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_0",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 3,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_2",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 4,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_3",
+      "kind": "WriteOp",
+      "name": "counter",
+      "line": 5,
+      "declarationKind": "let"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_counter_30",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_greeting_6",
+      "to": "n_scope_0_message_97",
+      "label": "read"
+    }
+  ]
+}

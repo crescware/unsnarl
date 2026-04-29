@@ -10,6 +10,7 @@ const b = [a];
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_a_6["a<br/>L1"]
   n_scope_0_b_21["b<br/>L2"]

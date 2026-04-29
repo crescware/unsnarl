@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-and-class/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_add_9",
+      "kind": "FunctionName",
+      "name": "add",
+      "line": 1
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Counter_62",
+      "kind": "ClassName",
+      "name": "Counter",
+      "line": 5
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_total_94",
+      "kind": "Variable",
+      "name": "total",
+      "line": 9,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_119",
+      "kind": "Variable",
+      "name": "c",
+      "line": 10,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_144",
+      "kind": "Variable",
+      "name": "result",
+      "line": 11,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_add_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_add_9",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_13",
+          "kind": "Parameter",
+          "name": "a",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_24",
+          "kind": "Parameter",
+          "name": "b",
+          "line": 1
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_13",
+      "to": "return_scope_0_add_9",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_24",
+      "to": "return_scope_0_add_9",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_add_9",
+      "to": "n_scope_0_total_94",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_Counter_62",
+      "to": "n_scope_0_c_119",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_total_94",
+      "to": "n_scope_0_result_144",
+      "label": "read"
+    }
+  ]
+}

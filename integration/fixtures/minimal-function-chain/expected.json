@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-function-chain/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "kind": "FunctionName",
+      "name": "f",
+      "line": 1,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_f_9",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_23",
+          "kind": "Variable",
+          "name": "a",
+          "line": 2,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_40",
+          "kind": "Variable",
+          "name": "b",
+          "line": 3,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_c_57",
+          "kind": "Variable",
+          "name": "c",
+          "line": 4,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_d_83",
+          "kind": "Variable",
+          "name": "d",
+          "line": 5,
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_23",
+      "to": "n_scope_1_b_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_40",
+      "to": "n_scope_1_c_57",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_c_57",
+      "to": "n_scope_1_d_83",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_d_83",
+      "to": "return_scope_0_f_9",
+      "label": "read"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-let/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "kind": "FunctionName",
+      "name": "f",
+      "line": 1,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "return_scope_0_f_9",
+          "kind": "ReturnSink",
+          "name": "return",
+          "line": 1
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_v_21",
+          "kind": "Variable",
+          "name": "v",
+          "line": 2,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_0",
+          "kind": "WriteOp",
+          "name": "v",
+          "line": 3,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_1",
+          "kind": "WriteOp",
+          "name": "v",
+          "line": 4,
+          "declarationKind": "let"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_v_21",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "return_scope_0_f_9",
+      "label": "read"
+    }
+  ]
+}

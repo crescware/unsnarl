@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-function/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_greet_9",
+      "kind": "FunctionName",
+      "name": "greet",
+      "line": 1
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_greet_9",
+      "elements": []
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_greet_9",
+      "to": "module_root",
+      "label": "read,call"
+    }
+  ]
+}

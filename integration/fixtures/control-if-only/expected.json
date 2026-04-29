@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-if-only/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_counter_4",
+      "kind": "Variable",
+      "name": "counter",
+      "line": 1,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_flag_23",
+      "kind": "Variable",
+      "name": "flag",
+      "line": 2,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_73",
+      "kind": "Variable",
+      "name": "result",
+      "line": 8,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "if",
+      "line": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_1",
+          "kind": "WriteOp",
+          "name": "counter",
+          "line": 5,
+          "declarationKind": "let"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_counter_4",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_flag_23",
+      "to": "s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_73",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_counter_4",
+      "to": "n_scope_0_result_73",
+      "label": "read"
+    }
+  ]
+}

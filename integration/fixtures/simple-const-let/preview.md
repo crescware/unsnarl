@@ -15,6 +15,7 @@ const unused = 99;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_greeting_6["greeting<br/>L1"]
   n_scope_0_counter_30["let counter<br/>L2"]

@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-default-middle/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_label_4",
+      "kind": "Variable",
+      "name": "label",
+      "line": 1,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_kind_22",
+      "kind": "Variable",
+      "name": "kind",
+      "line": 2,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_190",
+      "kind": "Variable",
+      "name": "result",
+      "line": 16,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "switch",
+      "line": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "case",
+          "line": 5,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_1",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 6,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "\"a\""
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "kind": "case",
+          "line": 8,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_2",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 9,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": null
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "kind": "case",
+          "line": 11,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_3",
+              "kind": "WriteOp",
+              "name": "label",
+              "line": 12,
+              "declarationKind": "let"
+            }
+          ],
+          "caseTest": "\"b\""
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_4",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_kind_22",
+      "to": "s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_190",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "n_scope_0_result_190",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "n_scope_0_result_190",
+      "label": "read"
+    }
+  ]
+}

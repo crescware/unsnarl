@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/minimal-const-array/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_6",
+      "kind": "Variable",
+      "name": "a",
+      "line": 1,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_21",
+      "kind": "Variable",
+      "name": "b",
+      "line": 2,
+      "declarationKind": "const",
+      "unused": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_a_6",
+      "to": "n_scope_0_b_21",
+      "label": "read"
+    }
+  ]
+}

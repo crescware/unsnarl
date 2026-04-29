@@ -8,7 +8,7 @@ import { MermaidEmitter } from "./mermaid.js";
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
-const emitter = new MermaidEmitter();
+const emitter = new MermaidEmitter({ renderer: "elk" });
 
 function emit(code: string, language: "ts" | "tsx" | "js" = "ts"): string {
   const parsed = parser.parse(code, {
@@ -31,9 +31,34 @@ describe("MermaidEmitter", () => {
     expect(emitter.contentType).toBe("text/vnd.mermaid");
   });
 
+  test("renderer defaults to elk and prepends an init directive", () => {
+    const out = emit("const a = 1;\n");
+    expect(
+      out.startsWith('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%\n'),
+    ).toBe(true);
+  });
+
+  test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
+    const dagre = new MermaidEmitter({ renderer: "dagre" });
+    const parsed = parser.parse("const a = 1;\n", {
+      language: "ts",
+      sourcePath: "input.ts",
+    });
+    const analyzed = analyzer.analyze(parsed);
+    const ir = serializer.serialize({
+      rootScope: analyzed.rootScope,
+      diagnostics: analyzed.diagnostics,
+      raw: analyzed.raw,
+      source: { path: "input.ts", language: "ts" },
+    });
+    const out = dagre.emit(ir, {});
+    expect(out).not.toContain("%%{init");
+    expect(out).toMatch(/^flowchart RL\n/);
+  });
+
   test("emits flowchart RL with one node per declared variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
-    expect(out).toMatch(/^flowchart RL\n/);
+    expect(out).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(out).toContain('"a<br/>L1"');
     expect(out).toContain('"b<br/>L2"');
   });
@@ -76,7 +101,8 @@ describe("MermaidEmitter", () => {
 
   test("renders a function as a subgraph and routes return through a return node", () => {
     const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
-    expect(out).toMatch(/subgraph n_scope_0_f_9\["f\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["f\(\)/);
+    expect(out).toMatch(/n_scope_0_f_9\["f\(\)<br\/>L1"\]/);
     expect(out).toContain("direction RL");
     expect(out).toContain("return_scope_0_f_9((return))");
     expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);
@@ -85,14 +111,16 @@ describe("MermaidEmitter", () => {
 
   test("subgraphs arrow functions assigned to a const", () => {
     const out = emit("const fn = (p: number) => p + 1;\n");
-    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
+    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
     expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| return_scope_0_fn_6/);
   });
 
   test("subgraphs function expressions assigned to a const", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
-    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
+    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
   });
 

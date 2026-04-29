@@ -16,6 +16,7 @@ const d = ns;
 ## Mermaid
 
 ```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_def_7["import def<br/>L1"]
   n_scope_0_named_41["import named<br/>L2"]
