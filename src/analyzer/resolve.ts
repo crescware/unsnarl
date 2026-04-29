@@ -1,4 +1,5 @@
-import type { Reference, Scope, Variable } from "../ir/model.js";
+import type { AstNode, Reference, Scope, Variable } from "../ir/model.js";
+import { VariableImpl } from "./scope.js";
 
 export function resolveInScopeChain(
   scope: Scope,
@@ -15,17 +16,39 @@ export function resolveInScopeChain(
   return null;
 }
 
-export function bindReference(scope: Scope, reference: Reference): void {
+export function bindReference(
+  scope: Scope,
+  reference: Reference,
+  globalScope: Scope,
+): void {
   scope.references.push(reference);
   const resolved = resolveInScopeChain(scope, reference.identifier.name);
   if (resolved) {
     (reference as { resolved: Variable | null }).resolved = resolved;
     resolved.references.push(reference);
-  } else {
-    let cur: Scope | null = scope;
-    while (cur) {
-      cur.through.push(reference);
-      cur = cur.upper;
-    }
+    return;
   }
+
+  let implicit = globalScope.set.get(reference.identifier.name);
+  if (!implicit) {
+    implicit = new VariableImpl(reference.identifier.name, globalScope);
+    globalScope.set.set(reference.identifier.name, implicit);
+    globalScope.variables.push(implicit);
+    implicit.identifiers.push(reference.identifier);
+    implicit.defs.push({
+      type: "ImplicitGlobalVariable",
+      name: reference.identifier,
+      node: reference.identifier as unknown as AstNode,
+      parent: null,
+    });
+  }
+  (reference as { resolved: Variable | null }).resolved = implicit;
+  implicit.references.push(reference);
+
+  let cur: Scope | null = scope;
+  while (cur && cur !== globalScope) {
+    cur.through.push(reference);
+    cur = cur.upper;
+  }
+  globalScope.through.push(reference);
 }

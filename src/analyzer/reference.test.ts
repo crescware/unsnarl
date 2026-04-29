@@ -138,7 +138,7 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(innerX.references[0]?.isRead()).toBe(true);
   });
 
-  test("unresolved identifier ends up in scope.through", () => {
+  test("unresolved identifier resolves to an ImplicitGlobalVariable and is propagated through", () => {
     const code = `
       function foo() {
         return globalThing;
@@ -147,7 +147,12 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     expect(rootScope.through.length).toBe(1);
     expect(rootScope.through[0]?.identifier.name).toBe("globalThing");
-    expect(rootScope.through[0]?.resolved).toBe(null);
+    const implicit = findVariable(rootScope, "globalThing");
+    expect(implicit).toBeDefined();
+    expect(implicit?.defs.map((d) => d.type)).toEqual([
+      "ImplicitGlobalVariable",
+    ]);
+    expect(rootScope.through[0]?.resolved).toBe(implicit);
   });
 
   test("unsnarlIsUnused returns true for unused imports and consts", () => {

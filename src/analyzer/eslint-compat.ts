@@ -8,7 +8,8 @@ import { hoistDeclarations } from "./hoisting.js";
 import { ScopeManager } from "./manager.js";
 import { bindReference } from "./resolve.js";
 import { ReferenceImpl } from "./scope.js";
-import type { PathEntry } from "./walk.js";
+import { isTypeOnlySubtree } from "./skip-types.js";
+import type { PathEntry, WalkAction } from "./walk.js";
 import { walk } from "./walk.js";
 
 export interface AnalysisResult {
@@ -43,7 +44,7 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
 
     walk(program as unknown as AstNode, {
       enter(node, parent, key, path) {
-        handleEnter(
+        return handleEnter(
           node as unknown as NodeLike,
           parent as unknown as NodeLike | null,
           key,
@@ -78,7 +79,10 @@ function handleEnter(
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
-): void {
+): WalkAction {
+  if (isTypeOnlySubtree(node.type, key)) {
+    return "skip";
+  }
   if (node.type === "Identifier" || node.type === "JSXIdentifier") {
     handleIdentifierReference(node, parent, key, path, manager);
     return;
@@ -304,7 +308,7 @@ function handleIdentifierReference(
     init: result.init,
     writeExpr: result.writeExpr,
   });
-  bindReference(manager.current(), ref);
+  bindReference(manager.current(), ref, manager.globalScope);
 }
 
 function isNodeLike(value: unknown): value is NodeLike {

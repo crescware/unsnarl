@@ -7,13 +7,15 @@ export interface PathEntry {
   readonly key: string | null;
 }
 
+export type WalkAction = "skip" | undefined | void;
+
 export interface WalkVisitor {
   enter?(
     node: AstNode,
     parent: AstNode | null,
     key: string | null,
     path: ReadonlyArray<PathEntry>,
-  ): void;
+  ): WalkAction;
   leave?(
     node: AstNode,
     parent: AstNode | null,
@@ -33,7 +35,11 @@ function walkNode(
   visitor: WalkVisitor,
   path: PathEntry[],
 ): void {
-  visitor.enter?.(node, parent, key, path);
+  const action = visitor.enter?.(node, parent, key, path);
+  if (action === "skip") {
+    visitor.leave?.(node, parent, key, path);
+    return;
+  }
   path.push({ node, key });
   const keys = visitorKeys[node.type];
   if (keys) {

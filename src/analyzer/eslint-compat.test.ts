@@ -78,14 +78,11 @@ describe("EslintCompatAnalyzer / declarations", () => {
       const { nested: { deep } } = obj;
     `;
     const { rootScope } = analyze(code);
-    expect(variableNames(rootScope).sort()).toEqual([
-      "a",
-      "c",
-      "deep",
-      "rest",
-      "x",
-      "y",
-    ]);
+    const declared = rootScope.variables
+      .filter((v) => v.defs.some((d) => d.type === "Variable"))
+      .map((v) => v.name)
+      .sort();
+    expect(declared).toEqual(["a", "c", "deep", "rest", "x", "y"]);
   });
 
   test("declares import bindings (default / named / namespace) as ImportBinding", () => {
