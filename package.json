@@ -20,6 +20,9 @@
     "format": "oxlint --fix && oxfmt",
     "test": "vitest"
   },
+  "dependencies": {
+    "oxc-parser": "0.128.0"
+  },
   "devDependencies": {
     "@types/node": "^24.12.2",
     "@typescript/native-preview": "7.0.0-dev.20260422.1",

@@ -41,3 +41,6 @@ export type {
 } from "./ir/model.js";
 
 export { ReferenceFlags } from "./ir/model.js";
+
+export { OxcParser, ParseError } from "./parser/oxc.js";
+export type { ParseErrorDetail } from "./parser/oxc.js";
