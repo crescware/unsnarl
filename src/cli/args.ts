@@ -1,4 +1,5 @@
 export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
+export type CliMermaidRenderer = "dagre" | "elk";
 
 export interface CliArgs {
   format: string;
@@ -9,6 +10,7 @@ export interface CliArgs {
   help: boolean;
   version: boolean;
   inputFile: string | null;
+  mermaidRenderer: CliMermaidRenderer | null;
 }
 
 export interface CliParseSuccess {
@@ -30,6 +32,11 @@ const LANGUAGES: ReadonlySet<string> = new Set([
   "jsx",
 ] satisfies CliLanguage[]);
 
+const MERMAID_RENDERERS: ReadonlySet<string> = new Set([
+  "dagre",
+  "elk",
+] satisfies CliMermaidRenderer[]);
+
 export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let format = "ir";
   let stdin = false;
@@ -39,6 +46,7 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let help = false;
   let version = false;
   let inputFile: string | null = null;
+  let mermaidRenderer: CliMermaidRenderer | null = null;
 
   let i = 0;
   while (i < argv.length) {
@@ -87,6 +95,18 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       i += 1;
       continue;
     }
+    if (arg === "--mermaid-renderer") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for --mermaid-renderer` };
+      }
+      if (!MERMAID_RENDERERS.has(next)) {
+        return { ok: false, error: `Invalid mermaid renderer: ${next}` };
+      }
+      mermaidRenderer = next as CliMermaidRenderer;
+      i += 2;
+      continue;
+    }
     if (arg === "-h" || arg === "--help") {
       help = true;
       i += 1;
@@ -118,6 +138,7 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       help,
       version,
       inputFile,
+      mermaidRenderer,
     },
   };
 }
@@ -133,6 +154,10 @@ Options:
   --stdin                      Read from stdin
   --lang <ts|tsx|js|jsx>       Language for stdin input (default: ts)
   --pretty / --no-pretty       Pretty-print JSON (default: pretty)
+  --mermaid-renderer <dagre|elk>
+                               Layout engine for Mermaid output (default: elk).
+                               Use 'dagre' when the consumer cannot register
+                               the elk loader (e.g. GitHub markdown preview).
   --list-formats               List registered emitters
   -h, --help                   Show this help
   -v, --version                Show version

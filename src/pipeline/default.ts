@@ -2,19 +2,29 @@ import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
 import { IrEmitter } from "../emitter/ir.js";
 import { JsonEmitter } from "../emitter/json.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";
-import { MermaidEmitter } from "../emitter/mermaid.js";
+import { MermaidEmitter, type MermaidRenderer } from "../emitter/mermaid.js";
 import { DefaultEmitterRegistry } from "../emitter/registry.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat.js";
 import { createPipeline } from "./pipeline.js";
 import type { EmitterRegistry, Pipeline } from "./types.js";
 
-export function createDefaultEmitterRegistry(): EmitterRegistry {
+export interface DefaultRegistryOptions {
+  mermaidRenderer?: MermaidRenderer;
+}
+
+export function createDefaultEmitterRegistry(
+  options: DefaultRegistryOptions = {},
+): EmitterRegistry {
   const reg = new DefaultEmitterRegistry();
   reg.register(new IrEmitter());
   reg.register(new JsonEmitter());
-  reg.register(new MermaidEmitter());
-  reg.register(new MarkdownEmitter());
+  const mermaid =
+    options.mermaidRenderer === undefined
+      ? new MermaidEmitter()
+      : new MermaidEmitter({ renderer: options.mermaidRenderer });
+  reg.register(mermaid);
+  reg.register(new MarkdownEmitter(mermaid));
   return reg;
 }
 

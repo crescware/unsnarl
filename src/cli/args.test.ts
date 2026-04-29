@@ -86,4 +86,28 @@ describe("parseCliArgs", () => {
       expect(r.error).toMatch(/Multiple input files/);
     }
   });
+
+  test("--mermaid-renderer accepts dagre/elk and defaults to null", () => {
+    const def = parseCliArgs(["foo.ts"]);
+    if (def.ok) {
+      expect(def.args.mermaidRenderer).toBeNull();
+    }
+    const elk = parseCliArgs(["--mermaid-renderer", "elk", "foo.ts"]);
+    if (elk.ok) {
+      expect(elk.args.mermaidRenderer).toBe("elk");
+    }
+    const dagre = parseCliArgs(["--mermaid-renderer", "dagre", "foo.ts"]);
+    if (dagre.ok) {
+      expect(dagre.args.mermaidRenderer).toBe("dagre");
+    }
+  });
+
+  test("--mermaid-renderer rejects unknown values and missing arg", () => {
+    expect(parseCliArgs(["--mermaid-renderer"]).ok).toBe(false);
+    const bad = parseCliArgs(["--mermaid-renderer", "graphviz"]);
+    expect(bad.ok).toBe(false);
+    if (!bad.ok) {
+      expect(bad.error).toMatch(/Invalid mermaid renderer/);
+    }
+  });
 });

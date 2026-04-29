@@ -27,7 +27,11 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     return 0;
   }
 
-  const emitters = createDefaultEmitterRegistry();
+  const emitters = createDefaultEmitterRegistry(
+    args.mermaidRenderer === null
+      ? {}
+      : { mermaidRenderer: args.mermaidRenderer },
+  );
   if (args.listFormats) {
     for (const f of emitters.list()) {
       process.stdout.write(`${f}\n`);

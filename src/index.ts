@@ -70,17 +70,23 @@ export type {
 } from "./visual-graph/model.js";
 export { MarkdownEmitter } from "./emitter/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid.js";
+export type {
+  MermaidEmitterOptions,
+  MermaidRenderer,
+} from "./emitter/mermaid.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";
 
 export {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
 } from "./pipeline/default.js";
+export type { DefaultRegistryOptions } from "./pipeline/default.js";
 
 export { parseCliArgs, usage as cliUsage } from "./cli/args.js";
 export type {
   CliArgs,
   CliLanguage,
+  CliMermaidRenderer,
   CliParseFailure,
   CliParseResult,
   CliParseSuccess,

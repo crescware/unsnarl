@@ -9,28 +9,50 @@ import type {
   VisualSubgraph,
 } from "../visual-graph/model.js";
 
+export type MermaidRenderer = "dagre" | "elk";
+
+export interface MermaidEmitterOptions {
+  /**
+   * Layout engine for the Mermaid flowchart. `"elk"` (default) gives
+   * cleaner nested-subgraph layouts but requires the `@mermaid-js/layout-elk`
+   * loader to be registered in the consuming environment. `"dagre"` is
+   * Mermaid's built-in default and is what unconfigured renderers (e.g.
+   * GitHub markdown preview) fall back to.
+   */
+  renderer?: MermaidRenderer;
+}
+
 export class MermaidEmitter implements Emitter {
   readonly format = "mermaid";
   readonly contentType = "text/vnd.mermaid";
 
+  private readonly renderer: MermaidRenderer;
+
+  constructor(options: MermaidEmitterOptions = {}) {
+    this.renderer = options.renderer ?? "elk";
+  }
+
   emit(ir: SerializedIR, _opts: EmitOptions): string {
     const graph = buildVisualGraph(ir);
-    return renderMermaid(graph);
+    return renderMermaid(graph, this.renderer);
   }
 }
 
-function renderMermaid(graph: VisualGraph): string {
-  // Use the elk layout engine instead of the default dagre. dagre struggles
-  // with nested subgraphs that share edges across boundaries (function
-  // wrapper containing the FunctionName node and the body subgraph, with
-  // edges from outside reaching into the body) — it produces colliding
-  // routes and inconsistent node-vs-body ordering. elk handles these cases
-  // far better and is registered as a layout loader at module init time
-  // (see src/index.ts).
-  const lines: string[] = [
-    '%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%',
-    `flowchart ${graph.direction}`,
-  ];
+function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
+  // dagre is Mermaid's built-in default; elk has to be opted into with an
+  // init directive (and `mermaid.registerLayoutLoaders([elkLayouts])` on
+  // the consuming side). dagre struggles with nested subgraphs that share
+  // edges across boundaries (the function wrapper containing the
+  // FunctionName node and the body subgraph, with edges reaching from
+  // outside into the body) and produces colliding routes and inconsistent
+  // node-vs-body ordering, which is why elk is the default here. dagre is
+  // still selectable for environments that cannot register the elk loader
+  // (e.g. GitHub's markdown preview).
+  const lines: string[] = [];
+  if (renderer === "elk") {
+    lines.push('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%');
+  }
+  lines.push(`flowchart ${graph.direction}`);
 
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);

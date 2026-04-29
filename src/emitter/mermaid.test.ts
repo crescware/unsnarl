@@ -31,6 +31,31 @@ describe("MermaidEmitter", () => {
     expect(emitter.contentType).toBe("text/vnd.mermaid");
   });
 
+  test("renderer defaults to elk and prepends an init directive", () => {
+    const out = emit("const a = 1;\n");
+    expect(
+      out.startsWith('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%\n'),
+    ).toBe(true);
+  });
+
+  test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
+    const dagre = new MermaidEmitter({ renderer: "dagre" });
+    const parsed = parser.parse("const a = 1;\n", {
+      language: "ts",
+      sourcePath: "input.ts",
+    });
+    const analyzed = analyzer.analyze(parsed);
+    const ir = serializer.serialize({
+      rootScope: analyzed.rootScope,
+      diagnostics: analyzed.diagnostics,
+      raw: analyzed.raw,
+      source: { path: "input.ts", language: "ts" },
+    });
+    const out = dagre.emit(ir, {});
+    expect(out).not.toContain("%%{init");
+    expect(out).toMatch(/^flowchart RL\n/);
+  });
+
   test("emits flowchart RL with one node per declared variable", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
     expect(out).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
