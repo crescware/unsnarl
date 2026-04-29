@@ -30,9 +30,9 @@
         "scope#0:result@144"
       ],
       "references": [
-        "ref#4",
-        "ref#5",
-        "ref#6"
+        "ref#2",
+        "ref#3",
+        "ref#4"
       ],
       "through": [],
       "functionExpressionScope": false
@@ -58,9 +58,7 @@
       ],
       "references": [
         "ref#0",
-        "ref#1",
-        "ref#2",
-        "ref#3"
+        "ref#1"
       ],
       "through": [],
       "functionExpressionScope": false
@@ -79,7 +77,7 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#2"
       ],
       "defs": [
         {
@@ -118,7 +116,7 @@
         }
       ],
       "references": [
-        "ref#5"
+        "ref#3"
       ],
       "defs": [
         {
@@ -157,7 +155,7 @@
         }
       ],
       "references": [
-        "ref#6"
+        "ref#4"
       ],
       "defs": [
         {
@@ -303,8 +301,7 @@
         }
       ],
       "references": [
-        "ref#0",
-        "ref#2"
+        "ref#0"
       ],
       "defs": [
         {
@@ -350,8 +347,7 @@
         }
       ],
       "references": [
-        "ref#1",
-        "ref#3"
+        "ref#1"
       ],
       "defs": [
         {
@@ -392,50 +388,6 @@
       "identifier": {
         "name": "a",
         "span": {
-          "line": 1,
-          "column": 13,
-          "offset": 13
-        }
-      },
-      "from": "scope#1",
-      "resolved": "scope#1:a@13",
-      "owners": [],
-      "writeExpr": null,
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      }
-    },
-    {
-      "id": "ref#1",
-      "identifier": {
-        "name": "b",
-        "span": {
-          "line": 1,
-          "column": 24,
-          "offset": 24
-        }
-      },
-      "from": "scope#1",
-      "resolved": "scope#1:b@24",
-      "owners": [],
-      "writeExpr": null,
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      }
-    },
-    {
-      "id": "ref#2",
-      "identifier": {
-        "name": "a",
-        "span": {
           "line": 2,
           "column": 9,
           "offset": 46
@@ -454,7 +406,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#1",
       "identifier": {
         "name": "b",
         "span": {
@@ -476,7 +428,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#2",
       "identifier": {
         "name": "add",
         "span": {
@@ -500,7 +452,7 @@
       }
     },
     {
-      "id": "ref#5",
+      "id": "ref#3",
       "identifier": {
         "name": "Counter",
         "span": {
@@ -524,7 +476,7 @@
       }
     },
     {
-      "id": "ref#6",
+      "id": "ref#4",
       "identifier": {
         "name": "total",
         "span": {

@@ -36,7 +36,6 @@ flowchart RL
   end
   n_scope_0_root_237["root<br/>L15"]
   n_scope_0_span_125["global span<br/>L9"]
-  n_scope_1_props_88 -->|read| return_scope_0_Hello_79
   n_scope_0_Fragment_9 -->|read| return_scope_0_Hello_79
   n_scope_0_span_125 -->|read| return_scope_0_Hello_79
   n_scope_1_props_88 -->|read| return_scope_0_Hello_79

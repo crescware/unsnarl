@@ -31,10 +31,10 @@
         "scope#0:span@125"
       ],
       "references": [
-        "ref#5"
+        "ref#4"
       ],
       "through": [
-        "ref#2"
+        "ref#1"
       ],
       "functionExpressionScope": false
     },
@@ -59,11 +59,10 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2",
-        "ref#3"
+        "ref#2"
       ],
       "through": [
-        "ref#2"
+        "ref#1"
       ],
       "functionExpressionScope": false
     },
@@ -84,7 +83,7 @@
       },
       "variables": [],
       "references": [
-        "ref#4"
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false
@@ -103,7 +102,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0"
       ],
       "defs": [
         {
@@ -149,7 +148,7 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#3"
       ],
       "defs": [
         {
@@ -199,7 +198,7 @@
         }
       ],
       "references": [
-        "ref#5"
+        "ref#4"
       ],
       "defs": [
         {
@@ -297,7 +296,7 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#1"
       ],
       "defs": [
         {
@@ -336,8 +335,7 @@
         }
       ],
       "references": [
-        "ref#0",
-        "ref#3"
+        "ref#2"
       ],
       "defs": [
         {
@@ -376,28 +374,6 @@
     {
       "id": "ref#0",
       "identifier": {
-        "name": "props",
-        "span": {
-          "line": 7,
-          "column": 15,
-          "offset": 88
-        }
-      },
-      "from": "scope#1",
-      "resolved": "scope#1:props@88",
-      "owners": [],
-      "writeExpr": null,
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      }
-    },
-    {
-      "id": "ref#1",
-      "identifier": {
         "name": "Fragment",
         "span": {
           "line": 8,
@@ -418,7 +394,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#1",
       "identifier": {
         "name": "span",
         "span": {
@@ -440,7 +416,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#2",
       "identifier": {
         "name": "props",
         "span": {
@@ -462,7 +438,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#3",
       "identifier": {
         "name": "Hello",
         "span": {
@@ -484,7 +460,7 @@
       }
     },
     {
-      "id": "ref#5",
+      "id": "ref#4",
       "identifier": {
         "name": "App",
         "span": {

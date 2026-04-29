@@ -101,6 +101,14 @@ function isDirectBinding(t: string, key: string | null): boolean {
   if ((t === "ClassDeclaration" || t === "ClassExpression") && key === "id") {
     return true;
   }
+  if (
+    (t === "FunctionDeclaration" ||
+      t === "FunctionExpression" ||
+      t === "ArrowFunctionExpression") &&
+    key === "params"
+  ) {
+    return true;
+  }
   if (t === "CatchClause" && key === "param") {
     return true;
   }
