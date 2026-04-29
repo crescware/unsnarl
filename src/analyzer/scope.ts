@@ -70,7 +70,7 @@ export class ReferenceImpl implements Reference {
   readonly identifier: AstIdentifier;
   readonly from: Scope;
   resolved: Variable | null = null;
-  unsnarlOwner: Variable | null = null;
+  unsnarlOwners: Variable[] = [];
   readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;

@@ -3,10 +3,10 @@ import { collectBindingIdentifiers } from "./declare.js";
 import { resolveInScopeChain } from "./resolve.js";
 import type { PathEntry } from "./walk.js";
 
-export function findReferenceOwner(
+export function findReferenceOwners(
   path: ReadonlyArray<PathEntry>,
   scope: Scope,
-): Variable | null {
+): Variable[] {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];
     if (!entry) {
@@ -16,9 +16,9 @@ export function findReferenceOwner(
     if (t === "VariableDeclarator") {
       const id = entry.node["id"];
       if (isAstNode(id)) {
-        return firstBindingVariable(id, scope);
+        return allBindingVariables(id, scope);
       }
-      return null;
+      return [];
     }
     if (t === "AssignmentExpression") {
       const left = entry.node["left"];
@@ -26,12 +26,13 @@ export function findReferenceOwner(
         if (left.type === "Identifier") {
           const name = left["name"];
           if (typeof name === "string") {
-            return resolveInScopeChain(scope, name);
+            const v = resolveInScopeChain(scope, name);
+            return v ? [v] : [];
           }
         }
-        return firstBindingVariable(left, scope);
+        return allBindingVariables(left, scope);
       }
-      return null;
+      return [];
     }
     if (
       t === "FunctionDeclaration" ||
@@ -43,19 +44,22 @@ export function findReferenceOwner(
       t === "PropertyDefinition" ||
       t === "AccessorProperty"
     ) {
-      return null;
+      return [];
     }
   }
-  return null;
+  return [];
 }
 
-function firstBindingVariable(pattern: AstNode, scope: Scope): Variable | null {
+function allBindingVariables(pattern: AstNode, scope: Scope): Variable[] {
   const idents = collectBindingIdentifiers(pattern);
-  const head = idents[0];
-  if (!head) {
-    return null;
+  const out: Variable[] = [];
+  for (const ident of idents) {
+    const v = resolveInScopeChain(scope, ident.name);
+    if (v && !out.includes(v)) {
+      out.push(v);
+    }
   }
-  return resolveInScopeChain(scope, head.name);
+  return out;
 }
 
 function isAstNode(value: unknown): value is AstNode {

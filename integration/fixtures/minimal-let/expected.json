@@ -89,7 +89,9 @@
       },
       "from": "scope#0",
       "resolved": "scope#0:count@4",
-      "owner": "scope#0:count@4",
+      "owners": [
+        "scope#0:count@4"
+      ],
       "writeExpr": {
         "line": 2,
         "column": 8,

@@ -88,7 +88,7 @@ export type { ClassifyResult } from "./analyzer/classify.js";
 
 export { bindReference, resolveInScopeChain } from "./analyzer/resolve.js";
 
-export { findReferenceOwner } from "./analyzer/owner.js";
+export { findReferenceOwners } from "./analyzer/owner.js";
 
 export { DiagnosticCollector } from "./util/diagnostic.js";
 export { spanFromOffset } from "./util/span.js";

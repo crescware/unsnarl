@@ -68,7 +68,7 @@ export class MermaidEmitter implements Emitter {
 
     const returnTargets = new Map<string, SerializedReference[]>();
     for (const r of ir.references) {
-      if (r.owner) {
+      if (r.owners.length > 0) {
         continue;
       }
       const enclosingFn = findEnclosingSubgraphVar(r.from);
@@ -106,18 +106,22 @@ export class MermaidEmitter implements Emitter {
 
     let needsModuleRoot = false;
     for (const r of ir.references) {
+      if (!r.resolved) {
+        continue;
+      }
       const label = edgeLabel(r);
-      if (r.owner && r.resolved) {
-        lines.push(`  ${nodeId(r.resolved)} -->|${label}| ${nodeId(r.owner)}`);
-      } else if (!r.owner && r.resolved) {
+      const fromId = nodeId(r.resolved);
+      if (r.owners.length > 0) {
+        for (const ownerId of r.owners) {
+          lines.push(`  ${fromId} -->|${label}| ${nodeId(ownerId)}`);
+        }
+      } else {
         const enclosingFn = findEnclosingSubgraphVar(r.from);
         if (enclosingFn) {
-          lines.push(
-            `  ${nodeId(r.resolved)} -->|${label}| ${returnNodeId(enclosingFn)}`,
-          );
+          lines.push(`  ${fromId} -->|${label}| ${returnNodeId(enclosingFn)}`);
         } else {
           needsModuleRoot = true;
-          lines.push(`  ${nodeId(r.resolved)} -->|${label}| ${MODULE_ROOT_ID}`);
+          lines.push(`  ${fromId} -->|${label}| ${MODULE_ROOT_ID}`);
         }
       }
     }
