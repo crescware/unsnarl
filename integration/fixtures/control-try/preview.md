@@ -1,0 +1,45 @@
+# control-try
+
+## Input (`input.ts`)
+
+```ts
+let value = 0;
+let attempts = 0;
+const raw = "42";
+
+try {
+  attempts = 1;
+  value = Number(raw);
+} catch (err) {
+  attempts = -1;
+  value = -1;
+} finally {
+  attempts += 1;
+}
+
+const result = value + attempts;
+```
+
+## Mermaid
+
+```mermaid
+flowchart RL
+  n_scope_0_value_4["value<br/>L1"]
+  n_scope_0_attempts_19["attempts<br/>L2"]
+  n_scope_0_raw_39["raw<br/>L3"]
+  n_scope_0_result_182["result<br/>L15"]
+  n_scope_0_Number_84["global Number<br/>L7"]
+  n_scope_2_err_106["catch err<br/>L8"]
+  n_scope_0_attempts_19 -->|write| n_scope_0_attempts_19
+  n_scope_0_value_4 -->|write| n_scope_0_value_4
+  n_scope_0_Number_84 -->|read,call| n_scope_0_value_4
+  n_scope_0_raw_39 -->|read| n_scope_0_value_4
+  n_scope_0_attempts_19 -->|write| n_scope_0_attempts_19
+  n_scope_0_value_4 -->|write| n_scope_0_value_4
+  n_scope_0_attempts_19 -->|read,write| n_scope_0_attempts_19
+  n_scope_0_value_4 -->|read| n_scope_0_result_182
+  n_scope_0_attempts_19 -->|read| n_scope_0_result_182
+  classDef unused stroke-dasharray: 5 5;
+  class n_scope_0_result_182 unused;
+  class n_scope_2_err_106 unused;
+```

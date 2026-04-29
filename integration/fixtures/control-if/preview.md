@@ -1,0 +1,32 @@
+# control-if
+
+## Input (`input.ts`)
+
+```ts
+let counter = 0;
+const flag = true;
+
+if (flag) {
+  counter = 1;
+} else {
+  counter = 2;
+}
+
+const result = counter;
+```
+
+## Mermaid
+
+```mermaid
+flowchart RL
+  n_scope_0_counter_4["counter<br/>L1"]
+  n_scope_0_flag_23["flag<br/>L2"]
+  n_scope_0_result_97["result<br/>L10"]
+  n_scope_0_flag_23 -->|read| module_root
+  n_scope_0_counter_4 -->|write| n_scope_0_counter_4
+  n_scope_0_counter_4 -->|write| n_scope_0_counter_4
+  n_scope_0_counter_4 -->|read| n_scope_0_result_97
+  module_root((module))
+  classDef unused stroke-dasharray: 5 5;
+  class n_scope_0_result_97 unused;
+```
