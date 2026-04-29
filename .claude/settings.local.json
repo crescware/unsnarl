@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(corepack enable *)",
+      "Bash(corepack prepare *)",
+      "Bash(mise exec *)"
+    ]
+  }
+}

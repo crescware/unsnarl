@@ -1,0 +1,16 @@
+{
+  "printWidth": 80,
+  "sortImports": {
+    "partitionByComment": true,
+    "groups": [
+      ["side_effect"],
+      ["builtin", "external", "type-external"],
+      ["internal", "type-internal"],
+      ["parent", "type-parent", "sibling", "type-sibling"],
+      ["index", "type-index"]
+    ]
+  },
+  "sortPackageJson": {
+    "sortScripts": true
+  }
+}

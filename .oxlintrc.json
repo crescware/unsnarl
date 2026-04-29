@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "typescript/no-explicit-any": "error",
+    "eslint/no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "vitest",
+            "importNames": ["it"],
+            "message": "Do not import \"it()\" directly from vitest. Use \"test()\" instead."
+          }
+        ]
+      }
+    ],
+    "eslint/eqeqeq": "error",
+    "typescript/consistent-type-imports": "error",
+    "eslint/curly": "error"
+  }
+}
