@@ -7,6 +7,13 @@
   "direction": "RL",
   "nodes": [
     {
+      "id": "n_scope_0_greet_9",
+      "kind": "FunctionName",
+      "name": "greet",
+      "line": 1,
+      "parent": null
+    },
+    {
       "id": "module_root",
       "kind": "ModuleSink",
       "name": "module",
@@ -16,12 +23,12 @@
   ],
   "subgraphs": [
     {
-      "id": "n_scope_0_greet_9",
+      "id": "s_scope_1",
       "kind": "function",
       "line": 1,
       "parent": null,
       "direction": "RL",
-      "ownerName": "greet"
+      "ownerNodeId": "n_scope_0_greet_9"
     }
   ],
   "edges": [

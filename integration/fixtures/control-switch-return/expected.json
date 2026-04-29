@@ -7,6 +7,13 @@
   "direction": "RL",
   "nodes": [
     {
+      "id": "n_scope_0_classify_9",
+      "kind": "FunctionName",
+      "name": "classify",
+      "line": 1,
+      "parent": null
+    },
+    {
       "id": "n_scope_0_result_243",
       "kind": "Variable",
       "name": "result",
@@ -20,21 +27,21 @@
       "kind": "ReturnSink",
       "name": "return",
       "line": 1,
-      "parent": "n_scope_0_classify_9"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_kind_18",
       "kind": "Parameter",
       "name": "kind",
       "line": 1,
-      "parent": "n_scope_0_classify_9"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_label_40",
       "kind": "Variable",
       "name": "label",
       "line": 2,
-      "parent": "n_scope_0_classify_9",
+      "parent": "s_scope_1",
       "declarationKind": "let"
     },
     {
@@ -64,18 +71,18 @@
   ],
   "subgraphs": [
     {
-      "id": "n_scope_0_classify_9",
+      "id": "s_scope_1",
       "kind": "function",
       "line": 1,
       "parent": null,
       "direction": "RL",
-      "ownerName": "classify"
+      "ownerNodeId": "n_scope_0_classify_9"
     },
     {
       "id": "s_scope_2",
       "kind": "switch",
       "line": 4,
-      "parent": "n_scope_0_classify_9",
+      "parent": "s_scope_1",
       "direction": "RL"
     },
     {

@@ -76,7 +76,8 @@ describe("MermaidEmitter", () => {
 
   test("renders a function as a subgraph and routes return through a return node", () => {
     const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
-    expect(out).toMatch(/subgraph n_scope_0_f_9\["f\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["f\(\)/);
+    expect(out).toMatch(/n_scope_0_f_9\["f\(\)<br\/>L1"\]/);
     expect(out).toContain("direction RL");
     expect(out).toContain("return_scope_0_f_9((return))");
     expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);
@@ -85,14 +86,16 @@ describe("MermaidEmitter", () => {
 
   test("subgraphs arrow functions assigned to a const", () => {
     const out = emit("const fn = (p: number) => p + 1;\n");
-    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
+    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
     expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| return_scope_0_fn_6/);
   });
 
   test("subgraphs function expressions assigned to a const", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
-    expect(out).toMatch(/subgraph n_scope_0_fn_6\["fn\(\)/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
+    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
   });
 

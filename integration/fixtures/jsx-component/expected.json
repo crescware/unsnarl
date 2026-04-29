@@ -17,6 +17,24 @@
       "importSource": "react"
     },
     {
+      "id": "n_scope_0_Hello_79",
+      "kind": "Variable",
+      "name": "Hello",
+      "line": 7,
+      "parent": null,
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "id": "n_scope_0_App_196",
+      "kind": "Variable",
+      "name": "App",
+      "line": 13,
+      "parent": null,
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
       "id": "n_scope_0_root_237",
       "kind": "Variable",
       "name": "root",
@@ -37,21 +55,21 @@
       "kind": "ReturnSink",
       "name": "return",
       "line": 7,
-      "parent": "n_scope_0_Hello_79"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_props_88",
       "kind": "Parameter",
       "name": "props",
       "line": 7,
-      "parent": "n_scope_0_Hello_79"
+      "parent": "s_scope_1"
     },
     {
       "id": "return_scope_0_App_196",
       "kind": "ReturnSink",
       "name": "return",
       "line": 13,
-      "parent": "n_scope_0_App_196"
+      "parent": "s_scope_2"
     },
     {
       "id": "mod_react",
@@ -63,20 +81,20 @@
   ],
   "subgraphs": [
     {
-      "id": "n_scope_0_Hello_79",
+      "id": "s_scope_1",
       "kind": "function",
       "line": 7,
       "parent": null,
       "direction": "RL",
-      "ownerName": "Hello"
+      "ownerNodeId": "n_scope_0_Hello_79"
     },
     {
-      "id": "n_scope_0_App_196",
+      "id": "s_scope_2",
       "kind": "function",
       "line": 13,
       "parent": null,
       "direction": "RL",
-      "ownerName": "App"
+      "ownerNodeId": "n_scope_0_App_196"
     }
   ],
   "edges": [

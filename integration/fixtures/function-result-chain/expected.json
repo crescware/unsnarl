@@ -7,6 +7,13 @@
   "direction": "RL",
   "nodes": [
     {
+      "id": "n_scope_0_f_9",
+      "kind": "FunctionName",
+      "name": "f",
+      "line": 1,
+      "parent": null
+    },
+    {
       "id": "n_scope_0_g_111",
       "kind": "Variable",
       "name": "g",
@@ -28,14 +35,14 @@
       "kind": "ReturnSink",
       "name": "return",
       "line": 1,
-      "parent": "n_scope_0_f_9"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_a_23",
       "kind": "Variable",
       "name": "a",
       "line": 2,
-      "parent": "n_scope_0_f_9",
+      "parent": "s_scope_1",
       "declarationKind": "const"
     },
     {
@@ -43,7 +50,7 @@
       "kind": "Variable",
       "name": "b",
       "line": 3,
-      "parent": "n_scope_0_f_9",
+      "parent": "s_scope_1",
       "declarationKind": "const"
     },
     {
@@ -51,7 +58,7 @@
       "kind": "Variable",
       "name": "c",
       "line": 4,
-      "parent": "n_scope_0_f_9",
+      "parent": "s_scope_1",
       "declarationKind": "const"
     },
     {
@@ -59,18 +66,18 @@
       "kind": "Variable",
       "name": "d",
       "line": 5,
-      "parent": "n_scope_0_f_9",
+      "parent": "s_scope_1",
       "declarationKind": "const"
     }
   ],
   "subgraphs": [
     {
-      "id": "n_scope_0_f_9",
+      "id": "s_scope_1",
       "kind": "function",
       "line": 1,
       "parent": null,
       "direction": "RL",
-      "ownerName": "f"
+      "ownerNodeId": "n_scope_0_f_9"
     }
   ],
   "edges": [

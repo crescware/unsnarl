@@ -29,7 +29,8 @@ function getDayType(day) {
 
 ```mermaid
 flowchart RL
-  subgraph n_scope_0_getDayType_9["getDayType()<br/>L1"]
+  n_scope_0_getDayType_9["getDayType()<br/>L1"]
+  subgraph s_scope_1["getDayType()<br/>L1"]
     direction RL
     return_scope_0_getDayType_9((return))
     n_scope_1_day_20["day<br/>L1"]

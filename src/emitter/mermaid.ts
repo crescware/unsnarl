@@ -21,6 +21,11 @@ export class MermaidEmitter implements Emitter {
 function renderMermaid(graph: VisualGraph): string {
   const lines: string[] = [`flowchart ${graph.direction}`];
 
+  const nodeMap = new Map<string, VisualNode>();
+  for (const n of graph.nodes) {
+    nodeMap.set(n.id, n);
+  }
+
   const nodesByParent = new Map<string | null, VisualNode[]>();
   for (const n of graph.nodes) {
     const arr = nodesByParent.get(n.parent) ?? [];
@@ -39,7 +44,7 @@ function renderMermaid(graph: VisualGraph): string {
   }
 
   function emitSubgraph(sg: VisualSubgraph, indent: string): void {
-    lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg)}"]`);
+    lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg, nodeMap)}"]`);
     const childIndent = `${indent}  `;
     lines.push(`${childIndent}direction ${sg.direction}`);
     const childNodes = nodesByParent.get(sg.id) ?? [];
@@ -109,11 +114,6 @@ function renderMermaid(graph: VisualGraph): string {
   for (const n of graph.nodes) {
     if (n.unused) {
       unusedIds.push(n.id);
-    }
-  }
-  for (const sg of graph.subgraphs) {
-    if (sg.unused) {
-      unusedIds.push(sg.id);
     }
   }
   if (unusedIds.length > 0) {
@@ -186,10 +186,17 @@ function nodeHead(n: VisualNode): string {
   }
 }
 
-function subgraphLabel(sg: VisualSubgraph): string {
+function subgraphLabel(
+  sg: VisualSubgraph,
+  nodeMap: Map<string, VisualNode>,
+): string {
   switch (sg.kind) {
-    case "function":
-      return `${escape(sg.ownerName ?? "")}()<br/>L${sg.line}`;
+    case "function": {
+      const ownerNode = sg.ownerNodeId
+        ? nodeMap.get(sg.ownerNodeId)
+        : undefined;
+      return `${escape(ownerNode?.name ?? "")}()<br/>L${sg.line}`;
+    }
     case "switch":
       return `switch L${sg.line}`;
     case "case":

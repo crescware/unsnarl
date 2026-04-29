@@ -7,25 +7,33 @@
   "direction": "RL",
   "nodes": [
     {
+      "id": "n_scope_0_getDayType_9",
+      "kind": "FunctionName",
+      "name": "getDayType",
+      "line": 1,
+      "parent": null,
+      "unused": true
+    },
+    {
       "id": "return_scope_0_getDayType_9",
       "kind": "ReturnSink",
       "name": "return",
       "line": 1,
-      "parent": "n_scope_0_getDayType_9"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_day_20",
       "kind": "Parameter",
       "name": "day",
       "line": 1,
-      "parent": "n_scope_0_getDayType_9"
+      "parent": "s_scope_1"
     },
     {
       "id": "n_scope_1_ret_33",
       "kind": "Variable",
       "name": "ret",
       "line": 2,
-      "parent": "n_scope_0_getDayType_9",
+      "parent": "s_scope_1",
       "declarationKind": "let"
     },
     {
@@ -55,19 +63,18 @@
   ],
   "subgraphs": [
     {
-      "id": "n_scope_0_getDayType_9",
+      "id": "s_scope_1",
       "kind": "function",
       "line": 1,
       "parent": null,
       "direction": "RL",
-      "ownerName": "getDayType",
-      "unused": true
+      "ownerNodeId": "n_scope_0_getDayType_9"
     },
     {
       "id": "s_scope_2",
       "kind": "switch",
       "line": 3,
-      "parent": "n_scope_0_getDayType_9",
+      "parent": "s_scope_1",
       "direction": "RL"
     },
     {

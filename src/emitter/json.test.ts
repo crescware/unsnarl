@@ -92,13 +92,18 @@ describe("JsonEmitter", () => {
     }
   });
 
-  test("function bodies become subgraphs of kind 'function' with the owner name", () => {
+  test("function bodies become subgraphs of kind 'function' carrying ownerNodeId of the FunctionName", () => {
     const graph = JSON.parse(emit("function add(a, b) { return a + b; }\n"));
     const fnSubgraph = graph.subgraphs.find(
       (s: { kind: string }) => s.kind === "function",
     );
     expect(fnSubgraph).toBeDefined();
-    expect(fnSubgraph.ownerName).toBe("add");
+    const ownerNode = graph.nodes.find(
+      (n: { id: string }) => n.id === fnSubgraph.ownerNodeId,
+    );
+    expect(ownerNode).toBeDefined();
+    expect(ownerNode.kind).toBe("FunctionName");
+    expect(ownerNode.name).toBe("add");
     const returnSink = graph.nodes.find(
       (n: { kind: string }) => n.kind === "ReturnSink",
     );

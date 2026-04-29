@@ -271,15 +271,8 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     return isFunctionSubgraph(scope) || isControlSubgraph(scope);
   }
 
-  const subgraphScopeId = (scope: SerializedScope): string => {
-    const ownerVar = subgraphOwnerVar.get(scope.id);
-    if (ownerVar) {
-      return nodeId(ownerVar);
-    }
-    return `s_${sanitize(scope.id)}`;
-  };
-
-  const subgraphOwnerVarSet = new Set(subgraphOwnerVar.values());
+  const subgraphScopeId = (scope: SerializedScope): string =>
+    `s_${sanitize(scope.id)}`;
 
   const lineForOffset = (offset: number): number => {
     let line = 1;
@@ -519,9 +512,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (hiddenVariables.has(vid)) {
         continue;
       }
-      if (subgraphOwnerVarSet.has(vid)) {
-        continue;
-      }
       const v = variableMap.get(vid);
       if (!v) {
         continue;
@@ -620,15 +610,19 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     const parentId = containerParentId(container);
     if (isFunctionSubgraph(scope)) {
       const ownerVarId = subgraphOwnerVar.get(scope.id);
-      const ownerVar = ownerVarId ? variableMap.get(ownerVarId) : undefined;
-      const ownerName = ownerVar?.name ?? "";
+      if (!ownerVarId) {
+        throw new Error(
+          `expected owner variable for function subgraph ${scope.id}`,
+        );
+      }
+      const ownerVar = variableMap.get(ownerVarId);
       return {
         id,
         kind: "function",
         line: ownerVar?.identifiers[0]?.line ?? scope.block.span.line,
         parent: parentId,
         direction: "RL",
-        ownerName,
+        ownerNodeId: nodeId(ownerVarId),
       };
     }
     const kind = controlSubgraphKindOf(scope);
@@ -888,12 +882,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     for (const n of nodes) {
       if (n.id === target) {
         n.unused = true;
-        break;
-      }
-    }
-    for (const sg of subgraphs) {
-      if (sg.id === target) {
-        sg.unused = true;
         break;
       }
     }

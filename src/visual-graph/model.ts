@@ -52,10 +52,9 @@ export interface VisualSubgraph {
   line: number;
   parent: string | null;
   direction: Direction;
-  unused?: boolean;
   caseTest?: string | null;
   hasElse?: boolean;
-  ownerName?: string;
+  ownerNodeId?: string;
 }
 
 export interface VisualEdge {
