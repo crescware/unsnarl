@@ -92,7 +92,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 35
+        "parentSpanOffset": 35,
+        "caseTest": "\"a\""
       },
       "fallsThrough": false
     },
@@ -120,7 +121,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 35
+        "parentSpanOffset": 35,
+        "caseTest": null
       },
       "fallsThrough": false
     },
@@ -148,7 +150,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 35
+        "parentSpanOffset": 35,
+        "caseTest": "\"b\""
       },
       "fallsThrough": false
     }

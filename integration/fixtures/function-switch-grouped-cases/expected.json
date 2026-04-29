@@ -120,7 +120,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'mon'"
       },
       "fallsThrough": true
     },
@@ -146,7 +147,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'tue'"
       },
       "fallsThrough": true
     },
@@ -172,7 +174,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'wed'"
       },
       "fallsThrough": true
     },
@@ -198,7 +201,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'thu'"
       },
       "fallsThrough": true
     },
@@ -226,7 +230,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'fri'"
       },
       "fallsThrough": false
     },
@@ -252,7 +257,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'sat'"
       },
       "fallsThrough": true
     },
@@ -280,7 +286,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": "'sun'"
       },
       "fallsThrough": false
     },
@@ -308,7 +315,8 @@
       "blockContext": {
         "parentType": "SwitchStatement",
         "key": "cases",
-        "parentSpanOffset": 45
+        "parentSpanOffset": 45,
+        "caseTest": null
       },
       "fallsThrough": false
     }

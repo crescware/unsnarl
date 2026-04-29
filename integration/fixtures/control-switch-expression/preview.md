@@ -1,0 +1,70 @@
+# integration/fixtures/control-switch-expression/input.ts
+
+## Input
+
+```ts
+let label = "";
+const a = 2;
+const b = 3;
+const target = 5;
+
+switch (target) {
+  case a + b:
+    label = "sum";
+    break;
+  case a * b:
+    label = "product";
+    break;
+  case Number.MAX_SAFE_INTEGER:
+    label = "maximum-safe-integer-value-marker";
+    break;
+  default:
+    label = "other";
+}
+
+const result = label;
+```
+
+## Mermaid
+
+```mermaid
+flowchart RL
+  n_scope_0_label_4["let label<br/>L1"]
+  n_scope_0_a_22["a<br/>L2"]
+  n_scope_0_b_35["b<br/>L3"]
+  n_scope_0_target_48["target<br/>L4"]
+  n_scope_0_result_304["result<br/>L20"]
+  subgraph s_scope_1["switch L6"]
+    direction RL
+    subgraph s_scope_2["case a + b L7"]
+      direction RL
+      wr_ref_3(["let label<br/>L8"])
+    end
+    subgraph s_scope_3["case a * b L10"]
+      direction RL
+      wr_ref_6(["let label<br/>L11"])
+    end
+    subgraph s_scope_4["case Number.MAX_SAFE_INTEGER L13"]
+      direction RL
+      wr_ref_8(["let label<br/>L14"])
+    end
+    subgraph s_scope_5["default L16"]
+      direction RL
+      wr_ref_9(["let label<br/>L17"])
+    end
+  end
+  n_scope_0_label_4 -->|set| wr_ref_3
+  n_scope_0_label_4 -->|set| wr_ref_6
+  n_scope_0_label_4 -->|set| wr_ref_8
+  n_scope_0_label_4 -->|set| wr_ref_9
+  n_scope_0_target_48 -->|read| s_scope_1
+  n_scope_0_a_22 -->|read| module_root
+  n_scope_0_b_35 -->|read| module_root
+  wr_ref_3 -->|read| n_scope_0_result_304
+  wr_ref_6 -->|read| n_scope_0_result_304
+  wr_ref_8 -->|read| n_scope_0_result_304
+  wr_ref_9 -->|read| n_scope_0_result_304
+  module_root((module))
+  classDef unused stroke-dasharray: 5 5;
+  class n_scope_0_result_304 unused;
+```

@@ -98,6 +98,7 @@ export interface BlockContext {
   parentType: string;
   key: string;
   parentSpanOffset: number;
+  caseTest?: string | null;
 }
 
 export interface Scope {

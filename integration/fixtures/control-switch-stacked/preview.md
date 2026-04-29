@@ -27,14 +27,14 @@ flowchart RL
   n_scope_0_result_145["result<br/>L13"]
   subgraph s_scope_1["switch L4"]
     direction RL
-    subgraph s_scope_2["case L5"]
+    subgraph s_scope_2["case \"a\" L5"]
       direction RL
     end
-    subgraph s_scope_3["case L6"]
+    subgraph s_scope_3["case \"b\" L6"]
       direction RL
       wr_ref_1(["let label<br/>L7"])
     end
-    subgraph s_scope_4["case L9"]
+    subgraph s_scope_4["default L9"]
       direction RL
       wr_ref_2(["let label<br/>L10"])
     end

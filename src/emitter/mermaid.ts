@@ -195,6 +195,12 @@ export class MermaidEmitter implements Emitter {
           }
         }
         if (ctx.parentType === "SwitchStatement" && ctx.key === "cases") {
+          if (ctx.caseTest === null) {
+            return `default L${line}`;
+          }
+          if (typeof ctx.caseTest === "string") {
+            return `case ${escape(ctx.caseTest)} L${line}`;
+          }
           return `case L${line}`;
         }
       }

@@ -1,0 +1,63 @@
+# integration/fixtures/control-switch-numeric/input.ts
+
+## Input
+
+```ts
+let label = "";
+const code = 1;
+
+switch (code) {
+  case 0:
+    label = "zero";
+    break;
+  case 1:
+    label = "one";
+    break;
+  case 2:
+    label = "two";
+    break;
+  default:
+    label = "many";
+}
+
+const result = label;
+```
+
+## Mermaid
+
+```mermaid
+flowchart RL
+  n_scope_0_label_4["let label<br/>L1"]
+  n_scope_0_code_22["code<br/>L2"]
+  n_scope_0_result_210["result<br/>L18"]
+  subgraph s_scope_1["switch L4"]
+    direction RL
+    subgraph s_scope_2["case 0 L5"]
+      direction RL
+      wr_ref_1(["let label<br/>L6"])
+    end
+    subgraph s_scope_3["case 1 L8"]
+      direction RL
+      wr_ref_2(["let label<br/>L9"])
+    end
+    subgraph s_scope_4["case 2 L11"]
+      direction RL
+      wr_ref_3(["let label<br/>L12"])
+    end
+    subgraph s_scope_5["default L14"]
+      direction RL
+      wr_ref_4(["let label<br/>L15"])
+    end
+  end
+  n_scope_0_label_4 -->|set| wr_ref_1
+  n_scope_0_label_4 -->|set| wr_ref_2
+  n_scope_0_label_4 -->|set| wr_ref_3
+  n_scope_0_label_4 -->|set| wr_ref_4
+  n_scope_0_code_22 -->|read| s_scope_1
+  wr_ref_1 -->|read| n_scope_0_result_210
+  wr_ref_2 -->|read| n_scope_0_result_210
+  wr_ref_3 -->|read| n_scope_0_result_210
+  wr_ref_4 -->|read| n_scope_0_result_210
+  classDef unused stroke-dasharray: 5 5;
+  class n_scope_0_result_210 unused;
+```
