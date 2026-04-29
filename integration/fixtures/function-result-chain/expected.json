@@ -387,7 +387,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": false
+        "call": false,
+        "receiver": false
       }
     },
     {
@@ -410,7 +411,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": false
+        "call": false,
+        "receiver": false
       }
     },
     {
@@ -433,7 +435,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": false
+        "call": false,
+        "receiver": false
       }
     },
     {
@@ -454,7 +457,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": false
+        "call": false,
+        "receiver": false
       }
     },
     {
@@ -477,7 +481,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": true
+        "call": true,
+        "receiver": false
       }
     },
     {
@@ -500,7 +505,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": false
+        "call": false,
+        "receiver": false
       }
     }
   ],

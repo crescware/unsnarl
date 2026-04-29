@@ -48,6 +48,7 @@ export const ReferenceFlags = {
   Read: 1 << 0,
   Write: 1 << 1,
   Call: 1 << 2,
+  Receiver: 1 << 3,
 } as const;
 
 export type ReferenceFlagBits = number;
@@ -64,6 +65,7 @@ export interface Reference {
   isWriteOnly(): boolean;
   isReadWrite(): boolean;
   isCall?(): boolean;
+  isReceiver?(): boolean;
   unsnarlFlags?: ReferenceFlagBits;
   unsnarlOwners?: Variable[];
 }
@@ -144,7 +146,12 @@ export interface SerializedReference {
   owners: VariableId[];
   writeExpr: Span | null;
   init: boolean;
-  flags: { read: boolean; write: boolean; call: boolean };
+  flags: {
+    read: boolean;
+    write: boolean;
+    call: boolean;
+    receiver: boolean;
+  };
 }
 
 export interface SerializedDefinition {

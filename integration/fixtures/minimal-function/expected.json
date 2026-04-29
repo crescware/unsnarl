@@ -110,7 +110,8 @@
       "flags": {
         "read": true,
         "write": false,
-        "call": true
+        "call": true,
+        "receiver": false
       }
     }
   ],

@@ -138,6 +138,13 @@ function classifyOrdinaryReference(
   if (t === "NewExpression" && key === "callee") {
     return reference(ReferenceFlags.Read | ReferenceFlags.Call, false, null);
   }
+  if (t === "MemberExpression" && key === "object") {
+    return reference(
+      ReferenceFlags.Read | ReferenceFlags.Receiver,
+      false,
+      null,
+    );
+  }
   let init = false;
   if (t === "VariableDeclarator" && key === "init") {
     init = true;

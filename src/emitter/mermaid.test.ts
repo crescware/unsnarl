@@ -89,13 +89,20 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/class n_scope_0_unused_/);
   });
 
-  test("renders ImplicitGlobalVariable as a 'global' node", () => {
-    const out = emit('console.log("hi");\n');
-    expect(out).toContain('"global console<br/>');
+  test("renders ImplicitGlobalVariable as a 'global' node when used directly", () => {
+    const out = emit("function f() { return globalThing; }\n");
+    expect(out).toContain('"global globalThing<br/>');
+  });
+
+  test("hides ImplicitGlobalVariable that only appears as a member receiver", () => {
+    const out = emit("const xs = Object.keys(arg);\n");
+    expect(out).not.toContain('"global Object');
+    // arg もグローバルだが、引数として直接読まれるので残る
+    expect(out).toContain('"global arg<br/>');
   });
 
   test("falls back to a (module) sink only for module-level owner-less references", () => {
-    const out = emit('console.log("hi");\n');
+    const out = emit("function f() {}\nf();\n");
     expect(out).toContain("module_root((module))");
   });
 });

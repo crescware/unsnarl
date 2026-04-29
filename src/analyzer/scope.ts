@@ -112,4 +112,8 @@ export class ReferenceImpl implements Reference {
   isCall(): boolean {
     return (this.unsnarlFlags & ReferenceFlags.Call) !== 0;
   }
+
+  isReceiver(): boolean {
+    return (this.unsnarlFlags & ReferenceFlags.Receiver) !== 0;
+  }
 }

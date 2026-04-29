@@ -212,6 +212,7 @@ function serializeReference(
       read: r.isRead(),
       write: r.isWrite(),
       call: r.isCall?.() ?? false,
+      receiver: r.isReceiver?.() ?? false,
     },
   };
 }

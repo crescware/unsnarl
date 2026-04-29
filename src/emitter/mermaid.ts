@@ -58,8 +58,22 @@ export class MermaidEmitter implements Emitter {
       return null;
     };
 
+    const hiddenVariables = new Set<string>();
+    for (const v of ir.variables) {
+      if (v.defs[0]?.type !== "ImplicitGlobalVariable") {
+        continue;
+      }
+      const refs = ir.references.filter((r) => r.resolved === v.id);
+      if (refs.length > 0 && refs.every((r) => r.flags.receiver)) {
+        hiddenVariables.add(v.id);
+      }
+    }
+
     const groups = new Map<string | null, string[]>();
     for (const v of ir.variables) {
+      if (hiddenVariables.has(v.id)) {
+        continue;
+      }
       const enclosing = findEnclosingSubgraphVar(v.scope);
       const arr = groups.get(enclosing) ?? [];
       arr.push(v.id);
@@ -105,6 +119,9 @@ export class MermaidEmitter implements Emitter {
     let needsModuleRoot = false;
     for (const r of ir.references) {
       if (!r.resolved) {
+        continue;
+      }
+      if (hiddenVariables.has(r.resolved)) {
         continue;
       }
       const label = edgeLabel(r);
