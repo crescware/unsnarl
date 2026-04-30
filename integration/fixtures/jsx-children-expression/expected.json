@@ -34,8 +34,16 @@
       "ownerNodeId": "n_scope_0_Main_46",
       "elements": [
         {
+          "type": "node",
+          "id": "n_scope_1_message_63",
+          "kind": "Variable",
+          "name": "message",
+          "line": 4,
+          "declarationKind": "const"
+        },
+        {
           "type": "subgraph",
-          "id": "s_return_scope_0_Main_46",
+          "id": "s_return_scope_0_Main_46_84_112",
           "kind": "return",
           "line": 5,
           "direction": "RL",
@@ -54,16 +62,7 @@
               "name": "message",
               "line": 5
             }
-          ],
-          "endLine": 5
-        },
-        {
-          "type": "node",
-          "id": "n_scope_1_message_63",
-          "kind": "Variable",
-          "name": "message",
-          "line": 4,
-          "declarationKind": "const"
+          ]
         }
       ]
     },

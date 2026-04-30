@@ -60,8 +60,15 @@
       "ownerNodeId": "n_scope_0_Hello_79",
       "elements": [
         {
+          "type": "node",
+          "id": "n_scope_1_props_88",
+          "kind": "Parameter",
+          "name": "props",
+          "line": 7
+        },
+        {
           "type": "subgraph",
-          "id": "s_return_scope_0_Hello_79",
+          "id": "s_return_scope_0_Hello_79_105_187",
           "kind": "return",
           "line": 7,
           "direction": "RL",
@@ -89,13 +96,6 @@
             }
           ],
           "endLine": 11
-        },
-        {
-          "type": "node",
-          "id": "n_scope_1_props_88",
-          "kind": "Parameter",
-          "name": "props",
-          "line": 7
         }
       ]
     },
@@ -110,7 +110,7 @@
       "elements": [
         {
           "type": "subgraph",
-          "id": "s_return_scope_0_App_196",
+          "id": "s_return_scope_0_App_196_208_228",
           "kind": "return",
           "line": 13,
           "direction": "RL",
@@ -122,8 +122,7 @@
               "name": "Hello",
               "line": 13
             }
-          ],
-          "endLine": 13
+          ]
         }
       ]
     },

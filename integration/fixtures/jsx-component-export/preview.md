@@ -21,7 +21,7 @@ flowchart RL
     n_scope_0_Main_46["unused Main()<br/>L3"]
     subgraph s_scope_1["Main()<br/>L3-5"]
       direction RL
-      subgraph s_return_scope_0_Main_46["return L4"]
+      subgraph s_return_scope_0_Main_46_57_79["return L4"]
         direction RL
         ret_use_ref_0["Sub<br/>L4"]
       end

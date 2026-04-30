@@ -32,30 +32,6 @@
       "ownerNodeId": "n_scope_0_classify_9",
       "elements": [
         {
-          "type": "subgraph",
-          "id": "s_return_scope_0_classify_9",
-          "kind": "return",
-          "line": 7,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
-              "name": "label",
-              "line": 7
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
-              "name": "label",
-              "line": 15
-            }
-          ],
-          "endLine": 15
-        },
-        {
           "type": "node",
           "id": "n_scope_1_kind_18",
           "kind": "Parameter",
@@ -136,6 +112,38 @@
               "caseTest": null
             }
           ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_114_127",
+          "kind": "return",
+          "line": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "label",
+              "line": 7
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_220_233",
+          "kind": "return",
+          "line": 15,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "label",
+              "line": 15
+            }
+          ]
         }
       ]
     }
@@ -164,11 +172,6 @@
     {
       "from": "wr_ref_1",
       "to": "ret_use_ref_2",
-      "label": "read"
-    },
-    {
-      "from": "wr_ref_1",
-      "to": "ret_use_ref_5",
       "label": "read"
     },
     {

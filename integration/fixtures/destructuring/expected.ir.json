@@ -58,7 +58,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [

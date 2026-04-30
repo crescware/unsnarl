@@ -35,7 +35,7 @@
       "elements": [
         {
           "type": "subgraph",
-          "id": "s_return_scope_0_Main_46",
+          "id": "s_return_scope_0_Main_46_57_79",
           "kind": "return",
           "line": 4,
           "direction": "RL",
@@ -47,8 +47,7 @@
               "name": "Sub",
               "line": 4
             }
-          ],
-          "endLine": 4
+          ]
         }
       ]
     },

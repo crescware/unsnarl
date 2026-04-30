@@ -37,7 +37,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -64,7 +65,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [

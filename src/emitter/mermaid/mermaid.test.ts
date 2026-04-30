@@ -109,7 +109,7 @@ describe("MermaidEmitter", () => {
     // f is never called, so its declaration node carries the "unused " prefix.
     expect(out).toMatch(/n_scope_0_f_9\["unused f\(\)<br\/>L1"\]/);
     expect(out).toContain("direction RL");
-    expect(out).toMatch(/subgraph s_return_scope_0_f_9\["return L\d+"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_0_f_9_\w+\["return L3"\]/);
     expect(out).toMatch(/ret_use_\w+\["x<br\/>L3"\]/);
     expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| ret_use_\w+/);
     expect(out).toContain("end");
@@ -119,7 +119,7 @@ describe("MermaidEmitter", () => {
     const out = emit("const fn = (p: number) => p + 1;\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
     expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
-    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L\d+"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_0_fn_6_\w+\["return L1"\]/);
     expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| ret_use_\w+/);
   });
 
@@ -127,7 +127,7 @@ describe("MermaidEmitter", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
     expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
-    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L1"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_0_fn_6_\w+\["return L1"\]/);
   });
 
   test("a multi-line return statement yields a return subgraph spanning the whole statement", () => {
@@ -162,6 +162,31 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)<br\/>L1-3"\]/);
     expect(out).toMatch(/subgraph s_return_scope_\w+\["return L1-3"\]/);
     expect(out).toMatch(/ret_use_\w+\["x<br\/>L2"\]/);
+  });
+
+  test("each ReturnStatement renders its own subgraph; they are not merged", () => {
+    const code = [
+      "function pick(k) {",
+      "  const a = 1;",
+      "  const b = 2;",
+      "  if (k) {",
+      "    return a;",
+      "  }",
+      "  return b;",
+      "}",
+    ].join("\n");
+    const out = emit(code);
+    // Two distinct return subgraphs, one per ReturnStatement, with line
+    // labels matching their own statement (not a merged span).
+    expect(
+      countMatches(out, /^\s*subgraph s_return_scope_\w+\["return L5"\]/),
+    ).toBe(1);
+    expect(
+      countMatches(out, /^\s*subgraph s_return_scope_\w+\["return L7"\]/),
+    ).toBe(1);
+    // The merged "L5-7" header that the previous single-subgraph design
+    // would have produced must not appear.
+    expect(out).not.toMatch(/return L5-7/);
   });
 
   test("marks unused declarations with an 'unused' prefix in the label", () => {

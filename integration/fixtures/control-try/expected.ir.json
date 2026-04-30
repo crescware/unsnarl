@@ -46,7 +46,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -84,7 +85,8 @@
         "key": "block",
         "parentSpanOffset": 52
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -120,7 +122,8 @@
         "key": "handler",
         "parentSpanOffset": 52
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#3",
@@ -153,7 +156,8 @@
         "key": "finalizer",
         "parentSpanOffset": 52
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [

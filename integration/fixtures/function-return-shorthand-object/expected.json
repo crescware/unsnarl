@@ -24,72 +24,6 @@
       "ownerNodeId": "n_scope_0_main_9",
       "elements": [
         {
-          "type": "subgraph",
-          "id": "s_return_scope_0_main_9",
-          "kind": "return",
-          "line": 11,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_0",
-              "kind": "ReturnUse",
-              "name": "a",
-              "line": 12
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_1",
-              "kind": "ReturnUse",
-              "name": "b",
-              "line": 13
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
-              "name": "c",
-              "line": 14
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
-              "name": "d",
-              "line": 15
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_4",
-              "kind": "ReturnUse",
-              "name": "e",
-              "line": 16
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
-              "name": "f",
-              "line": 17
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
-              "name": "g",
-              "line": 18
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_7",
-              "kind": "ReturnUse",
-              "name": "h",
-              "line": 19
-            }
-          ],
-          "endLine": 20
-        },
-        {
           "type": "node",
           "id": "n_scope_1_a_26",
           "kind": "Variable",
@@ -152,6 +86,72 @@
           "name": "h",
           "line": 9,
           "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_main_9_157_226",
+          "kind": "return",
+          "line": 11,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "a",
+              "line": 12
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnUse",
+              "name": "b",
+              "line": 13
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "c",
+              "line": 14
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "d",
+              "line": 15
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "e",
+              "line": 16
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "f",
+              "line": 17
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "g",
+              "line": 18
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_7",
+              "kind": "ReturnUse",
+              "name": "h",
+              "line": 19
+            }
+          ],
+          "endLine": 20
         }
       ]
     }

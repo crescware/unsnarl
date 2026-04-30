@@ -35,7 +35,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -69,7 +70,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -111,7 +113,8 @@
         "key": "body",
         "parentSpanOffset": 25
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#3",
@@ -143,7 +146,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'mon'"
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     },
     {
       "id": "scope#4",
@@ -175,7 +179,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'tue'"
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     },
     {
       "id": "scope#5",
@@ -207,7 +212,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'wed'"
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     },
     {
       "id": "scope#6",
@@ -239,7 +245,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'thu'"
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     },
     {
       "id": "scope#7",
@@ -273,7 +280,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'fri'"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#8",
@@ -305,7 +313,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'sat'"
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     },
     {
       "id": "scope#9",
@@ -339,7 +348,8 @@
         "parentSpanOffset": 45,
         "caseTest": "'sun'"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#10",
@@ -373,7 +383,8 @@
         "parentSpanOffset": 45,
         "caseTest": null
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [

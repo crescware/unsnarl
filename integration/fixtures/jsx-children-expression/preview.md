@@ -23,7 +23,7 @@ flowchart RL
     subgraph s_scope_1["Main()<br/>L3-6"]
       direction RL
       n_scope_1_message_63["message<br/>L4"]
-      subgraph s_return_scope_0_Main_46["return L5"]
+      subgraph s_return_scope_0_Main_46_84_112["return L5"]
         direction RL
         ret_use_ref_0["Sub<br/>L5"]
         ret_use_ref_1["message<br/>L5"]

@@ -24,23 +24,6 @@
       "ownerNodeId": "n_scope_0_getDayType_9",
       "elements": [
         {
-          "type": "subgraph",
-          "id": "s_return_scope_0_getDayType_9",
-          "kind": "return",
-          "line": 19,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_4",
-              "kind": "ReturnUse",
-              "name": "ret",
-              "line": 19
-            }
-          ],
-          "endLine": 19
-        },
-        {
           "type": "node",
           "id": "n_scope_1_day_20",
           "kind": "Parameter",
@@ -169,6 +152,22 @@
                 }
               ],
               "caseTest": null
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_getDayType_9_308_319",
+          "kind": "return",
+          "line": 19,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "ret",
+              "line": 19
             }
           ]
         }

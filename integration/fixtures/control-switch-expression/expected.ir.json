@@ -44,7 +44,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -84,7 +85,8 @@
         "key": "body",
         "parentSpanOffset": 0
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -120,7 +122,8 @@
         "parentSpanOffset": 61,
         "caseTest": "a + b"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#3",
@@ -156,7 +159,8 @@
         "parentSpanOffset": 61,
         "caseTest": "a * b"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#4",
@@ -193,7 +197,8 @@
         "parentSpanOffset": 61,
         "caseTest": "Number.MAX_SAFE_INTEGER"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#5",
@@ -227,7 +232,8 @@
         "parentSpanOffset": 61,
         "caseTest": null
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     }
   ],
   "variables": [

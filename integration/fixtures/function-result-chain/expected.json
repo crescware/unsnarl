@@ -40,23 +40,6 @@
       "ownerNodeId": "n_scope_0_f_9",
       "elements": [
         {
-          "type": "subgraph",
-          "id": "s_return_scope_0_f_9",
-          "kind": "return",
-          "line": 6,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
-              "name": "d",
-              "line": 6
-            }
-          ],
-          "endLine": 6
-        },
-        {
           "type": "node",
           "id": "n_scope_1_a_23",
           "kind": "Variable",
@@ -87,6 +70,22 @@
           "name": "d",
           "line": 5,
           "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_9_92_101",
+          "kind": "return",
+          "line": 6,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "d",
+              "line": 6
+            }
+          ]
         }
       ]
     }

@@ -160,6 +160,7 @@ function serializeScope(
     functionExpressionScope: scope.functionExpressionScope,
     blockContext: scope.unsnarlBlockContext ?? null,
     fallsThrough: scope.unsnarlFallsThrough ?? false,
+    exitsFunction: scope.unsnarlExitsFunction ?? false,
   };
 }
 

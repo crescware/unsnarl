@@ -408,6 +408,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
           }
         }
       }
+      // Cases ending in return/throw exit the function, so their writes
+      // never reach a read after the switch.
+      if (isSwitch && branchScope !== undefined && branchScope.exitsFunction) {
+        continue;
+      }
       let lastOp: WriteOp | null = null;
       for (const op of prev) {
         if (op.scopeId === branchId || isAncestorScope(branchId, op.scopeId)) {
@@ -487,7 +492,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   };
 
   type Container = { elements: VisualElement[] };
-  const returnSubgraphByFn = new Map<string, VisualSubgraph>();
+  const functionSubgraphByFn = new Map<string, VisualSubgraph>();
 
   const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
@@ -497,17 +502,8 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       container.elements.push(sg);
       bodyContainer = sg;
       const ownerVar = subgraphOwnerVar.get(scope.id);
-      if (ownerVar && returnTargets.has(ownerVar)) {
-        const returnSg: VisualSubgraph = {
-          type: "subgraph",
-          id: returnSubgraphId(ownerVar),
-          kind: "return",
-          line: scope.block.span.line,
-          direction: "RL",
-          elements: [],
-        };
-        sg.elements.push(returnSg);
-        returnSubgraphByFn.set(ownerVar, returnSg);
+      if (ownerVar) {
+        functionSubgraphByFn.set(ownerVar, sg);
       }
     }
     for (const vid of scope.variables) {
@@ -672,14 +668,40 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   }
 
   const returnUseAdded = new Set<string>();
-  const returnSubgraphSpanInitialized = new Set<string>();
+  const returnSubgraphsByFn = new Map<string, Map<string, VisualSubgraph>>();
   function ensureReturnUseNode(
     enclosingFnVarId: string,
     ref: SerializedReference,
   ): string | null {
-    const sg = returnSubgraphByFn.get(enclosingFnVarId);
-    if (!sg) {
+    const fnSg = functionSubgraphByFn.get(enclosingFnVarId);
+    if (!fnSg) {
       return null;
+    }
+    const containerKey = ref.returnContainer
+      ? `${ref.returnContainer.startSpan.offset}-${ref.returnContainer.endSpan.offset}`
+      : "implicit";
+    let perFn = returnSubgraphsByFn.get(enclosingFnVarId);
+    if (!perFn) {
+      perFn = new Map();
+      returnSubgraphsByFn.set(enclosingFnVarId, perFn);
+    }
+    let sg = perFn.get(containerKey);
+    if (!sg) {
+      const startLine = ref.returnContainer?.startSpan.line ?? fnSg.line;
+      const endLine = ref.returnContainer?.endSpan.line;
+      sg = {
+        type: "subgraph",
+        id: returnSubgraphId(enclosingFnVarId, containerKey),
+        kind: "return",
+        line: startLine,
+        direction: "RL",
+        elements: [],
+      };
+      if (endLine !== undefined && endLine !== startLine) {
+        sg.endLine = endLine;
+      }
+      fnSg.elements.push(sg);
+      perFn.set(containerKey, sg);
     }
     const id = retUseNodeId(ref.id);
     if (!returnUseAdded.has(ref.id)) {
@@ -693,18 +715,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         name,
         line: ref.identifier.span.line,
       });
-    }
-    if (ref.returnContainer) {
-      const startLine = ref.returnContainer.startSpan.line;
-      const endLine = ref.returnContainer.endSpan.line;
-      if (returnSubgraphSpanInitialized.has(sg.id)) {
-        sg.line = Math.min(sg.line, startLine);
-        sg.endLine = Math.max(sg.endLine ?? endLine, endLine);
-      } else {
-        sg.line = startLine;
-        sg.endLine = endLine;
-        returnSubgraphSpanInitialized.add(sg.id);
-      }
     }
     return id;
   }
@@ -1019,8 +1029,8 @@ export function visualNodeIdFromVariableId(varId: string): string {
   return `n_${sanitize(varId)}`;
 }
 
-function returnSubgraphId(varId: string): string {
-  return `s_return_${sanitize(varId)}`;
+function returnSubgraphId(varId: string, containerKey: string): string {
+  return `s_return_${sanitize(varId)}_${sanitize(containerKey)}`;
 }
 
 function retUseNodeId(refId: string): string {

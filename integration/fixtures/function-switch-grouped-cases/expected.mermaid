@@ -7,10 +7,6 @@ flowchart RL
       direction RL
       n_scope_1_day_20["day<br/>L1"]
       n_scope_1_ret_33["let ret<br/>L2"]
-      subgraph s_return_scope_0_getDayType_9["return L19"]
-        direction RL
-        ret_use_ref_4["ret<br/>L19"]
-      end
       subgraph s_scope_2["switch L3-18"]
         direction RL
         subgraph s_scope_3["case 'mon' L4"]
@@ -40,6 +36,10 @@ flowchart RL
           direction RL
           wr_ref_3(["let ret<br/>L16"])
         end
+      end
+      subgraph s_return_scope_0_getDayType_9_308_319["return L19"]
+        direction RL
+        ret_use_ref_4["ret<br/>L19"]
       end
     end
   end

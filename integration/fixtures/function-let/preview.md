@@ -24,7 +24,7 @@ flowchart RL
       n_scope_1_v_21["let v<br/>L2"]
       wr_ref_0(["let v<br/>L3"])
       wr_ref_1(["let v<br/>L4"])
-      subgraph s_return_scope_0_f_9["return L5"]
+      subgraph s_return_scope_0_f_9_48_57["return L5"]
         direction RL
         ret_use_ref_2["v<br/>L5"]
       end
