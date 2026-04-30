@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/const-chain-five/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_d_45",
+      "kind": "Variable",
+      "name": "d",
+      "line": 4,
+      "declarationKind": "const"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_e_58",
+      "kind": "Variable",
+      "name": "e",
+      "line": 5,
+      "declarationKind": "const",
+      "unused": true
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_d_45",
+      "to": "n_scope_0_e_58",
+      "label": "read"
+    }
+  ],
+  "pruning": {
+    "roots": [
+      {
+        "query": "e",
+        "matched": 1
+      }
+    ],
+    "descendants": 1,
+    "ancestors": 1
+  }
+}
