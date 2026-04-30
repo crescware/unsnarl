@@ -31,10 +31,15 @@ flowchart RL
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_Hello_79["Hello()<br/>L7"]
-    subgraph s_scope_1["Hello()<br/>L7"]
+    subgraph s_scope_1["Hello()<br/>L7-11"]
       direction RL
-      return_scope_0_Hello_79((return))
       n_scope_1_props_88["props<br/>L7"]
+      subgraph s_return_scope_0_Hello_79_105_187["return L7-11"]
+        direction RL
+        ret_use_ref_0["Fragment<br/>L8"]
+        ret_use_ref_1["span<br/>L9"]
+        ret_use_ref_2["props<br/>L9"]
+      end
     end
   end
   subgraph wrap_s_scope_2[" "]
@@ -42,13 +47,16 @@ flowchart RL
     n_scope_0_App_196["App()<br/>L13"]
     subgraph s_scope_2["App()<br/>L13"]
       direction RL
-      return_scope_0_App_196((return))
+      subgraph s_return_scope_0_App_196_208_228["return L13"]
+        direction RL
+        ret_use_ref_3["Hello<br/>L13"]
+      end
     end
   end
-  n_scope_0_Fragment_9 -->|read| return_scope_0_Hello_79
-  n_scope_0_span_125 -->|read| return_scope_0_Hello_79
-  n_scope_1_props_88 -->|read| return_scope_0_Hello_79
-  n_scope_0_Hello_79 -->|read| return_scope_0_App_196
+  n_scope_0_Fragment_9 -->|read| ret_use_ref_0
+  n_scope_0_span_125 -->|read| ret_use_ref_1
+  n_scope_1_props_88 -->|read| ret_use_ref_2
+  n_scope_0_Hello_79 -->|read| ret_use_ref_3
   n_scope_0_App_196 -->|read| n_scope_0_root_237
   mod_react["module react<br/>L1"]
   mod_react -->|read| n_scope_0_Fragment_9

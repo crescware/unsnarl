@@ -27,6 +27,7 @@ function makeRef(
     init: false,
     flags: { read: true, write: false, call: false, receiver: false },
     predicateContainer: null,
+    returnContainer: null,
   };
 }
 

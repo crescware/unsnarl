@@ -1,0 +1,35 @@
+# integration/fixtures/jsx-component-export/input.tsx
+
+## Input
+
+```tsx
+import { Sub } from "./sub";
+
+export function Main() {
+  return <Sub>sub</Sub>;
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_Sub_9["import Sub<br/>L1"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_Main_46["unused Main()<br/>L3"]
+    subgraph s_scope_1["Main()<br/>L3-5"]
+      direction RL
+      subgraph s_return_scope_0_Main_46_57_79["return L4"]
+        direction RL
+        ret_use_ref_0["Sub<br/>L4"]
+      end
+    end
+  end
+  n_scope_0_Sub_9 -->|read| ret_use_ref_0
+  mod___sub["module ./sub<br/>L1"]
+  mod___sub -->|read| n_scope_0_Sub_9
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;
+```

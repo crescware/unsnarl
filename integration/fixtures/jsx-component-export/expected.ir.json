@@ -1,0 +1,207 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-component-export/input.tsx",
+    "language": "tsx"
+  },
+  "raw": "import { Sub } from \"./sub\";\n\nexport function Main() {\n  return <Sub>sub</Sub>;\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 0,
+          "offset": 82
+        }
+      },
+      "variables": [
+        "scope#0:Sub@9",
+        "scope#0:Main@46"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 3,
+          "column": 7,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 1,
+          "offset": 81
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:Sub@9",
+      "name": "Sub",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "type": "ImportBinding",
+          "name": {
+            "name": "Sub",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "initType": null,
+          "initSpan": null,
+          "importKind": "named",
+          "importSource": "./sub",
+          "importedName": "Sub",
+          "declarationKind": null
+        }
+      ]
+    },
+    {
+      "id": "scope#0:Main@46",
+      "name": "Main",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 16,
+          "offset": 46
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "type": "FunctionName",
+          "name": {
+            "name": "Main",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 46
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 3,
+              "column": 7,
+              "offset": 37
+            }
+          },
+          "parent": null,
+          "initType": null,
+          "initSpan": null,
+          "importKind": null,
+          "importSource": null,
+          "importedName": null,
+          "declarationKind": null
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "Sub",
+        "span": {
+          "line": 4,
+          "column": 10,
+          "offset": 65
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:Sub@9",
+      "owners": [],
+      "writeExpr": null,
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 57
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 24,
+          "offset": 79
+        }
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:Main@46"
+  ],
+  "diagnostics": []
+}

@@ -18,6 +18,7 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
+      "endLine": 3,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_greet_9",
       "elements": []

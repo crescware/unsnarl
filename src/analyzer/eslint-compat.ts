@@ -13,6 +13,7 @@ import { ScopeManager } from "./manager.js";
 import { findReferenceOwners } from "./owner.js";
 import { findPredicateContainer } from "./predicate.js";
 import { bindReference } from "./resolve.js";
+import { findReturnContainer } from "./return-container.js";
 import { ReferenceImpl } from "./scope.js";
 import { isTypeOnlySubtree } from "./skip-types.js";
 import type { PathEntry, WalkAction } from "./walk.js";
@@ -162,8 +163,17 @@ function handleEnter(
       const consequent = node["consequent"];
       if (Array.isArray(consequent)) {
         (
-          scope as unknown as { unsnarlFallsThrough: boolean }
+          scope as unknown as {
+            unsnarlFallsThrough: boolean;
+            unsnarlExitsFunction: boolean;
+          }
         ).unsnarlFallsThrough = caseFallsThrough(consequent);
+        (
+          scope as unknown as {
+            unsnarlFallsThrough: boolean;
+            unsnarlExitsFunction: boolean;
+          }
+        ).unsnarlExitsFunction = caseExitsFunction(consequent);
         hoistDeclarations(consequent, scope, raw, diagnostics);
       } else {
         (
@@ -360,6 +370,7 @@ function handleIdentifierReference(
     key,
     path,
   );
+  ref.unsnarlReturnContainer = findReturnContainer(path);
 }
 
 const CASE_TEST_MAX_LENGTH = 32;
@@ -413,6 +424,50 @@ function caseFallsThrough(consequent: ReadonlyArray<unknown>): boolean {
     return true;
   }
   return !isControlExit(last);
+}
+
+function caseExitsFunction(consequent: ReadonlyArray<unknown>): boolean {
+  if (consequent.length === 0) {
+    return false;
+  }
+  const last = consequent[consequent.length - 1];
+  if (!isNodeLike(last)) {
+    return false;
+  }
+  return isFunctionExit(last);
+}
+
+function isFunctionExit(node: NodeLike): boolean {
+  switch (node.type) {
+    case "ReturnStatement":
+    case "ThrowStatement":
+      return true;
+    case "BlockStatement": {
+      const body = node["body"];
+      if (Array.isArray(body) && body.length > 0) {
+        const last = body[body.length - 1];
+        if (isNodeLike(last)) {
+          return isFunctionExit(last);
+        }
+      }
+      return false;
+    }
+    case "IfStatement": {
+      const consequent = node["consequent"];
+      const alternate = node["alternate"];
+      if (
+        isNodeLike(consequent) &&
+        isNodeLike(alternate) &&
+        isFunctionExit(consequent) &&
+        isFunctionExit(alternate)
+      ) {
+        return true;
+      }
+      return false;
+    }
+    default:
+      return false;
+  }
 }
 
 function isControlExit(node: NodeLike): boolean {

@@ -1,6 +1,6 @@
 0	0	integration/fixtures/function-let/input.ts:1 unused f
-0	1	integration/fixtures/function-let/input.ts:1 return
 1	0	integration/fixtures/function-let/input.ts:2 v
 1	1	integration/fixtures/function-let/input.ts:3 v
 1	1	integration/fixtures/function-let/input.ts:4 v
+0	1	integration/fixtures/function-let/input.ts:5 v
 3	3	5 total

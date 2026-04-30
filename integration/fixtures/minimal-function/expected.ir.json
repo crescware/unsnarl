@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 0,
+          "offset": 45
         }
       },
       "variables": [
@@ -32,7 +37,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -47,6 +53,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 35
         }
       },
       "variables": [],
@@ -54,7 +65,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -124,7 +136,8 @@
         "call": true,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [],

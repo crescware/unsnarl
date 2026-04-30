@@ -35,16 +35,10 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
+      "endLine": 7,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_f_9",
       "elements": [
-        {
-          "type": "node",
-          "id": "return_scope_0_f_9",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 1
-        },
         {
           "type": "node",
           "id": "n_scope_1_a_23",
@@ -76,6 +70,22 @@
           "name": "d",
           "line": 5,
           "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_9_92_101",
+          "kind": "return",
+          "line": 6,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "d",
+              "line": 6
+            }
+          ]
         }
       ]
     }
@@ -98,7 +108,7 @@
     },
     {
       "from": "n_scope_1_d_83",
-      "to": "return_scope_0_f_9",
+      "to": "ret_use_ref_3",
       "label": "read"
     },
     {

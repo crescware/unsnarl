@@ -35,21 +35,21 @@ flowchart RL
   n_scope_0_b_35["b<br/>L3"]
   n_scope_0_target_48["target<br/>L4"]
   n_scope_0_result_304["unused result<br/>L20"]
-  subgraph s_scope_1["switch L6"]
+  subgraph s_scope_1["switch L6-18"]
     direction RL
-    subgraph s_scope_2["case a + b L7"]
+    subgraph s_scope_2["case a + b L7-9"]
       direction RL
       wr_ref_3(["let label<br/>L8"])
     end
-    subgraph s_scope_3["case a * b L10"]
+    subgraph s_scope_3["case a * b L10-12"]
       direction RL
       wr_ref_6(["let label<br/>L11"])
     end
-    subgraph s_scope_4["case Number.MAX_SAFE_INTEGER L13"]
+    subgraph s_scope_4["case Number.MAX_SAFE_INTEGER L13-15"]
       direction RL
       wr_ref_8(["let label<br/>L14"])
     end
-    subgraph s_scope_5["default L16"]
+    subgraph s_scope_5["default L16-17"]
       direction RL
       wr_ref_9(["let label<br/>L17"])
     end

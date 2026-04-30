@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 0,
+          "offset": 104
         }
       },
       "variables": [
@@ -30,7 +35,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -45,6 +51,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 1,
+          "offset": 103
         }
       },
       "variables": [
@@ -62,7 +73,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -348,7 +360,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#1",
@@ -373,7 +386,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#2",
@@ -398,7 +412,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#3",
@@ -421,7 +436,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 2,
+          "offset": 92
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 11,
+          "offset": 101
+        }
+      }
     }
   ],
   "unusedVariableIds": [

@@ -408,6 +408,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
           }
         }
       }
+      // Cases ending in return/throw exit the function, so their writes
+      // never reach a read after the switch.
+      if (isSwitch && branchScope !== undefined && branchScope.exitsFunction) {
+        continue;
+      }
       let lastOp: WriteOp | null = null;
       for (const op of prev) {
         if (op.scopeId === branchId || isAncestorScope(branchId, op.scopeId)) {
@@ -487,6 +492,8 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   };
 
   type Container = { elements: VisualElement[] };
+  const functionSubgraphByFn = new Map<string, VisualSubgraph>();
+  const subgraphByScope = new Map<string, VisualSubgraph>();
 
   const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
@@ -495,15 +502,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       const sg = describeSubgraph(scope);
       container.elements.push(sg);
       bodyContainer = sg;
+      subgraphByScope.set(scope.id, sg);
       const ownerVar = subgraphOwnerVar.get(scope.id);
-      if (ownerVar && returnTargets.has(ownerVar)) {
-        sg.elements.push({
-          type: "node",
-          id: returnNodeId(ownerVar),
-          kind: "ReturnSink",
-          name: "return",
-          line: scope.block.span.line,
-        });
+      if (ownerVar) {
+        functionSubgraphByFn.set(ownerVar, sg);
       }
     }
     for (const vid of scope.variables) {
@@ -592,12 +594,22 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       for (const g of group) {
         buildScope(g, containerSubgraph);
       }
+      let containerEndLine = containerSubgraph.line;
+      for (const elem of containerSubgraph.elements) {
+        if (elem.type === "subgraph" && elem.endLine !== undefined) {
+          containerEndLine = Math.max(containerEndLine, elem.endLine);
+        }
+      }
+      if (containerEndLine !== containerSubgraph.line) {
+        containerSubgraph.endLine = containerEndLine;
+      }
       i = j;
     }
   };
 
   const describeSubgraph = (scope: SerializedScope): VisualSubgraph => {
     const id = subgraphScopeId(scope);
+    const endLine = scope.block.endSpan.line;
     if (isFunctionSubgraph(scope)) {
       const ownerVarId = subgraphOwnerVar.get(scope.id);
       if (!ownerVarId) {
@@ -606,11 +618,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         );
       }
       const ownerVar = variableMap.get(ownerVarId);
+      const startLine = ownerVar?.identifiers[0]?.line ?? scope.block.span.line;
       return {
         type: "subgraph",
         id,
         kind: "function",
-        line: ownerVar?.identifiers[0]?.line ?? scope.block.span.line,
+        line: startLine,
+        endLine,
         direction: "RL",
         ownerNodeId: nodeId(ownerVarId),
         elements: [],
@@ -627,6 +641,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       id,
       kind,
       line: scope.block.span.line,
+      endLine,
       direction: "RL",
       elements: [],
     };
@@ -652,6 +667,75 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
     emittedEdges.add(key);
     edges.push({ from, to, label });
+  }
+
+  const returnUseAdded = new Set<string>();
+  const returnSubgraphsByFn = new Map<string, Map<string, VisualSubgraph>>();
+  const findHostSubgraph = (
+    ref: SerializedReference,
+    enclosingFnVarId: string,
+  ): VisualSubgraph | null => {
+    let cur: SerializedScope | undefined = scopeMap.get(ref.from);
+    while (cur) {
+      const sg = subgraphByScope.get(cur.id);
+      if (sg) {
+        return sg;
+      }
+      if (!cur.upper) {
+        break;
+      }
+      cur = scopeMap.get(cur.upper);
+    }
+    return functionSubgraphByFn.get(enclosingFnVarId) ?? null;
+  };
+  function ensureReturnUseNode(
+    enclosingFnVarId: string,
+    ref: SerializedReference,
+  ): string | null {
+    const host = findHostSubgraph(ref, enclosingFnVarId);
+    if (!host) {
+      return null;
+    }
+    const containerKey = ref.returnContainer
+      ? `${ref.returnContainer.startSpan.offset}-${ref.returnContainer.endSpan.offset}`
+      : "implicit";
+    let perFn = returnSubgraphsByFn.get(enclosingFnVarId);
+    if (!perFn) {
+      perFn = new Map();
+      returnSubgraphsByFn.set(enclosingFnVarId, perFn);
+    }
+    let sg = perFn.get(containerKey);
+    if (!sg) {
+      const startLine = ref.returnContainer?.startSpan.line ?? host.line;
+      const endLine = ref.returnContainer?.endSpan.line;
+      sg = {
+        type: "subgraph",
+        id: returnSubgraphId(enclosingFnVarId, containerKey),
+        kind: "return",
+        line: startLine,
+        direction: "RL",
+        elements: [],
+      };
+      if (endLine !== undefined && endLine !== startLine) {
+        sg.endLine = endLine;
+      }
+      host.elements.push(sg);
+      perFn.set(containerKey, sg);
+    }
+    const id = retUseNodeId(ref.id);
+    if (!returnUseAdded.has(ref.id)) {
+      returnUseAdded.add(ref.id);
+      const v = ref.resolved ? variableMap.get(ref.resolved) : undefined;
+      const name = v?.name ?? ref.identifier.name ?? "";
+      sg.elements.push({
+        type: "node",
+        id,
+        kind: "ReturnUse",
+        name,
+        line: ref.identifier.span.line,
+      });
+    }
+    return id;
   }
 
   // let-chain edges (set / fallthrough)
@@ -752,8 +836,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     } else {
       const enclosingFn = enclosingFunctionVar(r.from);
       if (enclosingFn) {
-        for (const fromId of fromIds) {
-          pushEdge(fromId, label, returnNodeId(enclosingFn));
+        const useTargetId = ensureReturnUseNode(enclosingFn, r);
+        if (useTargetId) {
+          for (const fromId of fromIds) {
+            pushEdge(fromId, label, useTargetId);
+          }
         }
       } else {
         needsModuleRoot = true;
@@ -961,8 +1048,12 @@ export function visualNodeIdFromVariableId(varId: string): string {
   return `n_${sanitize(varId)}`;
 }
 
-function returnNodeId(varId: string): string {
-  return `return_${sanitize(varId)}`;
+function returnSubgraphId(varId: string, containerKey: string): string {
+  return `s_return_${sanitize(varId)}_${sanitize(containerKey)}`;
+}
+
+function retUseNodeId(refId: string): string {
+  return `ret_use_${sanitize(refId)}`;
 }
 
 function writeOpNodeId(refId: string): string {

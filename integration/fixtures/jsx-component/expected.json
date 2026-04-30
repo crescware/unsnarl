@@ -55,22 +55,47 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 7,
+      "endLine": 11,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_Hello_79",
       "elements": [
-        {
-          "type": "node",
-          "id": "return_scope_0_Hello_79",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 7
-        },
         {
           "type": "node",
           "id": "n_scope_1_props_88",
           "kind": "Parameter",
           "name": "props",
           "line": 7
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Hello_79_105_187",
+          "kind": "return",
+          "line": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "Fragment",
+              "line": 8
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnUse",
+              "name": "span",
+              "line": 9
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "props",
+              "line": 9
+            }
+          ],
+          "endLine": 11
         }
       ]
     },
@@ -79,15 +104,25 @@
       "id": "s_scope_2",
       "kind": "function",
       "line": 13,
+      "endLine": 13,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_App_196",
       "elements": [
         {
-          "type": "node",
-          "id": "return_scope_0_App_196",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 13
+          "type": "subgraph",
+          "id": "s_return_scope_0_App_196_208_228",
+          "kind": "return",
+          "line": 13,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "Hello",
+              "line": 13
+            }
+          ]
         }
       ]
     },
@@ -102,22 +137,22 @@
   "edges": [
     {
       "from": "n_scope_0_Fragment_9",
-      "to": "return_scope_0_Hello_79",
+      "to": "ret_use_ref_0",
       "label": "read"
     },
     {
       "from": "n_scope_0_span_125",
-      "to": "return_scope_0_Hello_79",
+      "to": "ret_use_ref_1",
       "label": "read"
     },
     {
       "from": "n_scope_1_props_88",
-      "to": "return_scope_0_Hello_79",
+      "to": "ret_use_ref_2",
       "label": "read"
     },
     {
       "from": "n_scope_0_Hello_79",
-      "to": "return_scope_0_App_196",
+      "to": "ret_use_ref_3",
       "label": "read"
     },
     {

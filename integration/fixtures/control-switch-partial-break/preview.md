@@ -27,17 +27,17 @@ flowchart RL
   n_scope_0_label_4["let label<br/>L1"]
   n_scope_0_kind_22["kind<br/>L2"]
   n_scope_0_result_168["unused result<br/>L14"]
-  subgraph s_scope_1["switch L4"]
+  subgraph s_scope_1["switch L4-12"]
     direction RL
-    subgraph s_scope_2["case &quot;a&quot; L5"]
+    subgraph s_scope_2["case &quot;a&quot; L5-6"]
       direction RL
       wr_ref_1(["let label<br/>L6"])
     end
-    subgraph s_scope_3["case &quot;b&quot; L7"]
+    subgraph s_scope_3["case &quot;b&quot; L7-9"]
       direction RL
       wr_ref_2(["let label<br/>L8"])
     end
-    subgraph s_scope_4["default L10"]
+    subgraph s_scope_4["default L10-11"]
       direction RL
       wr_ref_3(["let label<br/>L11"])
     end

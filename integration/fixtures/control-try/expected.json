@@ -51,6 +51,7 @@
       "id": "s_scope_1",
       "kind": "try",
       "line": 5,
+      "endLine": 8,
       "direction": "RL",
       "elements": [
         {
@@ -76,6 +77,7 @@
       "id": "s_scope_2",
       "kind": "catch",
       "line": 8,
+      "endLine": 11,
       "direction": "RL",
       "elements": [
         {
@@ -109,6 +111,7 @@
       "id": "s_scope_3",
       "kind": "finally",
       "line": 11,
+      "endLine": 13,
       "direction": "RL",
       "elements": [
         {

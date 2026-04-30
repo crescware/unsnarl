@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 12,
+          "column": 0,
+          "offset": 160
         }
       },
       "variables": [
@@ -38,7 +43,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -53,6 +59,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 54
         }
       },
       "variables": [
@@ -66,7 +77,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -437,7 +449,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 39
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 15,
+          "offset": 52
+        }
+      }
     },
     {
       "id": "ref#1",
@@ -460,7 +484,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 39
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 15,
+          "offset": 52
+        }
+      }
     },
     {
       "id": "ref#2",
@@ -485,7 +521,8 @@
         "call": true,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#3",
@@ -510,7 +547,8 @@
         "call": true,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#4",
@@ -535,7 +573,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

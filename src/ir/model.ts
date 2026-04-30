@@ -60,6 +60,11 @@ export interface PredicateContainer {
   offset: number;
 }
 
+export interface ReturnContainer {
+  startOffset: number;
+  endOffset: number;
+}
+
 export interface Reference {
   identifier: AstIdentifier;
   from: Scope;
@@ -76,6 +81,7 @@ export interface Reference {
   unsnarlFlags?: ReferenceFlagBits;
   unsnarlOwners?: Variable[];
   unsnarlPredicateContainer?: PredicateContainer | null;
+  unsnarlReturnContainer?: ReturnContainer | null;
 }
 
 export interface Definition {
@@ -115,6 +121,7 @@ export interface Scope {
   functionExpressionScope: boolean;
   unsnarlBlockContext?: BlockContext | null;
   unsnarlFallsThrough?: boolean;
+  unsnarlExitsFunction?: boolean;
 }
 
 export type DiagnosticKind =
@@ -139,13 +146,14 @@ export interface SerializedScope {
   upper: ScopeId | null;
   childScopes: ScopeId[];
   variableScope: ScopeId;
-  block: { type: string; span: Span };
+  block: { type: string; span: Span; endSpan: Span };
   variables: VariableId[];
   references: ReferenceId[];
   through: ReferenceId[];
   functionExpressionScope: boolean;
   blockContext: BlockContext | null;
   fallsThrough: boolean;
+  exitsFunction: boolean;
 }
 
 export interface SerializedVariable {
@@ -172,6 +180,7 @@ export interface SerializedReference {
     receiver: boolean;
   };
   predicateContainer: PredicateContainer | null;
+  returnContainer: { startSpan: Span; endSpan: Span } | null;
 }
 
 export type ImportKind = "default" | "named" | "namespace";

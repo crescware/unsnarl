@@ -27,16 +27,10 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
+      "endLine": 16,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_classify_9",
       "elements": [
-        {
-          "type": "node",
-          "id": "return_scope_0_classify_9",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 1
-        },
         {
           "type": "node",
           "id": "n_scope_1_kind_18",
@@ -57,6 +51,7 @@
           "id": "s_scope_2",
           "kind": "switch",
           "line": 4,
+          "endLine": 13,
           "direction": "RL",
           "elements": [
             {
@@ -64,6 +59,7 @@
               "id": "s_scope_3",
               "kind": "case",
               "line": 5,
+              "endLine": 7,
               "direction": "RL",
               "elements": [
                 {
@@ -73,6 +69,22 @@
                   "name": "label",
                   "line": 6,
                   "declarationKind": "let"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_classify_9_114_127",
+                  "kind": "return",
+                  "line": 7,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_2",
+                      "kind": "ReturnUse",
+                      "name": "label",
+                      "line": 7
+                    }
+                  ]
                 }
               ],
               "caseTest": "\"a\""
@@ -82,6 +94,7 @@
               "id": "s_scope_4",
               "kind": "case",
               "line": 8,
+              "endLine": 10,
               "direction": "RL",
               "elements": [
                 {
@@ -100,6 +113,7 @@
               "id": "s_scope_5",
               "kind": "case",
               "line": 11,
+              "endLine": 12,
               "direction": "RL",
               "elements": [
                 {
@@ -112,6 +126,22 @@
                 }
               ],
               "caseTest": null
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_220_233",
+          "kind": "return",
+          "line": 15,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "label",
+              "line": 15
             }
           ]
         }
@@ -141,17 +171,17 @@
     },
     {
       "from": "wr_ref_1",
-      "to": "return_scope_0_classify_9",
+      "to": "ret_use_ref_2",
       "label": "read"
     },
     {
       "from": "wr_ref_3",
-      "to": "return_scope_0_classify_9",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {
       "from": "wr_ref_4",
-      "to": "return_scope_0_classify_9",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {

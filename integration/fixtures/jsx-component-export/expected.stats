@@ -1,0 +1,5 @@
+1	1	integration/fixtures/jsx-component-export/input.tsx:1 Sub
+1	0	integration/fixtures/jsx-component-export/input.tsx:1 ./sub
+0	0	integration/fixtures/jsx-component-export/input.tsx:3 unused Main
+0	1	integration/fixtures/jsx-component-export/input.tsx:4 Sub
+2	2	4 total

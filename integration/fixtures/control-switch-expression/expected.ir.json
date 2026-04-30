@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 21,
+          "column": 0,
+          "offset": 320
         }
       },
       "variables": [
@@ -39,7 +44,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -59,6 +65,11 @@
           "line": 6,
           "column": 0,
           "offset": 61
+        },
+        "endSpan": {
+          "line": 18,
+          "column": 1,
+          "offset": 296
         }
       },
       "variables": [],
@@ -74,7 +85,8 @@
         "key": "body",
         "parentSpanOffset": 0
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -89,6 +101,11 @@
           "line": 7,
           "column": 2,
           "offset": 81
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 10,
+          "offset": 122
         }
       },
       "variables": [],
@@ -105,7 +122,8 @@
         "parentSpanOffset": 61,
         "caseTest": "a + b"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#3",
@@ -120,6 +138,11 @@
           "line": 10,
           "column": 2,
           "offset": 125
+        },
+        "endSpan": {
+          "line": 12,
+          "column": 10,
+          "offset": 170
         }
       },
       "variables": [],
@@ -136,7 +159,8 @@
         "parentSpanOffset": 61,
         "caseTest": "a * b"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#4",
@@ -151,6 +175,11 @@
           "line": 13,
           "column": 2,
           "offset": 173
+        },
+        "endSpan": {
+          "line": 15,
+          "column": 10,
+          "offset": 262
         }
       },
       "variables": [],
@@ -168,7 +197,8 @@
         "parentSpanOffset": 61,
         "caseTest": "Number.MAX_SAFE_INTEGER"
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#5",
@@ -183,6 +213,11 @@
           "line": 16,
           "column": 2,
           "offset": 265
+        },
+        "endSpan": {
+          "line": 17,
+          "column": 20,
+          "offset": 294
         }
       },
       "variables": [],
@@ -197,7 +232,8 @@
         "parentSpanOffset": 61,
         "caseTest": null
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -544,7 +580,8 @@
       "predicateContainer": {
         "type": "SwitchStatement",
         "offset": 61
-      }
+      },
+      "returnContainer": null
     },
     {
       "id": "ref#1",
@@ -567,7 +604,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#2",
@@ -590,7 +628,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#3",
@@ -619,7 +658,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#4",
@@ -642,7 +682,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#5",
@@ -665,7 +706,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#6",
@@ -694,7 +736,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#7",
@@ -717,7 +760,8 @@
         "call": false,
         "receiver": true
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#8",
@@ -746,7 +790,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#9",
@@ -775,7 +820,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#10",
@@ -800,7 +846,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

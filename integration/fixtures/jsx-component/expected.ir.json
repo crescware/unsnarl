@@ -22,6 +22,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 16,
+          "column": 0,
+          "offset": 249
         }
       },
       "variables": [
@@ -39,7 +44,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -54,6 +60,11 @@
           "line": 7,
           "column": 14,
           "offset": 87
+        },
+        "endSpan": {
+          "line": 11,
+          "column": 1,
+          "offset": 187
         }
       },
       "variables": [
@@ -69,7 +80,8 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -84,6 +96,11 @@
           "line": 13,
           "column": 12,
           "offset": 202
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 38,
+          "offset": 228
         }
       },
       "variables": [],
@@ -93,7 +110,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -423,7 +441,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 32,
+          "offset": 105
+        },
+        "endSpan": {
+          "line": 11,
+          "column": 1,
+          "offset": 187
+        }
+      }
     },
     {
       "id": "ref#1",
@@ -446,7 +476,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 32,
+          "offset": 105
+        },
+        "endSpan": {
+          "line": 11,
+          "column": 1,
+          "offset": 187
+        }
+      }
     },
     {
       "id": "ref#2",
@@ -469,7 +511,19 @@
         "call": false,
         "receiver": true
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 32,
+          "offset": 105
+        },
+        "endSpan": {
+          "line": 11,
+          "column": 1,
+          "offset": 187
+        }
+      }
     },
     {
       "id": "ref#3",
@@ -492,7 +546,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 18,
+          "offset": 208
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 38,
+          "offset": 228
+        }
+      }
     },
     {
       "id": "ref#4",
@@ -517,7 +583,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

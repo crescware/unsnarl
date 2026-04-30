@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 19,
+          "column": 0,
+          "offset": 267
         }
       },
       "variables": [
@@ -33,7 +38,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#1",
@@ -50,6 +56,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 16,
+          "column": 1,
+          "offset": 235
         }
       },
       "variables": [
@@ -62,7 +73,8 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#2",
@@ -81,6 +93,11 @@
           "line": 4,
           "column": 2,
           "offset": 55
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 3,
+          "offset": 216
         }
       },
       "variables": [],
@@ -94,7 +111,8 @@
         "key": "body",
         "parentSpanOffset": 32
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#3",
@@ -109,6 +127,11 @@
           "line": 5,
           "column": 4,
           "offset": 75
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 19,
+          "offset": 127
         }
       },
       "variables": [],
@@ -124,7 +147,8 @@
         "parentSpanOffset": 55,
         "caseTest": "\"a\""
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": true
     },
     {
       "id": "scope#4",
@@ -139,6 +163,11 @@
           "line": 8,
           "column": 4,
           "offset": 132
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 12,
+          "offset": 176
         }
       },
       "variables": [],
@@ -153,7 +182,8 @@
         "parentSpanOffset": 55,
         "caseTest": "\"b\""
       },
-      "fallsThrough": false
+      "fallsThrough": false,
+      "exitsFunction": false
     },
     {
       "id": "scope#5",
@@ -168,6 +198,11 @@
           "line": 11,
           "column": 4,
           "offset": 181
+        },
+        "endSpan": {
+          "line": 12,
+          "column": 22,
+          "offset": 212
         }
       },
       "variables": [],
@@ -182,7 +217,8 @@
         "parentSpanOffset": 55,
         "caseTest": null
       },
-      "fallsThrough": true
+      "fallsThrough": true,
+      "exitsFunction": false
     }
   ],
   "variables": [
@@ -415,7 +451,8 @@
       "predicateContainer": {
         "type": "SwitchStatement",
         "offset": 55
-      }
+      },
+      "returnContainer": null
     },
     {
       "id": "ref#1",
@@ -444,7 +481,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#2",
@@ -467,7 +505,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 6,
+          "offset": 114
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 19,
+          "offset": 127
+        }
+      }
     },
     {
       "id": "ref#3",
@@ -496,7 +546,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#4",
@@ -525,7 +576,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#5",
@@ -548,7 +600,19 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 15,
+          "column": 2,
+          "offset": 220
+        },
+        "endSpan": {
+          "line": 15,
+          "column": 15,
+          "offset": 233
+        }
+      }
     },
     {
       "id": "ref#6",
@@ -573,7 +637,8 @@
         "call": true,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

@@ -15,7 +15,7 @@ export type NodeKind =
   | "ImportBinding"
   | "ImplicitGlobalVariable"
   | "WriteOp"
-  | "ReturnSink"
+  | "ReturnUse"
   | "ModuleSink"
   | "ModuleSource"
   | "ImportIntermediate";
@@ -30,7 +30,8 @@ export type SubgraphKind =
   | "try"
   | "catch"
   | "finally"
-  | "for";
+  | "for"
+  | "return";
 
 export interface VisualNode {
   type: "node";
@@ -51,6 +52,7 @@ export interface VisualSubgraph {
   id: string;
   kind: SubgraphKind;
   line: number;
+  endLine?: number;
   direction: Direction;
   caseTest?: string | null;
   hasElse?: boolean;

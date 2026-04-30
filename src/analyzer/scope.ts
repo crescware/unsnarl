@@ -8,6 +8,7 @@ import type {
   PredicateContainer,
   Reference,
   ReferenceFlagBits,
+  ReturnContainer,
   Scope,
   ScopeType,
   Variable,
@@ -27,6 +28,7 @@ export class ScopeImpl implements Scope {
   readonly functionExpressionScope: boolean = false;
   unsnarlBlockContext: BlockContext | null = null;
   unsnarlFallsThrough: boolean = false;
+  unsnarlExitsFunction: boolean = false;
 
   constructor(opts: {
     type: ScopeType;
@@ -78,6 +80,7 @@ export class ReferenceImpl implements Reference {
   resolved: Variable | null = null;
   unsnarlOwners: Variable[] = [];
   unsnarlPredicateContainer: PredicateContainer | null = null;
+  unsnarlReturnContainer: ReturnContainer | null = null;
   readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;

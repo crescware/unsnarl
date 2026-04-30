@@ -38,21 +38,21 @@ flowchart RL
   n_scope_0_label_59["let label<br/>L5"]
   n_scope_0_color_77["color<br/>L6"]
   n_scope_0_result_283["unused result<br/>L22"]
-  subgraph s_scope_1["switch L8"]
+  subgraph s_scope_1["switch L8-20"]
     direction RL
-    subgraph s_scope_2["case RED L9"]
+    subgraph s_scope_2["case RED L9-11"]
       direction RL
       wr_ref_3(["let label<br/>L10"])
     end
-    subgraph s_scope_3["case GREEN L12"]
+    subgraph s_scope_3["case GREEN L12-14"]
       direction RL
       wr_ref_5(["let label<br/>L13"])
     end
-    subgraph s_scope_4["case BLUE L15"]
+    subgraph s_scope_4["case BLUE L15-17"]
       direction RL
       wr_ref_7(["let label<br/>L16"])
     end
-    subgraph s_scope_5["default L18"]
+    subgraph s_scope_5["default L18-19"]
       direction RL
       wr_ref_8(["let label<br/>L19"])
     end
