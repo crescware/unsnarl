@@ -186,9 +186,9 @@ describe("runCli (end-to-end)", () => {
     const r = await captureRun(["--format", "mermaid", "-r", "999", inputPath]);
     expect(r.exitCode).toBe(0);
     expect(r.stderr).toMatch(/unsnarl: warning: query '999' matched 0 roots/);
-    expect(r.stdout).toMatch(
-      /%% pruning: warning: query '999' matched 0 roots/,
-    );
+    // Mermaid comment uses bracket-free, quote-free wording so older
+    // Mermaid versions don't get tripped by `[` / `'` inside `%% ...`.
+    expect(r.stdout).toMatch(/%% pruning warning query 999 matched 0 roots/);
   });
 
   test("ir format ignores --roots (no pruning, no warning)", async () => {

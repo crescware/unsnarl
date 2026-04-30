@@ -26,6 +26,6 @@ const result = counter;
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  %% pruning: roots=[counter(1)] ancestors=2 descendants=0
+  %% pruning roots counter=1 ancestors=2 descendants=0
   n_scope_0_counter_4["let counter<br/>L1"]
 ```

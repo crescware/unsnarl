@@ -1,4 +1,6 @@
 import type { ParsedRootQuery } from "../cli/root-query.js";
+import type { SerializedIR } from "../ir/model.js";
+import { visualNodeIdFromVariableId } from "./builder.js";
 import type {
   NodeKind,
   VisualBoundaryEdge,
@@ -36,6 +38,7 @@ export interface PruneResult {
 export function pruneVisualGraph(
   graph: VisualGraph,
   options: PruneOptions,
+  ir?: SerializedIR,
 ): PruneResult {
   if (options.roots.length === 0) {
     return { graph, perQuery: [] };
@@ -46,7 +49,9 @@ export function pruneVisualGraph(
     matched: 0,
   }));
   const rootIds = new Set<string>();
+  const allNodeIds = new Set<string>();
   for (const node of iterateVisualNodes(graph.elements)) {
+    allNodeIds.add(node.id);
     for (let i = 0; i < options.roots.length; i++) {
       const q = options.roots[i];
       if (q !== undefined && nodeMatchesQuery(node, q)) {
@@ -54,6 +59,41 @@ export function pruneVisualGraph(
         const entry = perQuery[i];
         if (entry !== undefined) {
           perQuery[i] = { query: entry.query, matched: entry.matched + 1 };
+        }
+      }
+    }
+  }
+
+  // Line/range queries are positional, so identifiers that *only*
+  // appear as references on the requested line should also count as
+  // roots (their declaration is the natural seed). `name`-only
+  // queries deliberately stay declaration-scoped, matching the
+  // earlier feedback that bare names should not auto-pull every
+  // WriteOp/ReturnSink that happens to share the spelling.
+  if (ir !== undefined) {
+    for (let i = 0; i < options.roots.length; i++) {
+      const q = options.roots[i];
+      if (q === undefined || q.kind === "name") {
+        continue;
+      }
+      for (const ref of ir.references) {
+        if (ref.resolved === null) {
+          continue;
+        }
+        if (!referenceMatchesQuery(ref, q)) {
+          continue;
+        }
+        const candidate = visualNodeIdFromVariableId(ref.resolved);
+        if (!allNodeIds.has(candidate) || rootIds.has(candidate)) {
+          continue;
+        }
+        rootIds.add(candidate);
+        const entry = perQuery[i];
+        if (entry !== undefined) {
+          perQuery[i] = {
+            query: entry.query,
+            matched: entry.matched + 1,
+          };
         }
       }
     }
@@ -68,27 +108,54 @@ export function pruneVisualGraph(
   const innerA = bfs(rootIds, inEdges, options.ancestors);
   const reachable = new Set<string>([...rootIds, ...innerD, ...innerA]);
 
-  const boundaryEdges: VisualBoundaryEdge[] = [];
+  // Boundary edges are "more graph beyond here" hints. They are not
+  // about counting individual outgoing edges -- one inside node with
+  // 100 cut neighbors should still produce a single hint, not 100. So
+  // collapse on (inside, direction); for "in" we additionally union the
+  // labels (split by comma so "read,call" + "read" yields {call, read}).
+  type Bucket =
+    | { kind: "out"; inside: string }
+    | { kind: "in"; inside: string; labels: Set<string> };
+  const buckets = new Map<string, Bucket>();
+  const key = (inside: string, dir: "out" | "in") => `${dir}|${inside}`;
+
   if (options.descendants > 0) {
     for (const e of graph.edges) {
-      if (reachable.has(e.from) && !reachable.has(e.to)) {
-        // inside -> beyond: the action's actor is the unseen `to`,
-        // so the label is unknowable -- intentionally drop it.
-        boundaryEdges.push({ inside: e.from, direction: "out" });
+      if (!reachable.has(e.from) || reachable.has(e.to)) {
+        continue;
+      }
+      const k = key(e.from, "out");
+      if (!buckets.has(k)) {
+        buckets.set(k, { kind: "out", inside: e.from });
       }
     }
   }
   if (options.ancestors > 0) {
     for (const e of graph.edges) {
-      if (reachable.has(e.to) && !reachable.has(e.from)) {
-        // beyond -> inside: the actor is the visible `to` (= inside),
-        // so the original edge label still applies.
-        boundaryEdges.push({
-          inside: e.to,
-          direction: "in",
-          label: e.label,
-        });
+      if (!reachable.has(e.to) || reachable.has(e.from)) {
+        continue;
       }
+      const k = key(e.to, "in");
+      let bucket = buckets.get(k);
+      if (bucket === undefined) {
+        bucket = { kind: "in", inside: e.to, labels: new Set<string>() };
+        buckets.set(k, bucket);
+      }
+      if (bucket.kind === "in") {
+        for (const part of e.label.split(",")) {
+          bucket.labels.add(part);
+        }
+      }
+    }
+  }
+
+  const boundaryEdges: VisualBoundaryEdge[] = [];
+  for (const bucket of buckets.values()) {
+    if (bucket.kind === "out") {
+      boundaryEdges.push({ inside: bucket.inside, direction: "out" });
+    } else {
+      const label = [...bucket.labels].sort().join(",");
+      boundaryEdges.push({ inside: bucket.inside, direction: "in", label });
     }
   }
 
@@ -157,6 +224,26 @@ function nodeMatchesQuery(node: VisualNode, q: ParsedRootQuery): boolean {
       return node.line >= q.start && node.line <= q.end && node.name === q.name;
     case "name":
       return node.name === q.name;
+  }
+}
+
+function referenceMatchesQuery(
+  ref: SerializedIR["references"][number],
+  q: ParsedRootQuery,
+): boolean {
+  const refLine = ref.identifier.span.line;
+  const refName = ref.identifier.name;
+  switch (q.kind) {
+    case "line":
+      return refLine === q.line;
+    case "line-name":
+      return refLine === q.line && refName === q.name;
+    case "range":
+      return refLine >= q.start && refLine <= q.end;
+    case "range-name":
+      return refLine >= q.start && refLine <= q.end && refName === q.name;
+    case "name":
+      return false;
   }
 }
 
@@ -245,7 +332,13 @@ function rebuildElements(
       }
     } else {
       const children = rebuildElements(item.elements, keep);
-      if (children.length > 0 || keep.has(item.id)) {
+      // Subgraphs only survive when at least one descendant survived.
+      // Keeping an empty subgraph -- even if it appeared as an edge
+      // endpoint during BFS -- crashes Mermaid's elk layout because the
+      // cluster has no labels[0] for the renderer to size against. The
+      // edges that pointed at this subgraph are filtered out below by
+      // the `survivors` check, so dropping the cluster is consistent.
+      if (children.length > 0) {
         const cloned: VisualSubgraph = { ...item, elements: children };
         result.push(cloned);
       }

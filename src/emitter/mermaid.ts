@@ -56,15 +56,17 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
   }
   lines.push(`flowchart ${graph.direction}`);
   if (graph.pruning !== undefined) {
+    // Avoid `[ ]` in the comment payload because some Mermaid versions
+    // misread a comment line that contains shape-like brackets.
     const summary = graph.pruning.roots
-      .map((r) => `${r.query}(${r.matched})`)
-      .join(", ");
+      .map((r) => `${r.query}=${r.matched}`)
+      .join(" ");
     lines.push(
-      `  %% pruning: roots=[${summary}] ancestors=${graph.pruning.ancestors} descendants=${graph.pruning.descendants}`,
+      `  %% pruning roots ${summary} ancestors=${graph.pruning.ancestors} descendants=${graph.pruning.descendants}`,
     );
     for (const r of graph.pruning.roots) {
       if (r.matched === 0) {
-        lines.push(`  %% pruning: warning: query '${r.query}' matched 0 roots`);
+        lines.push(`  %% pruning warning query ${r.query} matched 0 roots`);
       }
     }
   }
@@ -195,7 +197,9 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
       stubCounter += 1;
       const stubId = `boundary_stub_${stubCounter}`;
       stubIds.push(stubId);
-      lines.push(`  ${stubId}((…))`);
+      // ASCII "..." instead of U+2026 -- some Mermaid renderers stumble
+      // on multibyte glyphs inside node shape syntax.
+      lines.push(`  ${stubId}((...))`);
       if (be.direction === "out") {
         lines.push(`  ${be.inside} -.-> ${stubId}`);
       } else {
