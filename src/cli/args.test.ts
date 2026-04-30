@@ -110,4 +110,105 @@ describe("parseCliArgs", () => {
       expect(bad.error).toMatch(/Invalid mermaid renderer/);
     }
   });
+
+  test("defaults pruning fields to empty / null", () => {
+    const r = parseCliArgs(["foo.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.roots).toEqual([]);
+      expect(r.args.descendants).toBeNull();
+      expect(r.args.ancestors).toBeNull();
+      expect(r.args.context).toBeNull();
+    }
+  });
+
+  test("-r parses a single root query", () => {
+    const r = parseCliArgs(["-r", "10:foo", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.roots).toHaveLength(1);
+      expect(r.args.roots[0]).toMatchObject({ kind: "line-name", line: 10 });
+    }
+  });
+
+  test("--roots accepts comma-separated tokens", () => {
+    const r = parseCliArgs(["--roots", "10:foo,42,9-13", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.roots).toHaveLength(3);
+      expect(r.args.roots.map((q) => q.kind)).toEqual([
+        "line-name",
+        "line",
+        "range",
+      ]);
+    }
+  });
+
+  test("repeated -r flags accumulate", () => {
+    const r = parseCliArgs(["-r", "10", "-r", "20", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.roots).toHaveLength(2);
+    }
+  });
+
+  test("-r and --roots can be mixed", () => {
+    const r = parseCliArgs(["-r", "10:a", "--roots", "20,30", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.roots).toHaveLength(3);
+    }
+  });
+
+  test("-r rejects bad query and missing value", () => {
+    expect(parseCliArgs(["-r"]).ok).toBe(false);
+    const bad = parseCliArgs(["-r", "foo-bar", "x.ts"]);
+    expect(bad.ok).toBe(false);
+  });
+
+  test("-A / -B / -C parse non-negative integers", () => {
+    const r = parseCliArgs(["-A", "3", "-B", "2", "-C", "5", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.descendants).toBe(3);
+      expect(r.args.ancestors).toBe(2);
+      expect(r.args.context).toBe(5);
+    }
+  });
+
+  test("--descendants / --ancestors / --context aliases work", () => {
+    const r = parseCliArgs([
+      "--descendants",
+      "1",
+      "--ancestors",
+      "2",
+      "--context",
+      "3",
+      "x.ts",
+    ]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.descendants).toBe(1);
+      expect(r.args.ancestors).toBe(2);
+      expect(r.args.context).toBe(3);
+    }
+  });
+
+  test("-A 0 is allowed", () => {
+    const r = parseCliArgs(["-A", "0", "x.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.descendants).toBe(0);
+    }
+  });
+
+  test("-A rejects non-integer values", () => {
+    expect(parseCliArgs(["-A", "foo", "x.ts"]).ok).toBe(false);
+    expect(parseCliArgs(["-A", "-1", "x.ts"]).ok).toBe(false);
+    expect(parseCliArgs(["-A", "1.5", "x.ts"]).ok).toBe(false);
+  });
+
+  test("-A rejects missing value", () => {
+    expect(parseCliArgs(["-A"]).ok).toBe(false);
+  });
 });

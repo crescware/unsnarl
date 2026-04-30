@@ -1,3 +1,5 @@
+import { type ParsedRootQuery, parseRootQueries } from "./root-query.js";
+
 export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
 export type CliMermaidRenderer = "dagre" | "elk";
 
@@ -11,6 +13,10 @@ export interface CliArgs {
   version: boolean;
   inputFile: string | null;
   mermaidRenderer: CliMermaidRenderer | null;
+  roots: readonly ParsedRootQuery[];
+  descendants: number | null;
+  ancestors: number | null;
+  context: number | null;
 }
 
 export interface CliParseSuccess {
@@ -47,6 +53,10 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let version = false;
   let inputFile: string | null = null;
   let mermaidRenderer: CliMermaidRenderer | null = null;
+  const roots: ParsedRootQuery[] = [];
+  let descendants: number | null = null;
+  let ancestors: number | null = null;
+  let context: number | null = null;
 
   let i = 0;
   while (i < argv.length) {
@@ -107,6 +117,67 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       i += 2;
       continue;
     }
+    if (arg === "-r" || arg === "--roots") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for ${arg}` };
+      }
+      const parsed = parseRootQueries(next);
+      if (!parsed.ok) {
+        return { ok: false, error: parsed.error };
+      }
+      roots.push(...parsed.queries);
+      i += 2;
+      continue;
+    }
+    if (arg === "-A" || arg === "--descendants") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for ${arg}` };
+      }
+      const n = parseGenerationCount(next);
+      if (n === null) {
+        return {
+          ok: false,
+          error: `Invalid value for ${arg}: ${next} (expected non-negative integer)`,
+        };
+      }
+      descendants = n;
+      i += 2;
+      continue;
+    }
+    if (arg === "-B" || arg === "--ancestors") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for ${arg}` };
+      }
+      const n = parseGenerationCount(next);
+      if (n === null) {
+        return {
+          ok: false,
+          error: `Invalid value for ${arg}: ${next} (expected non-negative integer)`,
+        };
+      }
+      ancestors = n;
+      i += 2;
+      continue;
+    }
+    if (arg === "-C" || arg === "--context") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for ${arg}` };
+      }
+      const n = parseGenerationCount(next);
+      if (n === null) {
+        return {
+          ok: false,
+          error: `Invalid value for ${arg}: ${next} (expected non-negative integer)`,
+        };
+      }
+      context = n;
+      i += 2;
+      continue;
+    }
     if (arg === "-h" || arg === "--help") {
       help = true;
       i += 1;
@@ -139,8 +210,19 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       version,
       inputFile,
       mermaidRenderer,
+      roots,
+      descendants,
+      ancestors,
+      context,
     },
   };
+}
+
+function parseGenerationCount(value: string): number | null {
+  if (!/^\d+$/.test(value)) {
+    return null;
+  }
+  return Number.parseInt(value, 10);
 }
 
 export function usage(): string {
@@ -158,6 +240,19 @@ Options:
                                Layout engine for Mermaid output (default: elk).
                                Use 'dagre' when the consumer cannot register
                                the elk loader (e.g. GitHub markdown preview).
+  -r, --roots <queries>        Comma-separated root queries to prune the graph.
+                               Each query is one of:
+                                 n           line n
+                                 n:id        line n with identifier id
+                                 n-m         line range [n,m]
+                                 n-m:id      line range [n,m] with identifier id
+                                 id          identifier across all scopes
+                               Repeat -r/--roots to add more queries.
+  -A, --descendants <N>        Keep N generations of descendants from each root
+                               (default: --context value, else 10).
+  -B, --ancestors <N>          Keep N generations of ancestors from each root
+                               (default: --context value, else 10).
+  -C, --context <N>            Shorthand for -A N -B N.
   --list-formats               List registered emitters
   -h, --help                   Show this help
   -v, --version                Show version
