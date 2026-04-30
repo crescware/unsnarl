@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { DEFAULT_GENERATIONS } from "./args.js";
 import { runCli } from "./main.js";
 
 interface CapturedOutput {
@@ -201,13 +202,69 @@ describe("runCli (end-to-end)", () => {
     expect(ir.variables.map((v: { name: string }) => v.name)).toEqual(["a"]);
   });
 
-  test("--roots default generations are -C 10 when no -A/-B/-C given", async () => {
+  test("--roots default generations match DEFAULT_GENERATIONS when no -A/-B/-C given", async () => {
     const inputPath = join(tmpDir, "default.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
     const r = await captureRun(["--format", "json", "-r", "1", inputPath]);
     expect(r.exitCode).toBe(0);
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning.descendants).toBe(10);
-    expect(graph.pruning.ancestors).toBe(10);
+    expect(graph.pruning.descendants).toBe(DEFAULT_GENERATIONS);
+    expect(graph.pruning.ancestors).toBe(DEFAULT_GENERATIONS);
+  });
+
+  test("--roots with only -A gives -B 0 (asymmetric, like grep)", async () => {
+    const inputPath = join(tmpDir, "only-a.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "json",
+      "-r",
+      "1",
+      "-A",
+      "6",
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    const graph = JSON.parse(r.stdout);
+    expect(graph.pruning.descendants).toBe(6);
+    expect(graph.pruning.ancestors).toBe(0);
+  });
+
+  test("--roots with only -B gives -A 0 (asymmetric, like grep)", async () => {
+    const inputPath = join(tmpDir, "only-b.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "json",
+      "-r",
+      "1",
+      "-B",
+      "5",
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    const graph = JSON.parse(r.stdout);
+    expect(graph.pruning.descendants).toBe(0);
+    expect(graph.pruning.ancestors).toBe(5);
+  });
+
+  test("--roots with -C and -A: -A overrides one side, -C fills the other", async () => {
+    const inputPath = join(tmpDir, "c-and-a.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "json",
+      "-r",
+      "1",
+      "-C",
+      "3",
+      "-A",
+      "7",
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    const graph = JSON.parse(r.stdout);
+    expect(graph.pruning.descendants).toBe(7);
+    expect(graph.pruning.ancestors).toBe(3);
   });
 });
