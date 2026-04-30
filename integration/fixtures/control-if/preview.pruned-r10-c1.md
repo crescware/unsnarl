@@ -15,6 +15,12 @@ if (flag) {
 const result = counter;
 ```
 
+## Query
+
+```sh
+-r 10 -C 1
+```
+
 ## Mermaid
 
 ```mermaid
