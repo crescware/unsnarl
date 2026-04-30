@@ -69,6 +69,22 @@
                   "name": "label",
                   "line": 6,
                   "declarationKind": "let"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_classify_9_114_127",
+                  "kind": "return",
+                  "line": 7,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_2",
+                      "kind": "ReturnUse",
+                      "name": "label",
+                      "line": 7
+                    }
+                  ]
                 }
               ],
               "caseTest": "\"a\""
@@ -110,22 +126,6 @@
                 }
               ],
               "caseTest": null
-            }
-          ]
-        },
-        {
-          "type": "subgraph",
-          "id": "s_return_scope_0_classify_9_114_127",
-          "kind": "return",
-          "line": 7,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
-              "name": "label",
-              "line": 7
             }
           ]
         },

@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-multi-return-shorthand/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_main_9",
+      "kind": "FunctionName",
+      "name": "main",
+      "line": 1,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 11,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_main_9",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_a_26",
+          "kind": "Variable",
+          "name": "a",
+          "line": 2,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_119",
+          "kind": "Variable",
+          "name": "b",
+          "line": 9,
+          "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "if",
+          "line": 4,
+          "endLine": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_b_75",
+              "kind": "Variable",
+              "name": "b",
+              "line": 5,
+              "declarationKind": "const"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_0_main_9_89_105",
+              "kind": "return",
+              "line": 6,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_1",
+                  "kind": "ReturnUse",
+                  "name": "a",
+                  "line": 6
+                },
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_2",
+                  "kind": "ReturnUse",
+                  "name": "b",
+                  "line": 6
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_main_9_131_147",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "a",
+              "line": 10
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "b",
+              "line": 10
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_b_75",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_119",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ]
+}

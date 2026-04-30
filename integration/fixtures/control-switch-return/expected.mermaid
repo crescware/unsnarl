@@ -13,6 +13,10 @@ flowchart RL
         subgraph s_scope_3["case &quot;a&quot; L5-7"]
           direction RL
           wr_ref_1(["let label<br/>L6"])
+          subgraph s_return_scope_0_classify_9_114_127["return L7"]
+            direction RL
+            ret_use_ref_2["label<br/>L7"]
+          end
         end
         subgraph s_scope_4["case &quot;b&quot; L8-10"]
           direction RL
@@ -22,10 +26,6 @@ flowchart RL
           direction RL
           wr_ref_4(["let label<br/>L12"])
         end
-      end
-      subgraph s_return_scope_0_classify_9_114_127["return L7"]
-        direction RL
-        ret_use_ref_2["label<br/>L7"]
       end
       subgraph s_return_scope_0_classify_9_220_233["return L15"]
         direction RL

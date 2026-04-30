@@ -493,6 +493,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   type Container = { elements: VisualElement[] };
   const functionSubgraphByFn = new Map<string, VisualSubgraph>();
+  const subgraphByScope = new Map<string, VisualSubgraph>();
 
   const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
@@ -501,6 +502,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       const sg = describeSubgraph(scope);
       container.elements.push(sg);
       bodyContainer = sg;
+      subgraphByScope.set(scope.id, sg);
       const ownerVar = subgraphOwnerVar.get(scope.id);
       if (ownerVar) {
         functionSubgraphByFn.set(ownerVar, sg);
@@ -669,12 +671,29 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   const returnUseAdded = new Set<string>();
   const returnSubgraphsByFn = new Map<string, Map<string, VisualSubgraph>>();
+  const findHostSubgraph = (
+    ref: SerializedReference,
+    enclosingFnVarId: string,
+  ): VisualSubgraph | null => {
+    let cur: SerializedScope | undefined = scopeMap.get(ref.from);
+    while (cur) {
+      const sg = subgraphByScope.get(cur.id);
+      if (sg) {
+        return sg;
+      }
+      if (!cur.upper) {
+        break;
+      }
+      cur = scopeMap.get(cur.upper);
+    }
+    return functionSubgraphByFn.get(enclosingFnVarId) ?? null;
+  };
   function ensureReturnUseNode(
     enclosingFnVarId: string,
     ref: SerializedReference,
   ): string | null {
-    const fnSg = functionSubgraphByFn.get(enclosingFnVarId);
-    if (!fnSg) {
+    const host = findHostSubgraph(ref, enclosingFnVarId);
+    if (!host) {
       return null;
     }
     const containerKey = ref.returnContainer
@@ -687,7 +706,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
     let sg = perFn.get(containerKey);
     if (!sg) {
-      const startLine = ref.returnContainer?.startSpan.line ?? fnSg.line;
+      const startLine = ref.returnContainer?.startSpan.line ?? host.line;
       const endLine = ref.returnContainer?.endSpan.line;
       sg = {
         type: "subgraph",
@@ -700,7 +719,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (endLine !== undefined && endLine !== startLine) {
         sg.endLine = endLine;
       }
-      fnSg.elements.push(sg);
+      host.elements.push(sg);
       perFn.set(containerKey, sg);
     }
     const id = retUseNodeId(ref.id);
