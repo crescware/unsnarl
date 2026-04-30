@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["integration/fixtures/**"],
   "printWidth": 80,
   "sortImports": {
     "partitionByComment": true,

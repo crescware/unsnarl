@@ -1,4 +1,5 @@
 {
+  "ignorePatterns": ["integration/fixtures/**"],
   "rules": {
     "typescript/no-explicit-any": "error",
     "eslint/no-restricted-imports": [
