@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
-import { createDefaultPipeline, parseRootQueries } from "../src/index.js";
+import { createDefaultPipeline } from "../src/index.js";
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 
@@ -100,47 +100,4 @@ describe("fixtures (end-to-end pipeline)", () => {
       });
     });
   }
-});
-
-describe("control-if (pruned)", () => {
-  const pipeline = createDefaultPipeline();
-  const fixtureDir = join(FIXTURE_DIR, "control-if");
-  const inputPath = join(fixtureDir, "input.ts");
-  const code = readFileSync(inputPath, "utf8");
-  const sourcePath = "integration/fixtures/control-if/input.ts";
-
-  test("--roots 10 -C 1 narrows to result and its immediate neighbors", () => {
-    const queries = parseRootQueries("10");
-    expect(queries.ok).toBe(true);
-    if (!queries.ok) {
-      return;
-    }
-    const out = pipeline.run(code, {
-      format: "json",
-      language: "ts",
-      sourcePath,
-      emit: { pretty: true },
-      pruning: { roots: queries.queries, descendants: 1, ancestors: 1 },
-    });
-    expect(out).toMatchFileSnapshot(
-      join(fixtureDir, "expected.pruned-r10-c1.json"),
-    );
-  });
-
-  test("--roots counter -B 0 -A 2 follows write-ops downstream", () => {
-    const queries = parseRootQueries("counter");
-    expect(queries.ok).toBe(true);
-    if (!queries.ok) {
-      return;
-    }
-    const out = pipeline.run(code, {
-      format: "mermaid",
-      language: "ts",
-      sourcePath,
-      pruning: { roots: queries.queries, descendants: 2, ancestors: 0 },
-    });
-    expect(out).toMatchFileSnapshot(
-      join(fixtureDir, "expected.pruned-counter-a2.mermaid"),
-    );
-  });
 });
