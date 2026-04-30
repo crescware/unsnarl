@@ -111,4 +111,53 @@ describe("control-if (pruned)", () => {
       );
     });
   });
+
+  describe("--roots counter -A 0 -B 2", () => {
+    const queries = parseRootQueries("counter");
+    if (!queries.ok) {
+      throw new Error(`unexpected query parse failure: ${queries.error}`);
+    }
+    const pruning = {
+      roots: queries.queries,
+      descendants: 0,
+      ancestors: 2,
+    };
+
+    test("emits the pruned VisualGraph JSON", () => {
+      const out = pipeline.run(code, {
+        format: "json",
+        language: "ts",
+        sourcePath,
+        emit: { pretty: true },
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-counter-b2.json"),
+      );
+    });
+
+    test("emits the pruned Mermaid flowchart", () => {
+      const out = pipeline.run(code, {
+        format: "mermaid",
+        language: "ts",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-counter-b2.mermaid"),
+      );
+    });
+
+    test("renders the pruned Markdown preview", () => {
+      const out = pipeline.run(code, {
+        format: "markdown",
+        language: "ts",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "preview.pruned-counter-b2.md"),
+      );
+    });
+  });
 });

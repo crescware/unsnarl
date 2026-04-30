@@ -1,11 +1,22 @@
 import type { ParsedRootQuery } from "../cli/root-query.js";
 import type {
+  NodeKind,
   VisualEdge,
   VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
 } from "./model.js";
+
+const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
+  "Variable",
+  "FunctionName",
+  "ClassName",
+  "Parameter",
+  "CatchClause",
+  "ImportBinding",
+  "ImplicitGlobalVariable",
+]);
 
 export interface PruneOptions {
   readonly roots: readonly ParsedRootQuery[];
@@ -92,7 +103,9 @@ function* iterateVisualNodes(
 ): Generator<VisualNode> {
   for (const e of elements) {
     if (e.type === "node") {
-      yield e;
+      if (ROOT_CANDIDATE_KINDS.has(e.kind)) {
+        yield e;
+      }
     } else {
       yield* iterateVisualNodes(e.elements);
     }

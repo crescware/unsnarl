@@ -94,7 +94,7 @@
     "roots": [
       {
         "query": "counter",
-        "matched": 3
+        "matched": 1
       }
     ],
     "descendants": 2,
