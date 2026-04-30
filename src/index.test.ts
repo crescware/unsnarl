@@ -46,6 +46,7 @@ const fakeSerializer: IRSerializer = {
 const fakeEmitter: Emitter = {
   format: "fake",
   contentType: "text/plain",
+  extension: "txt",
   emit: (ir) => `version=${ir.version}`,
 };
 

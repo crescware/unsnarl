@@ -1,4 +1,7 @@
 #!/usr/bin/env node
+import { mkdirSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+
 import { ParseError } from "../parser/oxc.js";
 import {
   createDefaultEmitterRegistry,
@@ -7,6 +10,7 @@ import {
 import type { PruningRunOptions } from "../pipeline/types.js";
 import { DEFAULT_GENERATIONS, parseCliArgs, usage } from "./args.js";
 import { readSourceFile, readStdin } from "./io.js";
+import { deriveOutputBasename } from "./output-name.js";
 
 const VERSION = "0.0.0";
 
@@ -41,6 +45,35 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     return 0;
   }
 
+  // Validate the output destination up-front: if -o/--out-dir cannot
+  // produce a filename (e.g. --stdin without -r), bail out before we read
+  // any input or do any analysis.
+  let outputPath: string | null = null;
+  if (args.outDir !== null) {
+    const derived = deriveOutputBasename({
+      roots: args.roots,
+      descendants: args.descendants,
+      ancestors: args.ancestors,
+      context: args.context,
+      // --stdin overrides any positional file for content, so it should
+      // override it for naming too: a stdin run has no usable filename.
+      inputPath: args.stdin ? null : args.inputFile,
+    });
+    if (!derived.ok) {
+      process.stderr.write(`error: ${derived.error}\n`);
+      return 2;
+    }
+    const emitter = emitters.get(args.format);
+    if (emitter === undefined) {
+      const available = emitters.list().join(", ");
+      process.stderr.write(
+        `error: Unknown emitter format: ${args.format}. Available: ${available}\n`,
+      );
+      return 1;
+    }
+    outputPath = join(args.outDir, `${derived.basename}.${emitter.extension}`);
+  }
+
   let code: string;
   let sourcePath: string;
   if (args.stdin) {
@@ -73,6 +106,7 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
           ...resolveGenerations(args),
         }
       : null;
+
   try {
     const result = pipeline.runDetailed(
       code,
@@ -87,7 +121,12 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
         }
       }
     }
-    process.stdout.write(result.text);
+    if (outputPath !== null && args.outDir !== null) {
+      mkdirSync(args.outDir, { recursive: true });
+      writeFileSync(outputPath, result.text);
+    } else {
+      process.stdout.write(result.text);
+    }
     return 0;
   } catch (e) {
     if (e instanceof ParseError) {

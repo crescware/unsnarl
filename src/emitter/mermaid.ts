@@ -27,6 +27,7 @@ export interface MermaidEmitterOptions {
 export class MermaidEmitter implements Emitter {
   readonly format = "mermaid";
   readonly contentType = "text/vnd.mermaid";
+  readonly extension = "mmd";
 
   private readonly renderer: MermaidRenderer;
 

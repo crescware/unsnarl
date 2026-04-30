@@ -21,6 +21,7 @@ member declarations are intentionally out of scope.
 ```sh
 unsnarl <file>                      # JSON IR to stdout
 unsnarl --format mermaid <file>     # Mermaid flowchart
+unsnarl --format markdown -r value -A 1 -o ./out file.ts   # write to ./out/value-a1.md
 cat foo.ts | unsnarl --stdin --lang ts
 unsnarl --list-formats
 ```
@@ -60,6 +61,42 @@ When `-r` is given but no generation flag is, the default is `-C 10`. Pruning
 applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
 `ir` output is always emitted in full. If a query matches nothing, a warning
 is written to stderr but the command still exits with `0`.
+
+### Writing to a directory
+
+Pass `-o` / `--out-dir <dir>` to write the output to a file inside `<dir>`
+instead of stdout. The filename is derived from the `-r` queries and the
+radius flags so that successive runs don't clobber each other:
+
+```sh
+unsnarl --format markdown -r value -A 1 -o ./out file.ts
+# -> ./out/value-a1.md
+unsnarl --format markdown -r 10-12 -C 2 -o ./out file.ts
+# -> ./out/l10-12-c2.md
+unsnarl --format markdown -r 42:render -A 1 -o ./out file.ts
+# -> ./out/l42-render-a1.md
+```
+
+Naming rules:
+
+| Query token / flag       | Filename fragment           |
+| ------------------------ | --------------------------- |
+| `id`                     | `id`                        |
+| `n`                      | `l<n>`                      |
+| `n:id`                   | `l<n>-<id>`                 |
+| `n-m`                    | `l<n>-<m>`                  |
+| `n-m:id`                 | `l<n>-<m>-<id>`             |
+| multiple `-r` queries    | joined with `+`             |
+| `-A N` / `-B N` / `-C N` | `-a<N>` / `-b<N>` / `-c<N>` |
+
+Radius fragments are appended in `a` → `b` → `c` order. When no radius flag
+is given, no suffix is added. When both `-A` and `-B` are given explicitly,
+`-C` is dropped from the filename because it has no remaining effect on
+the run. When `-r` is omitted entirely, the input filename (without
+extension) is used as the basename. Extensions per format:
+`ir` / `json` → `.json`, `mermaid` → `.mmd`, `markdown` → `.md`,
+`stats` → `.tsv`. The directory is created if missing, and existing files
+are overwritten.
 
 ## Setup
 

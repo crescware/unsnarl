@@ -6,6 +6,7 @@ import type { MermaidEmitter } from "./mermaid.js";
 export class MarkdownEmitter implements Emitter {
   readonly format = "markdown";
   readonly contentType = "text/markdown";
+  readonly extension = "md";
 
   private readonly mermaid: MermaidEmitter;
 

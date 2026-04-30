@@ -18,12 +18,14 @@ const fakeIR: SerializedIR = {
 const fakeEmitter: Emitter = {
   format: "fake",
   contentType: "text/plain",
+  extension: "txt",
   emit: () => "",
 };
 
 const otherEmitter: Emitter = {
   format: "other",
   contentType: "text/plain",
+  extension: "txt",
   emit: () => "",
 };
 
@@ -55,6 +57,7 @@ describe("DefaultEmitterRegistry", () => {
     reg.register({
       format: "callable",
       contentType: "text/plain",
+      extension: "txt",
       emit: (ir) => `version=${ir.version}`,
     });
     expect(reg.get("callable")?.emit(fakeIR, {})).toBe("version=1");

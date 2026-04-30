@@ -20,6 +20,7 @@ export interface CliArgs {
   descendants: number | null;
   ancestors: number | null;
   context: number | null;
+  outDir: string | null;
 }
 
 export interface CliParseSuccess {
@@ -60,6 +61,7 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let descendants: number | null = null;
   let ancestors: number | null = null;
   let context: number | null = null;
+  let outDir: string | null = null;
 
   let i = 0;
   while (i < argv.length) {
@@ -181,6 +183,15 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       i += 2;
       continue;
     }
+    if (arg === "-o" || arg === "--out-dir") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        return { ok: false, error: `Missing value for ${arg}` };
+      }
+      outDir = next;
+      i += 2;
+      continue;
+    }
     if (arg === "-h" || arg === "--help") {
       help = true;
       i += 1;
@@ -217,6 +228,7 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       descendants,
       ancestors,
       context,
+      outDir,
     },
   };
 }
@@ -260,6 +272,14 @@ Options:
                                --context value if -C is given;
                                otherwise 0 (asymmetric, like grep -A/-B).
   -C, --context <N>            Shorthand for -A N -B N (overridable by -A/-B).
+  -o, --out-dir <dir>          Write output to <dir>/<auto-name>.<ext>
+                               instead of stdout. The filename is derived
+                               from -r queries and -A/-B/-C, e.g.
+                                 -r value -A 1   -> value-a1.<ext>
+                                 -r 10-12 -C 2   -> l10-12-c2.<ext>
+                               When -r is omitted, the input filename
+                               (without extension) is used. The directory
+                               is created if missing.
   --list-formats               List registered emitters
   -h, --help                   Show this help
   -v, --version                Show version
