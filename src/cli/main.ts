@@ -5,7 +5,7 @@ import {
   createDefaultPipeline,
 } from "../pipeline/default.js";
 import type { PruningRunOptions } from "../pipeline/types.js";
-import { parseCliArgs, usage } from "./args.js";
+import { DEFAULT_GENERATIONS, parseCliArgs, usage } from "./args.js";
 import { readSourceFile, readStdin } from "./io.js";
 
 const VERSION = "0.0.0";
@@ -70,8 +70,7 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     args.roots.length > 0
       ? {
           roots: args.roots,
-          descendants: args.descendants ?? args.context ?? 10,
-          ancestors: args.ancestors ?? args.context ?? 10,
+          ...resolveGenerations(args),
         }
       : null;
   try {
@@ -100,6 +99,26 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     );
     return 1;
   }
+}
+
+// grep -A/-B semantics: an explicit -A says "I asked for descendants only,"
+// so the unspecified side falls to 0 instead of the symmetric DEFAULT.
+// -C still fills in for whichever side is unspecified. The symmetric DEFAULT
+// only applies when the user gave no radius flag at all.
+function resolveGenerations(args: {
+  descendants: number | null;
+  ancestors: number | null;
+  context: number | null;
+}): { descendants: number; ancestors: number } {
+  const noFlag =
+    args.descendants === null &&
+    args.ancestors === null &&
+    args.context === null;
+  const fallback = noFlag ? DEFAULT_GENERATIONS : (args.context ?? 0);
+  return {
+    descendants: args.descendants ?? fallback,
+    ancestors: args.ancestors ?? fallback,
+  };
 }
 
 function detectLanguage(

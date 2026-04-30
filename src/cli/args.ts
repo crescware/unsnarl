@@ -3,6 +3,9 @@ import { type ParsedRootQuery, parseRootQueries } from "./root-query.js";
 export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
 export type CliMermaidRenderer = "dagre" | "elk";
 
+// Default generations used when the user gives -r/--roots but no -A/-B/-C.
+export const DEFAULT_GENERATIONS = 10;
+
 export interface CliArgs {
   format: string;
   stdin: boolean;
@@ -248,11 +251,15 @@ Options:
                                  n-m:id      line range [n,m] with identifier id
                                  id          identifier across all scopes
                                Repeat -r/--roots to add more queries.
-  -A, --descendants <N>        Keep N generations of descendants from each root
-                               (default: --context value, else 10).
-  -B, --ancestors <N>          Keep N generations of ancestors from each root
-                               (default: --context value, else 10).
-  -C, --context <N>            Shorthand for -A N -B N.
+  -A, --descendants <N>        Keep N generations of descendants from each root.
+                               Default: ${DEFAULT_GENERATIONS} if no radius flag is given;
+                               --context value if -C is given;
+                               otherwise 0 (asymmetric, like grep -A/-B).
+  -B, --ancestors <N>          Keep N generations of ancestors from each root.
+                               Default: ${DEFAULT_GENERATIONS} if no radius flag is given;
+                               --context value if -C is given;
+                               otherwise 0 (asymmetric, like grep -A/-B).
+  -C, --context <N>            Shorthand for -A N -B N (overridable by -A/-B).
   --list-formats               List registered emitters
   -h, --help                   Show this help
   -v, --version                Show version
