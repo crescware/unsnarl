@@ -6,16 +6,16 @@
 function getDayType(day) {
   let ret = "";
   switch (day.toLowerCase()) {
-    case 'mon':
-    case 'tue':
-    case 'wed':
-    case 'thu':
-    case 'fri':
-      ret = 'weekday';
+    case "mon":
+    case "tue":
+    case "wed":
+    case "thu":
+    case "fri":
+      ret = "weekday";
       break;
-    case 'sat':
-    case 'sun':
-      ret = 'weekend';
+    case "sat":
+    case "sun":
+      ret = "weekend";
       break;
     default:
       ret = null;
@@ -39,26 +39,26 @@ flowchart RL
       n_scope_1_ret_33["let ret<br/>L2"]
       subgraph s_scope_2["switch L3-18"]
         direction RL
-        subgraph s_scope_3["case 'mon' L4"]
+        subgraph s_scope_3["case &quot;mon&quot; L4"]
           direction RL
         end
-        subgraph s_scope_4["case 'tue' L5"]
+        subgraph s_scope_4["case &quot;tue&quot; L5"]
           direction RL
         end
-        subgraph s_scope_5["case 'wed' L6"]
+        subgraph s_scope_5["case &quot;wed&quot; L6"]
           direction RL
         end
-        subgraph s_scope_6["case 'thu' L7"]
+        subgraph s_scope_6["case &quot;thu&quot; L7"]
           direction RL
         end
-        subgraph s_scope_7["case 'fri' L8-10"]
+        subgraph s_scope_7["case &quot;fri&quot; L8-10"]
           direction RL
           wr_ref_1(["let ret<br/>L9"])
         end
-        subgraph s_scope_8["case 'sat' L11"]
+        subgraph s_scope_8["case &quot;sat&quot; L11"]
           direction RL
         end
-        subgraph s_scope_9["case 'sun' L12-14"]
+        subgraph s_scope_9["case &quot;sun&quot; L12-14"]
           direction RL
           wr_ref_2(["let ret<br/>L13"])
         end

@@ -259,6 +259,28 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/case &quot;x&quot;/);
   });
 
+  test("preserves single quotes in case labels verbatim, without HTML entities", () => {
+    const code =
+      "let l = '';\nconst k = 'a';\nswitch (k) {\n  case 'x': l = 'x'; break;\n}\n";
+    const out = emit(code);
+    expect(out).toMatch(/case 'x' L\d+/);
+    expect(out).not.toContain("&quot;");
+    expect(out).not.toContain("&apos;");
+  });
+
+  test("case label quote style mirrors the source verbatim except for HTML escaping", () => {
+    const single = emit(
+      "let l = '';\nconst k = 'a';\nswitch (k) {\n  case 'x': l = 'x'; break;\n}\n",
+    );
+    const double = emit(
+      'let l = "";\nconst k = "a";\nswitch (k) {\n  case "x": l = "x"; break;\n}\n',
+    );
+    expect(single).toMatch(/case 'x' L\d+/);
+    expect(double).toMatch(/case &quot;x&quot; L\d+/);
+    expect(single).not.toMatch(/case &quot;/);
+    expect(double).not.toMatch(/case '/);
+  });
+
   test("encodes & < > in case labels with HTML entities", () => {
     const code =
       "let l = 0;\nconst a = 1;\nconst b = 2;\nswitch (a) {\n  case (a & b): l = 1; break;\n  case (a < b ? 1 : 0): l = 2; break;\n}\n";

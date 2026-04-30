@@ -54,7 +54,7 @@
               "endLine": 4,
               "direction": "RL",
               "elements": [],
-              "caseTest": "'mon'"
+              "caseTest": "\"mon\""
             },
             {
               "type": "subgraph",
@@ -64,7 +64,7 @@
               "endLine": 5,
               "direction": "RL",
               "elements": [],
-              "caseTest": "'tue'"
+              "caseTest": "\"tue\""
             },
             {
               "type": "subgraph",
@@ -74,7 +74,7 @@
               "endLine": 6,
               "direction": "RL",
               "elements": [],
-              "caseTest": "'wed'"
+              "caseTest": "\"wed\""
             },
             {
               "type": "subgraph",
@@ -84,7 +84,7 @@
               "endLine": 7,
               "direction": "RL",
               "elements": [],
-              "caseTest": "'thu'"
+              "caseTest": "\"thu\""
             },
             {
               "type": "subgraph",
@@ -103,7 +103,7 @@
                   "declarationKind": "let"
                 }
               ],
-              "caseTest": "'fri'"
+              "caseTest": "\"fri\""
             },
             {
               "type": "subgraph",
@@ -113,7 +113,7 @@
               "endLine": 11,
               "direction": "RL",
               "elements": [],
-              "caseTest": "'sat'"
+              "caseTest": "\"sat\""
             },
             {
               "type": "subgraph",
@@ -132,7 +132,7 @@
                   "declarationKind": "let"
                 }
               ],
-              "caseTest": "'sun'"
+              "caseTest": "\"sun\""
             },
             {
               "type": "subgraph",

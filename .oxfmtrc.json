@@ -1,5 +1,8 @@
 {
-  "ignorePatterns": ["integration/fixtures/**"],
+  "ignorePatterns": [
+    "integration/fixtures/**/expected.*",
+    "integration/fixtures/**/preview.md"
+  ],
   "printWidth": 80,
   "sortImports": {
     "partitionByComment": true,

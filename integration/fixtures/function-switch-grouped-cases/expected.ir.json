@@ -4,7 +4,7 @@
     "path": "integration/fixtures/function-switch-grouped-cases/input.ts",
     "language": "ts"
   },
-  "raw": "function getDayType(day) {\n  let ret = \"\";\n  switch (day.toLowerCase()) {\n    case 'mon':\n    case 'tue':\n    case 'wed':\n    case 'thu':\n    case 'fri':\n      ret = 'weekday';\n      break;\n    case 'sat':\n    case 'sun':\n      ret = 'weekend';\n      break;\n    default:\n      ret = null;\n      break;\n  }\n  return ret;\n}\n",
+  "raw": "function getDayType(day) {\n  let ret = \"\";\n  switch (day.toLowerCase()) {\n    case \"mon\":\n    case \"tue\":\n    case \"wed\":\n    case \"thu\":\n    case \"fri\":\n      ret = \"weekday\";\n      break;\n    case \"sat\":\n    case \"sun\":\n      ret = \"weekend\";\n      break;\n    default:\n      ret = null;\n      break;\n  }\n  return ret;\n}\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -144,7 +144,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'mon'"
+        "caseTest": "\"mon\""
       },
       "fallsThrough": true,
       "exitsFunction": false
@@ -177,7 +177,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'tue'"
+        "caseTest": "\"tue\""
       },
       "fallsThrough": true,
       "exitsFunction": false
@@ -210,7 +210,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'wed'"
+        "caseTest": "\"wed\""
       },
       "fallsThrough": true,
       "exitsFunction": false
@@ -243,7 +243,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'thu'"
+        "caseTest": "\"thu\""
       },
       "fallsThrough": true,
       "exitsFunction": false
@@ -278,7 +278,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'fri'"
+        "caseTest": "\"fri\""
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -311,7 +311,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'sat'"
+        "caseTest": "\"sat\""
       },
       "fallsThrough": true,
       "exitsFunction": false
@@ -346,7 +346,7 @@
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 45,
-        "caseTest": "'sun'"
+        "caseTest": "\"sun\""
       },
       "fallsThrough": false,
       "exitsFunction": false
