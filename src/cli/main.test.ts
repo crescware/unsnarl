@@ -122,4 +122,62 @@ describe("runCli (end-to-end)", () => {
     expect(r.exitCode).toBe(1);
     expect(r.stderr).toMatch(/Unknown emitter format/);
   });
+
+  test("--roots prunes the JSON output and adds pruning metadata", async () => {
+    const inputPath = join(tmpDir, "chain.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
+    const r = await captureRun([
+      "--format",
+      "json",
+      "-r",
+      "1",
+      "-C",
+      "1",
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).toBe("");
+    const graph = JSON.parse(r.stdout);
+    expect(graph.pruning).toBeDefined();
+    expect(graph.pruning.descendants).toBe(1);
+    expect(graph.pruning.ancestors).toBe(1);
+    expect(graph.pruning.roots).toEqual([{ query: "1", matched: 1 }]);
+    const names = graph.elements
+      .filter((e: { type: string }) => e.type === "node")
+      .map((e: { name: string }) => e.name);
+    expect(names).toContain("a");
+    expect(names).toContain("b");
+    expect(names).not.toContain("c");
+  });
+
+  test("--roots emits a stderr warning for queries that match nothing", async () => {
+    const inputPath = join(tmpDir, "tiny.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun(["--format", "mermaid", "-r", "999", inputPath]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).toMatch(/unsnarl: warning: query '999' matched 0 roots/);
+    expect(r.stdout).toMatch(
+      /%% pruning: warning: query '999' matched 0 roots/,
+    );
+  });
+
+  test("ir format ignores --roots (no pruning, no warning)", async () => {
+    const inputPath = join(tmpDir, "tiny2.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun(["-r", "999", inputPath, "--no-pretty"]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).toBe("");
+    const ir = JSON.parse(r.stdout);
+    expect(ir.variables.map((v: { name: string }) => v.name)).toEqual(["a"]);
+  });
+
+  test("--roots default generations are -C 10 when no -A/-B/-C given", async () => {
+    const inputPath = join(tmpDir, "default.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
+    const r = await captureRun(["--format", "json", "-r", "1", inputPath]);
+    expect(r.exitCode).toBe(0);
+    const graph = JSON.parse(r.stdout);
+    expect(graph.pruning.descendants).toBe(10);
+    expect(graph.pruning.ancestors).toBe(10);
+  });
 });

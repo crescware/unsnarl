@@ -1,0 +1,85 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-if/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_result_97",
+      "kind": "Variable",
+      "name": "result",
+      "line": 10,
+      "declarationKind": "const",
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_if_scope_0_37",
+      "kind": "if-else-container",
+      "line": 4,
+      "direction": "RL",
+      "hasElse": true,
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "if",
+          "line": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_1",
+              "kind": "WriteOp",
+              "name": "counter",
+              "line": 5,
+              "declarationKind": "let"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "else",
+          "line": 6,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "wr_ref_2",
+              "kind": "WriteOp",
+              "name": "counter",
+              "line": 7,
+              "declarationKind": "let"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_97",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "n_scope_0_result_97",
+      "label": "read"
+    }
+  ],
+  "pruning": {
+    "roots": [
+      {
+        "query": "10",
+        "matched": 1
+      }
+    ],
+    "descendants": 1,
+    "ancestors": 1
+  }
+}
