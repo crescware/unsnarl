@@ -8,6 +8,7 @@ import type {
   PredicateContainer,
   Reference,
   ReferenceFlagBits,
+  ReturnContainer,
   Scope,
   ScopeType,
   Variable,
@@ -78,6 +79,7 @@ export class ReferenceImpl implements Reference {
   resolved: Variable | null = null;
   unsnarlOwners: Variable[] = [];
   unsnarlPredicateContainer: PredicateContainer | null = null;
+  unsnarlReturnContainer: ReturnContainer | null = null;
   readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;

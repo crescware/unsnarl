@@ -21,6 +21,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 19,
+          "column": 0,
+          "offset": 226
         }
       },
       "variables": [
@@ -54,6 +59,11 @@
           "line": 4,
           "column": 0,
           "offset": 33
+        },
+        "endSpan": {
+          "line": 16,
+          "column": 1,
+          "offset": 202
         }
       },
       "variables": [],
@@ -82,6 +92,11 @@
           "line": 5,
           "column": 2,
           "offset": 51
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 10,
+          "offset": 89
         }
       },
       "variables": [],
@@ -111,6 +126,11 @@
           "line": 8,
           "column": 2,
           "offset": 92
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 10,
+          "offset": 129
         }
       },
       "variables": [],
@@ -140,6 +160,11 @@
           "line": 11,
           "column": 2,
           "offset": 132
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 10,
+          "offset": 169
         }
       },
       "variables": [],
@@ -169,6 +194,11 @@
           "line": 14,
           "column": 2,
           "offset": 172
+        },
+        "endSpan": {
+          "line": 15,
+          "column": 19,
+          "offset": 200
         }
       },
       "variables": [],
@@ -377,7 +407,8 @@
       "predicateContainer": {
         "type": "SwitchStatement",
         "offset": 33
-      }
+      },
+      "returnContainer": null
     },
     {
       "id": "ref#1",
@@ -406,7 +437,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#2",
@@ -435,7 +467,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#3",
@@ -464,7 +497,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#4",
@@ -493,7 +527,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#5",
@@ -518,7 +553,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

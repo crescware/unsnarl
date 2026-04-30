@@ -21,7 +21,7 @@ flowchart RL
   n_scope_0_counter_4["let counter<br/>L1"]
   n_scope_0_flag_23["flag<br/>L2"]
   n_scope_0_result_73["unused result<br/>L8"]
-  subgraph s_scope_1["if L4"]
+  subgraph s_scope_1["if L4-6"]
     direction RL
     wr_ref_1(["let counter<br/>L5"])
   end

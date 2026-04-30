@@ -19,15 +19,26 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
+      "endLine": 20,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_getDayType_9",
       "elements": [
         {
-          "type": "node",
-          "id": "return_scope_0_getDayType_9",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 1
+          "type": "subgraph",
+          "id": "s_return_scope_0_getDayType_9",
+          "kind": "return",
+          "line": 19,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "ret",
+              "line": 19
+            }
+          ],
+          "endLine": 19
         },
         {
           "type": "node",
@@ -49,6 +60,7 @@
           "id": "s_scope_2",
           "kind": "switch",
           "line": 3,
+          "endLine": 18,
           "direction": "RL",
           "elements": [
             {
@@ -56,6 +68,7 @@
               "id": "s_scope_3",
               "kind": "case",
               "line": 4,
+              "endLine": 4,
               "direction": "RL",
               "elements": [],
               "caseTest": "'mon'"
@@ -65,6 +78,7 @@
               "id": "s_scope_4",
               "kind": "case",
               "line": 5,
+              "endLine": 5,
               "direction": "RL",
               "elements": [],
               "caseTest": "'tue'"
@@ -74,6 +88,7 @@
               "id": "s_scope_5",
               "kind": "case",
               "line": 6,
+              "endLine": 6,
               "direction": "RL",
               "elements": [],
               "caseTest": "'wed'"
@@ -83,6 +98,7 @@
               "id": "s_scope_6",
               "kind": "case",
               "line": 7,
+              "endLine": 7,
               "direction": "RL",
               "elements": [],
               "caseTest": "'thu'"
@@ -92,6 +108,7 @@
               "id": "s_scope_7",
               "kind": "case",
               "line": 8,
+              "endLine": 10,
               "direction": "RL",
               "elements": [
                 {
@@ -110,6 +127,7 @@
               "id": "s_scope_8",
               "kind": "case",
               "line": 11,
+              "endLine": 11,
               "direction": "RL",
               "elements": [],
               "caseTest": "'sat'"
@@ -119,6 +137,7 @@
               "id": "s_scope_9",
               "kind": "case",
               "line": 12,
+              "endLine": 14,
               "direction": "RL",
               "elements": [
                 {
@@ -137,6 +156,7 @@
               "id": "s_scope_10",
               "kind": "case",
               "line": 15,
+              "endLine": 17,
               "direction": "RL",
               "elements": [
                 {
@@ -178,17 +198,17 @@
     },
     {
       "from": "wr_ref_1",
-      "to": "return_scope_0_getDayType_9",
+      "to": "ret_use_ref_4",
       "label": "read"
     },
     {
       "from": "wr_ref_2",
-      "to": "return_scope_0_getDayType_9",
+      "to": "ret_use_ref_4",
       "label": "read"
     },
     {
       "from": "wr_ref_3",
-      "to": "return_scope_0_getDayType_9",
+      "to": "ret_use_ref_4",
       "label": "read"
     }
   ]

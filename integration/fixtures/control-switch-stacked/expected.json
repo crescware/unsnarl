@@ -36,6 +36,7 @@
       "id": "s_scope_1",
       "kind": "switch",
       "line": 4,
+      "endLine": 11,
       "direction": "RL",
       "elements": [
         {
@@ -43,6 +44,7 @@
           "id": "s_scope_2",
           "kind": "case",
           "line": 5,
+          "endLine": 5,
           "direction": "RL",
           "elements": [],
           "caseTest": "\"a\""
@@ -52,6 +54,7 @@
           "id": "s_scope_3",
           "kind": "case",
           "line": 6,
+          "endLine": 8,
           "direction": "RL",
           "elements": [
             {
@@ -70,6 +73,7 @@
           "id": "s_scope_4",
           "kind": "case",
           "line": 9,
+          "endLine": 10,
           "direction": "RL",
           "elements": [
             {

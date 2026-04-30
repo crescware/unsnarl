@@ -143,7 +143,11 @@ function serializeScope(
       .map((c) => scopeIds.get(c))
       .filter((x): x is string => x !== undefined),
     variableScope: scopeIds.get(scope.variableScope) ?? id,
-    block: { type: scope.block.type, span: spanOf(scope.block, raw) },
+    block: {
+      type: scope.block.type,
+      span: spanOf(scope.block, raw),
+      endSpan: spanFromOffset(raw, scope.block.end ?? scope.block.start ?? 0),
+    },
     variables: scope.variables
       .map((v) => variableIds.get(v))
       .filter((x): x is string => x !== undefined),
@@ -283,5 +287,11 @@ function serializeReference(
       receiver: r.isReceiver?.() ?? false,
     },
     predicateContainer: r.unsnarlPredicateContainer ?? null,
+    returnContainer: r.unsnarlReturnContainer
+      ? {
+          startSpan: spanFromOffset(raw, r.unsnarlReturnContainer.startOffset),
+          endSpan: spanFromOffset(raw, r.unsnarlReturnContainer.endOffset),
+        }
+      : null,
   };
 }

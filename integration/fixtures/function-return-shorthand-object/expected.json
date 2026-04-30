@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function-return-shorthand-object/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_main_9",
+      "kind": "FunctionName",
+      "name": "main",
+      "line": 1,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 21,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_main_9",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_main_9",
+          "kind": "return",
+          "line": 11,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "a",
+              "line": 12
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnUse",
+              "name": "b",
+              "line": 13
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "c",
+              "line": 14
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "d",
+              "line": 15
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "e",
+              "line": 16
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "f",
+              "line": 17
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "g",
+              "line": 18
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_7",
+              "kind": "ReturnUse",
+              "name": "h",
+              "line": 19
+            }
+          ],
+          "endLine": 20
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_26",
+          "kind": "Variable",
+          "name": "a",
+          "line": 2,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_43",
+          "kind": "Variable",
+          "name": "b",
+          "line": 3,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_c_60",
+          "kind": "Variable",
+          "name": "c",
+          "line": 4,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_d_77",
+          "kind": "Variable",
+          "name": "d",
+          "line": 5,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_e_94",
+          "kind": "Variable",
+          "name": "e",
+          "line": 6,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_f_111",
+          "kind": "Variable",
+          "name": "f",
+          "line": 7,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_g_128",
+          "kind": "Variable",
+          "name": "g",
+          "line": 8,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_h_145",
+          "kind": "Variable",
+          "name": "h",
+          "line": 9,
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_43",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_c_60",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_d_77",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_e_94",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_f_111",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_g_128",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_h_145",
+      "to": "ret_use_ref_7",
+      "label": "read"
+    }
+  ]
+}

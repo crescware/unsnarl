@@ -1,0 +1,75 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-component-export/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_Sub_9",
+      "kind": "ImportBinding",
+      "name": "Sub",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "Sub",
+      "importSource": "./sub"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Main_46",
+      "kind": "FunctionName",
+      "name": "Main",
+      "line": 3,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_46",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_46",
+          "kind": "return",
+          "line": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "Sub",
+              "line": 4
+            }
+          ],
+          "endLine": 4
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod___sub",
+      "kind": "ModuleSource",
+      "name": "./sub",
+      "line": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Sub_9",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "mod___sub",
+      "to": "n_scope_0_Sub_9",
+      "label": "read"
+    }
+  ]
+}

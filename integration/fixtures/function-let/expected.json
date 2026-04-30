@@ -19,15 +19,26 @@
       "id": "s_scope_1",
       "kind": "function",
       "line": 1,
+      "endLine": 6,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_f_9",
       "elements": [
         {
-          "type": "node",
-          "id": "return_scope_0_f_9",
-          "kind": "ReturnSink",
-          "name": "return",
-          "line": 1
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_9",
+          "kind": "return",
+          "line": 5,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "v",
+              "line": 5
+            }
+          ],
+          "endLine": 5
         },
         {
           "type": "node",
@@ -69,7 +80,7 @@
     },
     {
       "from": "wr_ref_1",
-      "to": "return_scope_0_f_9",
+      "to": "ret_use_ref_2",
       "label": "read"
     }
   ]

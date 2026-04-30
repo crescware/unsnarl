@@ -144,10 +144,14 @@ describe("JsonEmitter", () => {
     expect(ownerNode).toBeDefined();
     expect(ownerNode?.kind).toBe("FunctionName");
     expect(ownerNode?.name).toBe("add");
-    const returnSink = (fnSubgraph?.elements ?? []).find(
-      (e) => e.type === "node" && e.kind === "ReturnSink",
+    const returnSubgraph = (fnSubgraph?.elements ?? []).find(
+      (e) => e.type === "subgraph" && e.kind === "return",
     );
-    expect(returnSink).toBeDefined();
+    expect(returnSubgraph).toBeDefined();
+    const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
+      (e) => e.type === "node" && e.kind === "ReturnUse",
+    );
+    expect(returnUseNodes.length).toBeGreaterThan(0);
   });
 
   test("switch cases become subgraphs of kind 'case' with caseTest preserved as raw text", () => {

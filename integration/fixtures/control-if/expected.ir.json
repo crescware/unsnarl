@@ -22,6 +22,11 @@
           "line": 1,
           "column": 0,
           "offset": 0
+        },
+        "endSpan": {
+          "line": 11,
+          "column": 0,
+          "offset": 115
         }
       },
       "variables": [
@@ -51,6 +56,11 @@
           "line": 4,
           "column": 10,
           "offset": 47
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 1,
+          "offset": 65
         }
       },
       "variables": [],
@@ -79,6 +89,11 @@
           "line": 6,
           "column": 7,
           "offset": 71
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 1,
+          "offset": 89
         }
       },
       "variables": [],
@@ -284,7 +299,8 @@
       "predicateContainer": {
         "type": "IfStatement",
         "offset": 37
-      }
+      },
+      "returnContainer": null
     },
     {
       "id": "ref#1",
@@ -313,7 +329,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#2",
@@ -342,7 +359,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     },
     {
       "id": "ref#3",
@@ -367,7 +385,8 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null
+      "predicateContainer": null,
+      "returnContainer": null
     }
   ],
   "unusedVariableIds": [

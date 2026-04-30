@@ -103,14 +103,15 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/n_scope_0_f_9 -->\|read,call\| n_scope_0_x_/);
   });
 
-  test("renders a function as a subgraph and routes return through a return node", () => {
+  test("renders a function as a subgraph and routes return through a return subgraph with per-use nodes", () => {
     const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["f\(\)/);
     // f is never called, so its declaration node carries the "unused " prefix.
     expect(out).toMatch(/n_scope_0_f_9\["unused f\(\)<br\/>L1"\]/);
     expect(out).toContain("direction RL");
-    expect(out).toContain("return_scope_0_f_9((return))");
-    expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);
+    expect(out).toMatch(/subgraph s_return_scope_0_f_9\["return L\d+"\]/);
+    expect(out).toMatch(/ret_use_\w+\["x<br\/>L3"\]/);
+    expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| ret_use_\w+/);
     expect(out).toContain("end");
   });
 
@@ -118,15 +119,15 @@ describe("MermaidEmitter", () => {
     const out = emit("const fn = (p: number) => p + 1;\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
     expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
-    expect(out).toContain("return_scope_0_fn_6((return))");
-    expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| return_scope_0_fn_6/);
+    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L\d+"\]/);
+    expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| ret_use_\w+/);
   });
 
   test("subgraphs function expressions assigned to a const", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
     expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
-    expect(out).toContain("return_scope_0_fn_6((return))");
+    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L\d+"\]/);
   });
 
   test("marks unused declarations with an 'unused' prefix in the label", () => {
@@ -172,23 +173,23 @@ describe("MermaidEmitter", () => {
       "}",
     ].join("\n");
     const out = emit(code);
-    expect(out).toMatch(/subgraph s_scope_\d+\["try L2"\]/);
-    expect(out).toMatch(/subgraph s_scope_\d+\["catch L4"\]/);
-    expect(out).toMatch(/subgraph s_scope_\d+\["finally L6"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["try L2-4"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["catch L4-6"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["finally L6-8"\]/);
   });
 
   test("subgraphs if / else blocks", () => {
     const code = "let x = 0;\nif (true) {\n  x = 1;\n} else {\n  x = 2;\n}\n";
     const out = emit(code);
-    expect(out).toMatch(/subgraph s_scope_\d+\["if L2"\]/);
-    expect(out).toMatch(/subgraph s_scope_\d+\["else L4"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["if L2-4"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["else L4-6"\]/);
   });
 
   test("subgraphs switch statements", () => {
     const code =
       "let l = '';\nconst k = 'a';\nswitch (k) {\n  case 'a': l = 'A'; break;\n  default: l = '?';\n}\n";
     const out = emit(code);
-    expect(out).toMatch(/subgraph s_scope_\d+\["switch L3"\]/);
+    expect(out).toMatch(/subgraph s_scope_\d+\["switch L3-6"\]/);
   });
 
   test("encodes double quotes in labels with HTML entity, never with backslash", () => {
@@ -287,10 +288,10 @@ describe("MermaidEmitter rendering: switch with break", () => {
 
   test("each case becomes its own labelled subgraph and no fallthrough edges are drawn", () => {
     expect(
-      countMatches(out, /^\s*subgraph s_scope_\d+\["case .* L\d+"\]/),
+      countMatches(out, /^\s*subgraph s_scope_\d+\["case .* L\d+(?:-\d+)?"\]/),
     ).toBe(2);
     expect(
-      countMatches(out, /^\s*subgraph s_scope_\d+\["default L\d+"\]/),
+      countMatches(out, /^\s*subgraph s_scope_\d+\["default L\d+(?:-\d+)?"\]/),
     ).toBe(1);
     expect(out).not.toContain("|fallthrough|");
   });
@@ -368,9 +369,9 @@ describe("MermaidEmitter rendering: if/else", () => {
   const out = emit(code);
 
   test("an outer if-else container subgraph wraps both arms", () => {
-    expect(out).toMatch(/^\s*subgraph cont_if_scope_0_\d+\["if-else L\d+"\]/m);
-    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L\d+"\]/m);
-    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["else L\d+"\]/m);
+    expect(out).toMatch(/^\s*subgraph cont_if_scope_0_\d+\["if-else L3-7"\]/m);
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L3-5"\]/m);
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["else L5-7"\]/m);
   });
 
   test("the predicate identifier feeds the if-else container", () => {
@@ -402,7 +403,7 @@ describe("MermaidEmitter rendering: if without else", () => {
 
   test("there is no if-else container, just a bare if subgraph", () => {
     expect(out).not.toContain("if-else L");
-    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L\d+"\]/m);
+    expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L3-5"\]/m);
   });
 
   test("the predicate flows directly into the bare if subgraph", () => {
@@ -435,7 +436,7 @@ describe("MermaidEmitter rendering: catch parameter placement", () => {
     ].join("\n");
     const out = emit(code);
     const ls = lines(out);
-    const catchStart = ls.findIndex((l) => l.includes('"catch L4"'));
+    const catchStart = ls.findIndex((l) => l.includes('"catch L4-6"'));
     expect(catchStart).toBeGreaterThan(-1);
     const catchEnd = ls.slice(catchStart).findIndex((l) => l.trim() === "end");
     expect(catchEnd).toBeGreaterThan(0);
@@ -459,7 +460,7 @@ describe("MermaidEmitter rendering: let writes form a state chain", () => {
   test("the chain passes through one wr_ref node per assignment, in source order", () => {
     expect(out).toMatch(/n_scope_1_v_\d+ -->\|set\| wr_ref_0/);
     expect(out).toMatch(/wr_ref_0 -->\|set\| wr_ref_1/);
-    expect(out).toMatch(/wr_ref_1 -->\|read\| return_scope_0_f_9/);
+    expect(out).toMatch(/wr_ref_1 -->\|read\| ret_use_\w+/);
   });
 
   test("there is no v -> v self loop", () => {
@@ -550,13 +551,13 @@ describe("MermaidEmitter rendering: import label prefix rule", () => {
 });
 
 describe("MermaidEmitter rendering: function parameters are not duplicated", () => {
-  test("each parameter renders exactly one |read| edge into the return sink", () => {
+  test("each parameter renders exactly one |read| edge into its return-use node", () => {
     const out = emit("function add(a, b) { return a + b; }\n");
-    expect(
-      countMatches(out, /n_scope_1_a_\d+ -->\|read\| return_scope_0_add_9/),
-    ).toBe(1);
-    expect(
-      countMatches(out, /n_scope_1_b_\d+ -->\|read\| return_scope_0_add_9/),
-    ).toBe(1);
+    expect(countMatches(out, /n_scope_1_a_\d+ -->\|read\| ret_use_\w+/)).toBe(
+      1,
+    );
+    expect(countMatches(out, /n_scope_1_b_\d+ -->\|read\| ret_use_\w+/)).toBe(
+      1,
+    );
   });
 });

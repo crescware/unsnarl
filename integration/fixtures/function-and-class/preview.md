@@ -28,15 +28,19 @@ flowchart RL
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_add_9["add()<br/>L1"]
-    subgraph s_scope_1["add()<br/>L1"]
+    subgraph s_scope_1["add()<br/>L1-3"]
       direction RL
-      return_scope_0_add_9((return))
       n_scope_1_a_13["a<br/>L1"]
       n_scope_1_b_24["b<br/>L1"]
+      subgraph s_return_scope_0_add_9["return L2"]
+        direction RL
+        ret_use_ref_0["a<br/>L2"]
+        ret_use_ref_1["b<br/>L2"]
+      end
     end
   end
-  n_scope_1_a_13 -->|read| return_scope_0_add_9
-  n_scope_1_b_24 -->|read| return_scope_0_add_9
+  n_scope_1_a_13 -->|read| ret_use_ref_0
+  n_scope_1_b_24 -->|read| ret_use_ref_1
   n_scope_0_add_9 -->|read,call| n_scope_0_total_94
   n_scope_0_Counter_62 -->|read,call| n_scope_0_c_119
   n_scope_0_total_94 -->|read| n_scope_0_result_144

@@ -60,6 +60,7 @@
       "id": "s_scope_1",
       "kind": "switch",
       "line": 8,
+      "endLine": 20,
       "direction": "RL",
       "elements": [
         {
@@ -67,6 +68,7 @@
           "id": "s_scope_2",
           "kind": "case",
           "line": 9,
+          "endLine": 11,
           "direction": "RL",
           "elements": [
             {
@@ -85,6 +87,7 @@
           "id": "s_scope_3",
           "kind": "case",
           "line": 12,
+          "endLine": 14,
           "direction": "RL",
           "elements": [
             {
@@ -103,6 +106,7 @@
           "id": "s_scope_4",
           "kind": "case",
           "line": 15,
+          "endLine": 17,
           "direction": "RL",
           "elements": [
             {
@@ -121,6 +125,7 @@
           "id": "s_scope_5",
           "kind": "case",
           "line": 18,
+          "endLine": 19,
           "direction": "RL",
           "elements": [
             {

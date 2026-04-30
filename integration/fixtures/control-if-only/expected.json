@@ -36,6 +36,7 @@
       "id": "s_scope_1",
       "kind": "if",
       "line": 4,
+      "endLine": 6,
       "direction": "RL",
       "elements": [
         {

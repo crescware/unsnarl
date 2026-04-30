@@ -295,7 +295,6 @@ function nodeSyntax(n: VisualNode): string {
   switch (n.kind) {
     case "WriteOp":
       return `(["${label}"])`;
-    case "ReturnSink":
     case "ModuleSink":
       return `((${label}))`;
     default:
@@ -305,9 +304,6 @@ function nodeSyntax(n: VisualNode): string {
 
 function nodeLabel(n: VisualNode): string {
   const head = nodeHead(n);
-  if (n.kind === "ReturnSink") {
-    return "return";
-  }
   if (n.kind === "ModuleSink") {
     return "module";
   }
@@ -358,35 +354,46 @@ function subgraphLabel(
   sg: VisualSubgraph,
   nodeMap: Map<string, VisualNode>,
 ): string {
+  const range = lineRangeLabel(sg);
   switch (sg.kind) {
     case "function": {
       const ownerNode = sg.ownerNodeId
         ? nodeMap.get(sg.ownerNodeId)
         : undefined;
-      return `${escape(ownerNode?.name ?? "")}()<br/>L${sg.line}`;
+      return `${escape(ownerNode?.name ?? "")}()<br/>${range}`;
     }
     case "switch":
-      return `switch L${sg.line}`;
+      return `switch ${range}`;
     case "case":
       if (sg.caseTest === null || sg.caseTest === undefined) {
-        return `default L${sg.line}`;
+        return `default ${range}`;
       }
-      return `case ${escape(sg.caseTest)} L${sg.line}`;
+      return `case ${escape(sg.caseTest)} ${range}`;
     case "if":
-      return `if L${sg.line}`;
+      return `if ${range}`;
     case "else":
-      return `else L${sg.line}`;
+      return `else ${range}`;
     case "if-else-container":
-      return `${sg.hasElse ? "if-else" : "if"} L${sg.line}`;
+      return `${sg.hasElse ? "if-else" : "if"} ${range}`;
     case "try":
-      return `try L${sg.line}`;
+      return `try ${range}`;
     case "catch":
-      return `catch L${sg.line}`;
+      return `catch ${range}`;
     case "finally":
-      return `finally L${sg.line}`;
+      return `finally ${range}`;
     case "for":
-      return `for L${sg.line}`;
+      return `for ${range}`;
+    case "return":
+      return `return ${range}`;
   }
+}
+
+function lineRangeLabel(sg: VisualSubgraph): string {
+  const end = sg.endLine;
+  if (end !== undefined && end !== sg.line) {
+    return `L${sg.line}-${end}`;
+  }
+  return `L${sg.line}`;
 }
 
 function escape(value: string): string {

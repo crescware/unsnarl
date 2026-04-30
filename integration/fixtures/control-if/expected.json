@@ -44,6 +44,7 @@
           "id": "s_scope_1",
           "kind": "if",
           "line": 4,
+          "endLine": 6,
           "direction": "RL",
           "elements": [
             {
@@ -61,6 +62,7 @@
           "id": "s_scope_2",
           "kind": "else",
           "line": 6,
+          "endLine": 8,
           "direction": "RL",
           "elements": [
             {
@@ -73,7 +75,8 @@
             }
           ]
         }
-      ]
+      ],
+      "endLine": 8
     }
   ],
   "edges": [

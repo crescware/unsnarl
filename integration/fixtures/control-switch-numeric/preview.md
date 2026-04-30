@@ -31,21 +31,21 @@ flowchart RL
   n_scope_0_label_4["let label<br/>L1"]
   n_scope_0_code_22["code<br/>L2"]
   n_scope_0_result_210["unused result<br/>L18"]
-  subgraph s_scope_1["switch L4"]
+  subgraph s_scope_1["switch L4-16"]
     direction RL
-    subgraph s_scope_2["case 0 L5"]
+    subgraph s_scope_2["case 0 L5-7"]
       direction RL
       wr_ref_1(["let label<br/>L6"])
     end
-    subgraph s_scope_3["case 1 L8"]
+    subgraph s_scope_3["case 1 L8-10"]
       direction RL
       wr_ref_2(["let label<br/>L9"])
     end
-    subgraph s_scope_4["case 2 L11"]
+    subgraph s_scope_4["case 2 L11-13"]
       direction RL
       wr_ref_3(["let label<br/>L12"])
     end
-    subgraph s_scope_5["default L14"]
+    subgraph s_scope_5["default L14-15"]
       direction RL
       wr_ref_4(["let label<br/>L15"])
     end

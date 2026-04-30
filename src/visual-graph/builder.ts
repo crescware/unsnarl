@@ -487,6 +487,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   };
 
   type Container = { elements: VisualElement[] };
+  const returnSubgraphByFn = new Map<string, VisualSubgraph>();
 
   const buildScope = (scope: SerializedScope, container: Container): void => {
     const subgraphHere = shouldSubgraph(scope);
@@ -497,13 +498,16 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       bodyContainer = sg;
       const ownerVar = subgraphOwnerVar.get(scope.id);
       if (ownerVar && returnTargets.has(ownerVar)) {
-        sg.elements.push({
-          type: "node",
-          id: returnNodeId(ownerVar),
-          kind: "ReturnSink",
-          name: "return",
+        const returnSg: VisualSubgraph = {
+          type: "subgraph",
+          id: returnSubgraphId(ownerVar),
+          kind: "return",
           line: scope.block.span.line,
-        });
+          direction: "RL",
+          elements: [],
+        };
+        sg.elements.push(returnSg);
+        returnSubgraphByFn.set(ownerVar, returnSg);
       }
     }
     for (const vid of scope.variables) {
@@ -592,12 +596,22 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       for (const g of group) {
         buildScope(g, containerSubgraph);
       }
+      let containerEndLine = containerSubgraph.line;
+      for (const elem of containerSubgraph.elements) {
+        if (elem.type === "subgraph" && elem.endLine !== undefined) {
+          containerEndLine = Math.max(containerEndLine, elem.endLine);
+        }
+      }
+      if (containerEndLine !== containerSubgraph.line) {
+        containerSubgraph.endLine = containerEndLine;
+      }
       i = j;
     }
   };
 
   const describeSubgraph = (scope: SerializedScope): VisualSubgraph => {
     const id = subgraphScopeId(scope);
+    const endLine = scope.block.endSpan.line;
     if (isFunctionSubgraph(scope)) {
       const ownerVarId = subgraphOwnerVar.get(scope.id);
       if (!ownerVarId) {
@@ -606,11 +620,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         );
       }
       const ownerVar = variableMap.get(ownerVarId);
+      const startLine = ownerVar?.identifiers[0]?.line ?? scope.block.span.line;
       return {
         type: "subgraph",
         id,
         kind: "function",
-        line: ownerVar?.identifiers[0]?.line ?? scope.block.span.line,
+        line: startLine,
+        endLine,
         direction: "RL",
         ownerNodeId: nodeId(ownerVarId),
         elements: [],
@@ -627,6 +643,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       id,
       kind,
       line: scope.block.span.line,
+      endLine,
       direction: "RL",
       elements: [],
     };
@@ -652,6 +669,44 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
     emittedEdges.add(key);
     edges.push({ from, to, label });
+  }
+
+  const returnUseAdded = new Set<string>();
+  const returnSubgraphSpanInitialized = new Set<string>();
+  function ensureReturnUseNode(
+    enclosingFnVarId: string,
+    ref: SerializedReference,
+  ): string | null {
+    const sg = returnSubgraphByFn.get(enclosingFnVarId);
+    if (!sg) {
+      return null;
+    }
+    const id = retUseNodeId(ref.id);
+    if (!returnUseAdded.has(ref.id)) {
+      returnUseAdded.add(ref.id);
+      const v = ref.resolved ? variableMap.get(ref.resolved) : undefined;
+      const name = v?.name ?? ref.identifier.name ?? "";
+      sg.elements.push({
+        type: "node",
+        id,
+        kind: "ReturnUse",
+        name,
+        line: ref.identifier.span.line,
+      });
+    }
+    if (ref.returnContainer) {
+      const startLine = ref.returnContainer.startSpan.line;
+      const endLine = ref.returnContainer.endSpan.line;
+      if (returnSubgraphSpanInitialized.has(sg.id)) {
+        sg.line = Math.min(sg.line, startLine);
+        sg.endLine = Math.max(sg.endLine ?? endLine, endLine);
+      } else {
+        sg.line = startLine;
+        sg.endLine = endLine;
+        returnSubgraphSpanInitialized.add(sg.id);
+      }
+    }
+    return id;
   }
 
   // let-chain edges (set / fallthrough)
@@ -752,8 +807,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     } else {
       const enclosingFn = enclosingFunctionVar(r.from);
       if (enclosingFn) {
-        for (const fromId of fromIds) {
-          pushEdge(fromId, label, returnNodeId(enclosingFn));
+        const useTargetId = ensureReturnUseNode(enclosingFn, r);
+        if (useTargetId) {
+          for (const fromId of fromIds) {
+            pushEdge(fromId, label, useTargetId);
+          }
         }
       } else {
         needsModuleRoot = true;
@@ -961,8 +1019,12 @@ export function visualNodeIdFromVariableId(varId: string): string {
   return `n_${sanitize(varId)}`;
 }
 
-function returnNodeId(varId: string): string {
-  return `return_${sanitize(varId)}`;
+function returnSubgraphId(varId: string): string {
+  return `s_return_${sanitize(varId)}`;
+}
+
+function retUseNodeId(refId: string): string {
+  return `ret_use_${sanitize(refId)}`;
 }
 
 function writeOpNodeId(refId: string): string {

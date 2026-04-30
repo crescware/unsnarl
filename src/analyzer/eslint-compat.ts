@@ -13,6 +13,7 @@ import { ScopeManager } from "./manager.js";
 import { findReferenceOwners } from "./owner.js";
 import { findPredicateContainer } from "./predicate.js";
 import { bindReference } from "./resolve.js";
+import { findReturnContainer } from "./return-container.js";
 import { ReferenceImpl } from "./scope.js";
 import { isTypeOnlySubtree } from "./skip-types.js";
 import type { PathEntry, WalkAction } from "./walk.js";
@@ -360,6 +361,7 @@ function handleIdentifierReference(
     key,
     path,
   );
+  ref.unsnarlReturnContainer = findReturnContainer(path);
 }
 
 const CASE_TEST_MAX_LENGTH = 32;
