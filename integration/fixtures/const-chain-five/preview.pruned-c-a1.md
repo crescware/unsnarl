@@ -25,4 +25,8 @@ flowchart RL
   n_scope_0_c_32["c<br/>L3"]
   n_scope_0_d_45["d<br/>L4"]
   n_scope_0_c_32 -->|read| n_scope_0_d_45
+  boundary_stub_1((…))
+  n_scope_0_d_45 -.-> boundary_stub_1
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class boundary_stub_1 boundaryStub;
 ```

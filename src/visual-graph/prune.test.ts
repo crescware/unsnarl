@@ -109,7 +109,7 @@ describe("pruneVisualGraph", () => {
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 
-  test("expands descendants by N hops", () => {
+  test("expands descendants by N hops; the outbound boundary hint carries no label", () => {
     const g = graph(
       [
         node("a", "a", 1),
@@ -129,9 +129,10 @@ describe("pruneVisualGraph", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["a", "b", "c"]);
+    expect(r.graph.boundaryEdges).toEqual([{ inside: "c", direction: "out" }]);
   });
 
-  test("expands ancestors by N hops", () => {
+  test("expands ancestors by N hops; the inbound boundary hint keeps the label", () => {
     const g = graph(
       [
         node("a", "a", 1),
@@ -151,9 +152,12 @@ describe("pruneVisualGraph", () => {
       ancestors: 2,
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "b", direction: "in", label: "read" },
+    ]);
   });
 
-  test("context expands in both directions", () => {
+  test("context expands in both directions and emits both-side boundary hints", () => {
     const g = graph(
       [
         node("a", "a", 1),
@@ -175,7 +179,24 @@ describe("pruneVisualGraph", () => {
       ancestors: 1,
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
-    expect(r.graph.edges).toHaveLength(2);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "d", direction: "out" },
+      { inside: "b", direction: "in", label: "read" },
+    ]);
+  });
+
+  test("descendants=0 stays strict (no boundary peek emitted)", () => {
+    const g = graph(
+      [node("a", "a", 1), node("b", "b", 2)],
+      [{ from: "a", to: "b", label: "read" }],
+    );
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(1)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.graph.boundaryEdges).toEqual([]);
   });
 
   test("retains the parent subgraph wrapping a kept node", () => {

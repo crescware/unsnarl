@@ -65,6 +65,7 @@ export type {
   Direction,
   NodeKind,
   SubgraphKind,
+  VisualBoundaryEdge,
   VisualEdge,
   VisualGraph,
   VisualGraphPruning,

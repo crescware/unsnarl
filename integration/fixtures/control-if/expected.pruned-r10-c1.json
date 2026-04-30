@@ -72,6 +72,18 @@
       "label": "read"
     }
   ],
+  "boundaryEdges": [
+    {
+      "inside": "wr_ref_1",
+      "direction": "in",
+      "label": "set"
+    },
+    {
+      "inside": "wr_ref_2",
+      "direction": "in",
+      "label": "set"
+    }
+  ],
   "pruning": {
     "roots": [
       {

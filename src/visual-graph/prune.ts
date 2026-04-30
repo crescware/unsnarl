@@ -1,6 +1,7 @@
 import type { ParsedRootQuery } from "../cli/root-query.js";
 import type {
   NodeKind,
+  VisualBoundaryEdge,
   VisualEdge,
   VisualElement,
   VisualGraph,
@@ -59,9 +60,37 @@ export function pruneVisualGraph(
   }
 
   const { outEdges, inEdges } = buildAdjacency(graph.edges);
-  const descendants = bfs(rootIds, outEdges, options.descendants);
-  const ancestors = bfs(rootIds, inEdges, options.ancestors);
-  const reachable = new Set<string>([...rootIds, ...descendants, ...ancestors]);
+  // BFS only as far as the user asked. The outermost edges that point
+  // beyond this radius are surfaced separately as boundaryEdges so
+  // renderers can hint at "more context exists in this direction" without
+  // pulling the next generation of nodes into the diagram.
+  const innerD = bfs(rootIds, outEdges, options.descendants);
+  const innerA = bfs(rootIds, inEdges, options.ancestors);
+  const reachable = new Set<string>([...rootIds, ...innerD, ...innerA]);
+
+  const boundaryEdges: VisualBoundaryEdge[] = [];
+  if (options.descendants > 0) {
+    for (const e of graph.edges) {
+      if (reachable.has(e.from) && !reachable.has(e.to)) {
+        // inside -> beyond: the action's actor is the unseen `to`,
+        // so the label is unknowable -- intentionally drop it.
+        boundaryEdges.push({ inside: e.from, direction: "out" });
+      }
+    }
+  }
+  if (options.ancestors > 0) {
+    for (const e of graph.edges) {
+      if (reachable.has(e.to) && !reachable.has(e.from)) {
+        // beyond -> inside: the actor is the visible `to` (= inside),
+        // so the original edge label still applies.
+        boundaryEdges.push({
+          inside: e.to,
+          direction: "in",
+          label: e.label,
+        });
+      }
+    }
+  }
 
   const parentOf = buildParentMap(graph.elements);
   const initial = Array.from(reachable);
@@ -78,6 +107,9 @@ export function pruneVisualGraph(
   const newEdges = graph.edges.filter(
     (e) => survivors.has(e.from) && survivors.has(e.to),
   );
+  const survivingBoundary = boundaryEdges.filter((b) =>
+    survivors.has(b.inside),
+  );
 
   const pruned: VisualGraph = {
     version: graph.version,
@@ -85,6 +117,7 @@ export function pruneVisualGraph(
     direction: graph.direction,
     elements: newElements,
     edges: newEdges,
+    boundaryEdges: survivingBoundary,
     pruning: {
       roots: perQuery.map(({ query, matched }) => ({
         query: query.raw,

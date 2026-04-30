@@ -34,7 +34,7 @@ flowchart RL
   n_scope_0_a_22["a<br/>L2"]
   n_scope_0_b_35["b<br/>L3"]
   n_scope_0_target_48["target<br/>L4"]
-  n_scope_0_result_304["result<br/>L20"]
+  n_scope_0_result_304["unused result<br/>L20"]
   subgraph s_scope_1["switch L6"]
     direction RL
     subgraph s_scope_2["case a + b L7"]
@@ -66,6 +66,4 @@ flowchart RL
   wr_ref_8 -->|read| n_scope_0_result_304
   wr_ref_9 -->|read| n_scope_0_result_304
   module_root((module))
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_result_304 unused;
 ```

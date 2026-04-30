@@ -4,3 +4,7 @@ flowchart RL
   n_scope_0_a_6["a<br/>L1"]
   n_scope_0_b_19["b<br/>L2"]
   n_scope_0_a_6 -->|read| n_scope_0_b_19
+  boundary_stub_1((…))
+  n_scope_0_b_19 -.-> boundary_stub_1
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class boundary_stub_1 boundaryStub;

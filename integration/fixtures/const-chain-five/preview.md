@@ -19,11 +19,9 @@ flowchart RL
   n_scope_0_b_19["b<br/>L2"]
   n_scope_0_c_32["c<br/>L3"]
   n_scope_0_d_45["d<br/>L4"]
-  n_scope_0_e_58["e<br/>L5"]
+  n_scope_0_e_58["unused e<br/>L5"]
   n_scope_0_a_6 -->|read| n_scope_0_b_19
   n_scope_0_b_19 -->|read| n_scope_0_c_32
   n_scope_0_c_32 -->|read| n_scope_0_d_45
   n_scope_0_d_45 -->|read| n_scope_0_e_58
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_e_58 unused;
 ```

@@ -125,7 +125,10 @@ describe("runCli (end-to-end)", () => {
 
   test("--roots prunes the JSON output and adds pruning metadata", async () => {
     const inputPath = join(tmpDir, "chain.ts");
-    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
+    writeFileSync(
+      inputPath,
+      "const a = 1;\nconst b = a;\nconst c = b;\nconst d = c;\n",
+    );
     const r = await captureRun([
       "--format",
       "json",
@@ -145,9 +148,20 @@ describe("runCli (end-to-end)", () => {
     const names = graph.elements
       .filter((e: { type: string }) => e.type === "node")
       .map((e: { name: string }) => e.name);
+    // Inner radius keeps a (root) and b (1 hop). c is past the requested
+    // radius and is NOT in the kept node list; instead the outgoing edge
+    // toward c shows up in boundaryEdges as a "more graph beyond here"
+    // hint, and d (2 hops out) doesn't appear at all.
     expect(names).toContain("a");
     expect(names).toContain("b");
     expect(names).not.toContain("c");
+    expect(names).not.toContain("d");
+    expect(graph.boundaryEdges).toEqual([
+      expect.objectContaining({ direction: "out" }),
+    ]);
+    // out-direction boundary edges are intentionally label-less because
+    // the action's actor (the unseen node beyond the boundary) is unknown.
+    expect(graph.boundaryEdges[0]).not.toHaveProperty("label");
   });
 
   test("--roots emits a stderr warning for queries that match nothing", async () => {

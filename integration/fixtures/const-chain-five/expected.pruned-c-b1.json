@@ -30,6 +30,13 @@
       "label": "read"
     }
   ],
+  "boundaryEdges": [
+    {
+      "inside": "n_scope_0_b_19",
+      "direction": "in",
+      "label": "read"
+    }
+  ],
   "pruning": {
     "roots": [
       {

@@ -90,6 +90,7 @@
       "label": "read"
     }
   ],
+  "boundaryEdges": [],
   "pruning": {
     "roots": [
       {
