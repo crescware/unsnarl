@@ -21,7 +21,7 @@ const h = [g];
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_g_111["g<br/>L9"]
-  n_scope_0_h_126["h<br/>L10"]
+  n_scope_0_h_126["unused h<br/>L10"]
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_f_9["f()<br/>L1"]
@@ -42,6 +42,4 @@ flowchart RL
   n_scope_0_g_111 -->|read| n_scope_0_h_126
   classDef fnWrap fill:#1a2030,stroke:#5a7d99;
   class wrap_s_scope_1 fnWrap;
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_h_126 unused;
 ```

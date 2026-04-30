@@ -1,0 +1,12 @@
+0	3	integration/fixtures/control-switch-identifier/input.ts:0 module
+2	0	integration/fixtures/control-switch-identifier/input.ts:1 RED
+1	0	integration/fixtures/control-switch-identifier/input.ts:2 GREEN
+1	0	integration/fixtures/control-switch-identifier/input.ts:3 BLUE
+4	0	integration/fixtures/control-switch-identifier/input.ts:5 label
+1	1	integration/fixtures/control-switch-identifier/input.ts:6 color
+1	1	integration/fixtures/control-switch-identifier/input.ts:10 label
+1	1	integration/fixtures/control-switch-identifier/input.ts:13 label
+1	1	integration/fixtures/control-switch-identifier/input.ts:16 label
+1	1	integration/fixtures/control-switch-identifier/input.ts:19 label
+0	4	integration/fixtures/control-switch-identifier/input.ts:22 unused result
+13	12	11 total

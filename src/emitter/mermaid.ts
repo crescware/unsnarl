@@ -34,8 +34,8 @@ export class MermaidEmitter implements Emitter {
     this.renderer = options.renderer;
   }
 
-  emit(ir: SerializedIR, _opts: EmitOptions): string {
-    const graph = buildVisualGraph(ir);
+  emit(ir: SerializedIR, opts: EmitOptions): string {
+    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
     return renderMermaid(graph, this.renderer);
   }
 }
@@ -55,6 +55,19 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     lines.push('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%');
   }
   lines.push(`flowchart ${graph.direction}`);
+  if (graph.pruning !== undefined) {
+    const summary = graph.pruning.roots
+      .map((r) => `${r.query}(${r.matched})`)
+      .join(", ");
+    lines.push(
+      `  %% pruning: roots=[${summary}] ancestors=${graph.pruning.ancestors} descendants=${graph.pruning.descendants}`,
+    );
+    for (const r of graph.pruning.roots) {
+      if (r.matched === 0) {
+        lines.push(`  %% pruning: warning: query '${r.query}' matched 0 roots`);
+      }
+    }
+  }
 
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);
@@ -164,6 +177,33 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     lines.push(`  ${e.from} -->|${e.label}| ${e.to}`);
   }
 
+  // Boundary edges: pruning detected one or more neighbors past the
+  // requested radius. Mermaid cannot draw a truly dangling edge, so each
+  // boundary edge gets a faint stub node "(...)" attached via a dashed
+  // arrow. The stub stands in for "more graph keeps going beyond here".
+  // The label question follows the edge semantics `from -label-> to`,
+  // where the label describes the action `to` performs on `from`:
+  //
+  // - "out" (`inside -> stub`): the actor is the stub, which is unknown,
+  //   so we cannot honestly attach a label.
+  // - "in"  (`stub -> inside`): the actor is the kept inside node, so we
+  //   keep the original label.
+  const stubIds: string[] = [];
+  if (graph.boundaryEdges !== undefined && graph.boundaryEdges.length > 0) {
+    let stubCounter = 0;
+    for (const be of graph.boundaryEdges) {
+      stubCounter += 1;
+      const stubId = `boundary_stub_${stubCounter}`;
+      stubIds.push(stubId);
+      lines.push(`  ${stubId}((…))`);
+      if (be.direction === "out") {
+        lines.push(`  ${be.inside} -.-> ${stubId}`);
+      } else {
+        lines.push(`  ${stubId} -.->|${be.label}| ${be.inside}`);
+      }
+    }
+  }
+
   if (wrapperIds.length > 0) {
     // Distinct background so the function wrapper is visually separable
     // from the inner function body subgraph (otherwise both inherit the
@@ -174,16 +214,12 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     }
   }
 
-  const unusedIds: string[] = [];
-  for (const n of nodeMap.values()) {
-    if (n.unused) {
-      unusedIds.push(n.id);
-    }
-  }
-  if (unusedIds.length > 0) {
-    lines.push("  classDef unused stroke-dasharray: 5 5;");
-    for (const id of unusedIds) {
-      lines.push(`  class ${id} unused;`);
+  if (stubIds.length > 0) {
+    lines.push(
+      "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
+    );
+    for (const id of stubIds) {
+      lines.push(`  class ${id} boundaryStub;`);
     }
   }
 
@@ -239,7 +275,11 @@ function nodeLabel(n: VisualNode): string {
   if (n.kind === "ModuleSink") {
     return "module";
   }
-  return `${head}<br/>L${n.line}`;
+  // Unused declarations are surfaced via a textual prefix instead of a
+  // dashed border. This keeps the visual cue legible even when the node
+  // already has another classDef applied (boundary stub, fnWrap, ...).
+  const prefixed = n.unused === true ? `unused ${head}` : head;
+  return `${prefixed}<br/>L${n.line}`;
 }
 
 function nodeHead(n: VisualNode): string {

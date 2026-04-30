@@ -1,0 +1,6 @@
+1	0	integration/fixtures/const-chain-five/input.ts:1 a
+1	1	integration/fixtures/const-chain-five/input.ts:2 b
+1	1	integration/fixtures/const-chain-five/input.ts:3 c
+1	1	integration/fixtures/const-chain-five/input.ts:4 d
+0	1	integration/fixtures/const-chain-five/input.ts:5 unused e
+4	4	5 total

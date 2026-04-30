@@ -4,6 +4,7 @@ import {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
 } from "../pipeline/default.js";
+import type { PruningRunOptions } from "../pipeline/types.js";
 import { parseCliArgs, usage } from "./args.js";
 import { readSourceFile, readStdin } from "./io.js";
 
@@ -59,14 +60,35 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     : detectLanguage(args.inputFile, args.language);
 
   const pipeline = createDefaultPipeline(emitters);
+  const baseRunOpts = {
+    format: args.format,
+    language,
+    sourcePath,
+    emit: { pretty: args.pretty },
+  };
+  const pruning: PruningRunOptions | null =
+    args.roots.length > 0
+      ? {
+          roots: args.roots,
+          descendants: args.descendants ?? args.context ?? 10,
+          ancestors: args.ancestors ?? args.context ?? 10,
+        }
+      : null;
   try {
-    const out = pipeline.run(code, {
-      format: args.format,
-      language,
-      sourcePath,
-      emit: { pretty: args.pretty },
-    });
-    process.stdout.write(out);
+    const result = pipeline.runDetailed(
+      code,
+      pruning === null ? baseRunOpts : { ...baseRunOpts, pruning },
+    );
+    if (result.pruning !== null) {
+      for (const r of result.pruning) {
+        if (r.matched === 0) {
+          process.stderr.write(
+            `unsnarl: warning: query '${r.query}' matched 0 roots\n`,
+          );
+        }
+      }
+    }
+    process.stdout.write(result.text);
     return 0;
   } catch (e) {
     if (e instanceof ParseError) {

@@ -1,0 +1,12 @@
+2	0	integration/fixtures/control-try/input.ts:1 value
+3	0	integration/fixtures/control-try/input.ts:2 attempts
+1	0	integration/fixtures/control-try/input.ts:3 raw
+0	1	integration/fixtures/control-try/input.ts:6 attempts
+1	0	integration/fixtures/control-try/input.ts:7 Number
+0	3	integration/fixtures/control-try/input.ts:7 value
+0	0	integration/fixtures/control-try/input.ts:8 unused err
+0	1	integration/fixtures/control-try/input.ts:9 attempts
+1	1	integration/fixtures/control-try/input.ts:10 value
+1	1	integration/fixtures/control-try/input.ts:12 attempts
+0	2	integration/fixtures/control-try/input.ts:15 unused result
+9	9	11 total

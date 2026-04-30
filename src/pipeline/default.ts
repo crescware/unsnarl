@@ -4,6 +4,7 @@ import { JsonEmitter } from "../emitter/json.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";
 import { MermaidEmitter, type MermaidRenderer } from "../emitter/mermaid.js";
 import { DefaultEmitterRegistry } from "../emitter/registry.js";
+import { StatsEmitter } from "../emitter/stats.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat.js";
 import { createPipeline } from "./pipeline.js";
@@ -22,6 +23,7 @@ export function createDefaultEmitterRegistry(
   const mermaid = new MermaidEmitter({ renderer: options.mermaidRenderer });
   reg.register(mermaid);
   reg.register(new MarkdownEmitter(mermaid));
+  reg.register(new StatsEmitter());
   return reg;
 }
 

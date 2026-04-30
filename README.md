@@ -27,6 +27,40 @@ unsnarl --list-formats
 
 Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 
+### Pruning the visual graph
+
+Large files generate dense graphs that can be hard to read. Pass one or more
+root queries with `-r` / `--roots` to keep only the neighborhood of the
+specified nodes. Combine with `-A` / `-B` / `-C` to control how far the
+neighborhood expands.
+
+```sh
+unsnarl --format mermaid -r 42:render -C 3 file.tsx       # 3 generations both ways
+unsnarl --format mermaid -r 9-13 -A 2 -B 0 file.ts        # range, descendants only
+unsnarl --format mermaid -r 10:foo,42 -r 99 file.ts       # multiple roots
+```
+
+Each query token is one of:
+
+| form     | meaning                                    |
+| -------- | ------------------------------------------ |
+| `n`      | every node on line `n`                     |
+| `n:id`   | node named `id` on line `n`                |
+| `n-m`    | every node in line range `[n, m]`          |
+| `n-m:id` | node named `id` within line range `[n, m]` |
+| `id`     | every node named `id`, regardless of scope |
+
+Generation flags (and their long aliases):
+
+- `-A N` / `--descendants N` – keep `N` generations of descendants
+- `-B N` / `--ancestors N` – keep `N` generations of ancestors
+- `-C N` / `--context N` – shorthand for `-A N -B N`
+
+When `-r` is given but no generation flag is, the default is `-C 10`. Pruning
+applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
+`ir` output is always emitted in full. If a query matches nothing, a warning
+is written to stderr but the command still exits with `0`.
+
 ## Setup
 
 ```sh

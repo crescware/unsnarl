@@ -1,0 +1,7 @@
+2	0	integration/fixtures/control-switch-partial-break/input.ts:1 label
+1	0	integration/fixtures/control-switch-partial-break/input.ts:2 kind
+1	1	integration/fixtures/control-switch-partial-break/input.ts:6 label
+1	1	integration/fixtures/control-switch-partial-break/input.ts:8 label
+1	1	integration/fixtures/control-switch-partial-break/input.ts:11 label
+0	2	integration/fixtures/control-switch-partial-break/input.ts:14 unused result
+6	5	6 total

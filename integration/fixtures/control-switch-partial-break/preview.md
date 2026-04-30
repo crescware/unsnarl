@@ -26,7 +26,7 @@ const result = label;
 flowchart RL
   n_scope_0_label_4["let label<br/>L1"]
   n_scope_0_kind_22["kind<br/>L2"]
-  n_scope_0_result_168["result<br/>L14"]
+  n_scope_0_result_168["unused result<br/>L14"]
   subgraph s_scope_1["switch L4"]
     direction RL
     subgraph s_scope_2["case &quot;a&quot; L5"]
@@ -48,6 +48,4 @@ flowchart RL
   n_scope_0_kind_22 -->|read| s_scope_1
   wr_ref_2 -->|read| n_scope_0_result_168
   wr_ref_3 -->|read| n_scope_0_result_168
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_result_168 unused;
 ```

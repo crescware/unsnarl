@@ -11,7 +11,9 @@ export type {
   Parser,
   Pipeline,
   PipelineConfig,
+  PipelineRunDetails,
   PipelineRunOptions,
+  PruningRunOptions,
   ScopeAnalyzer,
   SerializeContext,
   SourceMeta,
@@ -63,17 +65,22 @@ export type {
   Direction,
   NodeKind,
   SubgraphKind,
+  VisualBoundaryEdge,
   VisualEdge,
   VisualGraph,
+  VisualGraphPruning,
   VisualNode,
   VisualSubgraph,
 } from "./visual-graph/model.js";
+export { pruneVisualGraph } from "./visual-graph/prune.js";
+export type { PruneOptions, PruneResult } from "./visual-graph/prune.js";
 export { MarkdownEmitter } from "./emitter/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid.js";
 export type {
   MermaidEmitterOptions,
   MermaidRenderer,
 } from "./emitter/mermaid.js";
+export { StatsEmitter } from "./emitter/stats.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";
 
 export {
@@ -91,6 +98,13 @@ export type {
   CliParseResult,
   CliParseSuccess,
 } from "./cli/args.js";
+export { parseRootQueries, parseRootQuery } from "./cli/root-query.js";
+export type {
+  ParsedRootQuery,
+  RootQueryParseFailure,
+  RootQueryParseResult,
+  RootQueryParseSuccess,
+} from "./cli/root-query.js";
 export { runCli } from "./cli/main.js";
 export { readSourceFile, readStdin } from "./cli/io.js";
 

@@ -60,7 +60,9 @@ describe("MermaidEmitter", () => {
     const out = emit("const a = 1;\nconst b = a;\n");
     expect(out).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(out).toContain('"a<br/>L1"');
-    expect(out).toContain('"b<br/>L2"');
+    // b is the terminal of the chain so it ends up unused; the label
+    // gains the "unused " prefix introduced for the textual cue.
+    expect(out).toContain('"unused b<br/>L2"');
   });
 
   test("decorates labels per Definition kind", () => {
@@ -102,7 +104,8 @@ describe("MermaidEmitter", () => {
   test("renders a function as a subgraph and routes return through a return node", () => {
     const out = emit("function f() {\n  const x = 1;\n  return x;\n}\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["f\(\)/);
-    expect(out).toMatch(/n_scope_0_f_9\["f\(\)<br\/>L1"\]/);
+    // f is never called, so its declaration node carries the "unused " prefix.
+    expect(out).toMatch(/n_scope_0_f_9\["unused f\(\)<br\/>L1"\]/);
     expect(out).toContain("direction RL");
     expect(out).toContain("return_scope_0_f_9((return))");
     expect(out).toMatch(/n_scope_1_x_\d+ -->\|read\| return_scope_0_f_9/);
@@ -112,7 +115,7 @@ describe("MermaidEmitter", () => {
   test("subgraphs arrow functions assigned to a const", () => {
     const out = emit("const fn = (p: number) => p + 1;\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
-    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
+    expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
     expect(out).toMatch(/n_scope_1_p_\d+ -->\|read\| return_scope_0_fn_6/);
   });
@@ -120,15 +123,22 @@ describe("MermaidEmitter", () => {
   test("subgraphs function expressions assigned to a const", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
-    expect(out).toMatch(/n_scope_0_fn_6\["fn\(\)<br\/>L1"\]/);
+    expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
     expect(out).toContain("return_scope_0_fn_6((return))");
   });
 
-  test("highlights unused variables with a colorless dashed stroke", () => {
+  test("marks unused declarations with an 'unused' prefix in the label", () => {
     const out = emit("const a = 1;\nconst unused = 2;\nconst b = a;\n");
-    expect(out).toContain("classDef unused stroke-dasharray: 5 5;");
-    expect(out).not.toMatch(/fill:#|stroke:#/);
-    expect(out).toMatch(/class n_scope_0_unused_/);
+    // The dashed-stroke classDef is gone; the cue is the textual prefix.
+    expect(out).not.toContain("classDef unused");
+    expect(out).not.toMatch(/^\s*class n_scope_/m);
+    // `unused` (the variable name) plus the "unused " prefix yield this
+    // intentional double-word label.
+    expect(out).toMatch(/n_scope_0_unused_\d+\["unused unused<br\/>L2"\]/);
+    // `b` is also unused (terminal of the chain).
+    expect(out).toMatch(/n_scope_0_b_\d+\["unused b<br\/>L3"\]/);
+    // `a` is read by b so it stays without the prefix.
+    expect(out).toMatch(/n_scope_0_a_\d+\["a<br\/>L1"\]/);
   });
 
   test("renders ImplicitGlobalVariable as a 'global' node when used directly", () => {
@@ -428,7 +438,8 @@ describe("MermaidEmitter rendering: catch parameter placement", () => {
     const catchEnd = ls.slice(catchStart).findIndex((l) => l.trim() === "end");
     expect(catchEnd).toBeGreaterThan(0);
     const inside = ls.slice(catchStart, catchStart + catchEnd);
-    expect(inside.some((l) => l.includes('"catch err<br/>'))).toBe(true);
+    // err isn't read inside the catch body, so it carries the unused prefix.
+    expect(inside.some((l) => l.includes('"unused catch err<br/>'))).toBe(true);
   });
 });
 

@@ -28,7 +28,7 @@ flowchart RL
   n_scope_0_third_171["third<br/>L6"]
   n_scope_0_rest_181["rest<br/>L6"]
   n_scope_0_spread_206["spread<br/>L7"]
-  n_scope_0_sum_232["sum<br/>L9"]
+  n_scope_0_sum_232["unused sum<br/>L9"]
   n_scope_0_source_6 -->|read| n_scope_0_a_95
   n_scope_0_source_6 -->|read| n_scope_0_renamed_101
   n_scope_0_source_6 -->|read| n_scope_0_d_139
@@ -43,6 +43,4 @@ flowchart RL
   n_scope_0_third_171 -->|read| n_scope_0_sum_232
   n_scope_0_rest_181 -->|read| n_scope_0_sum_232
   n_scope_0_spread_206 -->|read| n_scope_0_sum_232
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_sum_232 unused;
 ```

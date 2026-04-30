@@ -1,0 +1,24 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  %% pruning: roots=[10(1)] ancestors=1 descendants=1
+  n_scope_0_result_97["unused result<br/>L10"]
+  subgraph cont_if_scope_0_37["if-else L4"]
+    direction RL
+    subgraph s_scope_1["if L4"]
+      direction RL
+      wr_ref_1(["let counter<br/>L5"])
+    end
+    subgraph s_scope_2["else L6"]
+      direction RL
+      wr_ref_2(["let counter<br/>L7"])
+    end
+  end
+  wr_ref_1 -->|read| n_scope_0_result_97
+  wr_ref_2 -->|read| n_scope_0_result_97
+  boundary_stub_1((…))
+  boundary_stub_1 -.->|set| wr_ref_1
+  boundary_stub_2((…))
+  boundary_stub_2 -.->|set| wr_ref_2
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class boundary_stub_1 boundaryStub;
+  class boundary_stub_2 boundaryStub;

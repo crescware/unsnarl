@@ -18,7 +18,7 @@ function f() {
 flowchart RL
   subgraph wrap_s_scope_1[" "]
     direction TB
-    n_scope_0_f_9["f()<br/>L1"]
+    n_scope_0_f_9["unused f()<br/>L1"]
     subgraph s_scope_1["f()<br/>L1"]
       direction RL
       return_scope_0_f_9((return))
@@ -32,6 +32,4 @@ flowchart RL
   wr_ref_1 -->|read| return_scope_0_f_9
   classDef fnWrap fill:#1a2030,stroke:#5a7d99;
   class wrap_s_scope_1 fnWrap;
-  classDef unused stroke-dasharray: 5 5;
-  class n_scope_0_f_9 unused;
 ```
