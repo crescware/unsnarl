@@ -11,6 +11,7 @@ vi.mock("../emitter/ir.js", () => ({
     return {
       format: "ir",
       contentType: "application/json",
+      extension: "json",
       emit: vi.fn(),
     };
   }),
@@ -20,6 +21,7 @@ vi.mock("../emitter/json.js", () => ({
     return {
       format: "json",
       contentType: "application/json",
+      extension: "json",
       emit: vi.fn(),
     };
   }),
@@ -29,6 +31,7 @@ vi.mock("../emitter/mermaid.js", () => ({
     return {
       format: "mermaid",
       contentType: "text/vnd.mermaid",
+      extension: "mmd",
       emit: vi.fn(),
     };
   }),
@@ -38,6 +41,7 @@ vi.mock("../emitter/markdown.js", () => ({
     return {
       format: "markdown",
       contentType: "text/markdown",
+      extension: "md",
       emit: vi.fn(),
     };
   }),

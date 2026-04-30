@@ -55,6 +55,10 @@ export interface EmitOptions {
 export interface Emitter {
   readonly format: string;
   readonly contentType: string;
+  // File extension without leading dot, used by `--out-dir` to derive
+  // output filenames. Multiple emitters may share an extension (e.g. ir
+  // and json both write JSON).
+  readonly extension: string;
   emit(ir: SerializedIR, opts: EmitOptions): string;
 }
 

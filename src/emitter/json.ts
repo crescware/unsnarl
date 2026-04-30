@@ -5,6 +5,7 @@ import { buildVisualGraph } from "../visual-graph/builder.js";
 export class JsonEmitter implements Emitter {
   readonly format = "json";
   readonly contentType = "application/json";
+  readonly extension = "json";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph = opts.prunedGraph ?? buildVisualGraph(ir);

@@ -1,4 +1,4 @@
-import { mkdtempSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
@@ -266,5 +266,89 @@ describe("runCli (end-to-end)", () => {
     const graph = JSON.parse(r.stdout);
     expect(graph.pruning.descendants).toBe(7);
     expect(graph.pruning.ancestors).toBe(3);
+  });
+
+  // One full-dressing happy path: nested out-dir + -A -B -C all set +
+  // non-default format. Demonstrates that args parsing -> name derivation
+  // -> emitter extension lookup -> mkdir(recursive) -> writeFile is wired
+  // end-to-end. Naming permutations (other -A/-B/-C combos, query forms)
+  // are pure string transforms and live in output-name.test.ts.
+  test("--out-dir writes a file under a not-yet-existing nested directory with the derived name", async () => {
+    const inputPath = join(tmpDir, "smoke.ts");
+    writeFileSync(inputPath, "const value = 1;\nconst other = value;\n");
+    const outDir = join(tmpDir, "deeply", "nested", "out");
+    const r = await captureRun([
+      "--format",
+      "markdown",
+      "-r",
+      "value",
+      "-A",
+      "1",
+      "-B",
+      "2",
+      "-C",
+      "3",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stdout).toBe("");
+    // -C is dropped because -A and -B are both explicit; -C has no effect
+    // once both sides are pinned.
+    const expected = join(outDir, "value-a1-b2.md");
+    expect(existsSync(expected)).toBe(true);
+    expect(readFileSync(expected, "utf8")).toMatch(/```mermaid/);
+  });
+
+  test("--out-dir without -r falls back to the input filename", async () => {
+    const inputPath = join(tmpDir, "fooBar.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const outDir = join(tmpDir, "no-roots-out");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(existsSync(join(outDir, "fooBar.mmd"))).toBe(true);
+  });
+
+  test("--out-dir overwrites an existing file", async () => {
+    const inputPath = join(tmpDir, "overwrite.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const outDir = join(tmpDir, "overwrite-out");
+    const first = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(first.exitCode).toBe(0);
+    const target = join(outDir, "overwrite.mmd");
+    const before = readFileSync(target, "utf8");
+
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const second = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(second.exitCode).toBe(0);
+    const after = readFileSync(target, "utf8");
+    expect(after).not.toBe(before);
+  });
+
+  test("--out-dir with --stdin and no -r exits with 2 (no naming basis)", async () => {
+    const outDir = join(tmpDir, "stdin-out");
+    const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
+    expect(r.exitCode).toBe(2);
+    expect(r.stderr).toMatch(/-r\/--roots|input file/);
+    expect(existsSync(outDir)).toBe(false);
   });
 });

@@ -23,6 +23,7 @@ import type { VisualElement, VisualNode } from "../visual-graph/model.js";
 export class StatsEmitter implements Emitter {
   readonly format = "stats";
   readonly contentType = "text/tab-separated-values";
+  readonly extension = "tsv";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph = opts.prunedGraph ?? buildVisualGraph(ir);

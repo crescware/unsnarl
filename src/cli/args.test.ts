@@ -211,4 +211,30 @@ describe("parseCliArgs", () => {
   test("-A rejects missing value", () => {
     expect(parseCliArgs(["-A"]).ok).toBe(false);
   });
+
+  test("outDir defaults to null", () => {
+    const r = parseCliArgs(["foo.ts"]);
+    expect(r.ok).toBe(true);
+    if (r.ok) {
+      expect(r.args.outDir).toBeNull();
+    }
+  });
+
+  test("-o / --out-dir parse a directory string", () => {
+    const a = parseCliArgs(["-o", "./out", "foo.ts"]);
+    const b = parseCliArgs(["--out-dir", "./out", "foo.ts"]);
+    expect(a.ok).toBe(true);
+    expect(b.ok).toBe(true);
+    if (a.ok) {
+      expect(a.args.outDir).toBe("./out");
+    }
+    if (b.ok) {
+      expect(b.args.outDir).toBe("./out");
+    }
+  });
+
+  test("-o rejects missing value", () => {
+    expect(parseCliArgs(["-o"]).ok).toBe(false);
+    expect(parseCliArgs(["--out-dir"]).ok).toBe(false);
+  });
 });
