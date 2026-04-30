@@ -4,7 +4,7 @@
     "path": "integration/fixtures/destructuring/input.ts",
     "language": "ts"
   },
-  "raw": "const source = { a: 1, b: 2, c: 3, nested: { d: 4 } };\nconst list = [10, 20, 30, 40];\n\nconst { a, b: renamed } = source;\nconst { nested: { d } } = source;\nconst [first, , third, ...rest] = list;\nconst { ...spread } = source;\n\nconst sum = a + renamed + d + first + third + rest.length + Object.keys(spread).length;\n",
+  "raw": "const source = { a: 1, b: 2, c: 3, nested: { d: 4 } };\nconst list = [10, 20, 30, 40];\n\nconst { a, b: renamed } = source;\nconst {\n  nested: { d },\n} = source;\nconst [first, , third, ...rest] = list;\nconst { ...spread } = source;\n\nconst sum =\n  a + renamed + d + first + third + rest.length + Object.keys(spread).length;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -26,13 +26,13 @@
         "scope#0:list@61",
         "scope#0:a@95",
         "scope#0:renamed@101",
-        "scope#0:d@139",
-        "scope#0:first@162",
-        "scope#0:third@171",
-        "scope#0:rest@181",
-        "scope#0:spread@206",
-        "scope#0:sum@232",
-        "scope#0:Object@286"
+        "scope#0:d@141",
+        "scope#0:first@165",
+        "scope#0:third@174",
+        "scope#0:rest@184",
+        "scope#0:spread@209",
+        "scope#0:sum@235",
+        "scope#0:Object@291"
       ],
       "references": [
         "ref#0",
@@ -276,14 +276,14 @@
       ]
     },
     {
-      "id": "scope#0:d@139",
+      "id": "scope#0:d@141",
       "name": "d",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 5,
-          "column": 18,
-          "offset": 139
+          "line": 6,
+          "column": 12,
+          "offset": 141
         }
       ],
       "references": [
@@ -295,9 +295,9 @@
           "name": {
             "name": "d",
             "span": {
-              "line": 5,
-              "column": 18,
-              "offset": 139
+              "line": 6,
+              "column": 12,
+              "offset": 141
             }
           },
           "node": {
@@ -318,9 +318,9 @@
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 5,
-            "column": 26,
-            "offset": 147
+            "line": 7,
+            "column": 4,
+            "offset": 150
           },
           "importKind": null,
           "importSource": null,
@@ -330,14 +330,14 @@
       ]
     },
     {
-      "id": "scope#0:first@162",
+      "id": "scope#0:first@165",
       "name": "first",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 6,
+          "line": 8,
           "column": 7,
-          "offset": 162
+          "offset": 165
         }
       ],
       "references": [
@@ -349,32 +349,32 @@
           "name": {
             "name": "first",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 7,
-              "offset": 162
+              "offset": 165
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 6,
-              "offset": 161
+              "offset": 164
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 0,
-              "offset": 155
+              "offset": 158
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 6,
+            "line": 8,
             "column": 34,
-            "offset": 189
+            "offset": 192
           },
           "importKind": null,
           "importSource": null,
@@ -384,14 +384,14 @@
       ]
     },
     {
-      "id": "scope#0:third@171",
+      "id": "scope#0:third@174",
       "name": "third",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 6,
+          "line": 8,
           "column": 16,
-          "offset": 171
+          "offset": 174
         }
       ],
       "references": [
@@ -403,32 +403,32 @@
           "name": {
             "name": "third",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 16,
-              "offset": 171
+              "offset": 174
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 6,
-              "offset": 161
+              "offset": 164
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 0,
-              "offset": 155
+              "offset": 158
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 6,
+            "line": 8,
             "column": 34,
-            "offset": 189
+            "offset": 192
           },
           "importKind": null,
           "importSource": null,
@@ -438,14 +438,14 @@
       ]
     },
     {
-      "id": "scope#0:rest@181",
+      "id": "scope#0:rest@184",
       "name": "rest",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 6,
+          "line": 8,
           "column": 26,
-          "offset": 181
+          "offset": 184
         }
       ],
       "references": [
@@ -457,32 +457,32 @@
           "name": {
             "name": "rest",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 26,
-              "offset": 181
+              "offset": 184
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 6,
-              "offset": 161
+              "offset": 164
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 6,
+              "line": 8,
               "column": 0,
-              "offset": 155
+              "offset": 158
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 6,
+            "line": 8,
             "column": 34,
-            "offset": 189
+            "offset": 192
           },
           "importKind": null,
           "importSource": null,
@@ -492,14 +492,14 @@
       ]
     },
     {
-      "id": "scope#0:spread@206",
+      "id": "scope#0:spread@209",
       "name": "spread",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 7,
+          "line": 9,
           "column": 11,
-          "offset": 206
+          "offset": 209
         }
       ],
       "references": [
@@ -511,32 +511,32 @@
           "name": {
             "name": "spread",
             "span": {
-              "line": 7,
+              "line": 9,
               "column": 11,
-              "offset": 206
+              "offset": 209
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 7,
+              "line": 9,
               "column": 6,
-              "offset": 201
+              "offset": 204
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 7,
+              "line": 9,
               "column": 0,
-              "offset": 195
+              "offset": 198
             }
           },
           "initType": "Identifier",
           "initSpan": {
-            "line": 7,
+            "line": 9,
             "column": 22,
-            "offset": 217
+            "offset": 220
           },
           "importKind": null,
           "importSource": null,
@@ -546,14 +546,14 @@
       ]
     },
     {
-      "id": "scope#0:sum@232",
+      "id": "scope#0:sum@235",
       "name": "sum",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 9,
+          "line": 11,
           "column": 6,
-          "offset": 232
+          "offset": 235
         }
       ],
       "references": [],
@@ -563,32 +563,32 @@
           "name": {
             "name": "sum",
             "span": {
-              "line": 9,
+              "line": 11,
               "column": 6,
-              "offset": 232
+              "offset": 235
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 9,
+              "line": 11,
               "column": 6,
-              "offset": 232
+              "offset": 235
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 9,
+              "line": 11,
               "column": 0,
-              "offset": 226
+              "offset": 229
             }
           },
           "initType": "BinaryExpression",
           "initSpan": {
-            "line": 9,
-            "column": 12,
-            "offset": 238
+            "line": 12,
+            "column": 2,
+            "offset": 243
           },
           "importKind": null,
           "importSource": null,
@@ -598,14 +598,14 @@
       ]
     },
     {
-      "id": "scope#0:Object@286",
+      "id": "scope#0:Object@291",
       "name": "Object",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 9,
-          "column": 60,
-          "offset": 286
+          "line": 12,
+          "column": 50,
+          "offset": 291
         }
       ],
       "references": [
@@ -617,17 +617,17 @@
           "name": {
             "name": "Object",
             "span": {
-              "line": 9,
-              "column": 60,
-              "offset": 286
+              "line": 12,
+              "column": 50,
+              "offset": 291
             }
           },
           "node": {
             "type": "Identifier",
             "span": {
-              "line": 9,
-              "column": 60,
-              "offset": 286
+              "line": 12,
+              "column": 50,
+              "offset": 291
             }
           },
           "parent": null,
@@ -673,15 +673,15 @@
       "identifier": {
         "name": "source",
         "span": {
-          "line": 5,
-          "column": 26,
-          "offset": 147
+          "line": 7,
+          "column": 4,
+          "offset": 150
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:source@6",
       "owners": [
-        "scope#0:d@139"
+        "scope#0:d@141"
       ],
       "writeExpr": null,
       "init": true,
@@ -698,17 +698,17 @@
       "identifier": {
         "name": "list",
         "span": {
-          "line": 6,
+          "line": 8,
           "column": 34,
-          "offset": 189
+          "offset": 192
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:list@61",
       "owners": [
-        "scope#0:first@162",
-        "scope#0:third@171",
-        "scope#0:rest@181"
+        "scope#0:first@165",
+        "scope#0:third@174",
+        "scope#0:rest@184"
       ],
       "writeExpr": null,
       "init": true,
@@ -725,15 +725,15 @@
       "identifier": {
         "name": "source",
         "span": {
-          "line": 7,
+          "line": 9,
           "column": 22,
-          "offset": 217
+          "offset": 220
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:source@6",
       "owners": [
-        "scope#0:spread@206"
+        "scope#0:spread@209"
       ],
       "writeExpr": null,
       "init": true,
@@ -750,15 +750,15 @@
       "identifier": {
         "name": "a",
         "span": {
-          "line": 9,
-          "column": 12,
-          "offset": 238
+          "line": 12,
+          "column": 2,
+          "offset": 243
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:a@95",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -775,15 +775,15 @@
       "identifier": {
         "name": "renamed",
         "span": {
-          "line": 9,
-          "column": 16,
-          "offset": 242
+          "line": 12,
+          "column": 6,
+          "offset": 247
         }
       },
       "from": "scope#0",
       "resolved": "scope#0:renamed@101",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -800,15 +800,15 @@
       "identifier": {
         "name": "d",
         "span": {
-          "line": 9,
-          "column": 26,
-          "offset": 252
+          "line": 12,
+          "column": 16,
+          "offset": 257
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:d@139",
+      "resolved": "scope#0:d@141",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -825,15 +825,15 @@
       "identifier": {
         "name": "first",
         "span": {
-          "line": 9,
-          "column": 30,
-          "offset": 256
+          "line": 12,
+          "column": 20,
+          "offset": 261
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:first@162",
+      "resolved": "scope#0:first@165",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -850,15 +850,15 @@
       "identifier": {
         "name": "third",
         "span": {
-          "line": 9,
-          "column": 38,
-          "offset": 264
+          "line": 12,
+          "column": 28,
+          "offset": 269
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:third@171",
+      "resolved": "scope#0:third@174",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -875,15 +875,15 @@
       "identifier": {
         "name": "rest",
         "span": {
-          "line": 9,
-          "column": 46,
-          "offset": 272
+          "line": 12,
+          "column": 36,
+          "offset": 277
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:rest@181",
+      "resolved": "scope#0:rest@184",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -900,15 +900,15 @@
       "identifier": {
         "name": "Object",
         "span": {
-          "line": 9,
-          "column": 60,
-          "offset": 286
+          "line": 12,
+          "column": 50,
+          "offset": 291
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:Object@286",
+      "resolved": "scope#0:Object@291",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -925,15 +925,15 @@
       "identifier": {
         "name": "spread",
         "span": {
-          "line": 9,
-          "column": 72,
-          "offset": 298
+          "line": 12,
+          "column": 62,
+          "offset": 303
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:spread@206",
+      "resolved": "scope#0:spread@209",
       "owners": [
-        "scope#0:sum@232"
+        "scope#0:sum@235"
       ],
       "writeExpr": null,
       "init": false,
@@ -947,7 +947,7 @@
     }
   ],
   "unusedVariableIds": [
-    "scope#0:sum@232"
+    "scope#0:sum@235"
   ],
   "diagnostics": []
 }

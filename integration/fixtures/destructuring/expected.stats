@@ -2,10 +2,10 @@
 3	0	integration/fixtures/destructuring/input.ts:2 list
 1	1	integration/fixtures/destructuring/input.ts:4 a
 1	1	integration/fixtures/destructuring/input.ts:4 renamed
-1	1	integration/fixtures/destructuring/input.ts:5 d
-1	1	integration/fixtures/destructuring/input.ts:6 first
-1	1	integration/fixtures/destructuring/input.ts:6 third
-1	1	integration/fixtures/destructuring/input.ts:6 rest
-1	1	integration/fixtures/destructuring/input.ts:7 spread
-0	7	integration/fixtures/destructuring/input.ts:9 unused sum
+1	1	integration/fixtures/destructuring/input.ts:6 d
+1	1	integration/fixtures/destructuring/input.ts:8 first
+1	1	integration/fixtures/destructuring/input.ts:8 third
+1	1	integration/fixtures/destructuring/input.ts:8 rest
+1	1	integration/fixtures/destructuring/input.ts:9 spread
+0	7	integration/fixtures/destructuring/input.ts:11 unused sum
 14	14	10 total

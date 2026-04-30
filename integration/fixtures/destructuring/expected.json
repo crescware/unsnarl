@@ -40,50 +40,50 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_d_139",
+      "id": "n_scope_0_d_141",
       "kind": "Variable",
       "name": "d",
-      "line": 5,
+      "line": 6,
       "declarationKind": "const"
     },
     {
       "type": "node",
-      "id": "n_scope_0_first_162",
+      "id": "n_scope_0_first_165",
       "kind": "Variable",
       "name": "first",
-      "line": 6,
+      "line": 8,
       "declarationKind": "const"
     },
     {
       "type": "node",
-      "id": "n_scope_0_third_171",
+      "id": "n_scope_0_third_174",
       "kind": "Variable",
       "name": "third",
-      "line": 6,
+      "line": 8,
       "declarationKind": "const"
     },
     {
       "type": "node",
-      "id": "n_scope_0_rest_181",
+      "id": "n_scope_0_rest_184",
       "kind": "Variable",
       "name": "rest",
-      "line": 6,
+      "line": 8,
       "declarationKind": "const"
     },
     {
       "type": "node",
-      "id": "n_scope_0_spread_206",
+      "id": "n_scope_0_spread_209",
       "kind": "Variable",
       "name": "spread",
-      "line": 7,
+      "line": 9,
       "declarationKind": "const"
     },
     {
       "type": "node",
-      "id": "n_scope_0_sum_232",
+      "id": "n_scope_0_sum_235",
       "kind": "Variable",
       "name": "sum",
-      "line": 9,
+      "line": 11,
       "declarationKind": "const",
       "unused": true
     }
@@ -101,62 +101,62 @@
     },
     {
       "from": "n_scope_0_source_6",
-      "to": "n_scope_0_d_139",
+      "to": "n_scope_0_d_141",
       "label": "read"
     },
     {
       "from": "n_scope_0_list_61",
-      "to": "n_scope_0_first_162",
+      "to": "n_scope_0_first_165",
       "label": "read"
     },
     {
       "from": "n_scope_0_list_61",
-      "to": "n_scope_0_third_171",
+      "to": "n_scope_0_third_174",
       "label": "read"
     },
     {
       "from": "n_scope_0_list_61",
-      "to": "n_scope_0_rest_181",
+      "to": "n_scope_0_rest_184",
       "label": "read"
     },
     {
       "from": "n_scope_0_source_6",
-      "to": "n_scope_0_spread_206",
+      "to": "n_scope_0_spread_209",
       "label": "read"
     },
     {
       "from": "n_scope_0_a_95",
-      "to": "n_scope_0_sum_232",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
       "from": "n_scope_0_renamed_101",
-      "to": "n_scope_0_sum_232",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
-      "from": "n_scope_0_d_139",
-      "to": "n_scope_0_sum_232",
+      "from": "n_scope_0_d_141",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
-      "from": "n_scope_0_first_162",
-      "to": "n_scope_0_sum_232",
+      "from": "n_scope_0_first_165",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
-      "from": "n_scope_0_third_171",
-      "to": "n_scope_0_sum_232",
+      "from": "n_scope_0_third_174",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
-      "from": "n_scope_0_rest_181",
-      "to": "n_scope_0_sum_232",
+      "from": "n_scope_0_rest_184",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     },
     {
-      "from": "n_scope_0_spread_206",
-      "to": "n_scope_0_sum_232",
+      "from": "n_scope_0_spread_209",
+      "to": "n_scope_0_sum_235",
       "label": "read"
     }
   ]
