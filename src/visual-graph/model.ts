@@ -66,10 +66,17 @@ export interface VisualEdge {
   label: string;
 }
 
+export interface VisualGraphPruning {
+  roots: ReadonlyArray<{ query: string; matched: number }>;
+  descendants: number;
+  ancestors: number;
+}
+
 export interface VisualGraph {
   version: 1;
   source: { path: string; language: Language };
   direction: Direction;
   elements: VisualElement[];
   edges: VisualEdge[];
+  pruning?: VisualGraphPruning;
 }
