@@ -34,8 +34,8 @@ export class MermaidEmitter implements Emitter {
     this.renderer = options.renderer;
   }
 
-  emit(ir: SerializedIR, _opts: EmitOptions): string {
-    const graph = buildVisualGraph(ir);
+  emit(ir: SerializedIR, opts: EmitOptions): string {
+    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
     return renderMermaid(graph, this.renderer);
   }
 }
@@ -55,6 +55,19 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     lines.push('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%');
   }
   lines.push(`flowchart ${graph.direction}`);
+  if (graph.pruning !== undefined) {
+    const summary = graph.pruning.roots
+      .map((r) => `${r.query}(${r.matched})`)
+      .join(", ");
+    lines.push(
+      `  %% pruning: roots=[${summary}] ancestors=${graph.pruning.ancestors} descendants=${graph.pruning.descendants}`,
+    );
+    for (const r of graph.pruning.roots) {
+      if (r.matched === 0) {
+        lines.push(`  %% pruning: warning: query '${r.query}' matched 0 roots`);
+      }
+    }
+  }
 
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);

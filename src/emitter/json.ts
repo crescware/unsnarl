@@ -7,7 +7,7 @@ export class JsonEmitter implements Emitter {
   readonly contentType = "application/json";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
-    const graph = buildVisualGraph(ir);
+    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
     const pretty = opts.pretty !== false;
     const text = pretty
       ? JSON.stringify(graph, null, 2)

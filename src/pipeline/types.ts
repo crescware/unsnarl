@@ -1,4 +1,6 @@
+import type { ParsedRootQuery } from "../cli/root-query.js";
 import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
+import type { VisualGraph } from "../visual-graph/model.js";
 
 export interface ParseOptions {
   language: Language;
@@ -47,6 +49,7 @@ export interface IRSerializer {
 
 export interface EmitOptions {
   pretty?: boolean;
+  prunedGraph?: VisualGraph;
 }
 
 export interface Emitter {
@@ -61,13 +64,29 @@ export interface EmitterRegistry {
   list(): readonly string[];
 }
 
+export interface PruningRunOptions {
+  readonly roots: readonly ParsedRootQuery[];
+  readonly descendants: number;
+  readonly ancestors: number;
+}
+
 export interface PipelineRunOptions extends ParseOptions {
   format: string;
   emit?: EmitOptions;
+  pruning?: PruningRunOptions;
+}
+
+export interface PipelineRunDetails {
+  readonly text: string;
+  readonly pruning: ReadonlyArray<{
+    readonly query: string;
+    readonly matched: number;
+  }> | null;
 }
 
 export interface Pipeline {
   run(code: string, opts: PipelineRunOptions): string;
+  runDetailed(code: string, opts: PipelineRunOptions): PipelineRunDetails;
 }
 
 export interface PipelineConfig {
