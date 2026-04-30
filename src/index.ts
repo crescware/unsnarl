@@ -75,11 +75,11 @@ export type {
 export { pruneVisualGraph } from "./visual-graph/prune.js";
 export type { PruneOptions, PruneResult } from "./visual-graph/prune.js";
 export { MarkdownEmitter } from "./emitter/markdown.js";
-export { MermaidEmitter } from "./emitter/mermaid.js";
+export { MermaidEmitter } from "./emitter/mermaid/mermaid.js";
 export type {
   MermaidEmitterOptions,
   MermaidRenderer,
-} from "./emitter/mermaid.js";
+} from "./emitter/mermaid/mermaid.js";
 export { StatsEmitter } from "./emitter/stats.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";
 
