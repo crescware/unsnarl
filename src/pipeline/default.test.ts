@@ -3,7 +3,9 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 import { IrEmitter } from "../emitter/ir.js";
 import { JsonEmitter } from "../emitter/json.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";
-import { MermaidEmitter } from "../emitter/mermaid.js";
+import { MermaidEmitter } from "../emitter/mermaid/mermaid.js";
+import { dagreStrategy } from "../emitter/mermaid/strategy/dagre-strategy.js";
+import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
 import { createDefaultEmitterRegistry } from "./default.js";
 
 vi.mock("../emitter/ir.js", () => ({
@@ -26,7 +28,7 @@ vi.mock("../emitter/json.js", () => ({
     };
   }),
 }));
-vi.mock("../emitter/mermaid.js", () => ({
+vi.mock("../emitter/mermaid/mermaid.js", () => ({
   MermaidEmitter: vi.fn(function MermaidEmitter() {
     return {
       format: "mermaid",
@@ -62,11 +64,11 @@ describe("createDefaultEmitterRegistry", () => {
 
   test("forwards the mermaid renderer choice into MermaidEmitter", () => {
     createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
-    expect(MermaidEmitter).toHaveBeenCalledWith({ renderer: "elk" });
+    expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: elkStrategy });
 
     vi.clearAllMocks();
     createDefaultEmitterRegistry({ mermaidRenderer: "dagre" });
-    expect(MermaidEmitter).toHaveBeenCalledWith({ renderer: "dagre" });
+    expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: dagreStrategy });
   });
 
   test("MarkdownEmitter receives the SAME MermaidEmitter instance, not a fresh one", () => {

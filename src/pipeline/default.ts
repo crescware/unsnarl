@@ -2,7 +2,13 @@ import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
 import { IrEmitter } from "../emitter/ir.js";
 import { JsonEmitter } from "../emitter/json.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";
-import { MermaidEmitter, type MermaidRenderer } from "../emitter/mermaid.js";
+import {
+  MermaidEmitter,
+  type MermaidRenderer,
+} from "../emitter/mermaid/mermaid.js";
+import { dagreStrategy } from "../emitter/mermaid/strategy/dagre-strategy.js";
+import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
+import type { MermaidStrategy } from "../emitter/mermaid/strategy/strategy.js";
 import { DefaultEmitterRegistry } from "../emitter/registry.js";
 import { StatsEmitter } from "../emitter/stats.js";
 import { OxcParser } from "../parser/oxc.js";
@@ -14,13 +20,20 @@ export interface DefaultRegistryOptions {
   mermaidRenderer: MermaidRenderer;
 }
 
+const STRATEGIES: Record<MermaidRenderer, MermaidStrategy> = {
+  dagre: dagreStrategy,
+  elk: elkStrategy,
+};
+
 export function createDefaultEmitterRegistry(
   options: DefaultRegistryOptions,
 ): EmitterRegistry {
   const reg = new DefaultEmitterRegistry();
   reg.register(new IrEmitter());
   reg.register(new JsonEmitter());
-  const mermaid = new MermaidEmitter({ renderer: options.mermaidRenderer });
+  const mermaid = new MermaidEmitter({
+    strategy: STRATEGIES[options.mermaidRenderer],
+  });
   reg.register(mermaid);
   reg.register(new MarkdownEmitter(mermaid));
   reg.register(new StatsEmitter());

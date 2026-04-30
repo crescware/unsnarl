@@ -1,27 +1,28 @@
-import type { SerializedIR } from "../ir/model.js";
-import type { EmitOptions, Emitter } from "../pipeline/types.js";
-import { buildVisualGraph } from "../visual-graph/builder.js";
+import type { SerializedIR } from "../../ir/model.js";
+import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import { buildVisualGraph } from "../../visual-graph/builder.js";
 import type {
   VisualEdge,
   VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
-} from "../visual-graph/model.js";
+} from "../../visual-graph/model.js";
+import type { MermaidStrategy } from "./strategy/strategy.js";
 
 export type MermaidRenderer = "dagre" | "elk";
 
 export interface MermaidEmitterOptions {
   /**
-   * Layout engine for the Mermaid flowchart. `"elk"` gives cleaner
-   * nested-subgraph layouts but requires the `@mermaid-js/layout-elk`
-   * loader to be registered in the consuming environment. `"dagre"` is
-   * Mermaid's built-in default and is what unconfigured renderers (e.g.
-   * GitHub markdown preview) fall back to. Required so callers must make
-   * this choice explicitly — the default lives at the CLI / pipeline-default
-   * boundary, not inside the emitter.
+   * Renderer-specific strategy. The strategy carries the preamble (e.g. the
+   * `%%{init: ...}%%` directive that elk needs), the empty-subgraph patch
+   * that papers over a layout-elk crash, and any trailer lines (classDef /
+   * class declarations) that reference placeholders the strategy injected.
+   * Required so callers must make this choice explicitly — the default
+   * lives at the CLI / pipeline-default boundary, not inside the emitter.
+   * See `dagreStrategy` / `elkStrategy` in `./mermaid-strategy.js`.
    */
-  renderer: MermaidRenderer;
+  strategy: MermaidStrategy;
 }
 
 export class MermaidEmitter implements Emitter {
@@ -29,31 +30,31 @@ export class MermaidEmitter implements Emitter {
   readonly contentType = "text/vnd.mermaid";
   readonly extension = "mmd";
 
-  private readonly renderer: MermaidRenderer;
+  private readonly strategy: MermaidStrategy;
 
   constructor(options: MermaidEmitterOptions) {
-    this.renderer = options.renderer;
+    this.strategy = options.strategy;
   }
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph = opts.prunedGraph ?? buildVisualGraph(ir);
-    return renderMermaid(graph, this.renderer);
+    return renderMermaid(graph, this.strategy);
   }
 }
 
-function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
-  // dagre is Mermaid's built-in default; elk has to be opted into with an
-  // init directive (and `mermaid.registerLayoutLoaders([elkLayouts])` on
-  // the consuming side). dagre struggles with nested subgraphs that share
-  // edges across boundaries (the function wrapper containing the
-  // FunctionName node and the body subgraph, with edges reaching from
-  // outside into the body) and produces colliding routes and inconsistent
-  // node-vs-body ordering, which is why elk is the default here. dagre is
-  // still selectable for environments that cannot register the elk loader
-  // (e.g. GitHub's markdown preview).
+function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
+  // The strategy decides which renderer-specific lines (e.g. the elk init
+  // directive) and which empty-subgraph patches are needed. dagre struggles
+  // with nested subgraphs that share edges across boundaries (the function
+  // wrapper containing the FunctionName node and the body subgraph, with
+  // edges reaching from outside into the body) and produces colliding
+  // routes and inconsistent node-vs-body ordering, which is why elk is the
+  // default at the CLI / pipeline boundary. dagre is still selectable for
+  // environments that cannot register the elk loader (e.g. GitHub's
+  // markdown preview).
   const lines: string[] = [];
-  if (renderer === "elk") {
-    lines.push('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%');
+  for (const l of strategy.preambleLines) {
+    lines.push(l);
   }
   lines.push(`flowchart ${graph.direction}`);
   if (graph.pruning !== undefined) {
@@ -82,6 +83,18 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
   collectWrappedOwnerIds(graph.elements, wrappedOwnerIds);
 
   const wrapperIds: string[] = [];
+  const placeholderIds: string[] = [];
+
+  // Pre-compute the set of ids that appear as edge endpoints. The
+  // emptySubgraphPlaceholder hook uses this to decide whether a workaround
+  // is needed (the layout-elk crash only triggers during edge processing,
+  // so subgraphs that are not edge endpoints don't need the patch even
+  // under elk).
+  const edgeEndpointIds = new Set<string>();
+  for (const e of graph.edges) {
+    edgeEndpointIds.add(e.from);
+    edgeEndpointIds.add(e.to);
+  }
 
   function emitNode(n: VisualNode, indent: string): void {
     lines.push(`${indent}${n.id}${nodeSyntax(n)}`);
@@ -91,14 +104,28 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg, nodeMap)}"]`);
     const childIndent = `${indent}  `;
     lines.push(`${childIndent}direction ${sg.direction}`);
+    let emittedChildren = 0;
     for (const e of sg.elements) {
       if (e.type === "node" && !wrappedOwnerIds.has(e.id)) {
         emitNode(e, childIndent);
+        emittedChildren++;
       }
     }
     for (const e of sg.elements) {
       if (e.type === "subgraph") {
         emitSubgraph(e, childIndent);
+        emittedChildren++;
+      }
+    }
+    if (emittedChildren === 0) {
+      const patch = strategy.emptySubgraphPlaceholder({
+        subgraphId: sg.id,
+        indent: childIndent,
+        referencedByEdge: edgeEndpointIds.has(sg.id),
+      });
+      if (patch !== null) {
+        lines.push(patch.line);
+        placeholderIds.push(patch.placeholderId);
       }
     }
     lines.push(`${indent}end`);
@@ -226,6 +253,10 @@ function renderMermaid(graph: VisualGraph, renderer: MermaidRenderer): string {
     for (const id of stubIds) {
       lines.push(`  class ${id} boundaryStub;`);
     }
+  }
+
+  for (const l of strategy.trailerLines(placeholderIds)) {
+    lines.push(l);
   }
 
   return `${lines.join("\n")}\n`;

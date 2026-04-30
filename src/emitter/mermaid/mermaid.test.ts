@@ -1,14 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
-import { OxcParser } from "../parser/oxc.js";
-import { FlatSerializer } from "../serializer/flat.js";
+import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat.js";
+import { OxcParser } from "../../parser/oxc.js";
+import { FlatSerializer } from "../../serializer/flat.js";
 import { MermaidEmitter } from "./mermaid.js";
+import { dagreStrategy } from "./strategy/dagre-strategy.js";
+import { elkStrategy } from "./strategy/elk-strategy.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
-const emitter = new MermaidEmitter({ renderer: "elk" });
+const emitter = new MermaidEmitter({ strategy: elkStrategy });
 
 function emit(code: string, language: "ts" | "tsx" | "js" = "ts"): string {
   const parsed = parser.parse(code, {
@@ -39,7 +41,7 @@ describe("MermaidEmitter", () => {
   });
 
   test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
-    const dagre = new MermaidEmitter({ renderer: "dagre" });
+    const dagre = new MermaidEmitter({ strategy: dagreStrategy });
     const parsed = parser.parse("const a = 1;\n", {
       language: "ts",
       sourcePath: "input.ts",
