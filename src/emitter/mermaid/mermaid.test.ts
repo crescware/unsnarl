@@ -127,7 +127,41 @@ describe("MermaidEmitter", () => {
     const out = emit("const fn = function inner(p: number) { return p; };\n");
     expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)/);
     expect(out).toMatch(/n_scope_0_fn_6\["unused fn\(\)<br\/>L1"\]/);
-    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L\d+"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_0_fn_6\["return L1"\]/);
+  });
+
+  test("a multi-line return statement yields a return subgraph spanning the whole statement", () => {
+    const code = [
+      "function build() {",
+      "  const a = 1;",
+      "  const b = 2;",
+      "  return {",
+      "    a,",
+      "    b,",
+      "  };",
+      "}",
+    ].join("\n");
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["build\(\)<br\/>L1-8"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_\w+\["return L4-7"\]/);
+    expect(out).toMatch(/ret_use_\w+\["a<br\/>L5"\]/);
+    expect(out).toMatch(/ret_use_\w+\["b<br\/>L6"\]/);
+  });
+
+  test("a block-body arrow with an explicit ReturnStatement uses the return statement's span", () => {
+    const code = ["const fn = (x) => {", "  return x;", "};"].join("\n");
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)<br\/>L1-3"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_\w+\["return L2"\]/);
+    expect(out).toMatch(/ret_use_\w+\["x<br\/>L2"\]/);
+  });
+
+  test("a multi-line arrow with an expression body uses the body's span as the implicit return", () => {
+    const code = ["const fn = (x) => (", "  x + 1", ");"].join("\n");
+    const out = emit(code);
+    expect(out).toMatch(/subgraph s_scope_\d+\["fn\(\)<br\/>L1-3"\]/);
+    expect(out).toMatch(/subgraph s_return_scope_\w+\["return L1-3"\]/);
+    expect(out).toMatch(/ret_use_\w+\["x<br\/>L2"\]/);
   });
 
   test("marks unused declarations with an 'unused' prefix in the label", () => {
