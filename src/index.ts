@@ -80,6 +80,7 @@ export type {
   MermaidEmitterOptions,
   MermaidRenderer,
 } from "./emitter/mermaid.js";
+export { StatsEmitter } from "./emitter/stats.js";
 export { DefaultEmitterRegistry } from "./emitter/registry.js";
 
 export {

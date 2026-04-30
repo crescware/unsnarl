@@ -61,6 +61,18 @@ describe("control-if (pruned)", () => {
         join(fixtureDir, "preview.pruned-r10-c1.md"),
       );
     });
+
+    test("emits the pruned stats TSV", () => {
+      const out = pipeline.run(code, {
+        format: "stats",
+        language: "ts",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-r10-c1.stats"),
+      );
+    });
   });
 
   describe("--roots counter -B 0 -A 2", () => {
@@ -110,6 +122,18 @@ describe("control-if (pruned)", () => {
         join(fixtureDir, "preview.pruned-counter-a2.md"),
       );
     });
+
+    test("emits the pruned stats TSV", () => {
+      const out = pipeline.run(code, {
+        format: "stats",
+        language: "ts",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-counter-a2.stats"),
+      );
+    });
   });
 
   describe("--roots counter -A 0 -B 2", () => {
@@ -157,6 +181,18 @@ describe("control-if (pruned)", () => {
       });
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "preview.pruned-counter-b2.md"),
+      );
+    });
+
+    test("emits the pruned stats TSV", () => {
+      const out = pipeline.run(code, {
+        format: "stats",
+        language: "ts",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-counter-b2.stats"),
       );
     });
   });
@@ -217,6 +253,18 @@ describe("const-chain-five (pruned)", () => {
         });
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `preview.pruned-${slug}.md`),
+        );
+      });
+
+      test("emits the pruned stats TSV", () => {
+        const out = pipeline.run(code, {
+          format: "stats",
+          language: "ts",
+          sourcePath,
+          pruning,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(fixtureDir, `expected.pruned-${slug}.stats`),
         );
       });
     });

@@ -1,0 +1,9 @@
+1	0	integration/fixtures/function-and-class/input.ts:1 add
+0	2	integration/fixtures/function-and-class/input.ts:1 return
+1	0	integration/fixtures/function-and-class/input.ts:1 a
+1	0	integration/fixtures/function-and-class/input.ts:1 b
+1	0	integration/fixtures/function-and-class/input.ts:5 Counter
+1	1	integration/fixtures/function-and-class/input.ts:9 total
+0	1	integration/fixtures/function-and-class/input.ts:10 unused c
+0	1	integration/fixtures/function-and-class/input.ts:11 unused result
+5	5	8 total

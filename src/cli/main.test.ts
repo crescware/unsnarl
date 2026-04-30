@@ -58,12 +58,14 @@ describe("runCli (end-to-end)", () => {
     expect(r.stdout).toMatch(/--format/);
   });
 
-  test("--list-formats lists ir, json, and mermaid", async () => {
+  test("--list-formats lists ir, json, mermaid, markdown, and stats", async () => {
     const r = await captureRun(["--list-formats"]);
     expect(r.exitCode).toBe(0);
     expect(r.stdout).toContain("ir");
     expect(r.stdout).toContain("json");
     expect(r.stdout).toContain("mermaid");
+    expect(r.stdout).toContain("markdown");
+    expect(r.stdout).toContain("stats");
   });
 
   test("happy path: analyzes a file and prints JSON IR", async () => {
@@ -83,6 +85,20 @@ describe("runCli (end-to-end)", () => {
       "used",
     ]);
     expect(ir.unusedVariableIds.length).toBe(2);
+  });
+
+  test("happy path: emits stats TSV", async () => {
+    const inputPath = join(tmpDir, "stats.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const r = await captureRun(["--format", "stats", inputPath]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).toBe("");
+    const lines = r.stdout.trimEnd().split("\n");
+    expect(lines).toEqual([
+      `1\t0\t${inputPath}:1 a`,
+      `0\t1\t${inputPath}:2 unused b`,
+      "1\t1\t2 total",
+    ]);
   });
 
   test("happy path: emits Mermaid output", async () => {

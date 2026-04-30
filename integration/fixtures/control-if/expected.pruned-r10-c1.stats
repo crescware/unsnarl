@@ -1,0 +1,4 @@
+1	?	integration/fixtures/control-if/input.ts:5 counter
+1	?	integration/fixtures/control-if/input.ts:7 counter
+0	2	integration/fixtures/control-if/input.ts:10 unused result
+2	?	3 total

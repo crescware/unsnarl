@@ -1,0 +1,13 @@
+1	1	integration/fixtures/imports/input.ts:1 def
+1	0	integration/fixtures/imports/input.ts:1 some-default
+1	1	integration/fixtures/imports/input.ts:2 named
+1	1	integration/fixtures/imports/input.ts:2 renamed
+2	0	integration/fixtures/imports/input.ts:2 some-named
+1	1	integration/fixtures/imports/input.ts:2 other
+1	1	integration/fixtures/imports/input.ts:3 ns
+1	0	integration/fixtures/imports/input.ts:3 some-namespace
+0	1	integration/fixtures/imports/input.ts:5 unused a
+0	1	integration/fixtures/imports/input.ts:6 unused b
+0	1	integration/fixtures/imports/input.ts:7 unused c
+0	1	integration/fixtures/imports/input.ts:8 unused d
+9	9	12 total

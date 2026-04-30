@@ -1,0 +1,11 @@
+0	2	integration/fixtures/control-switch-expression/input.ts:0 module
+4	0	integration/fixtures/control-switch-expression/input.ts:1 label
+1	0	integration/fixtures/control-switch-expression/input.ts:2 a
+1	0	integration/fixtures/control-switch-expression/input.ts:3 b
+1	0	integration/fixtures/control-switch-expression/input.ts:4 target
+1	1	integration/fixtures/control-switch-expression/input.ts:8 label
+1	1	integration/fixtures/control-switch-expression/input.ts:11 label
+1	1	integration/fixtures/control-switch-expression/input.ts:14 label
+1	1	integration/fixtures/control-switch-expression/input.ts:17 label
+0	4	integration/fixtures/control-switch-expression/input.ts:20 unused result
+11	10	10 total

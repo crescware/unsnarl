@@ -98,6 +98,17 @@ describe("fixtures (end-to-end pipeline)", () => {
           join(FIXTURE_DIR, fixture.name, "preview.md"),
         );
       });
+
+      test("emits the expected stats TSV", () => {
+        const out = pipeline.run(code, {
+          format: "stats",
+          language: fixture.language,
+          sourcePath,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(FIXTURE_DIR, fixture.name, "expected.stats"),
+        );
+      });
     });
   }
 });

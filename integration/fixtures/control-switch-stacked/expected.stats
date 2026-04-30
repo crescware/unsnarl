@@ -1,0 +1,6 @@
+2	0	integration/fixtures/control-switch-stacked/input.ts:1 label
+1	0	integration/fixtures/control-switch-stacked/input.ts:2 kind
+1	1	integration/fixtures/control-switch-stacked/input.ts:7 label
+1	1	integration/fixtures/control-switch-stacked/input.ts:10 label
+0	2	integration/fixtures/control-switch-stacked/input.ts:13 unused result
+5	4	5 total

@@ -1,0 +1,3 @@
+1	0	integration/fixtures/minimal-const-array/input.ts:1 a
+0	1	integration/fixtures/minimal-const-array/input.ts:2 unused b
+1	1	2 total

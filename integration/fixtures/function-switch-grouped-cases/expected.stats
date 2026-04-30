@@ -1,0 +1,8 @@
+0	0	integration/fixtures/function-switch-grouped-cases/input.ts:1 unused getDayType
+0	3	integration/fixtures/function-switch-grouped-cases/input.ts:1 return
+1	0	integration/fixtures/function-switch-grouped-cases/input.ts:1 day
+3	0	integration/fixtures/function-switch-grouped-cases/input.ts:2 ret
+1	1	integration/fixtures/function-switch-grouped-cases/input.ts:9 ret
+1	1	integration/fixtures/function-switch-grouped-cases/input.ts:13 ret
+1	1	integration/fixtures/function-switch-grouped-cases/input.ts:16 ret
+7	6	7 total

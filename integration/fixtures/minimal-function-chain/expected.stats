@@ -1,0 +1,7 @@
+0	0	integration/fixtures/minimal-function-chain/input.ts:1 unused f
+0	1	integration/fixtures/minimal-function-chain/input.ts:1 return
+1	0	integration/fixtures/minimal-function-chain/input.ts:2 a
+1	1	integration/fixtures/minimal-function-chain/input.ts:3 b
+1	1	integration/fixtures/minimal-function-chain/input.ts:4 c
+1	1	integration/fixtures/minimal-function-chain/input.ts:5 d
+4	4	6 total
