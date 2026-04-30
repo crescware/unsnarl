@@ -21,11 +21,11 @@ const e = d;
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  %% pruning: roots=[c(1)] ancestors=1 descendants=0
+  %% pruning roots c=1 ancestors=1 descendants=0
   n_scope_0_b_19["b<br/>L2"]
   n_scope_0_c_32["c<br/>L3"]
   n_scope_0_b_19 -->|read| n_scope_0_c_32
-  boundary_stub_1((…))
+  boundary_stub_1((...))
   boundary_stub_1 -.->|read| n_scope_0_b_19
   classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
   class boundary_stub_1 boundaryStub;

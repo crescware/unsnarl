@@ -38,7 +38,7 @@ export function createPipeline(config: PipelineConfig): Pipeline {
 
     if (opts.pruning !== undefined && emitter.format !== "ir") {
       const built = buildVisualGraph(ir);
-      const pr = pruneVisualGraph(built, opts.pruning);
+      const pr = pruneVisualGraph(built, opts.pruning, ir);
       emitOpts = { ...baseEmit, prunedGraph: pr.graph };
       perQuery = pr.perQuery.map(({ query, matched }) => ({
         query: query.raw,

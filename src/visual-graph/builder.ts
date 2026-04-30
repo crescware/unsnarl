@@ -948,7 +948,17 @@ function edgeLabelOfRef(r: SerializedReference): string {
 }
 
 function nodeId(id: string): string {
-  return `n_${sanitize(id)}`;
+  return visualNodeIdFromVariableId(id);
+}
+
+/**
+ * Stable mapping from an IR VariableId to the `n_*` id used by the
+ * visual graph. Exposed so other layers (e.g. pruning) can resolve
+ * references against the same canonical form without depending on a
+ * private `sanitize` helper.
+ */
+export function visualNodeIdFromVariableId(varId: string): string {
+  return `n_${sanitize(varId)}`;
 }
 
 function returnNodeId(varId: string): string {
