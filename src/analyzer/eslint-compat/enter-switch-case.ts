@@ -1,6 +1,6 @@
 import type { AstNode, BlockContext } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { hoistDeclarations } from "../hoisting.js";
+import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../manager.js";
 import { caseExitsFunction } from "./case-exits-function.js";
 import { caseFallsThrough } from "./case-falls-through.js";

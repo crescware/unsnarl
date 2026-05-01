@@ -116,7 +116,7 @@ export { ScopeManager } from "./analyzer/manager.js";
 
 export { collectBindingIdentifiers } from "./analyzer/declare/collect-binding-identifiers.js";
 export { declareVariable } from "./analyzer/declare/declare-variable.js";
-export { hoistDeclarations } from "./analyzer/hoisting.js";
+export { hoistDeclarations } from "./analyzer/hoisting/hoist-declarations.js";
 
 export { classifyIdentifier } from "./analyzer/classify.js";
 export type { ClassifyResult } from "./analyzer/classify.js";

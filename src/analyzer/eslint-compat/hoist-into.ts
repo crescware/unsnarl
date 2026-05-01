@@ -1,6 +1,6 @@
 import type { Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { hoistDeclarations } from "../hoisting.js";
+import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { NodeLike } from "./node-like.js";
 
 export function hoistInto(
