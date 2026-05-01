@@ -121,8 +121,8 @@ export { collectBindingIdentifiers } from "./analyzer/declare/collect-binding-id
 export { declareVariable } from "./analyzer/declare/declare-variable.js";
 export { hoistDeclarations } from "./analyzer/hoisting/hoist-declarations.js";
 
-export { classifyIdentifier } from "./analyzer/classify.js";
-export type { ClassifyResult } from "./analyzer/classify.js";
+export { classifyIdentifier } from "./analyzer/classify/classify-identifier.js";
+export type { ClassifyResult } from "./analyzer/classify/classify-result.js";
 
 export { bindReference, resolveInScopeChain } from "./analyzer/resolve.js";
 
