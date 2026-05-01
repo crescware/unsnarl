@@ -68,11 +68,6 @@ export function ensureReturnUseNode(
       endLine,
       isJsxElement: ref.jsxElement !== null,
       unused: false,
-      declarationKind: null,
-      initIsFunction: false,
-      importKind: null,
-      importedName: null,
-      importSource: null,
     } satisfies VisualNode;
     sg.elements.push(node);
   }

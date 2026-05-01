@@ -56,10 +56,6 @@ export function buildScope(
       isJsxElement: false,
       unused: false,
       declarationKind,
-      initIsFunction: false,
-      importKind: null,
-      importedName: null,
-      importSource: null,
     } satisfies VisualNode;
     bodyContainer.elements.push(node);
   }

@@ -9,17 +9,14 @@
     {
       "type": "node",
       "id": "n_scope_0_A_9",
-      "kind": "ImportBinding",
       "name": "A",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "A",
-      "importSource": "components"
+      "importedName": "A"
     },
     {
       "type": "subgraph",
@@ -36,17 +33,14 @@
         {
           "type": "node",
           "id": "n_scope_1_v_71",
-          "kind": "Variable",
           "name": "v",
           "line": 4,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -68,12 +62,7 @@
               "line": 11,
               "endLine": 23,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -83,12 +72,7 @@
               "line": 12,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }
@@ -102,12 +86,7 @@
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

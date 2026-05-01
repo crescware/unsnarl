@@ -9,77 +9,60 @@
     {
       "type": "node",
       "id": "n_scope_0_Fragment_9",
-      "kind": "ImportBinding",
       "name": "Fragment",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "Fragment",
-      "importSource": "react"
+      "importedName": "Fragment"
     },
     {
       "type": "node",
       "id": "n_scope_0_Hello_79",
-      "kind": "Variable",
       "name": "Hello",
       "line": 7,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": true,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": true
     },
     {
       "type": "node",
       "id": "n_scope_0_App_196",
-      "kind": "Variable",
       "name": "App",
       "line": 13,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": true,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": true
     },
     {
       "type": "node",
       "id": "n_scope_0_root_237",
-      "kind": "Variable",
       "name": "root",
       "line": 15,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_span_125",
-      "kind": "ImplicitGlobalVariable",
       "name": "span",
       "line": 9,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "ImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -96,17 +79,12 @@
         {
           "type": "node",
           "id": "n_scope_1_props_88",
-          "kind": "Parameter",
           "name": "props",
           "line": 7,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": null,
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "kind": "Parameter"
         },
         {
           "type": "subgraph",
@@ -128,12 +106,7 @@
               "line": 8,
               "endLine": 10,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -143,12 +116,7 @@
               "line": 9,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -158,12 +126,7 @@
               "line": 9,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }
@@ -201,12 +164,7 @@
               "line": 13,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }
@@ -220,12 +178,7 @@
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

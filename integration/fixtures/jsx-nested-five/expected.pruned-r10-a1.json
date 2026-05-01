@@ -38,12 +38,7 @@
               "line": 11,
               "endLine": 23,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -53,12 +48,7 @@
               "line": 12,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -68,12 +58,7 @@
               "line": 13,
               "endLine": 22,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -83,12 +68,7 @@
               "line": 14,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -98,12 +78,7 @@
               "line": 15,
               "endLine": 21,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -113,12 +88,7 @@
               "line": 16,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -128,12 +98,7 @@
               "line": 17,
               "endLine": 20,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -143,12 +108,7 @@
               "line": 18,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -158,12 +118,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -173,12 +128,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

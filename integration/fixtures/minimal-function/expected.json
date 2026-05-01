@@ -9,17 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_greet_9",
-      "kind": "FunctionName",
       "name": "greet",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -42,12 +37,7 @@
       "line": 0,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

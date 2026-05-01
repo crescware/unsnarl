@@ -38,12 +38,7 @@
               "line": 11,
               "endLine": 23,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -53,12 +48,7 @@
               "line": 12,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

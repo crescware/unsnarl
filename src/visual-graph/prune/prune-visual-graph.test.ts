@@ -22,7 +22,7 @@ function node(
   id: string,
   name: string,
   line: number,
-  extra: Partial<VisualNode> = {},
+  extra: Partial<Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>> = {},
 ): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
@@ -35,10 +35,39 @@ function node(
     unused: false,
     declarationKind: null,
     initIsFunction: false,
-    importKind: null,
-    importedName: null,
-    importSource: null,
     ...extra,
+  };
+}
+
+function writeOpNode(id: string, name: string, line: number): VisualNode {
+  return {
+    type: VISUAL_ELEMENT_TYPE.Node,
+    id,
+    kind: NODE_KIND.WriteOp,
+    name,
+    line,
+    endLine: null,
+    isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+  };
+}
+
+function returnUseNode(
+  id: string,
+  name: string,
+  line: number,
+  endLine: number | null,
+): VisualNode {
+  return {
+    type: VISUAL_ELEMENT_TYPE.Node,
+    id,
+    kind: NODE_KIND.ReturnUse,
+    name,
+    line,
+    endLine,
+    isJsxElement: false,
+    unused: false,
   };
 }
 
@@ -416,7 +445,7 @@ describe("pruneVisualGraph", () => {
 describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("a line query matches a ReturnUse at that line directly (no longer routed through the resolved declaration)", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: NODE_KIND.ReturnUse });
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, null);
     const ret = subgraph("sg_return", 10, [useA], {
       kind: SUBGRAPH_KIND.Return,
     });
@@ -440,7 +469,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
 
   test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: NODE_KIND.ReturnUse });
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, null);
     const ret = subgraph("sg_return", 10, [useA], {
       kind: SUBGRAPH_KIND.Return,
     });
@@ -459,10 +488,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   });
 
   test("a JSX ReturnUse spanning multiple lines is matched anywhere within [line, endLine]", () => {
-    const useA = node("ret_use_ref_0", "a", 11, {
-      kind: NODE_KIND.ReturnUse,
-      endLine: 23,
-    });
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, 23);
     const ret = subgraph("sg_return", 10, [useA], {
       kind: SUBGRAPH_KIND.Return,
     });
@@ -479,7 +505,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   });
 
   test("a WriteOp is also a root candidate", () => {
-    const writeOp = node("wr_ref_0", "x", 5, { kind: NODE_KIND.WriteOp });
+    const writeOp = writeOpNode("wr_ref_0", "x", 5);
     const g = graph([writeOp], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(5)],
@@ -495,8 +521,8 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     // the root on the declaration only; the assignment site and the JSX
     // usage are reachable via descendants/ancestors but never auto-rooted.
     const decl = node("n_decl_foo", "foo", 1);
-    const writeOp = node("wr_foo", "foo", 5, { kind: NODE_KIND.WriteOp });
-    const ret = node("ret_foo", "foo", 11, { kind: NODE_KIND.ReturnUse });
+    const writeOp = writeOpNode("wr_foo", "foo", 5);
+    const ret = returnUseNode("ret_foo", "foo", 11, null);
     const g = graph([decl, writeOp, ret], []);
     const r = pruneVisualGraph(g, {
       roots: [rawName("foo")],
@@ -510,8 +536,8 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("line-name still matches WriteOp / ReturnUse at the requested line", () => {
     // A line-name query is still positional, so the use-site nodes remain
     // valid roots. This protects the "use line + name disambiguator" case.
-    const writeOp = node("wr_foo", "foo", 5, { kind: NODE_KIND.WriteOp });
-    const ret = node("ret_foo", "foo", 11, { kind: NODE_KIND.ReturnUse });
+    const writeOp = writeOpNode("wr_foo", "foo", 5);
+    const ret = returnUseNode("ret_foo", "foo", 11, null);
     const g = graph([writeOp, ret], []);
     const r = pruneVisualGraph(g, {
       roots: [

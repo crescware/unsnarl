@@ -9,17 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_getDayType_9",
-      "kind": "FunctionName",
       "name": "getDayType",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -36,32 +31,24 @@
         {
           "type": "node",
           "id": "n_scope_1_day_20",
-          "kind": "Parameter",
           "name": "day",
           "line": 1,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": null,
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "kind": "Parameter"
         },
         {
           "type": "node",
           "id": "n_scope_1_ret_33",
-          "kind": "Variable",
           "name": "ret",
           "line": 2,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -148,11 +135,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 }
               ]
             },
@@ -190,11 +173,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 }
               ]
             },
@@ -219,11 +198,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 }
               ]
             }
@@ -249,12 +224,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

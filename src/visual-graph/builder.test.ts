@@ -71,15 +71,31 @@ function findSubgraphs(
   return flattenSubgraphs(graph.elements).filter((s) => s.kind === kind);
 }
 
-function findNodes(
+function findNodes<K extends VisualNode["kind"]>(
   graph: VisualGraph,
-  kind: VisualNode["kind"],
-): readonly VisualNode[] {
-  return flattenNodes(graph.elements).filter((n) => n.kind === kind);
+  kind: K,
+): readonly Extract<VisualNode, { kind: K }>[] {
+  return flattenNodes(graph.elements).filter(
+    (n): n is Extract<VisualNode, { kind: K }> => n.kind === kind,
+  );
 }
 
 function nodeByName(graph: VisualGraph, name: string): VisualNode | undefined {
   return flattenNodes(graph.elements).find((n) => n.name === name);
+}
+
+function variableByName(
+  graph: VisualGraph,
+  name: string,
+): Extract<VisualNode, { kind: typeof NODE_KIND.Variable }> | undefined {
+  return findNodes(graph, NODE_KIND.Variable).find((n) => n.name === name);
+}
+
+function importBindingByName(
+  graph: VisualGraph,
+  name: string,
+): Extract<VisualNode, { kind: typeof NODE_KIND.ImportBinding }> | undefined {
+  return findNodes(graph, NODE_KIND.ImportBinding).find((n) => n.name === name);
 }
 
 function edgesFrom(graph: VisualGraph, fromId: string): readonly VisualEdge[] {
@@ -152,13 +168,13 @@ describe("buildVisualGraph: variable nodes", () => {
 
   test("declarationKind is preserved on Variable nodes for let / const (var is intentionally skipped)", () => {
     const g = build("let a = 1;\nconst b = 2;\n");
-    expect(nodeByName(g, "a")?.declarationKind).toBe("let");
-    expect(nodeByName(g, "b")?.declarationKind).toBe("const");
+    expect(variableByName(g, "a")?.declarationKind).toBe("let");
+    expect(variableByName(g, "b")?.declarationKind).toBe("const");
   });
 
   test("a const initialised by a function expression is marked initIsFunction", () => {
     const g = build("const fn = function () {};\n");
-    expect(nodeByName(g, "fn")?.initIsFunction).toBe(true);
+    expect(variableByName(g, "fn")?.initIsFunction).toBe(true);
   });
 
   test("ImplicitGlobalVariable that is only a member receiver is hidden, but a direct read is kept", () => {
@@ -175,11 +191,12 @@ describe("buildVisualGraph: variable nodes", () => {
 
   test("named imports renamed at the import site keep the local name on the node", () => {
     const g = build("import { other as renamed } from 'm';\nvoid renamed;\n");
-    const node = nodeByName(g, "renamed");
+    const node = importBindingByName(g, "renamed");
     expect(node?.kind).toBe(DEFINITION_TYPE.ImportBinding);
     expect(node?.importKind).toBe(IMPORT_KIND.Named);
-    expect(node?.importedName).toBe("other");
-    expect(node?.importSource).toBe("m");
+    if (node?.importKind === IMPORT_KIND.Named) {
+      expect(node.importedName).toBe("other");
+    }
   });
 });
 

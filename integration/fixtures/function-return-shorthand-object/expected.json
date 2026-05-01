@@ -9,17 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_main_9",
-      "kind": "FunctionName",
       "name": "main",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -36,122 +31,98 @@
         {
           "type": "node",
           "id": "n_scope_1_a_26",
-          "kind": "Variable",
           "name": "a",
           "line": 2,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_b_43",
-          "kind": "Variable",
           "name": "b",
           "line": 3,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_c_60",
-          "kind": "Variable",
           "name": "c",
           "line": 4,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_d_77",
-          "kind": "Variable",
           "name": "d",
           "line": 5,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_e_94",
-          "kind": "Variable",
           "name": "e",
           "line": 6,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_f_111",
-          "kind": "Variable",
           "name": "f",
           "line": 7,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_g_128",
-          "kind": "Variable",
           "name": "g",
           "line": 8,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_h_145",
-          "kind": "Variable",
           "name": "h",
           "line": 9,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -173,12 +144,7 @@
               "line": 12,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -188,12 +154,7 @@
               "line": 13,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -203,12 +164,7 @@
               "line": 14,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -218,12 +174,7 @@
               "line": 15,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -233,12 +184,7 @@
               "line": 16,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -248,12 +194,7 @@
               "line": 17,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -263,12 +204,7 @@
               "line": 18,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -278,12 +214,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

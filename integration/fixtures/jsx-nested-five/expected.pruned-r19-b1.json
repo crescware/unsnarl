@@ -9,77 +9,62 @@
     {
       "type": "node",
       "id": "n_scope_0_A_9",
-      "kind": "ImportBinding",
       "name": "A",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "A",
-      "importSource": "components"
+      "importedName": "A"
     },
     {
       "type": "node",
       "id": "n_scope_0_B_12",
-      "kind": "ImportBinding",
       "name": "B",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "B",
-      "importSource": "components"
+      "importedName": "B"
     },
     {
       "type": "node",
       "id": "n_scope_0_C_15",
-      "kind": "ImportBinding",
       "name": "C",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "C",
-      "importSource": "components"
+      "importedName": "C"
     },
     {
       "type": "node",
       "id": "n_scope_0_D_18",
-      "kind": "ImportBinding",
       "name": "D",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "D",
-      "importSource": "components"
+      "importedName": "D"
     },
     {
       "type": "node",
       "id": "n_scope_0_E_21",
-      "kind": "ImportBinding",
       "name": "E",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "E",
-      "importSource": "components"
+      "importedName": "E"
     },
     {
       "type": "subgraph",
@@ -96,17 +81,14 @@
         {
           "type": "node",
           "id": "n_scope_1_z_139",
-          "kind": "Variable",
           "name": "z",
           "line": 8,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -128,12 +110,7 @@
               "line": 11,
               "endLine": 23,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -143,12 +120,7 @@
               "line": 13,
               "endLine": 22,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -158,12 +130,7 @@
               "line": 15,
               "endLine": 21,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -173,12 +140,7 @@
               "line": 17,
               "endLine": 20,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -188,12 +150,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -203,12 +160,7 @@
               "line": 19,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

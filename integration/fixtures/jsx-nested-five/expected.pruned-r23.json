@@ -9,17 +9,14 @@
     {
       "type": "node",
       "id": "n_scope_0_A_9",
-      "kind": "ImportBinding",
       "name": "A",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "A",
-      "importSource": "components"
+      "importedName": "A"
     },
     {
       "type": "subgraph",
@@ -53,12 +50,7 @@
               "line": 11,
               "endLine": 23,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }
@@ -72,12 +64,7 @@
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

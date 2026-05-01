@@ -9,32 +9,24 @@
     {
       "type": "node",
       "id": "n_scope_0_Sub_9",
-      "kind": "ImportBinding",
       "name": "Sub",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "Sub",
-      "importSource": "./sub"
+      "importedName": "Sub"
     },
     {
       "type": "node",
       "id": "n_scope_0_Main_46",
-      "kind": "FunctionName",
       "name": "Main",
       "line": 3,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -51,17 +43,14 @@
         {
           "type": "node",
           "id": "n_scope_1_message_63",
-          "kind": "Variable",
           "name": "message",
           "line": 4,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "const",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -83,12 +72,7 @@
               "line": 5,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             },
             {
               "type": "node",
@@ -98,12 +82,7 @@
               "line": 5,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }
@@ -117,12 +96,7 @@
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

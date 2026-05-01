@@ -9,77 +9,60 @@
     {
       "type": "node",
       "id": "n_scope_0_value_4",
-      "kind": "Variable",
       "name": "value",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "let",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_attempts_19",
-      "kind": "Variable",
       "name": "attempts",
       "line": 2,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "let",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_raw_39",
-      "kind": "Variable",
       "name": "raw",
       "line": 3,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_result_182",
-      "kind": "Variable",
       "name": "result",
       "line": 15,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_Number_84",
-      "kind": "ImplicitGlobalVariable",
       "name": "Number",
       "line": 7,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "ImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -102,11 +85,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "declarationKind": "let"
         },
         {
           "type": "node",
@@ -117,11 +96,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "declarationKind": "let"
         }
       ]
     },
@@ -140,17 +115,12 @@
         {
           "type": "node",
           "id": "n_scope_2_err_106",
-          "kind": "CatchClause",
           "name": "err",
           "line": 8,
           "endLine": null,
           "isJsxElement": false,
           "unused": true,
-          "declarationKind": null,
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "kind": "CatchClause"
         },
         {
           "type": "node",
@@ -161,11 +131,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "declarationKind": "let"
         },
         {
           "type": "node",
@@ -176,11 +142,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "declarationKind": "let"
         }
       ]
     },
@@ -205,11 +167,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "declarationKind": "let"
         }
       ]
     }

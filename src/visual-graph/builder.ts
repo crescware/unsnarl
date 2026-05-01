@@ -337,11 +337,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       endLine: null,
       isJsxElement: false,
       unused: false,
-      declarationKind: null,
-      initIsFunction: false,
-      importKind: null,
-      importedName: null,
-      importSource: null,
     });
   }
 
@@ -404,11 +399,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       endLine: null,
       isJsxElement: false,
       unused: false,
-      declarationKind: null,
-      initIsFunction: false,
-      importKind: null,
-      importedName: null,
-      importSource: null,
     });
   }
   for (const inter of intermediates.values()) {
@@ -421,11 +411,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       endLine: null,
       isJsxElement: false,
       unused: false,
-      declarationKind: null,
-      initIsFunction: false,
-      importKind: null,
-      importedName: null,
-      importSource: null,
     });
   }
   for (const v of ir.variables) {

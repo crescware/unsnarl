@@ -103,7 +103,7 @@ describe("JsonEmitter", () => {
     expect(a?.label).toBeUndefined();
   });
 
-  test("import nodes record kind / source / imported name", () => {
+  test("import nodes record kind / imported name; module source surfaces as a ModuleSource node", () => {
     const graph = JSON.parse(
       emit(
         [
@@ -117,8 +117,6 @@ describe("JsonEmitter", () => {
     const def = nodes.find((n) => n.name === "def");
     expect(def?.kind).toBe(DEFINITION_TYPE.ImportBinding);
     expect(def?.importKind).toBe(IMPORT_KIND.Default);
-    expect(def?.importSource).toBe("some-default");
-    expect(def?.importedName).toBeNull();
 
     const renamed = nodes.find((n) => n.name === "renamed");
     expect(renamed?.importKind).toBe(IMPORT_KIND.Named);

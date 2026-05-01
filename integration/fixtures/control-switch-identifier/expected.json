@@ -9,92 +9,74 @@
     {
       "type": "node",
       "id": "n_scope_0_RED_6",
-      "kind": "Variable",
       "name": "RED",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_GREEN_23",
-      "kind": "Variable",
       "name": "GREEN",
       "line": 2,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_BLUE_42",
-      "kind": "Variable",
       "name": "BLUE",
       "line": 3,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_label_59",
-      "kind": "Variable",
       "name": "label",
       "line": 5,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "let",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_color_77",
-      "kind": "Variable",
       "name": "color",
       "line": 6,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_result_283",
-      "kind": "Variable",
       "name": "result",
       "line": 22,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
@@ -129,11 +111,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "declarationKind": "let",
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "declarationKind": "let"
             }
           ]
         },
@@ -158,11 +136,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "declarationKind": "let",
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "declarationKind": "let"
             }
           ]
         },
@@ -187,11 +161,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "declarationKind": "let",
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "declarationKind": "let"
             }
           ]
         },
@@ -216,11 +186,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "declarationKind": "let",
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "declarationKind": "let"
             }
           ]
         }
@@ -234,12 +200,7 @@
       "line": 0,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

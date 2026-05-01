@@ -9,62 +9,50 @@
     {
       "type": "node",
       "id": "n_scope_0_a_6",
-      "kind": "Variable",
       "name": "a",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_b_21",
-      "kind": "Variable",
       "name": "b",
       "line": 2,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_c_36",
-      "kind": "Variable",
       "name": "c",
       "line": 3,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_d_60",
-      "kind": "Variable",
       "name": "d",
       "line": 4,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     }
   ],
   "edges": [

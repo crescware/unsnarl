@@ -5,7 +5,11 @@ import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { formatLabel } from "./format-label.js";
 
-const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
+const node = (
+  overrides: Partial<
+    Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>
+  > = {},
+): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
   kind: NODE_KIND.Variable,
@@ -16,9 +20,6 @@ const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
   unused: false,
   declarationKind: null,
   initIsFunction: false,
-  importKind: null,
-  importedName: null,
-  importSource: null,
   ...overrides,
 });
 

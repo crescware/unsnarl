@@ -9,62 +9,50 @@
     {
       "type": "node",
       "id": "n_scope_0_used_9",
-      "kind": "ImportBinding",
       "name": "used",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "used",
-      "importSource": "module"
+      "importedName": "used"
     },
     {
       "type": "node",
       "id": "n_scope_0_neverCalled_15",
-      "kind": "ImportBinding",
       "name": "neverCalled",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "declarationKind": null,
-      "initIsFunction": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "neverCalled",
-      "importSource": "module"
+      "importedName": "neverCalled"
     },
     {
       "type": "node",
       "id": "n_scope_0_a_67",
-      "kind": "Variable",
       "name": "a",
       "line": 4,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_ignored_83",
-      "kind": "Variable",
       "name": "ignored",
       "line": 5,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "node",
@@ -74,12 +62,7 @@
       "line": 0,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     },
     {
       "type": "node",
@@ -89,12 +72,7 @@
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
-      "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "unused": false
     }
   ],
   "edges": [

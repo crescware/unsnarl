@@ -6,7 +6,6 @@ import {
 } from "../../analyzer/definition-type.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { makeVariableNode } from "./make-variable-node.js";
@@ -31,6 +30,9 @@ describe("makeVariableNode", () => {
       line: 2,
       isJsxElement: false,
     });
+    if (node.kind !== NODE_KIND.Variable) {
+      throw new Error("expected Variable kind");
+    }
     expect(node.initIsFunction).toBe(false);
     expect(node.declarationKind).toBeNull();
   });
@@ -59,6 +61,9 @@ describe("makeVariableNode", () => {
     ({ initType, expected }) => {
       const v = { ...baseVariable(), defs: [{ ...baseDef(), initType }] };
       const node = makeVariableNode(v);
+      if (node.kind !== NODE_KIND.Variable) {
+        throw new Error("expected Variable kind");
+      }
       expect(node.initIsFunction).toBe(expected);
     },
   );
@@ -72,10 +77,14 @@ describe("makeVariableNode", () => {
       ...baseVariable(),
       defs: [{ ...baseDef(), declarationKind: kind }],
     };
-    expect(makeVariableNode(v).declarationKind).toBe(kind);
+    const node = makeVariableNode(v);
+    if (node.kind !== NODE_KIND.Variable) {
+      throw new Error("expected Variable kind");
+    }
+    expect(node.declarationKind).toBe(kind);
   });
 
-  test("ImportBinding propagates importKind, importedName, and importSource", () => {
+  test("Named ImportBinding propagates importKind and importedName", () => {
     const v = {
       ...baseVariable(),
       name: "renamed",
@@ -94,11 +103,10 @@ describe("makeVariableNode", () => {
       kind: NODE_KIND.ImportBinding,
       importKind: IMPORT_KIND.Named,
       importedName: "original",
-      importSource: "./mod.js",
     });
   });
 
-  test("ImportBinding with null importedName still sets the field to null", () => {
+  test("Default ImportBinding has no importedName field", () => {
     const v = {
       ...baseVariable(),
       defs: [
@@ -112,23 +120,10 @@ describe("makeVariableNode", () => {
       ],
     };
     const node = makeVariableNode(v);
-    expect(node.importedName).toBeNull();
-  });
-
-  test("non-import definitions do not set importedName/importSource", () => {
-    const v = {
-      ...baseVariable(),
-      defs: [
-        {
-          ...baseDef(),
-          type: DEFINITION_TYPE.Variable,
-          declarationKind: VARIABLE_DECLARATION_KIND.Let,
-        },
-      ],
-    };
-    const node = makeVariableNode(v);
-    expect(node.importedName).toBeNull();
-    expect(node.importSource).toBeNull();
+    expect(node.kind).toBe(NODE_KIND.ImportBinding);
+    if (node.kind === NODE_KIND.ImportBinding) {
+      expect(node.importKind).toBe(IMPORT_KIND.Default);
+    }
   });
 
   test("falls back to kind=Variable when defs is empty", () => {

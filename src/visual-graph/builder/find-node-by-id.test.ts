@@ -19,9 +19,6 @@ function leafNode(id: string, name = id): VisualNode {
     unused: false,
     declarationKind: null,
     initIsFunction: false,
-    importKind: null,
-    importedName: null,
-    importSource: null,
   };
 }
 

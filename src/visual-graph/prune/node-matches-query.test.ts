@@ -2,12 +2,16 @@ import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
-import type { NodeKind, VisualNode } from "../model.js";
+import type { VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { nodeMatchesQuery } from "./node-matches-query.js";
 
-const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
+const node = (
+  overrides: Partial<
+    Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>
+  > = {},
+): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
   kind: NODE_KIND.Variable,
@@ -18,9 +22,6 @@ const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
   unused: false,
   declarationKind: null,
   initIsFunction: false,
-  importKind: null,
-  importedName: null,
-  importSource: null,
   ...overrides,
 });
 
@@ -83,11 +84,36 @@ describe("nodeMatchesQuery", () => {
       raw: "x",
     } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ name: "x" }), q)).toBe(true);
-    for (const kind of [
-      NODE_KIND.WriteOp,
-      NODE_KIND.ReturnUse,
-    ] satisfies NodeKind[]) {
-      expect(nodeMatchesQuery(node({ name: "x", kind }), q)).toBe(false);
-    }
+    expect(
+      nodeMatchesQuery(
+        {
+          type: VISUAL_ELEMENT_TYPE.Node,
+          id: "n1",
+          kind: NODE_KIND.WriteOp,
+          name: "x",
+          line: 5,
+          endLine: null,
+          isJsxElement: false,
+          unused: false,
+          declarationKind: null,
+        },
+        q,
+      ),
+    ).toBe(false);
+    expect(
+      nodeMatchesQuery(
+        {
+          type: VISUAL_ELEMENT_TYPE.Node,
+          id: "n1",
+          kind: NODE_KIND.ReturnUse,
+          name: "x",
+          line: 5,
+          endLine: null,
+          isJsxElement: false,
+          unused: false,
+        },
+        q,
+      ),
+    ).toBe(false);
   });
 });

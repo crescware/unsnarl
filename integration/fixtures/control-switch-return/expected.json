@@ -9,32 +9,24 @@
     {
       "type": "node",
       "id": "n_scope_0_classify_9",
-      "kind": "FunctionName",
       "name": "classify",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "declarationKind": null,
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "kind": "FunctionName"
     },
     {
       "type": "node",
       "id": "n_scope_0_result_243",
-      "kind": "Variable",
       "name": "result",
       "line": 18,
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "initIsFunction": false,
-      "importKind": null,
-      "importedName": null,
-      "importSource": null
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
@@ -51,32 +43,24 @@
         {
           "type": "node",
           "id": "n_scope_1_kind_18",
-          "kind": "Parameter",
           "name": "kind",
           "line": 1,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "declarationKind": null,
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "kind": "Parameter"
         },
         {
           "type": "node",
           "id": "n_scope_1_label_40",
-          "kind": "Variable",
           "name": "label",
           "line": 2,
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
+          "kind": "Variable",
           "declarationKind": "let",
-          "initIsFunction": false,
-          "importKind": null,
-          "importedName": null,
-          "importSource": null
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
@@ -111,11 +95,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 },
                 {
                   "type": "subgraph",
@@ -137,12 +117,7 @@
                       "line": 7,
                       "endLine": null,
                       "isJsxElement": false,
-                      "unused": false,
-                      "declarationKind": null,
-                      "initIsFunction": false,
-                      "importKind": null,
-                      "importedName": null,
-                      "importSource": null
+                      "unused": false
                     }
                   ]
                 }
@@ -169,11 +144,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 }
               ]
             },
@@ -198,11 +169,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "declarationKind": "let",
-                  "initIsFunction": false,
-                  "importKind": null,
-                  "importedName": null,
-                  "importSource": null
+                  "declarationKind": "let"
                 }
               ]
             }
@@ -228,12 +195,7 @@
               "line": 15,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "declarationKind": null,
-              "initIsFunction": false,
-              "importKind": null,
-              "importedName": null,
-              "importSource": null
+              "unused": false
             }
           ]
         }

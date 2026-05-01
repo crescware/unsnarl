@@ -23,9 +23,6 @@ const node = (id: string, line = 1): VisualNode => ({
   unused: false,
   declarationKind: null,
   initIsFunction: false,
-  importKind: null,
-  importedName: null,
-  importSource: null,
 });
 
 const sg = (

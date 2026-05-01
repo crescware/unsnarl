@@ -13,21 +13,29 @@ import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
-const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => ({
-  type: VISUAL_ELEMENT_TYPE.Node,
-  id,
-  kind,
-  name: id,
-  line: 1,
-  isJsxElement: false,
-  endLine: null,
-  unused: false,
-  declarationKind: null,
-  initIsFunction: false,
-  importKind: null,
-  importedName: null,
-  importSource: null,
-});
+const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => {
+  const common = {
+    type: VISUAL_ELEMENT_TYPE.Node,
+    id,
+    name: id,
+    line: 1,
+    isJsxElement: false,
+    endLine: null,
+    unused: false,
+  } as const;
+  if (kind === NODE_KIND.Variable) {
+    return { ...common, kind, declarationKind: null, initIsFunction: false };
+  }
+  if (kind === NODE_KIND.WriteOp) {
+    return { ...common, kind, declarationKind: null };
+  }
+  if (kind === NODE_KIND.ImportBinding) {
+    throw new Error(
+      "ImportBinding fixture not supported by iterate-visual-nodes test",
+    );
+  }
+  return { ...common, kind };
+};
 
 const sg = (
   id: string,

@@ -1,25 +1,21 @@
-import type {
-  ImportKind,
-  Language,
-  VariableDeclarationKind,
-} from "../ir/model.js";
+import type { Language, VariableDeclarationKind } from "../ir/model.js";
+import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { Direction } from "./direction.js";
-import type { NodeKind } from "./node-kind.js";
+import type { NODE_KIND } from "./node-kind.js";
+import { type NodeKind } from "./node-kind.js";
 import type { BOUNDARY_EDGE_DIRECTION } from "./prune/boundary-edge-direction.js";
 import type { SubgraphKind } from "./subgraph-kind.js";
 import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 export type { Direction, NodeKind, SubgraphKind };
 
-// Mutable: builder.ts and the various builder/* helpers may patch fields
-// (endLine, unused, declarationKind, initIsFunction, importKind,
-// importedName, importSource) after the node is first inserted into its
-// container. Wrapping in Readonly would force a refactor of every
-// post-construction patch site.
-export type VisualNode = {
+// Common shape across every kind. Mutable: builder.ts and the various
+// builder/* helpers may patch endLine / unused after the node is first
+// inserted into its container. Wrapping in Readonly would force a
+// refactor of every post-construction patch site.
+type CommonNodeFields = {
   type: typeof VISUAL_ELEMENT_TYPE.Node;
   id: string;
-  kind: NodeKind;
   name: string;
   line: number;
   // Set when the reference logically extends past its identifier line --
@@ -32,12 +28,40 @@ export type VisualNode = {
   // element happens to be single-line (endLine is null).
   isJsxElement: boolean;
   unused: boolean;
-  declarationKind: VariableDeclarationKind | null;
-  initIsFunction: boolean;
-  importKind: ImportKind | null;
-  importedName: string | null;
-  importSource: string | null;
 };
+
+export type VisualNode =
+  | (CommonNodeFields & { kind: typeof NODE_KIND.FunctionName })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ClassName })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.Parameter })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.CatchClause })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ImplicitGlobalVariable })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnUse })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSink })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSource })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ImportIntermediate })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.Variable;
+      declarationKind: VariableDeclarationKind | null;
+      initIsFunction: boolean;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.WriteOp;
+      declarationKind: VariableDeclarationKind | null;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.ImportBinding;
+      importKind: typeof IMPORT_KIND.Named;
+      importedName: string;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.ImportBinding;
+      importKind: typeof IMPORT_KIND.Default;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.ImportBinding;
+      importKind: typeof IMPORT_KIND.Namespace;
+    });
 
 // Mutable: builder patches endLine / caseTest after construction and pushes
 // into elements as it walks scopes. rebuild-elements also rewires

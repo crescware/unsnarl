@@ -1,11 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
-import type { VisualNode } from "../../visual-graph/model.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeHead } from "./node-head.js";
-import { baseNode } from "./testing/make-node.js";
+import {
+  baseImportBindingDefault,
+  baseImportBindingNamed,
+  baseImportBindingNamespace,
+  baseNode,
+  baseSimpleNode,
+  baseWriteOpNode,
+} from "./testing/make-node.js";
 
 describe("nodeHead", () => {
   test("JSX element wraps the (escaped) name in &lt;...&gt;, ignoring kind-specific format", () => {
@@ -19,80 +24,44 @@ describe("nodeHead", () => {
     ).toBe("&lt;Foo&gt;");
   });
 
-  test.each<{
-    kind: Partial<VisualNode>;
-    name: string;
-    expected: string;
-  }>([
-    { kind: { kind: NODE_KIND.FunctionName }, name: "foo", expected: "foo()" },
-    { kind: { kind: NODE_KIND.ClassName }, name: "Foo", expected: "class Foo" },
+  test.each([
+    { kind: NODE_KIND.FunctionName, name: "foo", expected: "foo()" },
+    { kind: NODE_KIND.ClassName, name: "Foo", expected: "class Foo" },
+    { kind: NODE_KIND.CatchClause, name: "err", expected: "catch err" },
     {
-      kind: { kind: NODE_KIND.CatchClause },
-      name: "err",
-      expected: "catch err",
-    },
-    {
-      kind: { kind: NODE_KIND.ImplicitGlobalVariable },
+      kind: NODE_KIND.ImplicitGlobalVariable,
       name: "global1",
       expected: "global global1",
     },
+    { kind: NODE_KIND.ModuleSource, name: "./mod", expected: "module ./mod" },
     {
-      kind: { kind: NODE_KIND.ModuleSource },
-      name: "./mod",
-      expected: "module ./mod",
-    },
-    {
-      kind: { kind: NODE_KIND.ImportIntermediate },
+      kind: NODE_KIND.ImportIntermediate,
       name: "named",
       expected: "import named",
     },
-  ])("kind $kind.kind formats as $expected", ({ kind, name, expected }) => {
-    expect(nodeHead({ ...baseNode(), ...kind, name })).toBe(expected);
+  ] as const)("kind $kind formats as $expected", ({ kind, name, expected }) => {
+    expect(nodeHead({ ...baseSimpleNode(kind), name })).toBe(expected);
   });
 
   test.each([
     {
       name: "renamed named import keeps the local name only",
-      node: {
-        ...baseNode(),
-        kind: NODE_KIND.ImportBinding,
-        name: "renamed",
-        importKind: IMPORT_KIND.Named,
-        importedName: "original",
-      },
+      node: { ...baseImportBindingNamed("original"), name: "renamed" },
       expected: "renamed",
     },
     {
       name: "non-renamed named import gets 'import' prefix",
-      node: {
-        ...baseNode(),
-        kind: NODE_KIND.ImportBinding,
-        name: "foo",
-        importKind: IMPORT_KIND.Named,
-        importedName: "foo",
-      },
+      node: { ...baseImportBindingNamed("foo"), name: "foo" },
       expected: "import foo",
     },
     {
       name: "default import gets 'import' prefix",
-      node: {
-        ...baseNode(),
-        kind: NODE_KIND.ImportBinding,
-        name: "Foo",
-        importKind: IMPORT_KIND.Default,
-        importedName: null,
-      },
+      node: { ...baseImportBindingDefault(), name: "Foo" },
       expected: "import Foo",
     },
     {
       name: "namespace import gets 'import' prefix",
-      node: {
-        ...baseNode(),
-        kind: NODE_KIND.ImportBinding,
-        name: "ns",
-        importKind: IMPORT_KIND.Namespace,
-        importedName: null,
-      },
+      node: { ...baseImportBindingNamespace(), name: "ns" },
       expected: "import ns",
     },
   ])("$name", ({ node, expected }) => {
@@ -103,8 +72,7 @@ describe("nodeHead", () => {
     {
       name: "WriteOp with declarationKind=let prepends 'let'",
       node: {
-        ...baseNode(),
-        kind: NODE_KIND.WriteOp,
+        ...baseWriteOpNode(),
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Let,
       },
@@ -113,8 +81,7 @@ describe("nodeHead", () => {
     {
       name: "WriteOp with declarationKind=const has no prefix",
       node: {
-        ...baseNode(),
-        kind: NODE_KIND.WriteOp,
+        ...baseWriteOpNode(),
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Const,
       },
@@ -122,7 +89,7 @@ describe("nodeHead", () => {
     },
     {
       name: "WriteOp without declarationKind has no prefix",
-      node: { ...baseNode(), kind: NODE_KIND.WriteOp, name: "x" },
+      node: { ...baseWriteOpNode(), name: "x" },
       expected: "x",
     },
   ])("$name", ({ node, expected }) => {
