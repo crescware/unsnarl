@@ -1,34 +1,10 @@
 import { visitorKeys } from "oxc-parser";
 
-import type { AstNode } from "../ir/model.js";
+import type { AstNode } from "../../ir/model.js";
+import { isAstNode } from "./is-ast-node.js";
+import type { PathEntry, WalkVisitor } from "./walk.js";
 
-export interface PathEntry {
-  readonly node: AstNode;
-  readonly key: string | null;
-}
-
-export type WalkAction = "skip" | undefined | void;
-
-export interface WalkVisitor {
-  enter?(
-    node: AstNode,
-    parent: AstNode | null,
-    key: string | null,
-    path: ReadonlyArray<PathEntry>,
-  ): WalkAction;
-  leave?(
-    node: AstNode,
-    parent: AstNode | null,
-    key: string | null,
-    path: ReadonlyArray<PathEntry>,
-  ): void;
-}
-
-export function walk(root: AstNode, visitor: WalkVisitor): void {
-  walkNode(root, null, null, visitor, []);
-}
-
-function walkNode(
+export function walkNode(
   node: AstNode,
   parent: AstNode | null,
   key: string | null,
@@ -61,13 +37,4 @@ function walkNode(
   }
   path.pop();
   visitor.leave?.(node, parent, key, path);
-}
-
-function isAstNode(value: unknown): value is AstNode {
-  return (
-    value !== null &&
-    typeof value === "object" &&
-    "type" in value &&
-    typeof (value as { type: unknown }).type === "string"
-  );
 }

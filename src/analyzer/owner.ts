@@ -1,7 +1,7 @@
 import type { AstNode, Scope, Variable } from "../ir/model.js";
 import { collectBindingIdentifiers } from "./declare.js";
 import { resolveInScopeChain } from "./resolve.js";
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 export function findReferenceOwners(
   path: ReadonlyArray<PathEntry>,

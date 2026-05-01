@@ -1,6 +1,6 @@
 import { ReferenceFlags } from "../ir/model.js";
 import type { AstExpression, AstNode, ReferenceFlagBits } from "../ir/model.js";
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 export type ClassifyResult =
   | { kind: "binding" }

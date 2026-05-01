@@ -7,7 +7,7 @@ import { findPredicateContainer } from "../predicate.js";
 import { bindReference } from "../resolve.js";
 import { findReturnContainer } from "../return-container.js";
 import { ReferenceImpl } from "../scope.js";
-import type { PathEntry } from "../walk.js";
+import type { PathEntry } from "../walk/walk.js";
 import type { NodeLike } from "./node-like.js";
 
 export function handleIdentifierReference(

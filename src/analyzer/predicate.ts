@@ -1,5 +1,5 @@
 import type { PredicateContainer } from "../ir/model.js";
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 export function findPredicateContainer(
   parent: { type: string; start?: number } | null,

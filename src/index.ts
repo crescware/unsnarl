@@ -108,8 +108,8 @@ export type {
 export { runCli } from "./cli/main.js";
 export { readSourceFile, readStdin } from "./cli/io.js";
 
-export { walk } from "./analyzer/walk.js";
-export type { PathEntry, WalkVisitor } from "./analyzer/walk.js";
+export { walk } from "./analyzer/walk/walk.js";
+export type { PathEntry, WalkVisitor } from "./analyzer/walk/walk.js";
 
 export { ReferenceImpl, ScopeImpl, VariableImpl } from "./analyzer/scope.js";
 export { ScopeManager } from "./analyzer/manager.js";

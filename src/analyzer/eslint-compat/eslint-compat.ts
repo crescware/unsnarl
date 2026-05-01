@@ -6,7 +6,7 @@ import type {
 } from "../../pipeline/types.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
-import { walk } from "../walk.js";
+import { walk } from "../walk/walk.js";
 import { handleEnter } from "./handle-enter.js";
 import { handleLeave } from "./handle-leave.js";
 import { hoistInto } from "./hoist-into.js";
