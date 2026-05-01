@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { ROOT_QUERY_KIND } from "../../constants.js";
+import { CLI_MERMAID_RENDERER, ROOT_QUERY_KIND } from "../../constants.js";
 import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {
@@ -93,13 +93,21 @@ describe("parseCliArgs", () => {
     if (def.ok) {
       expect(def.args.mermaidRenderer).toBeNull();
     }
-    const elk = parseCliArgs(["--mermaid-renderer", "elk", "foo.ts"]);
+    const elk = parseCliArgs([
+      "--mermaid-renderer",
+      CLI_MERMAID_RENDERER.Elk,
+      "foo.ts",
+    ]);
     if (elk.ok) {
-      expect(elk.args.mermaidRenderer).toBe("elk");
+      expect(elk.args.mermaidRenderer).toBe(CLI_MERMAID_RENDERER.Elk);
     }
-    const dagre = parseCliArgs(["--mermaid-renderer", "dagre", "foo.ts"]);
+    const dagre = parseCliArgs([
+      "--mermaid-renderer",
+      CLI_MERMAID_RENDERER.Dagre,
+      "foo.ts",
+    ]);
     if (dagre.ok) {
-      expect(dagre.args.mermaidRenderer).toBe("dagre");
+      expect(dagre.args.mermaidRenderer).toBe(CLI_MERMAID_RENDERER.Dagre);
     }
   });
 

@@ -1,6 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
+import { CLI_MERMAID_RENDERER } from "../../constants.js";
 import { ParseError } from "../../parser/oxc.js";
 import {
   createDefaultEmitterRegistry,
@@ -40,7 +41,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
   // demands an explicit choice, so the default is resolved here at the
   // boundary instead of being smuggled into the emitter as undefined.
   const emitters = createDefaultEmitterRegistry({
-    mermaidRenderer: args.mermaidRenderer ?? "elk",
+    mermaidRenderer: args.mermaidRenderer ?? CLI_MERMAID_RENDERER.Elk,
   });
   if (args.listFormats) {
     for (const f of emitters.list()) {

@@ -1,4 +1,5 @@
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { CLI_MERMAID_RENDERER } from "../constants.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
@@ -46,6 +47,9 @@ export function createDefaultPipeline(emitters?: EmitterRegistry): Pipeline {
     analyzer: new EslintCompatAnalyzer(),
     serializer: new FlatSerializer(),
     emitters:
-      emitters ?? createDefaultEmitterRegistry({ mermaidRenderer: "elk" }),
+      emitters ??
+      createDefaultEmitterRegistry({
+        mermaidRenderer: CLI_MERMAID_RENDERER.Elk,
+      }),
   });
 }
