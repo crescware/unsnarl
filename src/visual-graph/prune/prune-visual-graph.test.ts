@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
+import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
 import type {
   VisualEdge,
   VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
-} from "./model.js";
-import { pruneVisualGraph } from "./prune.js";
+} from "../model.js";
+import { pruneVisualGraph } from "./prune-visual-graph.js";
 
 function node(
   id: string,

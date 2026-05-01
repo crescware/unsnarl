@@ -72,8 +72,11 @@ export type {
   VisualNode,
   VisualSubgraph,
 } from "./visual-graph/model.js";
-export { pruneVisualGraph } from "./visual-graph/prune.js";
-export type { PruneOptions, PruneResult } from "./visual-graph/prune.js";
+export { pruneVisualGraph } from "./visual-graph/prune/prune-visual-graph.js";
+export type {
+  PruneOptions,
+  PruneResult,
+} from "./visual-graph/prune/prune-options.js";
 export { MarkdownEmitter } from "./emitter/markdown/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid/mermaid.js";
 export type {

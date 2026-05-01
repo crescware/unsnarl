@@ -1,5 +1,5 @@
 import { buildVisualGraph } from "../visual-graph/builder.js";
-import { pruneVisualGraph } from "../visual-graph/prune.js";
+import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
 import type {
   EmitOptions,
   Pipeline,
