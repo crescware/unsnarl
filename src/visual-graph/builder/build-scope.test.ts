@@ -4,6 +4,7 @@ import {
   LANGUAGE,
   NODE_KIND,
   SCOPE_TYPE,
+  SERIALIZED_IR_VERSION,
   VARIABLE_DECLARATION_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -44,7 +45,7 @@ function makeCtx(opts: {
 }): BuilderContext {
   const variables = opts.variables ?? [];
   const ir = {
-    version: 1,
+    version: SERIALIZED_IR_VERSION,
     source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes: opts.scopes,

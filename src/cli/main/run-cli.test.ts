@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
 import {
   BOUNDARY_EDGE_DIRECTION,
+  SERIALIZED_IR_VERSION,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
@@ -82,7 +83,7 @@ describe("runCli (end-to-end)", () => {
     const r = await captureRun([inputPath, "--no-pretty"]);
     expect(r.exitCode).toBe(0);
     const ir = JSON.parse(r.stdout);
-    expect(ir.version).toBe(1);
+    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
     expect(ir.source.path).toBe(inputPath);
     expect(ir.variables.map((v: { name: string }) => v.name).sort()).toEqual([
       "answer",

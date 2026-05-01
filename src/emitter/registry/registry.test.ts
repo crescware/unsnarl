@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../../constants.js";
+import { LANGUAGE, SERIALIZED_IR_VERSION } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import type { Emitter } from "../../pipeline/types.js";
 import { DefaultEmitterRegistry } from "./registry.js";
 
 const fakeIR = {
-  version: 1,
+  version: SERIALIZED_IR_VERSION,
   source: { path: "x.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],

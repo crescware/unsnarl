@@ -1,3 +1,4 @@
+import { SERIALIZED_IR_VERSION } from "../../constants.js";
 import { makeReferenceId, makeScopeId, makeVariableId } from "../../ir/id.js";
 import type {
   Reference,
@@ -80,7 +81,7 @@ export class FlatSerializer implements IRSerializer {
     }
 
     return {
-      version: 1,
+      version: SERIALIZED_IR_VERSION,
       source: { path: ctx.source.path, language: ctx.source.language },
       raw: ctx.raw,
       scopes: serializedScopes,

@@ -5,6 +5,7 @@ import {
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
+  SERIALIZED_IR_VERSION,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -86,7 +87,7 @@ describe("JsonEmitter", () => {
 
   test("emits a versioned VisualGraph with elements/edges arrays", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
-    expect(graph.version).toBe(1);
+    expect(graph.version).toBe(SERIALIZED_IR_VERSION);
     expect(graph.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
     expect(graph.direction).toBe("RL");
     expect(Array.isArray(graph.elements)).toBe(true);

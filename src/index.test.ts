@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "./constants.js";
+import { LANGUAGE, SERIALIZED_IR_VERSION } from "./constants.js";
 import type { Scope, SerializedIR } from "./ir/model.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type {
@@ -14,7 +14,7 @@ import type {
 const fakeScope = {} as Scope;
 
 const fakeIR = {
-  version: 1,
+  version: SERIALIZED_IR_VERSION,
   source: { path: "test.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],

@@ -7,6 +7,7 @@ import {
   LANGUAGE,
   NODE_KIND,
   ROOT_QUERY_KIND,
+  SERIALIZED_IR_VERSION,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -55,7 +56,7 @@ function subgraph(
 
 function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
   return {
-    version: 1,
+    version: SERIALIZED_IR_VERSION,
     source: { path: "x.ts", language: LANGUAGE.Ts },
     direction: DIRECTION.RL,
     elements,

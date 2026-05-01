@@ -4,6 +4,7 @@ import {
   DIRECTION,
   LANGUAGE,
   NODE_KIND,
+  SERIALIZED_IR_VERSION,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -43,7 +44,7 @@ function makeCtx(
   const variables = opts.variables ?? [];
   const scopes = opts.scopes ?? [];
   const ir = {
-    version: 1,
+    version: SERIALIZED_IR_VERSION,
     source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes,

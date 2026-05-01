@@ -5,6 +5,7 @@ import {
   DIAGNOSTIC_KIND,
   LANGUAGE,
   SCOPE_TYPE,
+  SERIALIZED_IR_VERSION,
   type Language,
 } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
@@ -32,7 +33,7 @@ function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
 describe("FlatSerializer", () => {
   test("emits version 1 IR with the source metadata", () => {
     const ir = pipe("const a = 1;\n");
-    expect(ir.version).toBe(1);
+    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
     expect(ir.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
   });
 

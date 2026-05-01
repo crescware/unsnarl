@@ -4,6 +4,7 @@ import {
   IMPORT_KIND,
   NODE_KIND,
   SCOPE_TYPE,
+  SERIALIZED_IR_VERSION,
   VISUAL_ELEMENT_TYPE,
 } from "../constants.js";
 import type {
@@ -39,7 +40,7 @@ const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   const graph = {
-    version: 1,
+    version: SERIALIZED_IR_VERSION,
     source: { path: ir.source.path, language: ir.source.language },
     direction: DIRECTION.RL,
     elements: [] as VisualElement[],

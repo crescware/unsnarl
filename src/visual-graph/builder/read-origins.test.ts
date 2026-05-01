@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, SCOPE_TYPE } from "../../constants.js";
+import {
+  LANGUAGE,
+  SCOPE_TYPE,
+  SERIALIZED_IR_VERSION,
+} from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -19,7 +23,7 @@ function makeCtx(opts: {
   sortedCasesByContainer?: Map<string, readonly SerializedScope[]>;
 }): BuilderContext {
   const ir = {
-    version: 1,
+    version: SERIALIZED_IR_VERSION,
     source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes: opts.scopes,

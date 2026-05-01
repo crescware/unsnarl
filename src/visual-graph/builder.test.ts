@@ -5,6 +5,7 @@ import {
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
+  SERIALIZED_IR_VERSION,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
   type Language,
@@ -99,7 +100,7 @@ function childSubgraphsOf(sg: VisualSubgraph): readonly VisualSubgraph[] {
 describe("buildVisualGraph: top-level structure", () => {
   test("top-level metadata mirrors the IR source path/language and direction is RL", () => {
     const g = build("const a = 1;\n");
-    expect(g.version).toBe(1);
+    expect(g.version).toBe(SERIALIZED_IR_VERSION);
     expect(g.source.path).toBe("input.ts");
     expect(g.source.language).toBe("ts");
     expect(g.direction).toBe("RL");
