@@ -1,7 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  NODE_KIND,
+  ROOT_QUERY_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { NodeKind, VisualNode } from "../model.js";
 import { nodeMatchesQuery } from "./node-matches-query.js";
 
@@ -18,7 +22,7 @@ const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
 describe("nodeMatchesQuery", () => {
   test("kind=line matches when line falls within [start,end]", () => {
     const q = {
-      kind: "line",
+      kind: ROOT_QUERY_KIND.Line,
       line: 5,
       raw: "5",
     } as const satisfies ParsedRootQuery;
@@ -34,7 +38,7 @@ describe("nodeMatchesQuery", () => {
 
   test("kind=line-name additionally requires exact name match", () => {
     const q = {
-      kind: "line-name",
+      kind: ROOT_QUERY_KIND.LineName,
       line: 5,
       name: "x",
       raw: "5:x",
@@ -45,7 +49,7 @@ describe("nodeMatchesQuery", () => {
 
   test("kind=range overlaps node line range", () => {
     const q = {
-      kind: "range",
+      kind: ROOT_QUERY_KIND.Range,
       start: 4,
       end: 6,
       raw: "4-6",
@@ -57,7 +61,7 @@ describe("nodeMatchesQuery", () => {
 
   test("kind=range-name additionally requires exact name match", () => {
     const q = {
-      kind: "range-name",
+      kind: ROOT_QUERY_KIND.RangeName,
       start: 4,
       end: 6,
       name: "x",
@@ -69,7 +73,7 @@ describe("nodeMatchesQuery", () => {
 
   test("kind=name matches by name except for excluded use-site kinds", () => {
     const q = {
-      kind: "name",
+      kind: ROOT_QUERY_KIND.Name,
       name: "x",
       raw: "x",
     } as const satisfies ParsedRootQuery;

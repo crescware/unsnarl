@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { ROOT_QUERY_KIND } from "../../constants.js";
 import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {
@@ -127,7 +128,10 @@ describe("parseCliArgs", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.args.roots).toHaveLength(1);
-      expect(r.args.roots[0]).toMatchObject({ kind: "line-name", line: 10 });
+      expect(r.args.roots[0]).toMatchObject({
+        kind: ROOT_QUERY_KIND.LineName,
+        line: 10,
+      });
     }
   });
 

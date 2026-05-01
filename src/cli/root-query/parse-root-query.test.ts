@@ -1,15 +1,20 @@
 import { describe, expect, test } from "vitest";
 
+import { ROOT_QUERY_KIND } from "../../constants.js";
 import { parseRootQuery } from "./parse-root-query.js";
 
 describe("parseRootQuery", () => {
   test("parses a bare line number", () => {
-    expect(parseRootQuery("10")).toEqual({ kind: "line", line: 10, raw: "10" });
+    expect(parseRootQuery("10")).toEqual({
+      kind: ROOT_QUERY_KIND.Line,
+      line: 10,
+      raw: "10",
+    });
   });
 
   test("parses line:name", () => {
     expect(parseRootQuery("10:counter")).toEqual({
-      kind: "line-name",
+      kind: ROOT_QUERY_KIND.LineName,
       line: 10,
       name: "counter",
       raw: "10:counter",
@@ -18,7 +23,7 @@ describe("parseRootQuery", () => {
 
   test("parses a range n-m", () => {
     expect(parseRootQuery("9-13")).toEqual({
-      kind: "range",
+      kind: ROOT_QUERY_KIND.Range,
       start: 9,
       end: 13,
       raw: "9-13",
@@ -27,7 +32,7 @@ describe("parseRootQuery", () => {
 
   test("parses range:name", () => {
     expect(parseRootQuery("9-13:value")).toEqual({
-      kind: "range-name",
+      kind: ROOT_QUERY_KIND.RangeName,
       start: 9,
       end: 13,
       name: "value",
@@ -37,20 +42,26 @@ describe("parseRootQuery", () => {
 
   test("parses a bare identifier", () => {
     expect(parseRootQuery("foo")).toEqual({
-      kind: "name",
+      kind: ROOT_QUERY_KIND.Name,
       name: "foo",
       raw: "foo",
     });
   });
 
   test("accepts identifiers starting with $ or _", () => {
-    expect(parseRootQuery("$ok")).toMatchObject({ kind: "name", name: "$ok" });
-    expect(parseRootQuery("_ok")).toMatchObject({ kind: "name", name: "_ok" });
+    expect(parseRootQuery("$ok")).toMatchObject({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "$ok",
+    });
+    expect(parseRootQuery("_ok")).toMatchObject({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "_ok",
+    });
   });
 
   test("treats n-n as a single-line range", () => {
     expect(parseRootQuery("5-5")).toMatchObject({
-      kind: "range",
+      kind: ROOT_QUERY_KIND.Range,
       start: 5,
       end: 5,
     });

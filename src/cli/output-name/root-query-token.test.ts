@@ -1,12 +1,13 @@
 import { describe, expect, test } from "vitest";
 
+import { ROOT_QUERY_KIND } from "../../constants.js";
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { rootQueryToken } from "./root-query-token.js";
 
 describe("rootQueryToken", () => {
   test("name → identifier verbatim", () => {
     const q = {
-      kind: "name",
+      kind: ROOT_QUERY_KIND.Name,
       name: "value",
       raw: "value",
     } as const satisfies ParsedRootQuery;
@@ -15,7 +16,7 @@ describe("rootQueryToken", () => {
 
   test("line → l<n>", () => {
     const q = {
-      kind: "line",
+      kind: ROOT_QUERY_KIND.Line,
       line: 42,
       raw: "42",
     } as const satisfies ParsedRootQuery;
@@ -24,7 +25,7 @@ describe("rootQueryToken", () => {
 
   test("line-name → l<n>-<id>", () => {
     const q = {
-      kind: "line-name",
+      kind: ROOT_QUERY_KIND.LineName,
       line: 42,
       name: "render",
       raw: "42:render",
@@ -34,7 +35,7 @@ describe("rootQueryToken", () => {
 
   test("range → l<start>-<end>", () => {
     const q = {
-      kind: "range",
+      kind: ROOT_QUERY_KIND.Range,
       start: 10,
       end: 12,
       raw: "10-12",
@@ -44,7 +45,7 @@ describe("rootQueryToken", () => {
 
   test("range-name → l<start>-<end>-<id>", () => {
     const q = {
-      kind: "range-name",
+      kind: ROOT_QUERY_KIND.RangeName,
       start: 10,
       end: 12,
       name: "render",

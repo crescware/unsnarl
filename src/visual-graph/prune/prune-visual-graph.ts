@@ -1,4 +1,4 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION, ROOT_QUERY_KIND } from "../../constants.js";
 import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
 import { buildAdjacency } from "./build-adjacency.js";
@@ -44,7 +44,7 @@ export function pruneVisualGraph(
   // body in just because the return subgraph happens to start at L10.
   for (let i = 0; i < options.roots.length; i++) {
     const q = options.roots[i];
-    if (q === undefined || q.kind !== "line") {
+    if (q === undefined || q.kind !== ROOT_QUERY_KIND.Line) {
       continue;
     }
     for (const sg of iterateVisualSubgraphs(graph.elements)) {

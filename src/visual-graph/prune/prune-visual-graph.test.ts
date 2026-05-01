@@ -5,6 +5,7 @@ import {
   BOUNDARY_EDGE_DIRECTION,
   DIRECTION,
   NODE_KIND,
+  ROOT_QUERY_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -62,23 +63,23 @@ function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
 }
 
 const rawLine = (n: number): ParsedRootQuery => ({
-  kind: "line",
+  kind: ROOT_QUERY_KIND.Line,
   line: n,
   raw: String(n),
 });
 const rawLineName = (n: number, name: string): ParsedRootQuery => ({
-  kind: "line-name",
+  kind: ROOT_QUERY_KIND.LineName,
   line: n,
   name,
   raw: `${n}:${name}`,
 });
 const rawName = (name: string): ParsedRootQuery => ({
-  kind: "name",
+  kind: ROOT_QUERY_KIND.Name,
   name,
   raw: name,
 });
 const rawRange = (s: number, e: number): ParsedRootQuery => ({
-  kind: "range",
+  kind: ROOT_QUERY_KIND.Range,
   start: s,
   end: e,
   raw: `${s}-${e}`,
@@ -499,7 +500,14 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     const ret = node("ret_foo", "foo", 11, { kind: NODE_KIND.ReturnUse });
     const g = graph([writeOp, ret], []);
     const r = pruneVisualGraph(g, {
-      roots: [{ kind: "line-name", line: 11, name: "foo", raw: "11:foo" }],
+      roots: [
+        {
+          kind: ROOT_QUERY_KIND.LineName,
+          line: 11,
+          name: "foo",
+          raw: "11:foo",
+        },
+      ],
       descendants: 0,
       ancestors: 0,
     });
