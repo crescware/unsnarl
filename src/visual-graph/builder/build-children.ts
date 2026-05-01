@@ -7,9 +7,9 @@ import type { BuilderContext } from "./context.js";
 import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
 import { lineForOffset } from "./line-for-offset.js";
 
-type Container = {
+type Container = Readonly<{
   elements: VisualElement[];
-};
+}>;
 
 export function buildChildren(
   parentScope: SerializedScope,

@@ -19,7 +19,7 @@ import type { MermaidStrategy } from "./strategy/strategy.js";
 
 export type MermaidRenderer = "dagre" | "elk";
 
-export type MermaidEmitterOptions = {
+export type MermaidEmitterOptions = Readonly<{
   /**
    * Renderer-specific strategy. The strategy carries the preamble (e.g. the
    * `%%{init: ...}%%` directive that elk needs), the empty-subgraph patch
@@ -30,7 +30,7 @@ export type MermaidEmitterOptions = {
    * See `dagreStrategy` / `elkStrategy` in `./mermaid-strategy.js`.
    */
   strategy: MermaidStrategy;
-};
+}>;
 
 export class MermaidEmitter implements Emitter {
   readonly format = "mermaid";

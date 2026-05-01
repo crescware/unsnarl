@@ -2,102 +2,103 @@ import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
 import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
 import type { VisualGraph } from "../visual-graph/model.js";
 
-export type ParseOptions = {
+export type ParseOptions = Readonly<{
   language: Language;
   sourcePath: string;
-};
+}>;
 
-export type ParsedSource = {
+export type ParsedSource = Readonly<{
   ast: unknown;
   language: Language;
   sourcePath: string;
   raw: string;
-};
+}>;
 
-export type Parser = {
-  readonly id: string;
+export type Parser = Readonly<{
+  id: string;
   parse(code: string, opts: ParseOptions): ParsedSource;
-};
+}>;
 
-export type AnalyzedSource = {
-  readonly rootScope: Scope;
-  readonly diagnostics: readonly Diagnostic[];
-  readonly raw: string;
-};
+export type AnalyzedSource = Readonly<{
+  rootScope: Scope;
+  diagnostics: readonly Diagnostic[];
+  raw: string;
+}>;
 
-export type ScopeAnalyzer = {
-  readonly id: string;
+export type ScopeAnalyzer = Readonly<{
+  id: string;
   analyze(parsed: ParsedSource): AnalyzedSource;
-};
+}>;
 
-export type SourceMeta = {
+export type SourceMeta = Readonly<{
   path: string;
   language: Language;
-};
+}>;
 
-export type SerializeContext = {
-  readonly rootScope: Scope;
-  readonly source: SourceMeta;
-  readonly diagnostics: readonly Diagnostic[];
-  readonly raw: string;
-};
+export type SerializeContext = Readonly<{
+  rootScope: Scope;
+  source: SourceMeta;
+  diagnostics: readonly Diagnostic[];
+  raw: string;
+}>;
 
-export type IRSerializer = {
-  readonly id: string;
+export type IRSerializer = Readonly<{
+  id: string;
   serialize(ctx: SerializeContext): SerializedIR;
-};
+}>;
 
-export type EmitOptions = {
+export type EmitOptions = Readonly<{
   pretty?: boolean;
   prunedGraph?: VisualGraph;
-};
+}>;
 
-export type Emitter = {
-  readonly format: string;
-  readonly contentType: string;
+export type Emitter = Readonly<{
+  format: string;
+  contentType: string;
   // File extension without leading dot, used by `--out-dir` to derive
   // output filenames. Multiple emitters may share an extension (e.g. ir
   // and json both write JSON).
-  readonly extension: string;
+  extension: string;
   emit(ir: SerializedIR, opts: EmitOptions): string;
-};
+}>;
 
-export type EmitterRegistry = {
+export type EmitterRegistry = Readonly<{
   register(emitter: Emitter): void;
   get(format: string): Emitter | undefined;
   list(): readonly string[];
-};
+}>;
 
-export type PruningRunOptions = {
-  readonly roots: readonly ParsedRootQuery[];
-  readonly descendants: number;
-  readonly ancestors: number;
-};
+export type PruningRunOptions = Readonly<{
+  roots: readonly ParsedRootQuery[];
+  descendants: number;
+  ancestors: number;
+}>;
 
-export type PipelineRunOptions = ParseOptions & {
-  format: string;
-  emit?: EmitOptions;
-  pruning?: PruningRunOptions;
-};
+export type PipelineRunOptions = ParseOptions &
+  Readonly<{
+    format: string;
+    emit?: EmitOptions;
+    pruning?: PruningRunOptions;
+  }>;
 
-export type PipelineRunDetails = {
-  readonly text: string;
-  readonly pruning:
-    | readonly {
-        readonly query: string;
-        readonly matched: number;
-      }[]
+export type PipelineRunDetails = Readonly<{
+  text: string;
+  pruning:
+    | readonly Readonly<{
+        query: string;
+        matched: number;
+      }>[]
     | null;
-};
+}>;
 
-export type Pipeline = {
+export type Pipeline = Readonly<{
   run(code: string, opts: PipelineRunOptions): string;
   runDetailed(code: string, opts: PipelineRunOptions): PipelineRunDetails;
-};
+}>;
 
-export type PipelineConfig = {
+export type PipelineConfig = Readonly<{
   parser: Parser;
   analyzer: ScopeAnalyzer;
   serializer: IRSerializer;
   emitters: EmitterRegistry;
-};
+}>;

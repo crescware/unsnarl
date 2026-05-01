@@ -33,7 +33,7 @@ export type SubgraphKind =
   | "for"
   | "return";
 
-export type VisualNode = {
+export type VisualNode = Readonly<{
   type: "node";
   id: string;
   kind: NodeKind;
@@ -54,9 +54,13 @@ export type VisualNode = {
   importKind?: ImportKind;
   importedName?: string | null;
   importSource?: string;
-};
+}>;
 
-export type VisualSubgraph = {
+// `elements` stays mutable: builder.ts pushes into the array as it walks
+// scopes, and rebuild-elements rewires children through `{ ...item,
+// elements: children }`. Wrapping in Readonly only seals the field
+// reference, not the array contents.
+export type VisualSubgraph = Readonly<{
   type: "subgraph";
   id: string;
   kind: SubgraphKind;
@@ -70,21 +74,21 @@ export type VisualSubgraph = {
   // pruning even when the owner node itself gets cut out of the graph.
   ownerName?: string;
   elements: VisualElement[];
-};
+}>;
 
 export type VisualElement = VisualNode | VisualSubgraph;
 
-export type VisualEdge = {
+export type VisualEdge = Readonly<{
   from: string;
   to: string;
   label: string;
-};
+}>;
 
-export type VisualGraphPruning = {
-  roots: readonly { query: string; matched: number }[];
+export type VisualGraphPruning = Readonly<{
+  roots: readonly Readonly<{ query: string; matched: number }>[];
   descendants: number;
   ancestors: number;
-};
+}>;
 
 /**
  * An edge whose `inside` end is kept by pruning but whose other end was
@@ -102,15 +106,18 @@ export type VisualGraphPruning = {
  *   visible, so we can keep the original edge label.
  */
 export type VisualBoundaryEdge =
-  | { inside: string; direction: "out" }
-  | { inside: string; direction: "in"; label: string };
+  | Readonly<{ inside: string; direction: "out" }>
+  | Readonly<{ inside: string; direction: "in"; label: string }>;
 
-export type VisualGraph = {
+// `elements` and `edges` stay mutable arrays: the builder appends to them
+// during graph construction. Readonly only locks the property bindings,
+// not the array contents.
+export type VisualGraph = Readonly<{
   version: 1;
-  source: { path: string; language: Language };
+  source: Readonly<{ path: string; language: Language }>;
   direction: Direction;
   elements: VisualElement[];
   edges: VisualEdge[];
   boundaryEdges?: readonly VisualBoundaryEdge[];
   pruning?: VisualGraphPruning;
-};
+}>;

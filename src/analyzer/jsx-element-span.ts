@@ -1,9 +1,9 @@
 import type { PathEntry } from "./walk/walk.js";
 
-type JsxElementSpan = {
+type JsxElementSpan = Readonly<{
   startOffset: number;
   endOffset: number;
-};
+}>;
 
 // A JSX opening-tag identifier (and identifiers reached through a
 // JSXMemberExpression chain on the tag name) logically extends from the

@@ -6,10 +6,10 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
 import { runCli } from "./run-cli.js";
 
-type CapturedOutput = {
+type CapturedOutput = Readonly<{
   stdout: string;
   stderr: string;
-};
+}>;
 
 async function captureRun(
   argv: readonly string[],

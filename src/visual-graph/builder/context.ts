@@ -5,7 +5,7 @@ import type {
 } from "../../ir/model.js";
 import type { WriteOp } from "./write-op.js";
 
-export type BuilderContext = {
+export type BuilderContext = Readonly<{
   ir: SerializedIR;
   variableMap: Map<string, SerializedVariable>;
   scopeMap: Map<string, SerializedScope>;
@@ -15,4 +15,4 @@ export type BuilderContext = {
   writeOpsByScope: Map<string, WriteOp[]>;
   writeOpByRef: Map<string, WriteOp>;
   sortedCasesByContainer: Map<string, SerializedScope[]>;
-};
+}>;

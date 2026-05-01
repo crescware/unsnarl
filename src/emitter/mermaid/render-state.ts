@@ -1,7 +1,7 @@
 import type { VisualNode } from "../../visual-graph/model.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
 
-export type RenderState = {
+export type RenderState = Readonly<{
   lines: string[];
   nodeMap: ReadonlyMap<string, VisualNode>;
   wrappedOwnerIds: ReadonlySet<string>;
@@ -9,4 +9,4 @@ export type RenderState = {
   placeholderIds: string[];
   wrapperIds: string[];
   strategy: MermaidStrategy;
-};
+}>;

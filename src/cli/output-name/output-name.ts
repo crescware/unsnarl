@@ -4,17 +4,17 @@ import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { radiusSuffix } from "./radius-suffix.js";
 import { rootQueryToken } from "./root-query-token.js";
 
-type OutputNameInputs = {
-  readonly roots: readonly ParsedRootQuery[];
-  readonly descendants: number | null;
-  readonly ancestors: number | null;
-  readonly context: number | null;
-  readonly inputPath: string | null;
-};
+type OutputNameInputs = Readonly<{
+  roots: readonly ParsedRootQuery[];
+  descendants: number | null;
+  ancestors: number | null;
+  context: number | null;
+  inputPath: string | null;
+}>;
 
 type OutputNameResult =
-  | { readonly ok: true; readonly basename: string }
-  | { readonly ok: false; readonly error: string };
+  | Readonly<{ ok: true; basename: string }>
+  | Readonly<{ ok: false; error: string }>;
 
 export function deriveOutputBasename(
   inputs: OutputNameInputs,

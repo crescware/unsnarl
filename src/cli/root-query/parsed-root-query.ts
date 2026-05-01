@@ -1,22 +1,22 @@
 export type ParsedRootQuery =
-  | { readonly kind: "line"; readonly line: number; readonly raw: string }
-  | {
-      readonly kind: "line-name";
-      readonly line: number;
-      readonly name: string;
-      readonly raw: string;
-    }
-  | {
-      readonly kind: "range";
-      readonly start: number;
-      readonly end: number;
-      readonly raw: string;
-    }
-  | {
-      readonly kind: "range-name";
-      readonly start: number;
-      readonly end: number;
-      readonly name: string;
-      readonly raw: string;
-    }
-  | { readonly kind: "name"; readonly name: string; readonly raw: string };
+  | Readonly<{ kind: "line"; line: number; raw: string }>
+  | Readonly<{
+      kind: "line-name";
+      line: number;
+      name: string;
+      raw: string;
+    }>
+  | Readonly<{
+      kind: "range";
+      start: number;
+      end: number;
+      raw: string;
+    }>
+  | Readonly<{
+      kind: "range-name";
+      start: number;
+      end: number;
+      name: string;
+      raw: string;
+    }>
+  | Readonly<{ kind: "name"; name: string; raw: string }>;
