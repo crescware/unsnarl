@@ -1,3 +1,4 @@
+import { BOUNDARY_EDGE_DIRECTION } from "../constants.js";
 import type {
   BoundaryEdgeDirection,
   Direction,
@@ -97,8 +98,12 @@ export type VisualGraphPruning = Readonly<{
  *   visible, so we can keep the original edge label.
  */
 export type VisualBoundaryEdge =
-  | Readonly<{ inside: string; direction: "out" }>
-  | Readonly<{ inside: string; direction: "in"; label: string }>;
+  | Readonly<{ inside: string; direction: typeof BOUNDARY_EDGE_DIRECTION.Out }>
+  | Readonly<{
+      inside: string;
+      direction: typeof BOUNDARY_EDGE_DIRECTION.In;
+      label: string;
+    }>;
 
 // `elements` and `edges` stay mutable arrays: the builder appends to them
 // during graph construction. Readonly only locks the property bindings,

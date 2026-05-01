@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import { renderBoundaryEdges } from "./render-boundary-edges.js";
 import { makeGraph } from "./testing/make-graph.js";
 
@@ -21,7 +22,9 @@ describe("renderBoundaryEdges", () => {
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
       makeGraph({
-        boundaryEdges: [{ inside: "n_x", direction: "out" }],
+        boundaryEdges: [
+          { inside: "n_x", direction: BOUNDARY_EDGE_DIRECTION.Out },
+        ],
       }),
       lines,
       stubIds,
@@ -36,7 +39,13 @@ describe("renderBoundaryEdges", () => {
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
       makeGraph({
-        boundaryEdges: [{ inside: "n_x", direction: "in", label: "read" }],
+        boundaryEdges: [
+          {
+            inside: "n_x",
+            direction: BOUNDARY_EDGE_DIRECTION.In,
+            label: "read",
+          },
+        ],
       }),
       lines,
       stubIds,
@@ -51,9 +60,13 @@ describe("renderBoundaryEdges", () => {
     renderBoundaryEdges(
       makeGraph({
         boundaryEdges: [
-          { inside: "a", direction: "out" },
-          { inside: "b", direction: "in", label: "write" },
-          { inside: "c", direction: "out" },
+          { inside: "a", direction: BOUNDARY_EDGE_DIRECTION.Out },
+          {
+            inside: "b",
+            direction: BOUNDARY_EDGE_DIRECTION.In,
+            label: "write",
+          },
+          { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
         ],
       }),
       lines,

@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
 import { runCli } from "./run-cli.js";
 
@@ -174,7 +175,7 @@ describe("runCli (end-to-end)", () => {
     expect(names).not.toContain("c");
     expect(names).not.toContain("d");
     expect(graph.boundaryEdges).toEqual([
-      expect.objectContaining({ direction: "out" }),
+      expect.objectContaining({ direction: BOUNDARY_EDGE_DIRECTION.Out }),
     ]);
     // out-direction boundary edges are intentionally label-less because
     // the action's actor (the unseen node beyond the boundary) is unknown.

@@ -1,3 +1,4 @@
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
@@ -48,7 +49,7 @@ export class StatsEmitter implements Emitter {
     const boundaryOut = new Set<string>();
     const boundaryIn = new Set<string>();
     for (const be of graph.boundaryEdges ?? []) {
-      if (be.direction === "out") {
+      if (be.direction === BOUNDARY_EDGE_DIRECTION.Out) {
         boundaryOut.add(be.inside);
       } else {
         boundaryIn.add(be.inside);

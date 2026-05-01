@@ -1,3 +1,4 @@
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
 
 export function renderBoundaryEdges(
@@ -27,7 +28,7 @@ export function renderBoundaryEdges(
     // ASCII "..." instead of U+2026 -- some Mermaid renderers stumble
     // on multibyte glyphs inside node shape syntax.
     lines.push(`  ${stubId}((...))`);
-    if (be.direction === "out") {
+    if (be.direction === BOUNDARY_EDGE_DIRECTION.Out) {
       lines.push(`  ${be.inside} -.-> ${stubId}`);
     } else {
       lines.push(`  ${stubId} -.->|${be.label}| ${be.inside}`);

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
@@ -81,7 +82,12 @@ describe("StatsEmitter", () => {
           edges: graph.edges.filter(
             (e) => keepIds.has(e.from) && keepIds.has(e.to),
           ),
-          boundaryEdges: [{ inside: "n_scope_0_b_19", direction: "out" }],
+          boundaryEdges: [
+            {
+              inside: "n_scope_0_b_19",
+              direction: BOUNDARY_EDGE_DIRECTION.Out,
+            },
+          ],
         };
       },
     );

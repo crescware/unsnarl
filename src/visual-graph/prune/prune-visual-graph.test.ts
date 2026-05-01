@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import { DIRECTION } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION, DIRECTION } from "../../constants.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -131,7 +131,9 @@ describe("pruneVisualGraph", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["a", "b", "c"]);
-    expect(r.graph.boundaryEdges).toEqual([{ inside: "c", direction: "out" }]);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
+    ]);
   });
 
   test("expands ancestors by N hops; the inbound boundary hint keeps the label", () => {
@@ -155,7 +157,7 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "b", direction: "in", label: "read" },
+      { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
     ]);
   });
 
@@ -182,8 +184,8 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "d", direction: "out" },
-      { inside: "b", direction: "in", label: "read" },
+      { inside: "d", direction: BOUNDARY_EDGE_DIRECTION.Out },
+      { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
     ]);
   });
 
@@ -205,7 +207,9 @@ describe("pruneVisualGraph", () => {
       descendants: 1,
       ancestors: 0,
     });
-    expect(r.graph.boundaryEdges).toEqual([{ inside: "d", direction: "out" }]);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "d", direction: BOUNDARY_EDGE_DIRECTION.Out },
+    ]);
   });
 
   test("merges in-direction labels into a sorted, deduplicated comma list", () => {
@@ -229,7 +233,11 @@ describe("pruneVisualGraph", () => {
       ancestors: 1,
     });
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "M", direction: "in", label: "call,read,set" },
+      {
+        inside: "M",
+        direction: BOUNDARY_EDGE_DIRECTION.In,
+        label: "call,read,set",
+      },
     ]);
   });
 

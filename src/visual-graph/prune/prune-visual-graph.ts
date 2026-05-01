@@ -1,3 +1,4 @@
+import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
 import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
 import { buildAdjacency } from "./build-adjacency.js";
@@ -123,10 +124,17 @@ export function pruneVisualGraph(
   const boundaryEdges: /* mutable */ VisualBoundaryEdge[] = [];
   for (const bucket of buckets.values()) {
     if (bucket.kind === "out") {
-      boundaryEdges.push({ inside: bucket.inside, direction: "out" });
+      boundaryEdges.push({
+        inside: bucket.inside,
+        direction: BOUNDARY_EDGE_DIRECTION.Out,
+      });
     } else {
       const label = [...bucket.labels].sort().join(",");
-      boundaryEdges.push({ inside: bucket.inside, direction: "in", label });
+      boundaryEdges.push({
+        inside: bucket.inside,
+        direction: BOUNDARY_EDGE_DIRECTION.In,
+        label,
+      });
     }
   }
 
