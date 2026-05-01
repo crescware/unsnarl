@@ -1,4 +1,5 @@
 import {
+  AST_TYPE,
   DEFINITION_TYPE,
   DIRECTION,
   IMPORT_KIND,
@@ -68,8 +69,8 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     } else if (
       def.type === DEFINITION_TYPE.Variable &&
       def.initSpan !== null &&
-      (def.initType === "FunctionExpression" ||
-        def.initType === "ArrowFunctionExpression")
+      (def.initType === AST_TYPE.FunctionExpression ||
+        def.initType === AST_TYPE.ArrowFunctionExpression)
     ) {
       blockOffset = def.initSpan.offset;
     }
@@ -86,7 +87,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   const hiddenVariables = new Set<string>();
   for (const v of ir.variables) {
-    if (v.defs[0]?.type !== "ImplicitGlobalVariable") {
+    if (v.defs[0]?.type !== DEFINITION_TYPE.ImplicitGlobalVariable) {
       continue;
     }
     const refs = ir.references.filter((r) => r.resolved === v.id);
@@ -356,7 +357,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const def = v.defs[0];
-    if (def?.type !== "ImportBinding") {
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;
     }
     const source = def.importSource;
@@ -411,7 +412,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const def = v.defs[0];
-    if (def?.type !== "ImportBinding") {
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;
     }
     const source = def.importSource;

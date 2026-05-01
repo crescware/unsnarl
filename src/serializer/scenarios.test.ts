@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import {
   AST_TYPE,
+  DEFINITION_TYPE,
   IMPORT_KIND,
   LANGUAGE,
   PREDICATE_CONTAINER_TYPE,
@@ -283,7 +284,7 @@ describe("scenario: import declarations carry kind / source / imported name", ()
 
   test("default imports record the source and a null importedName", () => {
     const def = varByName(ir, "def").defs[0];
-    expect(def?.type).toBe("ImportBinding");
+    expect(def?.type).toBe(DEFINITION_TYPE.ImportBinding);
     expect(def?.importKind).toBe(IMPORT_KIND.Default);
     expect(def?.importSource).toBe("some-default");
     expect(def?.importedName).toBeNull();
@@ -322,7 +323,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
     expect(objectRefs[0]?.flags.receiver).toBe(true);
     expect(objectRefs[0]?.flags.read).toBe(true);
     const objectDef = varByName(ir, "Object").defs[0];
-    expect(objectDef?.type).toBe("ImplicitGlobalVariable");
+    expect(objectDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 
   test("a global read directly carries flags.receiver=false", () => {
@@ -332,7 +333,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
     expect(argRefs[0]?.flags.receiver).toBe(false);
     expect(argRefs[0]?.flags.read).toBe(true);
     const argDef = varByName(ir, "arg").defs[0];
-    expect(argDef?.type).toBe("ImplicitGlobalVariable");
+    expect(argDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 });
 
@@ -353,7 +354,7 @@ describe("scenario: function parameter references are not duplicated", () => {
 
   test("each parameter has a Parameter definition", () => {
     const ir = pipe("function add(a, b) { return a + b; }\n");
-    expect(varByName(ir, "a").defs[0]?.type).toBe("Parameter");
-    expect(varByName(ir, "b").defs[0]?.type).toBe("Parameter");
+    expect(varByName(ir, "a").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
+    expect(varByName(ir, "b").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
   });
 });

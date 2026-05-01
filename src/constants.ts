@@ -47,6 +47,7 @@ export const AST_TYPE = {
   JSXIdentifier: "JSXIdentifier",
   JSXMemberExpression: "JSXMemberExpression",
   JSXOpeningElement: "JSXOpeningElement",
+  LabeledStatement: "LabeledStatement",
   Literal: "Literal",
   MemberExpression: "MemberExpression",
   MethodDefinition: "MethodDefinition",

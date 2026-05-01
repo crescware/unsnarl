@@ -1,4 +1,8 @@
-import { DEFINITION_TYPE, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  AST_TYPE,
+  DEFINITION_TYPE,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { SerializedVariable } from "../../ir/model.js";
 import type { VisualNode } from "../model.js";
 import { nodeId } from "./node-id.js";
@@ -7,7 +11,8 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   const def = v.defs[0];
   const initType = def?.initType ?? null;
   const isFunctionInit =
-    initType === "ArrowFunctionExpression" || initType === "FunctionExpression";
+    initType === AST_TYPE.ArrowFunctionExpression ||
+    initType === AST_TYPE.FunctionExpression;
   const declarationKind = def?.declarationKind ?? null;
   const importKind = def?.importKind ?? null;
   const importedName = def?.importedName ?? null;

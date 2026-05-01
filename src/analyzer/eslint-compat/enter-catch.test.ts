@@ -27,7 +27,7 @@ describe("enterCatch", () => {
     expect(scope.type).toBe("catch");
     expect(scope.variables.map((v) => v.name).sort()).toEqual(["err", "z"]);
     expect(scope.variables.find((v) => v.name === "err")?.defs[0]?.type).toBe(
-      "CatchClause",
+      AST_TYPE.CatchClause,
     );
   });
 

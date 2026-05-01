@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { handleImportDeclaration } from "./handle-import-declaration.js";
@@ -32,7 +32,9 @@ describe("handleImportDeclaration", () => {
     const scope = newScope();
     handleImportDeclaration(firstStmt("import a from 'mod';"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["a"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe("ImportBinding");
+    expect(scope.variables[0]?.defs[0]?.type).toBe(
+      DEFINITION_TYPE.ImportBinding,
+    );
   });
 
   test("named specifiers declare each local name", () => {

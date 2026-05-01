@@ -12,7 +12,7 @@ describe("classifyOrdinaryReference", () => {
   test("AssignmentExpression#left with `=` → Write only, writeExpr from `right`", () => {
     const right = node({ type: AST_TYPE.Literal });
     const r = classifyOrdinaryReference(
-      "AssignmentExpression",
+      AST_TYPE.AssignmentExpression,
       "left",
       node({ type: AST_TYPE.AssignmentExpression, operator: "=", right }),
     );
@@ -27,7 +27,7 @@ describe("classifyOrdinaryReference", () => {
   test("AssignmentExpression#left with compound op → Read|Write", () => {
     const right = node({ type: AST_TYPE.Literal });
     const r = classifyOrdinaryReference(
-      "AssignmentExpression",
+      AST_TYPE.AssignmentExpression,
       "left",
       node({ type: AST_TYPE.AssignmentExpression, operator: "+=", right }),
     );
@@ -40,7 +40,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("AssignmentExpression with non-AST right yields writeExpr=null", () => {
     const r = classifyOrdinaryReference(
-      "AssignmentExpression",
+      AST_TYPE.AssignmentExpression,
       "left",
       node({ type: AST_TYPE.AssignmentExpression, operator: "=", right: 1 }),
     );
@@ -49,7 +49,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("UpdateExpression#argument → Read|Write", () => {
     const r = classifyOrdinaryReference(
-      "UpdateExpression",
+      AST_TYPE.UpdateExpression,
       "argument",
       node({ type: AST_TYPE.UpdateExpression }),
     );
@@ -60,7 +60,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("CallExpression#callee → Read|Call", () => {
     const r = classifyOrdinaryReference(
-      "CallExpression",
+      AST_TYPE.CallExpression,
       "callee",
       node({ type: AST_TYPE.CallExpression }),
     );
@@ -71,7 +71,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("NewExpression#callee → Read|Call", () => {
     const r = classifyOrdinaryReference(
-      "NewExpression",
+      AST_TYPE.NewExpression,
       "callee",
       node({ type: AST_TYPE.NewExpression }),
     );
@@ -82,7 +82,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("MemberExpression#object → Read|Receiver", () => {
     const r = classifyOrdinaryReference(
-      "MemberExpression",
+      AST_TYPE.MemberExpression,
       "object",
       node({ type: AST_TYPE.MemberExpression }),
     );
@@ -93,7 +93,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("VariableDeclarator#init → Read with init=true", () => {
     const r = classifyOrdinaryReference(
-      "VariableDeclarator",
+      AST_TYPE.VariableDeclarator,
       "init",
       node({ type: AST_TYPE.VariableDeclarator }),
     );
@@ -102,7 +102,7 @@ describe("classifyOrdinaryReference", () => {
 
   test("default fallback → Read with init=false", () => {
     const r = classifyOrdinaryReference(
-      "CallExpression",
+      AST_TYPE.CallExpression,
       "arguments",
       node({ type: AST_TYPE.CallExpression }),
     );

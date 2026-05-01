@@ -10,10 +10,10 @@ const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 describe("isPatternStep", () => {
   test("ObjectPattern / ArrayPattern / RestElement / AssignmentPattern → true", () => {
     for (const t of [
-      "ObjectPattern",
-      "ArrayPattern",
-      "RestElement",
-      "AssignmentPattern",
+      AST_TYPE.ObjectPattern,
+      AST_TYPE.ArrayPattern,
+      AST_TYPE.RestElement,
+      AST_TYPE.AssignmentPattern,
     ]) {
       expect(isPatternStep(node(t), [], 0)).toBe(true);
     }

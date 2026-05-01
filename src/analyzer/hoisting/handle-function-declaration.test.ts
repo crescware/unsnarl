@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { handleFunctionDeclaration } from "./handle-function-declaration.js";
@@ -32,7 +32,9 @@ describe("handleFunctionDeclaration", () => {
     const scope = newScope();
     handleFunctionDeclaration(firstStmt("function f() {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["f"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe("FunctionName");
+    expect(scope.variables[0]?.defs[0]?.type).toBe(
+      DEFINITION_TYPE.FunctionName,
+    );
   });
 
   test("anonymous function (no id) declares nothing", () => {

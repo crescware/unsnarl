@@ -14,10 +14,10 @@ export function findPredicateContainer(
       break;
     }
     const type = entry.node.type;
-    if (type === "IfStatement" && curKey === "test") {
+    if (type === AST_TYPE.IfStatement && curKey === "test") {
       return { type: AST_TYPE.IfStatement, offset: entry.node.start ?? 0 };
     }
-    if (type === "SwitchStatement" && curKey === "discriminant") {
+    if (type === AST_TYPE.SwitchStatement && curKey === "discriminant") {
       return { type: AST_TYPE.SwitchStatement, offset: entry.node.start ?? 0 };
     }
     curKey = entry.key;

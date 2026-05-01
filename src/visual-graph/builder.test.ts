@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import {
+  DEFINITION_TYPE,
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
@@ -114,7 +115,7 @@ describe("buildVisualGraph: top-level structure", () => {
 
   test("a single const declaration emits exactly one Variable node and no edges", () => {
     const g = build("const a = 1;\n");
-    const nodes = findNodes(g, "Variable");
+    const nodes = findNodes(g, NODE_KIND.Variable);
     expect(nodes).toHaveLength(1);
     expect(nodes[0]?.name).toBe("a");
     expect(g.edges).toEqual([]);
@@ -130,11 +131,19 @@ describe("buildVisualGraph: variable nodes", () => {
         "class Bar {}",
       ].join("\n"),
     );
-    expect(findNodes(g, "ImportBinding").map((n) => n.name)).toContain("imp");
-    expect(findNodes(g, "FunctionName").map((n) => n.name)).toContain("foo");
-    expect(findNodes(g, "Parameter").map((n) => n.name)).toContain("p");
-    expect(findNodes(g, "CatchClause").map((n) => n.name)).toContain("e");
-    expect(findNodes(g, "ClassName").map((n) => n.name)).toContain("Bar");
+    expect(findNodes(g, NODE_KIND.ImportBinding).map((n) => n.name)).toContain(
+      "imp",
+    );
+    expect(findNodes(g, NODE_KIND.FunctionName).map((n) => n.name)).toContain(
+      "foo",
+    );
+    expect(findNodes(g, NODE_KIND.Parameter).map((n) => n.name)).toContain("p");
+    expect(findNodes(g, NODE_KIND.CatchClause).map((n) => n.name)).toContain(
+      "e",
+    );
+    expect(findNodes(g, NODE_KIND.ClassName).map((n) => n.name)).toContain(
+      "Bar",
+    );
   });
 
   test("unused declarations carry the unused flag; declarations with readers do not", () => {
@@ -169,7 +178,7 @@ describe("buildVisualGraph: variable nodes", () => {
   test("named imports renamed at the import site keep the local name on the node", () => {
     const g = build("import { other as renamed } from 'm';\nvoid renamed;\n");
     const node = nodeByName(g, "renamed");
-    expect(node?.kind).toBe("ImportBinding");
+    expect(node?.kind).toBe(DEFINITION_TYPE.ImportBinding);
     expect(node?.importKind).toBe(IMPORT_KIND.Named);
     expect(node?.importedName).toBe("other");
     expect(node?.importSource).toBe("m");
@@ -186,7 +195,7 @@ describe("buildVisualGraph: function subgraphs", () => {
       (n) => n.id === fn?.ownerNodeId,
     );
     expect(ownerNode?.name).toBe("add");
-    expect(ownerNode?.kind).toBe("FunctionName");
+    expect(ownerNode?.kind).toBe(DEFINITION_TYPE.FunctionName);
   });
 
   test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
@@ -334,7 +343,7 @@ describe("buildVisualGraph: control subgraphs", () => {
 describe("buildVisualGraph: write operations and let-chain edges", () => {
   test("each let assignment becomes its own WriteOp node and they form a set chain", () => {
     const g = build("let v = 0;\nv = 1;\nv = 2;\n");
-    const writeOps = findNodes(g, "WriteOp");
+    const writeOps = findNodes(g, NODE_KIND.WriteOp);
     expect(writeOps.map((w) => w.name)).toEqual(["v", "v"]);
     const setEdges = g.edges.filter((e) => e.label === "set");
     // n_v -> wr0 and wr0 -> wr1
@@ -343,7 +352,7 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
 
   test("WriteOp nodes carry the declarationKind of the variable being mutated", () => {
     const g = build("let v = 0;\nv = 1;\n");
-    const wr = findNodes(g, "WriteOp")[0];
+    const wr = findNodes(g, NODE_KIND.WriteOp)[0];
     expect(wr?.declarationKind).toBe("let");
   });
 
@@ -405,7 +414,7 @@ describe("buildVisualGraph: read origin edges", () => {
     const reads = edgesTo(g, result!.id).filter((e) => e.label === "read");
     // One read edge per branch's last write.
     expect(reads).toHaveLength(2);
-    const writeOps = findNodes(g, "WriteOp");
+    const writeOps = findNodes(g, NODE_KIND.WriteOp);
     const writeOpIds = new Set(writeOps.map((n) => n.id));
     expect(reads.every((e) => writeOpIds.has(e.from))).toBe(true);
   });
@@ -471,13 +480,13 @@ describe("buildVisualGraph: read origin edges", () => {
       ].join("\n"),
     );
     // Find the post-switch return-use node for label.
-    const postSwitchReturnUse = findNodes(g, "ReturnUse").find(
+    const postSwitchReturnUse = findNodes(g, NODE_KIND.ReturnUse).find(
       (n) => n.line === 13,
     );
     expect(postSwitchReturnUse).toBeDefined();
     const incoming = edgesTo(g, postSwitchReturnUse!.id);
     // case "a" must not contribute (it exits the function).
-    const writeOps = findNodes(g, "WriteOp");
+    const writeOps = findNodes(g, NODE_KIND.WriteOp);
     const aWrite = writeOps.find((w) => w.line === 5);
     expect(aWrite).toBeDefined();
     expect(incoming.some((e) => e.from === aWrite?.id)).toBe(false);
@@ -619,7 +628,7 @@ describe("buildVisualGraph: return subgraphs", () => {
       ");",
     ].join("\n");
     const g = build(code, "tsx");
-    const retUses = findNodes(g, "ReturnUse");
+    const retUses = findNodes(g, NODE_KIND.ReturnUse);
     const a = retUses.find((n) => n.name === "A");
     expect(a?.isJsxElement).toBe(true);
     expect(a?.line).toBe(3);
@@ -632,7 +641,7 @@ describe("buildVisualGraph: return subgraphs", () => {
       "const App = () => <A>hi</A>;",
     ].join("\n");
     const g = build(code, "tsx");
-    const a = findNodes(g, "ReturnUse").find((n) => n.name === "A");
+    const a = findNodes(g, NODE_KIND.ReturnUse).find((n) => n.name === "A");
     expect(a?.isJsxElement).toBe(true);
     expect(a?.endLine).toBeUndefined();
   });
@@ -652,7 +661,7 @@ describe("buildVisualGraph: return subgraphs", () => {
 describe("buildVisualGraph: imports", () => {
   test("default imports get a single ModuleSource and one read edge into the local binding", () => {
     const g = build("import def from 'lib';\nvoid def;\n");
-    const moduleSource = findNodes(g, "ModuleSource")[0];
+    const moduleSource = findNodes(g, NODE_KIND.ModuleSource)[0];
     expect(moduleSource?.name).toBe("lib");
     const def = nodeByName(g, "def");
     expect(
@@ -664,11 +673,11 @@ describe("buildVisualGraph: imports", () => {
     const g = build(
       ["import { other as renamed } from 'lib';", "void renamed;"].join("\n"),
     );
-    const intermediates = findNodes(g, "ImportIntermediate");
+    const intermediates = findNodes(g, NODE_KIND.ImportIntermediate);
     expect(intermediates).toHaveLength(1);
     expect(intermediates[0]?.name).toBe("other");
     // ModuleSource -> Intermediate -> local binding
-    const moduleSource = findNodes(g, "ModuleSource")[0];
+    const moduleSource = findNodes(g, NODE_KIND.ModuleSource)[0];
     const renamed = nodeByName(g, "renamed");
     expect(
       g.edges.some(
@@ -684,8 +693,8 @@ describe("buildVisualGraph: imports", () => {
 
   test("namespace imports point directly from the module to the local binding (no intermediate)", () => {
     const g = build("import * as ns from 'lib';\nvoid ns;\n");
-    expect(findNodes(g, "ImportIntermediate")).toHaveLength(0);
-    const moduleSource = findNodes(g, "ModuleSource")[0];
+    expect(findNodes(g, NODE_KIND.ImportIntermediate)).toHaveLength(0);
+    const moduleSource = findNodes(g, NODE_KIND.ModuleSource)[0];
     const ns = nodeByName(g, "ns");
     expect(
       g.edges.some((e) => e.from === moduleSource?.id && e.to === ns?.id),
@@ -746,7 +755,7 @@ describe("buildVisualGraph: predicate references", () => {
 describe("buildVisualGraph: ownerless refs at module scope", () => {
   test("a top-level expression that consumes a variable creates a ModuleSink and routes the read there", () => {
     const g = build("const a = 1;\nconsole.log(a);\n");
-    const moduleSink = findNodes(g, "ModuleSink")[0];
+    const moduleSink = findNodes(g, NODE_KIND.ModuleSink)[0];
     expect(moduleSink).toBeDefined();
     const a = nodeByName(g, "a");
     // Either directly or via ImplicitGlobalVariable("console") routing — but

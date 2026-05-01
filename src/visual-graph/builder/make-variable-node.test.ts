@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  AST_TYPE,
   DEFINITION_TYPE,
   IMPORT_KIND,
   NODE_KIND,
@@ -44,9 +45,9 @@ describe("makeVariableNode", () => {
   });
 
   test.each<{ initType: string; expected: boolean }>([
-    { initType: "ArrowFunctionExpression", expected: true },
-    { initType: "FunctionExpression", expected: true },
-    { initType: "Literal", expected: false },
+    { initType: AST_TYPE.ArrowFunctionExpression, expected: true },
+    { initType: AST_TYPE.FunctionExpression, expected: true },
+    { initType: AST_TYPE.Literal, expected: false },
   ])(
     "initType=$initType yields initIsFunction=$expected",
     ({ initType, expected }) => {
@@ -125,7 +126,7 @@ describe("makeVariableNode", () => {
 
   test("falls back to kind=Variable when defs is empty", () => {
     const v = makeVariable({ id: "v", defs: [] });
-    expect(makeVariableNode(v).kind).toBe("Variable");
+    expect(makeVariableNode(v).kind).toBe(DEFINITION_TYPE.Variable);
   });
 
   test.each<{

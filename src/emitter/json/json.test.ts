@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import {
+  DEFINITION_TYPE,
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
@@ -98,7 +99,7 @@ describe("JsonEmitter", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     const nodes = flattenNodes(graph.elements);
     const a = nodes.find((n) => n.name === "a");
-    expect(a?.kind).toBe("Variable");
+    expect(a?.kind).toBe(DEFINITION_TYPE.Variable);
     expect(a?.declarationKind).toBe("const");
     expect(a?.label).toBeUndefined();
   });
@@ -115,7 +116,7 @@ describe("JsonEmitter", () => {
     );
     const nodes = flattenNodes(graph.elements);
     const def = nodes.find((n) => n.name === "def");
-    expect(def?.kind).toBe("ImportBinding");
+    expect(def?.kind).toBe(DEFINITION_TYPE.ImportBinding);
     expect(def?.importKind).toBe(IMPORT_KIND.Default);
     expect(def?.importSource).toBe("some-default");
     expect(def?.importedName).toBeNull();
@@ -154,7 +155,7 @@ describe("JsonEmitter", () => {
       (n) => n.id === fnSubgraph?.ownerNodeId,
     );
     expect(ownerNode).toBeDefined();
-    expect(ownerNode?.kind).toBe("FunctionName");
+    expect(ownerNode?.kind).toBe(DEFINITION_TYPE.FunctionName);
     expect(ownerNode?.name).toBe("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
       (e) =>

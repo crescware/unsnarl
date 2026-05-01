@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
@@ -32,7 +32,7 @@ describe("handleClassDeclaration", () => {
     const scope = newScope();
     handleClassDeclaration(firstStmt("class C {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["C"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe("ClassName");
+    expect(scope.variables[0]?.defs[0]?.type).toBe(DEFINITION_TYPE.ClassName);
   });
 
   test("anonymous class (no id) declares nothing", () => {

@@ -14,15 +14,15 @@ function freshManager(): ScopeManager {
 
 describe("handleLeave", () => {
   test.each([
-    "FunctionDeclaration",
-    "FunctionExpression",
-    "ArrowFunctionExpression",
-    "ForStatement",
+    AST_TYPE.FunctionDeclaration,
+    AST_TYPE.FunctionExpression,
+    AST_TYPE.ArrowFunctionExpression,
+    AST_TYPE.ForStatement,
     "ForOfStatement",
     "ForInStatement",
-    "SwitchStatement",
-    "SwitchCase",
-    "CatchClause",
+    AST_TYPE.SwitchStatement,
+    AST_TYPE.SwitchCase,
+    AST_TYPE.CatchClause,
   ])("pops the current scope for type=%s", (type) => {
     const manager = freshManager();
     const block = { type } as const satisfies NodeLike;

@@ -62,8 +62,8 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     const a = findVariable(rootScope, "a");
     const b = findVariable(rootScope, "b");
-    expect(a && defTypes(a)).toEqual(["Variable"]);
-    expect(b && defTypes(b)).toEqual(["Variable"]);
+    expect(a && defTypes(a)).toEqual([DEFINITION_TYPE.Variable]);
+    expect(b && defTypes(b)).toEqual([DEFINITION_TYPE.Variable]);
   });
 
   test("collects function declarations as FunctionName and class as ClassName", () => {
@@ -74,8 +74,8 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     const foo = findVariable(rootScope, "foo");
     const bar = findVariable(rootScope, "Bar");
-    expect(foo && defTypes(foo)).toEqual(["FunctionName"]);
-    expect(bar && defTypes(bar)).toEqual(["ClassName"]);
+    expect(foo && defTypes(foo)).toEqual([DEFINITION_TYPE.FunctionName]);
+    expect(bar && defTypes(bar)).toEqual([DEFINITION_TYPE.ClassName]);
   });
 
   test("expands destructuring patterns into individual Variables", () => {
@@ -101,7 +101,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     expect(variableNames(rootScope).sort()).toEqual(["a", "c", "def", "ns"]);
     for (const v of rootScope.variables) {
-      expect(defTypes(v)).toEqual(["ImportBinding"]);
+      expect(defTypes(v)).toEqual([DEFINITION_TYPE.ImportBinding]);
     }
   });
 
@@ -121,9 +121,9 @@ describe("EslintCompatAnalyzer / declarations", () => {
       "rest",
     ]);
     const a = fnScope && findVariable(fnScope, "a");
-    expect(a && defTypes(a)).toEqual(["Parameter"]);
+    expect(a && defTypes(a)).toEqual([DEFINITION_TYPE.Parameter]);
     const inner = fnScope && findVariable(fnScope, "inner");
-    expect(inner && defTypes(inner)).toEqual(["Variable"]);
+    expect(inner && defTypes(inner)).toEqual([DEFINITION_TYPE.Variable]);
   });
 
   test("creates block scope only for non-function blocks", () => {
@@ -167,7 +167,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(catchScope).toBeDefined();
     expect(catchScope && variableNames(catchScope!).sort()).toEqual(["e", "x"]);
     const e = catchScope && findVariable(catchScope!, "e");
-    expect(e && defTypes(e)).toEqual(["CatchClause"]);
+    expect(e && defTypes(e)).toEqual([DEFINITION_TYPE.CatchClause]);
   });
 
   test("records var-detected diagnostic and skips var bindings", () => {

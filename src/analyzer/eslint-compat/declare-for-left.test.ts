@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
+import {
+  AST_TYPE,
+  DIAGNOSTIC_KIND,
+  LANGUAGE,
+  type Language,
+} from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -29,7 +34,7 @@ describe("declareForLeft", () => {
   test("declares a let binding in a C-style for loop", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (let i = 0; i < 10; i++) {}",
-      "ForStatement",
+      AST_TYPE.ForStatement,
     );
     declareForLeft(forNode, forScope, code, diagnostics);
     expect(forScope.variables.map((v) => v.name)).toEqual(["i"]);
@@ -58,7 +63,7 @@ describe("declareForLeft", () => {
   test("emits a var-detected diagnostic and skips the binding when var is used", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (var i = 0; i < 1; i++) {}",
-      "ForStatement",
+      AST_TYPE.ForStatement,
       "js",
     );
     declareForLeft(forNode, forScope, code, diagnostics);
@@ -72,7 +77,7 @@ describe("declareForLeft", () => {
   test("ignores assignment-only init (no VariableDeclaration)", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (i = 0; i < 1; i++) {}",
-      "ForStatement",
+      AST_TYPE.ForStatement,
       "js",
     );
     declareForLeft(forNode, forScope, code, diagnostics);

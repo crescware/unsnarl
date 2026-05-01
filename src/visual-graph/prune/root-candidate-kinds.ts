@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { NodeKind } from "../model.js";
 
 // Every visible node that carries a meaningful source line is eligible as a
@@ -10,7 +11,7 @@ export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   "FunctionName",
   "ClassName",
   "Parameter",
-  "CatchClause",
+  AST_TYPE.CatchClause,
   "ImportBinding",
   "ImplicitGlobalVariable",
   "ReturnUse",

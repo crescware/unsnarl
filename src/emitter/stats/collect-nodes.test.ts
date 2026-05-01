@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { DIRECTION, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   Direction,
   VisualElement,
@@ -21,7 +21,7 @@ const node = (id: string, line = 1): VisualNode => ({
 const sg = (
   id: string,
   elements: VisualElement[],
-  direction: Direction = "TB",
+  direction: Direction = DIRECTION.TB,
 ): VisualSubgraph => ({
   type: VISUAL_ELEMENT_TYPE.Subgraph,
   id,

@@ -15,14 +15,14 @@ export function findReferenceOwners(
       break;
     }
     const t = entry.node.type;
-    if (t === "VariableDeclarator") {
+    if (t === AST_TYPE.VariableDeclarator) {
       const id = entry.node["id"];
       if (isAstNode(id)) {
         return allBindingVariables(id, scope);
       }
       return [];
     }
-    if (t === "AssignmentExpression") {
+    if (t === AST_TYPE.AssignmentExpression) {
       const left = entry.node["left"];
       if (isAstNode(left)) {
         if (left.type === AST_TYPE.Identifier) {
@@ -37,14 +37,14 @@ export function findReferenceOwners(
       return [];
     }
     if (
-      t === "FunctionDeclaration" ||
-      t === "FunctionExpression" ||
-      t === "ArrowFunctionExpression" ||
-      t === "ClassDeclaration" ||
-      t === "ClassExpression" ||
-      t === "MethodDefinition" ||
-      t === "PropertyDefinition" ||
-      t === "AccessorProperty"
+      t === AST_TYPE.FunctionDeclaration ||
+      t === AST_TYPE.FunctionExpression ||
+      t === AST_TYPE.ArrowFunctionExpression ||
+      t === AST_TYPE.ClassDeclaration ||
+      t === AST_TYPE.ClassExpression ||
+      t === AST_TYPE.MethodDefinition ||
+      t === AST_TYPE.PropertyDefinition ||
+      t === AST_TYPE.AccessorProperty
     ) {
       return [];
     }
