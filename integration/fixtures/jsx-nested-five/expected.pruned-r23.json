@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-nested-five/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_A_9",
+      "kind": "ImportBinding",
+      "name": "A",
+      "line": 1,
+      "isJsxElement": false,
+      "importKind": "named",
+      "importedName": "A",
+      "importSource": "components"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 25,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_54",
+      "ownerName": "Main",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_54_151_331",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "A",
+              "line": 11,
+              "isJsxElement": true,
+              "endLine": 23
+            }
+          ],
+          "endLine": 24
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_components",
+      "kind": "ModuleSource",
+      "name": "components",
+      "line": 1,
+      "isJsxElement": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_A_9",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_A_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [
+    {
+      "inside": "mod_components",
+      "direction": "out"
+    }
+  ],
+  "pruning": {
+    "roots": [
+      {
+        "query": "23",
+        "matched": 1
+      }
+    ],
+    "descendants": 10,
+    "ancestors": 10
+  }
+}

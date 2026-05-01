@@ -1,0 +1,6 @@
+1	1	integration/fixtures/jsx-nested-five/input.tsx:1 A
+?	0	integration/fixtures/jsx-nested-five/input.tsx:1 components
+1	0	integration/fixtures/jsx-nested-five/input.tsx:4 v
+0	1	integration/fixtures/jsx-nested-five/input.tsx:11 A
+0	1	integration/fixtures/jsx-nested-five/input.tsx:12 v
+?	3	5 total

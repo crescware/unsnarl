@@ -284,65 +284,74 @@ describe("jsx-nested-five (pruned)", () => {
   const code = readFileSync(inputPath, "utf8");
   const sourcePath = "integration/fixtures/jsx-nested-five/input.tsx";
 
-  describe("--roots 19", () => {
-    const queries = parseRootQueries("19");
-    if (!queries.ok) {
-      throw new Error(`unexpected query parse failure: ${queries.error}`);
-    }
-    // -r alone defaults to 10 generations both ways (DEFAULT_GENERATIONS).
-    const pruning = {
-      roots: queries.queries,
-      descendants: 10,
-      ancestors: 10,
-    };
+  function emitAll(label: string, rootSpec: string, slug: string) {
+    describe(label, () => {
+      const queries = parseRootQueries(rootSpec);
+      if (!queries.ok) {
+        throw new Error(`unexpected query parse failure: ${queries.error}`);
+      }
+      // -r alone defaults to 10 generations both ways (DEFAULT_GENERATIONS).
+      const pruning = {
+        roots: queries.queries,
+        descendants: 10,
+        ancestors: 10,
+      };
 
-    test("emits the pruned VisualGraph JSON", () => {
-      const out = pipeline.run(code, {
-        format: "json",
-        language: "tsx",
-        sourcePath,
-        emit: { pretty: true },
-        pruning,
+      test("emits the pruned VisualGraph JSON", () => {
+        const out = pipeline.run(code, {
+          format: "json",
+          language: "tsx",
+          sourcePath,
+          emit: { pretty: true },
+          pruning,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(fixtureDir, `expected.pruned-${slug}.json`),
+        );
       });
-      expect(out).toMatchFileSnapshot(
-        join(fixtureDir, "expected.pruned-r19.json"),
-      );
-    });
 
-    test("emits the pruned Mermaid flowchart", () => {
-      const out = pipeline.run(code, {
-        format: "mermaid",
-        language: "tsx",
-        sourcePath,
-        pruning,
+      test("emits the pruned Mermaid flowchart", () => {
+        const out = pipeline.run(code, {
+          format: "mermaid",
+          language: "tsx",
+          sourcePath,
+          pruning,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(fixtureDir, `expected.pruned-${slug}.mermaid`),
+        );
       });
-      expect(out).toMatchFileSnapshot(
-        join(fixtureDir, "expected.pruned-r19.mermaid"),
-      );
-    });
 
-    test("renders the pruned Markdown preview", () => {
-      const out = pipeline.run(code, {
-        format: "markdown",
-        language: "tsx",
-        sourcePath,
-        pruning,
+      test("renders the pruned Markdown preview", () => {
+        const out = pipeline.run(code, {
+          format: "markdown",
+          language: "tsx",
+          sourcePath,
+          pruning,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(fixtureDir, `preview.pruned-${slug}.md`),
+        );
       });
-      expect(out).toMatchFileSnapshot(
-        join(fixtureDir, "preview.pruned-r19.md"),
-      );
-    });
 
-    test("emits the pruned stats TSV", () => {
-      const out = pipeline.run(code, {
-        format: "stats",
-        language: "tsx",
-        sourcePath,
-        pruning,
+      test("emits the pruned stats TSV", () => {
+        const out = pipeline.run(code, {
+          format: "stats",
+          language: "tsx",
+          sourcePath,
+          pruning,
+        });
+        expect(out).toMatchFileSnapshot(
+          join(fixtureDir, `expected.pruned-${slug}.stats`),
+        );
       });
-      expect(out).toMatchFileSnapshot(
-        join(fixtureDir, "expected.pruned-r19.stats"),
-      );
     });
-  });
+  }
+
+  emitAll("--roots 10", "10", "r10");
+  emitAll("--roots 10-11", "10-11", "r10-11");
+  emitAll("--roots 10-12", "10-12", "r10-12");
+  emitAll("--roots 19", "19", "r19");
+  emitAll("--roots 23", "23", "r23");
+  emitAll("--roots 24", "24", "r24");
 });
