@@ -56,7 +56,7 @@ export type { ParseErrorDetail } from "./parser/oxc.js";
 
 export { EslintCompatAnalyzer } from "./analyzer/eslint-compat/eslint-compat.js";
 
-export { FlatSerializer } from "./serializer/flat.js";
+export { FlatSerializer } from "./serializer/flat/flat-serializer.js";
 
 export { IrEmitter } from "./emitter/ir/ir.js";
 export { JsonEmitter } from "./emitter/json/json.js";
@@ -72,8 +72,11 @@ export type {
   VisualNode,
   VisualSubgraph,
 } from "./visual-graph/model.js";
-export { pruneVisualGraph } from "./visual-graph/prune.js";
-export type { PruneOptions, PruneResult } from "./visual-graph/prune.js";
+export { pruneVisualGraph } from "./visual-graph/prune/prune-visual-graph.js";
+export type {
+  PruneOptions,
+  PruneResult,
+} from "./visual-graph/prune/prune-options.js";
 export { MarkdownEmitter } from "./emitter/markdown/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid/mermaid.js";
 export type {
@@ -89,43 +92,45 @@ export {
 } from "./pipeline/default.js";
 export type { DefaultRegistryOptions } from "./pipeline/default.js";
 
-export { parseCliArgs, usage as cliUsage } from "./cli/args.js";
+export { parseCliArgs } from "./cli/args/parse-cli-args.js";
+export { usage as cliUsage } from "./cli/args/usage.js";
+export type { CliArgs } from "./cli/args/cli-args.js";
+export type { CliLanguage } from "./cli/args/cli-language.js";
+export type { CliMermaidRenderer } from "./cli/args/cli-mermaid-renderer.js";
 export type {
-  CliArgs,
-  CliLanguage,
-  CliMermaidRenderer,
   CliParseFailure,
   CliParseResult,
   CliParseSuccess,
-} from "./cli/args.js";
-export { parseRootQueries, parseRootQuery } from "./cli/root-query.js";
+} from "./cli/args/cli-parse-result.js";
+export { parseRootQuery } from "./cli/root-query/parse-root-query.js";
+export {
+  parseRootQueries,
+} from "./cli/root-query/parse-root-queries.js";
 export type {
-  ParsedRootQuery,
   RootQueryParseFailure,
   RootQueryParseResult,
   RootQueryParseSuccess,
-} from "./cli/root-query.js";
-export { runCli } from "./cli/main.js";
+} from "./cli/root-query/parse-root-queries.js";
+export type { ParsedRootQuery } from "./cli/root-query/parsed-root-query.js";
+export { runCli } from "./cli/main/run-cli.js";
 export { readSourceFile, readStdin } from "./cli/io.js";
 
-export { walk } from "./analyzer/walk.js";
-export type { PathEntry, WalkVisitor } from "./analyzer/walk.js";
+export { walk } from "./analyzer/walk/walk.js";
+export type { PathEntry, WalkVisitor } from "./analyzer/walk/walk.js";
 
 export { ReferenceImpl, ScopeImpl, VariableImpl } from "./analyzer/scope.js";
 export { ScopeManager } from "./analyzer/manager.js";
 
-export {
-  collectBindingIdentifiers,
-  declareVariable,
-} from "./analyzer/declare.js";
-export { hoistDeclarations } from "./analyzer/hoisting.js";
+export { collectBindingIdentifiers } from "./analyzer/declare/collect-binding-identifiers.js";
+export { declareVariable } from "./analyzer/declare/declare-variable.js";
+export { hoistDeclarations } from "./analyzer/hoisting/hoist-declarations.js";
 
-export { classifyIdentifier } from "./analyzer/classify.js";
-export type { ClassifyResult } from "./analyzer/classify.js";
+export { classifyIdentifier } from "./analyzer/classify/classify-identifier.js";
+export type { ClassifyResult } from "./analyzer/classify/classify-result.js";
 
 export { bindReference, resolveInScopeChain } from "./analyzer/resolve.js";
 
-export { findReferenceOwners } from "./analyzer/owner.js";
+export { findReferenceOwners } from "./analyzer/owner/find-reference-owners.js";
 
 export { findPredicateContainer } from "./analyzer/predicate.js";
 

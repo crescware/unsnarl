@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../ir/model.js";
 import { findReturnContainer } from "./return-container.js";
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 function entry(node: AstNode, key: string | null = null): PathEntry {
   return { node, key };

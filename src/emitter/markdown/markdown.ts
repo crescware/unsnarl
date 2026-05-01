@@ -1,7 +1,8 @@
-import type { Language, SerializedIR } from "../../ir/model.js";
+import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
-import type { VisualGraphPruning } from "../../visual-graph/model.js";
 import type { MermaidEmitter } from "../mermaid/mermaid.js";
+import { codeFenceLang } from "./code-fence-lang.js";
+import { formatPruningQuery } from "./format-pruning-query.js";
 
 export class MarkdownEmitter implements Emitter {
   readonly format = "markdown";
@@ -41,26 +42,5 @@ export class MarkdownEmitter implements Emitter {
     }
     lines.push("## Mermaid", "", "```mermaid", mermaid, "```", "");
     return `${lines.join("\n")}`;
-  }
-}
-
-function formatPruningQuery(pruning: VisualGraphPruning): string {
-  const roots = pruning.roots.map((r) => r.query).join(",");
-  if (pruning.descendants === pruning.ancestors) {
-    return `-r ${roots} -C ${pruning.descendants}`;
-  }
-  return `-r ${roots} -A ${pruning.descendants} -B ${pruning.ancestors}`;
-}
-
-function codeFenceLang(language: Language): string {
-  switch (language) {
-    case "tsx":
-      return "tsx";
-    case "jsx":
-      return "jsx";
-    case "js":
-      return "js";
-    default:
-      return "ts";
   }
 }

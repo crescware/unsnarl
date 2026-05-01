@@ -1,7 +1,8 @@
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
-import type { VisualElement, VisualNode } from "../../visual-graph/model.js";
+import { collectNodes } from "./collect-nodes.js";
+import { formatLabel } from "./format-label.js";
 
 /**
  * Emits a wc-like, tab-separated table of per-node edge counts so the
@@ -83,21 +84,4 @@ export class StatsEmitter implements Emitter {
 
     return `${lines.join("\n")}\n`;
   }
-}
-
-function collectNodes(elements: readonly VisualElement[]): VisualNode[] {
-  const out: VisualNode[] = [];
-  for (const e of elements) {
-    if (e.type === "node") {
-      out.push(e);
-    } else {
-      out.push(...collectNodes(e.elements));
-    }
-  }
-  return out;
-}
-
-function formatLabel(path: string, n: VisualNode): string {
-  const prefix = n.unused === true ? "unused " : "";
-  return `${path}:${n.line} ${prefix}${n.name}`;
 }

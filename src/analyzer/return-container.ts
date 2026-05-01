@@ -1,5 +1,5 @@
 import type { ReturnContainer } from "../ir/model.js";
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 export function findReturnContainer(
   path: ReadonlyArray<PathEntry>,

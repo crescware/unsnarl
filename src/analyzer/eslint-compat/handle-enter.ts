@@ -1,7 +1,7 @@
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import type { ScopeManager } from "../manager.js";
 import { isTypeOnlySubtree } from "../skip-types.js";
-import type { PathEntry, WalkAction } from "../walk.js";
+import type { PathEntry, WalkAction } from "../walk/walk.js";
 import { enterBlock } from "./enter-block.js";
 import { enterCatch } from "./enter-catch.js";
 import { enterFor } from "./enter-for.js";

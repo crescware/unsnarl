@@ -1,7 +1,8 @@
 import type { AstNode } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { collectBindingIdentifiers, declareVariable } from "../declare.js";
-import { hoistDeclarations } from "../hoisting.js";
+import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
+import { declareVariable } from "../declare/declare-variable.js";
+import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../manager.js";
 import { blockContextOf } from "./block-context-of.js";
 import { isNodeLike } from "./is-node-like.js";

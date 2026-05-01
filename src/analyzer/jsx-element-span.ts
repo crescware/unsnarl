@@ -1,4 +1,4 @@
-import type { PathEntry } from "./walk.js";
+import type { PathEntry } from "./walk/walk.js";
 
 interface JsxElementSpan {
   startOffset: number;

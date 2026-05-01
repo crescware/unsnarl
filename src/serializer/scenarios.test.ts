@@ -8,7 +8,7 @@ import type {
   SerializedVariable,
 } from "../ir/model.js";
 import { OxcParser } from "../parser/oxc.js";
-import { FlatSerializer } from "./flat.js";
+import { FlatSerializer } from "./flat/flat-serializer.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
