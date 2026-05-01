@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -103,7 +104,7 @@ describe("handleEnter", () => {
     {
       name: "CatchClause -> pushes catch scope",
       code: "try {} catch (e) {}",
-      type: "CatchClause",
+      type: DEFINITION_TYPE.CatchClause,
       expectedScopeType: "catch",
     },
   ])("$name", ({ code, type, expectedScopeType }) => {

@@ -78,7 +78,7 @@ describe("makeVariableNode", () => {
       name: "renamed",
       defs: [
         makeDef({
-          type: "ImportBinding",
+          type: DEFINITION_TYPE.ImportBinding,
           importKind: IMPORT_KIND.Named,
           importedName: "original",
           importSource: "./mod.js",
@@ -98,7 +98,7 @@ describe("makeVariableNode", () => {
     const v = makeVariable({
       defs: [
         makeDef({
-          type: "ImportBinding",
+          type: DEFINITION_TYPE.ImportBinding,
           importKind: IMPORT_KIND.Default,
           importedName: null,
           importSource: "./mod.js",
@@ -113,7 +113,7 @@ describe("makeVariableNode", () => {
     const v = makeVariable({
       defs: [
         makeDef({
-          type: "Variable",
+          type: DEFINITION_TYPE.Variable,
           declarationKind: VARIABLE_DECLARATION_KIND.Let,
         }),
       ],

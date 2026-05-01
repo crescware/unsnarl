@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  DEFINITION_TYPE,
   LANGUAGE,
   NODE_KIND,
   SCOPE_TYPE,
@@ -140,7 +141,7 @@ describe("buildScope", () => {
     const param = makeVariable({
       id: "param",
       name: "p",
-      defs: [makeDef({ type: "Parameter" })],
+      defs: [makeDef({ type: DEFINITION_TYPE.Parameter })],
     });
     const owner = makeVariable({ id: "ownerVar", name: "myFn" });
     const ctx = makeCtx({

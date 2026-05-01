@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../../constants.js";
 import type {
   AstIdentifier,
   AstNode,
@@ -12,7 +13,7 @@ const ident = (name: string, start?: number): AstIdentifier =>
   ({ type: "Identifier", name, start }) as unknown as AstIdentifier;
 
 const def = (nameStart?: number): Definition => ({
-  type: "Variable",
+  type: DEFINITION_TYPE.Variable,
   name: ident("x", nameStart),
   node: { type: "VariableDeclarator" } as unknown as AstNode,
   parent: null,

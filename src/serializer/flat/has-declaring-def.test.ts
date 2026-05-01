@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../../constants.js";
 import type {
   AstIdentifier,
   AstNode,
@@ -19,7 +20,7 @@ describe("hasDeclaringDef", () => {
   test("true when at least one def has a non-implicit type", () => {
     const v = variableWith([
       {
-        type: "Variable",
+        type: DEFINITION_TYPE.Variable,
         name: ident("x"),
         node: node("VariableDeclarator"),
         parent: null,
@@ -31,7 +32,7 @@ describe("hasDeclaringDef", () => {
   test("false when every def is ImplicitGlobalVariable", () => {
     const v = variableWith([
       {
-        type: "ImplicitGlobalVariable",
+        type: DEFINITION_TYPE.ImplicitGlobalVariable,
         name: ident("x"),
         node: node("Identifier"),
         parent: null,
@@ -43,13 +44,13 @@ describe("hasDeclaringDef", () => {
   test("true when mixed (any single non-implicit def is enough)", () => {
     const v = variableWith([
       {
-        type: "ImplicitGlobalVariable",
+        type: DEFINITION_TYPE.ImplicitGlobalVariable,
         name: ident("x"),
         node: node("Identifier"),
         parent: null,
       },
       {
-        type: "FunctionName",
+        type: DEFINITION_TYPE.FunctionName,
         name: ident("x"),
         node: node("FunctionDeclaration"),
         parent: null,
