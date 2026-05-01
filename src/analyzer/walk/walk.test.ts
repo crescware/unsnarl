@@ -51,6 +51,7 @@ describe("walk", () => {
         if (node.type === AST_TYPE.VariableDeclarator) {
           return "skip";
         }
+        return undefined;
       },
       leave(node) {
         left.push(node.type);

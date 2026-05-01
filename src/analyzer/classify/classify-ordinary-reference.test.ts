@@ -6,7 +6,7 @@ import type { AstNode } from "../../ir/model.js";
 import { classifyOrdinaryReference } from "./classify-ordinary-reference.js";
 
 const node = (overrides: Record<string, unknown>): AstNode =>
-  ({ type: overrides.type as string, ...overrides }) as unknown as AstNode;
+  ({ type: overrides["type"] as string, ...overrides }) as unknown as AstNode;
 
 describe("classifyOrdinaryReference", () => {
   test("AssignmentExpression#left with `=` → Write only, writeExpr from `right`", () => {

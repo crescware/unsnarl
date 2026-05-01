@@ -1,24 +1,15 @@
-import { BOUNDARY_EDGE_DIRECTION, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import type {
-  BoundaryEdgeDirection,
-  Direction,
-  NodeKind,
-  SubgraphKind,
-  VisualElementType,
+  BOUNDARY_EDGE_DIRECTION,
+  VISUAL_ELEMENT_TYPE,
 } from "../constants.js";
+import type { Direction, NodeKind, SubgraphKind } from "../constants.js";
 import type {
   ImportKind,
   Language,
   VariableDeclarationKind,
 } from "../ir/model.js";
 
-export type {
-  BoundaryEdgeDirection,
-  Direction,
-  NodeKind,
-  SubgraphKind,
-  VisualElementType,
-};
+export type { Direction, NodeKind, SubgraphKind };
 
 // Mutable: builder.ts and the various builder/* helpers fill optional
 // fields (endLine, unused, declarationKind, initIsFunction, importKind,

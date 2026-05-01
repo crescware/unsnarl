@@ -8,7 +8,7 @@ import type {
   SerializedIRVersion,
   VariableDeclarationKind,
 } from "../constants.js";
-import { AST_TYPE } from "../constants.js";
+import type { AST_TYPE } from "../constants.js";
 
 export type {
   DefinitionType,

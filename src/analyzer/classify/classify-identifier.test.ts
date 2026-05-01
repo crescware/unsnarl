@@ -7,7 +7,7 @@ import type { PathEntry } from "../walk/walk.js";
 import { classifyIdentifier } from "./classify-identifier.js";
 
 const node = (overrides: Record<string, unknown>): AstNode =>
-  ({ type: overrides.type as string, ...overrides }) as unknown as AstNode;
+  ({ type: overrides["type"] as string, ...overrides }) as unknown as AstNode;
 
 describe("classifyIdentifier dispatch", () => {
   test("no parent → plain Read reference", () => {

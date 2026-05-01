@@ -43,7 +43,9 @@ const pathTo = (
   const stack: /* mutable */ PathEntry[] = [];
   let found: readonly PathEntry[] | null = null;
   const visit = (node: AstNode, key: string | null): void => {
-    if (found !== null) return;
+    if (found !== null) {
+      return;
+    }
     if (predicate(node)) {
       found = stack.slice();
       return;
@@ -51,7 +53,9 @@ const pathTo = (
     stack.push({ node, key });
     for (const k of Object.keys(node)) {
       const child = (node as Record<string, unknown>)[k];
-      if (child === null || child === undefined) continue;
+      if (child === null || child === undefined) {
+        continue;
+      }
       if (Array.isArray(child)) {
         for (const c of child) {
           if (c !== null && typeof c === "object" && "type" in c) {

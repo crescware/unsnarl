@@ -71,7 +71,6 @@ export const AST_TYPE = {
   VariableDeclaration: "VariableDeclaration",
   VariableDeclarator: "VariableDeclarator",
 } as const;
-export type AstType = (typeof AST_TYPE)[keyof typeof AST_TYPE];
 
 // ---------------------------------------------------------------------------
 // IR layer
@@ -187,15 +186,11 @@ export const VISUAL_ELEMENT_TYPE = {
   Node: "node",
   Subgraph: "subgraph",
 } as const;
-export type VisualElementType =
-  (typeof VISUAL_ELEMENT_TYPE)[keyof typeof VISUAL_ELEMENT_TYPE];
 
 export const BOUNDARY_EDGE_DIRECTION = {
   Out: "out",
   In: "in",
 } as const;
-export type BoundaryEdgeDirection =
-  (typeof BOUNDARY_EDGE_DIRECTION)[keyof typeof BOUNDARY_EDGE_DIRECTION];
 
 // ---------------------------------------------------------------------------
 // CLI layer
@@ -227,5 +222,3 @@ export const ROOT_QUERY_KIND = {
   RangeName: "range-name",
   Name: "name",
 } as const;
-export type RootQueryKind =
-  (typeof ROOT_QUERY_KIND)[keyof typeof ROOT_QUERY_KIND];

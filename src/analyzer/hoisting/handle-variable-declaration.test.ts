@@ -20,7 +20,7 @@ const firstStmt = (code: string): NodeLike => {
   return stmt;
 };
 
-const newScope = (raw = ""): ScopeImpl =>
+const newScope = (): ScopeImpl =>
   new ScopeImpl({
     type: SCOPE_TYPE.Module,
     isStrict: true,

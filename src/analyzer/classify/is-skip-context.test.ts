@@ -5,7 +5,7 @@ import type { AstNode } from "../../ir/model.js";
 import { isSkipContext } from "./is-skip-context.js";
 
 const nodeOf = (overrides: Record<string, unknown>): AstNode =>
-  ({ type: overrides.type as string, ...overrides }) as unknown as AstNode;
+  ({ type: overrides["type"] as string, ...overrides }) as unknown as AstNode;
 
 describe("isSkipContext", () => {
   test("ImportSpecifier#imported is skipped", () => {
