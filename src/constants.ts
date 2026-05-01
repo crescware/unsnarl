@@ -1,224 +1,28 @@
-// Single source of truth for every string-literal and numeric tag used as
-// a discriminator across the codebase. Each `* as const` block owns a
-// related family of values; the matching `type` alias is derived from
-// `(typeof X)[keyof typeof X]` so the union and the lookup table cannot
-// drift apart. Implementation sites import the constant rather than
-// retyping the literal.
-
-// ---------------------------------------------------------------------------
-// AST layer (oxc-parser node `type` discriminator strings)
-// ---------------------------------------------------------------------------
-
-export const AST_TYPE = {
-  AccessorProperty: "AccessorProperty",
-  ArrayExpression: "ArrayExpression",
-  ArrayPattern: "ArrayPattern",
-  ArrowFunctionExpression: "ArrowFunctionExpression",
-  AssignmentExpression: "AssignmentExpression",
-  AssignmentPattern: "AssignmentPattern",
-  BinaryExpression: "BinaryExpression",
-  BlockStatement: "BlockStatement",
-  BooleanLiteral: "BooleanLiteral",
-  BreakStatement: "BreakStatement",
-  CallExpression: "CallExpression",
-  CatchClause: "CatchClause",
-  ClassBody: "ClassBody",
-  ClassDeclaration: "ClassDeclaration",
-  ClassExpression: "ClassExpression",
-  ContinueStatement: "ContinueStatement",
-  ExportDefaultDeclaration: "ExportDefaultDeclaration",
-  ExportNamedDeclaration: "ExportNamedDeclaration",
-  ExportSpecifier: "ExportSpecifier",
-  ExpressionStatement: "ExpressionStatement",
-  ForInStatement: "ForInStatement",
-  ForOfStatement: "ForOfStatement",
-  ForStatement: "ForStatement",
-  FunctionDeclaration: "FunctionDeclaration",
-  FunctionExpression: "FunctionExpression",
-  Identifier: "Identifier",
-  IfStatement: "IfStatement",
-  ImportDeclaration: "ImportDeclaration",
-  ImportDefaultSpecifier: "ImportDefaultSpecifier",
-  ImportNamespaceSpecifier: "ImportNamespaceSpecifier",
-  ImportSpecifier: "ImportSpecifier",
-  JSXAttribute: "JSXAttribute",
-  JSXClosingElement: "JSXClosingElement",
-  JSXElement: "JSXElement",
-  JSXIdentifier: "JSXIdentifier",
-  JSXMemberExpression: "JSXMemberExpression",
-  JSXOpeningElement: "JSXOpeningElement",
-  LabeledStatement: "LabeledStatement",
-  Literal: "Literal",
-  MemberExpression: "MemberExpression",
-  MethodDefinition: "MethodDefinition",
-  NewExpression: "NewExpression",
-  NullLiteral: "NullLiteral",
-  NumericLiteral: "NumericLiteral",
-  ObjectExpression: "ObjectExpression",
-  ObjectPattern: "ObjectPattern",
-  Program: "Program",
-  Property: "Property",
-  PropertyDefinition: "PropertyDefinition",
-  RestElement: "RestElement",
-  ReturnStatement: "ReturnStatement",
-  StringLiteral: "StringLiteral",
-  SwitchCase: "SwitchCase",
-  SwitchStatement: "SwitchStatement",
-  TemplateLiteral: "TemplateLiteral",
-  ThrowStatement: "ThrowStatement",
-  TryStatement: "TryStatement",
-  UpdateExpression: "UpdateExpression",
-  VariableDeclaration: "VariableDeclaration",
-  VariableDeclarator: "VariableDeclarator",
-} as const;
-
-// ---------------------------------------------------------------------------
-// IR layer
-// ---------------------------------------------------------------------------
-
-export const SCOPE_TYPE = {
-  Block: "block",
-  Catch: "catch",
-  Class: "class",
-  ClassFieldInitializer: "class-field-initializer",
-  ClassStaticBlock: "class-static-block",
-  For: "for",
-  Function: "function",
-  FunctionExpressionName: "function-expression-name",
-  Global: "global",
-  Module: "module",
-  Switch: "switch",
-  With: "with",
-} as const;
-export type ScopeType = (typeof SCOPE_TYPE)[keyof typeof SCOPE_TYPE];
-
-export const DEFINITION_TYPE = {
-  CatchClause: "CatchClause",
-  ClassName: "ClassName",
-  FunctionName: "FunctionName",
-  ImplicitGlobalVariable: "ImplicitGlobalVariable",
-  ImportBinding: "ImportBinding",
-  Parameter: "Parameter",
-  Variable: "Variable",
-} as const;
-export type DefinitionType =
-  (typeof DEFINITION_TYPE)[keyof typeof DEFINITION_TYPE];
-
-export const IMPORT_KIND = {
-  Default: "default",
-  Named: "named",
-  Namespace: "namespace",
-} as const;
-export type ImportKind = (typeof IMPORT_KIND)[keyof typeof IMPORT_KIND];
-
-export const VARIABLE_DECLARATION_KIND = {
-  Var: "var",
-  Let: "let",
-  Const: "const",
-} as const;
-export type VariableDeclarationKind =
-  (typeof VARIABLE_DECLARATION_KIND)[keyof typeof VARIABLE_DECLARATION_KIND];
-
-export const DIAGNOSTIC_KIND = {
-  VarDetected: "var-detected",
-  UnresolvedIdentifier: "unresolved-identifier",
-  ParseError: "parse-error",
-} as const;
-export type DiagnosticKind =
-  (typeof DIAGNOSTIC_KIND)[keyof typeof DIAGNOSTIC_KIND];
-
-export const PREDICATE_CONTAINER_TYPE = {
-  IfStatement: "IfStatement",
-  SwitchStatement: "SwitchStatement",
-} as const;
-export type PredicateContainerType =
-  (typeof PREDICATE_CONTAINER_TYPE)[keyof typeof PREDICATE_CONTAINER_TYPE];
-
-// SerializedIR.version is a numeric discriminator: bump it every time the
-// on-disk shape changes and consumers can switch on it.
-export const SERIALIZED_IR_VERSION = 1;
-export type SerializedIRVersion = typeof SERIALIZED_IR_VERSION;
-
-// ---------------------------------------------------------------------------
-// Visual graph layer
-// ---------------------------------------------------------------------------
-
-export const DIRECTION = {
-  RL: "RL",
-  LR: "LR",
-  TB: "TB",
-  BT: "BT",
-} as const;
-export type Direction = (typeof DIRECTION)[keyof typeof DIRECTION];
-
-export const NODE_KIND = {
-  Variable: "Variable",
-  FunctionName: "FunctionName",
-  ClassName: "ClassName",
-  Parameter: "Parameter",
-  CatchClause: "CatchClause",
-  ImportBinding: "ImportBinding",
-  ImplicitGlobalVariable: "ImplicitGlobalVariable",
-  WriteOp: "WriteOp",
-  ReturnUse: "ReturnUse",
-  ModuleSink: "ModuleSink",
-  ModuleSource: "ModuleSource",
-  ImportIntermediate: "ImportIntermediate",
-} as const;
-export type NodeKind = (typeof NODE_KIND)[keyof typeof NODE_KIND];
-
-export const SUBGRAPH_KIND = {
-  Function: "function",
-  Switch: "switch",
-  Case: "case",
-  If: "if",
-  Else: "else",
-  IfElseContainer: "if-else-container",
-  Try: "try",
-  Catch: "catch",
-  Finally: "finally",
-  For: "for",
-  Return: "return",
-} as const;
-export type SubgraphKind = (typeof SUBGRAPH_KIND)[keyof typeof SUBGRAPH_KIND];
-
-export const VISUAL_ELEMENT_TYPE = {
-  Node: "node",
-  Subgraph: "subgraph",
-} as const;
-
-export const BOUNDARY_EDGE_DIRECTION = {
-  Out: "out",
-  In: "in",
-} as const;
-
-// ---------------------------------------------------------------------------
-// CLI layer
-// ---------------------------------------------------------------------------
-
-// Source language tag, shared between the IR (`Language`) and the CLI
-// (`CliLanguage`). They alias the same value set so callers on either
-// side don't import across domains.
-export const LANGUAGE = {
-  Ts: "ts",
-  Tsx: "tsx",
-  Js: "js",
-  Jsx: "jsx",
-} as const;
-export type Language = (typeof LANGUAGE)[keyof typeof LANGUAGE];
-export type CliLanguage = Language;
-
-export const CLI_MERMAID_RENDERER = {
-  Dagre: "dagre",
-  Elk: "elk",
-} as const;
-export type CliMermaidRenderer =
-  (typeof CLI_MERMAID_RENDERER)[keyof typeof CLI_MERMAID_RENDERER];
-
-export const ROOT_QUERY_KIND = {
-  Line: "line",
-  LineName: "line-name",
-  Range: "range",
-  RangeName: "range-name",
-  Name: "name",
-} as const;
+export { AST_TYPE } from "./ast-type.js";
+export { SCOPE_TYPE, type ScopeType } from "./scope-type.js";
+export { DEFINITION_TYPE, type DefinitionType } from "./definition-type.js";
+export { IMPORT_KIND, type ImportKind } from "./import-kind.js";
+export {
+  VARIABLE_DECLARATION_KIND,
+  type VariableDeclarationKind,
+} from "./variable-declaration-kind.js";
+export { DIAGNOSTIC_KIND, type DiagnosticKind } from "./diagnostic-kind.js";
+export {
+  PREDICATE_CONTAINER_TYPE,
+  type PredicateContainerType,
+} from "./predicate-container-type.js";
+export {
+  SERIALIZED_IR_VERSION,
+  type SerializedIRVersion,
+} from "./serialized-ir-version.js";
+export { DIRECTION, type Direction } from "./direction.js";
+export { NODE_KIND, type NodeKind } from "./node-kind.js";
+export { SUBGRAPH_KIND, type SubgraphKind } from "./subgraph-kind.js";
+export { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
+export { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
+export { LANGUAGE, type Language, type CliLanguage } from "./language.js";
+export {
+  CLI_MERMAID_RENDERER,
+  type CliMermaidRenderer,
+} from "./cli-mermaid-renderer.js";
+export { ROOT_QUERY_KIND } from "./root-query-kind.js";
