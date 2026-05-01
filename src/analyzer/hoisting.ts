@@ -1,7 +1,8 @@
 import type { AstIdentifier, AstNode, Scope } from "../ir/model.js";
 import type { DiagnosticCollector } from "../util/diagnostic.js";
 import { spanFromOffset } from "../util/span.js";
-import { collectBindingIdentifiers, declareVariable } from "./declare.js";
+import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
+import { declareVariable } from "./declare/declare-variable.js";
 
 interface NodeLike {
   type: string;

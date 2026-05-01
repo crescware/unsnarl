@@ -114,10 +114,8 @@ export type { PathEntry, WalkVisitor } from "./analyzer/walk/walk.js";
 export { ReferenceImpl, ScopeImpl, VariableImpl } from "./analyzer/scope.js";
 export { ScopeManager } from "./analyzer/manager.js";
 
-export {
-  collectBindingIdentifiers,
-  declareVariable,
-} from "./analyzer/declare.js";
+export { collectBindingIdentifiers } from "./analyzer/declare/collect-binding-identifiers.js";
+export { declareVariable } from "./analyzer/declare/declare-variable.js";
 export { hoistDeclarations } from "./analyzer/hoisting.js";
 
 export { classifyIdentifier } from "./analyzer/classify.js";

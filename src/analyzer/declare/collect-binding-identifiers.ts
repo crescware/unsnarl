@@ -1,12 +1,5 @@
-import type {
-  AstIdentifier,
-  AstNode,
-  Definition,
-  DefinitionType,
-  Scope,
-  Variable,
-} from "../ir/model.js";
-import { VariableImpl } from "./scope.js";
+import type { AstIdentifier, AstNode } from "../../ir/model.js";
+import { isAstNode } from "./is-ast-node.js";
 
 export function collectBindingIdentifiers(pattern: AstNode): AstIdentifier[] {
   const out: AstIdentifier[] = [];
@@ -72,37 +65,4 @@ function collect(node: AstNode, out: AstIdentifier[]): void {
     default:
       return;
   }
-}
-
-function isAstNode(value: unknown): value is AstNode {
-  return (
-    value !== null &&
-    typeof value === "object" &&
-    "type" in value &&
-    typeof (value as { type: unknown }).type === "string"
-  );
-}
-
-export function declareVariable(
-  scope: Scope,
-  identifier: AstIdentifier,
-  defType: DefinitionType,
-  defNode: AstNode,
-  parent: AstNode | null,
-): Variable {
-  let variable = scope.set.get(identifier.name);
-  if (!variable) {
-    variable = new VariableImpl(identifier.name, scope);
-    scope.set.set(identifier.name, variable);
-    scope.variables.push(variable);
-  }
-  variable.identifiers.push(identifier);
-  const def: Definition = {
-    type: defType,
-    name: identifier,
-    node: defNode,
-    parent,
-  };
-  variable.defs.push(def);
-  return variable;
 }

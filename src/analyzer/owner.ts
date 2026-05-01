@@ -1,5 +1,5 @@
 import type { AstNode, Scope, Variable } from "../ir/model.js";
-import { collectBindingIdentifiers } from "./declare.js";
+import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
 import { resolveInScopeChain } from "./resolve.js";
 import type { PathEntry } from "./walk/walk.js";
 
