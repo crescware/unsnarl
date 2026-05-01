@@ -149,7 +149,7 @@ export function pruneVisualGraph(
     survivors.has(b.inside),
   );
 
-  const pruned: VisualGraph = {
+  const pruned = {
     version: graph.version,
     source: graph.source,
     direction: graph.direction,
@@ -164,7 +164,7 @@ export function pruneVisualGraph(
       descendants: options.descendants,
       ancestors: options.ancestors,
     },
-  };
+  } as const satisfies VisualGraph;
 
   return { graph: pruned, perQuery };
 }

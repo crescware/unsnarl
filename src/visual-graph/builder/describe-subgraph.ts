@@ -1,5 +1,5 @@
 import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
-import type { VisualSubgraph } from "../model.js";
+import type { VisualElement, VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
 import { isFunctionSubgraph } from "./is-function-subgraph.js";
 import { nodeId } from "./node-id.js";
@@ -39,15 +39,15 @@ export function describeSubgraph(
       `expected control subgraph kind for scope ${scope.id} (type=${scope.type})`,
     );
   }
-  const sg: VisualSubgraph = {
+  const sg = {
     type: "subgraph",
     id,
     kind,
     line: scope.block.span.line,
     endLine,
     direction: "RL",
-    elements: [],
-  };
+    elements: [] as VisualElement[],
+  } satisfies VisualSubgraph as VisualSubgraph;
   if (kind === "case") {
     sg.caseTest = scope.blockContext?.caseTest ?? null;
   }

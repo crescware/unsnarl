@@ -8,7 +8,10 @@ import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
 
-const switchParent: NodeLike = { type: "SwitchStatement", start: 0 };
+const switchParent = {
+  type: "SwitchStatement",
+  start: 0,
+} as const satisfies NodeLike;
 
 describe("enterSwitchCase", () => {
   test("captures caseTest, marks fallsThrough=false when consequent ends in break", () => {

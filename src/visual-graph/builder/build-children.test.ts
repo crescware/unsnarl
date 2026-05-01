@@ -26,7 +26,7 @@ function emptyState(): BuildState {
 
 function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
   const variables: /* mutable */ SerializedVariable[] = [];
-  const ir: SerializedIR = {
+  const ir = {
     version: 1,
     source: { path: "x.ts", language: "ts" },
     raw,
@@ -35,7 +35,7 @@ function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
     references: [],
     unusedVariableIds: [],
     diagnostics: [],
-  };
+  } as const satisfies SerializedIR;
   return {
     ir,
     variableMap: new Map(),

@@ -44,14 +44,14 @@ export function buildScope(
   for (const op of ops) {
     const ownerVar = ctx.variableMap.get(op.varId);
     const declarationKind = ownerVar?.defs[0]?.declarationKind;
-    const node: VisualNode = {
+    const node = {
       type: "node",
       id: writeOpNodeId(op.refId),
       kind: "WriteOp",
       name: op.varName,
       line: op.line,
       isJsxElement: false,
-    };
+    } satisfies VisualNode as VisualNode;
     if (declarationKind) {
       node.declarationKind = declarationKind;
     }

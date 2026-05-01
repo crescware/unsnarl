@@ -12,7 +12,7 @@ import type {
 
 const fakeScope = {} as Scope;
 
-const fakeIR: SerializedIR = {
+const fakeIR = {
   version: 1,
   source: { path: "test.ts", language: "ts" },
   scopes: [],
@@ -21,9 +21,9 @@ const fakeIR: SerializedIR = {
   unusedVariableIds: [],
   raw: "",
   diagnostics: [],
-};
+} as const satisfies SerializedIR;
 
-const fakeParser: Parser = {
+const fakeParser = {
   id: "fake",
   parse: (code, opts) => ({
     ast: { type: "Program", body: [] },
@@ -31,24 +31,24 @@ const fakeParser: Parser = {
     sourcePath: opts.sourcePath,
     raw: code,
   }),
-};
+} as const satisfies Parser;
 
-const fakeAnalyzer: ScopeAnalyzer = {
+const fakeAnalyzer = {
   id: "fake",
   analyze: () => ({ rootScope: fakeScope, diagnostics: [], raw: "" }),
-};
+} as const satisfies ScopeAnalyzer;
 
-const fakeSerializer: IRSerializer = {
+const fakeSerializer = {
   id: "fake",
   serialize: () => fakeIR,
-};
+} as const satisfies IRSerializer;
 
-const fakeEmitter: Emitter = {
+const fakeEmitter = {
   format: "fake",
   contentType: "text/plain",
   extension: "txt",
   emit: (ir) => `version=${ir.version}`,
-};
+} as const satisfies Emitter;
 
 function buildRegistry(emitters: readonly Emitter[]): EmitterRegistry {
   const map = new Map<string, Emitter>();
@@ -101,7 +101,7 @@ describe("createPipeline", () => {
 
   test("allows swapping parser without touching downstream layers", () => {
     let parserCalled = false;
-    const swapped: Parser = {
+    const swapped = {
       id: "swapped",
       parse: (code, opts) => {
         parserCalled = true;
@@ -112,7 +112,7 @@ describe("createPipeline", () => {
           raw: code,
         };
       },
-    };
+    } as const satisfies Parser;
 
     const pipeline = createPipeline({
       parser: swapped,

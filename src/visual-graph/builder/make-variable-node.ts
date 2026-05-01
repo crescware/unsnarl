@@ -11,14 +11,14 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   const importKind = def?.importKind ?? null;
   const importedName = def?.importedName ?? null;
   const importSource = def?.importSource ?? null;
-  const node: VisualNode = {
+  const node = {
     type: "node",
     id: nodeId(v.id),
     kind: (def?.type ?? "Variable") as VisualNode["kind"],
     name: v.name,
     line: v.identifiers[0]?.line ?? def?.name.span.line ?? 0,
     isJsxElement: false,
-  };
+  } satisfies VisualNode as VisualNode;
   if (declarationKind) {
     node.declarationKind = declarationKind;
   }

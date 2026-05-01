@@ -82,7 +82,7 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
   // under elk).
   const edgeEndpointIds = collectEdgeEndpointIds(graph.edges);
 
-  const state: RenderState = {
+  const state = {
     lines,
     nodeMap,
     wrappedOwnerIds,
@@ -90,7 +90,7 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
     placeholderIds: [],
     wrapperIds: [],
     strategy,
-  };
+  } as const satisfies RenderState;
 
   // Emit top-level "tree" nodes (anything that isn't a synthetic top-level
   // import/module/sink), then top-level subgraphs, then synthetic top-level

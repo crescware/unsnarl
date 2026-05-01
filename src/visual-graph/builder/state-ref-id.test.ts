@@ -14,7 +14,7 @@ import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
 
 function makeCtx(overrides: Partial<BuilderContext>): BuilderContext {
-  const ir: SerializedIR = {
+  const ir = {
     version: 1,
     source: { path: "x.ts", language: "ts" },
     raw: "",
@@ -23,7 +23,7 @@ function makeCtx(overrides: Partial<BuilderContext>): BuilderContext {
     references: [],
     unusedVariableIds: [],
     diagnostics: [],
-  };
+  } as const satisfies SerializedIR;
   return {
     ir,
     variableMap: new Map<string, SerializedVariable>(),

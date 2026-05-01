@@ -8,7 +8,10 @@ import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
 
-const tryParent: NodeLike = { type: "TryStatement", start: 0 };
+const tryParent = {
+  type: "TryStatement",
+  start: 0,
+} as const satisfies NodeLike;
 
 describe("enterCatch", () => {
   test("pushes a catch scope, declares the param, and hoists body declarations", () => {

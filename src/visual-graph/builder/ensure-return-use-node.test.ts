@@ -35,7 +35,7 @@ function makeCtx(
 ): BuilderContext {
   const variables = opts.variables ?? [];
   const scopes = opts.scopes ?? [];
-  const ir: SerializedIR = {
+  const ir = {
     version: 1,
     source: { path: "x.ts", language: "ts" },
     raw: "",
@@ -44,7 +44,7 @@ function makeCtx(
     references: [],
     unusedVariableIds: [],
     diagnostics: [],
-  };
+  } as const satisfies SerializedIR;
   return {
     ir,
     variableMap: new Map(variables.map((v) => [v.id, v])),
@@ -72,14 +72,14 @@ function makeState(host: VisualSubgraph, fnVarId = "fnVar"): BuildState {
 describe("ensureReturnUseNode", () => {
   test("returns null when no host subgraph exists", () => {
     const ctx = makeCtx();
-    const state: BuildState = {
+    const state = {
       subgraphByScope: new Map(),
       functionSubgraphByFn: new Map(),
       returnSubgraphsByFn: new Map(),
       returnUseAdded: new Set(),
       emittedEdges: new Set(),
       edges: [],
-    };
+    } as const satisfies BuildState;
     expect(
       ensureReturnUseNode("fnVar", makeRef({ from: "scope" }), ctx, state),
     ).toBeNull();

@@ -20,10 +20,10 @@ export type DefaultRegistryOptions = Readonly<{
   mermaidRenderer: MermaidRenderer;
 }>;
 
-const STRATEGIES: Record<MermaidRenderer, MermaidStrategy> = {
+const STRATEGIES = {
   dagre: dagreStrategy,
   elk: elkStrategy,
-};
+} as const satisfies Record<MermaidRenderer, MermaidStrategy>;
 
 export function createDefaultEmitterRegistry(
   options: DefaultRegistryOptions,

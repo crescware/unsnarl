@@ -16,7 +16,11 @@ const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
 
 describe("nodeMatchesQuery", () => {
   test("kind=line matches when line falls within [start,end]", () => {
-    const q: ParsedRootQuery = { kind: "line", line: 5, raw: "5" };
+    const q = {
+      kind: "line",
+      line: 5,
+      raw: "5",
+    } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ line: 5 }), q)).toBe(true);
     expect(nodeMatchesQuery(node({ line: 4 }), q)).toBe(false);
     expect(
@@ -28,37 +32,46 @@ describe("nodeMatchesQuery", () => {
   });
 
   test("kind=line-name additionally requires exact name match", () => {
-    const q: ParsedRootQuery = {
+    const q = {
       kind: "line-name",
       line: 5,
       name: "x",
       raw: "5:x",
-    };
+    } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toBe(true);
     expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toBe(false);
   });
 
   test("kind=range overlaps node line range", () => {
-    const q: ParsedRootQuery = { kind: "range", start: 4, end: 6, raw: "4-6" };
+    const q = {
+      kind: "range",
+      start: 4,
+      end: 6,
+      raw: "4-6",
+    } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ line: 5 }), q)).toBe(true);
     expect(nodeMatchesQuery(node({ line: 7 }), q)).toBe(false);
     expect(nodeMatchesQuery(node({ line: 1, endLine: 4 }), q)).toBe(true);
   });
 
   test("kind=range-name additionally requires exact name match", () => {
-    const q: ParsedRootQuery = {
+    const q = {
       kind: "range-name",
       start: 4,
       end: 6,
       name: "x",
       raw: "4-6:x",
-    };
+    } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toBe(true);
     expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toBe(false);
   });
 
   test("kind=name matches by name except for excluded use-site kinds", () => {
-    const q: ParsedRootQuery = { kind: "name", name: "x", raw: "x" };
+    const q = {
+      kind: "name",
+      name: "x",
+      raw: "x",
+    } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ name: "x" }), q)).toBe(true);
     for (const kind of ["WriteOp", "ReturnUse"] satisfies NodeKind[]) {
       expect(nodeMatchesQuery(node({ name: "x", kind }), q)).toBe(false);

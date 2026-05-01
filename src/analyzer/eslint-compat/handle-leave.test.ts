@@ -24,7 +24,7 @@ describe("handleLeave", () => {
     "CatchClause",
   ])("pops the current scope for type=%s", (type) => {
     const manager = freshManager();
-    const block: NodeLike = { type };
+    const block = { type } as const satisfies NodeLike;
     manager.push("function", block as unknown as AstNode);
     const before = manager.current();
 
@@ -36,9 +36,9 @@ describe("handleLeave", () => {
 
   test("BlockStatement under FunctionDeclaration does NOT pop", () => {
     const manager = freshManager();
-    const block: NodeLike = { type: "BlockStatement" };
+    const block = { type: "BlockStatement" } as const satisfies NodeLike;
     const before = manager.current();
-    const parent: NodeLike = { type: "FunctionDeclaration" };
+    const parent = { type: "FunctionDeclaration" } as const satisfies NodeLike;
 
     handleLeave(block, parent, "body", manager);
 
@@ -48,8 +48,8 @@ describe("handleLeave", () => {
   test("plain BlockStatement (not under fn/catch) pops the current scope", () => {
     const manager = freshManager();
     manager.push("block", { type: "BlockStatement" } as unknown as AstNode);
-    const block: NodeLike = { type: "BlockStatement" };
-    const parent: NodeLike = { type: "IfStatement" };
+    const block = { type: "BlockStatement" } as const satisfies NodeLike;
+    const parent = { type: "IfStatement" } as const satisfies NodeLike;
 
     handleLeave(block, parent, "consequent", manager);
 

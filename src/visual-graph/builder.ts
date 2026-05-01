@@ -25,18 +25,18 @@ import { sanitize } from "./builder/sanitize.js";
 import { stateRefId } from "./builder/state-ref-id.js";
 import { writeOpNodeId } from "./builder/write-op-node-id.js";
 import type { WriteOp } from "./builder/write-op.js";
-import type { VisualGraph } from "./model.js";
+import type { VisualEdge, VisualElement, VisualGraph } from "./model.js";
 
 const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(ir: SerializedIR): VisualGraph {
-  const graph: VisualGraph = {
+  const graph = {
     version: 1,
     source: { path: ir.source.path, language: ir.source.language },
     direction: "RL",
-    elements: [],
-    edges: [],
-  };
+    elements: [] as VisualElement[],
+    edges: [] as VisualEdge[],
+  } satisfies VisualGraph;
 
   const variableMap = new Map<string, SerializedVariable>();
   for (const v of ir.variables) {
@@ -111,14 +111,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (!r.flags.write) {
         continue;
       }
-      const op: WriteOp = {
+      const op = {
         refId: r.id,
         varId: v.id,
         varName: v.name,
         line: r.identifier.span.line,
         offset: r.identifier.span.offset,
         scopeId: r.from,
-      };
+      } as const satisfies WriteOp;
       ops.push(op);
       writeOpByRef.set(r.id, op);
       const sopArr = writeOpsByScope.get(op.scopeId) ?? [];
@@ -146,7 +146,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     arr.sort((a, b) => a.block.span.offset - b.block.span.offset);
   }
 
-  const ctx: BuilderContext = {
+  const ctx = {
     ir,
     variableMap,
     scopeMap,
@@ -156,15 +156,15 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     writeOpsByScope,
     writeOpByRef,
     sortedCasesByContainer,
-  };
-  const state: BuildState = {
+  } as const satisfies BuilderContext;
+  const state = {
     subgraphByScope: new Map(),
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     emittedEdges: new Set(),
     edges: graph.edges,
-  };
+  } as const satisfies BuildState;
 
   const root = ir.scopes.find(
     (s) => s.type === "module" || s.type === "global",

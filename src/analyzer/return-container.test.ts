@@ -23,17 +23,17 @@ describe("findReturnContainer", () => {
   });
 
   test("uses the body expression span when an arrow has an expression body", () => {
-    const bodyNode: AstNode = {
+    const bodyNode = {
       type: "BinaryExpression",
       start: 30,
       end: 50,
-    };
-    const arrowNode: AstNode = {
+    } as const satisfies AstNode;
+    const arrowNode = {
       type: "ArrowFunctionExpression",
       start: 10,
       end: 60,
       body: bodyNode,
-    };
+    } as const satisfies AstNode;
     const path = [
       entry(arrowNode),
       entry(bodyNode, "body"),
@@ -46,17 +46,17 @@ describe("findReturnContainer", () => {
   });
 
   test("returns null for a block-body arrow with no inner ReturnStatement", () => {
-    const bodyNode: AstNode = {
+    const bodyNode = {
       type: "BlockStatement",
       start: 25,
       end: 60,
-    };
-    const arrowNode: AstNode = {
+    } as const satisfies AstNode;
+    const arrowNode = {
       type: "ArrowFunctionExpression",
       start: 10,
       end: 60,
       body: bodyNode,
-    };
+    } as const satisfies AstNode;
     const path = [
       entry(arrowNode),
       entry(bodyNode, "body"),
@@ -67,17 +67,17 @@ describe("findReturnContainer", () => {
   });
 
   test("prefers an inner ReturnStatement over the enclosing arrow body", () => {
-    const bodyNode: AstNode = {
+    const bodyNode = {
       type: "BlockStatement",
       start: 25,
       end: 60,
-    };
-    const arrowNode: AstNode = {
+    } as const satisfies AstNode;
+    const arrowNode = {
       type: "ArrowFunctionExpression",
       start: 10,
       end: 60,
       body: bodyNode,
-    };
+    } as const satisfies AstNode;
     const path = [
       entry(arrowNode),
       entry(bodyNode, "body"),

@@ -1,7 +1,7 @@
 import type { MermaidStrategy } from "./strategy.js";
 
-export const dagreStrategy: MermaidStrategy = {
+export const dagreStrategy = {
   preambleLines: [],
-  emptySubgraphPlaceholder: () => null,
-  trailerLines: () => [],
-};
+  emptySubgraphPlaceholder: (_ctx) => null,
+  trailerLines: (_placeholderIds) => [],
+} as const satisfies MermaidStrategy;

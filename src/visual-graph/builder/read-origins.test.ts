@@ -17,7 +17,7 @@ function makeCtx(opts: {
   writeOpsByVariable?: Map<string, WriteOp[]>;
   sortedCasesByContainer?: Map<string, readonly SerializedScope[]>;
 }): BuilderContext {
-  const ir: SerializedIR = {
+  const ir = {
     version: 1,
     source: { path: "x.ts", language: "ts" },
     raw: "",
@@ -26,7 +26,7 @@ function makeCtx(opts: {
     references: [],
     unusedVariableIds: [],
     diagnostics: [],
-  };
+  } as const satisfies SerializedIR;
   return {
     ir,
     variableMap: new Map<string, SerializedVariable>(),

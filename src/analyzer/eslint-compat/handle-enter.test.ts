@@ -18,7 +18,7 @@ describe("handleEnter", () => {
     const program = parse(code);
     const manager = makeManager(program);
     const diagnostics = new DiagnosticCollector();
-    const node: NodeLike = { type: "TSInterfaceDeclaration" };
+    const node = { type: "TSInterfaceDeclaration" } as const satisfies NodeLike;
 
     const action = handleEnter(
       node,
@@ -35,7 +35,7 @@ describe("handleEnter", () => {
 
   test('returns "skip" when key is a TS type-only key', () => {
     const code = "let x: number = 1;";
-    const node: NodeLike = { type: "TSTypeAnnotation" };
+    const node = { type: "TSTypeAnnotation" } as const satisfies NodeLike;
     const manager = makeManager(parse(code));
 
     const action = handleEnter(
@@ -129,7 +129,9 @@ describe("handleEnter", () => {
     const program = parse(code);
     const block = findFirst(program, "BlockStatement");
     const manager = makeManager(program);
-    const fnParent: NodeLike = { type: "FunctionDeclaration" };
+    const fnParent = {
+      type: "FunctionDeclaration",
+    } as const satisfies NodeLike;
 
     handleEnter(
       block,
@@ -149,7 +151,10 @@ describe("handleEnter", () => {
     const program = parse(code);
     const block = findFirst(program, "BlockStatement");
     const manager = makeManager(program);
-    const parent: NodeLike = { type: "IfStatement", start: 0 };
+    const parent = {
+      type: "IfStatement",
+      start: 0,
+    } as const satisfies NodeLike;
 
     handleEnter(
       block,

@@ -4,7 +4,7 @@ import type { SerializedIR } from "../../ir/model.js";
 import type { Emitter } from "../../pipeline/types.js";
 import { DefaultEmitterRegistry } from "./registry.js";
 
-const fakeIR: SerializedIR = {
+const fakeIR = {
   version: 1,
   source: { path: "x.ts", language: "ts" },
   scopes: [],
@@ -13,21 +13,21 @@ const fakeIR: SerializedIR = {
   unusedVariableIds: [],
   raw: "",
   diagnostics: [],
-};
+} as const satisfies SerializedIR;
 
-const fakeEmitter: Emitter = {
+const fakeEmitter = {
   format: "fake",
   contentType: "text/plain",
   extension: "txt",
   emit: () => "",
-};
+} as const satisfies Emitter;
 
-const otherEmitter: Emitter = {
+const otherEmitter = {
   format: "other",
   contentType: "text/plain",
   extension: "txt",
   emit: () => "",
-};
+} as const satisfies Emitter;
 
 describe("DefaultEmitterRegistry", () => {
   test("registers, looks up, and lists emitters", () => {

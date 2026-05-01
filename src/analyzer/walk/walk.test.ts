@@ -89,14 +89,14 @@ describe("walk", () => {
 
   test("parent and key are null for the root", () => {
     const program = parse("const x = 1;");
-    const visitor: WalkVisitor = {
+    const visitor = {
       enter(node, parent, key) {
         if (node === program) {
           expect(parent).toBeNull();
           expect(key).toBeNull();
         }
       },
-    };
+    } satisfies WalkVisitor;
     walk(program, visitor);
   });
 

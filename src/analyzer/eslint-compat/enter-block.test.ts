@@ -13,7 +13,10 @@ describe("enterBlock", () => {
     const code = "if (x) { let y = 1; }";
     const program = parse(code);
     const block = findFirst(program, "BlockStatement");
-    const parent: NodeLike = { type: "IfStatement", start: 5 };
+    const parent = {
+      type: "IfStatement",
+      start: 5,
+    } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -42,7 +45,7 @@ describe("enterBlock", () => {
   });
 
   test("does not hoist when body is missing", () => {
-    const block: NodeLike = { type: "BlockStatement" };
+    const block = { type: "BlockStatement" } as const satisfies NodeLike;
     const program = parse("");
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();

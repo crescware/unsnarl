@@ -5,7 +5,11 @@ import type { NodeLike } from "./node-like.js";
 
 describe("formatCaseTest", () => {
   test("uses raw slice when start/end are valid and within length budget", () => {
-    const node: NodeLike = { type: "BinaryExpression", start: 5, end: 14 };
+    const node = {
+      type: "BinaryExpression",
+      start: 5,
+      end: 14,
+    } as const satisfies NodeLike;
     const raw = "case x === 1: break;";
     expect(formatCaseTest(node, raw)).toBe(raw.slice(5, 14));
   });
@@ -57,7 +61,7 @@ describe("formatCaseTest", () => {
   });
 
   test("Identifier without name returns <expr>", () => {
-    const node: NodeLike = { type: "Identifier" };
+    const node = { type: "Identifier" } as const satisfies NodeLike;
     expect(formatCaseTest(node, "")).toBe("<expr>");
   });
 });

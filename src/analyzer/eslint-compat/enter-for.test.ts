@@ -13,7 +13,7 @@ describe("enterFor", () => {
     const code = "for (let i = 0; i < 10; i++) {}";
     const program = parse(code);
     const forNode = findFirst(program, "ForStatement");
-    const parent: NodeLike = { type: "Program", start: 0 };
+    const parent = { type: "Program", start: 0 } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 

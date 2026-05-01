@@ -48,14 +48,14 @@ export function ensureReturnUseNode(
     const v = ref.resolved ? ctx.variableMap.get(ref.resolved) : undefined;
     const name = v?.name ?? ref.identifier.name ?? "";
     const startLine = ref.identifier.span.line;
-    const node: VisualNode = {
+    const node = {
       type: "node",
       id,
       kind: "ReturnUse",
       name,
       line: startLine,
       isJsxElement: ref.jsxElement !== null,
-    };
+    } satisfies VisualNode as VisualNode;
     const jsxEnd = ref.jsxElement?.endSpan.line;
     if (jsxEnd !== undefined && jsxEnd !== startLine) {
       node.endLine = jsxEnd;

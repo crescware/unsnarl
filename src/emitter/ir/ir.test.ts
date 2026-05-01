@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import type { SerializedIR } from "../../ir/model.js";
 import { IrEmitter } from "./ir.js";
 
-const ir: SerializedIR = {
+const ir = {
   version: 1,
   source: { path: "x.ts", language: "ts" },
   scopes: [],
@@ -12,7 +12,7 @@ const ir: SerializedIR = {
   unusedVariableIds: [],
   raw: "",
   diagnostics: [],
-};
+} as const satisfies SerializedIR;
 
 describe("IrEmitter", () => {
   test("emits pretty JSON by default with a trailing newline", () => {

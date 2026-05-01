@@ -57,15 +57,15 @@ export function buildChildren(
     const offset = child.blockContext?.parentSpanOffset ?? 0;
     const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
     const hasElse = group.some((g) => g.blockContext?.key === "alternate");
-    const containerSubgraph: VisualSubgraph = {
+    const containerSubgraph = {
       type: "subgraph",
       id: containerId,
       kind: "if-else-container",
       line: lineForOffset(ctx.ir.raw, offset),
       direction: "RL",
       hasElse,
-      elements: [],
-    };
+      elements: [] as VisualElement[],
+    } satisfies VisualSubgraph as VisualSubgraph;
     container.elements.push(containerSubgraph);
     for (const g of group) {
       buildScope(g, containerSubgraph, ctx, state);

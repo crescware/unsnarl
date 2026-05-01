@@ -16,10 +16,10 @@ describe("isControlExit", () => {
   });
 
   test("BlockStatement: ends in BreakStatement -> true", () => {
-    const node: NodeLike = {
+    const node = {
       type: "BlockStatement",
       body: [{ type: "ExpressionStatement" }, { type: "BreakStatement" }],
-    };
+    } as const satisfies NodeLike;
     expect(isControlExit(node)).toBe(true);
   });
 
@@ -28,20 +28,20 @@ describe("isControlExit", () => {
   });
 
   test("IfStatement: both branches exit (mixed kinds) -> true", () => {
-    const node: NodeLike = {
+    const node = {
       type: "IfStatement",
       consequent: { type: "BreakStatement" },
       alternate: { type: "ReturnStatement" },
-    };
+    } as const satisfies NodeLike;
     expect(isControlExit(node)).toBe(true);
   });
 
   test("IfStatement: only one branch exits -> false", () => {
-    const node: NodeLike = {
+    const node = {
       type: "IfStatement",
       consequent: { type: "BreakStatement" },
       alternate: { type: "ExpressionStatement" },
-    };
+    } as const satisfies NodeLike;
     expect(isControlExit(node)).toBe(false);
   });
 });

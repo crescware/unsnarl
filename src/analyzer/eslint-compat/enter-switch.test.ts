@@ -12,7 +12,7 @@ describe("enterSwitch", () => {
     const code = "switch (x) { case 1: break; }";
     const program = parse(code);
     const switchNode = findFirst(program, "SwitchStatement");
-    const parent: NodeLike = { type: "Program", start: 0 };
+    const parent = { type: "Program", start: 0 } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
 
     enterSwitch(switchNode, parent, "body", manager);
