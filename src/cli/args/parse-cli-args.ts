@@ -1,52 +1,12 @@
-import { parseRootQueries } from "./root-query/parse-root-queries.js";
-import type { ParsedRootQuery } from "./root-query/parsed-root-query.js";
-
-export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
-export type CliMermaidRenderer = "dagre" | "elk";
-
-// Default generations used when the user gives -r/--roots but no -A/-B/-C.
-export const DEFAULT_GENERATIONS = 10;
-
-export interface CliArgs {
-  format: string;
-  stdin: boolean;
-  language: CliLanguage;
-  pretty: boolean;
-  listFormats: boolean;
-  help: boolean;
-  version: boolean;
-  inputFile: string | null;
-  mermaidRenderer: CliMermaidRenderer | null;
-  roots: readonly ParsedRootQuery[];
-  descendants: number | null;
-  ancestors: number | null;
-  context: number | null;
-  outDir: string | null;
-}
-
-export interface CliParseSuccess {
-  ok: true;
-  args: CliArgs;
-}
-
-export interface CliParseFailure {
-  ok: false;
-  error: string;
-}
-
-export type CliParseResult = CliParseSuccess | CliParseFailure;
-
-const LANGUAGES: ReadonlySet<string> = new Set([
-  "ts",
-  "tsx",
-  "js",
-  "jsx",
-] satisfies CliLanguage[]);
-
-const MERMAID_RENDERERS: ReadonlySet<string> = new Set([
-  "dagre",
-  "elk",
-] satisfies CliMermaidRenderer[]);
+import { parseRootQueries } from "../root-query/parse-root-queries.js";
+import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
+import { LANGUAGES, type CliLanguage } from "./cli-language.js";
+import {
+  MERMAID_RENDERERS,
+  type CliMermaidRenderer,
+} from "./cli-mermaid-renderer.js";
+import type { CliParseResult } from "./cli-parse-result.js";
+import { parseGenerationCount } from "./parse-generation-count.js";
 
 export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let format = "ir";
@@ -232,57 +192,4 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
       outDir,
     },
   };
-}
-
-function parseGenerationCount(value: string): number | null {
-  if (!/^\d+$/.test(value)) {
-    return null;
-  }
-  return Number.parseInt(value, 10);
-}
-
-export function usage(): string {
-  return `Usage:
-  unsnarl <file>                      Print SerializedIR (JSON) to stdout
-  unsnarl --format mermaid <file>     Print Mermaid flowchart to stdout
-  cat foo.ts | unsnarl --stdin --lang ts
-
-Options:
-  -f, --format <id>            Emitter format (default: ir)
-  --stdin                      Read from stdin
-  --lang <ts|tsx|js|jsx>       Language for stdin input (default: ts)
-  --pretty / --no-pretty       Pretty-print JSON (default: pretty)
-  --mermaid-renderer <dagre|elk>
-                               Layout engine for Mermaid output (default: elk).
-                               Use 'dagre' when the consumer cannot register
-                               the elk loader (e.g. GitHub markdown preview).
-  -r, --roots <queries>        Comma-separated root queries to prune the graph.
-                               Each query is one of:
-                                 n           line n
-                                 n:id        line n with identifier id
-                                 n-m         line range [n,m]
-                                 n-m:id      line range [n,m] with identifier id
-                                 id          identifier across all scopes
-                               Repeat -r/--roots to add more queries.
-  -A, --descendants <N>        Keep N generations of descendants from each root.
-                               Default: ${DEFAULT_GENERATIONS} if no radius flag is given;
-                               --context value if -C is given;
-                               otherwise 0 (asymmetric, like grep -A/-B).
-  -B, --ancestors <N>          Keep N generations of ancestors from each root.
-                               Default: ${DEFAULT_GENERATIONS} if no radius flag is given;
-                               --context value if -C is given;
-                               otherwise 0 (asymmetric, like grep -A/-B).
-  -C, --context <N>            Shorthand for -A N -B N (overridable by -A/-B).
-  -o, --out-dir <dir>          Write output to <dir>/<auto-name>.<ext>
-                               instead of stdout. The filename is derived
-                               from -r queries and -A/-B/-C, e.g.
-                                 -r value -A 1   -> value-a1.<ext>
-                                 -r 10-12 -C 2   -> l10-12-c2.<ext>
-                               When -r is omitted, the input filename
-                               (without extension) is used. The directory
-                               is created if missing.
-  --list-formats               List registered emitters
-  -h, --help                   Show this help
-  -v, --version                Show version
-`;
 }

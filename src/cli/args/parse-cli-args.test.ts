@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { parseCliArgs } from "./args.js";
+import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {
   test("uses defaults when only an input file is provided", () => {

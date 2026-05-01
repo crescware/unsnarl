@@ -92,15 +92,16 @@ export {
 } from "./pipeline/default.js";
 export type { DefaultRegistryOptions } from "./pipeline/default.js";
 
-export { parseCliArgs, usage as cliUsage } from "./cli/args.js";
+export { parseCliArgs } from "./cli/args/parse-cli-args.js";
+export { usage as cliUsage } from "./cli/args/usage.js";
+export type { CliArgs } from "./cli/args/cli-args.js";
+export type { CliLanguage } from "./cli/args/cli-language.js";
+export type { CliMermaidRenderer } from "./cli/args/cli-mermaid-renderer.js";
 export type {
-  CliArgs,
-  CliLanguage,
-  CliMermaidRenderer,
   CliParseFailure,
   CliParseResult,
   CliParseSuccess,
-} from "./cli/args.js";
+} from "./cli/args/cli-parse-result.js";
 export { parseRootQuery } from "./cli/root-query/parse-root-query.js";
 export {
   parseRootQueries,

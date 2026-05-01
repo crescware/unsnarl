@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { DEFAULT_GENERATIONS } from "./args.js";
+import { DEFAULT_GENERATIONS } from "./args/cli-args.js";
 import { runCli } from "./main.js";
 
 interface CapturedOutput {

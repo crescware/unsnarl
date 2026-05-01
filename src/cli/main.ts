@@ -8,7 +8,9 @@ import {
   createDefaultPipeline,
 } from "../pipeline/default.js";
 import type { PruningRunOptions } from "../pipeline/types.js";
-import { DEFAULT_GENERATIONS, parseCliArgs, usage } from "./args.js";
+import { DEFAULT_GENERATIONS } from "./args/cli-args.js";
+import { parseCliArgs } from "./args/parse-cli-args.js";
+import { usage } from "./args/usage.js";
 import { readSourceFile, readStdin } from "./io.js";
 import { deriveOutputBasename } from "./output-name/output-name.js";
 
