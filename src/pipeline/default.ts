@@ -1,7 +1,7 @@
-import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
-import { IrEmitter } from "../emitter/ir.js";
-import { JsonEmitter } from "../emitter/json.js";
-import { MarkdownEmitter } from "../emitter/markdown.js";
+import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { IrEmitter } from "../emitter/ir/ir.js";
+import { JsonEmitter } from "../emitter/json/json.js";
+import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
 import {
   MermaidEmitter,
   type MermaidRenderer,
@@ -9,8 +9,8 @@ import {
 import { dagreStrategy } from "../emitter/mermaid/strategy/dagre-strategy.js";
 import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
 import type { MermaidStrategy } from "../emitter/mermaid/strategy/strategy.js";
-import { DefaultEmitterRegistry } from "../emitter/registry.js";
-import { StatsEmitter } from "../emitter/stats.js";
+import { DefaultEmitterRegistry } from "../emitter/registry/registry.js";
+import { StatsEmitter } from "../emitter/stats/stats.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat.js";
 import { createPipeline } from "./pipeline.js";

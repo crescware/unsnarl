@@ -1,0 +1,23 @@
+import type { SerializedReference, SerializedScope } from "../../ir/model.js";
+import type { VisualSubgraph } from "../model.js";
+import type { BuildState } from "./build-state.js";
+
+export function findHostSubgraph(
+  ref: SerializedReference,
+  enclosingFnVarId: string,
+  scopeMap: ReadonlyMap<string, SerializedScope>,
+  state: BuildState,
+): VisualSubgraph | null {
+  let cur: SerializedScope | undefined = scopeMap.get(ref.from);
+  while (cur) {
+    const sg = state.subgraphByScope.get(cur.id);
+    if (sg) {
+      return sg;
+    }
+    if (!cur.upper) {
+      break;
+    }
+    cur = scopeMap.get(cur.upper);
+  }
+  return state.functionSubgraphByFn.get(enclosingFnVarId) ?? null;
+}

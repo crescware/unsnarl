@@ -1,13 +1,20 @@
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
-import type {
-  VisualEdge,
-  VisualElement,
-  VisualGraph,
-  VisualNode,
-  VisualSubgraph,
-} from "../../visual-graph/model.js";
+import type { VisualGraph, VisualNode } from "../../visual-graph/model.js";
+import { collectEdgeEndpointIds } from "./collect-edge-endpoint-ids.js";
+import { collectImportSources } from "./collect-import-sources.js";
+import { collectNodesInto } from "./collect-nodes-into.js";
+import { collectWrappedOwnerIds } from "./collect-wrapped-owner-ids.js";
+import { pushEdgeLines } from "./push-edge-lines.js";
+import { renderBoundaryEdges } from "./render-boundary-edges.js";
+import { renderClassDefs } from "./render-class-defs.js";
+import { renderPruningComment } from "./render-pruning-comment.js";
+import type { RenderState } from "./render-state.js";
+import { renderSyntheticNodeBlock } from "./render-synthetic-node-block.js";
+import { renderTopLevelNodes } from "./render-top-level-nodes.js";
+import { renderTopLevelSubgraphs } from "./render-top-level-subgraphs.js";
+import { splitEdges } from "./split-edges.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
 
 export type MermaidRenderer = "dagre" | "elk";
@@ -57,362 +64,63 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
     lines.push(l);
   }
   lines.push(`flowchart ${graph.direction}`);
-  if (graph.pruning !== undefined) {
-    // Avoid `[ ]` in the comment payload because some Mermaid versions
-    // misread a comment line that contains shape-like brackets.
-    const summary = graph.pruning.roots
-      .map((r) => `${r.query}=${r.matched}`)
-      .join(" ");
-    lines.push(
-      `  %% pruning roots ${summary} ancestors=${graph.pruning.ancestors} descendants=${graph.pruning.descendants}`,
-    );
-    for (const r of graph.pruning.roots) {
-      if (r.matched === 0) {
-        lines.push(`  %% pruning warning query ${r.query} matched 0 roots`);
-      }
-    }
-  }
+  renderPruningComment(graph, lines);
 
   const nodeMap = new Map<string, VisualNode>();
   collectNodesInto(graph.elements, nodeMap);
 
   // FunctionName nodes that own a function subgraph are absorbed into a
-  // wrapper subgraph alongside the body, so they must NOT also be emitted as
-  // a sibling node at their declaring scope.
+  // wrapper subgraph alongside the body, so they must NOT also be emitted
+  // as a sibling node at their declaring scope.
   const wrappedOwnerIds = new Set<string>();
   collectWrappedOwnerIds(graph.elements, wrappedOwnerIds);
-
-  const wrapperIds: string[] = [];
-  const placeholderIds: string[] = [];
 
   // Pre-compute the set of ids that appear as edge endpoints. The
   // emptySubgraphPlaceholder hook uses this to decide whether a workaround
   // is needed (the layout-elk crash only triggers during edge processing,
   // so subgraphs that are not edge endpoints don't need the patch even
   // under elk).
-  const edgeEndpointIds = new Set<string>();
-  for (const e of graph.edges) {
-    edgeEndpointIds.add(e.from);
-    edgeEndpointIds.add(e.to);
-  }
+  const edgeEndpointIds = collectEdgeEndpointIds(graph.edges);
 
-  function emitNode(n: VisualNode, indent: string): void {
-    lines.push(`${indent}${n.id}${nodeSyntax(n)}`);
-  }
-
-  function emitPlainSubgraph(sg: VisualSubgraph, indent: string): void {
-    lines.push(`${indent}subgraph ${sg.id}["${subgraphLabel(sg, nodeMap)}"]`);
-    const childIndent = `${indent}  `;
-    lines.push(`${childIndent}direction ${sg.direction}`);
-    let emittedChildren = 0;
-    for (const e of sg.elements) {
-      if (e.type === "node" && !wrappedOwnerIds.has(e.id)) {
-        emitNode(e, childIndent);
-        emittedChildren++;
-      }
-    }
-    for (const e of sg.elements) {
-      if (e.type === "subgraph") {
-        emitSubgraph(e, childIndent);
-        emittedChildren++;
-      }
-    }
-    if (emittedChildren === 0) {
-      const patch = strategy.emptySubgraphPlaceholder({
-        subgraphId: sg.id,
-        indent: childIndent,
-        referencedByEdge: edgeEndpointIds.has(sg.id),
-      });
-      if (patch !== null) {
-        lines.push(patch.line);
-        placeholderIds.push(patch.placeholderId);
-      }
-    }
-    lines.push(`${indent}end`);
-  }
-
-  function emitSubgraph(sg: VisualSubgraph, indent: string): void {
-    if (sg.kind === "function" && sg.ownerNodeId !== undefined) {
-      const ownerNode = nodeMap.get(sg.ownerNodeId);
-      if (ownerNode !== undefined) {
-        // Wrap the FunctionName node and the function body subgraph as
-        // SIBLINGS inside a single wrapper subgraph. The FunctionName node
-        // belongs to the parent scope (it names the function from the
-        // outside), so it must NOT live inside the body subgraph — that
-        // would imply "f references itself from within its own body".
-        // The wrapper exists purely to keep these two siblings adjacent in
-        // the rendered diagram.
-        const wrapId = `wrap_${sg.id}`;
-        wrapperIds.push(wrapId);
-        lines.push(`${indent}subgraph ${wrapId}[" "]`);
-        const wrapIndent = `${indent}  `;
-        lines.push(`${wrapIndent}direction TB`);
-        emitNode(ownerNode, wrapIndent);
-        emitPlainSubgraph(sg, wrapIndent);
-        lines.push(`${indent}end`);
-        return;
-      }
-    }
-    emitPlainSubgraph(sg, indent);
-  }
+  const state: RenderState = {
+    lines,
+    nodeMap,
+    wrappedOwnerIds,
+    edgeEndpointIds,
+    placeholderIds: [],
+    wrapperIds: [],
+    strategy,
+  };
 
   // Emit top-level "tree" nodes (anything that isn't a synthetic top-level
   // import/module/sink), then top-level subgraphs, then synthetic top-level
-  // nodes — preserves the historical Mermaid output ordering and keeps the
+  // nodes -- preserves the historical Mermaid output ordering and keeps the
   // module/intermediate cluster grouped near the import edges.
-  const synthetic = (n: VisualNode): boolean =>
-    n.kind === "ModuleSink" ||
-    n.kind === "ModuleSource" ||
-    n.kind === "ImportIntermediate";
-  for (const e of graph.elements) {
-    if (e.type === "node" && !synthetic(e) && !wrappedOwnerIds.has(e.id)) {
-      emitNode(e, "  ");
-    }
-  }
-  for (const e of graph.elements) {
-    if (e.type === "subgraph") {
-      emitSubgraph(e, "  ");
-    }
-  }
+  renderTopLevelNodes(state, graph);
+  renderTopLevelSubgraphs(state, graph);
 
   // Edges originating from a synthetic node (ModuleSource / ImportIntermediate)
   // are import edges and rendered after the synthetic node block. Edges that
   // merely point INTO a synthetic node (e.g. `n_x -->|read| module_root`) stay
   // with the body edges to preserve the historical ordering.
-  const importSources = new Set<string>();
-  for (const n of nodeMap.values()) {
-    if (n.kind === "ModuleSource" || n.kind === "ImportIntermediate") {
-      importSources.add(n.id);
-    }
-  }
-  const bodyEdges: VisualEdge[] = [];
-  const importEdges: VisualEdge[] = [];
-  for (const e of graph.edges) {
-    if (importSources.has(e.from)) {
-      importEdges.push(e);
-    } else {
-      bodyEdges.push(e);
-    }
-  }
-  for (const e of bodyEdges) {
-    lines.push(`  ${e.from} -->|${e.label}| ${e.to}`);
-  }
+  const importSources = collectImportSources(nodeMap);
+  const { body: bodyEdges, imports: importEdges } = splitEdges(
+    graph.edges,
+    importSources,
+  );
+  pushEdgeLines(bodyEdges, lines);
 
-  for (const e of graph.elements) {
-    if (e.type === "node" && synthetic(e)) {
-      emitNode(e, "  ");
-    }
-  }
-  for (const e of importEdges) {
-    lines.push(`  ${e.from} -->|${e.label}| ${e.to}`);
-  }
+  renderSyntheticNodeBlock(state, graph);
+  pushEdgeLines(importEdges, lines);
 
-  // Boundary edges: pruning detected one or more neighbors past the
-  // requested radius. Mermaid cannot draw a truly dangling edge, so each
-  // boundary edge gets a faint stub node "(...)" attached via a dashed
-  // arrow. The stub stands in for "more graph keeps going beyond here".
-  // The label question follows the edge semantics `from -label-> to`,
-  // where the label describes the action `to` performs on `from`:
-  //
-  // - "out" (`inside -> stub`): the actor is the stub, which is unknown,
-  //   so we cannot honestly attach a label.
-  // - "in"  (`stub -> inside`): the actor is the kept inside node, so we
-  //   keep the original label.
   const stubIds: string[] = [];
-  if (graph.boundaryEdges !== undefined && graph.boundaryEdges.length > 0) {
-    let stubCounter = 0;
-    for (const be of graph.boundaryEdges) {
-      stubCounter += 1;
-      const stubId = `boundary_stub_${stubCounter}`;
-      stubIds.push(stubId);
-      // ASCII "..." instead of U+2026 -- some Mermaid renderers stumble
-      // on multibyte glyphs inside node shape syntax.
-      lines.push(`  ${stubId}((...))`);
-      if (be.direction === "out") {
-        lines.push(`  ${be.inside} -.-> ${stubId}`);
-      } else {
-        lines.push(`  ${stubId} -.->|${be.label}| ${be.inside}`);
-      }
-    }
-  }
+  renderBoundaryEdges(graph, lines, stubIds);
 
-  if (wrapperIds.length > 0) {
-    // Distinct background so the function wrapper is visually separable
-    // from the inner function body subgraph (otherwise both inherit the
-    // same Mermaid cluster fill and the nesting becomes invisible).
-    lines.push("  classDef fnWrap fill:#1a2030,stroke:#5a7d99;");
-    for (const id of wrapperIds) {
-      lines.push(`  class ${id} fnWrap;`);
-    }
-  }
+  renderClassDefs(state.wrapperIds, stubIds, lines);
 
-  if (stubIds.length > 0) {
-    lines.push(
-      "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
-    );
-    for (const id of stubIds) {
-      lines.push(`  class ${id} boundaryStub;`);
-    }
-  }
-
-  for (const l of strategy.trailerLines(placeholderIds)) {
+  for (const l of strategy.trailerLines(state.placeholderIds)) {
     lines.push(l);
   }
 
   return `${lines.join("\n")}\n`;
-}
-
-function collectNodesInto(
-  elements: VisualElement[],
-  out: Map<string, VisualNode>,
-): void {
-  for (const e of elements) {
-    if (e.type === "node") {
-      out.set(e.id, e);
-    } else {
-      collectNodesInto(e.elements, out);
-    }
-  }
-}
-
-function collectWrappedOwnerIds(
-  elements: VisualElement[],
-  out: Set<string>,
-): void {
-  for (const e of elements) {
-    if (e.type !== "subgraph") {
-      continue;
-    }
-    if (e.kind === "function" && e.ownerNodeId !== undefined) {
-      out.add(e.ownerNodeId);
-    }
-    collectWrappedOwnerIds(e.elements, out);
-  }
-}
-
-function nodeSyntax(n: VisualNode): string {
-  const label = nodeLabel(n);
-  switch (n.kind) {
-    case "WriteOp":
-      return `(["${label}"])`;
-    case "ModuleSink":
-      return `((${label}))`;
-    default:
-      return `["${label}"]`;
-  }
-}
-
-function nodeLabel(n: VisualNode): string {
-  const head = nodeHead(n);
-  if (n.kind === "ModuleSink") {
-    return "module";
-  }
-  // Unused declarations are surfaced via a textual prefix instead of a
-  // dashed border. This keeps the visual cue legible even when the node
-  // already has another classDef applied (boundary stub, fnWrap, ...).
-  const prefixed = n.unused === true ? `unused ${head}` : head;
-  const range =
-    n.endLine !== undefined && n.endLine !== n.line
-      ? `L${n.line}-${n.endLine}`
-      : `L${n.line}`;
-  return `${prefixed}<br/>${range}`;
-}
-
-function nodeHead(n: VisualNode): string {
-  const name = escape(n.name);
-  if (n.isJsxElement) {
-    // Mermaid `["..."]` labels require HTML-escaped angle brackets so the
-    // parser does not mistake them for syntax; the renderer surfaces them
-    // as literal `<` / `>` in the output.
-    return `&lt;${name}&gt;`;
-  }
-  switch (n.kind) {
-    case "FunctionName":
-      return `${name}()`;
-    case "ClassName":
-      return `class ${name}`;
-    case "ImportBinding": {
-      const isRenamedNamed =
-        n.importKind === "named" &&
-        n.importedName !== null &&
-        n.importedName !== undefined &&
-        n.importedName !== n.name;
-      return isRenamedNamed ? name : `import ${name}`;
-    }
-    case "CatchClause":
-      return `catch ${name}`;
-    case "ImplicitGlobalVariable":
-      return `global ${name}`;
-    case "WriteOp":
-      return n.declarationKind === "let" ? `let ${name}` : name;
-    case "ModuleSource":
-      return `module ${name}`;
-    case "ImportIntermediate":
-      return `import ${name}`;
-    default:
-      if (n.initIsFunction) {
-        return `${name}()`;
-      }
-      if (n.declarationKind === "let") {
-        return `let ${name}`;
-      }
-      return name;
-  }
-}
-
-function subgraphLabel(
-  sg: VisualSubgraph,
-  nodeMap: Map<string, VisualNode>,
-): string {
-  const range = lineRangeLabel(sg);
-  switch (sg.kind) {
-    case "function": {
-      // Prefer the name baked onto the subgraph at build time; the owner
-      // node may be absent after pruning even when the subgraph survives.
-      const ownerNode = sg.ownerNodeId
-        ? nodeMap.get(sg.ownerNodeId)
-        : undefined;
-      const name = sg.ownerName ?? ownerNode?.name ?? "";
-      return `${escape(name)}()<br/>${range}`;
-    }
-    case "switch":
-      return `switch ${range}`;
-    case "case":
-      if (sg.caseTest === null || sg.caseTest === undefined) {
-        return `default ${range}`;
-      }
-      return `case ${escape(sg.caseTest)} ${range}`;
-    case "if":
-      return `if ${range}`;
-    case "else":
-      return `else ${range}`;
-    case "if-else-container":
-      return `${sg.hasElse ? "if-else" : "if"} ${range}`;
-    case "try":
-      return `try ${range}`;
-    case "catch":
-      return `catch ${range}`;
-    case "finally":
-      return `finally ${range}`;
-    case "for":
-      return `for ${range}`;
-    case "return":
-      return `return ${range}`;
-  }
-}
-
-function lineRangeLabel(sg: VisualSubgraph): string {
-  const end = sg.endLine;
-  if (end !== undefined && end !== sg.line) {
-    return `L${sg.line}-${end}`;
-  }
-  return `L${sg.line}`;
-}
-
-function escape(value: string): string {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/"/g, "&quot;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
 }

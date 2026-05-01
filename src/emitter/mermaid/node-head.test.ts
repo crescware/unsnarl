@@ -1,0 +1,142 @@
+import { describe, expect, test } from "vitest";
+
+import { nodeHead } from "./node-head.js";
+import { makeNode } from "./testing/make-node.js";
+
+describe("nodeHead", () => {
+  test("JSX element wraps the (escaped) name in &lt;...&gt;, ignoring kind-specific format", () => {
+    expect(
+      nodeHead(
+        makeNode({ kind: "FunctionName", name: "Foo", isJsxElement: true }),
+      ),
+    ).toBe("&lt;Foo&gt;");
+  });
+
+  test.each<{
+    kind: Parameters<typeof makeNode>[0] extends undefined
+      ? never
+      : Parameters<typeof makeNode>[0];
+    name: string;
+    expected: string;
+  }>([
+    { kind: { kind: "FunctionName" }, name: "foo", expected: "foo()" },
+    { kind: { kind: "ClassName" }, name: "Foo", expected: "class Foo" },
+    { kind: { kind: "CatchClause" }, name: "err", expected: "catch err" },
+    {
+      kind: { kind: "ImplicitGlobalVariable" },
+      name: "global1",
+      expected: "global global1",
+    },
+    { kind: { kind: "ModuleSource" }, name: "./mod", expected: "module ./mod" },
+    {
+      kind: { kind: "ImportIntermediate" },
+      name: "named",
+      expected: "import named",
+    },
+  ])("kind $kind.kind formats as $expected", ({ kind, name, expected }) => {
+    expect(nodeHead(makeNode({ ...kind, name }))).toBe(expected);
+  });
+
+  test.each([
+    {
+      name: "renamed named import keeps the local name only",
+      node: makeNode({
+        kind: "ImportBinding",
+        name: "renamed",
+        importKind: "named",
+        importedName: "original",
+      }),
+      expected: "renamed",
+    },
+    {
+      name: "non-renamed named import gets 'import' prefix",
+      node: makeNode({
+        kind: "ImportBinding",
+        name: "foo",
+        importKind: "named",
+        importedName: "foo",
+      }),
+      expected: "import foo",
+    },
+    {
+      name: "default import gets 'import' prefix",
+      node: makeNode({
+        kind: "ImportBinding",
+        name: "Foo",
+        importKind: "default",
+        importedName: null,
+      }),
+      expected: "import Foo",
+    },
+    {
+      name: "namespace import gets 'import' prefix",
+      node: makeNode({
+        kind: "ImportBinding",
+        name: "ns",
+        importKind: "namespace",
+        importedName: null,
+      }),
+      expected: "import ns",
+    },
+  ])("$name", ({ node, expected }) => {
+    expect(nodeHead(node)).toBe(expected);
+  });
+
+  test.each([
+    {
+      name: "WriteOp with declarationKind=let prepends 'let'",
+      node: makeNode({ kind: "WriteOp", name: "x", declarationKind: "let" }),
+      expected: "let x",
+    },
+    {
+      name: "WriteOp with declarationKind=const has no prefix",
+      node: makeNode({ kind: "WriteOp", name: "x", declarationKind: "const" }),
+      expected: "x",
+    },
+    {
+      name: "WriteOp without declarationKind has no prefix",
+      node: makeNode({ kind: "WriteOp", name: "x" }),
+      expected: "x",
+    },
+  ])("$name", ({ node, expected }) => {
+    expect(nodeHead(node)).toBe(expected);
+  });
+
+  test.each([
+    {
+      name: "Variable initialized with a function uses '<name>()' format",
+      node: makeNode({ name: "f", initIsFunction: true }),
+      expected: "f()",
+    },
+    {
+      name: "let-declared Variable prepends 'let'",
+      node: makeNode({ name: "x", declarationKind: "let" }),
+      expected: "let x",
+    },
+    {
+      name: "const-declared Variable has no prefix",
+      node: makeNode({ name: "x", declarationKind: "const" }),
+      expected: "x",
+    },
+    {
+      name: "Variable without declarationKind has no prefix",
+      node: makeNode({ name: "x" }),
+      expected: "x",
+    },
+    {
+      name: "initIsFunction wins over declarationKind",
+      node: makeNode({
+        name: "f",
+        initIsFunction: true,
+        declarationKind: "let",
+      }),
+      expected: "f()",
+    },
+  ])("$name", ({ node, expected }) => {
+    expect(nodeHead(node)).toBe(expected);
+  });
+
+  test("ReturnUse falls through to the default formatting (uses name only)", () => {
+    expect(nodeHead(makeNode({ kind: "ReturnUse", name: "x" }))).toBe("x");
+  });
+});

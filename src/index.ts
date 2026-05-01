@@ -54,12 +54,12 @@ export { ReferenceFlags } from "./ir/model.js";
 export { OxcParser, ParseError } from "./parser/oxc.js";
 export type { ParseErrorDetail } from "./parser/oxc.js";
 
-export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
+export { EslintCompatAnalyzer } from "./analyzer/eslint-compat/eslint-compat.js";
 
 export { FlatSerializer } from "./serializer/flat.js";
 
-export { IrEmitter } from "./emitter/ir.js";
-export { JsonEmitter } from "./emitter/json.js";
+export { IrEmitter } from "./emitter/ir/ir.js";
+export { JsonEmitter } from "./emitter/json/json.js";
 export { buildVisualGraph } from "./visual-graph/builder.js";
 export type {
   Direction,
@@ -74,14 +74,14 @@ export type {
 } from "./visual-graph/model.js";
 export { pruneVisualGraph } from "./visual-graph/prune.js";
 export type { PruneOptions, PruneResult } from "./visual-graph/prune.js";
-export { MarkdownEmitter } from "./emitter/markdown.js";
+export { MarkdownEmitter } from "./emitter/markdown/markdown.js";
 export { MermaidEmitter } from "./emitter/mermaid/mermaid.js";
 export type {
   MermaidEmitterOptions,
   MermaidRenderer,
 } from "./emitter/mermaid/mermaid.js";
-export { StatsEmitter } from "./emitter/stats.js";
-export { DefaultEmitterRegistry } from "./emitter/registry.js";
+export { StatsEmitter } from "./emitter/stats/stats.js";
+export { DefaultEmitterRegistry } from "./emitter/registry/registry.js";
 
 export {
   createDefaultEmitterRegistry,
