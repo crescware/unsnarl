@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { DIAGNOSTIC_KIND, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
@@ -22,7 +22,7 @@ const firstStmt = (code: string): NodeLike => {
 
 const newScope = (raw = ""): ScopeImpl =>
   new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
     block: { type: "Program" } as unknown as AstNode,

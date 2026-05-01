@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -15,42 +16,42 @@ describe("shouldSubgraph", () => {
   }>([
     {
       name: "function-subgraph owner on a plain block -> true",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: null,
       isOwner: true,
       expected: true,
     },
     {
       name: "control kind (for) without owner -> true",
-      type: "for",
+      type: SCOPE_TYPE.For,
       blockContext: null,
       isOwner: false,
       expected: true,
     },
     {
       name: "branch block (if consequent) without owner -> true",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: makeBlockContext("IfStatement", "consequent", 0),
       isOwner: false,
       expected: true,
     },
     {
       name: "plain block without owner or branch context -> false",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: null,
       isOwner: false,
       expected: false,
     },
     {
       name: "module without owner -> false",
-      type: "module",
+      type: SCOPE_TYPE.Module,
       blockContext: null,
       isOwner: false,
       expected: false,
     },
     {
       name: "global without owner -> false",
-      type: "global",
+      type: SCOPE_TYPE.Global,
       blockContext: null,
       isOwner: false,
       expected: false,

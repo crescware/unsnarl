@@ -1,4 +1,9 @@
-import { DIRECTION, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
+import {
+  DIRECTION,
+  NODE_KIND,
+  SCOPE_TYPE,
+  VISUAL_ELEMENT_TYPE,
+} from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -168,7 +173,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   } as const satisfies BuildState;
 
   const root = ir.scopes.find(
-    (s) => s.type === "module" || s.type === "global",
+    (s) => s.type === SCOPE_TYPE.Module || s.type === SCOPE_TYPE.Global,
   );
   if (root) {
     buildScope(root, graph, ctx, state);

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, type Language } from "../constants.js";
+import { LANGUAGE, SCOPE_TYPE, type Language } from "../constants.js";
 import type { Reference, Scope, Variable } from "../ir/model.js";
 import { OxcParser } from "../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
@@ -214,8 +214,8 @@ describe("EslintCompatAnalyzer / references", () => {
     const all = collectScopes(rootScope);
     const innerB = all.find(
       (s) =>
-        s.type === "function" &&
-        s.upper?.type === "function" &&
+        s.type === SCOPE_TYPE.Function &&
+        s.upper?.type === SCOPE_TYPE.Function &&
         s.upper?.upper === rootScope,
     );
     expect(innerB).toBeDefined();

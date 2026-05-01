@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../../constants.js";
+import { LANGUAGE, SCOPE_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -130,7 +130,7 @@ describe("readOrigins", () => {
     const root = makeScope({ id: "root" });
     const switchScope = makeScope({
       id: "switch",
-      type: "switch",
+      type: SCOPE_TYPE.Switch,
       upper: "root",
     });
     const c1 = makeScope({
@@ -159,7 +159,7 @@ describe("readOrigins", () => {
     const root = makeScope({ id: "root" });
     const switchScope = makeScope({
       id: "switch",
-      type: "switch",
+      type: SCOPE_TYPE.Switch,
       upper: "root",
     });
     const c1 = makeScope({

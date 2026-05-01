@@ -1,3 +1,4 @@
+import { SCOPE_TYPE } from "../../../constants.js";
 import type { SerializedScope } from "../../../ir/model.js";
 import { span } from "./span.js";
 
@@ -7,7 +8,7 @@ export function makeScope(
   const offset = overrides.block?.span?.offset ?? 0;
   return {
     id: "s",
-    type: "block",
+    type: SCOPE_TYPE.Block,
     isStrict: false,
     upper: null,
     childScopes: [],

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../../constants.js";
+import { LANGUAGE, SCOPE_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -52,7 +52,11 @@ function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
 
 describe("buildChildren", () => {
   test("non-branch children are built directly into the parent container", () => {
-    const inner = makeScope({ id: "for1", type: "for", upper: "outer" });
+    const inner = makeScope({
+      id: "for1",
+      type: SCOPE_TYPE.For,
+      upper: "outer",
+    });
     const outer = makeScope({ id: "outer", childScopes: ["for1"] });
     const ctx = makeCtx([outer, inner]);
     const container: { elements: VisualElement[] } = { elements: [] };

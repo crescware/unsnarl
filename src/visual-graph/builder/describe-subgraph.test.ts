@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import {
   DIRECTION,
+  SCOPE_TYPE,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -17,7 +18,7 @@ describe("describeSubgraph", () => {
   test("function subgraph returns kind=function with owner metadata", () => {
     const fnScope = makeScope({
       id: "fnScope",
-      type: "function",
+      type: SCOPE_TYPE.Function,
       block: {
         type: "FunctionDeclaration",
         span: span(0, 5),
@@ -50,7 +51,7 @@ describe("describeSubgraph", () => {
   test("function subgraph falls back to scope.block.span.line when owner has no identifiers", () => {
     const fnScope = makeScope({
       id: "fn",
-      type: "function",
+      type: SCOPE_TYPE.Function,
       block: {
         type: "FunctionDeclaration",
         span: span(0, 7),
@@ -67,7 +68,7 @@ describe("describeSubgraph", () => {
   });
 
   test("function subgraph throws if owner var id is missing from owner map", () => {
-    const scope = makeScope({ id: "fn", type: "function" });
+    const scope = makeScope({ id: "fn", type: SCOPE_TYPE.Function });
     expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
   });
 
@@ -76,9 +77,9 @@ describe("describeSubgraph", () => {
     type: ScopeType;
     expectedKind: VisualSubgraph["kind"];
   }>([
-    { name: "for", type: "for", expectedKind: "for" },
-    { name: "catch", type: "catch", expectedKind: "catch" },
-    { name: "switch", type: "switch", expectedKind: "switch" },
+    { name: "for", type: SCOPE_TYPE.For, expectedKind: "for" },
+    { name: "catch", type: SCOPE_TYPE.Catch, expectedKind: "catch" },
+    { name: "switch", type: SCOPE_TYPE.Switch, expectedKind: "switch" },
   ])(
     "control subgraph for scope type $name -> kind=$expectedKind",
     ({ type, expectedKind }) => {
@@ -98,7 +99,7 @@ describe("describeSubgraph", () => {
   test("case subgraph captures caseTest from blockContext", () => {
     const scope = makeScope({
       id: "case1",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       block: { type: "Block", span: span(0, 1), endSpan: span(10, 2) },
       blockContext: makeBlockContext("SwitchStatement", "cases", 0, "x === 1"),
     });
@@ -110,7 +111,7 @@ describe("describeSubgraph", () => {
   test("case subgraph defaults caseTest to null when blockContext lacks it", () => {
     const scope = makeScope({
       id: "case-default",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: makeBlockContext("SwitchStatement", "cases", 0),
     });
     const sg = describeSubgraph(scope, new Map(), new Map());
@@ -118,7 +119,7 @@ describe("describeSubgraph", () => {
   });
 
   test("throws when scope is neither a function subgraph nor a control kind", () => {
-    const scope = makeScope({ id: "plain", type: "block" });
+    const scope = makeScope({ id: "plain", type: SCOPE_TYPE.Block });
     expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
   });
 });

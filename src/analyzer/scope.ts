@@ -1,3 +1,4 @@
+import { SCOPE_TYPE } from "../constants.js";
 import { ReferenceFlags } from "../ir/model.js";
 import type {
   AstExpression,
@@ -47,9 +48,9 @@ export class ScopeImpl implements Scope {
       opts.upper.childScopes.push(this);
     }
     if (
-      opts.type === "function" ||
-      opts.type === "module" ||
-      opts.type === "global"
+      opts.type === SCOPE_TYPE.Function ||
+      opts.type === SCOPE_TYPE.Module ||
+      opts.type === SCOPE_TYPE.Global
     ) {
       this.variableScope = this;
     } else {

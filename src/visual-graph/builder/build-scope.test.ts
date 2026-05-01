@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  LANGUAGE,
+  NODE_KIND,
+  SCOPE_TYPE,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -126,7 +131,7 @@ describe("buildScope", () => {
   test("function-owner scope wraps body in a function subgraph and registers state", () => {
     const fnScope = makeScope({
       id: "fn",
-      type: "function",
+      type: SCOPE_TYPE.Function,
       variables: ["param"],
       block: { type: "Function", span: span(0, 1), endSpan: span(10, 5) },
     });
@@ -162,7 +167,7 @@ describe("buildScope", () => {
   test("control-kind scope (for) wraps body in a control subgraph", () => {
     const forScope = makeScope({
       id: "for1",
-      type: "for",
+      type: SCOPE_TYPE.For,
       variables: ["v"],
       block: { type: "ForStatement", span: span(0, 1), endSpan: span(10, 3) },
     });

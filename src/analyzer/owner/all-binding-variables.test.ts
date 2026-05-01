@@ -1,6 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { ScopeImpl } from "../scope.js";
@@ -23,7 +24,7 @@ const declId = (code: string): AstNode => {
 
 const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
     block: { type: "Program" } as unknown as AstNode,
@@ -62,7 +63,7 @@ describe("allBindingVariables", () => {
   test("walks up the scope chain", () => {
     const upper = scopeWith("outer");
     const inner = new ScopeImpl({
-      type: "block",
+      type: SCOPE_TYPE.Block,
       isStrict: true,
       upper,
       block: { type: "BlockStatement" } as unknown as AstNode,

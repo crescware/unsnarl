@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
+import {
+  DIAGNOSTIC_KIND,
+  LANGUAGE,
+  SCOPE_TYPE,
+  type Language,
+} from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "./flat-serializer.js";
@@ -67,7 +72,7 @@ describe("FlatSerializer", () => {
     const resolvedRef = ir.references.find((r) => r.identifier.name === "f");
     expect(resolvedRef?.resolved).toBe(fVar?.id);
     // Scope.upper も id 参照
-    const fnScope = ir.scopes.find((s) => s.type === "function");
+    const fnScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Function);
     expect(fnScope?.upper).toBe("scope#0");
   });
 

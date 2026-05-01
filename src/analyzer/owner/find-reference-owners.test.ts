@@ -1,6 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { ScopeImpl } from "../scope.js";
@@ -12,7 +13,7 @@ const ident = (name: string): AstIdentifier =>
 
 const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
     block: { type: "Program" } as unknown as AstNode,

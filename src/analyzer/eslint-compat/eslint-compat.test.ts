@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
+import {
+  DIAGNOSTIC_KIND,
+  LANGUAGE,
+  SCOPE_TYPE,
+  type Language,
+} from "../../constants.js";
 import type {
   DefinitionType,
   Scope,
@@ -157,7 +162,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     // try block (block scope) と catch scope (catch)
     const allScopes = collectScopes(rootScope);
-    const catchScope = allScopes.find((s) => s.type === "catch");
+    const catchScope = allScopes.find((s) => s.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope && variableNames(catchScope!).sort()).toEqual(["e", "x"]);
     const e = catchScope && findVariable(catchScope!, "e");

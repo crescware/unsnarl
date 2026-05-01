@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
@@ -10,19 +11,21 @@ type Kind = VisualSubgraph["kind"] | null;
 
 describe("controlSubgraphKindOf", () => {
   test.each<{ type: ScopeType; expected: Kind }>([
-    { type: "catch", expected: "catch" },
-    { type: "for", expected: "for" },
-    { type: "switch", expected: "switch" },
-    { type: "function", expected: null },
-    { type: "module", expected: null },
-    { type: "global", expected: null },
-    { type: "class", expected: null },
+    { type: SCOPE_TYPE.Catch, expected: "catch" },
+    { type: SCOPE_TYPE.For, expected: "for" },
+    { type: SCOPE_TYPE.Switch, expected: "switch" },
+    { type: SCOPE_TYPE.Function, expected: null },
+    { type: SCOPE_TYPE.Module, expected: null },
+    { type: SCOPE_TYPE.Global, expected: null },
+    { type: SCOPE_TYPE.Class, expected: null },
   ])("scope type $type maps to $expected", ({ type, expected }) => {
     expect(controlSubgraphKindOf(makeScope({ type }))).toBe(expected);
   });
 
   test("returns null for a block scope without blockContext", () => {
-    expect(controlSubgraphKindOf(makeScope({ type: "block" }))).toBeNull();
+    expect(
+      controlSubgraphKindOf(makeScope({ type: SCOPE_TYPE.Block })),
+    ).toBeNull();
   });
 
   test.each<{ ctx: BlockContext; expected: Kind }>([
@@ -45,7 +48,9 @@ describe("controlSubgraphKindOf", () => {
     "block + parentType=$ctx.parentType key=$ctx.key -> $expected",
     ({ ctx, expected }) => {
       expect(
-        controlSubgraphKindOf(makeScope({ type: "block", blockContext: ctx })),
+        controlSubgraphKindOf(
+          makeScope({ type: SCOPE_TYPE.Block, blockContext: ctx }),
+        ),
       ).toBe(expected);
     },
   );

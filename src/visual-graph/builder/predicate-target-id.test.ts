@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -15,7 +16,7 @@ function withSwitchAt(offset: number): {
 } {
   const switchScope = makeScope({
     id: "switch1",
-    type: "switch",
+    type: SCOPE_TYPE.Switch,
     upper: "outer",
     block: {
       type: "SwitchStatement",

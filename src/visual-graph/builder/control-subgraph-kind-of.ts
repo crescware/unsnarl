@@ -1,19 +1,20 @@
+import { SCOPE_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 
 export function controlSubgraphKindOf(
   scope: SerializedScope,
 ): VisualSubgraph["kind"] | null {
-  if (scope.type === "catch") {
+  if (scope.type === SCOPE_TYPE.Catch) {
     return "catch";
   }
-  if (scope.type === "for") {
+  if (scope.type === SCOPE_TYPE.For) {
     return "for";
   }
-  if (scope.type === "switch") {
+  if (scope.type === SCOPE_TYPE.Switch) {
     return "switch";
   }
-  if (scope.type === "block") {
+  if (scope.type === SCOPE_TYPE.Block) {
     const ctx = scope.blockContext;
     if (!ctx) {
       return null;

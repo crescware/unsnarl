@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { LANGUAGE, type Language } from "../constants.js";
+import { LANGUAGE, SCOPE_TYPE, type Language } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -49,13 +49,16 @@ function refsToVar(
 function caseScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) =>
-      s.type === "block" && s.blockContext?.parentType === "SwitchStatement",
+      s.type === SCOPE_TYPE.Block &&
+      s.blockContext?.parentType === "SwitchStatement",
   );
 }
 
 function ifBranchScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
-    (s) => s.type === "block" && s.blockContext?.parentType === "IfStatement",
+    (s) =>
+      s.type === SCOPE_TYPE.Block &&
+      s.blockContext?.parentType === "IfStatement",
   );
 }
 
@@ -234,18 +237,18 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
       key: s.blockContext?.key,
     }));
     expect(layout).toEqual([
-      { type: "block", key: "block" },
-      { type: "catch", key: "handler" },
-      { type: "block", key: "finalizer" },
+      { type: SCOPE_TYPE.Block, key: "block" },
+      { type: SCOPE_TYPE.Catch, key: "handler" },
+      { type: SCOPE_TYPE.Block, key: "finalizer" },
     ]);
   });
 
   test("the catch parameter `err` is owned by the catch scope, not the surrounding module", () => {
     const err = varByName(ir, "err");
-    const catchScope = ir.scopes.find((s) => s.type === "catch");
+    const catchScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope?.variables).toContain(err.id);
-    const moduleScope = ir.scopes.find((s) => s.type === "module") as
+    const moduleScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Module) as
       | SerializedScope
       | undefined;
     expect(moduleScope?.variables ?? []).not.toContain(err.id);

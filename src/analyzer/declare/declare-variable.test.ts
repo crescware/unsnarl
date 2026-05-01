@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { declareVariable } from "./declare-variable.js";
@@ -11,7 +12,7 @@ const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 
 const makeScope = (): ScopeImpl =>
   new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
     block: node("Program"),
