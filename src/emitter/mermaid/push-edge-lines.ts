@@ -1,7 +1,7 @@
 import type { VisualEdge } from "../../visual-graph/model.js";
 
 export function pushEdgeLines(
-  edges: ReadonlyArray<VisualEdge>,
+  edges: readonly VisualEdge[],
   lines: string[],
 ): void {
   for (const e of edges) {

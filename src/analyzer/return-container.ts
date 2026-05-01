@@ -2,7 +2,7 @@ import type { ReturnContainer } from "../ir/model.js";
 import type { PathEntry } from "./walk/walk.js";
 
 export function findReturnContainer(
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): ReturnContainer | null {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];

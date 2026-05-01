@@ -1,7 +1,7 @@
 import type { VisualEdge } from "../../visual-graph/model.js";
 
 export function splitEdges(
-  edges: ReadonlyArray<VisualEdge>,
+  edges: readonly VisualEdge[],
   importSourceIds: ReadonlySet<string>,
 ): { body: VisualEdge[]; imports: VisualEdge[] } {
   const body: VisualEdge[] = [];

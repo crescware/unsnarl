@@ -9,8 +9,8 @@ export type PruneOptions = {
 
 export type PruneResult = {
   readonly graph: VisualGraph;
-  readonly perQuery: ReadonlyArray<{
+  readonly perQuery: readonly {
     readonly query: ParsedRootQuery;
     readonly matched: number;
-  }>;
+  }[];
 };

@@ -6,7 +6,7 @@ const parser = new OxcParser();
 
 type MinimalProgram = {
   type: string;
-  body: ReadonlyArray<{ type: string }>;
+  body: readonly { type: string }[];
   sourceType?: string;
 };
 

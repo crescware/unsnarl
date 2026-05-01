@@ -13,13 +13,13 @@ export type WalkVisitor = {
     node: AstNode,
     parent: AstNode | null,
     key: string | null,
-    path: ReadonlyArray<PathEntry>,
+    path: readonly PathEntry[],
   ): WalkAction;
   leave?(
     node: AstNode,
     parent: AstNode | null,
     key: string | null,
-    path: ReadonlyArray<PathEntry>,
+    path: readonly PathEntry[],
   ): void;
 };
 

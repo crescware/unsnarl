@@ -1,7 +1,7 @@
 import type { VisualEdge } from "../../visual-graph/model.js";
 
 export function collectEdgeEndpointIds(
-  edges: ReadonlyArray<VisualEdge>,
+  edges: readonly VisualEdge[],
 ): Set<string> {
   const ids = new Set<string>();
   for (const e of edges) {

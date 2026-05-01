@@ -81,7 +81,7 @@ export type VisualEdge = {
 };
 
 export type VisualGraphPruning = {
-  roots: ReadonlyArray<{ query: string; matched: number }>;
+  roots: readonly { query: string; matched: number }[];
   descendants: number;
   ancestors: number;
 };

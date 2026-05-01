@@ -13,9 +13,7 @@ function collect(node: AstNode, out: AstIdentifier[]): void {
       out.push(node as AstIdentifier);
       return;
     case "ObjectPattern": {
-      const properties = node["properties"] as
-        | ReadonlyArray<AstNode>
-        | undefined;
+      const properties = node["properties"] as readonly AstNode[] | undefined;
       if (!properties) {
         return;
       }
@@ -36,7 +34,7 @@ function collect(node: AstNode, out: AstIdentifier[]): void {
     }
     case "ArrayPattern": {
       const elements = node["elements"] as
-        | ReadonlyArray<AstNode | null>
+        | readonly (AstNode | null)[]
         | undefined;
       if (!elements) {
         return;

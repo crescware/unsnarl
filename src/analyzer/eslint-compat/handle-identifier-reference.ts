@@ -14,7 +14,7 @@ export function handleIdentifierReference(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   manager: ScopeManager,
 ): void {
   const result = classifyIdentifier(

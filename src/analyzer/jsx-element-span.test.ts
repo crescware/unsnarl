@@ -14,11 +14,11 @@ function analyze(code: string) {
   return analyzer.analyze(parsed);
 }
 
-function findRefs(rootScope: { through: ReadonlyArray<unknown> }) {
-  return rootScope.through as ReadonlyArray<{
+function findRefs(rootScope: { through: readonly unknown[] }) {
+  return rootScope.through as readonly {
     identifier: { name: string };
     unsnarlJsxElement: { startOffset: number; endOffset: number } | null;
-  }>;
+  }[];
 }
 
 describe("EslintCompatAnalyzer / JSX element span", () => {

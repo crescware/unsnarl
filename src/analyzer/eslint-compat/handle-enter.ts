@@ -16,7 +16,7 @@ export function handleEnter(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,

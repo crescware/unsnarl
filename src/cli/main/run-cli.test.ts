@@ -12,7 +12,7 @@ type CapturedOutput = {
 };
 
 async function captureRun(
-  argv: ReadonlyArray<string>,
+  argv: readonly string[],
 ): Promise<{ exitCode: number } & CapturedOutput> {
   const stdout: string[] = [];
   const stderr: string[] = [];

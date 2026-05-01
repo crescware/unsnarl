@@ -12,7 +12,7 @@ type JsxElementSpan = {
 // else (attribute values, embedded expressions, plain JS identifiers) yields
 // null so callers fall back to the identifier's own line.
 export function findJsxElementSpan(
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): JsxElementSpan | null {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];

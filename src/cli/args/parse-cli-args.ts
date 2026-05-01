@@ -8,7 +8,7 @@ import {
 import type { CliParseResult } from "./cli-parse-result.js";
 import { parseGenerationCount } from "./parse-generation-count.js";
 
-export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
+export function parseCliArgs(argv: readonly string[]): CliParseResult {
   let format = "ir";
   let stdin = false;
   let language: CliLanguage = "ts";

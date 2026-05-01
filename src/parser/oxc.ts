@@ -10,9 +10,9 @@ export type ParseErrorDetail = {
 
 export class ParseError extends Error {
   override readonly name = "ParseError";
-  readonly errors: ReadonlyArray<ParseErrorDetail>;
+  readonly errors: readonly ParseErrorDetail[];
 
-  constructor(message: string, errors: ReadonlyArray<ParseErrorDetail>) {
+  constructor(message: string, errors: readonly ParseErrorDetail[]) {
     super(message);
     this.errors = errors;
   }

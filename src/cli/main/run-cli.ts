@@ -15,7 +15,7 @@ import { detectLanguage } from "./detect-language.js";
 import { resolveGenerations } from "./resolve-generations.js";
 import { VERSION } from "./version.js";
 
-export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
+export async function runCli(argv: readonly string[]): Promise<number> {
   const parsed = parseCliArgs(argv);
   if (!parsed.ok) {
     process.stderr.write(`error: ${parsed.error}\n`);

@@ -5,7 +5,7 @@ import { allBindingVariables } from "./all-binding-variables.js";
 import { isAstNode } from "./is-ast-node.js";
 
 export function findReferenceOwners(
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   scope: Scope,
 ): Variable[] {
   for (let i = path.length - 1; i >= 0; i--) {

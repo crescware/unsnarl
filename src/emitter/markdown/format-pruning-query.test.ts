@@ -4,7 +4,7 @@ import type { VisualGraphPruning } from "../../visual-graph/model.js";
 import { formatPruningQuery } from "./format-pruning-query.js";
 
 const pruning = (
-  roots: ReadonlyArray<{ query: string; matched: number }>,
+  roots: readonly { query: string; matched: number }[],
   descendants: number,
   ancestors: number,
 ): VisualGraphPruning => ({ roots, descendants, ancestors });

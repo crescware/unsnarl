@@ -1,6 +1,6 @@
 export function renderClassDefs(
-  wrapperIds: ReadonlyArray<string>,
-  stubIds: ReadonlyArray<string>,
+  wrapperIds: readonly string[],
+  stubIds: readonly string[],
   lines: string[],
 ): void {
   if (wrapperIds.length > 0) {

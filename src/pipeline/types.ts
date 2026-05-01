@@ -82,10 +82,12 @@ export type PipelineRunOptions = ParseOptions & {
 
 export type PipelineRunDetails = {
   readonly text: string;
-  readonly pruning: ReadonlyArray<{
-    readonly query: string;
-    readonly matched: number;
-  }> | null;
+  readonly pruning:
+    | readonly {
+        readonly query: string;
+        readonly matched: number;
+      }[]
+    | null;
 };
 
 export type Pipeline = {

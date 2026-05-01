@@ -10,7 +10,7 @@ import { visit } from "./visit.js";
 const firstStmt = (code: string): NodeLike => {
   const program = parseSync("input.ts", code, { lang: "ts" })
     .program as unknown as {
-    body: ReadonlyArray<NodeLike>;
+    body: readonly NodeLike[];
   };
   const stmt = program.body[0];
   if (stmt === undefined) {

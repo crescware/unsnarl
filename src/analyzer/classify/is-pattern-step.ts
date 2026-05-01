@@ -3,7 +3,7 @@ import type { PathEntry } from "../walk/walk.js";
 
 export function isPatternStep(
   node: AstNode,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   i: number,
 ): boolean {
   const t = node.type;

@@ -73,7 +73,7 @@ describe("walk", () => {
 
   test("path passed to enter ends at the parent of the visited node", () => {
     const program = parse("const x = 1;");
-    let identPath: ReadonlyArray<PathEntry> | null = null;
+    let identPath: readonly PathEntry[] | null = null;
     walk(program, {
       enter(node, _parent, _key, path) {
         if (node.type === "Identifier" && identPath === null) {

@@ -5,7 +5,7 @@ import { isPatternStep } from "./is-pattern-step.js";
 export function findBindingRootContext(
   parent: AstNode | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): "var" | "param" | "catch" | "assign" | null {
   let curParent: AstNode | null = parent;
   let curKey = key;

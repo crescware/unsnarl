@@ -12,7 +12,7 @@ import { reference } from "./reference.js";
 export function classifyIdentifier(
   parent: AstNode | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): ClassifyResult {
   if (!parent) {
     return reference(ReferenceFlags.Read, false, null);

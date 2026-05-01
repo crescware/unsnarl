@@ -12,7 +12,7 @@ const ident = (name: string): AstIdentifier =>
 const declId = (code: string): AstNode => {
   const program = parseSync("input.ts", code, { lang: "ts" })
     .program as unknown as {
-    body: ReadonlyArray<{ declarations: ReadonlyArray<{ id: AstNode }> }>;
+    body: readonly { declarations: readonly { id: AstNode }[] }[];
   };
   const decl = program.body[0]?.declarations[0]?.id;
   if (decl === undefined) {

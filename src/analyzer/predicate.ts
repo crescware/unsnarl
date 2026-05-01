@@ -4,7 +4,7 @@ import type { PathEntry } from "./walk/walk.js";
 export function findPredicateContainer(
   parent: { type: string; start?: number } | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): PredicateContainer | null {
   let curKey: string | null = key;
   for (let i = path.length - 1; i >= 0; i--) {

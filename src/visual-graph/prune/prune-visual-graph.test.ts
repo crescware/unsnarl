@@ -577,12 +577,12 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
   });
 });
 
-function collectIds(elements: ReadonlyArray<VisualElement>): string[] {
+function collectIds(elements: readonly VisualElement[]): string[] {
   const out: string[] = [];
   walk(elements);
   return out;
 
-  function walk(items: ReadonlyArray<VisualElement>): void {
+  function walk(items: readonly VisualElement[]): void {
     for (const item of items) {
       out.push(item.id);
       if (item.type === "subgraph") {

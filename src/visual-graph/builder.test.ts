@@ -34,7 +34,7 @@ function build(
   return buildVisualGraph(ir);
 }
 
-function flattenNodes(elements: ReadonlyArray<VisualElement>): VisualNode[] {
+function flattenNodes(elements: readonly VisualElement[]): VisualNode[] {
   const out: VisualNode[] = [];
   for (const e of elements) {
     if (e.type === "node") {
@@ -47,7 +47,7 @@ function flattenNodes(elements: ReadonlyArray<VisualElement>): VisualNode[] {
 }
 
 function flattenSubgraphs(
-  elements: ReadonlyArray<VisualElement>,
+  elements: readonly VisualElement[],
 ): VisualSubgraph[] {
   const out: VisualSubgraph[] = [];
   for (const e of elements) {
