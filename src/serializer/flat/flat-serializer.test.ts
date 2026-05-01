@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import type { SerializedIR } from "../ir/model.js";
-import { OxcParser } from "../parser/oxc.js";
-import { FlatSerializer } from "./flat.js";
+import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import type { SerializedIR } from "../../ir/model.js";
+import { OxcParser } from "../../parser/oxc.js";
+import { FlatSerializer } from "./flat-serializer.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();

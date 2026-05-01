@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { OxcParser } from "../../parser/oxc.js";
-import { FlatSerializer } from "../../serializer/flat.js";
+import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
 import { StatsEmitter } from "./stats.js";

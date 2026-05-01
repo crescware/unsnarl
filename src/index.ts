@@ -56,7 +56,7 @@ export type { ParseErrorDetail } from "./parser/oxc.js";
 
 export { EslintCompatAnalyzer } from "./analyzer/eslint-compat/eslint-compat.js";
 
-export { FlatSerializer } from "./serializer/flat.js";
+export { FlatSerializer } from "./serializer/flat/flat-serializer.js";
 
 export { IrEmitter } from "./emitter/ir/ir.js";
 export { JsonEmitter } from "./emitter/json/json.js";

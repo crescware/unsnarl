@@ -12,7 +12,7 @@ import type { MermaidStrategy } from "../emitter/mermaid/strategy/strategy.js";
 import { DefaultEmitterRegistry } from "../emitter/registry/registry.js";
 import { StatsEmitter } from "../emitter/stats/stats.js";
 import { OxcParser } from "../parser/oxc.js";
-import { FlatSerializer } from "../serializer/flat.js";
+import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { createPipeline } from "./pipeline.js";
 import type { EmitterRegistry, Pipeline } from "./types.js";
 
