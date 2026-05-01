@@ -201,7 +201,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#1",
@@ -231,7 +232,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -266,7 +268,8 @@
           "column": 11,
           "offset": 57
         }
-      }
+      },
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

@@ -311,11 +311,21 @@ function nodeLabel(n: VisualNode): string {
   // dashed border. This keeps the visual cue legible even when the node
   // already has another classDef applied (boundary stub, fnWrap, ...).
   const prefixed = n.unused === true ? `unused ${head}` : head;
-  return `${prefixed}<br/>L${n.line}`;
+  const range =
+    n.endLine !== undefined && n.endLine !== n.line
+      ? `L${n.line}-${n.endLine}`
+      : `L${n.line}`;
+  return `${prefixed}<br/>${range}`;
 }
 
 function nodeHead(n: VisualNode): string {
   const name = escape(n.name);
+  if (n.isJsxElement) {
+    // Mermaid `["..."]` labels require HTML-escaped angle brackets so the
+    // parser does not mistake them for syntax; the renderer surfaces them
+    // as literal `<` / `>` in the output.
+    return `&lt;${name}&gt;`;
+  }
   switch (n.kind) {
     case "FunctionName":
       return `${name}()`;
@@ -357,10 +367,13 @@ function subgraphLabel(
   const range = lineRangeLabel(sg);
   switch (sg.kind) {
     case "function": {
+      // Prefer the name baked onto the subgraph at build time; the owner
+      // node may be absent after pruning even when the subgraph survives.
       const ownerNode = sg.ownerNodeId
         ? nodeMap.get(sg.ownerNodeId)
         : undefined;
-      return `${escape(ownerNode?.name ?? "")}()<br/>${range}`;
+      const name = sg.ownerName ?? ownerNode?.name ?? "";
+      return `${escape(name)}()<br/>${range}`;
     }
     case "switch":
       return `switch ${range}`;

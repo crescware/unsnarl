@@ -197,6 +197,18 @@
           "column": 24,
           "offset": 79
         }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 4,
+          "column": 9,
+          "offset": 64
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 23,
+          "offset": 78
+        }
       }
     }
   ],

@@ -563,7 +563,8 @@
         "type": "SwitchStatement",
         "offset": 45
       },
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#1",
@@ -593,7 +594,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -623,7 +625,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#3",
@@ -653,7 +656,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#4",
@@ -688,7 +692,8 @@
           "column": 13,
           "offset": 319
         }
-      }
+      },
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

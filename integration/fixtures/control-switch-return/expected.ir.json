@@ -452,7 +452,8 @@
         "type": "SwitchStatement",
         "offset": 55
       },
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#1",
@@ -482,7 +483,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -517,7 +519,8 @@
           "column": 19,
           "offset": 127
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#3",
@@ -547,7 +550,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#4",
@@ -577,7 +581,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#5",
@@ -612,7 +617,8 @@
           "column": 15,
           "offset": 233
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#6",
@@ -638,7 +644,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

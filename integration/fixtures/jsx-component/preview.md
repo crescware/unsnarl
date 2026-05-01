@@ -36,8 +36,8 @@ flowchart RL
       n_scope_1_props_88["props<br/>L7"]
       subgraph s_return_scope_0_Hello_79_105_187["return L7-11"]
         direction RL
-        ret_use_ref_0["Fragment<br/>L8"]
-        ret_use_ref_1["span<br/>L9"]
+        ret_use_ref_0["&lt;Fragment&gt;<br/>L8-10"]
+        ret_use_ref_1["&lt;span&gt;<br/>L9"]
         ret_use_ref_2["props<br/>L9"]
       end
     end
@@ -49,7 +49,7 @@ flowchart RL
       direction RL
       subgraph s_return_scope_0_App_196_208_228["return L13"]
         direction RL
-        ret_use_ref_3["Hello<br/>L13"]
+        ret_use_ref_3["&lt;Hello&gt;<br/>L13"]
       end
     end
   end

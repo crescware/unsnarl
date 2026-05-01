@@ -39,6 +39,15 @@ export interface VisualNode {
   kind: NodeKind;
   name: string;
   line: number;
+  // Set when the reference logically extends past its identifier line --
+  // currently the JSX element case where <A>...</A> spans line..endLine.
+  // Renderers display L{line}-{endLine} and prune treats line queries as
+  // matching anywhere within the closed range.
+  endLine?: number;
+  // Marks a reference whose identifier names a JSX element opening tag, so
+  // renderers can wrap the label as `<Name>` regardless of whether the
+  // element happens to be single-line (no endLine).
+  isJsxElement: boolean;
   unused?: boolean;
   declarationKind?: VariableDeclarationKind;
   initIsFunction?: boolean;
@@ -57,6 +66,9 @@ export interface VisualSubgraph {
   caseTest?: string | null;
   hasElse?: boolean;
   ownerNodeId?: string;
+  // Mirrors the owner node's display name so the subgraph label survives
+  // pruning even when the owner node itself gets cut out of the graph.
+  ownerName?: string;
   elements: VisualElement[];
 }
 

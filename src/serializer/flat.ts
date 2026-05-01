@@ -294,5 +294,11 @@ function serializeReference(
           endSpan: spanFromOffset(raw, r.unsnarlReturnContainer.endOffset),
         }
       : null,
+    jsxElement: r.unsnarlJsxElement
+      ? {
+          startSpan: spanFromOffset(raw, r.unsnarlJsxElement.startOffset),
+          endSpan: spanFromOffset(raw, r.unsnarlJsxElement.endOffset),
+        }
+      : null,
   };
 }

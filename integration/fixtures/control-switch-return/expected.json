@@ -11,7 +11,8 @@
       "id": "n_scope_0_classify_9",
       "kind": "FunctionName",
       "name": "classify",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     },
     {
       "type": "node",
@@ -19,6 +20,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 18,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -30,13 +32,15 @@
       "endLine": 16,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
       "elements": [
         {
           "type": "node",
           "id": "n_scope_1_kind_18",
           "kind": "Parameter",
           "name": "kind",
-          "line": 1
+          "line": 1,
+          "isJsxElement": false
         },
         {
           "type": "node",
@@ -44,6 +48,7 @@
           "kind": "Variable",
           "name": "label",
           "line": 2,
+          "isJsxElement": false,
           "declarationKind": "let"
         },
         {
@@ -68,6 +73,7 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 6,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 },
                 {
@@ -82,7 +88,8 @@
                       "id": "ret_use_ref_2",
                       "kind": "ReturnUse",
                       "name": "label",
-                      "line": 7
+                      "line": 7,
+                      "isJsxElement": false
                     }
                   ]
                 }
@@ -103,6 +110,7 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 9,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 }
               ],
@@ -122,6 +130,7 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 12,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 }
               ],
@@ -141,7 +150,8 @@
               "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "label",
-              "line": 15
+              "line": 15,
+              "isJsxElement": false
             }
           ]
         }

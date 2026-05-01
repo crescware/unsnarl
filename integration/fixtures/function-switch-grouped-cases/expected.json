@@ -12,6 +12,7 @@
       "kind": "FunctionName",
       "name": "getDayType",
       "line": 1,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -22,13 +23,15 @@
       "endLine": 20,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_getDayType_9",
+      "ownerName": "getDayType",
       "elements": [
         {
           "type": "node",
           "id": "n_scope_1_day_20",
           "kind": "Parameter",
           "name": "day",
-          "line": 1
+          "line": 1,
+          "isJsxElement": false
         },
         {
           "type": "node",
@@ -36,6 +39,7 @@
           "kind": "Variable",
           "name": "ret",
           "line": 2,
+          "isJsxElement": false,
           "declarationKind": "let"
         },
         {
@@ -100,6 +104,7 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 9,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 }
               ],
@@ -129,6 +134,7 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 13,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 }
               ],
@@ -148,6 +154,7 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 16,
+                  "isJsxElement": false,
                   "declarationKind": "let"
                 }
               ],
@@ -167,7 +174,8 @@
               "id": "ret_use_ref_4",
               "kind": "ReturnUse",
               "name": "ret",
-              "line": 19
+              "line": 19,
+              "isJsxElement": false
             }
           ]
         }

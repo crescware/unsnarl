@@ -461,7 +461,8 @@
           "column": 15,
           "offset": 52
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#1",
@@ -496,7 +497,8 @@
           "column": 15,
           "offset": 52
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -522,7 +524,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#3",
@@ -548,7 +551,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#4",
@@ -574,7 +578,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

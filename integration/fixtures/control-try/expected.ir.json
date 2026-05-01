@@ -494,7 +494,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#1",
@@ -524,7 +525,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -550,7 +552,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#3",
@@ -576,7 +579,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#4",
@@ -606,7 +610,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#5",
@@ -636,7 +641,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#6",
@@ -666,7 +672,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#7",
@@ -692,7 +699,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     },
     {
       "id": "ref#8",
@@ -718,7 +726,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

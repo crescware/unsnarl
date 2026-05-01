@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "counter",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "flag",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 10,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -53,6 +56,7 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 5,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ]
@@ -71,6 +75,7 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 7,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ]

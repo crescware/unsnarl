@@ -12,6 +12,7 @@
       "kind": "ImportBinding",
       "name": "Fragment",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "Fragment",
       "importSource": "react"
@@ -22,6 +23,7 @@
       "kind": "Variable",
       "name": "Hello",
       "line": 7,
+      "isJsxElement": false,
       "declarationKind": "const",
       "initIsFunction": true
     },
@@ -31,6 +33,7 @@
       "kind": "Variable",
       "name": "App",
       "line": 13,
+      "isJsxElement": false,
       "declarationKind": "const",
       "initIsFunction": true
     },
@@ -40,6 +43,7 @@
       "kind": "Variable",
       "name": "root",
       "line": 15,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -48,7 +52,8 @@
       "id": "n_scope_0_span_125",
       "kind": "ImplicitGlobalVariable",
       "name": "span",
-      "line": 9
+      "line": 9,
+      "isJsxElement": false
     },
     {
       "type": "subgraph",
@@ -58,13 +63,15 @@
       "endLine": 11,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_Hello_79",
+      "ownerName": "Hello",
       "elements": [
         {
           "type": "node",
           "id": "n_scope_1_props_88",
           "kind": "Parameter",
           "name": "props",
-          "line": 7
+          "line": 7,
+          "isJsxElement": false
         },
         {
           "type": "subgraph",
@@ -78,21 +85,25 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "Fragment",
-              "line": 8
+              "line": 8,
+              "isJsxElement": true,
+              "endLine": 10
             },
             {
               "type": "node",
               "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "span",
-              "line": 9
+              "line": 9,
+              "isJsxElement": true
             },
             {
               "type": "node",
               "id": "ret_use_ref_2",
               "kind": "ReturnUse",
               "name": "props",
-              "line": 9
+              "line": 9,
+              "isJsxElement": false
             }
           ],
           "endLine": 11
@@ -107,6 +118,7 @@
       "endLine": 13,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_App_196",
+      "ownerName": "App",
       "elements": [
         {
           "type": "subgraph",
@@ -120,7 +132,8 @@
               "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "Hello",
-              "line": 13
+              "line": 13,
+              "isJsxElement": true
             }
           ]
         }
@@ -131,7 +144,8 @@
       "id": "mod_react",
       "kind": "ModuleSource",
       "name": "react",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     }
   ],
   "edges": [

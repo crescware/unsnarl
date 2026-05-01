@@ -177,6 +177,12 @@ describe("buildVisualGraph: function subgraphs", () => {
     expect(ownerNode?.kind).toBe("FunctionName");
   });
 
+  test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
+    const g = build("function add(a, b) { return a + b; }\n");
+    const fn = findSubgraphs(g, "function")[0];
+    expect(fn?.ownerName).toBe("add");
+  });
+
   test("an arrow function const, function expression const, and FunctionDeclaration all subgraph alike", () => {
     for (const code of [
       "const fn = (p) => p;",
@@ -579,6 +585,44 @@ describe("buildVisualGraph: return subgraphs", () => {
           e.from === aParam?.id && e.to === retUse?.id && e.label === "read",
       ),
     ).toBe(true);
+  });
+
+  test("ReturnUse for a multi-line JSX opening tag carries isJsxElement and the closing-tag endLine", () => {
+    const code = [
+      "import { A } from 'm';",
+      "const App = () => (",
+      "  <A>",
+      "    hello",
+      "  </A>",
+      ");",
+    ].join("\n");
+    const g = build(code, "tsx");
+    const retUses = findNodes(g, "ReturnUse");
+    const a = retUses.find((n) => n.name === "A");
+    expect(a?.isJsxElement).toBe(true);
+    expect(a?.line).toBe(3);
+    expect(a?.endLine).toBe(5);
+  });
+
+  test("a single-line JSX element still flags isJsxElement, and endLine is omitted", () => {
+    const code = [
+      "import { A } from 'm';",
+      "const App = () => <A>hi</A>;",
+    ].join("\n");
+    const g = build(code, "tsx");
+    const a = findNodes(g, "ReturnUse").find((n) => n.name === "A");
+    expect(a?.isJsxElement).toBe(true);
+    expect(a?.endLine).toBeUndefined();
+  });
+
+  test("non-JSX ReturnUse stays isJsxElement=false with no endLine", () => {
+    const g = build("function f(a) { return a; }\n");
+    const ret = findSubgraphs(g, "return")[0];
+    const retUse = ret?.elements.find(
+      (e) => e.type === "node" && e.kind === "ReturnUse",
+    ) as VisualNode | undefined;
+    expect(retUse?.isJsxElement).toBe(false);
+    expect(retUse?.endLine).toBeUndefined();
   });
 });
 

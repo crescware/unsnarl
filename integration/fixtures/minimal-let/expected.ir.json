@@ -124,7 +124,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [],

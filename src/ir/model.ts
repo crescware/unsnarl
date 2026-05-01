@@ -65,6 +65,11 @@ export interface ReturnContainer {
   endOffset: number;
 }
 
+export interface JsxElementContainer {
+  startOffset: number;
+  endOffset: number;
+}
+
 export interface Reference {
   identifier: AstIdentifier;
   from: Scope;
@@ -82,6 +87,7 @@ export interface Reference {
   unsnarlOwners?: Variable[];
   unsnarlPredicateContainer?: PredicateContainer | null;
   unsnarlReturnContainer?: ReturnContainer | null;
+  unsnarlJsxElement?: JsxElementContainer | null;
 }
 
 export interface Definition {
@@ -181,6 +187,7 @@ export interface SerializedReference {
   };
   predicateContainer: PredicateContainer | null;
   returnContainer: { startSpan: Span; endSpan: Span } | null;
+  jsxElement: { startSpan: Span; endSpan: Span } | null;
 }
 
 export type ImportKind = "default" | "named" | "namespace";

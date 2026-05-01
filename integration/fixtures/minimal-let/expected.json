@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "count",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "WriteOp",
       "name": "count",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "let"
     }
   ],

@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "greeting",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "counter",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "message",
       "line": 6,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -37,6 +40,7 @@
       "kind": "Variable",
       "name": "unused",
       "line": 7,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -46,6 +50,7 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 3,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -54,6 +59,7 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 4,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -62,6 +68,7 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 5,
+      "isJsxElement": false,
       "declarationKind": "let"
     }
   ],

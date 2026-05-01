@@ -254,6 +254,18 @@
           "column": 30,
           "offset": 112
         }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 5,
+          "column": 9,
+          "offset": 91
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 29,
+          "offset": 111
+        }
       }
     },
     {
@@ -289,7 +301,8 @@
           "column": 30,
           "offset": 112
         }
-      }
+      },
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [
