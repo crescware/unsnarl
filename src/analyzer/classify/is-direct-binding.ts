@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 export function isDirectBinding(t: string, key: string | null): boolean {
   if (t === AST_TYPE.VariableDeclarator && key === "id") {
     return true;

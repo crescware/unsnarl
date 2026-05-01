@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../node-kind.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";

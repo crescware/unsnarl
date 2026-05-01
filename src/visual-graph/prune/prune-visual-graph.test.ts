@@ -1,14 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
+import { LANGUAGE } from "../../cli/language.js";
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import { DIRECTION } from "../../direction.js";
-import { LANGUAGE } from "../../language.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
-import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { DIRECTION } from "../direction.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -16,6 +12,10 @@ import type {
   VisualNode,
   VisualSubgraph,
 } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
 import { pruneVisualGraph } from "./prune-visual-graph.js";
 
 function node(

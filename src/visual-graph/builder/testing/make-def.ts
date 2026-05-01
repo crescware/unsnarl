@@ -1,6 +1,6 @@
-import { AST_TYPE } from "../../../ast-type.js";
-import { DEFINITION_TYPE } from "../../../definition-type.js";
+import { DEFINITION_TYPE } from "../../../analyzer/definition-type.js";
 import type { SerializedDefinition } from "../../../ir/model.js";
+import { AST_TYPE } from "../../../parser/ast-type.js";
 import { span } from "./span.js";
 
 export function makeDef(

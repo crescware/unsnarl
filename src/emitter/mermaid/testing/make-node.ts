@@ -1,6 +1,6 @@
-import { NODE_KIND } from "../../../node-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../../visual-element-type.js";
 import type { VisualNode } from "../../../visual-graph/model.js";
+import { NODE_KIND } from "../../../visual-graph/node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 
 export function makeNode(overrides: Partial<VisualNode> = {}): VisualNode {
   return {

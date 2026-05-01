@@ -1,9 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION } from "../../direction.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { DIRECTION } from "../direction.js";
 import type {
   Direction,
   NodeKind,
@@ -11,6 +8,9 @@ import type {
   VisualNode,
   VisualSubgraph,
 } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
 const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => ({

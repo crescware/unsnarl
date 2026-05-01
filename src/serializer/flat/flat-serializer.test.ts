@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { DIAGNOSTIC_KIND } from "../../diagnostic-kind.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import type { SerializedIR } from "../../ir/model.js";
-import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
-import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "./flat-serializer.js";
 
 const parser = new OxcParser();

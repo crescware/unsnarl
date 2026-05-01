@@ -1,5 +1,5 @@
-import { NODE_KIND } from "../../node-kind.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
 
 export function isSyntheticNode(n: VisualNode): boolean {
   return (

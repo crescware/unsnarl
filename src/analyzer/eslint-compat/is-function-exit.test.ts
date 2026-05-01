@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isFunctionExit } from "./is-function-exit.js";
 import type { NodeLike } from "./node-like.js";
 

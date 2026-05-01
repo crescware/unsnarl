@@ -1,5 +1,5 @@
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
+import { CLI_MERMAID_RENDERER } from "../cli/cli-mermaid-renderer.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";

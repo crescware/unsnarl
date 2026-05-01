@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "./ast-type.js";
+import { LANGUAGE } from "./cli/language.js";
 import type { Scope, SerializedIR } from "./ir/model.js";
-import { LANGUAGE } from "./language.js";
+import { AST_TYPE } from "./parser/ast-type.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type {
   Emitter,
@@ -11,7 +11,7 @@ import type {
   Parser,
   ScopeAnalyzer,
 } from "./pipeline/types.js";
-import { SERIALIZED_IR_VERSION } from "./serialized-ir-version.js";
+import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
 
 const fakeScope = {} as Scope;
 

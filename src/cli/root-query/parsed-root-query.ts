@@ -1,4 +1,4 @@
-import type { ROOT_QUERY_KIND } from "../../root-query-kind.js";
+import type { ROOT_QUERY_KIND } from "./root-query-kind.js";
 
 export type ParsedRootQuery =
   | Readonly<{ kind: typeof ROOT_QUERY_KIND.Line; line: number; raw: string }>

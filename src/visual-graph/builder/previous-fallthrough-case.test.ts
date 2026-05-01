@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
 import type { SerializedScope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
 import { makeScope } from "./testing/make-scope.js";

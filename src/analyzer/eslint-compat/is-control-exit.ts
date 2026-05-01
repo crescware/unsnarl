@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 

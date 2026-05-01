@@ -1,14 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { LANGUAGE } from "../../cli/language.js";
 import type {
   SerializedIR,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
-import { LANGUAGE } from "../../language.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
-import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";

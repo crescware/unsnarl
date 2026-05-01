@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { ScopeManager } from "../manager.js";
 import { handleLeave } from "./handle-leave.js";
 import type { NodeLike } from "./node-like.js";

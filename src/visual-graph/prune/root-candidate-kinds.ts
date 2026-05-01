@@ -1,5 +1,5 @@
-import { NODE_KIND } from "../../node-kind.js";
 import type { NodeKind } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
 
 // Every visible node that carries a meaningful source line is eligible as a
 // root, including "use" nodes (ReturnUse for JSX/ownerless reads inside a

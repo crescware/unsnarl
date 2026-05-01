@@ -1,17 +1,14 @@
-import { AST_TYPE } from "../ast-type.js";
-import { DEFINITION_TYPE } from "../definition-type.js";
-import { DIRECTION } from "../direction.js";
-import { IMPORT_KIND } from "../import-kind.js";
+import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
+import { SCOPE_TYPE } from "../analyzer/scope-type.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../ir/model.js";
-import { NODE_KIND } from "../node-kind.js";
-import { SCOPE_TYPE } from "../scope-type.js";
-import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
-import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import { AST_TYPE } from "../parser/ast-type.js";
+import { IMPORT_KIND } from "../serializer/import-kind.js";
+import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";
 import { branchContainerKey } from "./builder/branch-container-key.js";
 import { buildScope } from "./builder/build-scope.js";
 import type { BuildState } from "./builder/build-state.js";
@@ -33,7 +30,10 @@ import { sanitize } from "./builder/sanitize.js";
 import { stateRefId } from "./builder/state-ref-id.js";
 import { writeOpNodeId } from "./builder/write-op-node-id.js";
 import type { WriteOp } from "./builder/write-op.js";
+import { DIRECTION } from "./direction.js";
 import type { VisualEdge, VisualElement, VisualGraph } from "./model.js";
+import { NODE_KIND } from "./node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 const MODULE_ROOT_ID = "module_root";
 

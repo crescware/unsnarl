@@ -1,8 +1,8 @@
-import { AST_TYPE } from "../../ast-type.js";
-import { IMPORT_KIND } from "../../import-kind.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { escape } from "./escape.js";
 export function nodeHead(n: VisualNode): string {
   const name = escape(n.name);

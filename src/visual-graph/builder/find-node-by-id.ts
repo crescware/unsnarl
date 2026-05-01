@@ -1,5 +1,5 @@
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualElement, VisualNode } from "../model.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 
 export function findNodeById(
   elements: readonly VisualElement[],

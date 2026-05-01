@@ -1,17 +1,14 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { DEFINITION_TYPE } from "../definition-type.js";
-import { DIRECTION } from "../direction.js";
-import { IMPORT_KIND } from "../import-kind.js";
-import { LANGUAGE, type Language } from "../language.js";
-import { NODE_KIND } from "../node-kind.js";
+import { LANGUAGE, type Language } from "../cli/language.js";
 import { OxcParser } from "../parser/oxc.js";
-import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
-import { SUBGRAPH_KIND } from "../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import { IMPORT_KIND } from "../serializer/import-kind.js";
+import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";
 import { buildVisualGraph } from "./builder.js";
+import { DIRECTION } from "./direction.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -19,6 +16,9 @@ import type {
   VisualNode,
   VisualSubgraph,
 } from "./model.js";
+import { NODE_KIND } from "./node-kind.js";
+import { SUBGRAPH_KIND } from "./subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();

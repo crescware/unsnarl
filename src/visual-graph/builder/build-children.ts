@@ -1,8 +1,8 @@
-import { DIRECTION } from "../../direction.js";
 import type { SerializedScope } from "../../ir/model.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { DIRECTION } from "../direction.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";

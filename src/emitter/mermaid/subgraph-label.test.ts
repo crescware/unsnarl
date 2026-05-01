@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { subgraphLabel } from "./subgraph-label.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeSubgraph } from "./testing/make-subgraph.js";

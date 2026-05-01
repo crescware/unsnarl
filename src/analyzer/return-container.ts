@@ -1,5 +1,5 @@
-import { AST_TYPE } from "../ast-type.js";
 import type { ReturnContainer } from "../ir/model.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 
 export function findReturnContainer(

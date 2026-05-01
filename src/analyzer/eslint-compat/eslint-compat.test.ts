@@ -1,16 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../definition-type.js";
-import { DIAGNOSTIC_KIND } from "../../diagnostic-kind.js";
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import type {
   DefinitionType,
   Scope,
   ScopeType,
   Variable,
 } from "../../ir/model.js";
-import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat.js";
 
 const parser = new OxcParser();

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../node-kind.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { isSyntheticNode } from "./is-synthetic-node.js";
 import { makeNode } from "./testing/make-node.js";
 

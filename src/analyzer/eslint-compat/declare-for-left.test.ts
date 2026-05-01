@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DIAGNOSTIC_KIND } from "../../diagnostic-kind.js";
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import type { AstNode } from "../../ir/model.js";
-import { LANGUAGE, type Language } from "../../language.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { ScopeManager } from "../manager.js";
 import { declareForLeft } from "./declare-for-left.js";
 import { findFirst } from "./testing/find-first.js";

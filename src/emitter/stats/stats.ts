@@ -1,8 +1,8 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 import { collectNodes } from "./collect-nodes.js";
 import { formatLabel } from "./format-label.js";
 

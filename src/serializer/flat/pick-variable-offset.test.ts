@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE } from "../../definition-type.js";
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type {
   AstIdentifier,
   AstNode,
   Definition,
   Variable,
 } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { pickVariableOffset } from "./pick-variable-offset.js";
 
 const ident = (name: string, start?: number): AstIdentifier =>

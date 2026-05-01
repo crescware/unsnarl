@@ -1,6 +1,6 @@
+import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedReference, SerializedScope } from "../../ir/model.js";
-import { PREDICATE_CONTAINER_TYPE } from "../../predicate-container-type.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
 import { sanitize } from "./sanitize.js";

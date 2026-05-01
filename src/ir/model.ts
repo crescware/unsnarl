@@ -1,12 +1,12 @@
-import type { AST_TYPE } from "../ast-type.js";
-import type { DefinitionType } from "../definition-type.js";
-import type { DiagnosticKind } from "../diagnostic-kind.js";
-import type { ImportKind } from "../import-kind.js";
-import type { Language } from "../language.js";
-import type { PredicateContainerType } from "../predicate-container-type.js";
-import type { ScopeType } from "../scope-type.js";
-import type { SerializedIRVersion } from "../serialized-ir-version.js";
-import type { VariableDeclarationKind } from "../variable-declaration-kind.js";
+import type { DefinitionType } from "../analyzer/definition-type.js";
+import type { DiagnosticKind } from "../analyzer/diagnostic-kind.js";
+import type { PredicateContainerType } from "../analyzer/predicate-container-type.js";
+import type { ScopeType } from "../analyzer/scope-type.js";
+import type { Language } from "../cli/language.js";
+import type { AST_TYPE } from "../parser/ast-type.js";
+import type { ImportKind } from "../serializer/import-kind.js";
+import type { SerializedIRVersion } from "../serializer/serialized-ir-version.js";
+import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 
 export type {
   DefinitionType,

@@ -1,9 +1,9 @@
-import { DIRECTION } from "../../direction.js";
 import type { SerializedReference } from "../../ir/model.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { DIRECTION } from "../direction.js";
 import type { VisualNode, VisualSubgraph } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";

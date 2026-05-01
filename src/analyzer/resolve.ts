@@ -1,5 +1,5 @@
-import { DEFINITION_TYPE } from "../definition-type.js";
 import type { AstNode, Reference, Scope, Variable } from "../ir/model.js";
+import { DEFINITION_TYPE } from "./definition-type.js";
 import { VariableImpl } from "./scope.js";
 
 export function resolveInScopeChain(

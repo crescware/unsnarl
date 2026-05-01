@@ -1,7 +1,6 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { CLI_MERMAID_RENDERER } from "../../cli-mermaid-renderer.js";
 import { ParseError } from "../../parser/oxc.js";
 import {
   createDefaultEmitterRegistry,
@@ -13,6 +12,7 @@ import type {
 } from "../../pipeline/types.js";
 import { parseCliArgs } from "../args/parse-cli-args.js";
 import { usage } from "../args/usage.js";
+import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
 import { readSourceFile, readStdin } from "../io.js";
 import { deriveOutputBasename } from "../output-name/output-name.js";
 import { detectLanguage } from "./detect-language.js";

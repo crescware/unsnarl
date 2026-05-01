@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
 import { makeScope } from "./testing/make-scope.js";

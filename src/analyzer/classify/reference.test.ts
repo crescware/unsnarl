@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstExpression } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { reference } from "./reference.js";
 
 describe("reference factory", () => {

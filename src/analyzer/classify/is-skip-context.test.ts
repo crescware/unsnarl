@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isSkipContext } from "./is-skip-context.js";
 
 const nodeOf = (overrides: Record<string, unknown>): AstNode =>

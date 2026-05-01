@@ -1,11 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE, type DefinitionType } from "../../definition-type.js";
-import { IMPORT_KIND } from "../../import-kind.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import {
+  DEFINITION_TYPE,
+  type DefinitionType,
+} from "../../analyzer/definition-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
+import { NODE_KIND } from "../node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";

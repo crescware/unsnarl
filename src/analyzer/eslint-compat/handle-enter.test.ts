@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { ScopeManager } from "../manager.js";
 import { handleEnter } from "./handle-enter.js";
 import type { NodeLike } from "./node-like.js";

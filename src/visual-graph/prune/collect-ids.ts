@@ -1,5 +1,5 @@
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualElement } from "../model.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 
 export function collectIds(elements: readonly VisualElement[]): Set<string> {
   const ids = new Set<string>();

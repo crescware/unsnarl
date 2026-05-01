@@ -1,6 +1,6 @@
-import { AST_TYPE } from "../../../ast-type.js";
+import { SCOPE_TYPE } from "../../../analyzer/scope-type.js";
 import type { SerializedScope } from "../../../ir/model.js";
-import { SCOPE_TYPE } from "../../../scope-type.js";
+import { AST_TYPE } from "../../../parser/ast-type.js";
 import { span } from "./span.js";
 
 export function makeScope(

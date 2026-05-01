@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import type { ScopeManager } from "../manager.js";
 import { isTypeOnlySubtree } from "../skip-types.js";

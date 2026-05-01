@@ -1,6 +1,6 @@
-import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { isIdentifierNode } from "./is-identifier-node.js";
 import type { NodeLike } from "./node-like.js";
 

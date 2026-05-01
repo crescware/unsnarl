@@ -9,7 +9,7 @@ import type {
   Variable,
 } from "../../ir/model.js";
 import type { IRSerializer, SerializeContext } from "../../pipeline/types.js";
-import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";
 import { hasDeclaringDef } from "./has-declaring-def.js";
 import { offsetOf } from "./offset-of.js";

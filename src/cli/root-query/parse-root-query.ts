@@ -1,5 +1,5 @@
-import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
 import type { ParsedRootQuery } from "./parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "./root-query-kind.js";
 
 const ID_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 const LINE_RE = /^([0-9]+)$/;

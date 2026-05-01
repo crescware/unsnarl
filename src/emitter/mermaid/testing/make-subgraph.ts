@@ -1,7 +1,7 @@
-import { DIRECTION } from "../../../direction.js";
-import { SUBGRAPH_KIND } from "../../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../../visual-element-type.js";
+import { DIRECTION } from "../../../visual-graph/direction.js";
 import type { VisualSubgraph } from "../../../visual-graph/model.js";
+import { SUBGRAPH_KIND } from "../../../visual-graph/subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 
 export function makeSubgraph(
   overrides: Partial<VisualSubgraph> = {},

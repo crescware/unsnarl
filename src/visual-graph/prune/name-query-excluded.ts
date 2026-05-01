@@ -1,5 +1,5 @@
-import { NODE_KIND } from "../../node-kind.js";
 import type { NodeKind } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
 
 // Use-site nodes (WriteOp, ReturnUse) are positional: they make sense as
 // roots when the user pinpoints a line, but a bare `-r counter` should

@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { ScopeImpl } from "../../analyzer/scope.js";
-import { AST_TYPE } from "../../ast-type.js";
 import type { AstNode } from "../../ir/model.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";
 
 const block = (type: string): AstNode => ({ type }) as unknown as AstNode;

@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { NodeLike } from "./node-like.js";
 
 const CASE_TEST_MAX_LENGTH = 32;

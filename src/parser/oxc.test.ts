@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../ast-type.js";
-import { LANGUAGE } from "../language.js";
+import { LANGUAGE } from "../cli/language.js";
+import { AST_TYPE } from "./ast-type.js";
 import { OxcParser, ParseError } from "./oxc.js";
 
 const parser = new OxcParser();

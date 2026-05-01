@@ -1,8 +1,8 @@
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { AstNode, Scope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 

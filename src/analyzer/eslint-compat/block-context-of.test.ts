@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { blockContextOf } from "./block-context-of.js";
 import type { NodeLike } from "./node-like.js";
 describe("blockContextOf", () => {

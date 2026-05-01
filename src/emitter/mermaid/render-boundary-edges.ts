@@ -1,5 +1,5 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 
 export function renderBoundaryEdges(
   graph: VisualGraph,

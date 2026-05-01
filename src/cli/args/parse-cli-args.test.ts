@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { CLI_MERMAID_RENDERER } from "../../cli-mermaid-renderer.js";
-import { LANGUAGE } from "../../language.js";
-import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
+import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
+import { LANGUAGE } from "../language.js";
+import { ROOT_QUERY_KIND } from "../root-query/root-query-kind.js";
 import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {

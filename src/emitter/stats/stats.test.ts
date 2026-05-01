@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
-import { LANGUAGE } from "../../language.js";
+import { LANGUAGE } from "../../cli/language.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { StatsEmitter } from "./stats.js";
 
 const parser = new OxcParser();

@@ -1,5 +1,5 @@
-import { AST_TYPE } from "../../ast-type.js";
 import type { Scope, Variable } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { resolveInScopeChain } from "../resolve.js";
 import type { PathEntry } from "../walk/walk.js";
 import { allBindingVariables } from "./all-binding-variables.js";

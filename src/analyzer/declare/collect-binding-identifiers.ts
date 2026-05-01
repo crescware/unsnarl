@@ -1,5 +1,5 @@
-import { AST_TYPE } from "../../ast-type.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isAstNode } from "./is-ast-node.js";
 
 export function collectBindingIdentifiers(

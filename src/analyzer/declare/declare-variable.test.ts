@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import { declareVariable } from "./declare-variable.js";
 

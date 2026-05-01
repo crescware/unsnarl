@@ -1,10 +1,10 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
 import type { AstNode } from "../../ir/model.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import type { NodeLike } from "./node-like.js";
 import { visit } from "./visit.js";

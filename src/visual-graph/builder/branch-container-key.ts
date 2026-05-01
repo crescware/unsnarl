@@ -1,5 +1,5 @@
-import { AST_TYPE } from "../../ast-type.js";
 import type { SerializedScope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 
 export function branchContainerKey(scope: SerializedScope): string | null {
   const ctx = scope.blockContext;

@@ -1,8 +1,8 @@
-import { DIRECTION } from "../../direction.js";
 import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { DIRECTION } from "../direction.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
 import { isFunctionSubgraph } from "./is-function-subgraph.js";
 import { nodeId } from "./node-id.js";

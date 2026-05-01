@@ -1,13 +1,13 @@
-import type { BOUNDARY_EDGE_DIRECTION } from "../boundary-edge-direction.js";
-import type { Direction } from "../direction.js";
 import type {
   ImportKind,
   Language,
   VariableDeclarationKind,
 } from "../ir/model.js";
-import type { NodeKind } from "../node-kind.js";
-import type { SubgraphKind } from "../subgraph-kind.js";
-import type { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { Direction } from "./direction.js";
+import type { NodeKind } from "./node-kind.js";
+import type { BOUNDARY_EDGE_DIRECTION } from "./prune/boundary-edge-direction.js";
+import type { SubgraphKind } from "./subgraph-kind.js";
+import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 export type { Direction, NodeKind, SubgraphKind };
 

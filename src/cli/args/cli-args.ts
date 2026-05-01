@@ -1,6 +1,6 @@
+import type { CliMermaidRenderer } from "../cli-mermaid-renderer.js";
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import type { CliLanguage } from "./cli-language.js";
-import type { CliMermaidRenderer } from "./cli-mermaid-renderer.js";
 
 // Default generations used when the user gives -r/--roots but no -A/-B/-C.
 export const DEFAULT_GENERATIONS = 10;

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../node-kind.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeLabel } from "./node-label.js";
 import { makeNode } from "./testing/make-node.js";
 

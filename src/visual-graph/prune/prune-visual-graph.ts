@@ -1,7 +1,7 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
-import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
+import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
 import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
+import { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
 import { buildAdjacency } from "./build-adjacency.js";
 import { buildParentMap } from "./build-parent-map.js";
 import { collectIds } from "./collect-ids.js";

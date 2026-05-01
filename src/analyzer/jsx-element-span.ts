@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../ast-type.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 
 type JsxElementSpan = Readonly<{

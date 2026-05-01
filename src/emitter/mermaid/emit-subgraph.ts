@@ -1,5 +1,5 @@
-import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
 import type { VisualSubgraph } from "../../visual-graph/model.js";
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { emitNode } from "./emit-node.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
 import type { RenderState } from "./render-state.js";

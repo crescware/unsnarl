@@ -1,19 +1,19 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../ast-type.js";
-import { DEFINITION_TYPE } from "../../definition-type.js";
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { LANGUAGE } from "../../cli/language.js";
 import type {
   SerializedIR,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
-import { LANGUAGE } from "../../language.js";
-import { NODE_KIND } from "../../node-kind.js";
-import { SCOPE_TYPE } from "../../scope-type.js";
-import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
-import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";

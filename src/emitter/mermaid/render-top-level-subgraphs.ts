@@ -1,5 +1,5 @@
-import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import type { RenderState } from "./render-state.js";
 
