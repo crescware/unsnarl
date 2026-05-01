@@ -78,7 +78,10 @@ describe("nodeMatchesQuery", () => {
       raw: "x",
     } as const satisfies ParsedRootQuery;
     expect(nodeMatchesQuery(node({ name: "x" }), q)).toBe(true);
-    for (const kind of ["WriteOp", "ReturnUse"] satisfies NodeKind[]) {
+    for (const kind of [
+      NODE_KIND.WriteOp,
+      NODE_KIND.ReturnUse,
+    ] satisfies NodeKind[]) {
       expect(nodeMatchesQuery(node({ name: "x", kind }), q)).toBe(false);
     }
   });

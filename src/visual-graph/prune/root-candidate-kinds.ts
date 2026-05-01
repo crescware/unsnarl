@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { NODE_KIND } from "../../constants.js";
 import type { NodeKind } from "../model.js";
 
 // Every visible node that carries a meaningful source line is eligible as a
@@ -7,13 +7,13 @@ import type { NodeKind } from "../model.js";
 // is actually at line N; surrounding declarations are reached via the
 // ancestors BFS, not auto-attached as a separate root.
 export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
-  "Variable",
-  "FunctionName",
-  "ClassName",
-  "Parameter",
-  AST_TYPE.CatchClause,
-  "ImportBinding",
-  "ImplicitGlobalVariable",
-  "ReturnUse",
-  "WriteOp",
+  NODE_KIND.Variable,
+  NODE_KIND.FunctionName,
+  NODE_KIND.ClassName,
+  NODE_KIND.Parameter,
+  NODE_KIND.CatchClause,
+  NODE_KIND.ImportBinding,
+  NODE_KIND.ImplicitGlobalVariable,
+  NODE_KIND.ReturnUse,
+  NODE_KIND.WriteOp,
 ]);

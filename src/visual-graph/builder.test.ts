@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import {
   DEFINITION_TYPE,
+  DIRECTION,
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
@@ -104,7 +105,7 @@ describe("buildVisualGraph: top-level structure", () => {
     expect(g.version).toBe(SERIALIZED_IR_VERSION);
     expect(g.source.path).toBe("input.ts");
     expect(g.source.language).toBe("ts");
-    expect(g.direction).toBe("RL");
+    expect(g.direction).toBe(DIRECTION.RL);
   });
 
   test("an empty source produces an empty graph", () => {

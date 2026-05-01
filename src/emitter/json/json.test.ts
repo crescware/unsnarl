@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import {
   DEFINITION_TYPE,
+  DIRECTION,
   IMPORT_KIND,
   LANGUAGE,
   NODE_KIND,
@@ -90,7 +91,7 @@ describe("JsonEmitter", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     expect(graph.version).toBe(SERIALIZED_IR_VERSION);
     expect(graph.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
-    expect(graph.direction).toBe("RL");
+    expect(graph.direction).toBe(DIRECTION.RL);
     expect(Array.isArray(graph.elements)).toBe(true);
     expect(Array.isArray(graph.edges)).toBe(true);
   });

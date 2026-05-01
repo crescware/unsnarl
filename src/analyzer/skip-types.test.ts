@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, type Language } from "../constants.js";
+import { DEFINITION_TYPE, LANGUAGE, type Language } from "../constants.js";
 import type { Scope, Variable } from "../ir/model.js";
 import { OxcParser } from "../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
@@ -112,7 +112,7 @@ describe("EslintCompatAnalyzer / ImplicitGlobalVariable", () => {
     const console_ = findVariable(rootScope, "console");
     expect(console_).toBeDefined();
     expect(console_?.defs.map((d) => d.type)).toEqual([
-      "ImplicitGlobalVariable",
+      DEFINITION_TYPE.ImplicitGlobalVariable,
     ]);
     expect(console_?.references.length).toBe(1);
   });
