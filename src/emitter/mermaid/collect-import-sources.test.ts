@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { NODE_KIND } from "../../constants.js";
 import type { VisualNode } from "../../visual-graph/model.js";
 import { collectImportSources } from "./collect-import-sources.js";
 import { makeNode } from "./testing/make-node.js";
@@ -11,9 +12,9 @@ function asMap(...nodes: readonly VisualNode[]): Map<string, VisualNode> {
 describe("collectImportSources", () => {
   test("collects ids of ModuleSource and ImportIntermediate nodes", () => {
     const map = asMap(
-      makeNode({ id: "mod_a", kind: "ModuleSource" }),
-      makeNode({ id: "import_b", kind: "ImportIntermediate" }),
-      makeNode({ id: "n_x", kind: "Variable" }),
+      makeNode({ id: "mod_a", kind: NODE_KIND.ModuleSource }),
+      makeNode({ id: "import_b", kind: NODE_KIND.ImportIntermediate }),
+      makeNode({ id: "n_x", kind: NODE_KIND.Variable }),
     );
     expect([...collectImportSources(map)].sort()).toEqual([
       "import_b",
@@ -22,14 +23,16 @@ describe("collectImportSources", () => {
   });
 
   test("excludes other synthetic kinds (e.g. ModuleSink)", () => {
-    const map = asMap(makeNode({ id: "module_root", kind: "ModuleSink" }));
+    const map = asMap(
+      makeNode({ id: "module_root", kind: NODE_KIND.ModuleSink }),
+    );
     expect(collectImportSources(map).size).toBe(0);
   });
 
   test("excludes non-synthetic kinds", () => {
     const map = asMap(
-      makeNode({ id: "n_x", kind: "Variable" }),
-      makeNode({ id: "n_f", kind: "FunctionName" }),
+      makeNode({ id: "n_x", kind: NODE_KIND.Variable }),
+      makeNode({ id: "n_f", kind: NODE_KIND.FunctionName }),
     );
     expect(collectImportSources(map).size).toBe(0);
   });

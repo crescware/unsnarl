@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   Direction,
   VisualElement,
@@ -12,7 +12,7 @@ import { buildParentMap } from "./build-parent-map.js";
 const node = (id: string): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id,
-  kind: "Variable",
+  kind: NODE_KIND.Variable,
   name: id,
   line: 1,
   isJsxElement: false,

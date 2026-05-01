@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import {
   DIRECTION,
+  NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -12,7 +13,7 @@ function leafNode(id: string, name = id): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: "Variable",
+    kind: NODE_KIND.Variable,
     name,
     line: 1,
     isJsxElement: false,

@@ -1,23 +1,24 @@
 import { describe, expect, test } from "vitest";
 
+import { NODE_KIND } from "../../constants.js";
 import type { VisualNode } from "../../visual-graph/model.js";
 import { isSyntheticNode } from "./is-synthetic-node.js";
 import { makeNode } from "./testing/make-node.js";
 
 describe("isSyntheticNode", () => {
   test.each<{ kind: VisualNode["kind"]; expected: boolean }>([
-    { kind: "ModuleSink", expected: true },
-    { kind: "ModuleSource", expected: true },
-    { kind: "ImportIntermediate", expected: true },
-    { kind: "Variable", expected: false },
-    { kind: "FunctionName", expected: false },
-    { kind: "ClassName", expected: false },
-    { kind: "Parameter", expected: false },
-    { kind: "CatchClause", expected: false },
-    { kind: "ImportBinding", expected: false },
-    { kind: "ImplicitGlobalVariable", expected: false },
-    { kind: "WriteOp", expected: false },
-    { kind: "ReturnUse", expected: false },
+    { kind: NODE_KIND.ModuleSink, expected: true },
+    { kind: NODE_KIND.ModuleSource, expected: true },
+    { kind: NODE_KIND.ImportIntermediate, expected: true },
+    { kind: NODE_KIND.Variable, expected: false },
+    { kind: NODE_KIND.FunctionName, expected: false },
+    { kind: NODE_KIND.ClassName, expected: false },
+    { kind: NODE_KIND.Parameter, expected: false },
+    { kind: NODE_KIND.CatchClause, expected: false },
+    { kind: NODE_KIND.ImportBinding, expected: false },
+    { kind: NODE_KIND.ImplicitGlobalVariable, expected: false },
+    { kind: NODE_KIND.WriteOp, expected: false },
+    { kind: NODE_KIND.ReturnUse, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
     expect(isSyntheticNode(makeNode({ kind }))).toBe(expected);
   });

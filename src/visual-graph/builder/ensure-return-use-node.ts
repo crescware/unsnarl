@@ -1,5 +1,6 @@
 import {
   DIRECTION,
+  NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -56,7 +57,7 @@ export function ensureReturnUseNode(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id,
-      kind: "ReturnUse",
+      kind: NODE_KIND.ReturnUse,
       name,
       line: startLine,
       isJsxElement: ref.jsxElement !== null,

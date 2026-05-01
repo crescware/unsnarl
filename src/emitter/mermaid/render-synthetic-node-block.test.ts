@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { NODE_KIND } from "../../constants.js";
 import { renderSyntheticNodeBlock } from "./render-synthetic-node-block.js";
 import { makeGraph } from "./testing/make-graph.js";
 import { makeNode } from "./testing/make-node.js";
@@ -12,10 +13,10 @@ describe("renderSyntheticNodeBlock", () => {
       state,
       makeGraph({
         elements: [
-          makeNode({ id: "mod_a", kind: "ModuleSource" }),
-          makeNode({ id: "n_a", kind: "Variable" }),
-          makeNode({ id: "import_b", kind: "ImportIntermediate" }),
-          makeNode({ id: "module_root", kind: "ModuleSink" }),
+          makeNode({ id: "mod_a", kind: NODE_KIND.ModuleSource }),
+          makeNode({ id: "n_a", kind: NODE_KIND.Variable }),
+          makeNode({ id: "import_b", kind: NODE_KIND.ImportIntermediate }),
+          makeNode({ id: "module_root", kind: NODE_KIND.ModuleSink }),
         ],
       }),
     );
@@ -30,7 +31,9 @@ describe("renderSyntheticNodeBlock", () => {
     const state = makeRenderState();
     renderSyntheticNodeBlock(
       state,
-      makeGraph({ elements: [makeNode({ id: "n_x", kind: "Variable" })] }),
+      makeGraph({
+        elements: [makeNode({ id: "n_x", kind: NODE_KIND.Variable })],
+      }),
     );
     expect(state.lines).toEqual([]);
   });
@@ -41,8 +44,8 @@ describe("renderSyntheticNodeBlock", () => {
       state,
       makeGraph({
         elements: [
-          makeNode({ id: "mod_first", kind: "ModuleSource" }),
-          makeNode({ id: "import_second", kind: "ImportIntermediate" }),
+          makeNode({ id: "mod_first", kind: NODE_KIND.ModuleSource }),
+          makeNode({ id: "import_second", kind: NODE_KIND.ImportIntermediate }),
         ],
       }),
     );

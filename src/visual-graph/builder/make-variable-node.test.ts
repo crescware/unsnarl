@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";
@@ -13,7 +13,7 @@ describe("makeVariableNode", () => {
     expect(node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
-      kind: "Variable",
+      kind: NODE_KIND.Variable,
       name: "x",
       line: 2,
       isJsxElement: false,
@@ -80,7 +80,7 @@ describe("makeVariableNode", () => {
     });
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
-      kind: "ImportBinding",
+      kind: NODE_KIND.ImportBinding,
       importKind: "named",
       importedName: "original",
       importSource: "./mod.js",

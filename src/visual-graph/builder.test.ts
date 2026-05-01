@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
+import { NODE_KIND, SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "./builder.js";
@@ -152,7 +152,8 @@ describe("buildVisualGraph: variable nodes", () => {
   test("ImplicitGlobalVariable that is only a member receiver is hidden, but a direct read is kept", () => {
     const directRead = build("function f() { return globalThing; }\n");
     expect(
-      nodeByName(directRead, "globalThing")?.kind === "ImplicitGlobalVariable",
+      nodeByName(directRead, "globalThing")?.kind ===
+        NODE_KIND.ImplicitGlobalVariable,
     ).toBe(true);
 
     const onlyReceiver = build("const x = Object.keys({});\n");
@@ -489,7 +490,8 @@ describe("buildVisualGraph: return subgraphs", () => {
     const ret = findSubgraphs(g, "return")[0];
     expect(ret).toBeDefined();
     const uses = ret!.elements.filter(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
     );
     expect(uses).toHaveLength(2);
   });
@@ -591,7 +593,8 @@ describe("buildVisualGraph: return subgraphs", () => {
     const aParam = nodeByName(g, "a");
     const ret = findSubgraphs(g, "return")[0];
     const retUse = ret?.elements.find(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
     );
     expect(
       g.edges.some(
@@ -633,7 +636,8 @@ describe("buildVisualGraph: return subgraphs", () => {
     const g = build("function f(a) { return a; }\n");
     const ret = findSubgraphs(g, "return")[0];
     const retUse = ret?.elements.find(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
     ) as VisualNode | undefined;
     expect(retUse?.isJsxElement).toBe(false);
     expect(retUse?.endLine).toBeUndefined();
@@ -758,7 +762,7 @@ describe("buildVisualGraph: edge deduplication", () => {
     const uses = (ret?.elements ?? []).filter(
       (e) =>
         e.type === VISUAL_ELEMENT_TYPE.Node &&
-        e.kind === "ReturnUse" &&
+        e.kind === NODE_KIND.ReturnUse &&
         e.name === "a",
     );
     expect(uses.length).toBeGreaterThanOrEqual(1);

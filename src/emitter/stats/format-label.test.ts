@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualNode } from "../../visual-graph/model.js";
 import { formatLabel } from "./format-label.js";
 
 const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
-  kind: "Variable",
+  kind: NODE_KIND.Variable,
   name: "x",
   line: 5,
   isJsxElement: false,

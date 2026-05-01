@@ -1,4 +1,4 @@
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { buildChildren } from "./build-children.js";
@@ -48,7 +48,7 @@ export function buildScope(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
-      kind: "WriteOp",
+      kind: NODE_KIND.WriteOp,
       name: op.varName,
       line: op.line,
       isJsxElement: false,

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SUBGRAPH_KIND } from "../../constants.js";
+import { NODE_KIND, SUBGRAPH_KIND } from "../../constants.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";
@@ -8,7 +8,11 @@ import { makeSubgraph } from "./testing/make-subgraph.js";
 
 describe("emitSubgraph", () => {
   test("function with a known ownerNodeId is wrapped in a wrap_<id> subgraph", () => {
-    const owner = makeNode({ id: "n_owner", kind: "FunctionName", name: "f" });
+    const owner = makeNode({
+      id: "n_owner",
+      kind: NODE_KIND.FunctionName,
+      name: "f",
+    });
     const state = makeRenderState({
       nodeMap: new Map([[owner.id, owner]]),
     });
@@ -54,7 +58,11 @@ describe("emitSubgraph", () => {
   });
 
   test("the owner node line appears INSIDE the wrapper, before the function body subgraph", () => {
-    const owner = makeNode({ id: "n_owner", kind: "FunctionName", name: "f" });
+    const owner = makeNode({
+      id: "n_owner",
+      kind: NODE_KIND.FunctionName,
+      name: "f",
+    });
     const state = makeRenderState({
       nodeMap: new Map([[owner.id, owner]]),
     });

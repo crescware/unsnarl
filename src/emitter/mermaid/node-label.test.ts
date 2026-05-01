@@ -1,13 +1,14 @@
 import { describe, expect, test } from "vitest";
 
+import { NODE_KIND } from "../../constants.js";
 import { nodeLabel } from "./node-label.js";
 import { makeNode } from "./testing/make-node.js";
 
 describe("nodeLabel", () => {
   test("ModuleSink shortcuts to the literal 'module'", () => {
-    expect(nodeLabel(makeNode({ kind: "ModuleSink", name: "ignored" }))).toBe(
-      "module",
-    );
+    expect(
+      nodeLabel(makeNode({ kind: NODE_KIND.ModuleSink, name: "ignored" })),
+    ).toBe("module");
   });
 
   test("appends the line range as a single line", () => {

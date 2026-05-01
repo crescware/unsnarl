@@ -1,4 +1,4 @@
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../constants.js";
+import { DIRECTION, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -322,7 +322,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: MODULE_ROOT_ID,
-      kind: "ModuleSink",
+      kind: NODE_KIND.ModuleSink,
       name: "module",
       line: 0,
       isJsxElement: false,
@@ -382,7 +382,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: mod.id,
-      kind: "ModuleSource",
+      kind: NODE_KIND.ModuleSource,
       name: mod.source,
       line: mod.line,
       isJsxElement: false,
@@ -392,7 +392,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: inter.id,
-      kind: "ImportIntermediate",
+      kind: NODE_KIND.ImportIntermediate,
       name: inter.name,
       line: inter.line,
       isJsxElement: false,

@@ -1,7 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  NODE_KIND,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { JsonEmitter } from "./json.js";
@@ -118,7 +122,7 @@ describe("JsonEmitter", () => {
     expect(renamed?.importedName).toBe("other");
 
     const moduleNode = nodes.find(
-      (n) => n.kind === "ModuleSource" && n.name === "some-default",
+      (n) => n.kind === NODE_KIND.ModuleSource && n.name === "some-default",
     );
     expect(moduleNode).toBeDefined();
   });
@@ -128,7 +132,7 @@ describe("JsonEmitter", () => {
       emit("function f() { let v = 0; v = 1; v = 2; return v; }\n"),
     );
     const writeOps = flattenNodes(graph.elements).filter(
-      (n) => n.kind === "WriteOp",
+      (n) => n.kind === NODE_KIND.WriteOp,
     );
     expect(writeOps).toHaveLength(2);
     for (const op of writeOps) {
@@ -156,7 +160,8 @@ describe("JsonEmitter", () => {
     );
     expect(returnSubgraph).toBeDefined();
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
     );
     expect(returnUseNodes.length).toBeGreaterThan(0);
   });

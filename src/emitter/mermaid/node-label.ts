@@ -1,9 +1,10 @@
+import { NODE_KIND } from "../../constants.js";
 import type { VisualNode } from "../../visual-graph/model.js";
 import { nodeHead } from "./node-head.js";
 
 export function nodeLabel(n: VisualNode): string {
   const head = nodeHead(n);
-  if (n.kind === "ModuleSink") {
+  if (n.kind === NODE_KIND.ModuleSink) {
     return "module";
   }
   // Unused declarations are surfaced via a textual prefix instead of a

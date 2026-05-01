@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { NODE_KIND } from "../../constants.js";
 import { renderTopLevelNodes } from "./render-top-level-nodes.js";
 import { makeGraph } from "./testing/make-graph.js";
 import { makeNode } from "./testing/make-node.js";
@@ -27,9 +28,9 @@ describe("renderTopLevelNodes", () => {
       state,
       makeGraph({
         elements: [
-          makeNode({ id: "mod_a", kind: "ModuleSource" }),
+          makeNode({ id: "mod_a", kind: NODE_KIND.ModuleSource }),
           makeNode({ id: "n_b" }),
-          makeNode({ id: "module_root", kind: "ModuleSink" }),
+          makeNode({ id: "module_root", kind: NODE_KIND.ModuleSink }),
         ],
       }),
     );

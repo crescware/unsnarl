@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import {
   DIRECTION,
+  NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -110,7 +111,11 @@ describe("ensureReturnUseNode", () => {
     expect(sg.line).toBe(3);
     expect(sg.endLine).toBe(5);
     const node = sg.elements.find((e) => e.type === VISUAL_ELEMENT_TYPE.Node);
-    expect(node).toMatchObject({ kind: "ReturnUse", name: "x", line: 3 });
+    expect(node).toMatchObject({
+      kind: NODE_KIND.ReturnUse,
+      name: "x",
+      line: 3,
+    });
   });
 
   test("uses the identifier name when the variable is not resolved", () => {

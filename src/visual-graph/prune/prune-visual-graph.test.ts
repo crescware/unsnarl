@@ -4,6 +4,7 @@ import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js"
 import {
   BOUNDARY_EDGE_DIRECTION,
   DIRECTION,
+  NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
@@ -25,7 +26,7 @@ function node(
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: "Variable",
+    kind: NODE_KIND.Variable,
     name,
     line,
     isJsxElement: false,
@@ -400,7 +401,7 @@ describe("pruneVisualGraph", () => {
 describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("a line query matches a ReturnUse at that line directly (no longer routed through the resolved declaration)", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
+    const useA = node("ret_use_ref_0", "a", 11, { kind: NODE_KIND.ReturnUse });
     const ret = subgraph("sg_return", 10, [useA], {
       kind: SUBGRAPH_KIND.Return,
     });
@@ -424,7 +425,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
 
   test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
+    const useA = node("ret_use_ref_0", "a", 11, { kind: NODE_KIND.ReturnUse });
     const ret = subgraph("sg_return", 10, [useA], {
       kind: SUBGRAPH_KIND.Return,
     });
@@ -444,7 +445,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
 
   test("a JSX ReturnUse spanning multiple lines is matched anywhere within [line, endLine]", () => {
     const useA = node("ret_use_ref_0", "a", 11, {
-      kind: "ReturnUse",
+      kind: NODE_KIND.ReturnUse,
       endLine: 23,
     });
     const ret = subgraph("sg_return", 10, [useA], {
@@ -463,7 +464,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   });
 
   test("a WriteOp is also a root candidate", () => {
-    const writeOp = node("wr_ref_0", "x", 5, { kind: "WriteOp" });
+    const writeOp = node("wr_ref_0", "x", 5, { kind: NODE_KIND.WriteOp });
     const g = graph([writeOp], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(5)],
@@ -479,8 +480,8 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     // the root on the declaration only; the assignment site and the JSX
     // usage are reachable via descendants/ancestors but never auto-rooted.
     const decl = node("n_decl_foo", "foo", 1);
-    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
-    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const writeOp = node("wr_foo", "foo", 5, { kind: NODE_KIND.WriteOp });
+    const ret = node("ret_foo", "foo", 11, { kind: NODE_KIND.ReturnUse });
     const g = graph([decl, writeOp, ret], []);
     const r = pruneVisualGraph(g, {
       roots: [rawName("foo")],
@@ -494,8 +495,8 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("line-name still matches WriteOp / ReturnUse at the requested line", () => {
     // A line-name query is still positional, so the use-site nodes remain
     // valid roots. This protects the "use line + name disambiguator" case.
-    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
-    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const writeOp = node("wr_foo", "foo", 5, { kind: NODE_KIND.WriteOp });
+    const ret = node("ret_foo", "foo", 11, { kind: NODE_KIND.ReturnUse });
     const g = graph([writeOp, ret], []);
     const r = pruneVisualGraph(g, {
       roots: [{ kind: "line-name", line: 11, name: "foo", raw: "11:foo" }],

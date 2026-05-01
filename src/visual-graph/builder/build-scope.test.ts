@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -73,7 +73,7 @@ describe("buildScope", () => {
     expect(container.elements[0]).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
-      kind: "Variable",
+      kind: NODE_KIND.Variable,
       name: "x",
     });
   });
@@ -116,7 +116,7 @@ describe("buildScope", () => {
       (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
-      kind: "WriteOp",
+      kind: NODE_KIND.WriteOp,
       name: "x",
       line: 4,
       declarationKind: "let",
