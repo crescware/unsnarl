@@ -44,7 +44,7 @@ describe("declareForLeft", () => {
   test("declares const bindings in a for-of loop", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (const x of items) {}",
-      "ForOfStatement",
+      AST_TYPE.ForOfStatement,
     );
     declareForLeft(forNode, forScope, code, diagnostics);
     expect(forScope.variables.map((v) => v.name)).toEqual(["x"]);
@@ -54,7 +54,7 @@ describe("declareForLeft", () => {
   test("declares destructured bindings in a for-in loop", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (const { a, b } in obj) {}",
-      "ForInStatement",
+      AST_TYPE.ForInStatement,
     );
     declareForLeft(forNode, forScope, code, diagnostics);
     expect(forScope.variables.map((v) => v.name).sort()).toEqual(["a", "b"]);

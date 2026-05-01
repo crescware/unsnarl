@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { DIRECTION, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   Direction,
   NodeKind,
@@ -10,7 +10,7 @@ import type {
 } from "../model.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
-const node = (id: string, kind: NodeKind = "Variable"): VisualNode => ({
+const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id,
   kind,

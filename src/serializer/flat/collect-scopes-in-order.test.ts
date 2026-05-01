@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { ScopeImpl } from "../../analyzer/scope.js";
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";
 
@@ -13,7 +13,7 @@ describe("collectScopesInOrder", () => {
       type: SCOPE_TYPE.Module,
       isStrict: true,
       upper: null,
-      block: block("Program"),
+      block: block(AST_TYPE.Program),
     });
     expect(collectScopesInOrder(root)).toEqual([root]);
   });
@@ -23,25 +23,25 @@ describe("collectScopesInOrder", () => {
       type: SCOPE_TYPE.Module,
       isStrict: true,
       upper: null,
-      block: block("Program"),
+      block: block(AST_TYPE.Program),
     });
     const a = new ScopeImpl({
       type: SCOPE_TYPE.Block,
       isStrict: true,
       upper: root,
-      block: block("BlockStatement"),
+      block: block(AST_TYPE.BlockStatement),
     });
     const a1 = new ScopeImpl({
       type: SCOPE_TYPE.Block,
       isStrict: true,
       upper: a,
-      block: block("BlockStatement"),
+      block: block(AST_TYPE.BlockStatement),
     });
     const b = new ScopeImpl({
       type: SCOPE_TYPE.Block,
       isStrict: true,
       upper: root,
-      block: block("BlockStatement"),
+      block: block(AST_TYPE.BlockStatement),
     });
     expect(collectScopesInOrder(root)).toEqual([root, a, a1, b]);
   });
