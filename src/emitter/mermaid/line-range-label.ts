@@ -1,0 +1,9 @@
+import type { VisualSubgraph } from "../../visual-graph/model.js";
+
+export function lineRangeLabel(sg: VisualSubgraph): string {
+  const end = sg.endLine;
+  if (end !== undefined && end !== sg.line) {
+    return `L${sg.line}-${end}`;
+  }
+  return `L${sg.line}`;
+}
