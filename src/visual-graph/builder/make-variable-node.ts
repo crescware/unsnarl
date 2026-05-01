@@ -1,4 +1,4 @@
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { DEFINITION_TYPE, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedVariable } from "../../ir/model.js";
 import type { VisualNode } from "../model.js";
 import { nodeId } from "./node-id.js";
@@ -15,7 +15,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   const node = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: nodeId(v.id),
-    kind: (def?.type ?? "Variable") as VisualNode["kind"],
+    kind: (def?.type ?? DEFINITION_TYPE.Variable) as VisualNode["kind"],
     name: v.name,
     line: v.identifiers[0]?.line ?? def?.name.span.line ?? 0,
     isJsxElement: false,

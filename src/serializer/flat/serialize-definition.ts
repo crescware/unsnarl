@@ -1,3 +1,4 @@
+import { DEFINITION_TYPE } from "../../constants.js";
 import type {
   AstNode,
   Definition,
@@ -28,7 +29,7 @@ export function serializeDefinition(
   let importKind: SerializedDefinition["importKind"] = null;
   let importSource: string | null = null;
   let importedName: string | null = null;
-  if (d.type === "ImportBinding") {
+  if (d.type === DEFINITION_TYPE.ImportBinding) {
     if (d.node.type === "ImportDefaultSpecifier") {
       importKind = "default";
     } else if (d.node.type === "ImportNamespaceSpecifier") {
@@ -58,7 +59,7 @@ export function serializeDefinition(
   }
   let declarationKind: SerializedDefinition["declarationKind"] = null;
   if (
-    d.type === "Variable" &&
+    d.type === DEFINITION_TYPE.Variable &&
     d.parent !== null &&
     d.parent.type === "VariableDeclaration"
   ) {

@@ -1,4 +1,5 @@
 import {
+  DEFINITION_TYPE,
   DIRECTION,
   NODE_KIND,
   SCOPE_TYPE,
@@ -60,10 +61,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     let blockOffset: number | null = null;
-    if (def.type === "FunctionName") {
+    if (def.type === DEFINITION_TYPE.FunctionName) {
       blockOffset = def.node.span.offset;
     } else if (
-      def.type === "Variable" &&
+      def.type === DEFINITION_TYPE.Variable &&
       def.initSpan !== null &&
       (def.initType === "FunctionExpression" ||
         def.initType === "ArrowFunctionExpression")

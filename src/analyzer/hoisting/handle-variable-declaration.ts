@@ -1,4 +1,4 @@
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { DEFINITION_TYPE, DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
@@ -42,7 +42,7 @@ export function handleVariableDeclaration(
       declareVariable(
         scope,
         ident,
-        "Variable",
+        DEFINITION_TYPE.Variable,
         dec as unknown as AstNode,
         node as unknown as AstNode,
       );

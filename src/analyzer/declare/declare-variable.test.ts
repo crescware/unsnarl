@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { declareVariable } from "./declare-variable.js";
@@ -24,7 +24,7 @@ describe("declareVariable", () => {
     const v = declareVariable(
       scope,
       ident("x"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       null,
     );
@@ -39,12 +39,23 @@ describe("declareVariable", () => {
     const idB = ident("x");
     const declA = node("VariableDeclarator");
     const declB = node("FunctionDeclaration");
-    const v = declareVariable(scope, idA, "Variable", declA, null);
-    declareVariable(scope, idB, "FunctionName", declB, null);
+    const v = declareVariable(
+      scope,
+      idA,
+      DEFINITION_TYPE.Variable,
+      declA,
+      null,
+    );
+    declareVariable(scope, idB, DEFINITION_TYPE.FunctionName, declB, null);
     expect(v.identifiers).toEqual([idA, idB]);
     expect(v.defs).toEqual([
-      { type: "Variable", name: idA, node: declA, parent: null },
-      { type: "FunctionName", name: idB, node: declB, parent: null },
+      { type: DEFINITION_TYPE.Variable, name: idA, node: declA, parent: null },
+      {
+        type: DEFINITION_TYPE.FunctionName,
+        name: idB,
+        node: declB,
+        parent: null,
+      },
     ]);
   });
 
@@ -53,14 +64,14 @@ describe("declareVariable", () => {
     const first = declareVariable(
       scope,
       ident("x"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       null,
     );
     const second = declareVariable(
       scope,
       ident("x"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       null,
     );
@@ -73,14 +84,14 @@ describe("declareVariable", () => {
     const a = declareVariable(
       scope,
       ident("a"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       null,
     );
     const b = declareVariable(
       scope,
       ident("b"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       null,
     );
@@ -94,7 +105,7 @@ describe("declareVariable", () => {
     const v = declareVariable(
       scope,
       ident("x"),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       node("VariableDeclarator"),
       parent,
     );

@@ -1,3 +1,4 @@
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
@@ -19,7 +20,7 @@ export function declareFunctionParams(node: NodeLike, scope: Scope): void {
       declareVariable(
         scope,
         ident,
-        "Parameter",
+        DEFINITION_TYPE.Parameter,
         p as unknown as AstNode,
         node as unknown as AstNode,
       );

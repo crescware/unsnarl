@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { ScopeImpl } from "../scope.js";
@@ -22,7 +22,7 @@ const scopeWith = (...names: readonly string[]): ScopeImpl => {
     declareVariable(
       scope,
       ident(n),
-      "Variable",
+      DEFINITION_TYPE.Variable,
       { type: "VariableDeclarator" } as unknown as AstNode,
       null,
     );

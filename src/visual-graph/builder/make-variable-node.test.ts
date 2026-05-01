@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DEFINITION_TYPE,
+  NODE_KIND,
+  VISUAL_ELEMENT_TYPE,
+  type DefinitionType,
+} from "../../constants.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";
@@ -117,12 +122,12 @@ describe("makeVariableNode", () => {
   });
 
   test.each<{
-    defType: "FunctionName" | "ClassName" | "Parameter" | "CatchClause";
+    defType: DefinitionType;
   }>([
-    { defType: "FunctionName" },
-    { defType: "ClassName" },
-    { defType: "Parameter" },
-    { defType: "CatchClause" },
+    { defType: DEFINITION_TYPE.FunctionName },
+    { defType: DEFINITION_TYPE.ClassName },
+    { defType: DEFINITION_TYPE.Parameter },
+    { defType: DEFINITION_TYPE.CatchClause },
   ])("kind reflects definition type $defType", ({ defType }) => {
     const v = makeVariable({ defs: [makeDef({ type: defType })] });
     expect(makeVariableNode(v).kind).toBe(defType);

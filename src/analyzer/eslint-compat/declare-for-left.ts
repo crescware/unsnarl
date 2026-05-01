@@ -1,4 +1,4 @@
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { DEFINITION_TYPE, DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
@@ -47,7 +47,7 @@ export function declareForLeft(
         declareVariable(
           scope,
           ident,
-          "Variable",
+          DEFINITION_TYPE.Variable,
           dec as unknown as AstNode,
           cand as unknown as AstNode,
         );

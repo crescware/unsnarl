@@ -1,3 +1,4 @@
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { isIdentifierNode } from "./is-identifier-node.js";
@@ -19,7 +20,7 @@ export function handleImportDeclaration(node: NodeLike, scope: Scope): void {
     declareVariable(
       scope,
       local,
-      "ImportBinding",
+      DEFINITION_TYPE.ImportBinding,
       spec as unknown as AstNode,
       node as unknown as AstNode,
     );

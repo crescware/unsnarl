@@ -1,3 +1,4 @@
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
@@ -25,7 +26,7 @@ export function enterCatch(
       declareVariable(
         scope,
         ident,
-        "CatchClause",
+        DEFINITION_TYPE.CatchClause,
         node as unknown as AstNode,
         null,
       );

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  DEFINITION_TYPE,
   DIAGNOSTIC_KIND,
   LANGUAGE,
   SCOPE_TYPE,
@@ -85,7 +86,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     `;
     const { rootScope } = analyze(code);
     const declared = rootScope.variables
-      .filter((v) => v.defs.some((d) => d.type === "Variable"))
+      .filter((v) => v.defs.some((d) => d.type === DEFINITION_TYPE.Variable))
       .map((v) => v.name)
       .sort();
     expect(declared).toEqual(["a", "c", "deep", "rest", "x", "y"]);

@@ -1,5 +1,6 @@
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { Variable } from "../../ir/model.js";
 
 export function hasDeclaringDef(v: Variable): boolean {
-  return v.defs.some((d) => d.type !== "ImplicitGlobalVariable");
+  return v.defs.some((d) => d.type !== DEFINITION_TYPE.ImplicitGlobalVariable);
 }
