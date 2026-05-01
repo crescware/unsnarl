@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../constants.js";
+import { LANGUAGE } from "../language.js";
 import { OxcParser } from "../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 

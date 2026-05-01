@@ -1,18 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  DIRECTION,
-  LANGUAGE,
-  NODE_KIND,
-  SERIALIZED_IR_VERSION,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { DIRECTION } from "../../direction.js";
 import type {
   SerializedIR,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
+import { LANGUAGE } from "../../language.js";
+import { NODE_KIND } from "../../node-kind.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualSubgraph } from "../model.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";

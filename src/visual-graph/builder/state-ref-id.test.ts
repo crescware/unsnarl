@@ -1,12 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, SERIALIZED_IR_VERSION } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
+import { LANGUAGE } from "../../language.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
 import type { BuilderContext } from "./context.js";
 import { stateRefId } from "./state-ref-id.js";
 import { makeRef } from "./testing/make-ref.js";

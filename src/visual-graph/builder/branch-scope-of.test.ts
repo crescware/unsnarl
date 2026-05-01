@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { SerializedScope } from "../../ir/model.js";
 import { branchScopeOf } from "./branch-scope-of.js";
 import { makeBlockContext } from "./testing/make-block-context.js";

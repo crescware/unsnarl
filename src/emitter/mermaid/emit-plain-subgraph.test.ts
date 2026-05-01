@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION, SUBGRAPH_KIND } from "../../constants.js";
+import { DIRECTION } from "../../direction.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";

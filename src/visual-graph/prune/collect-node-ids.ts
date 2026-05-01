@@ -1,4 +1,4 @@
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualElement } from "../model.js";
 
 export function collectNodeIds(

@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";

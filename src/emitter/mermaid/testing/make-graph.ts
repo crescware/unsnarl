@@ -1,8 +1,6 @@
-import {
-  DIRECTION,
-  LANGUAGE,
-  SERIALIZED_IR_VERSION,
-} from "../../../constants.js";
+import { DIRECTION } from "../../../direction.js";
+import { LANGUAGE } from "../../../language.js";
+import { SERIALIZED_IR_VERSION } from "../../../serialized-ir-version.js";
 import type { VisualGraph } from "../../../visual-graph/model.js";
 
 export function makeGraph(overrides: Partial<VisualGraph> = {}): VisualGraph {

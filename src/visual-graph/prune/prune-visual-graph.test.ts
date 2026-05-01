@@ -1,16 +1,14 @@
 import { describe, expect, test } from "vitest";
 
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import {
-  BOUNDARY_EDGE_DIRECTION,
-  DIRECTION,
-  LANGUAGE,
-  NODE_KIND,
-  ROOT_QUERY_KIND,
-  SERIALIZED_IR_VERSION,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { DIRECTION } from "../../direction.js";
+import { LANGUAGE } from "../../language.js";
+import { NODE_KIND } from "../../node-kind.js";
+import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type {
   VisualEdge,
   VisualElement,

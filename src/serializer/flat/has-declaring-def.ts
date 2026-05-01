@@ -1,4 +1,4 @@
-import { DEFINITION_TYPE } from "../../constants.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { Variable } from "../../ir/model.js";
 
 export function hasDeclaringDef(v: Variable): boolean {

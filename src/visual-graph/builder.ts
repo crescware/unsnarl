@@ -1,19 +1,17 @@
-import {
-  AST_TYPE,
-  DEFINITION_TYPE,
-  DIRECTION,
-  IMPORT_KIND,
-  NODE_KIND,
-  SCOPE_TYPE,
-  SERIALIZED_IR_VERSION,
-  VISUAL_ELEMENT_TYPE,
-} from "../constants.js";
+import { AST_TYPE } from "../ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIRECTION } from "../direction.js";
+import { IMPORT_KIND } from "../import-kind.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../ir/model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SCOPE_TYPE } from "../scope-type.js";
+import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { branchContainerKey } from "./builder/branch-container-key.js";
 import { buildScope } from "./builder/build-scope.js";
 import type { BuildState } from "./builder/build-state.js";

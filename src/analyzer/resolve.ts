@@ -1,4 +1,4 @@
-import { DEFINITION_TYPE } from "../constants.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import type { AstNode, Reference, Scope, Variable } from "../ir/model.js";
 import { VariableImpl } from "./scope.js";
 

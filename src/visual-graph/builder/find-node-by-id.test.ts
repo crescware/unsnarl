@@ -1,11 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  DIRECTION,
-  NODE_KIND,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { DIRECTION } from "../../direction.js";
+import { NODE_KIND } from "../../node-kind.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { findNodeById } from "./find-node-by-id.js";
 

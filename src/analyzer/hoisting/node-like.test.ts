@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import { isNodeLike } from "./node-like.js";
 
 describe("isNodeLike", () => {

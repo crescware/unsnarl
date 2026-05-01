@@ -1,4 +1,3 @@
-import { SCOPE_TYPE } from "../constants.js";
 import { ReferenceFlags } from "../ir/model.js";
 import type {
   AstExpression,
@@ -15,6 +14,7 @@ import type {
   ScopeType,
   Variable,
 } from "../ir/model.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 
 export class ScopeImpl implements Scope {
   readonly type: ScopeType;

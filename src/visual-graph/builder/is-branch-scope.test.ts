@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { BlockContext } from "../../ir/model.js";
 import { isBranchScope } from "./is-branch-scope.js";
 import { makeBlockContext } from "./testing/make-block-context.js";

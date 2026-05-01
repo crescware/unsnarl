@@ -3,11 +3,9 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import {
-  BOUNDARY_EDGE_DIRECTION,
-  SERIALIZED_IR_VERSION,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
 import { runCli } from "./run-cli.js";
 

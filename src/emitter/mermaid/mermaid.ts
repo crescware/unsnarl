@@ -17,7 +17,7 @@ import { renderTopLevelSubgraphs } from "./render-top-level-subgraphs.js";
 import { splitEdges } from "./split-edges.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
 
-export type { CliMermaidRenderer as MermaidRenderer } from "../../constants.js";
+export type { CliMermaidRenderer as MermaidRenderer } from "../../cli-mermaid-renderer.js";
 
 export type MermaidEmitterOptions = Readonly<{
   /**

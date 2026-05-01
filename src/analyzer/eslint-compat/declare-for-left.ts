@@ -1,12 +1,10 @@
-import {
-  AST_TYPE,
-  DEFINITION_TYPE,
-  DIAGNOSTIC_KIND,
-  VARIABLE_DECLARATION_KIND,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
+import { DIAGNOSTIC_KIND } from "../../diagnostic-kind.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
+import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { isNodeLike } from "./is-node-like.js";

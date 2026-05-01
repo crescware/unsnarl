@@ -1,4 +1,4 @@
-import { SUBGRAPH_KIND } from "../../constants.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
 import type { VisualSubgraph } from "../../visual-graph/model.js";
 import { emitNode } from "./emit-node.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";

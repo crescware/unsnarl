@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { Scope, Variable } from "../../ir/model.js";
 import { resolveInScopeChain } from "../resolve.js";
 import type { PathEntry } from "../walk/walk.js";

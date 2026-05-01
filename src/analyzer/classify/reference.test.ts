@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstExpression } from "../../ir/model.js";
 import { reference } from "./reference.js";

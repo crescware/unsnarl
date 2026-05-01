@@ -1,4 +1,5 @@
-import { AST_TYPE, DEFINITION_TYPE } from "../../../constants.js";
+import { AST_TYPE } from "../../../ast-type.js";
+import { DEFINITION_TYPE } from "../../../definition-type.js";
 import type { SerializedDefinition } from "../../../ir/model.js";
 import { span } from "./span.js";
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { AstNode } from "../../ir/model.js";
 import type { PathEntry } from "../walk/walk.js";
 import { findBindingRootContext } from "./find-binding-root-context.js";

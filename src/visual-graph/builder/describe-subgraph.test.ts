@@ -1,13 +1,11 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  AST_TYPE,
-  DIRECTION,
-  SCOPE_TYPE,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DIRECTION } from "../../direction.js";
 import type { ScopeType, SerializedVariable } from "../../ir/model.js";
+import { SCOPE_TYPE } from "../../scope-type.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualSubgraph } from "../model.js";
 import { describeSubgraph } from "./describe-subgraph.js";
 import { makeBlockContext } from "./testing/make-block-context.js";

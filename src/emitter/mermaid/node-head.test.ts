@@ -1,10 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  IMPORT_KIND,
-  NODE_KIND,
-  VARIABLE_DECLARATION_KIND,
-} from "../../constants.js";
+import { IMPORT_KIND } from "../../import-kind.js";
+import { NODE_KIND } from "../../node-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
 import { nodeHead } from "./node-head.js";
 import { makeNode } from "./testing/make-node.js";
 

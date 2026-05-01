@@ -1,11 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  AST_TYPE,
-  PREDICATE_CONTAINER_TYPE,
-  SCOPE_TYPE,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { SerializedScope } from "../../ir/model.js";
+import { PREDICATE_CONTAINER_TYPE } from "../../predicate-container-type.js";
+import { SCOPE_TYPE } from "../../scope-type.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
 import { makeRef } from "./testing/make-ref.js";

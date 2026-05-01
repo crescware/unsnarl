@@ -1,15 +1,13 @@
-import {
-  AST_TYPE,
-  DEFINITION_TYPE,
-  IMPORT_KIND,
-  VARIABLE_DECLARATION_KIND,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
+import { IMPORT_KIND } from "../../import-kind.js";
 import type {
   AstNode,
   Definition,
   SerializedDefinition,
   Span,
 } from "../../ir/model.js";
+import { VARIABLE_DECLARATION_KIND } from "../../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeDefinition(

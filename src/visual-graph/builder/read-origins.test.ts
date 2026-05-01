@@ -1,16 +1,14 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  AST_TYPE,
-  LANGUAGE,
-  SCOPE_TYPE,
-  SERIALIZED_IR_VERSION,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type {
   SerializedIR,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
+import { LANGUAGE } from "../../language.js";
+import { SCOPE_TYPE } from "../../scope-type.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
 import type { BuilderContext } from "./context.js";
 import { readOrigins } from "./read-origins.js";
 import { makeBlockContext } from "./testing/make-block-context.js";

@@ -1,22 +1,19 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import {
-  AST_TYPE,
-  DEFINITION_TYPE,
-  IMPORT_KIND,
-  LANGUAGE,
-  PREDICATE_CONTAINER_TYPE,
-  SCOPE_TYPE,
-  type Language,
-} from "../constants.js";
+import { AST_TYPE } from "../ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { IMPORT_KIND } from "../import-kind.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../ir/model.js";
+import { LANGUAGE, type Language } from "../language.js";
 import { OxcParser } from "../parser/oxc.js";
+import { PREDICATE_CONTAINER_TYPE } from "../predicate-container-type.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { FlatSerializer } from "./flat/flat-serializer.js";
 
 const parser = new OxcParser();

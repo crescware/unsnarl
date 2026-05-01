@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { ScopeManager } from "../manager.js";
 import type { NodeLike } from "./node-like.js";
 import { skipBlockScope } from "./skip-block-scope.js";

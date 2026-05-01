@@ -1,4 +1,4 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";

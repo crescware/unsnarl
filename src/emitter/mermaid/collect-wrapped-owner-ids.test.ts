@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SUBGRAPH_KIND } from "../../constants.js";
+import { SUBGRAPH_KIND } from "../../subgraph-kind.js";
 import { collectWrappedOwnerIds } from "./collect-wrapped-owner-ids.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeSubgraph } from "./testing/make-subgraph.js";

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import { renderBoundaryEdges } from "./render-boundary-edges.js";
 import { makeGraph } from "./testing/make-graph.js";
 

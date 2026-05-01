@@ -1,7 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
+import { SCOPE_TYPE } from "../../scope-type.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
 import { makeScope } from "./testing/make-scope.js";

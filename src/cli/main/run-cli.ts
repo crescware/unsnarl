@@ -1,7 +1,7 @@
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
-import { CLI_MERMAID_RENDERER } from "../../constants.js";
+import { CLI_MERMAID_RENDERER } from "../../cli-mermaid-renderer.js";
 import { ParseError } from "../../parser/oxc.js";
 import {
   createDefaultEmitterRegistry,

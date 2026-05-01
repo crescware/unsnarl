@@ -1,4 +1,4 @@
-import { ROOT_QUERY_KIND } from "../../constants.js";
+import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
 import type { ParsedRootQuery } from "./parsed-root-query.js";
 
 const ID_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;

@@ -1,9 +1,7 @@
-import {
-  AST_TYPE,
-  DEFINITION_TYPE,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { SerializedVariable } from "../../ir/model.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualNode } from "../model.js";
 import { nodeId } from "./node-id.js";
 

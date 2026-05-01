@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { ROOT_QUERY_KIND } from "../../constants.js";
+import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
 import { parseRootQuery } from "./parse-root-query.js";
 
 describe("parseRootQuery", () => {

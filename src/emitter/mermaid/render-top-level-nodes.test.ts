@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../constants.js";
+import { NODE_KIND } from "../../node-kind.js";
 import { renderTopLevelNodes } from "./render-top-level-nodes.js";
 import { makeGraph } from "./testing/make-graph.js";
 import { makeNode } from "./testing/make-node.js";

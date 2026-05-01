@@ -1,19 +1,16 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import {
-  DEFINITION_TYPE,
-  DIRECTION,
-  IMPORT_KIND,
-  LANGUAGE,
-  NODE_KIND,
-  SERIALIZED_IR_VERSION,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-  type Language,
-} from "../constants.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIRECTION } from "../direction.js";
+import { IMPORT_KIND } from "../import-kind.js";
+import { LANGUAGE, type Language } from "../language.js";
+import { NODE_KIND } from "../node-kind.js";
 import { OxcParser } from "../parser/oxc.js";
+import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { buildVisualGraph } from "./builder.js";
 import type {
   VisualEdge,

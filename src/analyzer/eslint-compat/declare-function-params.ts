@@ -1,4 +1,5 @@
-import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";

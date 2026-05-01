@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
+import { DEFINITION_TYPE } from "../../definition-type.js";
 import type {
   AstIdentifier,
   AstNode,

@@ -1,4 +1,4 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
 
 export function renderBoundaryEdges(

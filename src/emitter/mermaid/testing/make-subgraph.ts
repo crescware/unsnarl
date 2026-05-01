@@ -1,8 +1,6 @@
-import {
-  DIRECTION,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../../constants.js";
+import { DIRECTION } from "../../../direction.js";
+import { SUBGRAPH_KIND } from "../../../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../../visual-element-type.js";
 import type { VisualSubgraph } from "../../../visual-graph/model.js";
 
 export function makeSubgraph(

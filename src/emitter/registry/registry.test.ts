@@ -1,8 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, SERIALIZED_IR_VERSION } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
+import { LANGUAGE } from "../../language.js";
 import type { Emitter } from "../../pipeline/types.js";
+import { SERIALIZED_IR_VERSION } from "../../serialized-ir-version.js";
 import { DefaultEmitterRegistry } from "./registry.js";
 
 const fakeIR = {

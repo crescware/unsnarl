@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { AstIdentifier } from "../../ir/model.js";
 import { isNodeLike } from "./node-like.js";
 

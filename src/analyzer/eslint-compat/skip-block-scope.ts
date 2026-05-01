@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 export function skipBlockScope(parentType: string): boolean {
   return (
     parentType === "FunctionDeclaration" ||

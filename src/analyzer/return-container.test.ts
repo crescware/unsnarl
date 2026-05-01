@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../constants.js";
+import { AST_TYPE } from "../ast-type.js";
 import type { AstNode } from "../ir/model.js";
 import { findReturnContainer } from "./return-container.js";
 import type { PathEntry } from "./walk/walk.js";

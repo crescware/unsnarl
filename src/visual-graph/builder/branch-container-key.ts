@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import type { SerializedScope } from "../../ir/model.js";
 
 export function branchContainerKey(scope: SerializedScope): string | null {

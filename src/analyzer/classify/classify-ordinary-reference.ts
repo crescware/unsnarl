@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../constants.js";
+import { AST_TYPE } from "../../ast-type.js";
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstNode } from "../../ir/model.js";
 import type { ClassifyResult } from "./classify-result.js";

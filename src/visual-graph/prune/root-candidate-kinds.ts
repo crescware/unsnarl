@@ -1,4 +1,4 @@
-import { NODE_KIND } from "../../constants.js";
+import { NODE_KIND } from "../../node-kind.js";
 import type { NodeKind } from "../model.js";
 
 // Every visible node that carries a meaningful source line is eligible as a

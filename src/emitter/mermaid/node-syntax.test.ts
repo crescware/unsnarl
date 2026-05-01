@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../constants.js";
+import { NODE_KIND } from "../../node-kind.js";
 import { nodeSyntax } from "./node-syntax.js";
 import { makeNode } from "./testing/make-node.js";
 

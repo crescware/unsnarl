@@ -1,4 +1,5 @@
-import { BOUNDARY_EDGE_DIRECTION, ROOT_QUERY_KIND } from "../../constants.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../boundary-edge-direction.js";
+import { ROOT_QUERY_KIND } from "../../root-query-kind.js";
 import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
 import { buildAdjacency } from "./build-adjacency.js";

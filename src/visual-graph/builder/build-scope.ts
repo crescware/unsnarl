@@ -1,5 +1,6 @@
-import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
+import { NODE_KIND } from "../../node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-element-type.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";

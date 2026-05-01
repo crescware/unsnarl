@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../constants.js";
+import { NODE_KIND } from "../../node-kind.js";
 import { renderSyntheticNodeBlock } from "./render-synthetic-node-block.js";
 import { makeGraph } from "./testing/make-graph.js";
 import { makeNode } from "./testing/make-node.js";
