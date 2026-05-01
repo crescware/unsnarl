@@ -123,7 +123,7 @@ export type { ClassifyResult } from "./analyzer/classify.js";
 
 export { bindReference, resolveInScopeChain } from "./analyzer/resolve.js";
 
-export { findReferenceOwners } from "./analyzer/owner.js";
+export { findReferenceOwners } from "./analyzer/owner/find-reference-owners.js";
 
 export { findPredicateContainer } from "./analyzer/predicate.js";
 

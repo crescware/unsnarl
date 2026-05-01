@@ -2,7 +2,7 @@ import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { classifyIdentifier } from "../classify.js";
 import { findJsxElementSpan } from "../jsx-element-span.js";
 import type { ScopeManager } from "../manager.js";
-import { findReferenceOwners } from "../owner.js";
+import { findReferenceOwners } from "../owner/find-reference-owners.js";
 import { findPredicateContainer } from "../predicate.js";
 import { bindReference } from "../resolve.js";
 import { findReturnContainer } from "../return-container.js";

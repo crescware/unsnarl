@@ -1,7 +1,8 @@
-import type { AstNode, Scope, Variable } from "../ir/model.js";
-import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
-import { resolveInScopeChain } from "./resolve.js";
-import type { PathEntry } from "./walk/walk.js";
+import type { Scope, Variable } from "../../ir/model.js";
+import { resolveInScopeChain } from "../resolve.js";
+import type { PathEntry } from "../walk/walk.js";
+import { allBindingVariables } from "./all-binding-variables.js";
+import { isAstNode } from "./is-ast-node.js";
 
 export function findReferenceOwners(
   path: ReadonlyArray<PathEntry>,
@@ -48,25 +49,4 @@ export function findReferenceOwners(
     }
   }
   return [];
-}
-
-function allBindingVariables(pattern: AstNode, scope: Scope): Variable[] {
-  const idents = collectBindingIdentifiers(pattern);
-  const out: Variable[] = [];
-  for (const ident of idents) {
-    const v = resolveInScopeChain(scope, ident.name);
-    if (v && !out.includes(v)) {
-      out.push(v);
-    }
-  }
-  return out;
-}
-
-function isAstNode(value: unknown): value is AstNode {
-  return (
-    value !== null &&
-    typeof value === "object" &&
-    "type" in value &&
-    typeof (value as { type: unknown }).type === "string"
-  );
 }
