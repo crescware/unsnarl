@@ -4,6 +4,7 @@ import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js
 import {
   IMPORT_KIND,
   LANGUAGE,
+  PREDICATE_CONTAINER_TYPE,
   SCOPE_TYPE,
   type Language,
 } from "../constants.js";
@@ -126,7 +127,9 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
   test("the discriminant identifier carries a SwitchStatement predicate container", () => {
     const kindRefs = ir.references.filter((r) => r.identifier.name === "kind");
     expect(kindRefs).toHaveLength(1);
-    expect(kindRefs[0]?.predicateContainer?.type).toBe("SwitchStatement");
+    expect(kindRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.SwitchStatement,
+    );
   });
 });
 
@@ -183,7 +186,9 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
   test("the predicate identifier carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter((r) => r.identifier.name === "flag");
     expect(flagRefs).toHaveLength(1);
-    expect(flagRefs[0]?.predicateContainer?.type).toBe("IfStatement");
+    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.IfStatement,
+    );
   });
 
   test("counter receives one write per branch, in distinct branch scopes", () => {
@@ -215,7 +220,9 @@ describe("scenario: if without else — only the consequent scope exists", () =>
 
   test("the predicate identifier still carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter((r) => r.identifier.name === "flag");
-    expect(flagRefs[0]?.predicateContainer?.type).toBe("IfStatement");
+    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.IfStatement,
+    );
   });
 });
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { PREDICATE_CONTAINER_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -45,7 +45,10 @@ describe("predicateTargetId", () => {
     const { scopes, scopeMap, refFrom } = withSwitchAt(offset);
     const ref = makeRef({
       from: refFrom,
-      predicateContainer: predicateContainer("SwitchStatement", offset),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.SwitchStatement,
+        offset,
+      ),
     });
     expect(predicateTargetId(ref, scopes, scopeMap)).toBe("s_switch1");
   });
@@ -54,7 +57,10 @@ describe("predicateTargetId", () => {
     const { scopes, scopeMap, refFrom } = withSwitchAt(100);
     const ref = makeRef({
       from: refFrom,
-      predicateContainer: predicateContainer("SwitchStatement", 999),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.SwitchStatement,
+        999,
+      ),
     });
     expect(predicateTargetId(ref, scopes, scopeMap)).toBeNull();
   });
@@ -73,7 +79,10 @@ describe("predicateTargetId", () => {
     const scopes = [consequent, alternate] satisfies SerializedScope[];
     const ref = makeRef({
       from: "outer",
-      predicateContainer: predicateContainer("IfStatement", 50),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.IfStatement,
+        50,
+      ),
     });
     expect(predicateTargetId(ref, scopes, new Map())).toBe("cont_if_outer_50");
   });
@@ -86,7 +95,10 @@ describe("predicateTargetId", () => {
     });
     const ref = makeRef({
       from: "outer",
-      predicateContainer: predicateContainer("IfStatement", 50),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.IfStatement,
+        50,
+      ),
     });
     expect(predicateTargetId(ref, [consequent], new Map())).toBe("s_lone");
   });
@@ -94,7 +106,10 @@ describe("predicateTargetId", () => {
   test("IfStatement with zero matching branches -> null", () => {
     const ref = makeRef({
       from: "outer",
-      predicateContainer: predicateContainer("IfStatement", 50),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.IfStatement,
+        50,
+      ),
     });
     expect(predicateTargetId(ref, [], new Map())).toBeNull();
   });

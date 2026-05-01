@@ -1,4 +1,4 @@
-import { SCOPE_TYPE } from "../../constants.js";
+import { PREDICATE_CONTAINER_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { SerializedReference, SerializedScope } from "../../ir/model.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
@@ -13,7 +13,7 @@ export function predicateTargetId(
   if (!pc) {
     return null;
   }
-  if (pc.type === "SwitchStatement") {
+  if (pc.type === PREDICATE_CONTAINER_TYPE.SwitchStatement) {
     let cur = scopeMap.get(r.from);
     while (cur) {
       if (
