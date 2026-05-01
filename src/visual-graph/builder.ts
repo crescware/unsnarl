@@ -627,6 +627,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         endLine,
         direction: "RL",
         ownerNodeId: nodeId(ownerVarId),
+        ownerName: ownerVar?.name ?? "",
         elements: [],
       };
     }

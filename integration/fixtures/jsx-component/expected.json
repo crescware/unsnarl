@@ -58,6 +58,7 @@
       "endLine": 11,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_Hello_79",
+      "ownerName": "Hello",
       "elements": [
         {
           "type": "node",
@@ -107,6 +108,7 @@
       "endLine": 13,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_App_196",
+      "ownerName": "App",
       "elements": [
         {
           "type": "subgraph",

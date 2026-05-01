@@ -357,10 +357,13 @@ function subgraphLabel(
   const range = lineRangeLabel(sg);
   switch (sg.kind) {
     case "function": {
+      // Prefer the name baked onto the subgraph at build time; the owner
+      // node may be absent after pruning even when the subgraph survives.
       const ownerNode = sg.ownerNodeId
         ? nodeMap.get(sg.ownerNodeId)
         : undefined;
-      return `${escape(ownerNode?.name ?? "")}()<br/>${range}`;
+      const name = sg.ownerName ?? ownerNode?.name ?? "";
+      return `${escape(name)}()<br/>${range}`;
     }
     case "switch":
       return `switch ${range}`;

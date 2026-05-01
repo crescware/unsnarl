@@ -30,6 +30,7 @@
       "endLine": 16,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
       "elements": [
         {
           "type": "node",

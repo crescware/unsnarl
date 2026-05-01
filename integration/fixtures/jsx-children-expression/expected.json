@@ -32,6 +32,7 @@
       "endLine": 6,
       "direction": "RL",
       "ownerNodeId": "n_scope_0_Main_46",
+      "ownerName": "Main",
       "elements": [
         {
           "type": "node",

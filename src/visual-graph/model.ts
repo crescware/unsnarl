@@ -57,6 +57,9 @@ export interface VisualSubgraph {
   caseTest?: string | null;
   hasElse?: boolean;
   ownerNodeId?: string;
+  // Mirrors the owner node's display name so the subgraph label survives
+  // pruning even when the owner node itself gets cut out of the graph.
+  ownerName?: string;
   elements: VisualElement[];
 }
 

@@ -177,6 +177,12 @@ describe("buildVisualGraph: function subgraphs", () => {
     expect(ownerNode?.kind).toBe("FunctionName");
   });
 
+  test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
+    const g = build("function add(a, b) { return a + b; }\n");
+    const fn = findSubgraphs(g, "function")[0];
+    expect(fn?.ownerName).toBe("add");
+  });
+
   test("an arrow function const, function expression const, and FunctionDeclaration all subgraph alike", () => {
     for (const code of [
       "const fn = (p) => p;",
