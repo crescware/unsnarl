@@ -1,3 +1,4 @@
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
@@ -15,7 +16,7 @@ export function handleVariableDeclaration(
   if (kind === "var") {
     const start = node.start ?? 0;
     diagnostics.add(
-      "var-detected",
+      DIAGNOSTIC_KIND.VarDetected,
       "var declaration is not supported and was skipped.",
       spanFromOffset(raw, start),
     );

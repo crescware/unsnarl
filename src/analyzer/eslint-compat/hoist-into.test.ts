@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -45,9 +46,9 @@ describe("hoistInto", () => {
 
     hoistInto(program, manager.globalScope, code, diagnostics);
 
-    expect(diagnostics.list().some((d) => d.kind === "var-detected")).toBe(
-      true,
-    );
+    expect(
+      diagnostics.list().some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected),
+    ).toBe(true);
   });
 
   test("does nothing when program has no body array", () => {

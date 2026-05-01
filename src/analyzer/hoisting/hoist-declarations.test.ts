@@ -1,6 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
@@ -51,7 +52,9 @@ describe("hoistDeclarations", () => {
     const raw = "var x = 1; const y = 2;";
     hoistDeclarations(programBody(raw), scope, raw, diags);
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
-    expect(diags.list().map((d) => d.kind)).toEqual(["var-detected"]);
+    expect(diags.list().map((d) => d.kind)).toEqual([
+      DIAGNOSTIC_KIND.VarDetected,
+    ]);
   });
 
   test("empty body declares nothing", () => {

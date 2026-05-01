@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type {
   DefinitionType,
   Scope,
@@ -168,7 +169,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope, diagnostics } = analyze(code);
     expect(variableNames(rootScope)).toEqual(["modern"]);
     expect(diagnostics.length).toBe(1);
-    expect(diagnostics[0]?.kind).toBe("var-detected");
+    expect(diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
     expect(diagnostics[0]?.span?.line).toBe(1);
   });
 

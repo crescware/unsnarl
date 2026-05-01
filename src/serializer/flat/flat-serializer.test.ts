@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "./flat-serializer.js";
@@ -114,7 +115,7 @@ describe("FlatSerializer", () => {
     const code = "var legacy = 1;\nconst x = 2;\n";
     const ir = pipe(code);
     expect(ir.diagnostics.length).toBe(1);
-    expect(ir.diagnostics[0]?.kind).toBe("var-detected");
+    expect(ir.diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
   });
 
   test("computes line/column for spans", () => {

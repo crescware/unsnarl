@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -59,7 +60,9 @@ describe("declareForLeft", () => {
     declareForLeft(forNode, forScope, code, diagnostics);
     expect(forScope.variables).toHaveLength(0);
     const events = diagnostics.list();
-    expect(events.some((d) => d.kind === "var-detected")).toBe(true);
+    expect(events.some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected)).toBe(
+      true,
+    );
   });
 
   test("ignores assignment-only init (no VariableDeclaration)", () => {

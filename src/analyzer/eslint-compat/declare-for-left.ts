@@ -1,3 +1,4 @@
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
@@ -20,7 +21,7 @@ export function declareForLeft(
     const kind = cand["kind"];
     if (kind === "var") {
       diagnostics.add(
-        "var-detected",
+        DIAGNOSTIC_KIND.VarDetected,
         "var declaration is not supported and was skipped.",
         spanFromOffset(raw, cand.start ?? 0),
       );

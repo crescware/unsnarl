@@ -1,6 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
@@ -60,7 +61,7 @@ describe("handleVariableDeclaration", () => {
     expect(scope.variables).toEqual([]);
     const items = diags.list();
     expect(items).toHaveLength(1);
-    expect(items[0]?.kind).toBe("var-detected");
+    expect(items[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
   });
 
   test("non-var/const/let kind is silently ignored", () => {
