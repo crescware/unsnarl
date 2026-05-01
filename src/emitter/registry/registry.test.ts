@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { SerializedIR } from "../ir/model.js";
-import type { Emitter } from "../pipeline/types.js";
+import type { SerializedIR } from "../../ir/model.js";
+import type { Emitter } from "../../pipeline/types.js";
 import { DefaultEmitterRegistry } from "./registry.js";
 
 const fakeIR: SerializedIR = {

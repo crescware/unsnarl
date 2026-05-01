@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { OxcParser } from "../parser/oxc.js";
-import { FlatSerializer } from "../serializer/flat.js";
+import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { OxcParser } from "../../parser/oxc.js";
+import { FlatSerializer } from "../../serializer/flat.js";
 import { JsonEmitter } from "./json.js";
 
 const parser = new OxcParser();

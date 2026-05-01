@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { SerializedIR } from "../ir/model.js";
+import type { SerializedIR } from "../../ir/model.js";
 import { IrEmitter } from "./ir.js";
 
 const ir: SerializedIR = {

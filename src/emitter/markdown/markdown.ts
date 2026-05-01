@@ -1,7 +1,7 @@
-import type { Language, SerializedIR } from "../ir/model.js";
-import type { EmitOptions, Emitter } from "../pipeline/types.js";
-import type { VisualGraphPruning } from "../visual-graph/model.js";
-import type { MermaidEmitter } from "./mermaid/mermaid.js";
+import type { Language, SerializedIR } from "../../ir/model.js";
+import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import type { VisualGraphPruning } from "../../visual-graph/model.js";
+import type { MermaidEmitter } from "../mermaid/mermaid.js";
 
 export class MarkdownEmitter implements Emitter {
   readonly format = "markdown";

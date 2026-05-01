@@ -1,7 +1,7 @@
-import type { SerializedIR } from "../ir/model.js";
-import type { EmitOptions, Emitter } from "../pipeline/types.js";
-import { buildVisualGraph } from "../visual-graph/builder.js";
-import type { VisualElement, VisualNode } from "../visual-graph/model.js";
+import type { SerializedIR } from "../../ir/model.js";
+import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import { buildVisualGraph } from "../../visual-graph/builder.js";
+import type { VisualElement, VisualNode } from "../../visual-graph/model.js";
 
 /**
  * Emits a wc-like, tab-separated table of per-node edge counts so the
