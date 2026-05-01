@@ -1,4 +1,4 @@
-import { EslintCompatAnalyzer } from "../analyzer/eslint-compat.js";
+import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import { IrEmitter } from "../emitter/ir.js";
 import { JsonEmitter } from "../emitter/json.js";
 import { MarkdownEmitter } from "../emitter/markdown.js";

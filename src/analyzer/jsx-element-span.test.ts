@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { OxcParser } from "../parser/oxc.js";
-import { EslintCompatAnalyzer } from "./eslint-compat.js";
+import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();

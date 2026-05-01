@@ -5,8 +5,8 @@ import type {
   Scope,
   ScopeType,
   Variable,
-} from "../ir/model.js";
-import { OxcParser } from "../parser/oxc.js";
+} from "../../ir/model.js";
+import { OxcParser } from "../../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat.js";
 
 const parser = new OxcParser();

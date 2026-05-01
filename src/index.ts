@@ -54,7 +54,7 @@ export { ReferenceFlags } from "./ir/model.js";
 export { OxcParser, ParseError } from "./parser/oxc.js";
 export type { ParseErrorDetail } from "./parser/oxc.js";
 
-export { EslintCompatAnalyzer } from "./analyzer/eslint-compat.js";
+export { EslintCompatAnalyzer } from "./analyzer/eslint-compat/eslint-compat.js";
 
 export { FlatSerializer } from "./serializer/flat.js";
 
