@@ -19,13 +19,13 @@ export class ScopeImpl implements Scope {
   readonly type: ScopeType;
   readonly isStrict: boolean;
   readonly upper: Scope | null;
-  readonly childScopes: Scope[] = [];
+  readonly childScopes: /* mutable */ Scope[] = [];
   readonly variableScope: Scope;
   readonly block: AstNode;
-  readonly variables: Variable[] = [];
+  readonly variables: /* mutable */ Variable[] = [];
   readonly set: Map<string, Variable> = new Map();
-  readonly references: Reference[] = [];
-  readonly through: Reference[] = [];
+  readonly references: /* mutable */ Reference[] = [];
+  readonly through: /* mutable */ Reference[] = [];
   readonly functionExpressionScope: boolean = false;
   unsnarlBlockContext: BlockContext | null = null;
   unsnarlFallsThrough: boolean = false;
@@ -61,9 +61,9 @@ export class ScopeImpl implements Scope {
 export class VariableImpl implements Variable {
   readonly name: string;
   readonly scope: Scope;
-  readonly identifiers: AstIdentifier[] = [];
-  readonly references: Reference[] = [];
-  readonly defs: Definition[] = [];
+  readonly identifiers: /* mutable */ AstIdentifier[] = [];
+  readonly references: /* mutable */ Reference[] = [];
+  readonly defs: /* mutable */ Definition[] = [];
 
   constructor(name: string, scope: Scope) {
     this.name = name;
@@ -79,7 +79,7 @@ export class ReferenceImpl implements Reference {
   readonly identifier: AstIdentifier;
   readonly from: Scope;
   resolved: Variable | null = null;
-  unsnarlOwners: Variable[] = [];
+  unsnarlOwners: /* mutable */ Variable[] = [];
   unsnarlPredicateContainer: PredicateContainer | null = null;
   unsnarlReturnContainer: ReturnContainer | null = null;
   unsnarlJsxElement: JsxElementContainer | null = null;

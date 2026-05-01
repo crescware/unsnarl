@@ -1,7 +1,7 @@
 import type { VisualElement, VisualNode } from "../model.js";
 
 export function findNodeById(
-  elements: VisualElement[],
+  elements: readonly VisualElement[],
   id: string,
 ): VisualNode | null {
   for (const e of elements) {

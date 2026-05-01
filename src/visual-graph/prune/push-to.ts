@@ -1,5 +1,5 @@
 export function pushTo(
-  map: Map<string, string[]>,
+  map: Map<string, /* mutable */ string[]>,
   key: string,
   value: string,
 ): void {

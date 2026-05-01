@@ -33,7 +33,12 @@ export type SubgraphKind =
   | "for"
   | "return";
 
-export type VisualNode = Readonly<{
+// Mutable: builder.ts and the various builder/* helpers fill optional
+// fields (endLine, unused, declarationKind, initIsFunction, importKind,
+// importedName, importSource) after the node is first inserted into its
+// container. Wrapping in Readonly would force a refactor of every
+// post-construction patch site.
+export type VisualNode = {
   type: "node";
   id: string;
   kind: NodeKind;
@@ -54,13 +59,13 @@ export type VisualNode = Readonly<{
   importKind?: ImportKind;
   importedName?: string | null;
   importSource?: string;
-}>;
+};
 
-// `elements` stays mutable: builder.ts pushes into the array as it walks
-// scopes, and rebuild-elements rewires children through `{ ...item,
-// elements: children }`. Wrapping in Readonly only seals the field
-// reference, not the array contents.
-export type VisualSubgraph = Readonly<{
+// Mutable: builder fills endLine / caseTest after construction and pushes
+// into elements as it walks scopes. rebuild-elements also rewires
+// children through `{ ...item, elements: children }`, so we cannot lock
+// the property bindings either.
+export type VisualSubgraph = {
   type: "subgraph";
   id: string;
   kind: SubgraphKind;
@@ -73,8 +78,8 @@ export type VisualSubgraph = Readonly<{
   // Mirrors the owner node's display name so the subgraph label survives
   // pruning even when the owner node itself gets cut out of the graph.
   ownerName?: string;
-  elements: VisualElement[];
-}>;
+  elements: /* mutable */ VisualElement[];
+};
 
 export type VisualElement = VisualNode | VisualSubgraph;
 
@@ -116,8 +121,8 @@ export type VisualGraph = Readonly<{
   version: 1;
   source: Readonly<{ path: string; language: Language }>;
   direction: Direction;
-  elements: VisualElement[];
-  edges: VisualEdge[];
+  elements: /* mutable */ VisualElement[];
+  edges: /* mutable */ VisualEdge[];
   boundaryEdges?: readonly VisualBoundaryEdge[];
   pruning?: VisualGraphPruning;
 }>;

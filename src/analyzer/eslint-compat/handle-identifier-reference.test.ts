@@ -14,7 +14,7 @@ type CapturedIdentifier = {
   node: NodeLike;
   parent: NodeLike | null;
   key: string | null;
-  path: PathEntry[];
+  path: readonly PathEntry[];
 };
 
 function captureNthIdentifier(

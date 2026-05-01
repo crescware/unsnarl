@@ -27,7 +27,7 @@ export const elkStrategy: MermaidStrategy = {
     if (placeholderIds.length === 0) {
       return [];
     }
-    const out: string[] = [
+    const out: /* mutable */ string[] = [
       "  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;",
     ];
     for (const id of placeholderIds) {

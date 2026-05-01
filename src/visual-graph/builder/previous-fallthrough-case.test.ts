@@ -28,7 +28,7 @@ const c2 = caseScope("c2", 100, true);
 const c3 = caseScope("c3", 100, false);
 
 const containerKey = "switch:switch:100";
-const sortedCases = new Map<string, SerializedScope[]>([
+const sortedCases = new Map<string, readonly SerializedScope[]>([
   [containerKey, [c0, c1, c2, c3]],
 ]);
 

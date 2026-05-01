@@ -20,7 +20,7 @@ export function parseRootQueries(value: string): RootQueryParseResult {
     return { ok: false, error: "empty --roots value" };
   }
   const tokens = value.split(",");
-  const queries: ParsedRootQuery[] = [];
+  const queries: /* mutable */ ParsedRootQuery[] = [];
   for (const token of tokens) {
     const r = parseRootQuery(token);
     if ("error" in r) {

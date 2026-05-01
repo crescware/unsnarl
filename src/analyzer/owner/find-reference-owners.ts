@@ -7,7 +7,7 @@ import { isAstNode } from "./is-ast-node.js";
 export function findReferenceOwners(
   path: readonly PathEntry[],
   scope: Scope,
-): Variable[] {
+): /* mutable */ Variable[] {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];
     if (!entry) {

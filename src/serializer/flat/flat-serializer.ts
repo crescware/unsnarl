@@ -26,7 +26,7 @@ export class FlatSerializer implements IRSerializer {
     scopes.forEach((s, i) => scopeIds.set(s, makeScopeId(i)));
 
     const variableIds = new Map<Variable, string>();
-    const orderedVariables: Variable[] = [];
+    const orderedVariables: /* mutable */ Variable[] = [];
     for (const s of scopes) {
       for (const v of s.variables) {
         const sid = scopeIds.get(s);
@@ -41,7 +41,7 @@ export class FlatSerializer implements IRSerializer {
     }
 
     const referenceIds = new Map<Reference, string>();
-    const allReferences: Reference[] = [];
+    const allReferences: /* mutable */ Reference[] = [];
     for (const s of scopes) {
       for (const r of s.references) {
         if (referenceIds.has(r)) {
@@ -55,19 +55,21 @@ export class FlatSerializer implements IRSerializer {
     );
     allReferences.forEach((r, i) => referenceIds.set(r, makeReferenceId(i)));
 
-    const serializedScopes: SerializedScope[] = scopes.map((s) =>
+    const serializedScopes: readonly SerializedScope[] = scopes.map((s) =>
       serializeScope(s, scopeIds, variableIds, referenceIds, ctx.raw),
     );
 
-    const serializedVariables: SerializedVariable[] = orderedVariables.map(
-      (v) => serializeVariable(v, scopeIds, variableIds, referenceIds, ctx.raw),
-    );
+    const serializedVariables: readonly SerializedVariable[] =
+      orderedVariables.map((v) =>
+        serializeVariable(v, scopeIds, variableIds, referenceIds, ctx.raw),
+      );
 
-    const serializedReferences: SerializedReference[] = allReferences.map((r) =>
-      serializeReference(r, scopeIds, variableIds, referenceIds, ctx.raw),
-    );
+    const serializedReferences: readonly SerializedReference[] =
+      allReferences.map((r) =>
+        serializeReference(r, scopeIds, variableIds, referenceIds, ctx.raw),
+      );
 
-    const unusedVariableIds: string[] = [];
+    const unusedVariableIds: /* mutable */ string[] = [];
     for (const v of orderedVariables) {
       if (v.references.length === 0 && hasDeclaringDef(v)) {
         const id = variableIds.get(v);

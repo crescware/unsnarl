@@ -28,7 +28,10 @@ function makeHostSubgraph(): VisualSubgraph {
 }
 
 function makeCtx(
-  opts: { variables?: SerializedVariable[]; scopes?: SerializedScope[] } = {},
+  opts: {
+    variables?: readonly SerializedVariable[];
+    scopes?: readonly SerializedScope[];
+  } = {},
 ): BuilderContext {
   const variables = opts.variables ?? [];
   const scopes = opts.scopes ?? [];

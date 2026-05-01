@@ -1,7 +1,9 @@
 import type { VisualElement } from "../model.js";
 
-export function collectNodeIds(elements: readonly VisualElement[]): string[] {
-  const out: string[] = [];
+export function collectNodeIds(
+  elements: readonly VisualElement[],
+): readonly string[] {
+  const out: /* mutable */ string[] = [];
   walk(elements);
   return out;
 

@@ -3,7 +3,7 @@ import { branchContainerKey } from "./branch-container-key.js";
 
 export function previousFallthroughCase(
   caseScope: SerializedScope,
-  sortedCasesByContainer: ReadonlyMap<string, SerializedScope[]>,
+  sortedCasesByContainer: ReadonlyMap<string, readonly SerializedScope[]>,
 ): SerializedScope | null {
   const ckey = branchContainerKey(caseScope);
   if (!ckey) {

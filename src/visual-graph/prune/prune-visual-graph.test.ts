@@ -577,12 +577,12 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
   });
 });
 
-function collectIds(elements: readonly VisualElement[]): string[] {
-  const out: string[] = [];
+function collectIds(elements: VisualElement[]): readonly string[] {
+  const out: /* mutable */ string[] = [];
   walk(elements);
   return out;
 
-  function walk(items: readonly VisualElement[]): void {
+  function walk(items: VisualElement[]): void {
     for (const item of items) {
       out.push(item.id);
       if (item.type === "subgraph") {
@@ -592,8 +592,8 @@ function collectIds(elements: readonly VisualElement[]): string[] {
   }
 }
 
-function flatten(elements: readonly VisualElement[]): VisualElement[] {
-  const out: VisualElement[] = [];
+function flatten(elements: VisualElement[]): VisualElement[] {
+  const out: /* mutable */ VisualElement[] = [];
   for (const e of elements) {
     out.push(e);
     if (e.type === "subgraph") {

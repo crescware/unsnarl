@@ -24,8 +24,8 @@ function emptyState(): BuildState {
   };
 }
 
-function makeCtx(scopes: SerializedScope[], raw = ""): BuilderContext {
-  const variables: SerializedVariable[] = [];
+function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
+  const variables: /* mutable */ SerializedVariable[] = [];
   const ir: SerializedIR = {
     version: 1,
     source: { path: "x.ts", language: "ts" },

@@ -5,7 +5,7 @@ import type { WriteOp } from "./write-op.js";
 export function ownerTargetId(
   ownerVarId: string,
   offset: number,
-  writeOpsByVariable: ReadonlyMap<string, WriteOp[]>,
+  writeOpsByVariable: ReadonlyMap<string, readonly WriteOp[]>,
 ): string {
   const ops = writeOpsByVariable.get(ownerVarId) ?? [];
   let last: WriteOp | null = null;

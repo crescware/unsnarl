@@ -11,7 +11,7 @@ export function readOrigins(
   refOffset: number,
   refScopeId: string,
   ctx: BuilderContext,
-): string[] {
+): readonly string[] {
   const ops = ctx.writeOpsByVariable.get(varId) ?? [];
   const prev = ops.filter((op) => op.offset < refOffset);
   const last = prev[prev.length - 1];
@@ -34,14 +34,14 @@ export function readOrigins(
     return [writeOpNodeId(last.refId)];
   }
 
-  const branchScopeIds: string[] = [];
+  const branchScopeIds: /* mutable */ string[] = [];
   for (const s of ctx.ir.scopes) {
     if (branchContainerKey(s) === containerKey) {
       branchScopeIds.push(s.id);
     }
   }
 
-  const origins: string[] = [];
+  const origins: /* mutable */ string[] = [];
   const isSwitch = containerKey.startsWith("switch:");
   for (const branchId of branchScopeIds) {
     const branchScope = ctx.scopeMap.get(branchId);

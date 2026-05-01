@@ -1,6 +1,7 @@
 import type { SerializedIR } from "../../ir/model.js";
 import type { EmitOptions, Emitter } from "../../pipeline/types.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
+import type { VisualNode } from "../../visual-graph/model.js";
 import { collectNodes } from "./collect-nodes.js";
 import { formatLabel } from "./format-label.js";
 
@@ -32,7 +33,10 @@ export class StatsEmitter implements Emitter {
     // itself: editors that pick up `path:line` jump targets land on
     // the right place, and same-line ties keep their original order
     // via Array.prototype.sort being stable.
-    const nodes = collectNodes(graph.elements).sort((a, b) => a.line - b.line);
+    // Copy before sort: collectNodes returns a readonly view, so we
+    // build a /* mutable */ slice locally for in-place sort.
+    const nodes: /* mutable */ VisualNode[] = [...collectNodes(graph.elements)];
+    nodes.sort((a, b) => a.line - b.line);
 
     const outCounts = new Map<string, number>();
     const inCounts = new Map<string, number>();
@@ -51,7 +55,7 @@ export class StatsEmitter implements Emitter {
       }
     }
 
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     const path = graph.source.path;
     let sumDesc = 0;
     let sumAnc = 0;

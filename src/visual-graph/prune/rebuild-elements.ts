@@ -3,8 +3,8 @@ import type { VisualElement, VisualSubgraph } from "../model.js";
 export function rebuildElements(
   elements: readonly VisualElement[],
   keep: ReadonlySet<string>,
-): VisualElement[] {
-  const result: VisualElement[] = [];
+): /* mutable */ VisualElement[] {
+  const result: /* mutable */ VisualElement[] = [];
   for (const item of elements) {
     if (item.type === "node") {
       if (keep.has(item.id)) {

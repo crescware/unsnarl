@@ -41,18 +41,21 @@ function varByName(ir: SerializedIR, name: string): SerializedVariable {
   return matches[0] as SerializedVariable;
 }
 
-function refsToVar(ir: SerializedIR, id: string): SerializedReference[] {
+function refsToVar(
+  ir: SerializedIR,
+  id: string,
+): readonly SerializedReference[] {
   return ir.references.filter((r) => r.resolved === id);
 }
 
-function caseScopesOf(ir: SerializedIR): SerializedScope[] {
+function caseScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) =>
       s.type === "block" && s.blockContext?.parentType === "SwitchStatement",
   );
 }
 
-function ifBranchScopesOf(ir: SerializedIR): SerializedScope[] {
+function ifBranchScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) => s.type === "block" && s.blockContext?.parentType === "IfStatement",
   );

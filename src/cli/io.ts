@@ -5,7 +5,7 @@ export function readSourceFile(path: string): string {
 }
 
 export async function readStdin(): Promise<string> {
-  const chunks: Buffer[] = [];
+  const chunks: /* mutable */ Buffer[] = [];
   for await (const chunk of process.stdin as unknown as AsyncIterable<Buffer>) {
     chunks.push(chunk);
   }

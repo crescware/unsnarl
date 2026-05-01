@@ -89,7 +89,7 @@ export type Reference = {
   isCall?(): boolean;
   isReceiver?(): boolean;
   unsnarlFlags?: ReferenceFlagBits;
-  unsnarlOwners?: Variable[];
+  unsnarlOwners?: /* mutable */ Variable[];
   unsnarlPredicateContainer?: PredicateContainer | null;
   unsnarlReturnContainer?: ReturnContainer | null;
   unsnarlJsxElement?: JsxElementContainer | null;
@@ -107,9 +107,9 @@ export type Definition = Readonly<{
 export type Variable = {
   name: string;
   scope: Scope;
-  identifiers: AstIdentifier[];
-  references: Reference[];
-  defs: Definition[];
+  identifiers: /* mutable */ AstIdentifier[];
+  references: /* mutable */ Reference[];
+  defs: /* mutable */ Definition[];
   unsnarlIsUnused?(): boolean;
 };
 
@@ -127,13 +127,13 @@ export type Scope = {
   type: ScopeType;
   isStrict: boolean;
   upper: Scope | null;
-  childScopes: Scope[];
+  childScopes: /* mutable */ Scope[];
   variableScope: Scope;
   block: AstNode;
-  variables: Variable[];
+  variables: /* mutable */ Variable[];
   set: Map<string, Variable>;
-  references: Reference[];
-  through: Reference[];
+  references: /* mutable */ Reference[];
+  through: /* mutable */ Reference[];
   functionExpressionScope: boolean;
   unsnarlBlockContext?: BlockContext | null;
   unsnarlFallsThrough?: boolean;

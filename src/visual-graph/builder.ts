@@ -86,7 +86,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
-  const refsByVariable = new Map<string, SerializedReference[]>();
+  const refsByVariable = new Map<string, /* mutable */ SerializedReference[]>();
   for (const r of ir.references) {
     if (!r.resolved) {
       continue;
@@ -98,15 +98,15 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   for (const [, refs] of refsByVariable) {
     refs.sort((a, b) => a.identifier.span.offset - b.identifier.span.offset);
   }
-  const writeOpsByVariable = new Map<string, WriteOp[]>();
-  const writeOpsByScope = new Map<string, WriteOp[]>();
+  const writeOpsByVariable = new Map<string, /* mutable */ WriteOp[]>();
+  const writeOpsByScope = new Map<string, /* mutable */ WriteOp[]>();
   const writeOpByRef = new Map<string, WriteOp>();
   for (const v of ir.variables) {
     if (hiddenVariables.has(v.id)) {
       continue;
     }
     const refs = refsByVariable.get(v.id) ?? [];
-    const ops: WriteOp[] = [];
+    const ops: /* mutable */ WriteOp[] = [];
     for (const r of refs) {
       if (!r.flags.write) {
         continue;
@@ -130,7 +130,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
-  const sortedCasesByContainer = new Map<string, SerializedScope[]>();
+  const sortedCasesByContainer = new Map<
+    string,
+    /* mutable */ SerializedScope[]
+  >();
   for (const s of ir.scopes) {
     const ckey = branchContainerKey(s);
     if (ckey?.startsWith("switch:")) {

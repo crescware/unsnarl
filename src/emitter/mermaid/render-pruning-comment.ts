@@ -2,7 +2,7 @@ import type { VisualGraph } from "../../visual-graph/model.js";
 
 export function renderPruningComment(
   graph: VisualGraph,
-  lines: string[],
+  lines: /* mutable */ string[],
 ): void {
   if (graph.pruning === undefined) {
     return;

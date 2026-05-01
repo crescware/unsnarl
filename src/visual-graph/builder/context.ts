@@ -11,8 +11,8 @@ export type BuilderContext = Readonly<{
   scopeMap: Map<string, SerializedScope>;
   subgraphOwnerVar: Map<string, string>;
   hiddenVariables: Set<string>;
-  writeOpsByVariable: Map<string, WriteOp[]>;
-  writeOpsByScope: Map<string, WriteOp[]>;
+  writeOpsByVariable: Map<string, /* mutable */ WriteOp[]>;
+  writeOpsByScope: Map<string, /* mutable */ WriteOp[]>;
   writeOpByRef: Map<string, WriteOp>;
-  sortedCasesByContainer: Map<string, SerializedScope[]>;
+  sortedCasesByContainer: Map<string, /* mutable */ SerializedScope[]>;
 }>;

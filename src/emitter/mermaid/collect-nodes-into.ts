@@ -1,7 +1,7 @@
 import type { VisualElement, VisualNode } from "../../visual-graph/model.js";
 
 export function collectNodesInto(
-  elements: VisualElement[],
+  elements: readonly VisualElement[],
   out: Map<string, VisualNode>,
 ): void {
   for (const e of elements) {

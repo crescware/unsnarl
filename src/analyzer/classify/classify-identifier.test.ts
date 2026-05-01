@@ -31,7 +31,7 @@ describe("classifyIdentifier dispatch", () => {
   });
 
   test("pattern step under VariableDeclarator → binding", () => {
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node({ type: "Program" }), key: null },
       { node: node({ type: "VariableDeclaration" }), key: "body" },
       { node: node({ type: "VariableDeclarator" }), key: "declarations" },
@@ -43,7 +43,7 @@ describe("classifyIdentifier dispatch", () => {
   });
 
   test("pattern step under AssignmentExpression → Write reference", () => {
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node({ type: "ExpressionStatement" }), key: null },
       { node: node({ type: "AssignmentExpression" }), key: "expression" },
       { node: node({ type: "ArrayPattern" }), key: "left" },

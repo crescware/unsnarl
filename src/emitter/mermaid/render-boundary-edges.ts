@@ -2,8 +2,8 @@ import type { VisualGraph } from "../../visual-graph/model.js";
 
 export function renderBoundaryEdges(
   graph: VisualGraph,
-  lines: string[],
-  stubIds: string[],
+  lines: /* mutable */ string[],
+  stubIds: /* mutable */ string[],
 ): void {
   if (graph.boundaryEdges === undefined || graph.boundaryEdges.length === 0) {
     return;

@@ -50,7 +50,7 @@ const fakeEmitter: Emitter = {
   emit: (ir) => `version=${ir.version}`,
 };
 
-function buildRegistry(emitters: Emitter[]): EmitterRegistry {
+function buildRegistry(emitters: readonly Emitter[]): EmitterRegistry {
   const map = new Map<string, Emitter>();
   for (const e of emitters) {
     map.set(e.format, e);

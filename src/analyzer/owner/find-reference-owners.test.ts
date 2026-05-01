@@ -10,7 +10,7 @@ import { findReferenceOwners } from "./find-reference-owners.js";
 const ident = (name: string): AstIdentifier =>
   ({ type: "Identifier", name }) as unknown as AstIdentifier;
 
-const scopeWith = (...names: string[]): ScopeImpl => {
+const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
     type: "module",
     isStrict: true,
@@ -38,9 +38,9 @@ const programOf = (code: string): AstNode =>
 const pathTo = (
   root: AstNode,
   predicate: (n: AstNode) => boolean,
-): PathEntry[] => {
-  const stack: PathEntry[] = [];
-  let found: PathEntry[] | null = null;
+): readonly PathEntry[] => {
+  const stack: /* mutable */ PathEntry[] = [];
+  let found: readonly PathEntry[] | null = null;
   const visit = (node: AstNode, key: string | null): void => {
     if (found !== null) return;
     if (predicate(node)) {

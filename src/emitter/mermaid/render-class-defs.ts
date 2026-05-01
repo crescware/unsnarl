@@ -1,7 +1,7 @@
 export function renderClassDefs(
   wrapperIds: readonly string[],
   stubIds: readonly string[],
-  lines: string[],
+  lines: /* mutable */ string[],
 ): void {
   if (wrapperIds.length > 0) {
     // Distinct background so the function wrapper is visually separable

@@ -17,7 +17,7 @@ type FlatElement = {
   name?: string;
   ownerNodeId?: string;
   caseTest?: string | null;
-  elements?: FlatElement[];
+  elements?: readonly FlatElement[];
   declarationKind?: string;
   importKind?: string;
   importedName?: string | null;
@@ -25,8 +25,10 @@ type FlatElement = {
   label?: unknown;
 };
 
-function flattenNodes(elements: FlatElement[]): FlatElement[] {
-  const out: FlatElement[] = [];
+function flattenNodes(
+  elements: readonly FlatElement[],
+): readonly FlatElement[] {
+  const out: /* mutable */ FlatElement[] = [];
   for (const e of elements) {
     if (e.type === "node") {
       out.push(e);
@@ -39,8 +41,10 @@ function flattenNodes(elements: FlatElement[]): FlatElement[] {
   return out;
 }
 
-function flattenSubgraphs(elements: FlatElement[]): FlatElement[] {
-  const out: FlatElement[] = [];
+function flattenSubgraphs(
+  elements: readonly FlatElement[],
+): readonly FlatElement[] {
+  const out: /* mutable */ FlatElement[] = [];
   for (const e of elements) {
     if (e.type === "subgraph" && e.elements) {
       out.push(e);

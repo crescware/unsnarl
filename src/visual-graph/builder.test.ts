@@ -34,8 +34,8 @@ function build(
   return buildVisualGraph(ir);
 }
 
-function flattenNodes(elements: readonly VisualElement[]): VisualNode[] {
-  const out: VisualNode[] = [];
+function flattenNodes(elements: VisualElement[]): readonly VisualNode[] {
+  const out: /* mutable */ VisualNode[] = [];
   for (const e of elements) {
     if (e.type === "node") {
       out.push(e);
@@ -47,9 +47,9 @@ function flattenNodes(elements: readonly VisualElement[]): VisualNode[] {
 }
 
 function flattenSubgraphs(
-  elements: readonly VisualElement[],
-): VisualSubgraph[] {
-  const out: VisualSubgraph[] = [];
+  elements: VisualElement[],
+): readonly VisualSubgraph[] {
+  const out: /* mutable */ VisualSubgraph[] = [];
   for (const e of elements) {
     if (e.type === "subgraph") {
       out.push(e);
@@ -62,11 +62,14 @@ function flattenSubgraphs(
 function findSubgraphs(
   graph: VisualGraph,
   kind: VisualSubgraph["kind"],
-): VisualSubgraph[] {
+): readonly VisualSubgraph[] {
   return flattenSubgraphs(graph.elements).filter((s) => s.kind === kind);
 }
 
-function findNodes(graph: VisualGraph, kind: VisualNode["kind"]): VisualNode[] {
+function findNodes(
+  graph: VisualGraph,
+  kind: VisualNode["kind"],
+): readonly VisualNode[] {
   return flattenNodes(graph.elements).filter((n) => n.kind === kind);
 }
 
@@ -74,15 +77,15 @@ function nodeByName(graph: VisualGraph, name: string): VisualNode | undefined {
   return flattenNodes(graph.elements).find((n) => n.name === name);
 }
 
-function edgesFrom(graph: VisualGraph, fromId: string): VisualEdge[] {
+function edgesFrom(graph: VisualGraph, fromId: string): readonly VisualEdge[] {
   return graph.edges.filter((e) => e.from === fromId);
 }
 
-function edgesTo(graph: VisualGraph, toId: string): VisualEdge[] {
+function edgesTo(graph: VisualGraph, toId: string): readonly VisualEdge[] {
   return graph.edges.filter((e) => e.to === toId);
 }
 
-function childSubgraphsOf(sg: VisualSubgraph): VisualSubgraph[] {
+function childSubgraphsOf(sg: VisualSubgraph): readonly VisualSubgraph[] {
   return sg.elements.filter((e): e is VisualSubgraph => e.type === "subgraph");
 }
 

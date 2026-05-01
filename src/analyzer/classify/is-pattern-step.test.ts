@@ -19,7 +19,7 @@ describe("isPatternStep", () => {
   });
 
   test("Property is a pattern step only when its parent (path[i-1]) is ObjectPattern", () => {
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node("ObjectPattern"), key: null },
       { node: node("Property"), key: "properties" },
     ];
@@ -27,7 +27,7 @@ describe("isPatternStep", () => {
   });
 
   test("Property under a non-ObjectPattern parent → false", () => {
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node("ObjectExpression"), key: null },
       { node: node("Property"), key: "properties" },
     ];

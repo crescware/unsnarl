@@ -18,7 +18,7 @@ export function parseCliArgs(argv: readonly string[]): CliParseResult {
   let version = false;
   let inputFile: string | null = null;
   let mermaidRenderer: CliMermaidRenderer | null = null;
-  const roots: ParsedRootQuery[] = [];
+  const roots: /* mutable */ ParsedRootQuery[] = [];
   let descendants: number | null = null;
   let ancestors: number | null = null;
   let context: number | null = null;

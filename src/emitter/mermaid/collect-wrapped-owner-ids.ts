@@ -1,7 +1,7 @@
 import type { VisualElement } from "../../visual-graph/model.js";
 
 export function collectWrappedOwnerIds(
-  elements: VisualElement[],
+  elements: readonly VisualElement[],
   out: Set<string>,
 ): void {
   for (const e of elements) {

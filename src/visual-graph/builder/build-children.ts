@@ -8,7 +8,7 @@ import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
 import { lineForOffset } from "./line-for-offset.js";
 
 type Container = Readonly<{
-  elements: VisualElement[];
+  elements: /* mutable */ VisualElement[];
 }>;
 
 export function buildChildren(
@@ -17,7 +17,7 @@ export function buildChildren(
   ctx: BuilderContext,
   state: BuildState,
 ): void {
-  const children: SerializedScope[] = [];
+  const children: /* mutable */ SerializedScope[] = [];
   for (const id of parentScope.childScopes) {
     const c = ctx.scopeMap.get(id);
     if (c) {
@@ -37,7 +37,7 @@ export function buildChildren(
       i++;
       continue;
     }
-    const group: SerializedScope[] = [child];
+    const group: /* mutable */ SerializedScope[] = [child];
     let j = i + 1;
     while (j < children.length) {
       const next = children[j];

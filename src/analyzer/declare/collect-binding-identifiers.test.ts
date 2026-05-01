@@ -16,7 +16,7 @@ const declId = (code: string): AstNode => {
   return decl;
 };
 
-const names = (pattern: AstNode): string[] =>
+const names = (pattern: AstNode): readonly string[] =>
   collectBindingIdentifiers(pattern).map((i) => i.name);
 
 describe("collectBindingIdentifiers", () => {

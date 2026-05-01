@@ -51,7 +51,7 @@ describe("stateRefId", () => {
 
   test.each<{
     name: string;
-    refs: SerializedReference[];
+    refs: readonly SerializedReference[];
     ops: WriteOp[];
     refId: string;
     varId: string;

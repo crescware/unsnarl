@@ -11,7 +11,7 @@ const parse = (code: string): AstNode =>
 describe("walk", () => {
   test("enter is called for the root node first", () => {
     const program = parse("const x = 1;");
-    const types: string[] = [];
+    const types: /* mutable */ string[] = [];
     walk(program, {
       enter(node) {
         types.push(node.type);
@@ -22,7 +22,7 @@ describe("walk", () => {
 
   test("enter visits descendants in source order", () => {
     const program = parse("const x = 1; const y = 2;");
-    const declared: string[] = [];
+    const declared: /* mutable */ string[] = [];
     walk(program, {
       enter(node) {
         if (node.type === "VariableDeclarator") {
@@ -42,8 +42,8 @@ describe("walk", () => {
 
   test("returning 'skip' from enter prevents descent but still calls leave", () => {
     const program = parse("const x = 1;");
-    const entered: string[] = [];
-    const left: string[] = [];
+    const entered: /* mutable */ string[] = [];
+    const left: /* mutable */ string[] = [];
     walk(program, {
       enter(node) {
         entered.push(node.type);
@@ -62,7 +62,7 @@ describe("walk", () => {
 
   test("leave fires in post-order (root last)", () => {
     const program = parse("const x = 1;");
-    const left: string[] = [];
+    const left: /* mutable */ string[] = [];
     walk(program, {
       leave(node) {
         left.push(node.type);

@@ -59,7 +59,7 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
   // default at the CLI / pipeline boundary. dagre is still selectable for
   // environments that cannot register the elk loader (e.g. GitHub's
   // markdown preview).
-  const lines: string[] = [];
+  const lines: /* mutable */ string[] = [];
   for (const l of strategy.preambleLines) {
     lines.push(l);
   }
@@ -113,7 +113,7 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
   renderSyntheticNodeBlock(state, graph);
   pushEdgeLines(importEdges, lines);
 
-  const stubIds: string[] = [];
+  const stubIds: /* mutable */ string[] = [];
   renderBoundaryEdges(graph, lines, stubIds);
 
   renderClassDefs(state.wrapperIds, stubIds, lines);

@@ -9,7 +9,7 @@ import { shouldSubgraph } from "./should-subgraph.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
 type Container = Readonly<{
-  elements: VisualElement[];
+  elements: /* mutable */ VisualElement[];
 }>;
 
 export function buildScope(

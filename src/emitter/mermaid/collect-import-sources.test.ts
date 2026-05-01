@@ -4,7 +4,7 @@ import type { VisualNode } from "../../visual-graph/model.js";
 import { collectImportSources } from "./collect-import-sources.js";
 import { makeNode } from "./testing/make-node.js";
 
-function asMap(...nodes: VisualNode[]): Map<string, VisualNode> {
+function asMap(...nodes: readonly VisualNode[]): Map<string, VisualNode> {
   return new Map(nodes.map((n) => [n.id, n]));
 }
 

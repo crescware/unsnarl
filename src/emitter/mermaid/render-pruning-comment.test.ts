@@ -5,13 +5,13 @@ import { makeGraph } from "./testing/make-graph.js";
 
 describe("renderPruningComment", () => {
   test("does nothing when graph.pruning is undefined", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(makeGraph(), lines);
     expect(lines).toEqual([]);
   });
 
   test("emits a single comment summarising roots, ancestors, and descendants", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
       makeGraph({
         pruning: {
@@ -31,7 +31,7 @@ describe("renderPruningComment", () => {
   });
 
   test("appends a warning line for each zero-match root", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
       makeGraph({
         pruning: {
@@ -56,7 +56,7 @@ describe("renderPruningComment", () => {
   });
 
   test("empty roots list still emits the summary line", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
       makeGraph({
         pruning: { roots: [], ancestors: 0, descendants: 0 },

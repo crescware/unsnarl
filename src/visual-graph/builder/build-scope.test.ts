@@ -29,8 +29,8 @@ function emptyState(): BuildState {
 }
 
 function makeCtx(opts: {
-  scopes: SerializedScope[];
-  variables?: SerializedVariable[];
+  scopes: readonly SerializedScope[];
+  variables?: readonly SerializedVariable[];
   subgraphOwnerVar?: Map<string, string>;
   hiddenVariables?: Set<string>;
   writeOpsByScope?: Map<string, WriteOp[]>;

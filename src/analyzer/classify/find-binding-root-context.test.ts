@@ -50,7 +50,7 @@ describe("findBindingRootContext", () => {
     // path stack: [VariableDeclarator (key=id, but recorded with key=parent's key on the way down), ObjectPattern (id), Property (properties)]
     // findBindingRootContext walks `parent` which is the immediate parent of the visited identifier.
     // We start at ObjectPattern parent (pattern step) and walk up to VariableDeclarator.
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node("Program"), key: null },
       { node: node("VariableDeclaration"), key: "body" },
       { node: node("VariableDeclarator"), key: "declarations" },
@@ -62,7 +62,7 @@ describe("findBindingRootContext", () => {
   });
 
   test("walks up through nested patterns and stops at AssignmentExpression#left", () => {
-    const path: PathEntry[] = [
+    const path: readonly PathEntry[] = [
       { node: node("ExpressionStatement"), key: null },
       { node: node("AssignmentExpression"), key: "expression" },
       { node: node("ArrayPattern"), key: "left" },

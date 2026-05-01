@@ -350,11 +350,11 @@ describe("MermaidEmitter", () => {
   });
 });
 
-function lines(out: string): string[] {
+function lines(out: string): readonly string[] {
   return out.split("\n");
 }
 
-function edgesFor(out: string): string[] {
+function edgesFor(out: string): readonly string[] {
   return lines(out).filter((l) => l.includes(" -->|"));
 }
 

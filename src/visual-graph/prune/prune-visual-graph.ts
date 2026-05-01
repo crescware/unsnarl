@@ -120,7 +120,7 @@ export function pruneVisualGraph(
     }
   }
 
-  const boundaryEdges: VisualBoundaryEdge[] = [];
+  const boundaryEdges: /* mutable */ VisualBoundaryEdge[] = [];
   for (const bucket of buckets.values()) {
     if (bucket.kind === "out") {
       boundaryEdges.push({ inside: bucket.inside, direction: "out" });

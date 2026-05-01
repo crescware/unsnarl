@@ -6,10 +6,10 @@ import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
 import { hoistDeclarations } from "./hoist-declarations.js";
 
-const programBody = (code: string): unknown[] => {
+const programBody = (code: string): readonly unknown[] => {
   const program = parseSync("input.ts", code, { lang: "ts" })
     .program as unknown as {
-    body: unknown[];
+    body: readonly unknown[];
   };
   return program.body;
 };

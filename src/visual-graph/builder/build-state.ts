@@ -6,5 +6,5 @@ export type BuildState = Readonly<{
   returnSubgraphsByFn: Map<string, Map<string, VisualSubgraph>>;
   returnUseAdded: Set<string>;
   emittedEdges: Set<string>;
-  edges: VisualEdge[];
+  edges: /* mutable */ VisualEdge[];
 }>;

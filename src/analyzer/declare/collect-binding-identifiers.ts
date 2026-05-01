@@ -1,13 +1,15 @@
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { isAstNode } from "./is-ast-node.js";
 
-export function collectBindingIdentifiers(pattern: AstNode): AstIdentifier[] {
-  const out: AstIdentifier[] = [];
+export function collectBindingIdentifiers(
+  pattern: AstNode,
+): readonly AstIdentifier[] {
+  const out: /* mutable */ AstIdentifier[] = [];
   collect(pattern, out);
   return out;
 }
 
-function collect(node: AstNode, out: AstIdentifier[]): void {
+function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
   switch (node.type) {
     case "Identifier":
       out.push(node as AstIdentifier);

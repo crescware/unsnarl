@@ -19,8 +19,8 @@ const def = (nameStart?: number): Definition => ({
 });
 
 const variable = (
-  identifiers: AstIdentifier[],
-  defs: Definition[] = [],
+  identifiers: readonly AstIdentifier[],
+  defs: readonly Definition[] = [],
 ): Variable => ({ identifiers, defs }) as unknown as Variable;
 
 describe("pickVariableOffset", () => {

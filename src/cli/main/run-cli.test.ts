@@ -14,8 +14,8 @@ type CapturedOutput = Readonly<{
 async function captureRun(
   argv: readonly string[],
 ): Promise<{ exitCode: number } & CapturedOutput> {
-  const stdout: string[] = [];
-  const stderr: string[] = [];
+  const stdout: /* mutable */ string[] = [];
+  const stderr: /* mutable */ string[] = [];
   const stdoutSpy = vi
     .spyOn(process.stdout, "write")
     .mockImplementation((chunk: unknown) => {

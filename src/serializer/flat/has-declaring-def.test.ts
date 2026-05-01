@@ -12,7 +12,7 @@ const ident = (name: string): AstIdentifier =>
   ({ type: "Identifier", name }) as unknown as AstIdentifier;
 const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 
-const variableWith = (defs: Definition[]): Variable =>
+const variableWith = (defs: readonly Definition[]): Variable =>
   ({ defs }) as unknown as Variable;
 
 describe("hasDeclaringDef", () => {

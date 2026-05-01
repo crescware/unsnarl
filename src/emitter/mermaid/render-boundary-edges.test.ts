@@ -5,8 +5,8 @@ import { makeGraph } from "./testing/make-graph.js";
 
 describe("renderBoundaryEdges", () => {
   test("does nothing when boundaryEdges is undefined or empty", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(makeGraph(), lines, stubIds);
     expect(lines).toEqual([]);
     expect(stubIds).toEqual([]);
@@ -17,8 +17,8 @@ describe("renderBoundaryEdges", () => {
   });
 
   test("emits an unlabeled dashed arrow for direction='out' (label is unknowable)", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
       makeGraph({
         boundaryEdges: [{ inside: "n_x", direction: "out" }],
@@ -32,8 +32,8 @@ describe("renderBoundaryEdges", () => {
   });
 
   test("emits a labeled dashed arrow for direction='in'", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
       makeGraph({
         boundaryEdges: [{ inside: "n_x", direction: "in", label: "read" }],
@@ -46,8 +46,8 @@ describe("renderBoundaryEdges", () => {
   });
 
   test("assigns sequential stub ids and appends them to stubIds", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
       makeGraph({
         boundaryEdges: [

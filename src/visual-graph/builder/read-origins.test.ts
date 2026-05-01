@@ -13,9 +13,9 @@ import { makeWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
 function makeCtx(opts: {
-  scopes: SerializedScope[];
+  scopes: readonly SerializedScope[];
   writeOpsByVariable?: Map<string, WriteOp[]>;
-  sortedCasesByContainer?: Map<string, SerializedScope[]>;
+  sortedCasesByContainer?: Map<string, readonly SerializedScope[]>;
 }): BuilderContext {
   const ir: SerializedIR = {
     version: 1,

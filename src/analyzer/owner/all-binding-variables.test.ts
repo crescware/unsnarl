@@ -21,7 +21,7 @@ const declId = (code: string): AstNode => {
   return decl;
 };
 
-const scopeWith = (...names: string[]): ScopeImpl => {
+const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
     type: "module",
     isStrict: true,

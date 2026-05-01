@@ -19,8 +19,8 @@ function findVariable(scope: Scope, name: string): Variable | undefined {
   return scope.variables.find((v) => v.name === name);
 }
 
-function collectScopes(root: Scope): Scope[] {
-  const out: Scope[] = [];
+function collectScopes(root: Scope): readonly Scope[] {
+  const out: /* mutable */ Scope[] = [];
   function visit(s: Scope) {
     out.push(s);
     for (const c of s.childScopes) {
@@ -31,7 +31,7 @@ function collectScopes(root: Scope): Scope[] {
   return out;
 }
 
-function refsOf(scope: Scope, name: string): Reference[] {
+function refsOf(scope: Scope, name: string): readonly Reference[] {
   const v = findVariable(scope, name);
   return v ? [...v.references] : [];
 }

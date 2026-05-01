@@ -5,7 +5,7 @@ import { makeEdge } from "./testing/make-edge.js";
 
 describe("pushEdgeLines", () => {
   test("formats each edge as '  <from> -->|<label>| <to>'", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     pushEdgeLines(
       [
         makeEdge({ from: "a", to: "b", label: "read" }),
@@ -17,13 +17,13 @@ describe("pushEdgeLines", () => {
   });
 
   test("preserves the input order in the appended lines", () => {
-    const lines: string[] = ["existing"];
+    const lines: /* mutable */ string[] = ["existing"];
     pushEdgeLines([makeEdge({ from: "x", to: "y", label: "set" })], lines);
     expect(lines).toEqual(["existing", "  x -->|set| y"]);
   });
 
   test("empty input pushes nothing", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     pushEdgeLines([], lines);
     expect(lines).toEqual([]);
   });

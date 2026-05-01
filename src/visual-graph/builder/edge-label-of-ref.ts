@@ -1,7 +1,7 @@
 import type { SerializedReference } from "../../ir/model.js";
 
 export function edgeLabelOfRef(r: SerializedReference): string {
-  const parts: string[] = [];
+  const parts: /* mutable */ string[] = [];
   if (r.flags.read) {
     parts.push("read");
   }

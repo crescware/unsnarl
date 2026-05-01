@@ -9,7 +9,7 @@ import { predicateContainer } from "./testing/predicate-container.js";
 import { span } from "./testing/span.js";
 
 function withSwitchAt(offset: number): {
-  scopes: SerializedScope[];
+  scopes: readonly SerializedScope[];
   scopeMap: Map<string, SerializedScope>;
   refFrom: string;
 } {

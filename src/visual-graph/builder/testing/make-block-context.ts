@@ -6,9 +6,7 @@ export function makeBlockContext(
   parentSpanOffset = 0,
   caseTest?: string | null,
 ): BlockContext {
-  const ctx: BlockContext = { parentType, key, parentSpanOffset };
-  if (caseTest !== undefined) {
-    ctx.caseTest = caseTest;
-  }
-  return ctx;
+  return caseTest === undefined
+    ? { parentType, key, parentSpanOffset }
+    : { parentType, key, parentSpanOffset, caseTest };
 }

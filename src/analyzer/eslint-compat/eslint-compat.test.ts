@@ -20,7 +20,7 @@ function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
   return analyzer.analyze(parsed);
 }
 
-function variableNames(scope: Scope): string[] {
+function variableNames(scope: Scope): /* mutable */ string[] {
   return scope.variables.map((v) => v.name);
 }
 
@@ -28,12 +28,12 @@ function findVariable(scope: Scope, name: string): Variable | undefined {
   return scope.variables.find((v) => v.name === name);
 }
 
-function defTypes(variable: Variable): DefinitionType[] {
+function defTypes(variable: Variable): readonly DefinitionType[] {
   return variable.defs.map((d) => d.type);
 }
 
-function collectScopes(root: Scope): Scope[] {
-  const out: Scope[] = [];
+function collectScopes(root: Scope): readonly Scope[] {
+  const out: /* mutable */ Scope[] = [];
   function visit(s: Scope) {
     out.push(s);
     for (const c of s.childScopes) {
