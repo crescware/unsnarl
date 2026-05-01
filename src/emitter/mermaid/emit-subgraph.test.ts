@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SUBGRAPH_KIND } from "../../constants.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";
@@ -13,7 +14,7 @@ describe("emitSubgraph", () => {
     });
     const sg = makeSubgraph({
       id: "s_fn",
-      kind: "function",
+      kind: SUBGRAPH_KIND.Function,
       ownerNodeId: "n_owner",
       ownerName: "f",
     });
@@ -29,7 +30,7 @@ describe("emitSubgraph", () => {
     const state = makeRenderState();
     const sg = makeSubgraph({
       id: "s_fn",
-      kind: "function",
+      kind: SUBGRAPH_KIND.Function,
       ownerNodeId: "n_missing",
     });
     emitSubgraph(state, sg, "  ");
@@ -41,7 +42,11 @@ describe("emitSubgraph", () => {
 
   test("non-function subgraphs are emitted plainly without a wrapper", () => {
     const state = makeRenderState();
-    emitSubgraph(state, makeSubgraph({ id: "s_if", kind: "if" }), "  ");
+    emitSubgraph(
+      state,
+      makeSubgraph({ id: "s_if", kind: SUBGRAPH_KIND.If }),
+      "  ",
+    );
     expect(state.wrapperIds).toEqual([]);
     expect(state.lines.some((l) => l.startsWith('  subgraph s_if["'))).toBe(
       true,
@@ -55,7 +60,7 @@ describe("emitSubgraph", () => {
     });
     const sg = makeSubgraph({
       id: "s_fn",
-      kind: "function",
+      kind: SUBGRAPH_KIND.Function,
       ownerNodeId: "n_owner",
     });
     emitSubgraph(state, sg, "  ");

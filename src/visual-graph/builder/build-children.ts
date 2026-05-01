@@ -1,4 +1,8 @@
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { branchContainerKey } from "./branch-container-key.js";
@@ -61,7 +65,7 @@ export function buildChildren(
     const containerSubgraph = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: containerId,
-      kind: "if-else-container",
+      kind: SUBGRAPH_KIND.IfElseContainer,
       line: lineForOffset(ctx.ir.raw, offset),
       direction: DIRECTION.RL,
       hasElse,

@@ -1,4 +1,4 @@
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement } from "../../visual-graph/model.js";
 
 export function collectWrappedOwnerIds(
@@ -9,7 +9,7 @@ export function collectWrappedOwnerIds(
     if (e.type !== VISUAL_ELEMENT_TYPE.Subgraph) {
       continue;
     }
-    if (e.kind === "function" && e.ownerNodeId !== undefined) {
+    if (e.kind === SUBGRAPH_KIND.Function && e.ownerNodeId !== undefined) {
       out.add(e.ownerNodeId);
     }
     collectWrappedOwnerIds(e.elements, out);

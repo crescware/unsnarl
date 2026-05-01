@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { JsonEmitter } from "./json.js";
@@ -12,9 +12,7 @@ const serializer = new FlatSerializer();
 const emitter = new JsonEmitter();
 
 type FlatElement = {
-  type:
-    | typeof VISUAL_ELEMENT_TYPE.Node
-    | typeof VISUAL_ELEMENT_TYPE.Subgraph;
+  type: typeof VISUAL_ELEMENT_TYPE.Node | typeof VISUAL_ELEMENT_TYPE.Subgraph;
   id: string;
   kind: string;
   name?: string;
@@ -142,7 +140,7 @@ describe("JsonEmitter", () => {
   test("function bodies become subgraphs of kind 'function' carrying ownerNodeId of the FunctionName", () => {
     const graph = JSON.parse(emit("function add(a, b) { return a + b; }\n"));
     const fnSubgraph = flattenSubgraphs(graph.elements).find(
-      (s) => s.kind === "function",
+      (s) => s.kind === SUBGRAPH_KIND.Function,
     );
     expect(fnSubgraph).toBeDefined();
     const ownerNode = flattenNodes(graph.elements).find(
@@ -152,7 +150,9 @@ describe("JsonEmitter", () => {
     expect(ownerNode?.kind).toBe("FunctionName");
     expect(ownerNode?.name).toBe("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Subgraph && e.kind === "return",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Subgraph &&
+        e.kind === SUBGRAPH_KIND.Return,
     );
     expect(returnSubgraph).toBeDefined();
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
@@ -175,7 +175,7 @@ describe("JsonEmitter", () => {
       ),
     );
     const cases = flattenSubgraphs(graph.elements).filter(
-      (s) => s.kind === "case",
+      (s) => s.kind === SUBGRAPH_KIND.Case,
     );
     const caseTests = cases.map((c) => c.caseTest);
     expect(caseTests).toContain('"a"');

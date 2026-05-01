@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SUBGRAPH_KIND } from "../../constants.js";
 import { collectWrappedOwnerIds } from "./collect-wrapped-owner-ids.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeSubgraph } from "./testing/make-subgraph.js";
@@ -9,8 +10,8 @@ describe("collectWrappedOwnerIds", () => {
     const out = new Set<string>();
     collectWrappedOwnerIds(
       [
-        makeSubgraph({ kind: "function", ownerNodeId: "n_a" }),
-        makeSubgraph({ kind: "function", ownerNodeId: "n_b" }),
+        makeSubgraph({ kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_a" }),
+        makeSubgraph({ kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_b" }),
       ],
       out,
     );
@@ -19,14 +20,17 @@ describe("collectWrappedOwnerIds", () => {
 
   test("ignores function subgraphs without ownerNodeId", () => {
     const out = new Set<string>();
-    collectWrappedOwnerIds([makeSubgraph({ kind: "function" })], out);
+    collectWrappedOwnerIds(
+      [makeSubgraph({ kind: SUBGRAPH_KIND.Function })],
+      out,
+    );
     expect(out.size).toBe(0);
   });
 
   test("ignores non-function subgraphs even with ownerNodeId set", () => {
     const out = new Set<string>();
     collectWrappedOwnerIds(
-      [makeSubgraph({ kind: "if", ownerNodeId: "n_x" })],
+      [makeSubgraph({ kind: SUBGRAPH_KIND.If, ownerNodeId: "n_x" })],
       out,
     );
     expect(out.size).toBe(0);
@@ -37,10 +41,13 @@ describe("collectWrappedOwnerIds", () => {
     collectWrappedOwnerIds(
       [
         makeSubgraph({
-          kind: "function",
+          kind: SUBGRAPH_KIND.Function,
           ownerNodeId: "n_outer",
           elements: [
-            makeSubgraph({ kind: "function", ownerNodeId: "n_inner" }),
+            makeSubgraph({
+              kind: SUBGRAPH_KIND.Function,
+              ownerNodeId: "n_inner",
+            }),
           ],
         }),
       ],
@@ -54,7 +61,7 @@ describe("collectWrappedOwnerIds", () => {
     collectWrappedOwnerIds(
       [
         makeNode({ id: "n_a" }),
-        makeSubgraph({ kind: "function", ownerNodeId: "n_b" }),
+        makeSubgraph({ kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_b" }),
       ],
       out,
     );

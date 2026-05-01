@@ -1,4 +1,8 @@
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
@@ -25,7 +29,7 @@ export function describeSubgraph(
     return {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id,
-      kind: "function",
+      kind: SUBGRAPH_KIND.Function,
       line: startLine,
       endLine,
       direction: DIRECTION.RL,

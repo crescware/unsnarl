@@ -1,4 +1,8 @@
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { SerializedReference } from "../../ir/model.js";
 import type { VisualNode, VisualSubgraph } from "../model.js";
 import type { BuildState } from "./build-state.js";
@@ -32,7 +36,7 @@ export function ensureReturnUseNode(
     sg = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: returnSubgraphId(enclosingFnVarId, containerKey),
-      kind: "return",
+      kind: SUBGRAPH_KIND.Return,
       line: startLine,
       direction: DIRECTION.RL,
       elements: [],

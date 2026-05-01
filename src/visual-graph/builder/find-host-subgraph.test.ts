@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 import type { BuildState } from "./build-state.js";
@@ -12,7 +16,7 @@ function makeSubgraph(id: string): VisualSubgraph {
   return {
     type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
-    kind: "function",
+    kind: SUBGRAPH_KIND.Function,
     line: 1,
     direction: DIRECTION.RL,
     elements: [],

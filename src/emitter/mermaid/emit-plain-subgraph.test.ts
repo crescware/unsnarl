@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION } from "../../constants.js";
+import { DIRECTION, SUBGRAPH_KIND } from "../../constants.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";
@@ -12,7 +12,7 @@ describe("emitPlainSubgraph", () => {
     const state = makeRenderState();
     const sg = makeSubgraph({
       id: "s_x",
-      kind: "if",
+      kind: SUBGRAPH_KIND.If,
       direction: DIRECTION.TB,
       elements: [makeNode({ id: "n_a" }), makeNode({ id: "n_b" })],
     });
@@ -28,9 +28,9 @@ describe("emitPlainSubgraph", () => {
     const state = makeRenderState();
     const sg = makeSubgraph({
       id: "outer",
-      kind: "if",
+      kind: SUBGRAPH_KIND.If,
       elements: [
-        makeSubgraph({ id: "inner", kind: "else" }),
+        makeSubgraph({ id: "inner", kind: SUBGRAPH_KIND.Else }),
         makeNode({ id: "n_a" }),
       ],
     });
@@ -44,7 +44,7 @@ describe("emitPlainSubgraph", () => {
     const wrapped = new Set(["n_owner"]);
     const state = makeRenderState({ wrappedOwnerIds: wrapped });
     const sg = makeSubgraph({
-      kind: "if",
+      kind: SUBGRAPH_KIND.If,
       elements: [makeNode({ id: "n_owner" }), makeNode({ id: "n_keep" })],
     });
     emitPlainSubgraph(state, sg, "  ");
@@ -60,7 +60,11 @@ describe("emitPlainSubgraph", () => {
       }),
     });
     const state = makeRenderState({ strategy });
-    const sg = makeSubgraph({ id: "empty", kind: "if", elements: [] });
+    const sg = makeSubgraph({
+      id: "empty",
+      kind: SUBGRAPH_KIND.If,
+      elements: [],
+    });
     emitPlainSubgraph(state, sg, "  ");
     expect(state.lines.some((l) => l.includes("__placeholder_empty"))).toBe(
       true,
@@ -78,7 +82,7 @@ describe("emitPlainSubgraph", () => {
     });
     const state = makeRenderState({ strategy });
     const sg = makeSubgraph({
-      kind: "if",
+      kind: SUBGRAPH_KIND.If,
       elements: [makeNode({ id: "n_a" })],
     });
     emitPlainSubgraph(state, sg, "  ");
@@ -88,7 +92,11 @@ describe("emitPlainSubgraph", () => {
   test("placeholder returning null inserts no line and registers no id", () => {
     const strategy = makeStrategy({ emptySubgraphPlaceholder: () => null });
     const state = makeRenderState({ strategy });
-    const sg = makeSubgraph({ id: "empty", kind: "if", elements: [] });
+    const sg = makeSubgraph({
+      id: "empty",
+      kind: SUBGRAPH_KIND.If,
+      elements: [],
+    });
     const before = state.lines.length;
     emitPlainSubgraph(state, sg, "  ");
     // open + direction + end = 3 lines, no placeholder
@@ -108,7 +116,11 @@ describe("emitPlainSubgraph", () => {
       strategy,
       edgeEndpointIds: new Set(["empty"]),
     });
-    emitPlainSubgraph(state, makeSubgraph({ id: "empty", kind: "if" }), "  ");
+    emitPlainSubgraph(
+      state,
+      makeSubgraph({ id: "empty", kind: SUBGRAPH_KIND.If }),
+      "  ",
+    );
     expect(observed).toBe(true);
   });
 });

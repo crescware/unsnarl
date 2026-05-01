@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { VISUAL_ELEMENT_TYPE } from "../constants.js";
+import { SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "./builder.js";
@@ -233,13 +233,21 @@ describe("buildVisualGraph: control subgraphs", () => {
     const catchS = findSubgraphs(g, "catch")[0];
     const finallyS = findSubgraphs(g, "finally")[0];
     expect(tryS).toEqual(
-      expect.objectContaining({ line: 2, endLine: 4, kind: "try" }),
+      expect.objectContaining({ line: 2, endLine: 4, kind: SUBGRAPH_KIND.Try }),
     );
     expect(catchS).toEqual(
-      expect.objectContaining({ line: 4, endLine: 6, kind: "catch" }),
+      expect.objectContaining({
+        line: 4,
+        endLine: 6,
+        kind: SUBGRAPH_KIND.Catch,
+      }),
     );
     expect(finallyS).toEqual(
-      expect.objectContaining({ line: 6, endLine: 8, kind: "finally" }),
+      expect.objectContaining({
+        line: 6,
+        endLine: 8,
+        kind: SUBGRAPH_KIND.Finally,
+      }),
     );
   });
 
@@ -518,10 +526,10 @@ describe("buildVisualGraph: return subgraphs", () => {
     const fn = findSubgraphs(g, "function")[0];
     const ifS = findSubgraphs(g, "if")[0];
     const fnDirectReturns = childSubgraphsOf(fn!).filter(
-      (s) => s.kind === "return",
+      (s) => s.kind === SUBGRAPH_KIND.Return,
     );
     const ifDirectReturns = childSubgraphsOf(ifS!).filter(
-      (s) => s.kind === "return",
+      (s) => s.kind === SUBGRAPH_KIND.Return,
     );
     expect(fnDirectReturns).toHaveLength(1);
     expect(ifDirectReturns).toHaveLength(1);
@@ -546,7 +554,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const cases = findSubgraphs(g, "case");
     // The default case body has a ReturnUse for x; check it is nested there.
     const caseWithReturnUse = cases.find((c) =>
-      childSubgraphsOf(c).some((s) => s.kind === "return"),
+      childSubgraphsOf(c).some((s) => s.kind === SUBGRAPH_KIND.Return),
     );
     expect(caseWithReturnUse).toBeDefined();
     expect(caseWithReturnUse?.caseTest).toBe(null);

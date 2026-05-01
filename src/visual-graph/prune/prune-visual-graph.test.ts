@@ -4,6 +4,7 @@ import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js"
 import {
   BOUNDARY_EDGE_DIRECTION,
   DIRECTION,
+  SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
 import type {
@@ -41,7 +42,7 @@ function subgraph(
   return {
     type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
-    kind: "function",
+    kind: SUBGRAPH_KIND.Function,
     line,
     direction: DIRECTION.RL,
     elements,
@@ -297,7 +298,7 @@ describe("pruneVisualGraph", () => {
       [
         node("flag", "flag", 1),
         subgraph("cont_if", 3, [node("wr1", "set", 4)], {
-          kind: "if-else-container",
+          kind: SUBGRAPH_KIND.IfElseContainer,
         }),
         node("result", "result", 10),
       ],
@@ -400,7 +401,9 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("a line query matches a ReturnUse at that line directly (no longer routed through the resolved declaration)", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
     const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph(
       [declA, ret],
       [{ from: declA.id, to: useA.id, label: "read" }],
@@ -422,7 +425,9 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
     const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph(
       [declA, ret],
       [{ from: declA.id, to: useA.id, label: "read" }],
@@ -442,7 +447,9 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       kind: "ReturnUse",
       endLine: 23,
     });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([ret], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(23)],
@@ -504,7 +511,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
   test("a bare line query equal to a subgraph's start line sweeps every node it contains", () => {
     const inner = node("inner_a", "a", 11);
     const outerOnly = node("outside", "z", 50);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg, outerOnly], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(10)],
@@ -520,7 +529,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
 
   test("a range query never auto-pulls a subgraph's body, even if its start line falls inside the range", () => {
     const inner = node("inner_a", "a", 11);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg], []);
     const r = pruneVisualGraph(g, {
       // Range [10..11] would contain both the subgraph's start and the inner
@@ -537,7 +548,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
 
   test("a line query that is not a subgraph's start line falls back to per-node matching", () => {
     const inner = node("inner_a", "a", 11);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg], []);
     const r = pruneVisualGraph(g, {
       // 11 is the inner node's line, not the subgraph's start line.

@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { ScopeType, SerializedVariable } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 import { describeSubgraph } from "./describe-subgraph.js";
@@ -33,7 +37,7 @@ describe("describeSubgraph", () => {
     expect(sg).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: "s_fnScope",
-      kind: "function",
+      kind: SUBGRAPH_KIND.Function,
       direction: DIRECTION.RL,
       ownerNodeId: "n_ownerVar",
       ownerName: "myFn",

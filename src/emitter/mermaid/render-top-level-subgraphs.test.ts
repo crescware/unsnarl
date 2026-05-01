@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { SUBGRAPH_KIND } from "../../constants.js";
 import { renderTopLevelSubgraphs } from "./render-top-level-subgraphs.js";
 import { makeGraph } from "./testing/make-graph.js";
 import { makeNode } from "./testing/make-node.js";
@@ -13,8 +14,8 @@ describe("renderTopLevelSubgraphs", () => {
       state,
       makeGraph({
         elements: [
-          makeSubgraph({ id: "s1", kind: "if" }),
-          makeSubgraph({ id: "s2", kind: "else" }),
+          makeSubgraph({ id: "s1", kind: SUBGRAPH_KIND.If }),
+          makeSubgraph({ id: "s2", kind: SUBGRAPH_KIND.Else }),
         ],
       }),
     );
@@ -36,7 +37,9 @@ describe("renderTopLevelSubgraphs", () => {
     const state = makeRenderState();
     renderTopLevelSubgraphs(
       state,
-      makeGraph({ elements: [makeSubgraph({ id: "s1", kind: "if" })] }),
+      makeGraph({
+        elements: [makeSubgraph({ id: "s1", kind: SUBGRAPH_KIND.If })],
+      }),
     );
     expect(state.lines[0]?.startsWith("  subgraph s1")).toBe(true);
   });

@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  DIRECTION,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { findNodeById } from "./find-node-by-id.js";
 
@@ -20,7 +24,7 @@ const elements: VisualElement[] = [
   {
     type: VISUAL_ELEMENT_TYPE.Subgraph,
     id: "s1",
-    kind: "function",
+    kind: SUBGRAPH_KIND.Function,
     line: 1,
     direction: DIRECTION.RL,
     elements: [
@@ -28,7 +32,7 @@ const elements: VisualElement[] = [
       {
         type: VISUAL_ELEMENT_TYPE.Subgraph,
         id: "s2",
-        kind: "if",
+        kind: SUBGRAPH_KIND.If,
         line: 1,
         direction: DIRECTION.RL,
         elements: [leafNode("c")],
