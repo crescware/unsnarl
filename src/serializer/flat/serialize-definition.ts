@@ -1,4 +1,8 @@
-import { DEFINITION_TYPE, IMPORT_KIND } from "../../constants.js";
+import {
+  DEFINITION_TYPE,
+  IMPORT_KIND,
+  VARIABLE_DECLARATION_KIND,
+} from "../../constants.js";
 import type {
   AstNode,
   Definition,
@@ -64,7 +68,11 @@ export function serializeDefinition(
     d.parent.type === "VariableDeclaration"
   ) {
     const kind = d.parent["kind"];
-    if (kind === "var" || kind === "let" || kind === "const") {
+    if (
+      kind === VARIABLE_DECLARATION_KIND.Var ||
+      kind === VARIABLE_DECLARATION_KIND.Let ||
+      kind === VARIABLE_DECLARATION_KIND.Const
+    ) {
       declarationKind = kind;
     }
   }

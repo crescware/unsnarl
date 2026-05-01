@@ -1,6 +1,13 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE, IMPORT_KIND, NODE_KIND, VISUAL_ELEMENT_TYPE, type DefinitionType } from "../../constants.js";
+import {
+  DEFINITION_TYPE,
+  IMPORT_KIND,
+  NODE_KIND,
+  VARIABLE_DECLARATION_KIND,
+  VISUAL_ELEMENT_TYPE,
+  type DefinitionType,
+} from "../../constants.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";
@@ -104,7 +111,12 @@ describe("makeVariableNode", () => {
 
   test("non-import definitions do not set importedName/importSource", () => {
     const v = makeVariable({
-      defs: [makeDef({ type: "Variable", declarationKind: "let" })],
+      defs: [
+        makeDef({
+          type: "Variable",
+          declarationKind: VARIABLE_DECLARATION_KIND.Let,
+        }),
+      ],
     });
     const node = makeVariableNode(v);
     expect(node.importedName).toBeUndefined();

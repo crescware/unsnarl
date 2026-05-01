@@ -4,6 +4,7 @@ import {
   LANGUAGE,
   NODE_KIND,
   SCOPE_TYPE,
+  VARIABLE_DECLARATION_KIND,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
 import type {
@@ -105,7 +106,7 @@ describe("buildScope", () => {
     const v = makeVariable({
       id: "v1",
       name: "x",
-      defs: [makeDef({ declarationKind: "let" })],
+      defs: [makeDef({ declarationKind: VARIABLE_DECLARATION_KIND.Let })],
     });
     const op = makeWriteOp({ refId: "r1", varId: "v1", varName: "x", line: 4 });
     const ctx = makeCtx({
@@ -124,7 +125,7 @@ describe("buildScope", () => {
       kind: NODE_KIND.WriteOp,
       name: "x",
       line: 4,
-      declarationKind: "let",
+      declarationKind: VARIABLE_DECLARATION_KIND.Let,
     });
   });
 

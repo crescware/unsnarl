@@ -1,8 +1,6 @@
+import { IMPORT_KIND, VARIABLE_DECLARATION_KIND } from "../../constants.js";
 import type { VisualNode } from "../../visual-graph/model.js";
 import { escape } from "./escape.js";
-
-import { IMPORT_KIND } from "../../constants.js";
-
 export function nodeHead(n: VisualNode): string {
   const name = escape(n.name);
   if (n.isJsxElement) {
@@ -29,7 +27,9 @@ export function nodeHead(n: VisualNode): string {
     case "ImplicitGlobalVariable":
       return `global ${name}`;
     case "WriteOp":
-      return n.declarationKind === "let" ? `let ${name}` : name;
+      return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
+        ? `let ${name}`
+        : name;
     case "ModuleSource":
       return `module ${name}`;
     case "ImportIntermediate":
@@ -38,7 +38,7 @@ export function nodeHead(n: VisualNode): string {
       if (n.initIsFunction) {
         return `${name}()`;
       }
-      if (n.declarationKind === "let") {
+      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
         return `let ${name}`;
       }
       return name;

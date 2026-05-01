@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { IMPORT_KIND, NODE_KIND } from "../../constants.js";
+import {
+  IMPORT_KIND,
+  NODE_KIND,
+  VARIABLE_DECLARATION_KIND,
+} from "../../constants.js";
 import { nodeHead } from "./node-head.js";
 import { makeNode } from "./testing/make-node.js";
 
@@ -101,7 +105,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.WriteOp,
         name: "x",
-        declarationKind: "let",
+        declarationKind: VARIABLE_DECLARATION_KIND.Let,
       }),
       expected: "let x",
     },
@@ -110,7 +114,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.WriteOp,
         name: "x",
-        declarationKind: "const",
+        declarationKind: VARIABLE_DECLARATION_KIND.Const,
       }),
       expected: "x",
     },
@@ -131,12 +135,18 @@ describe("nodeHead", () => {
     },
     {
       name: "let-declared Variable prepends 'let'",
-      node: makeNode({ name: "x", declarationKind: "let" }),
+      node: makeNode({
+        name: "x",
+        declarationKind: VARIABLE_DECLARATION_KIND.Let,
+      }),
       expected: "let x",
     },
     {
       name: "const-declared Variable has no prefix",
-      node: makeNode({ name: "x", declarationKind: "const" }),
+      node: makeNode({
+        name: "x",
+        declarationKind: VARIABLE_DECLARATION_KIND.Const,
+      }),
       expected: "x",
     },
     {
@@ -149,7 +159,7 @@ describe("nodeHead", () => {
       node: makeNode({
         name: "f",
         initIsFunction: true,
-        declarationKind: "let",
+        declarationKind: VARIABLE_DECLARATION_KIND.Let,
       }),
       expected: "f()",
     },

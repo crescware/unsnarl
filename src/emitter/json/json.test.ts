@@ -1,7 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { IMPORT_KIND, LANGUAGE, NODE_KIND, SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import {
+  IMPORT_KIND,
+  LANGUAGE,
+  NODE_KIND,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { JsonEmitter } from "./json.js";

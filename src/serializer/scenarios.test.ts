@@ -1,7 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { IMPORT_KIND, LANGUAGE, SCOPE_TYPE, type Language } from "../constants.js";
+import {
+  IMPORT_KIND,
+  LANGUAGE,
+  SCOPE_TYPE,
+  type Language,
+} from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,

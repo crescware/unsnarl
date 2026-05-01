@@ -1,4 +1,11 @@
-import { DEFINITION_TYPE, DIRECTION, IMPORT_KIND, NODE_KIND, SCOPE_TYPE, VISUAL_ELEMENT_TYPE } from "../constants.js";
+import {
+  DEFINITION_TYPE,
+  DIRECTION,
+  IMPORT_KIND,
+  NODE_KIND,
+  SCOPE_TYPE,
+  VISUAL_ELEMENT_TYPE,
+} from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,

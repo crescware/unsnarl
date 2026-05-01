@@ -1,4 +1,8 @@
-import { DEFINITION_TYPE, DIAGNOSTIC_KIND } from "../../constants.js";
+import {
+  DIAGNOSTIC_KIND,
+  DEFINITION_TYPE,
+  VARIABLE_DECLARATION_KIND,
+} from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
@@ -13,7 +17,7 @@ export function handleVariableDeclaration(
   diagnostics: DiagnosticCollector,
 ): void {
   const kind = node["kind"];
-  if (kind === "var") {
+  if (kind === VARIABLE_DECLARATION_KIND.Var) {
     const start = node.start ?? 0;
     diagnostics.add(
       DIAGNOSTIC_KIND.VarDetected,
