@@ -1,10 +1,8 @@
 import type { VisualNode } from "../../../visual-graph/model.js";
 import type { RenderState } from "../render-state.js";
-import { makeStrategy } from "./make-strategy.js";
+import { baseStrategy } from "./make-strategy.js";
 
-export function makeRenderState(
-  overrides: Partial<RenderState> = {},
-): RenderState {
+export function baseRenderState(): RenderState {
   return {
     lines: [],
     nodeMap: new Map<string, VisualNode>(),
@@ -12,7 +10,6 @@ export function makeRenderState(
     edgeEndpointIds: new Set<string>(),
     placeholderIds: [],
     wrapperIds: [],
-    strategy: makeStrategy(),
-    ...overrides,
+    strategy: baseStrategy(),
   };
 }

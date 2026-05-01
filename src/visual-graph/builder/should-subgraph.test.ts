@@ -4,8 +4,8 @@ import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { shouldSubgraph } from "./should-subgraph.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
 describe("shouldSubgraph", () => {
   test.each<{
@@ -32,7 +32,12 @@ describe("shouldSubgraph", () => {
     {
       name: "branch block (if consequent) without owner -> true",
       type: SCOPE_TYPE.Block,
-      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 0,
+      },
       isOwner: false,
       expected: true,
     },
@@ -58,7 +63,7 @@ describe("shouldSubgraph", () => {
       expected: false,
     },
   ])("$name", ({ type, blockContext, isOwner, expected }) => {
-    const scope = makeScope({ id: "s", type, blockContext });
+    const scope = { ...baseScope(), id: "s", type, blockContext };
     const owners = isOwner
       ? new Map([["s", "var"]])
       : new Map<string, string>();

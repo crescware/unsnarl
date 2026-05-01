@@ -80,6 +80,8 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "test.ts",
+      emit: { pretty: true, prunedGraph: null },
+      pruning: null,
     });
 
     expect(result).toBe("version=1");
@@ -98,6 +100,8 @@ describe("createPipeline", () => {
         format: "missing",
         language: LANGUAGE.Ts,
         sourcePath: "x.ts",
+        emit: { pretty: true, prunedGraph: null },
+        pruning: null,
       }),
     ).toThrow(/Unknown emitter format/);
   });
@@ -128,6 +132,8 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "x.ts",
+      emit: { pretty: true, prunedGraph: null },
+      pruning: null,
     });
 
     expect(parserCalled).toBe(true);

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
-import { makeRef } from "./testing/make-ref.js";
+import { baseRef } from "./testing/make-ref.js";
 
 describe("edgeLabelOfRef", () => {
   test.each([
@@ -67,7 +67,10 @@ describe("edgeLabelOfRef", () => {
     "flags read=$read write=$write call=$call receiver=$receiver -> $expected",
     ({ read, write, call, receiver, expected }) => {
       expect(
-        edgeLabelOfRef(makeRef({ flags: { read, write, call, receiver } })),
+        edgeLabelOfRef({
+          ...baseRef(),
+          flags: { read, write, call, receiver },
+        }),
       ).toBe(expected);
     },
   );

@@ -23,6 +23,7 @@ const newScope = (): ScopeImpl =>
     isStrict: true,
     upper: null,
     block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
 
 describe("hoistDeclarations", () => {

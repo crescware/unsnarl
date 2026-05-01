@@ -1,19 +1,19 @@
 import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
 import { branchScopeOf } from "./branch-scope-of.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
-const outer = makeScope({ id: "outer" });
-const ifBranch = makeScope({
+const outer = { ...baseScope(), id: "outer" };
+const ifBranch = {
+  ...baseScope(),
   id: "if",
   upper: "outer",
-  blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
-});
-const inner = makeScope({ id: "inner", upper: "if" });
-const deeper = makeScope({ id: "deeper", upper: "inner" });
+  blockContext: baseBlockContext(),
+};
+const inner = { ...baseScope(), id: "inner", upper: "if" };
+const deeper = { ...baseScope(), id: "deeper", upper: "inner" };
 const map = new Map<string, SerializedScope>(
   [outer, ifBranch, inner, deeper].map((s) => [s.id, s]),
 );

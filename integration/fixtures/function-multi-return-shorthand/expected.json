@@ -12,8 +12,14 @@
       "kind": "FunctionName",
       "name": "main",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -22,6 +28,8 @@
       "line": 1,
       "endLine": 11,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_main_9",
       "ownerName": "main",
       "elements": [
@@ -31,8 +39,14 @@
           "kind": "Variable",
           "name": "a",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -40,8 +54,14 @@
           "kind": "Variable",
           "name": "b",
           "line": 9,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
@@ -50,6 +70,10 @@
           "line": 4,
           "endLine": 7,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -57,15 +81,26 @@
               "kind": "Variable",
               "name": "b",
               "line": 5,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "const"
+              "unused": false,
+              "declarationKind": "const",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "subgraph",
               "id": "s_return_scope_0_main_9_89_105",
               "kind": "return",
               "line": 6,
+              "endLine": null,
               "direction": "RL",
+              "caseTest": null,
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -73,7 +108,14 @@
                   "kind": "ReturnUse",
                   "name": "a",
                   "line": 6,
-                  "isJsxElement": false
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": null,
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 },
                 {
                   "type": "node",
@@ -81,7 +123,14 @@
                   "kind": "ReturnUse",
                   "name": "b",
                   "line": 6,
-                  "isJsxElement": false
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": null,
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
               ]
             }
@@ -92,7 +141,12 @@
           "id": "s_return_scope_0_main_9_131_147",
           "kind": "return",
           "line": 10,
+          "endLine": null,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -100,7 +154,14 @@
               "kind": "ReturnUse",
               "name": "a",
               "line": 10,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -108,7 +169,14 @@
               "kind": "ReturnUse",
               "name": "b",
               "line": 10,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
@@ -136,5 +204,7 @@
       "to": "ret_use_ref_4",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

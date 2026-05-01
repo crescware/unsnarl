@@ -20,6 +20,13 @@ const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => ({
   name: id,
   line: 1,
   isJsxElement: false,
+  endLine: null,
+  unused: false,
+  declarationKind: null,
+  initIsFunction: false,
+  importKind: null,
+  importedName: null,
+  importSource: null,
 });
 
 const sg = (
@@ -33,6 +40,11 @@ const sg = (
   line: 1,
   direction,
   elements,
+  endLine: null,
+  caseTest: null,
+  hasElse: false,
+  ownerNodeId: null,
+  ownerName: null,
 });
 
 describe("iterateVisualNodes", () => {

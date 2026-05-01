@@ -2,24 +2,24 @@ import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
 import { lastWriteOpInScopeBefore } from "./last-write-op-in-scope-before.js";
-import { makeScope } from "./testing/make-scope.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseScope } from "./testing/make-scope.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
-const root = makeScope({ id: "root" });
-const child = makeScope({ id: "child", upper: "root" });
-const sibling = makeScope({ id: "sibling", upper: "root" });
-const grandchild = makeScope({ id: "grandchild", upper: "child" });
+const root = { ...baseScope(), id: "root" };
+const child = { ...baseScope(), id: "child", upper: "root" };
+const sibling = { ...baseScope(), id: "sibling", upper: "root" };
+const grandchild = { ...baseScope(), id: "grandchild", upper: "child" };
 const scopeMap = new Map<string, SerializedScope>(
   [root, child, sibling, grandchild].map((s) => [s.id, s]),
 );
 
 const ops: WriteOp[] = [
-  makeWriteOp({ refId: "rRoot", offset: 5, scopeId: "root" }),
-  makeWriteOp({ refId: "rChild", offset: 10, scopeId: "child" }),
-  makeWriteOp({ refId: "rGrand", offset: 15, scopeId: "grandchild" }),
-  makeWriteOp({ refId: "rSib", offset: 20, scopeId: "sibling" }),
-  makeWriteOp({ refId: "rRoot2", offset: 25, scopeId: "root" }),
+  { ...baseWriteOp(), refId: "rRoot", offset: 5, scopeId: "root" },
+  { ...baseWriteOp(), refId: "rChild", offset: 10, scopeId: "child" },
+  { ...baseWriteOp(), refId: "rGrand", offset: 15, scopeId: "grandchild" },
+  { ...baseWriteOp(), refId: "rSib", offset: 20, scopeId: "sibling" },
+  { ...baseWriteOp(), refId: "rRoot2", offset: 25, scopeId: "root" },
 ];
 const byVar = new Map<string, WriteOp[]>([["v", ops]]);
 

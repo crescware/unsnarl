@@ -3,24 +3,26 @@ import { describe, expect, test } from "vitest";
 import type { SerializedScope } from "../../ir/model.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
 function caseScope(
   id: string,
   parentSpanOffset: number,
   fallsThrough: boolean,
 ): SerializedScope {
-  return makeScope({
+  return {
+    ...baseScope(),
     id,
     upper: "switch",
     fallsThrough,
-    blockContext: makeBlockContext(
-      AST_TYPE.SwitchStatement,
-      "cases",
+    blockContext: {
+      ...baseBlockContext(),
+      parentType: AST_TYPE.SwitchStatement,
+      key: "cases",
       parentSpanOffset,
-    ),
-  });
+    },
+  };
 }
 
 const c0 = caseScope("c0", 100, true);
@@ -61,7 +63,7 @@ describe("previousFallthroughCase", () => {
 
   test("scope without branchContainerKey -> null", () => {
     expect(
-      previousFallthroughCase(makeScope({ id: "x" }), sortedCases),
+      previousFallthroughCase({ ...baseScope(), id: "x" }, sortedCases),
     ).toBeNull();
   });
 

@@ -16,8 +16,8 @@ import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
 import { jsxContainer } from "./testing/jsx-container.js";
-import { makeRef } from "./testing/make-ref.js";
-import { makeVariable } from "./testing/make-variable.js";
+import { baseRef } from "./testing/make-ref.js";
+import { baseVariable } from "./testing/make-variable.js";
 import { returnContainer } from "./testing/return-container.js";
 import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
@@ -28,7 +28,12 @@ function makeHostSubgraph(): VisualSubgraph {
     id: "s_fn",
     kind: SUBGRAPH_KIND.Function,
     line: 1,
+    endLine: null,
     direction: DIRECTION.RL,
+    caseTest: null,
+    hasElse: false,
+    ownerNodeId: null,
+    ownerName: null,
     elements: [],
   };
 }
@@ -87,20 +92,23 @@ describe("ensureReturnUseNode", () => {
       edges: [],
     } as const satisfies BuildState;
     expect(
-      ensureReturnUseNode("fnVar", makeRef({ from: "scope" }), ctx, state),
+      ensureReturnUseNode("fnVar", { ...baseRef(), from: "scope" }, ctx, state),
     ).toBeNull();
   });
 
   test("creates a return subgraph and a ReturnUse node, returning the node id", () => {
     const host = makeHostSubgraph();
-    const ctx = makeCtx({ variables: [makeVariable({ id: "v", name: "x" })] });
+    const ctx = makeCtx({
+      variables: [{ ...baseVariable(), id: "v", name: "x" }],
+    });
     const state = makeState(host);
-    const ref = makeRef({
+    const ref = {
+      ...baseRef(),
       id: "r1",
       identifier: { name: "x", span: span(0, 3) },
       resolved: "v",
       returnContainer: returnContainer(0, 50, 3, 5),
-    });
+    };
 
     const id = ensureReturnUseNode("fnVar", ref, ctx, state);
 
@@ -122,11 +130,12 @@ describe("ensureReturnUseNode", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const ref = makeRef({
+    const ref = {
+      ...baseRef(),
       id: "r1",
       identifier: { name: "literal", span: span(0, 1) },
       resolved: null,
-    });
+    };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
     expect((sg.elements[0] as { name: string }).name).toBe("literal");
@@ -137,8 +146,8 @@ describe("ensureReturnUseNode", () => {
     const ctx = makeCtx();
     const state = makeState(host);
     const rc = returnContainer(0, 50, 3, 5);
-    const ref1 = makeRef({ id: "r1", returnContainer: rc });
-    const ref2 = makeRef({ id: "r2", returnContainer: rc });
+    const ref1 = { ...baseRef(), id: "r1", returnContainer: rc };
+    const ref2 = { ...baseRef(), id: "r2", returnContainer: rc };
 
     ensureReturnUseNode("fnVar", ref1, ctx, state);
     ensureReturnUseNode("fnVar", ref2, ctx, state);
@@ -155,11 +164,16 @@ describe("ensureReturnUseNode", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const ref1 = makeRef({ id: "r1", returnContainer: returnContainer(0, 10) });
-    const ref2 = makeRef({
+    const ref1 = {
+      ...baseRef(),
+      id: "r1",
+      returnContainer: returnContainer(0, 10),
+    };
+    const ref2 = {
+      ...baseRef(),
       id: "r2",
       returnContainer: returnContainer(20, 30),
-    });
+    };
 
     ensureReturnUseNode("fnVar", ref1, ctx, state);
     ensureReturnUseNode("fnVar", ref2, ctx, state);
@@ -171,8 +185,8 @@ describe("ensureReturnUseNode", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    ensureReturnUseNode("fnVar", makeRef({ id: "r1" }), ctx, state);
-    ensureReturnUseNode("fnVar", makeRef({ id: "r2" }), ctx, state);
+    ensureReturnUseNode("fnVar", { ...baseRef(), id: "r1" }, ctx, state);
+    ensureReturnUseNode("fnVar", { ...baseRef(), id: "r2" }, ctx, state);
     expect(host.elements).toHaveLength(1);
   });
 
@@ -180,7 +194,7 @@ describe("ensureReturnUseNode", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const ref = makeRef({ id: "r1" });
+    const ref = { ...baseRef(), id: "r1" };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
@@ -191,11 +205,12 @@ describe("ensureReturnUseNode", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const ref = makeRef({
+    const ref = {
+      ...baseRef(),
       id: "r1",
       identifier: { name: "Foo", span: span(0, 2) },
       jsxElement: jsxContainer(0, 30, 2, 5),
-    });
+    };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
     const node = sg.elements[0] as { isJsxElement: boolean; endLine?: number };

@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "d",
       "line": 4,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,9 +27,14 @@
       "kind": "Variable",
       "name": "e",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [

@@ -83,7 +83,8 @@
       "blockContext": {
         "parentType": "TryStatement",
         "key": "block",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -120,7 +121,8 @@
       "blockContext": {
         "parentType": "TryStatement",
         "key": "handler",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -154,7 +156,8 @@
       "blockContext": {
         "parentType": "TryStatement",
         "key": "finalizer",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false

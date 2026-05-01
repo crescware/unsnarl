@@ -12,17 +12,26 @@
       "kind": "Variable",
       "name": "result",
       "line": 10,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
       "id": "cont_if_scope_0_37",
       "kind": "if-else-container",
       "line": 4,
+      "endLine": 8,
       "direction": "RL",
+      "caseTest": null,
       "hasElse": true,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "subgraph",
@@ -31,6 +40,10 @@
           "line": 4,
           "endLine": 6,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -38,8 +51,14 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 5,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         },
@@ -50,6 +69,10 @@
           "line": 6,
           "endLine": 8,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -57,13 +80,18 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 7,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
-      ],
-      "endLine": 8
+      ]
     }
   ],
   "edges": [

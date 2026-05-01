@@ -6,7 +6,7 @@ export function renderBoundaryEdges(
   lines: /* mutable */ string[],
   stubIds: /* mutable */ string[],
 ): void {
-  if (graph.boundaryEdges === undefined || graph.boundaryEdges.length === 0) {
+  if (graph.boundaryEdges.length === 0) {
     return;
   }
   // Pruning detected one or more neighbors past the requested radius.

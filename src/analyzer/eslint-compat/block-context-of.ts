@@ -12,5 +12,6 @@ export function blockContextOf(
     parentType: parent.type,
     key,
     parentSpanOffset: parent.start ?? 0,
+    caseTest: null,
   };
 }

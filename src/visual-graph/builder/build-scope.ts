@@ -45,18 +45,22 @@ export function buildScope(
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];
   for (const op of ops) {
     const ownerVar = ctx.variableMap.get(op.varId);
-    const declarationKind = ownerVar?.defs[0]?.declarationKind;
+    const declarationKind = ownerVar?.defs[0]?.declarationKind ?? null;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
       kind: NODE_KIND.WriteOp,
       name: op.varName,
       line: op.line,
+      endLine: null,
       isJsxElement: false,
-    } satisfies VisualNode as VisualNode;
-    if (declarationKind) {
-      node.declarationKind = declarationKind;
-    }
+      unused: false,
+      declarationKind,
+      initIsFunction: false,
+      importKind: null,
+      importedName: null,
+      importSource: null,
+    } satisfies VisualNode;
     bodyContainer.elements.push(node);
   }
   buildChildren(scope, bodyContainer, ctx, state);

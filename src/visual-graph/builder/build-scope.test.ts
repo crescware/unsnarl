@@ -17,11 +17,11 @@ import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeDef } from "./testing/make-def.js";
-import { makeScope } from "./testing/make-scope.js";
-import { makeVariable } from "./testing/make-variable.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseDef } from "./testing/make-def.js";
+import { baseScope } from "./testing/make-scope.js";
+import { baseVariable } from "./testing/make-variable.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
 
@@ -69,8 +69,8 @@ function makeCtx(opts: {
 
 describe("buildScope", () => {
   test("plain block scope appends variable nodes directly to the container (no subgraph)", () => {
-    const scope = makeScope({ id: "s", variables: ["v1"] });
-    const v = makeVariable({ id: "v1", name: "x", scope: "s" });
+    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
+    const v = { ...baseVariable(), id: "v1", name: "x", scope: "s" };
     const ctx = makeCtx({ scopes: [scope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -86,9 +86,9 @@ describe("buildScope", () => {
   });
 
   test("hidden variables are skipped", () => {
-    const scope = makeScope({ id: "s", variables: ["hidden", "v"] });
-    const hidden = makeVariable({ id: "hidden", name: "h" });
-    const v = makeVariable({ id: "v", name: "x" });
+    const scope = { ...baseScope(), id: "s", variables: ["hidden", "v"] };
+    const hidden = { ...baseVariable(), id: "hidden", name: "h" };
+    const v = { ...baseVariable(), id: "v", name: "x" };
     const ctx = makeCtx({
       scopes: [scope],
       variables: [hidden, v],
@@ -103,13 +103,20 @@ describe("buildScope", () => {
   });
 
   test("writeOps in the scope appear as WriteOp nodes with declarationKind from the owning variable", () => {
-    const scope = makeScope({ id: "s", variables: ["v1"] });
-    const v = makeVariable({
+    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
+    const v = {
+      ...baseVariable(),
       id: "v1",
       name: "x",
-      defs: [makeDef({ declarationKind: VARIABLE_DECLARATION_KIND.Let })],
-    });
-    const op = makeWriteOp({ refId: "r1", varId: "v1", varName: "x", line: 4 });
+      defs: [{ ...baseDef(), declarationKind: VARIABLE_DECLARATION_KIND.Let }],
+    };
+    const op = {
+      ...baseWriteOp(),
+      refId: "r1",
+      varId: "v1",
+      varName: "x",
+      line: 4,
+    };
     const ctx = makeCtx({
       scopes: [scope],
       variables: [v],
@@ -131,18 +138,20 @@ describe("buildScope", () => {
   });
 
   test("function-owner scope wraps body in a function subgraph and registers state", () => {
-    const fnScope = makeScope({
+    const fnScope = {
+      ...baseScope(),
       id: "fn",
       type: SCOPE_TYPE.Function,
       variables: ["param"],
       block: { type: "Function", span: span(0, 1), endSpan: span(10, 5) },
-    });
-    const param = makeVariable({
+    };
+    const param = {
+      ...baseVariable(),
       id: "param",
       name: "p",
-      defs: [makeDef({ type: DEFINITION_TYPE.Parameter })],
-    });
-    const owner = makeVariable({ id: "ownerVar", name: "myFn" });
+      defs: [{ ...baseDef(), type: DEFINITION_TYPE.Parameter }],
+    };
+    const owner = { ...baseVariable(), id: "ownerVar", name: "myFn" };
     const ctx = makeCtx({
       scopes: [fnScope],
       variables: [param, owner],
@@ -167,7 +176,8 @@ describe("buildScope", () => {
   });
 
   test("control-kind scope (for) wraps body in a control subgraph", () => {
-    const forScope = makeScope({
+    const forScope = {
+      ...baseScope(),
       id: "for1",
       type: SCOPE_TYPE.For,
       variables: ["v"],
@@ -176,8 +186,8 @@ describe("buildScope", () => {
         span: span(0, 1),
         endSpan: span(10, 3),
       },
-    });
-    const v = makeVariable({ id: "v", name: "i" });
+    };
+    const v = { ...baseVariable(), id: "v", name: "i" };
     const ctx = makeCtx({ scopes: [forScope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -194,14 +204,20 @@ describe("buildScope", () => {
   });
 
   test("recurses into childScopes", () => {
-    const inner = makeScope({
+    const inner = {
+      ...baseScope(),
       id: "inner",
       upper: "outer",
       variables: ["vIn"],
-      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
-    });
-    const outer = makeScope({ id: "outer", childScopes: ["inner"] });
-    const vIn = makeVariable({ id: "vIn", name: "y" });
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 0,
+      },
+    };
+    const outer = { ...baseScope(), id: "outer", childScopes: ["inner"] };
+    const vIn = { ...baseVariable(), id: "vIn", name: "y" };
     const ctx = makeCtx({ scopes: [outer, inner], variables: [vIn] });
     const container: { elements: VisualElement[] } = { elements: [] };
 

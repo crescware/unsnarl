@@ -73,7 +73,8 @@
       "blockContext": {
         "parentType": "IfStatement",
         "key": "consequent",
-        "parentSpanOffset": 37
+        "parentSpanOffset": 37,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -107,7 +108,8 @@
       "blockContext": {
         "parentType": "IfStatement",
         "key": "alternate",
-        "parentSpanOffset": 37
+        "parentSpanOffset": 37,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false

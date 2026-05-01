@@ -12,8 +12,14 @@
       "kind": "FunctionName",
       "name": "getDayType",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -22,6 +28,8 @@
       "line": 1,
       "endLine": 20,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_getDayType_9",
       "ownerName": "getDayType",
       "elements": [
@@ -31,7 +39,14 @@
           "kind": "Parameter",
           "name": "day",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -39,8 +54,14 @@
           "kind": "Variable",
           "name": "ret",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
@@ -49,6 +70,10 @@
           "line": 3,
           "endLine": 18,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "subgraph",
@@ -57,8 +82,11 @@
               "line": 4,
               "endLine": 4,
               "direction": "RL",
-              "elements": [],
-              "caseTest": "\"mon\""
+              "caseTest": "\"mon\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
+              "elements": []
             },
             {
               "type": "subgraph",
@@ -67,8 +95,11 @@
               "line": 5,
               "endLine": 5,
               "direction": "RL",
-              "elements": [],
-              "caseTest": "\"tue\""
+              "caseTest": "\"tue\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
+              "elements": []
             },
             {
               "type": "subgraph",
@@ -77,8 +108,11 @@
               "line": 6,
               "endLine": 6,
               "direction": "RL",
-              "elements": [],
-              "caseTest": "\"wed\""
+              "caseTest": "\"wed\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
+              "elements": []
             },
             {
               "type": "subgraph",
@@ -87,8 +121,11 @@
               "line": 7,
               "endLine": 7,
               "direction": "RL",
-              "elements": [],
-              "caseTest": "\"thu\""
+              "caseTest": "\"thu\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
+              "elements": []
             },
             {
               "type": "subgraph",
@@ -97,6 +134,10 @@
               "line": 8,
               "endLine": 10,
               "direction": "RL",
+              "caseTest": "\"fri\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -104,11 +145,16 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 9,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
-              ],
-              "caseTest": "\"fri\""
+              ]
             },
             {
               "type": "subgraph",
@@ -117,8 +163,11 @@
               "line": 11,
               "endLine": 11,
               "direction": "RL",
-              "elements": [],
-              "caseTest": "\"sat\""
+              "caseTest": "\"sat\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
+              "elements": []
             },
             {
               "type": "subgraph",
@@ -127,6 +176,10 @@
               "line": 12,
               "endLine": 14,
               "direction": "RL",
+              "caseTest": "\"sun\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -134,11 +187,16 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 13,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
-              ],
-              "caseTest": "\"sun\""
+              ]
             },
             {
               "type": "subgraph",
@@ -147,6 +205,10 @@
               "line": 15,
               "endLine": 17,
               "direction": "RL",
+              "caseTest": null,
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -154,11 +216,16 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 16,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
-              ],
-              "caseTest": null
+              ]
             }
           ]
         },
@@ -167,7 +234,12 @@
           "id": "s_return_scope_0_getDayType_9_308_319",
           "kind": "return",
           "line": 19,
+          "endLine": null,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -175,7 +247,14 @@
               "kind": "ReturnUse",
               "name": "ret",
               "line": 19,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
@@ -218,5 +297,7 @@
       "to": "ret_use_ref_4",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

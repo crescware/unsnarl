@@ -79,13 +79,13 @@ export type Reference = {
   isReadOnly(): boolean;
   isWriteOnly(): boolean;
   isReadWrite(): boolean;
-  isCall?(): boolean;
-  isReceiver?(): boolean;
-  unsnarlFlags?: ReferenceFlagBits;
-  unsnarlOwners?: /* mutable */ Variable[];
-  unsnarlPredicateContainer?: PredicateContainer | null;
-  unsnarlReturnContainer?: ReturnContainer | null;
-  unsnarlJsxElement?: JsxElementContainer | null;
+  isCall(): boolean;
+  isReceiver(): boolean;
+  unsnarlFlags: ReferenceFlagBits;
+  unsnarlOwners: /* mutable */ Variable[];
+  unsnarlPredicateContainer: PredicateContainer | null;
+  unsnarlReturnContainer: ReturnContainer | null;
+  unsnarlJsxElement: JsxElementContainer | null;
 };
 
 export type Definition = Readonly<{
@@ -103,14 +103,14 @@ export type Variable = {
   identifiers: /* mutable */ AstIdentifier[];
   references: /* mutable */ Reference[];
   defs: /* mutable */ Definition[];
-  unsnarlIsUnused?(): boolean;
+  unsnarlIsUnused(): boolean;
 };
 
 export type BlockContext = Readonly<{
   parentType: string;
   key: string;
   parentSpanOffset: number;
-  caseTest?: string | null;
+  caseTest: string | null;
 }>;
 
 // Mutable: ScopeImpl pushes into childScopes / variables / references /
@@ -128,15 +128,15 @@ export type Scope = {
   references: /* mutable */ Reference[];
   through: /* mutable */ Reference[];
   functionExpressionScope: boolean;
-  unsnarlBlockContext?: BlockContext | null;
-  unsnarlFallsThrough?: boolean;
-  unsnarlExitsFunction?: boolean;
+  unsnarlBlockContext: BlockContext | null;
+  unsnarlFallsThrough: boolean;
+  unsnarlExitsFunction: boolean;
 };
 
 export type Diagnostic = Readonly<{
   kind: DiagnosticKind;
   message: string;
-  span?: Span;
+  span: Span | null;
 }>;
 
 export type ScopeId = string;

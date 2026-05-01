@@ -30,7 +30,14 @@ function node(
     kind: NODE_KIND.Variable,
     name,
     line,
+    endLine: null,
     isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+    initIsFunction: false,
+    importKind: null,
+    importedName: null,
+    importSource: null,
     ...extra,
   };
 }
@@ -46,7 +53,12 @@ function subgraph(
     id,
     kind: SUBGRAPH_KIND.Function,
     line,
+    endLine: null,
     direction: DIRECTION.RL,
+    caseTest: null,
+    hasElse: false,
+    ownerNodeId: null,
+    ownerName: null,
     elements,
     ...extra,
   };
@@ -59,6 +71,8 @@ function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
     direction: DIRECTION.RL,
     elements,
     edges,
+    boundaryEdges: [],
+    pruning: null,
   };
 }
 

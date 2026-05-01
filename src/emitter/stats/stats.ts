@@ -48,7 +48,7 @@ export class StatsEmitter implements Emitter {
 
     const boundaryOut = new Set<string>();
     const boundaryIn = new Set<string>();
-    for (const be of graph.boundaryEdges ?? []) {
+    for (const be of graph.boundaryEdges) {
       if (be.direction === BOUNDARY_EDGE_DIRECTION.Out) {
         boundaryOut.add(be.inside);
       } else {

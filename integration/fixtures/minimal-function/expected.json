@@ -12,7 +12,14 @@
       "kind": "FunctionName",
       "name": "greet",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -21,6 +28,8 @@
       "line": 1,
       "endLine": 3,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_greet_9",
       "ownerName": "greet",
       "elements": []
@@ -31,7 +40,14 @@
       "kind": "ModuleSink",
       "name": "module",
       "line": 0,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -40,5 +56,7 @@
       "to": "module_root",
       "label": "read,call"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

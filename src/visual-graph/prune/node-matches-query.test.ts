@@ -13,7 +13,14 @@ const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
   kind: NODE_KIND.Variable,
   name: "x",
   line: 5,
+  endLine: null,
   isJsxElement: false,
+  unused: false,
+  declarationKind: null,
+  initIsFunction: false,
+  importKind: null,
+  importedName: null,
+  importSource: null,
   ...overrides,
 });
 

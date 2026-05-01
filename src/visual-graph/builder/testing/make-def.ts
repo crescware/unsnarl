@@ -3,9 +3,7 @@ import type { SerializedDefinition } from "../../../ir/model.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 import { span } from "./span.js";
 
-export function makeDef(
-  overrides: Partial<SerializedDefinition> = {},
-): SerializedDefinition {
+export function baseDef(): SerializedDefinition {
   return {
     type: DEFINITION_TYPE.Variable,
     name: { name: "x", span: span() },
@@ -17,6 +15,5 @@ export function makeDef(
     importSource: null,
     importedName: null,
     declarationKind: null,
-    ...overrides,
   };
 }

@@ -65,20 +65,21 @@ export function buildChildren(
       id: containerId,
       kind: SUBGRAPH_KIND.IfElseContainer,
       line: lineForOffset(ctx.ir.raw, offset),
+      endLine: null as number | null,
       direction: DIRECTION.RL,
+      caseTest: null,
       hasElse,
+      ownerNodeId: null,
+      ownerName: null,
       elements: [] as VisualElement[],
-    } satisfies VisualSubgraph as VisualSubgraph;
+    } satisfies VisualSubgraph;
     container.elements.push(containerSubgraph);
     for (const g of group) {
       buildScope(g, containerSubgraph, ctx, state);
     }
     let containerEndLine = containerSubgraph.line;
     for (const elem of containerSubgraph.elements) {
-      if (
-        elem.type === VISUAL_ELEMENT_TYPE.Subgraph &&
-        elem.endLine !== undefined
-      ) {
+      if (elem.type === VISUAL_ELEMENT_TYPE.Subgraph && elem.endLine !== null) {
         containerEndLine = Math.max(containerEndLine, elem.endLine);
       }
     }

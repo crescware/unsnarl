@@ -2,17 +2,17 @@ import { describe, expect, test } from "vitest";
 
 import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 import { renderBoundaryEdges } from "./render-boundary-edges.js";
-import { makeGraph } from "./testing/make-graph.js";
+import { baseGraph } from "./testing/make-graph.js";
 
 describe("renderBoundaryEdges", () => {
   test("does nothing when boundaryEdges is undefined or empty", () => {
     const lines: /* mutable */ string[] = [];
     const stubIds: /* mutable */ string[] = [];
-    renderBoundaryEdges(makeGraph(), lines, stubIds);
+    renderBoundaryEdges(baseGraph(), lines, stubIds);
     expect(lines).toEqual([]);
     expect(stubIds).toEqual([]);
 
-    renderBoundaryEdges(makeGraph({ boundaryEdges: [] }), lines, stubIds);
+    renderBoundaryEdges({ ...baseGraph(), boundaryEdges: [] }, lines, stubIds);
     expect(lines).toEqual([]);
     expect(stubIds).toEqual([]);
   });
@@ -21,11 +21,12 @@ describe("renderBoundaryEdges", () => {
     const lines: /* mutable */ string[] = [];
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
+      {
+        ...baseGraph(),
         boundaryEdges: [
           { inside: "n_x", direction: BOUNDARY_EDGE_DIRECTION.Out },
         ],
-      }),
+      },
       lines,
       stubIds,
     );
@@ -38,7 +39,8 @@ describe("renderBoundaryEdges", () => {
     const lines: /* mutable */ string[] = [];
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
+      {
+        ...baseGraph(),
         boundaryEdges: [
           {
             inside: "n_x",
@@ -46,7 +48,7 @@ describe("renderBoundaryEdges", () => {
             label: "read",
           },
         ],
-      }),
+      },
       lines,
       stubIds,
     );
@@ -58,7 +60,8 @@ describe("renderBoundaryEdges", () => {
     const lines: /* mutable */ string[] = [];
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
+      {
+        ...baseGraph(),
         boundaryEdges: [
           { inside: "a", direction: BOUNDARY_EDGE_DIRECTION.Out },
           {
@@ -68,7 +71,7 @@ describe("renderBoundaryEdges", () => {
           },
           { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
         ],
-      }),
+      },
       lines,
       stubIds,
     );

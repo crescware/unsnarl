@@ -59,6 +59,8 @@ describe("Mermaid output syntax (real parser)", () => {
         format: "mermaid",
         language: fixture.language,
         sourcePath: `integration/fixtures/${fixture.name}/input.${fixture.language}`,
+        emit: { pretty: true, prunedGraph: null },
+        pruning: null,
       });
       expect(out).not.toContain('\\"');
       await mermaid.parse(out);

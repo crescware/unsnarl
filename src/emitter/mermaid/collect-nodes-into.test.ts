@@ -2,13 +2,19 @@ import { describe, expect, test } from "vitest";
 
 import type { VisualNode } from "../../visual-graph/model.js";
 import { collectNodesInto } from "./collect-nodes-into.js";
-import { makeNode } from "./testing/make-node.js";
-import { makeSubgraph } from "./testing/make-subgraph.js";
+import { baseNode } from "./testing/make-node.js";
+import { baseSubgraph } from "./testing/make-subgraph.js";
 
 describe("collectNodesInto", () => {
   test("collects flat top-level nodes keyed by id", () => {
     const out = new Map<string, VisualNode>();
-    collectNodesInto([makeNode({ id: "a" }), makeNode({ id: "b" })], out);
+    collectNodesInto(
+      [
+        { ...baseNode(), id: "a" },
+        { ...baseNode(), id: "b" },
+      ],
+      out,
+    );
     expect([...out.keys()]).toEqual(["a", "b"]);
   });
 
@@ -16,14 +22,19 @@ describe("collectNodesInto", () => {
     const out = new Map<string, VisualNode>();
     collectNodesInto(
       [
-        makeNode({ id: "a" }),
-        makeSubgraph({
+        { ...baseNode(), id: "a" },
+        {
+          ...baseSubgraph(),
           id: "s1",
           elements: [
-            makeNode({ id: "b" }),
-            makeSubgraph({ id: "s2", elements: [makeNode({ id: "c" })] }),
+            { ...baseNode(), id: "b" },
+            {
+              ...baseSubgraph(),
+              id: "s2",
+              elements: [{ ...baseNode(), id: "c" }],
+            },
           ],
-        }),
+        },
       ],
       out,
     );
@@ -32,7 +43,7 @@ describe("collectNodesInto", () => {
 
   test("does NOT add subgraph ids", () => {
     const out = new Map<string, VisualNode>();
-    collectNodesInto([makeSubgraph({ id: "sg" })], out);
+    collectNodesInto([{ ...baseSubgraph(), id: "sg" }], out);
     expect([...out.keys()]).toEqual([]);
   });
 
@@ -40,8 +51,8 @@ describe("collectNodesInto", () => {
     const out = new Map<string, VisualNode>();
     collectNodesInto(
       [
-        makeNode({ id: "a", name: "first" }),
-        makeNode({ id: "a", name: "second" }),
+        { ...baseNode(), id: "a", name: "first" },
+        { ...baseNode(), id: "a", name: "second" },
       ],
       out,
     );

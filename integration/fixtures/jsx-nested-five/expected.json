@@ -12,7 +12,11 @@
       "kind": "ImportBinding",
       "name": "A",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "A",
       "importSource": "components"
@@ -23,7 +27,11 @@
       "kind": "ImportBinding",
       "name": "B",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "B",
       "importSource": "components"
@@ -34,7 +42,11 @@
       "kind": "ImportBinding",
       "name": "C",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "C",
       "importSource": "components"
@@ -45,7 +57,11 @@
       "kind": "ImportBinding",
       "name": "D",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "D",
       "importSource": "components"
@@ -56,7 +72,11 @@
       "kind": "ImportBinding",
       "name": "E",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "E",
       "importSource": "components"
@@ -67,8 +87,14 @@
       "kind": "FunctionName",
       "name": "Main",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -77,6 +103,8 @@
       "line": 3,
       "endLine": 25,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_Main_54",
       "ownerName": "Main",
       "elements": [
@@ -86,8 +114,14 @@
           "kind": "Variable",
           "name": "v",
           "line": 4,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -95,8 +129,14 @@
           "kind": "Variable",
           "name": "w",
           "line": 5,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -104,8 +144,14 @@
           "kind": "Variable",
           "name": "x",
           "line": 6,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -113,8 +159,14 @@
           "kind": "Variable",
           "name": "y",
           "line": 7,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -122,15 +174,26 @@
           "kind": "Variable",
           "name": "z",
           "line": 8,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "declarationKind": "const",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_Main_54_151_331",
           "kind": "return",
           "line": 10,
+          "endLine": 24,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -138,8 +201,14 @@
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
+              "endLine": 23,
               "isJsxElement": true,
-              "endLine": 23
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -147,7 +216,14 @@
               "kind": "ReturnUse",
               "name": "v",
               "line": 12,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -155,8 +231,14 @@
               "kind": "ReturnUse",
               "name": "B",
               "line": 13,
+              "endLine": 22,
               "isJsxElement": true,
-              "endLine": 22
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -164,7 +246,14 @@
               "kind": "ReturnUse",
               "name": "w",
               "line": 14,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -172,8 +261,14 @@
               "kind": "ReturnUse",
               "name": "C",
               "line": 15,
+              "endLine": 21,
               "isJsxElement": true,
-              "endLine": 21
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -181,7 +276,14 @@
               "kind": "ReturnUse",
               "name": "x",
               "line": 16,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -189,8 +291,14 @@
               "kind": "ReturnUse",
               "name": "D",
               "line": 17,
+              "endLine": 20,
               "isJsxElement": true,
-              "endLine": 20
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -198,7 +306,14 @@
               "kind": "ReturnUse",
               "name": "y",
               "line": 18,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -206,7 +321,14 @@
               "kind": "ReturnUse",
               "name": "E",
               "line": 19,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -214,10 +336,16 @@
               "kind": "ReturnUse",
               "name": "z",
               "line": 19,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "endLine": 24
+          ]
         }
       ]
     },
@@ -227,7 +355,14 @@
       "kind": "ModuleSource",
       "name": "components",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -306,5 +441,7 @@
       "to": "n_scope_0_E_21",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

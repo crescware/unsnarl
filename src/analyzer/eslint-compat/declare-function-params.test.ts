@@ -12,7 +12,7 @@ function setup(code: string) {
   const program = parse(code);
   const fn = findFirst(program, AST_TYPE.FunctionDeclaration);
   const manager = new ScopeManager("module", program as unknown as AstNode);
-  const fnScope = manager.push("function", fn as unknown as AstNode);
+  const fnScope = manager.push("function", fn as unknown as AstNode, null);
   return { fn, fnScope };
 }
 
@@ -43,7 +43,11 @@ describe("declareFunctionParams", () => {
   test("does nothing when params is missing or not an array", () => {
     const program = parse("");
     const manager = new ScopeManager("module", program as unknown as AstNode);
-    const fnScope = manager.push("function", program as unknown as AstNode);
+    const fnScope = manager.push(
+      "function",
+      program as unknown as AstNode,
+      null,
+    );
     declareFunctionParams({ type: AST_TYPE.FunctionDeclaration }, fnScope);
     expect(fnScope.variables).toHaveLength(0);
   });

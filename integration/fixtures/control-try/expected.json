@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "value",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "Variable",
       "name": "attempts",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -30,8 +42,14 @@
       "kind": "Variable",
       "name": "raw",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -39,9 +57,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 15,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -49,7 +72,14 @@
       "kind": "ImplicitGlobalVariable",
       "name": "Number",
       "line": 7,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -58,6 +88,10 @@
       "line": 5,
       "endLine": 8,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "node",
@@ -65,8 +99,14 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 7,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -74,8 +114,14 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 6,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         }
       ]
     },
@@ -86,6 +132,10 @@
       "line": 8,
       "endLine": 11,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "node",
@@ -93,8 +143,14 @@
           "kind": "CatchClause",
           "name": "err",
           "line": 8,
+          "endLine": null,
           "isJsxElement": false,
-          "unused": true
+          "unused": true,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -102,8 +158,14 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 10,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -111,8 +173,14 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 9,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         }
       ]
     },
@@ -123,6 +191,10 @@
       "line": 11,
       "endLine": 13,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "node",
@@ -130,8 +202,14 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 12,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         }
       ]
     }
@@ -182,5 +260,7 @@
       "to": "n_scope_0_result_182",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

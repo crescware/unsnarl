@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "counter",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "Variable",
       "name": "flag",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -30,9 +42,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 8,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -41,6 +58,10 @@
       "line": 4,
       "endLine": 6,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "node",
@@ -48,8 +69,14 @@
           "kind": "WriteOp",
           "name": "counter",
           "line": 5,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         }
       ]
     }
@@ -75,5 +102,7 @@
       "to": "n_scope_0_result_73",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

@@ -1,6 +1,6 @@
 import type { WriteOp } from "../write-op.js";
 
-export function makeWriteOp(overrides: Partial<WriteOp> = {}): WriteOp {
+export function baseWriteOp(): WriteOp {
   return {
     refId: "r",
     varId: "v",
@@ -8,6 +8,5 @@ export function makeWriteOp(overrides: Partial<WriteOp> = {}): WriteOp {
     line: 1,
     offset: 0,
     scopeId: "s",
-    ...overrides,
   };
 }

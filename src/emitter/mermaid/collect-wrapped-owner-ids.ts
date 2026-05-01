@@ -10,7 +10,7 @@ export function collectWrappedOwnerIds(
     if (e.type !== VISUAL_ELEMENT_TYPE.Subgraph) {
       continue;
     }
-    if (e.kind === SUBGRAPH_KIND.Function && e.ownerNodeId !== undefined) {
+    if (e.kind === SUBGRAPH_KIND.Function && e.ownerNodeId !== null) {
       out.add(e.ownerNodeId);
     }
     collectWrappedOwnerIds(e.elements, out);

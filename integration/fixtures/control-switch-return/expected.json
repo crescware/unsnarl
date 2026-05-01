@@ -12,7 +12,14 @@
       "kind": "FunctionName",
       "name": "classify",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -20,9 +27,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 18,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -31,6 +43,8 @@
       "line": 1,
       "endLine": 16,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_classify_9",
       "ownerName": "classify",
       "elements": [
@@ -40,7 +54,14 @@
           "kind": "Parameter",
           "name": "kind",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -48,8 +69,14 @@
           "kind": "Variable",
           "name": "label",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "declarationKind": "let",
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
@@ -58,6 +85,10 @@
           "line": 4,
           "endLine": 13,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "subgraph",
@@ -66,6 +97,10 @@
               "line": 5,
               "endLine": 7,
               "direction": "RL",
+              "caseTest": "\"a\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -73,15 +108,26 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 6,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 },
                 {
                   "type": "subgraph",
                   "id": "s_return_scope_0_classify_9_114_127",
                   "kind": "return",
                   "line": 7,
+                  "endLine": null,
                   "direction": "RL",
+                  "caseTest": null,
+                  "hasElse": false,
+                  "ownerNodeId": null,
+                  "ownerName": null,
                   "elements": [
                     {
                       "type": "node",
@@ -89,12 +135,18 @@
                       "kind": "ReturnUse",
                       "name": "label",
                       "line": 7,
-                      "isJsxElement": false
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "declarationKind": null,
+                      "initIsFunction": false,
+                      "importKind": null,
+                      "importedName": null,
+                      "importSource": null
                     }
                   ]
                 }
-              ],
-              "caseTest": "\"a\""
+              ]
             },
             {
               "type": "subgraph",
@@ -103,6 +155,10 @@
               "line": 8,
               "endLine": 10,
               "direction": "RL",
+              "caseTest": "\"b\"",
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -110,11 +166,16 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 9,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
-              ],
-              "caseTest": "\"b\""
+              ]
             },
             {
               "type": "subgraph",
@@ -123,6 +184,10 @@
               "line": 11,
               "endLine": 12,
               "direction": "RL",
+              "caseTest": null,
+              "hasElse": false,
+              "ownerNodeId": null,
+              "ownerName": null,
               "elements": [
                 {
                   "type": "node",
@@ -130,11 +195,16 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 12,
+                  "endLine": null,
                   "isJsxElement": false,
-                  "declarationKind": "let"
+                  "unused": false,
+                  "declarationKind": "let",
+                  "initIsFunction": false,
+                  "importKind": null,
+                  "importedName": null,
+                  "importSource": null
                 }
-              ],
-              "caseTest": null
+              ]
             }
           ]
         },
@@ -143,7 +213,12 @@
           "id": "s_return_scope_0_classify_9_220_233",
           "kind": "return",
           "line": 15,
+          "endLine": null,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -151,7 +226,14 @@
               "kind": "ReturnUse",
               "name": "label",
               "line": 15,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
@@ -199,5 +281,7 @@
       "to": "n_scope_0_result_243",
       "label": "read,call"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

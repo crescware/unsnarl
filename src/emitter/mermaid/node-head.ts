@@ -21,7 +21,6 @@ export function nodeHead(n: VisualNode): string {
       const isRenamedNamed =
         n.importKind === IMPORT_KIND.Named &&
         n.importedName !== null &&
-        n.importedName !== undefined &&
         n.importedName !== n.name;
       return isRenamedNamed ? name : `import ${name}`;
     }

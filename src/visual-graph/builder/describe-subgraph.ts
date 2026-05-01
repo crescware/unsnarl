@@ -31,6 +31,8 @@ export function describeSubgraph(
       line: startLine,
       endLine,
       direction: DIRECTION.RL,
+      caseTest: null,
+      hasElse: false,
       ownerNodeId: nodeId(ownerVarId),
       ownerName: ownerVar?.name ?? "",
       elements: [],
@@ -42,17 +44,17 @@ export function describeSubgraph(
       `expected control subgraph kind for scope ${scope.id} (type=${scope.type})`,
     );
   }
-  const sg = {
+  return {
     type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
     kind,
     line: scope.block.span.line,
     endLine,
     direction: DIRECTION.RL,
+    caseTest: kind === "case" ? (scope.blockContext?.caseTest ?? null) : null,
+    hasElse: false,
+    ownerNodeId: null,
+    ownerName: null,
     elements: [] as VisualElement[],
-  } satisfies VisualSubgraph as VisualSubgraph;
-  if (kind === "case") {
-    sg.caseTest = scope.blockContext?.caseTest ?? null;
-  }
-  return sg;
+  };
 }

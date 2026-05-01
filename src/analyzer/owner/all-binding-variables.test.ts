@@ -30,6 +30,7 @@ const scopeWith = (...names: readonly string[]): ScopeImpl => {
     isStrict: true,
     upper: null,
     block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
   for (const n of names) {
     declareVariable(
@@ -69,6 +70,7 @@ describe("allBindingVariables", () => {
       isStrict: true,
       upper,
       block: { type: AST_TYPE.BlockStatement } as unknown as AstNode,
+      blockContext: null,
     });
     const out = allBindingVariables(declId("const outer = 1;"), inner);
     expect(out.map((v) => v.name)).toEqual(["outer"]);

@@ -44,6 +44,8 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     direction: DIRECTION.RL,
     elements: [] as VisualElement[],
     edges: [] as VisualEdge[],
+    boundaryEdges: [],
+    pruning: null,
   } satisfies VisualGraph;
 
   const variableMap = new Map<string, SerializedVariable>();
@@ -332,7 +334,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: NODE_KIND.ModuleSink,
       name: "module",
       line: 0,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
+      declarationKind: null,
+      initIsFunction: false,
+      importKind: null,
+      importedName: null,
+      importSource: null,
     });
   }
 
@@ -392,7 +401,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: NODE_KIND.ModuleSource,
       name: mod.source,
       line: mod.line,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
+      declarationKind: null,
+      initIsFunction: false,
+      importKind: null,
+      importedName: null,
+      importSource: null,
     });
   }
   for (const inter of intermediates.values()) {
@@ -402,7 +418,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: NODE_KIND.ImportIntermediate,
       name: inter.name,
       line: inter.line,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
+      declarationKind: null,
+      initIsFunction: false,
+      importKind: null,
+      importedName: null,
+      importSource: null,
     });
   }
   for (const v of ir.variables) {

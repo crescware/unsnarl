@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "label",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "Variable",
       "name": "kind",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -30,9 +42,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 16,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -41,6 +58,10 @@
       "line": 4,
       "endLine": 14,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "subgraph",
@@ -49,6 +70,10 @@
           "line": 5,
           "endLine": 7,
           "direction": "RL",
+          "caseTest": "\"a\"",
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -56,11 +81,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 6,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": "\"a\""
+          ]
         },
         {
           "type": "subgraph",
@@ -69,6 +99,10 @@
           "line": 8,
           "endLine": 10,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -76,11 +110,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 9,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": null
+          ]
         },
         {
           "type": "subgraph",
@@ -89,6 +128,10 @@
           "line": 11,
           "endLine": 13,
           "direction": "RL",
+          "caseTest": "\"b\"",
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -96,11 +139,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 12,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": "\"b\""
+          ]
         }
       ]
     }
@@ -141,5 +189,7 @@
       "to": "n_scope_0_result_190",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

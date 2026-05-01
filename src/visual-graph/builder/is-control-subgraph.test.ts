@@ -4,8 +4,8 @@ import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { isControlSubgraph } from "./is-control-subgraph.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
 describe("isControlSubgraph", () => {
   test.each<{ type: ScopeType; expected: boolean }>([
@@ -17,50 +17,82 @@ describe("isControlSubgraph", () => {
     { type: SCOPE_TYPE.Global, expected: false },
     { type: SCOPE_TYPE.Class, expected: false },
   ])("scope type $type -> $expected", ({ type, expected }) => {
-    expect(isControlSubgraph(makeScope({ type }))).toBe(expected);
+    expect(isControlSubgraph({ ...baseScope(), type })).toBe(expected);
   });
 
   test.each<{ name: string; ctx: BlockContext; expected: boolean }>([
     {
       name: "block + IfStatement.consequent",
-      ctx: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 0,
+      },
       expected: true,
     },
     {
       name: "block + IfStatement.alternate",
-      ctx: makeBlockContext(AST_TYPE.IfStatement, "alternate", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "alternate",
+        parentSpanOffset: 0,
+      },
       expected: true,
     },
     {
       name: "block + TryStatement.block",
-      ctx: makeBlockContext(AST_TYPE.TryStatement, "block", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "block",
+        parentSpanOffset: 0,
+      },
       expected: true,
     },
     {
       name: "block + TryStatement.finalizer",
-      ctx: makeBlockContext(AST_TYPE.TryStatement, "finalizer", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "finalizer",
+        parentSpanOffset: 0,
+      },
       expected: true,
     },
     {
       name: "block + SwitchStatement.cases",
-      ctx: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.SwitchStatement,
+        key: "cases",
+        parentSpanOffset: 0,
+      },
       expected: true,
     },
     {
       name: "block + WhileStatement.body",
-      ctx: makeBlockContext("WhileStatement", "body", 0),
+      ctx: {
+        ...baseBlockContext(),
+        parentType: "WhileStatement",
+        key: "body",
+        parentSpanOffset: 0,
+      },
       expected: false,
     },
   ])("$name -> $expected", ({ ctx, expected }) => {
     expect(
-      isControlSubgraph(
-        makeScope({ type: SCOPE_TYPE.Block, blockContext: ctx }),
-      ),
+      isControlSubgraph({
+        ...baseScope(),
+        type: SCOPE_TYPE.Block,
+        blockContext: ctx,
+      }),
     ).toBe(expected);
   });
 
   test("plain block without blockContext -> false", () => {
-    expect(isControlSubgraph(makeScope({ type: SCOPE_TYPE.Block }))).toBe(
+    expect(isControlSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block })).toBe(
       false,
     );
   });

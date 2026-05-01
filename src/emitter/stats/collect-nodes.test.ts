@@ -19,6 +19,13 @@ const node = (id: string, line = 1): VisualNode => ({
   name: id,
   line,
   isJsxElement: false,
+  endLine: null,
+  unused: false,
+  declarationKind: null,
+  initIsFunction: false,
+  importKind: null,
+  importedName: null,
+  importSource: null,
 });
 
 const sg = (
@@ -32,6 +39,11 @@ const sg = (
   line: 1,
   direction,
   elements,
+  endLine: null,
+  caseTest: null,
+  hasElse: false,
+  ownerNodeId: null,
+  ownerName: null,
 });
 
 describe("collectNodes", () => {

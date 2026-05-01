@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "counter",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [],

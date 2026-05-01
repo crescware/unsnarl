@@ -83,7 +83,8 @@
       "blockContext": {
         "parentType": "Program",
         "key": "body",
-        "parentSpanOffset": 0
+        "parentSpanOffset": 0,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false

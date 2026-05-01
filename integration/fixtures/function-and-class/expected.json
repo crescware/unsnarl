@@ -12,7 +12,14 @@
       "kind": "FunctionName",
       "name": "add",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -20,7 +27,14 @@
       "kind": "ClassName",
       "name": "Counter",
       "line": 5,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -28,8 +42,14 @@
       "kind": "Variable",
       "name": "total",
       "line": 9,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -37,9 +57,14 @@
       "kind": "Variable",
       "name": "c",
       "line": 10,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -47,9 +72,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 11,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -58,6 +88,8 @@
       "line": 1,
       "endLine": 3,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_add_9",
       "ownerName": "add",
       "elements": [
@@ -67,7 +99,14 @@
           "kind": "Parameter",
           "name": "a",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "node",
@@ -75,14 +114,26 @@
           "kind": "Parameter",
           "name": "b",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_add_9_39_52",
           "kind": "return",
           "line": 2,
+          "endLine": null,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -90,7 +141,14 @@
               "kind": "ReturnUse",
               "name": "a",
               "line": 2,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -98,7 +156,14 @@
               "kind": "ReturnUse",
               "name": "b",
               "line": 2,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
@@ -131,5 +196,7 @@
       "to": "n_scope_0_result_144",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

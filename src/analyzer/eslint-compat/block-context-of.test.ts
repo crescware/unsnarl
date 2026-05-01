@@ -25,6 +25,7 @@ describe("blockContextOf", () => {
       parentType: AST_TYPE.IfStatement,
       key: "consequent",
       parentSpanOffset: 12,
+      caseTest: null,
     });
   });
 
@@ -34,6 +35,7 @@ describe("blockContextOf", () => {
       parentType: AST_TYPE.Program,
       key: "body",
       parentSpanOffset: 0,
+      caseTest: null,
     });
   });
 });

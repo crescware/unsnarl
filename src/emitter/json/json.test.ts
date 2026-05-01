@@ -76,7 +76,7 @@ function emit(code: string, pretty = true): string {
     raw: analyzed.raw,
     source: { path: "input.ts", language: LANGUAGE.Ts },
   });
-  return emitter.emit(ir, pretty ? {} : { pretty: false });
+  return emitter.emit(ir, { pretty, prunedGraph: null });
 }
 
 describe("JsonEmitter", () => {

@@ -48,8 +48,8 @@ export type IRSerializer = Readonly<{
 }>;
 
 export type EmitOptions = Readonly<{
-  pretty?: boolean;
-  prunedGraph?: VisualGraph;
+  pretty: boolean;
+  prunedGraph: VisualGraph | null;
 }>;
 
 export type Emitter = Readonly<{
@@ -77,8 +77,8 @@ export type PruningRunOptions = Readonly<{
 export type PipelineRunOptions = ParseOptions &
   Readonly<{
     format: string;
-    emit?: EmitOptions;
-    pruning?: PruningRunOptions;
+    emit: EmitOptions;
+    pruning: PruningRunOptions | null;
   }>;
 
 export type PipelineRunDetails = Readonly<{

@@ -11,8 +11,8 @@ import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 export type { Direction, NodeKind, SubgraphKind };
 
-// Mutable: builder.ts and the various builder/* helpers fill optional
-// fields (endLine, unused, declarationKind, initIsFunction, importKind,
+// Mutable: builder.ts and the various builder/* helpers may patch fields
+// (endLine, unused, declarationKind, initIsFunction, importKind,
 // importedName, importSource) after the node is first inserted into its
 // container. Wrapping in Readonly would force a refactor of every
 // post-construction patch site.
@@ -25,21 +25,21 @@ export type VisualNode = {
   // Set when the reference logically extends past its identifier line --
   // currently the JSX element case where <A>...</A> spans line..endLine.
   // Renderers display L{line}-{endLine} and prune treats line queries as
-  // matching anywhere within the closed range.
-  endLine?: number;
+  // matching anywhere within the closed range. null when single-line.
+  endLine: number | null;
   // Marks a reference whose identifier names a JSX element opening tag, so
   // renderers can wrap the label as `<Name>` regardless of whether the
-  // element happens to be single-line (no endLine).
+  // element happens to be single-line (endLine is null).
   isJsxElement: boolean;
-  unused?: boolean;
-  declarationKind?: VariableDeclarationKind;
-  initIsFunction?: boolean;
-  importKind?: ImportKind;
-  importedName?: string | null;
-  importSource?: string;
+  unused: boolean;
+  declarationKind: VariableDeclarationKind | null;
+  initIsFunction: boolean;
+  importKind: ImportKind | null;
+  importedName: string | null;
+  importSource: string | null;
 };
 
-// Mutable: builder fills endLine / caseTest after construction and pushes
+// Mutable: builder patches endLine / caseTest after construction and pushes
 // into elements as it walks scopes. rebuild-elements also rewires
 // children through `{ ...item, elements: children }`, so we cannot lock
 // the property bindings either.
@@ -48,14 +48,14 @@ export type VisualSubgraph = {
   id: string;
   kind: SubgraphKind;
   line: number;
-  endLine?: number;
+  endLine: number | null;
   direction: Direction;
-  caseTest?: string | null;
-  hasElse?: boolean;
-  ownerNodeId?: string;
+  caseTest: string | null;
+  hasElse: boolean;
+  ownerNodeId: string | null;
   // Mirrors the owner node's display name so the subgraph label survives
   // pruning even when the owner node itself gets cut out of the graph.
-  ownerName?: string;
+  ownerName: string | null;
   elements: /* mutable */ VisualElement[];
 };
 
@@ -105,6 +105,6 @@ export type VisualGraph = Readonly<{
   direction: Direction;
   elements: /* mutable */ VisualElement[];
   edges: /* mutable */ VisualEdge[];
-  boundaryEdges?: readonly VisualBoundaryEdge[];
-  pruning?: VisualGraphPruning;
+  boundaryEdges: readonly VisualBoundaryEdge[];
+  pruning: VisualGraphPruning | null;
 }>;

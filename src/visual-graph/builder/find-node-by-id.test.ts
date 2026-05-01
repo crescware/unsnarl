@@ -14,7 +14,14 @@ function leafNode(id: string, name = id): VisualNode {
     kind: NODE_KIND.Variable,
     name,
     line: 1,
+    endLine: null,
     isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+    initIsFunction: false,
+    importKind: null,
+    importedName: null,
+    importSource: null,
   };
 }
 
@@ -25,7 +32,12 @@ const elements: VisualElement[] = [
     id: "s1",
     kind: SUBGRAPH_KIND.Function,
     line: 1,
+    endLine: null,
     direction: DIRECTION.RL,
+    caseTest: null,
+    hasElse: false,
+    ownerNodeId: null,
+    ownerName: null,
     elements: [
       leafNode("b"),
       {
@@ -33,7 +45,12 @@ const elements: VisualElement[] = [
         id: "s2",
         kind: SUBGRAPH_KIND.If,
         line: 1,
+        endLine: null,
         direction: DIRECTION.RL,
+        caseTest: null,
+        hasElse: false,
+        ownerNodeId: null,
+        ownerName: null,
         elements: [leafNode("c")],
       },
     ],

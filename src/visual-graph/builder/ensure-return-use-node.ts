@@ -29,20 +29,24 @@ export function ensureReturnUseNode(
     state.returnSubgraphsByFn.set(enclosingFnVarId, perFn);
   }
   let sg = perFn.get(containerKey);
-  if (!sg) {
+  if (sg === undefined) {
     const startLine = ref.returnContainer?.startSpan.line ?? host.line;
-    const endLine = ref.returnContainer?.endSpan.line;
+    const rawEndLine = ref.returnContainer?.endSpan.line;
+    const endLine =
+      rawEndLine !== undefined && rawEndLine !== startLine ? rawEndLine : null;
     sg = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: returnSubgraphId(enclosingFnVarId, containerKey),
       kind: SUBGRAPH_KIND.Return,
       line: startLine,
+      endLine,
       direction: DIRECTION.RL,
+      caseTest: null,
+      hasElse: false,
+      ownerNodeId: null,
+      ownerName: null,
       elements: [],
     } satisfies VisualSubgraph;
-    if (endLine !== undefined && endLine !== startLine) {
-      sg.endLine = endLine;
-    }
     host.elements.push(sg);
     perFn.set(containerKey, sg);
   }
@@ -52,18 +56,24 @@ export function ensureReturnUseNode(
     const v = ref.resolved ? ctx.variableMap.get(ref.resolved) : undefined;
     const name = v?.name ?? ref.identifier.name ?? "";
     const startLine = ref.identifier.span.line;
+    const jsxEnd = ref.jsxElement?.endSpan.line;
+    const endLine =
+      jsxEnd !== undefined && jsxEnd !== startLine ? jsxEnd : null;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id,
       kind: NODE_KIND.ReturnUse,
       name,
       line: startLine,
+      endLine,
       isJsxElement: ref.jsxElement !== null,
-    } satisfies VisualNode as VisualNode;
-    const jsxEnd = ref.jsxElement?.endSpan.line;
-    if (jsxEnd !== undefined && jsxEnd !== startLine) {
-      node.endLine = jsxEnd;
-    }
+      unused: false,
+      declarationKind: null,
+      initIsFunction: false,
+      importKind: null,
+      importedName: null,
+      importSource: null,
+    } satisfies VisualNode;
     sg.elements.push(node);
   }
   return id;

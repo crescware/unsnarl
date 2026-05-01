@@ -58,7 +58,8 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "ir",
           language: fixture.language,
           sourcePath,
-          emit: { pretty: true },
+          emit: { pretty: true, prunedGraph: null },
+          pruning: null,
         });
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.ir.json"),
@@ -70,7 +71,8 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "json",
           language: fixture.language,
           sourcePath,
-          emit: { pretty: true },
+          emit: { pretty: true, prunedGraph: null },
+          pruning: null,
         });
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.json"),
@@ -82,6 +84,8 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "mermaid",
           language: fixture.language,
           sourcePath,
+          emit: { pretty: true, prunedGraph: null },
+          pruning: null,
         });
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.mermaid"),
@@ -93,6 +97,8 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "markdown",
           language: fixture.language,
           sourcePath,
+          emit: { pretty: true, prunedGraph: null },
+          pruning: null,
         });
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "preview.md"),
@@ -104,6 +110,8 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "stats",
           language: fixture.language,
           sourcePath,
+          emit: { pretty: true, prunedGraph: null },
+          pruning: null,
         });
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.stats"),

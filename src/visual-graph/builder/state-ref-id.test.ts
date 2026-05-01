@@ -10,8 +10,8 @@ import type {
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import type { BuilderContext } from "./context.js";
 import { stateRefId } from "./state-ref-id.js";
-import { makeRef } from "./testing/make-ref.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseRef } from "./testing/make-ref.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
 
@@ -40,8 +40,13 @@ function makeCtx(overrides: Partial<BuilderContext>): BuilderContext {
   };
 }
 
-const writeOp = makeWriteOp({ refId: "wRef", varId: "v", offset: 10 });
-const earlierOp = makeWriteOp({ refId: "wEarlier", varId: "v", offset: 5 });
+const writeOp = { ...baseWriteOp(), refId: "wRef", varId: "v", offset: 10 };
+const earlierOp = {
+  ...baseWriteOp(),
+  refId: "wEarlier",
+  varId: "v",
+  offset: 5,
+};
 
 describe("stateRefId", () => {
   test("refId that names a writeOp returns the writeOp's node id", () => {
@@ -70,7 +75,11 @@ describe("stateRefId", () => {
     {
       name: "reference exists but no prior writes -> nodeId(varId)",
       refs: [
-        makeRef({ id: "readRef", identifier: { name: "x", span: span(20) } }),
+        {
+          ...baseRef(),
+          id: "readRef",
+          identifier: { name: "x", span: span(20) },
+        },
       ],
       ops: [],
       refId: "readRef",
@@ -80,7 +89,11 @@ describe("stateRefId", () => {
     {
       name: "reference exists with prior write -> writeOpNodeId of the prior write",
       refs: [
-        makeRef({ id: "readRef", identifier: { name: "x", span: span(20) } }),
+        {
+          ...baseRef(),
+          id: "readRef",
+          identifier: { name: "x", span: span(20) },
+        },
       ],
       ops: [earlierOp],
       refId: "readRef",

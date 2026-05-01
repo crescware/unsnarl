@@ -2,27 +2,25 @@ import { describe, expect, test } from "vitest";
 
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
+import type { VisualNode } from "../../visual-graph/model.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeHead } from "./node-head.js";
-import { makeNode } from "./testing/make-node.js";
+import { baseNode } from "./testing/make-node.js";
 
 describe("nodeHead", () => {
   test("JSX element wraps the (escaped) name in &lt;...&gt;, ignoring kind-specific format", () => {
     expect(
-      nodeHead(
-        makeNode({
-          kind: NODE_KIND.FunctionName,
-          name: "Foo",
-          isJsxElement: true,
-        }),
-      ),
+      nodeHead({
+        ...baseNode(),
+        kind: NODE_KIND.FunctionName,
+        name: "Foo",
+        isJsxElement: true,
+      }),
     ).toBe("&lt;Foo&gt;");
   });
 
   test.each<{
-    kind: Parameters<typeof makeNode>[0] extends undefined
-      ? never
-      : Parameters<typeof makeNode>[0];
+    kind: Partial<VisualNode>;
     name: string;
     expected: string;
   }>([
@@ -49,48 +47,52 @@ describe("nodeHead", () => {
       expected: "import named",
     },
   ])("kind $kind.kind formats as $expected", ({ kind, name, expected }) => {
-    expect(nodeHead(makeNode({ ...kind, name }))).toBe(expected);
+    expect(nodeHead({ ...baseNode(), ...kind, name })).toBe(expected);
   });
 
   test.each([
     {
       name: "renamed named import keeps the local name only",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.ImportBinding,
         name: "renamed",
         importKind: IMPORT_KIND.Named,
         importedName: "original",
-      }),
+      },
       expected: "renamed",
     },
     {
       name: "non-renamed named import gets 'import' prefix",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.ImportBinding,
         name: "foo",
         importKind: IMPORT_KIND.Named,
         importedName: "foo",
-      }),
+      },
       expected: "import foo",
     },
     {
       name: "default import gets 'import' prefix",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.ImportBinding,
         name: "Foo",
         importKind: IMPORT_KIND.Default,
         importedName: null,
-      }),
+      },
       expected: "import Foo",
     },
     {
       name: "namespace import gets 'import' prefix",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.ImportBinding,
         name: "ns",
         importKind: IMPORT_KIND.Namespace,
         importedName: null,
-      }),
+      },
       expected: "import ns",
     },
   ])("$name", ({ node, expected }) => {
@@ -100,25 +102,27 @@ describe("nodeHead", () => {
   test.each([
     {
       name: "WriteOp with declarationKind=let prepends 'let'",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.WriteOp,
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      }),
+      },
       expected: "let x",
     },
     {
       name: "WriteOp with declarationKind=const has no prefix",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         kind: NODE_KIND.WriteOp,
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Const,
-      }),
+      },
       expected: "x",
     },
     {
       name: "WriteOp without declarationKind has no prefix",
-      node: makeNode({ kind: NODE_KIND.WriteOp, name: "x" }),
+      node: { ...baseNode(), kind: NODE_KIND.WriteOp, name: "x" },
       expected: "x",
     },
   ])("$name", ({ node, expected }) => {
@@ -128,37 +132,40 @@ describe("nodeHead", () => {
   test.each([
     {
       name: "Variable initialized with a function uses '<name>()' format",
-      node: makeNode({ name: "f", initIsFunction: true }),
+      node: { ...baseNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
     {
       name: "let-declared Variable prepends 'let'",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      }),
+      },
       expected: "let x",
     },
     {
       name: "const-declared Variable has no prefix",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Const,
-      }),
+      },
       expected: "x",
     },
     {
       name: "Variable without declarationKind has no prefix",
-      node: makeNode({ name: "x" }),
+      node: { ...baseNode(), name: "x" },
       expected: "x",
     },
     {
       name: "initIsFunction wins over declarationKind",
-      node: makeNode({
+      node: {
+        ...baseNode(),
         name: "f",
         initIsFunction: true,
         declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      }),
+      },
       expected: "f()",
     },
   ])("$name", ({ node, expected }) => {
@@ -166,8 +173,8 @@ describe("nodeHead", () => {
   });
 
   test("ReturnUse falls through to the default formatting (uses name only)", () => {
-    expect(nodeHead(makeNode({ kind: NODE_KIND.ReturnUse, name: "x" }))).toBe(
-      "x",
-    );
+    expect(
+      nodeHead({ ...baseNode(), kind: NODE_KIND.ReturnUse, name: "x" }),
+    ).toBe("x");
   });
 });

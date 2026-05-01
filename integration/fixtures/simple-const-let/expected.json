@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "greeting",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "Variable",
       "name": "counter",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -30,9 +42,14 @@
       "kind": "Variable",
       "name": "message",
       "line": 6,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -40,9 +57,14 @@
       "kind": "Variable",
       "name": "unused",
       "line": 7,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -50,8 +72,14 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -59,8 +87,14 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 4,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -68,8 +102,14 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -93,5 +133,7 @@
       "to": "n_scope_0_message_97",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

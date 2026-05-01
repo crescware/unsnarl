@@ -1,12 +1,11 @@
 import type { BlockContext } from "../../../ir/model.js";
+import { AST_TYPE } from "../../../parser/ast-type.js";
 
-export function makeBlockContext(
-  parentType: string,
-  key: string,
-  parentSpanOffset = 0,
-  caseTest?: string | null,
-): BlockContext {
-  return caseTest === undefined
-    ? { parentType, key, parentSpanOffset }
-    : { parentType, key, parentSpanOffset, caseTest };
+export function baseBlockContext(): BlockContext {
+  return {
+    parentType: AST_TYPE.IfStatement,
+    key: "consequent",
+    parentSpanOffset: 0,
+    caseTest: null,
+  };
 }

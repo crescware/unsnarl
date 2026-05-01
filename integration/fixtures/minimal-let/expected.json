@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "count",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "WriteOp",
       "name": "count",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -31,5 +43,7 @@
       "to": "wr_ref_0",
       "label": "set"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

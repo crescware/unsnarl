@@ -62,6 +62,8 @@ describe("DefaultEmitterRegistry", () => {
       extension: "txt",
       emit: (ir) => `version=${ir.version}`,
     });
-    expect(reg.get("callable")?.emit(fakeIR, {})).toBe("version=1");
+    expect(
+      reg.get("callable")?.emit(fakeIR, { pretty: true, prunedGraph: null }),
+    ).toBe("version=1");
   });
 });

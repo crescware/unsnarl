@@ -111,7 +111,8 @@
       "blockContext": {
         "parentType": "BlockStatement",
         "key": "body",
-        "parentSpanOffset": 25
+        "parentSpanOffset": 25,
+        "caseTest": null
       },
       "fallsThrough": false,
       "exitsFunction": false

@@ -146,7 +146,7 @@ describe("buildVisualGraph: variable nodes", () => {
 
   test("unused declarations carry the unused flag; declarations with readers do not", () => {
     const g = build("const a = 1;\nconst b = a;\n");
-    expect(nodeByName(g, "a")?.unused).toBeUndefined();
+    expect(nodeByName(g, "a")?.unused).toBe(false);
     expect(nodeByName(g, "b")?.unused).toBe(true);
   });
 
@@ -585,7 +585,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const g = build(["const fn = (x) => {", "  return x;", "};"].join("\n"));
     const ret = findSubgraphs(g, "return")[0];
     expect(ret?.line).toBe(2);
-    expect(ret?.endLine).toBeUndefined();
+    expect(ret?.endLine).toBeNull();
   });
 
   test("a function with no ownerless refs in its body produces no return subgraph", () => {
@@ -593,11 +593,11 @@ describe("buildVisualGraph: return subgraphs", () => {
     expect(findSubgraphs(g, "return")).toHaveLength(0);
   });
 
-  test("a single-line return subgraph omits endLine (rendered as plain L<n>)", () => {
+  test("a single-line return subgraph leaves endLine null (rendered as plain L<n>)", () => {
     const g = build("function f(x) { return x; }\n");
     const ret = findSubgraphs(g, "return")[0];
     expect(ret?.line).toBe(1);
-    expect(ret?.endLine).toBeUndefined();
+    expect(ret?.endLine).toBeNull();
   });
 
   test("ownerless refs flow into ReturnUse nodes via |read| edges", () => {
@@ -633,7 +633,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     expect(a?.endLine).toBe(5);
   });
 
-  test("a single-line JSX element still flags isJsxElement, and endLine is omitted", () => {
+  test("a single-line JSX element still flags isJsxElement, and endLine stays null", () => {
     const code = [
       "import { A } from 'm';",
       "const App = () => <A>hi</A>;",
@@ -641,10 +641,10 @@ describe("buildVisualGraph: return subgraphs", () => {
     const g = build(code, "tsx");
     const a = findNodes(g, NODE_KIND.ReturnUse).find((n) => n.name === "A");
     expect(a?.isJsxElement).toBe(true);
-    expect(a?.endLine).toBeUndefined();
+    expect(a?.endLine).toBeNull();
   });
 
-  test("non-JSX ReturnUse stays isJsxElement=false with no endLine", () => {
+  test("non-JSX ReturnUse stays isJsxElement=false with endLine null", () => {
     const g = build("function f(a) { return a; }\n");
     const ret = findSubgraphs(g, "return")[0];
     const retUse = ret?.elements.find(
@@ -652,7 +652,7 @@ describe("buildVisualGraph: return subgraphs", () => {
         e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
     ) as VisualNode | undefined;
     expect(retUse?.isJsxElement).toBe(false);
-    expect(retUse?.endLine).toBeUndefined();
+    expect(retUse?.endLine).toBeNull();
   });
 });
 

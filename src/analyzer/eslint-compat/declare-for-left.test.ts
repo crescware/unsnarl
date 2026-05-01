@@ -18,7 +18,7 @@ function setup(
   const program = parse(code, language);
   const forNode = findFirst(program, forType);
   const manager = new ScopeManager("module", program as unknown as AstNode);
-  const forScope = manager.push("for", forNode as unknown as AstNode);
+  const forScope = manager.push("for", forNode as unknown as AstNode, null);
   return {
     forNode,
     forScope,

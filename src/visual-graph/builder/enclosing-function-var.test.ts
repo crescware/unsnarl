@@ -2,11 +2,11 @@ import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseScope } from "./testing/make-scope.js";
 
-const grand = makeScope({ id: "grand" });
-const parent = makeScope({ id: "parent", upper: "grand" });
-const child = makeScope({ id: "child", upper: "parent" });
+const grand = { ...baseScope(), id: "grand" };
+const parent = { ...baseScope(), id: "parent", upper: "grand" };
+const child = { ...baseScope(), id: "child", upper: "parent" };
 const map = new Map<string, SerializedScope>(
   [grand, parent, child].map((s) => [s.id, s]),
 );

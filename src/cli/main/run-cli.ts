@@ -98,12 +98,6 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     : detectLanguage(args.inputFile, args.language);
 
   const pipeline = createDefaultPipeline(emitters);
-  const baseRunOpts = {
-    format: args.format,
-    language,
-    sourcePath,
-    emit: { pretty: args.pretty },
-  } satisfies PipelineRunOptions;
   const pruning: PruningRunOptions | null =
     args.roots.length > 0
       ? {
@@ -111,12 +105,16 @@ export async function runCli(argv: readonly string[]): Promise<number> {
           ...resolveGenerations(args),
         }
       : null;
+  const runOpts: PipelineRunOptions = {
+    format: args.format,
+    language,
+    sourcePath,
+    emit: { pretty: args.pretty, prunedGraph: null },
+    pruning,
+  };
 
   try {
-    const result = pipeline.runDetailed(
-      code,
-      pruning === null ? baseRunOpts : { ...baseRunOpts, pruning },
-    );
+    const result = pipeline.runDetailed(code, runOpts);
     if (result.pruning !== null) {
       for (const r of result.pruning) {
         if (r.matched === 0) {

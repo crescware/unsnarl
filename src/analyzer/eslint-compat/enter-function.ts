@@ -13,7 +13,7 @@ export function enterFunction(
   raw: string,
   diagnostics: DiagnosticCollector,
 ): void {
-  const scope = manager.push("function", node as unknown as AstNode);
+  const scope = manager.push("function", node as unknown as AstNode, null);
   declareFunctionParams(node, scope);
   const body = node["body"];
   if (isNodeLike(body) && body.type === AST_TYPE.BlockStatement) {

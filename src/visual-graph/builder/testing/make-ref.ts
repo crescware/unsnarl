@@ -1,9 +1,7 @@
 import type { SerializedReference } from "../../../ir/model.js";
 import { span } from "./span.js";
 
-export function makeRef(
-  overrides: Partial<SerializedReference> = {},
-): SerializedReference {
+export function baseRef(): SerializedReference {
   return {
     id: "r",
     identifier: { name: "x", span: span() },
@@ -16,6 +14,5 @@ export function makeRef(
     predicateContainer: null,
     returnContainer: null,
     jsxElement: null,
-    ...overrides,
   };
 }

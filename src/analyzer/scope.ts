@@ -37,13 +37,13 @@ export class ScopeImpl implements Scope {
     isStrict: boolean;
     upper: Scope | null;
     block: AstNode;
-    blockContext?: BlockContext | null;
+    blockContext: BlockContext | null;
   }) {
     this.type = opts.type;
     this.isStrict = opts.isStrict;
     this.upper = opts.upper;
     this.block = opts.block;
-    this.unsnarlBlockContext = opts.blockContext ?? null;
+    this.unsnarlBlockContext = opts.blockContext;
     if (opts.upper) {
       opts.upper.childScopes.push(this);
     }
@@ -93,13 +93,13 @@ export class ReferenceImpl implements Reference {
     from: Scope;
     flags: ReferenceFlagBits;
     init: boolean;
-    writeExpr?: AstExpression | null;
+    writeExpr: AstExpression | null;
   }) {
     this.identifier = opts.identifier;
     this.from = opts.from;
     this.unsnarlFlags = opts.flags;
     this.init = opts.init;
-    this.writeExpr = opts.writeExpr ?? null;
+    this.writeExpr = opts.writeExpr;
   }
 
   isRead(): boolean {

@@ -12,8 +12,14 @@
       "kind": "Variable",
       "name": "RED",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -21,8 +27,14 @@
       "kind": "Variable",
       "name": "GREEN",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -30,8 +42,14 @@
       "kind": "Variable",
       "name": "BLUE",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -39,8 +57,14 @@
       "kind": "Variable",
       "name": "label",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "declarationKind": "let",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -48,8 +72,14 @@
       "kind": "Variable",
       "name": "color",
       "line": 6,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "declarationKind": "const",
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -57,9 +87,14 @@
       "kind": "Variable",
       "name": "result",
       "line": 22,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -68,6 +103,10 @@
       "line": 8,
       "endLine": 20,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
+      "ownerNodeId": null,
+      "ownerName": null,
       "elements": [
         {
           "type": "subgraph",
@@ -76,6 +115,10 @@
           "line": 9,
           "endLine": 11,
           "direction": "RL",
+          "caseTest": "RED",
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -83,11 +126,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 10,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": "RED"
+          ]
         },
         {
           "type": "subgraph",
@@ -96,6 +144,10 @@
           "line": 12,
           "endLine": 14,
           "direction": "RL",
+          "caseTest": "GREEN",
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -103,11 +155,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 13,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": "GREEN"
+          ]
         },
         {
           "type": "subgraph",
@@ -116,6 +173,10 @@
           "line": 15,
           "endLine": 17,
           "direction": "RL",
+          "caseTest": "BLUE",
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -123,11 +184,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 16,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": "BLUE"
+          ]
         },
         {
           "type": "subgraph",
@@ -136,6 +202,10 @@
           "line": 18,
           "endLine": 19,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -143,11 +213,16 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 19,
+              "endLine": null,
               "isJsxElement": false,
-              "declarationKind": "let"
+              "unused": false,
+              "declarationKind": "let",
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "caseTest": null
+          ]
         }
       ]
     },
@@ -157,7 +232,14 @@
       "kind": "ModuleSink",
       "name": "module",
       "line": 0,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -226,5 +308,7 @@
       "to": "n_scope_0_result_283",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

@@ -12,7 +12,11 @@
       "kind": "ImportBinding",
       "name": "Fragment",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
       "importKind": "named",
       "importedName": "Fragment",
       "importSource": "react"
@@ -23,9 +27,14 @@
       "kind": "Variable",
       "name": "Hello",
       "line": 7,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "const",
-      "initIsFunction": true
+      "initIsFunction": true,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -33,9 +42,14 @@
       "kind": "Variable",
       "name": "App",
       "line": 13,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "const",
-      "initIsFunction": true
+      "initIsFunction": true,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -43,9 +57,14 @@
       "kind": "Variable",
       "name": "root",
       "line": 15,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "node",
@@ -53,7 +72,14 @@
       "kind": "ImplicitGlobalVariable",
       "name": "span",
       "line": 9,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     },
     {
       "type": "subgraph",
@@ -62,6 +88,8 @@
       "line": 7,
       "endLine": 11,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_Hello_79",
       "ownerName": "Hello",
       "elements": [
@@ -71,14 +99,26 @@
           "kind": "Parameter",
           "name": "props",
           "line": 7,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null,
+          "initIsFunction": false,
+          "importKind": null,
+          "importedName": null,
+          "importSource": null
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_Hello_79_105_187",
           "kind": "return",
           "line": 7,
+          "endLine": 11,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -86,8 +126,14 @@
               "kind": "ReturnUse",
               "name": "Fragment",
               "line": 8,
+              "endLine": 10,
               "isJsxElement": true,
-              "endLine": 10
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -95,7 +141,14 @@
               "kind": "ReturnUse",
               "name": "span",
               "line": 9,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             },
             {
               "type": "node",
@@ -103,10 +156,16 @@
               "kind": "ReturnUse",
               "name": "props",
               "line": 9,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "endLine": 11
+          ]
         }
       ]
     },
@@ -117,6 +176,8 @@
       "line": 13,
       "endLine": 13,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_App_196",
       "ownerName": "App",
       "elements": [
@@ -125,7 +186,12 @@
           "id": "s_return_scope_0_App_196_208_228",
           "kind": "return",
           "line": 13,
+          "endLine": null,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -133,7 +199,14 @@
               "kind": "ReturnUse",
               "name": "Hello",
               "line": 13,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
           ]
         }
@@ -145,7 +218,14 @@
       "kind": "ModuleSource",
       "name": "react",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": null,
+      "initIsFunction": false,
+      "importKind": null,
+      "importedName": null,
+      "importSource": null
     }
   ],
   "edges": [
@@ -179,5 +259,7 @@
       "to": "n_scope_0_Fragment_9",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

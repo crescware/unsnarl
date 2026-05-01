@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { lineRangeLabel } from "./line-range-label.js";
-import { makeSubgraph } from "./testing/make-subgraph.js";
+import { baseSubgraph } from "./testing/make-subgraph.js";
 
 describe("lineRangeLabel", () => {
   test.each<{
@@ -35,9 +35,10 @@ describe("lineRangeLabel", () => {
       expected: "L1-2",
     },
   ])("$name", ({ line, endLine, expected }) => {
-    const sg = makeSubgraph(
-      endLine === undefined ? { line } : { line, endLine },
-    );
+    const sg =
+      endLine === undefined
+        ? { ...baseSubgraph(), line }
+        : { ...baseSubgraph(), line, endLine };
     expect(lineRangeLabel(sg)).toBe(expected);
   });
 });

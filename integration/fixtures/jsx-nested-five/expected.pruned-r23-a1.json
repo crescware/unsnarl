@@ -13,6 +13,8 @@
       "line": 3,
       "endLine": 25,
       "direction": "RL",
+      "caseTest": null,
+      "hasElse": false,
       "ownerNodeId": "n_scope_0_Main_54",
       "ownerName": "Main",
       "elements": [
@@ -21,7 +23,12 @@
           "id": "s_return_scope_0_Main_54_151_331",
           "kind": "return",
           "line": 10,
+          "endLine": 24,
           "direction": "RL",
+          "caseTest": null,
+          "hasElse": false,
+          "ownerNodeId": null,
+          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -29,11 +36,16 @@
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
+              "endLine": 23,
               "isJsxElement": true,
-              "endLine": 23
+              "unused": false,
+              "declarationKind": null,
+              "initIsFunction": false,
+              "importKind": null,
+              "importedName": null,
+              "importSource": null
             }
-          ],
-          "endLine": 24
+          ]
         }
       ]
     }
