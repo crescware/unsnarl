@@ -81,7 +81,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "source",
             "span": {
@@ -106,15 +105,15 @@
               "offset": 0
             }
           },
-          "initType": "ObjectExpression",
-          "initSpan": {
-            "line": 1,
-            "column": 15,
-            "offset": 15
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -135,7 +134,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "list",
             "span": {
@@ -160,15 +158,15 @@
               "offset": 55
             }
           },
-          "initType": "ArrayExpression",
-          "initSpan": {
-            "line": 2,
-            "column": 13,
-            "offset": 68
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 2,
+              "column": 13,
+              "offset": 68
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -189,7 +187,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -214,15 +211,15 @@
               "offset": 87
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 4,
-            "column": 26,
-            "offset": 113
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 4,
+              "column": 26,
+              "offset": 113
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -243,7 +240,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "renamed",
             "span": {
@@ -268,15 +264,15 @@
               "offset": 87
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 4,
-            "column": 26,
-            "offset": 113
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 4,
+              "column": 26,
+              "offset": 113
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -297,7 +293,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "d",
             "span": {
@@ -322,15 +317,15 @@
               "offset": 121
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 7,
-            "column": 4,
-            "offset": 150
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 7,
+              "column": 4,
+              "offset": 150
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -351,7 +346,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "first",
             "span": {
@@ -376,15 +370,15 @@
               "offset": 158
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 8,
-            "column": 34,
-            "offset": 192
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 8,
+              "column": 34,
+              "offset": 192
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -405,7 +399,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "third",
             "span": {
@@ -430,15 +423,15 @@
               "offset": 158
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 8,
-            "column": 34,
-            "offset": 192
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 8,
+              "column": 34,
+              "offset": 192
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -459,7 +452,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "rest",
             "span": {
@@ -484,15 +476,15 @@
               "offset": 158
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 8,
-            "column": 34,
-            "offset": 192
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 8,
+              "column": 34,
+              "offset": 192
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -513,7 +505,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "spread",
             "span": {
@@ -538,15 +529,15 @@
               "offset": 198
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 9,
-            "column": 22,
-            "offset": 220
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 9,
+              "column": 22,
+              "offset": 220
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -565,7 +556,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "sum",
             "span": {
@@ -590,15 +580,15 @@
               "offset": 229
             }
           },
-          "initType": "BinaryExpression",
-          "initSpan": {
-            "line": 12,
-            "column": 2,
-            "offset": 243
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 12,
+              "column": 2,
+              "offset": 243
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -619,7 +609,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "Object",
             "span": {
@@ -637,12 +626,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     }

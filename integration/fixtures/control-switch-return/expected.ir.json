@@ -239,7 +239,6 @@
       ],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "classify",
             "span": {
@@ -257,12 +256,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -280,7 +274,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -305,15 +298,15 @@
               "offset": 237
             }
           },
-          "initType": "CallExpression",
-          "initSpan": {
-            "line": 18,
-            "column": 15,
-            "offset": 252
+          "type": "Variable",
+          "init": {
+            "type": "CallExpression",
+            "span": {
+              "line": 18,
+              "column": 15,
+              "offset": 252
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -334,7 +327,6 @@
       ],
       "defs": [
         {
-          "type": "Parameter",
           "name": {
             "name": "kind",
             "span": {
@@ -359,12 +351,7 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "Parameter"
         }
       ]
     },
@@ -388,7 +375,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "label",
             "span": {
@@ -413,15 +399,15 @@
               "offset": 36
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 14,
-            "offset": 48
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 14,
+              "offset": 48
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]

@@ -56,7 +56,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "count",
             "span": {
@@ -81,15 +80,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]

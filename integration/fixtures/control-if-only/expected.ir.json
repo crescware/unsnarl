@@ -97,7 +97,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "counter",
             "span": {
@@ -122,15 +121,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 14,
-            "offset": 14
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 14,
+              "offset": 14
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -151,7 +150,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "flag",
             "span": {
@@ -176,15 +174,15 @@
               "offset": 17
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 13,
-            "offset": 30
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 13,
+              "offset": 30
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -203,7 +201,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -228,15 +225,15 @@
               "offset": 67
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 8,
-            "column": 15,
-            "offset": 82
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 8,
+              "column": 15,
+              "offset": 82
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]

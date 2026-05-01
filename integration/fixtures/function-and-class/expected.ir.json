@@ -98,7 +98,6 @@
       ],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "add",
             "span": {
@@ -116,12 +115,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -141,7 +135,6 @@
       ],
       "defs": [
         {
-          "type": "ClassName",
           "name": {
             "name": "Counter",
             "span": {
@@ -159,12 +152,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ClassName"
         }
       ]
     },
@@ -184,7 +172,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "total",
             "span": {
@@ -209,15 +196,15 @@
               "offset": 88
             }
           },
-          "initType": "CallExpression",
-          "initSpan": {
-            "line": 9,
-            "column": 14,
-            "offset": 102
+          "type": "Variable",
+          "init": {
+            "type": "CallExpression",
+            "span": {
+              "line": 9,
+              "column": 14,
+              "offset": 102
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -236,7 +223,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "c",
             "span": {
@@ -261,15 +247,15 @@
               "offset": 113
             }
           },
-          "initType": "NewExpression",
-          "initSpan": {
-            "line": 10,
-            "column": 10,
-            "offset": 123
+          "type": "Variable",
+          "init": {
+            "type": "NewExpression",
+            "span": {
+              "line": 10,
+              "column": 10,
+              "offset": 123
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -288,7 +274,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -313,15 +298,15 @@
               "offset": 138
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 11,
-            "column": 15,
-            "offset": 153
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 11,
+              "column": 15,
+              "offset": 153
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -342,7 +327,6 @@
       ],
       "defs": [
         {
-          "type": "Parameter",
           "name": {
             "name": "a",
             "span": {
@@ -367,12 +351,7 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "Parameter"
         }
       ]
     },
@@ -392,7 +371,6 @@
       ],
       "defs": [
         {
-          "type": "Parameter",
           "name": {
             "name": "b",
             "span": {
@@ -417,12 +395,7 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "Parameter"
         }
       ]
     }

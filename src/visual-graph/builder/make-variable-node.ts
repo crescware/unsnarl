@@ -50,15 +50,24 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     throw new Error(`expected importKind for ImportBinding ${nodeId(v.id)}`);
   }
 
-  if (def?.type === undefined || def.type === DEFINITION_TYPE.Variable) {
-    const initType = def?.initType ?? null;
+  if (def === undefined) {
+    return {
+      ...common,
+      kind: NODE_KIND.Variable,
+      declarationKind: null,
+      initIsFunction: false,
+    };
+  }
+
+  if (def.type === DEFINITION_TYPE.Variable) {
+    const initType = def.init?.type ?? null;
     const initIsFunction =
       initType === AST_TYPE.ArrowFunctionExpression ||
       initType === AST_TYPE.FunctionExpression;
     return {
       ...common,
       kind: NODE_KIND.Variable,
-      declarationKind: def?.declarationKind ?? null,
+      declarationKind: def.declarationKind,
       initIsFunction,
     };
   }

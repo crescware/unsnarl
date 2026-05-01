@@ -403,7 +403,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "getDayType",
             "span": {
@@ -421,12 +420,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -446,7 +440,6 @@
       ],
       "defs": [
         {
-          "type": "Parameter",
           "name": {
             "name": "day",
             "span": {
@@ -471,12 +464,7 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "Parameter"
         }
       ]
     },
@@ -499,7 +487,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "ret",
             "span": {
@@ -524,15 +511,15 @@
               "offset": 29
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 12,
-            "offset": 39
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 12,
+              "offset": 39
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]

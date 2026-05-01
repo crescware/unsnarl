@@ -64,7 +64,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "used",
             "span": {
@@ -89,12 +88,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "module",
           "importedName": "used",
-          "declarationKind": null
+          "importSource": "module"
         }
       ]
     },
@@ -112,7 +109,6 @@
       "references": [],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "neverCalled",
             "span": {
@@ -137,12 +133,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "module",
           "importedName": "neverCalled",
-          "declarationKind": null
+          "importSource": "module"
         }
       ]
     },
@@ -162,7 +156,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -187,15 +180,15 @@
               "offset": 61
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 4,
-            "column": 10,
-            "offset": 71
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 4,
+              "column": 10,
+              "offset": 71
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -214,7 +207,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "ignored",
             "span": {
@@ -239,15 +231,15 @@
               "offset": 77
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 16,
-            "offset": 93
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 16,
+              "offset": 93
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -268,7 +260,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "console",
             "span": {
@@ -286,12 +277,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     }

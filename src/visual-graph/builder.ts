@@ -68,11 +68,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       blockOffset = def.node.span.offset;
     } else if (
       def.type === DEFINITION_TYPE.Variable &&
-      def.initSpan !== null &&
-      (def.initType === AST_TYPE.FunctionExpression ||
-        def.initType === AST_TYPE.ArrowFunctionExpression)
+      def.init !== null &&
+      (def.init.type === AST_TYPE.FunctionExpression ||
+        def.init.type === AST_TYPE.ArrowFunctionExpression)
     ) {
-      blockOffset = def.initSpan.offset;
+      blockOffset = def.init.span.offset;
     }
     if (blockOffset === null) {
       continue;

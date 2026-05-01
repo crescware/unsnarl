@@ -88,7 +88,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "f",
             "span": {
@@ -106,12 +105,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -133,7 +127,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "v",
             "span": {
@@ -158,15 +151,15 @@
               "offset": 17
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 10,
-            "offset": 25
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 10,
+              "offset": 25
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]

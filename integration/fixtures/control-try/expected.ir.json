@@ -182,7 +182,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "value",
             "span": {
@@ -207,15 +206,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -239,7 +238,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "attempts",
             "span": {
@@ -264,15 +262,15 @@
               "offset": 15
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 15,
-            "offset": 30
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 15,
+              "offset": 30
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -293,7 +291,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "raw",
             "span": {
@@ -318,15 +315,15 @@
               "offset": 33
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 3,
-            "column": 12,
-            "offset": 45
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 12,
+              "offset": 45
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -345,7 +342,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -370,15 +366,15 @@
               "offset": 176
             }
           },
-          "initType": "BinaryExpression",
-          "initSpan": {
-            "line": 15,
-            "column": 15,
-            "offset": 191
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 15,
+              "column": 15,
+              "offset": 191
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -399,7 +395,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "Number",
             "span": {
@@ -417,12 +412,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     },
@@ -440,7 +430,6 @@
       "references": [],
       "defs": [
         {
-          "type": "CatchClause",
           "name": {
             "name": "err",
             "span": {
@@ -458,12 +447,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "CatchClause"
         }
       ]
     }

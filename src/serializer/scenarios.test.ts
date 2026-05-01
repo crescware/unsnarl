@@ -279,34 +279,51 @@ describe("scenario: import declarations carry kind / source / imported name", ()
   ].join("\n");
   const ir = pipe(code);
 
-  test("default imports record the source and a null importedName", () => {
+  test("default imports record the source and no importedName", () => {
     const def = varByName(ir, "def").defs[0];
     expect(def?.type).toBe(DEFINITION_TYPE.ImportBinding);
-    expect(def?.importKind).toBe(IMPORT_KIND.Default);
-    expect(def?.importSource).toBe("some-default");
-    expect(def?.importedName).toBeNull();
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(def.importKind).toBe(IMPORT_KIND.Default);
+    expect(def.importSource).toBe("some-default");
   });
 
   test("named imports record the imported name as the original symbol", () => {
     const named = varByName(ir, "named").defs[0];
-    expect(named?.importKind).toBe(IMPORT_KIND.Named);
-    expect(named?.importSource).toBe("some-named");
-    expect(named?.importedName).toBe(IMPORT_KIND.Named);
+    if (named?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(named.importKind).toBe(IMPORT_KIND.Named);
+    expect(named.importSource).toBe("some-named");
+    if (named.importKind !== IMPORT_KIND.Named) {
+      throw new Error("expected Named");
+    }
+    expect(named.importedName).toBe("named");
   });
 
   test("renamed imports keep the local name on the variable but the original on importedName", () => {
     const renamed = varByName(ir, "renamed");
     expect(renamed.name).toBe("renamed");
-    expect(renamed.defs[0]?.importKind).toBe(IMPORT_KIND.Named);
-    expect(renamed.defs[0]?.importedName).toBe("other");
-    expect(renamed.defs[0]?.importSource).toBe("some-named");
+    const def = renamed.defs[0];
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(def.importKind).toBe(IMPORT_KIND.Named);
+    if (def.importKind !== IMPORT_KIND.Named) {
+      throw new Error("expected Named");
+    }
+    expect(def.importedName).toBe("other");
+    expect(def.importSource).toBe("some-named");
   });
 
-  test("namespace imports record kind=namespace and a null importedName", () => {
+  test("namespace imports record kind=namespace", () => {
     const ns = varByName(ir, "ns").defs[0];
-    expect(ns?.importKind).toBe(IMPORT_KIND.Namespace);
-    expect(ns?.importSource).toBe("some-namespace");
-    expect(ns?.importedName).toBeNull();
+    if (ns?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(ns.importKind).toBe(IMPORT_KIND.Namespace);
+    expect(ns.importSource).toBe("some-namespace");
   });
 });
 

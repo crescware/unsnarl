@@ -1,3 +1,4 @@
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -45,7 +46,11 @@ export function buildScope(
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];
   for (const op of ops) {
     const ownerVar = ctx.variableMap.get(op.varId);
-    const declarationKind = ownerVar?.defs[0]?.declarationKind ?? null;
+    const ownerDef = ownerVar?.defs[0];
+    const declarationKind =
+      ownerDef?.type === DEFINITION_TYPE.Variable
+        ? ownerDef.declarationKind
+        : null;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),

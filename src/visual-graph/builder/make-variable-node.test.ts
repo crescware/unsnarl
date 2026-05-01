@@ -1,15 +1,12 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  DEFINITION_TYPE,
-  type DefinitionType,
-} from "../../analyzer/definition-type.js";
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { makeVariableNode } from "./make-variable-node.js";
-import { baseDef } from "./testing/make-def.js";
+import { baseDef, baseSimpleDef } from "./testing/make-def.js";
 import { baseVariable } from "./testing/make-variable.js";
 import { span } from "./testing/span.js";
 
@@ -57,9 +54,12 @@ describe("makeVariableNode", () => {
     { initType: AST_TYPE.FunctionExpression, expected: true },
     { initType: AST_TYPE.Literal, expected: false },
   ])(
-    "initType=$initType yields initIsFunction=$expected",
+    "init.type=$initType yields initIsFunction=$expected",
     ({ initType, expected }) => {
-      const v = { ...baseVariable(), defs: [{ ...baseDef(), initType }] };
+      const v = {
+        ...baseVariable(),
+        defs: [{ ...baseDef(), init: { type: initType, span: span() } }],
+      };
       const node = makeVariableNode(v);
       if (node.kind !== NODE_KIND.Variable) {
         throw new Error("expected Variable kind");
@@ -131,15 +131,13 @@ describe("makeVariableNode", () => {
     expect(makeVariableNode(v).kind).toBe(DEFINITION_TYPE.Variable);
   });
 
-  test.each<{
-    defType: DefinitionType;
-  }>([
+  test.each([
     { defType: DEFINITION_TYPE.FunctionName },
     { defType: DEFINITION_TYPE.ClassName },
     { defType: DEFINITION_TYPE.Parameter },
     { defType: DEFINITION_TYPE.CatchClause },
-  ])("kind reflects definition type $defType", ({ defType }) => {
-    const v = { ...baseVariable(), defs: [{ ...baseDef(), type: defType }] };
+  ] as const)("kind reflects definition type $defType", ({ defType }) => {
+    const v = { ...baseVariable(), defs: [baseSimpleDef(defType)] };
     expect(makeVariableNode(v).kind).toBe(defType);
   });
 });

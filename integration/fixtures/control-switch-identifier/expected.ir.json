@@ -248,7 +248,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "RED",
             "span": {
@@ -273,15 +272,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -302,7 +301,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "GREEN",
             "span": {
@@ -327,15 +325,15 @@
               "offset": 17
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 14,
-            "offset": 31
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 14,
+              "offset": 31
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -356,7 +354,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "BLUE",
             "span": {
@@ -381,15 +378,15 @@
               "offset": 36
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 3,
-            "column": 13,
-            "offset": 49
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 13,
+              "offset": 49
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -414,7 +411,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "label",
             "span": {
@@ -439,15 +435,15 @@
               "offset": 55
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 12,
-            "offset": 67
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 12,
+              "offset": 67
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -468,7 +464,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "color",
             "span": {
@@ -493,15 +488,15 @@
               "offset": 71
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 6,
-            "column": 14,
-            "offset": 85
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 6,
+              "column": 14,
+              "offset": 85
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -520,7 +515,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -545,15 +539,15 @@
               "offset": 277
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 22,
-            "column": 15,
-            "offset": 292
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 22,
+              "column": 15,
+              "offset": 292
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]

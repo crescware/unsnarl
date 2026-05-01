@@ -1,10 +1,13 @@
-import type { DefinitionType } from "../analyzer/definition-type.js";
+import type {
+  DEFINITION_TYPE,
+  DefinitionType,
+} from "../analyzer/definition-type.js";
 import type { DiagnosticKind } from "../analyzer/diagnostic-kind.js";
 import type { PredicateContainerType } from "../analyzer/predicate-container-type.js";
 import type { ScopeType } from "../analyzer/scope-type.js";
 import type { Language } from "../cli/language.js";
 import type { AST_TYPE } from "../parser/ast-type.js";
-import type { ImportKind } from "../serializer/import-kind.js";
+import type { IMPORT_KIND, ImportKind } from "../serializer/import-kind.js";
 import type { SerializedIRVersion } from "../serializer/serialized-ir-version.js";
 import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 
@@ -188,18 +191,44 @@ export type SerializedReference = Readonly<{
   jsxElement: Readonly<{ startSpan: Span; endSpan: Span }> | null;
 }>;
 
-export type SerializedDefinition = Readonly<{
-  type: DefinitionType;
+type CommonDefFields = Readonly<{
   name: Readonly<{ name: string; span: Span }>;
   node: Readonly<{ type: string; span: Span }>;
   parent: Readonly<{ type: string; span: Span }> | null;
-  initType: string | null;
-  initSpan: Span | null;
-  importKind: ImportKind | null;
-  importSource: string | null;
-  importedName: string | null;
-  declarationKind: VariableDeclarationKind | null;
 }>;
+
+export type SerializedDefinition =
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.Variable;
+        init: Readonly<{ type: string; span: Span }> | null;
+        declarationKind: VariableDeclarationKind | null;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Named;
+        importedName: string;
+        importSource: string;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Default;
+        importSource: string;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Namespace;
+        importSource: string;
+      }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.FunctionName }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.ClassName }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.Parameter }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.CatchClause }>)
+  | (CommonDefFields &
+      Readonly<{ type: typeof DEFINITION_TYPE.ImplicitGlobalVariable }>);
 
 export type SerializedIR = Readonly<{
   version: SerializedIRVersion;
