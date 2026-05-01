@@ -8,15 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_counter_4",
-      "kind": "Variable",
-      "name": "counter",
-      "line": 1,
-      "isJsxElement": false,
-      "declarationKind": "let"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_result_97",
       "kind": "Variable",
       "name": "result",
@@ -77,16 +68,6 @@
   ],
   "edges": [
     {
-      "from": "n_scope_0_counter_4",
-      "to": "wr_ref_1",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_counter_4",
-      "to": "wr_ref_2",
-      "label": "set"
-    },
-    {
       "from": "wr_ref_1",
       "to": "n_scope_0_result_97",
       "label": "read"
@@ -97,12 +78,23 @@
       "label": "read"
     }
   ],
-  "boundaryEdges": [],
+  "boundaryEdges": [
+    {
+      "inside": "wr_ref_1",
+      "direction": "in",
+      "label": "set"
+    },
+    {
+      "inside": "wr_ref_2",
+      "direction": "in",
+      "label": "set"
+    }
+  ],
   "pruning": {
     "roots": [
       {
         "query": "10",
-        "matched": 2
+        "matched": 1
       }
     ],
     "descendants": 1,
