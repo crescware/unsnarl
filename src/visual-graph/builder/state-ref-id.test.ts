@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -16,7 +17,7 @@ import type { WriteOp } from "./write-op.js";
 function makeCtx(overrides: Partial<BuilderContext>): BuilderContext {
   const ir = {
     version: 1,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes: [],
     variables: [],
@@ -89,7 +90,7 @@ describe("stateRefId", () => {
     const ctx = makeCtx({
       ir: {
         version: 1,
-        source: { path: "x.ts", language: "ts" },
+        source: { path: "x.ts", language: LANGUAGE.Ts },
         raw: "",
         scopes: [],
         variables: [],

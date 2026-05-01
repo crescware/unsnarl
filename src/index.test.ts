@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "./constants.js";
 import type { Scope, SerializedIR } from "./ir/model.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type {
@@ -14,7 +15,7 @@ const fakeScope = {} as Scope;
 
 const fakeIR = {
   version: 1,
-  source: { path: "test.ts", language: "ts" },
+  source: { path: "test.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],
   references: [],
@@ -75,7 +76,7 @@ describe("createPipeline", () => {
 
     const result = pipeline.run("const x = 1;", {
       format: "fake",
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "test.ts",
     });
 
@@ -93,7 +94,7 @@ describe("createPipeline", () => {
     expect(() =>
       pipeline.run("", {
         format: "missing",
-        language: "ts",
+        language: LANGUAGE.Ts,
         sourcePath: "x.ts",
       }),
     ).toThrow(/Unknown emitter format/);
@@ -123,7 +124,7 @@ describe("createPipeline", () => {
 
     pipeline.run("", {
       format: "fake",
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "x.ts",
     });
 

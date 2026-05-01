@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import {
   DIRECTION,
+  LANGUAGE,
   NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
@@ -43,7 +44,7 @@ function makeCtx(
   const scopes = opts.scopes ?? [];
   const ir = {
     version: 1,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes,
     variables,

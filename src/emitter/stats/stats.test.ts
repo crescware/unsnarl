@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import {
   BOUNDARY_EDGE_DIRECTION,
+  LANGUAGE,
   VISUAL_ELEMENT_TYPE,
 } from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
@@ -18,7 +19,7 @@ const emitter = new StatsEmitter();
 
 function emit(code: string): string {
   const parsed = parser.parse(code, {
-    language: "ts",
+    language: LANGUAGE.Ts,
     sourcePath: "x.ts",
   });
   const analyzed = analyzer.analyze(parsed);
@@ -26,7 +27,7 @@ function emit(code: string): string {
     rootScope: analyzed.rootScope,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
   });
   return emitter.emit(ir, {});
 }
@@ -36,7 +37,7 @@ function emitWithBoundary(
   patch: (graph: VisualGraph) => VisualGraph,
 ): string {
   const parsed = parser.parse(code, {
-    language: "ts",
+    language: LANGUAGE.Ts,
     sourcePath: "x.ts",
   });
   const analyzed = analyzer.analyze(parsed);
@@ -44,7 +45,7 @@ function emitWithBoundary(
     rootScope: analyzed.rootScope,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
   });
   const prunedGraph = patch(buildVisualGraph(ir));
   return emitter.emit(ir, { prunedGraph });

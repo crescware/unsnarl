@@ -4,6 +4,7 @@ import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js"
 import {
   BOUNDARY_EDGE_DIRECTION,
   DIRECTION,
+  LANGUAGE,
   NODE_KIND,
   ROOT_QUERY_KIND,
   SUBGRAPH_KIND,
@@ -55,7 +56,7 @@ function subgraph(
 function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
   return {
     version: 1,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     direction: DIRECTION.RL,
     elements,
     edges,

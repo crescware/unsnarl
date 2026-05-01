@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { CLI_MERMAID_RENDERER, ROOT_QUERY_KIND } from "../../constants.js";
+import {
+  CLI_MERMAID_RENDERER,
+  LANGUAGE,
+  ROOT_QUERY_KIND,
+} from "../../constants.js";
 import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {
@@ -11,7 +15,7 @@ describe("parseCliArgs", () => {
       expect(r.args).toMatchObject({
         format: "ir",
         stdin: false,
-        language: "ts",
+        language: LANGUAGE.Ts,
         pretty: true,
         listFormats: false,
         help: false,

@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import { IrEmitter } from "./ir.js";
 
 const ir = {
   version: 1,
-  source: { path: "x.ts", language: "ts" },
+  source: { path: "x.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],
   references: [],

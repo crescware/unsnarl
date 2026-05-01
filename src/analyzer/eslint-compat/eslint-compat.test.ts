@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
 import type {
   DefinitionType,
   Scope,
@@ -13,7 +13,7 @@ import { EslintCompatAnalyzer } from "./eslint-compat.js";
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 
-function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
+function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../constants.js";
 import { OxcParser, ParseError } from "./oxc.js";
 
 const parser = new OxcParser();
@@ -23,7 +24,7 @@ describe("OxcParser", () => {
     const code =
       "const greeting: string = 'hi';\nconst length = greeting.length;\n";
     const parsed = parser.parse(code, {
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "input.ts",
     });
 
@@ -42,7 +43,7 @@ describe("OxcParser", () => {
     const code =
       'const Hello = () => <div className="x"><span>{"hi"}</span></div>;\n';
     const parsed = parser.parse(code, {
-      language: "tsx",
+      language: LANGUAGE.Tsx,
       sourcePath: "input.tsx",
     });
 
@@ -56,7 +57,7 @@ describe("OxcParser", () => {
     const code =
       "import { join } from 'node:path';\nexport const sep = join('a', 'b');\n";
     const parsed = parser.parse(code, {
-      language: "js",
+      language: LANGUAGE.Js,
       sourcePath: "input.js",
     });
 
@@ -68,7 +69,7 @@ describe("OxcParser", () => {
   test("synthesizes a filename with the correct extension when sourcePath has none", () => {
     const code = "const x = 1;\n";
     expect(() =>
-      parser.parse(code, { language: "ts", sourcePath: "" }),
+      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "" }),
     ).not.toThrow();
   });
 
@@ -76,7 +77,7 @@ describe("OxcParser", () => {
     const code = "const = 1;\n";
     let captured: unknown;
     try {
-      parser.parse(code, { language: "ts", sourcePath: "broken.ts" });
+      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "broken.ts" });
     } catch (e) {
       captured = e;
     }

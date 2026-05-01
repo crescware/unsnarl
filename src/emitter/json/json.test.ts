@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import {
+  LANGUAGE,
   NODE_KIND,
   SUBGRAPH_KIND,
   VISUAL_ELEMENT_TYPE,
@@ -63,7 +64,7 @@ function flattenSubgraphs(
 
 function emit(code: string, pretty = true): string {
   const parsed = parser.parse(code, {
-    language: "ts",
+    language: LANGUAGE.Ts,
     sourcePath: "input.ts",
   });
   const analyzed = analyzer.analyze(parsed);
@@ -71,7 +72,7 @@ function emit(code: string, pretty = true): string {
     rootScope: analyzed.rootScope,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
-    source: { path: "input.ts", language: "ts" },
+    source: { path: "input.ts", language: LANGUAGE.Ts },
   });
   return emitter.emit(ir, pretty ? {} : { pretty: false });
 }
@@ -85,7 +86,7 @@ describe("JsonEmitter", () => {
   test("emits a versioned VisualGraph with elements/edges arrays", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     expect(graph.version).toBe(1);
-    expect(graph.source).toEqual({ path: "input.ts", language: "ts" });
+    expect(graph.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
     expect(graph.direction).toBe("RL");
     expect(Array.isArray(graph.elements)).toBe(true);
     expect(Array.isArray(graph.edges)).toBe(true);

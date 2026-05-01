@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { LANGUAGE, type Language } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -14,10 +15,7 @@ const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
-function pipe(
-  code: string,
-  language: "ts" | "tsx" | "js" = "ts",
-): SerializedIR {
+function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,

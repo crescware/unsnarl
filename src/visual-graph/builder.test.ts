@@ -1,7 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { NODE_KIND, SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../constants.js";
+import {
+  NODE_KIND,
+  SUBGRAPH_KIND,
+  VISUAL_ELEMENT_TYPE,
+  LANGUAGE,
+  type Language,
+} from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "./builder.js";
@@ -17,10 +23,7 @@ const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
-function build(
-  code: string,
-  language: "ts" | "tsx" | "js" | "jsx" = "ts",
-): VisualGraph {
+function build(code: string, language: Language = LANGUAGE.Ts): VisualGraph {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,

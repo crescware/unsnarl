@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -28,7 +29,7 @@ function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
   const variables: /* mutable */ SerializedVariable[] = [];
   const ir = {
     version: 1,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     raw,
     scopes,
     variables,

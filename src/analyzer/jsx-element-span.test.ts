@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
@@ -8,7 +9,7 @@ const analyzer = new EslintCompatAnalyzer();
 
 function analyze(code: string) {
   const parsed = parser.parse(code, {
-    language: "tsx",
+    language: LANGUAGE.Tsx,
     sourcePath: "input.tsx",
   });
   return analyzer.analyze(parsed);

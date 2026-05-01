@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
+import { LANGUAGE, NODE_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -39,7 +39,7 @@ function makeCtx(opts: {
   const variables = opts.variables ?? [];
   const ir = {
     version: 1,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes: opts.scopes,
     variables,

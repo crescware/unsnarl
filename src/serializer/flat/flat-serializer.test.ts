@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
 import type { SerializedIR } from "../../ir/model.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "./flat-serializer.js";
@@ -10,10 +10,7 @@ const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
-function pipe(
-  code: string,
-  language: "ts" | "tsx" | "js" = "ts",
-): SerializedIR {
+function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -31,7 +28,7 @@ describe("FlatSerializer", () => {
   test("emits version 1 IR with the source metadata", () => {
     const ir = pipe("const a = 1;\n");
     expect(ir.version).toBe(1);
-    expect(ir.source).toEqual({ path: "input.ts", language: "ts" });
+    expect(ir.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
   });
 
   test("assigns deterministic scope and variable ids", () => {

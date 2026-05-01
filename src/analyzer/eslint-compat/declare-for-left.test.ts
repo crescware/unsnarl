@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { LANGUAGE, DIAGNOSTIC_KIND, type Language } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -8,7 +8,11 @@ import { declareForLeft } from "./declare-for-left.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
 
-function setup(code: string, forType: string, language: "ts" | "js" = "ts") {
+function setup(
+  code: string,
+  forType: string,
+  language: Language = LANGUAGE.Ts,
+) {
   const program = parse(code, language);
   const forNode = findFirst(program, forType);
   const manager = new ScopeManager("module", program as unknown as AstNode);
