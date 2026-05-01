@@ -1,0 +1,29 @@
+import type { SerializedScope } from "../../../ir/model.js";
+import { span } from "./span.js";
+
+export function makeScope(
+  overrides: Partial<SerializedScope> = {},
+): SerializedScope {
+  const offset = overrides.block?.span?.offset ?? 0;
+  return {
+    id: "s",
+    type: "block",
+    isStrict: false,
+    upper: null,
+    childScopes: [],
+    variableScope: "s",
+    block: {
+      type: "BlockStatement",
+      span: span(offset),
+      endSpan: span(offset + 10, 1, offset + 10),
+    },
+    variables: [],
+    references: [],
+    through: [],
+    functionExpressionScope: false,
+    blockContext: null,
+    fallsThrough: false,
+    exitsFunction: false,
+    ...overrides,
+  };
+}
