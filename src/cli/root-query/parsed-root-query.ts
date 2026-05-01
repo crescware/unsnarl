@@ -1,22 +1,24 @@
+import type { ROOT_QUERY_KIND } from "../../constants.js";
+
 export type ParsedRootQuery =
-  | Readonly<{ kind: "line"; line: number; raw: string }>
+  | Readonly<{ kind: typeof ROOT_QUERY_KIND.Line; line: number; raw: string }>
   | Readonly<{
-      kind: "line-name";
+      kind: typeof ROOT_QUERY_KIND.LineName;
       line: number;
       name: string;
       raw: string;
     }>
   | Readonly<{
-      kind: "range";
+      kind: typeof ROOT_QUERY_KIND.Range;
       start: number;
       end: number;
       raw: string;
     }>
   | Readonly<{
-      kind: "range-name";
+      kind: typeof ROOT_QUERY_KIND.RangeName;
       start: number;
       end: number;
       name: string;
       raw: string;
     }>
-  | Readonly<{ kind: "name"; name: string; raw: string }>;
+  | Readonly<{ kind: typeof ROOT_QUERY_KIND.Name; name: string; raw: string }>;

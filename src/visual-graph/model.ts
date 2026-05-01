@@ -1,37 +1,23 @@
 import type {
+  BoundaryEdgeDirection,
+  Direction,
+  NodeKind,
+  SubgraphKind,
+  VisualElementType,
+} from "../constants.js";
+import type {
   ImportKind,
   Language,
   VariableDeclarationKind,
 } from "../ir/model.js";
 
-export type Direction = "RL" | "LR" | "TB" | "BT";
-
-export type NodeKind =
-  | "Variable"
-  | "FunctionName"
-  | "ClassName"
-  | "Parameter"
-  | "CatchClause"
-  | "ImportBinding"
-  | "ImplicitGlobalVariable"
-  | "WriteOp"
-  | "ReturnUse"
-  | "ModuleSink"
-  | "ModuleSource"
-  | "ImportIntermediate";
-
-export type SubgraphKind =
-  | "function"
-  | "switch"
-  | "case"
-  | "if"
-  | "else"
-  | "if-else-container"
-  | "try"
-  | "catch"
-  | "finally"
-  | "for"
-  | "return";
+export type {
+  BoundaryEdgeDirection,
+  Direction,
+  NodeKind,
+  SubgraphKind,
+  VisualElementType,
+};
 
 // Mutable: builder.ts and the various builder/* helpers fill optional
 // fields (endLine, unused, declarationKind, initIsFunction, importKind,

@@ -1,33 +1,29 @@
+import type {
+  DefinitionType,
+  DiagnosticKind,
+  ImportKind,
+  Language,
+  PredicateContainerType,
+  ScopeType,
+  SerializedIRVersion,
+  VariableDeclarationKind,
+} from "../constants.js";
+
+export type {
+  DefinitionType,
+  DiagnosticKind,
+  ImportKind,
+  Language,
+  PredicateContainerType,
+  ScopeType,
+  VariableDeclarationKind,
+};
+
 export type Span = Readonly<{
   line: number;
   column: number;
   offset: number;
 }>;
-
-export type Language = "ts" | "tsx" | "js" | "jsx";
-
-export type ScopeType =
-  | "block"
-  | "catch"
-  | "class"
-  | "class-field-initializer"
-  | "class-static-block"
-  | "for"
-  | "function"
-  | "function-expression-name"
-  | "global"
-  | "module"
-  | "switch"
-  | "with";
-
-export type DefinitionType =
-  | "CatchClause"
-  | "ClassName"
-  | "FunctionName"
-  | "ImplicitGlobalVariable"
-  | "ImportBinding"
-  | "Parameter"
-  | "Variable";
 
 export type AstNode = Readonly<{
   type: string;
@@ -53,8 +49,6 @@ export const ReferenceFlags = {
 } as const;
 
 export type ReferenceFlagBits = number;
-
-export type PredicateContainerType = "IfStatement" | "SwitchStatement";
 
 export type PredicateContainer = Readonly<{
   type: PredicateContainerType;
@@ -140,11 +134,6 @@ export type Scope = {
   unsnarlExitsFunction?: boolean;
 };
 
-export type DiagnosticKind =
-  | "var-detected"
-  | "unresolved-identifier"
-  | "parse-error";
-
 export type Diagnostic = Readonly<{
   kind: DiagnosticKind;
   message: string;
@@ -200,10 +189,6 @@ export type SerializedReference = Readonly<{
   jsxElement: Readonly<{ startSpan: Span; endSpan: Span }> | null;
 }>;
 
-export type ImportKind = "default" | "named" | "namespace";
-
-export type VariableDeclarationKind = "var" | "let" | "const";
-
 export type SerializedDefinition = Readonly<{
   type: DefinitionType;
   name: Readonly<{ name: string; span: Span }>;
@@ -218,7 +203,7 @@ export type SerializedDefinition = Readonly<{
 }>;
 
 export type SerializedIR = Readonly<{
-  version: 1;
+  version: SerializedIRVersion;
   source: Readonly<{ path: string; language: Language }>;
   raw: string;
   scopes: readonly SerializedScope[];
