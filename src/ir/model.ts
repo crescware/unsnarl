@@ -139,7 +139,7 @@ export type Scope = {
 export type Diagnostic = Readonly<{
   kind: DiagnosticKind;
   message: string;
-  span: Span | null;
+  span: Span;
 }>;
 
 export type ScopeId = string;
