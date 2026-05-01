@@ -1,0 +1,76 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-nested-five/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_A_9",
+      "kind": "ImportBinding",
+      "name": "A",
+      "line": 1,
+      "isJsxElement": false,
+      "importKind": "named",
+      "importedName": "A",
+      "importSource": "components"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 25,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_54",
+      "ownerName": "Main",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_54_151_331",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "A",
+              "line": 11,
+              "isJsxElement": true,
+              "endLine": 23
+            }
+          ],
+          "endLine": 24
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_A_9",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [
+    {
+      "inside": "n_scope_0_A_9",
+      "direction": "in",
+      "label": "read"
+    }
+  ],
+  "pruning": {
+    "roots": [
+      {
+        "query": "10-11",
+        "matched": 1
+      }
+    ],
+    "descendants": 0,
+    "ancestors": 1
+  }
+}

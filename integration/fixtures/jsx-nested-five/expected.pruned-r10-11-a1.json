@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-nested-five/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 25,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_54",
+      "ownerName": "Main",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_54_151_331",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "A",
+              "line": 11,
+              "isJsxElement": true,
+              "endLine": 23
+            }
+          ],
+          "endLine": 24
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": {
+    "roots": [
+      {
+        "query": "10-11",
+        "matched": 1
+      }
+    ],
+    "descendants": 1,
+    "ancestors": 0
+  }
+}
