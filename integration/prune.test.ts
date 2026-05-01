@@ -276,3 +276,73 @@ describe("const-chain-five (pruned)", () => {
   emitAll("--roots c -A 1 -B 0", "c", "c-a1", 1, 0);
   emitAll("--roots c -A 0 -B 1", "c", "c-b1", 0, 1);
 });
+
+describe("jsx-nested-five (pruned)", () => {
+  const pipeline = createDefaultPipeline();
+  const fixtureDir = join(FIXTURE_DIR, "jsx-nested-five");
+  const inputPath = join(fixtureDir, "input.tsx");
+  const code = readFileSync(inputPath, "utf8");
+  const sourcePath = "integration/fixtures/jsx-nested-five/input.tsx";
+
+  describe("--roots 19", () => {
+    const queries = parseRootQueries("19");
+    if (!queries.ok) {
+      throw new Error(`unexpected query parse failure: ${queries.error}`);
+    }
+    // -r alone defaults to 10 generations both ways (DEFAULT_GENERATIONS).
+    const pruning = {
+      roots: queries.queries,
+      descendants: 10,
+      ancestors: 10,
+    };
+
+    test("emits the pruned VisualGraph JSON", () => {
+      const out = pipeline.run(code, {
+        format: "json",
+        language: "tsx",
+        sourcePath,
+        emit: { pretty: true },
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-r19.json"),
+      );
+    });
+
+    test("emits the pruned Mermaid flowchart", () => {
+      const out = pipeline.run(code, {
+        format: "mermaid",
+        language: "tsx",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-r19.mermaid"),
+      );
+    });
+
+    test("renders the pruned Markdown preview", () => {
+      const out = pipeline.run(code, {
+        format: "markdown",
+        language: "tsx",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "preview.pruned-r19.md"),
+      );
+    });
+
+    test("emits the pruned stats TSV", () => {
+      const out = pipeline.run(code, {
+        format: "stats",
+        language: "tsx",
+        sourcePath,
+        pruning,
+      });
+      expect(out).toMatchFileSnapshot(
+        join(fixtureDir, "expected.pruned-r19.stats"),
+      );
+    });
+  });
+});

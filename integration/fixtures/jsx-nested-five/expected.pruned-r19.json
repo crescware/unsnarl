@@ -1,0 +1,104 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-nested-five/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_E_21",
+      "kind": "ImportBinding",
+      "name": "E",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "E",
+      "importSource": "components"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 25,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_54",
+      "ownerName": "Main",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_z_139",
+          "kind": "Variable",
+          "name": "z",
+          "line": 8,
+          "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_54_151_331",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_8",
+              "kind": "ReturnUse",
+              "name": "E",
+              "line": 19
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_9",
+              "kind": "ReturnUse",
+              "name": "z",
+              "line": 19
+            }
+          ],
+          "endLine": 24
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_components",
+      "kind": "ModuleSource",
+      "name": "components",
+      "line": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_E_21",
+      "to": "ret_use_ref_8",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_z_139",
+      "to": "ret_use_ref_9",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_E_21",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [
+    {
+      "inside": "mod_components",
+      "direction": "out"
+    }
+  ],
+  "pruning": {
+    "roots": [
+      {
+        "query": "19",
+        "matched": 2
+      }
+    ],
+    "descendants": 10,
+    "ancestors": 10
+  }
+}

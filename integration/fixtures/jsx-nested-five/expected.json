@@ -1,0 +1,284 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx-nested-five/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_A_9",
+      "kind": "ImportBinding",
+      "name": "A",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "A",
+      "importSource": "components"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_B_12",
+      "kind": "ImportBinding",
+      "name": "B",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "B",
+      "importSource": "components"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_C_15",
+      "kind": "ImportBinding",
+      "name": "C",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "C",
+      "importSource": "components"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_D_18",
+      "kind": "ImportBinding",
+      "name": "D",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "D",
+      "importSource": "components"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_E_21",
+      "kind": "ImportBinding",
+      "name": "E",
+      "line": 1,
+      "importKind": "named",
+      "importedName": "E",
+      "importSource": "components"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Main_54",
+      "kind": "FunctionName",
+      "name": "Main",
+      "line": 3,
+      "unused": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 25,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Main_54",
+      "ownerName": "Main",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_v_71",
+          "kind": "Variable",
+          "name": "v",
+          "line": 4,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_w_88",
+          "kind": "Variable",
+          "name": "w",
+          "line": 5,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_x_105",
+          "kind": "Variable",
+          "name": "x",
+          "line": 6,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_y_122",
+          "kind": "Variable",
+          "name": "y",
+          "line": 7,
+          "declarationKind": "const"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_z_139",
+          "kind": "Variable",
+          "name": "z",
+          "line": 8,
+          "declarationKind": "const"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Main_54_151_331",
+          "kind": "return",
+          "line": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnUse",
+              "name": "A",
+              "line": 11
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnUse",
+              "name": "v",
+              "line": 12
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "B",
+              "line": 13
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "w",
+              "line": 14
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "C",
+              "line": 15
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "x",
+              "line": 16
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "D",
+              "line": 17
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_7",
+              "kind": "ReturnUse",
+              "name": "y",
+              "line": 18
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_8",
+              "kind": "ReturnUse",
+              "name": "E",
+              "line": 19
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_9",
+              "kind": "ReturnUse",
+              "name": "z",
+              "line": 19
+            }
+          ],
+          "endLine": 24
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_components",
+      "kind": "ModuleSource",
+      "name": "components",
+      "line": 1
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_A_9",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_71",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_B_12",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_w_88",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_C_15",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_x_105",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_D_18",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_y_122",
+      "to": "ret_use_ref_7",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_E_21",
+      "to": "ret_use_ref_8",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_z_139",
+      "to": "ret_use_ref_9",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_A_9",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_B_12",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_C_15",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_D_18",
+      "label": "read"
+    },
+    {
+      "from": "mod_components",
+      "to": "n_scope_0_E_21",
+      "label": "read"
+    }
+  ]
+}
