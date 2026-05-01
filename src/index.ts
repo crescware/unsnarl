@@ -20,7 +20,6 @@ export type {
 } from "./pipeline/types.js";
 
 export type {
-  AstExpression,
   AstIdentifier,
   AstNode,
   BlockContext,

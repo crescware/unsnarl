@@ -648,7 +648,6 @@
         "scope#0:a@95",
         "scope#0:renamed@101"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -675,7 +674,6 @@
       "owners": [
         "scope#0:d@141"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -704,7 +702,6 @@
         "scope#0:third@174",
         "scope#0:rest@184"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -731,7 +728,6 @@
       "owners": [
         "scope#0:spread@209"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -758,7 +754,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -785,7 +780,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -812,7 +806,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -839,7 +832,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -866,7 +858,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -893,7 +884,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -920,7 +910,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -947,7 +936,6 @@
       "owners": [
         "scope#0:sum@235"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

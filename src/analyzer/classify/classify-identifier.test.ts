@@ -15,7 +15,6 @@ describe("classifyIdentifier dispatch", () => {
       kind: "reference",
       flags: ReferenceFlags.Read,
       init: false,
-      writeExpr: null,
     });
   });
 
@@ -65,7 +64,6 @@ describe("classifyIdentifier dispatch", () => {
       kind: "reference",
       flags: ReferenceFlags.Write,
       init: false,
-      writeExpr: null,
     });
   });
 

@@ -30,7 +30,6 @@ export function handleIdentifierReference(
     from: manager.current(),
     flags: result.flags,
     init: result.init,
-    writeExpr: result.writeExpr,
   });
   bindReference(manager.current(), ref, manager.globalScope);
   ref.unsnarlOwners = findReferenceOwners(path, manager.current());

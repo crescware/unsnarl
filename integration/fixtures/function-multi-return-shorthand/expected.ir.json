@@ -367,7 +367,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Math@42",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -395,7 +394,6 @@
       "from": "scope#2",
       "resolved": "scope#1:a@26",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -431,7 +429,6 @@
       "from": "scope#2",
       "resolved": "scope#2:b@75",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -467,7 +464,6 @@
       "from": "scope#1",
       "resolved": "scope#1:a@26",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -503,7 +499,6 @@
       "from": "scope#1",
       "resolved": "scope#1:b@119",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

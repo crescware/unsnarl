@@ -563,7 +563,6 @@
       "from": "scope#1",
       "resolved": "scope#0:target@48",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -591,7 +590,6 @@
       "from": "scope#2",
       "resolved": "scope#0:a@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -616,7 +614,6 @@
       "from": "scope#2",
       "resolved": "scope#0:b@35",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -643,11 +640,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 8,
-        "column": 12,
-        "offset": 105
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -672,7 +664,6 @@
       "from": "scope#3",
       "resolved": "scope#0:a@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -697,7 +688,6 @@
       "from": "scope#3",
       "resolved": "scope#0:b@35",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -724,11 +714,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 11,
-        "column": 12,
-        "offset": 149
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -753,7 +738,6 @@
       "from": "scope#4",
       "resolved": "scope#0:Number@178",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -780,11 +764,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 14,
-        "column": 12,
-        "offset": 215
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -811,11 +790,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 17,
-        "column": 12,
-        "offset": 286
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -842,7 +816,6 @@
       "owners": [
         "scope#0:result@304"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

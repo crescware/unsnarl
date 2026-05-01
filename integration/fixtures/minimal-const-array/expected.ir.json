@@ -162,7 +162,6 @@
       "owners": [
         "scope#0:b@21"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

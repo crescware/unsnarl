@@ -224,7 +224,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Sub@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -271,7 +270,6 @@
       "from": "scope#1",
       "resolved": "scope#1:message@63",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

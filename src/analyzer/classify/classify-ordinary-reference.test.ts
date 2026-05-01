@@ -9,42 +9,29 @@ const node = (overrides: Record<string, unknown>): AstNode =>
   ({ type: overrides["type"] as string, ...overrides }) as unknown as AstNode;
 
 describe("classifyOrdinaryReference", () => {
-  test("AssignmentExpression#left with `=` → Write only, writeExpr from `right`", () => {
-    const right = node({ type: AST_TYPE.Literal });
+  test("AssignmentExpression#left with `=` → Write only", () => {
     const r = classifyOrdinaryReference(
       AST_TYPE.AssignmentExpression,
       "left",
-      node({ type: AST_TYPE.AssignmentExpression, operator: "=", right }),
+      node({ type: AST_TYPE.AssignmentExpression, operator: "=" }),
     );
     expect(r).toEqual({
       kind: "reference",
       flags: ReferenceFlags.Write,
       init: false,
-      writeExpr: right,
     });
   });
 
   test("AssignmentExpression#left with compound op → Read|Write", () => {
-    const right = node({ type: AST_TYPE.Literal });
     const r = classifyOrdinaryReference(
       AST_TYPE.AssignmentExpression,
       "left",
-      node({ type: AST_TYPE.AssignmentExpression, operator: "+=", right }),
+      node({ type: AST_TYPE.AssignmentExpression, operator: "+=" }),
     );
     expect(r).toMatchObject({
       kind: "reference",
       flags: ReferenceFlags.Read | ReferenceFlags.Write,
-      writeExpr: right,
     });
-  });
-
-  test("AssignmentExpression with non-AST right yields writeExpr=null", () => {
-    const r = classifyOrdinaryReference(
-      AST_TYPE.AssignmentExpression,
-      "left",
-      node({ type: AST_TYPE.AssignmentExpression, operator: "=", right: 1 }),
-    );
-    expect(r).toMatchObject({ writeExpr: null });
   });
 
   test("UpdateExpression#argument → Read|Write", () => {
@@ -106,10 +93,6 @@ describe("classifyOrdinaryReference", () => {
       "arguments",
       node({ type: AST_TYPE.CallExpression }),
     );
-    expect(r).toMatchObject({
-      flags: ReferenceFlags.Read,
-      init: false,
-      writeExpr: null,
-    });
+    expect(r).toMatchObject({ flags: ReferenceFlags.Read, init: false });
   });
 });

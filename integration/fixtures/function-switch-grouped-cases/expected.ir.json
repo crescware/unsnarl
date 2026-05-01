@@ -547,7 +547,6 @@
       "from": "scope#2",
       "resolved": "scope#1:day@20",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -577,11 +576,6 @@
       "owners": [
         "scope#1:ret@33"
       ],
-      "writeExpr": {
-        "line": 9,
-        "column": 12,
-        "offset": 166
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -608,11 +602,6 @@
       "owners": [
         "scope#1:ret@33"
       ],
-      "writeExpr": {
-        "line": 13,
-        "column": 12,
-        "offset": 234
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -639,11 +628,6 @@
       "owners": [
         "scope#1:ret@33"
       ],
-      "writeExpr": {
-        "line": 16,
-        "column": 12,
-        "offset": 283
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -668,7 +652,6 @@
       "from": "scope#1",
       "resolved": "scope#1:ret@33",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

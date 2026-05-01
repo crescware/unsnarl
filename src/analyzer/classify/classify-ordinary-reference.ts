@@ -2,7 +2,6 @@ import { ReferenceFlags } from "../../ir/model.js";
 import type { AstNode } from "../../ir/model.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { ClassifyResult } from "./classify-result.js";
-import { isAstExpression } from "./is-ast-expression.js";
 import { reference } from "./reference.js";
 
 export function classifyOrdinaryReference(
@@ -16,28 +15,23 @@ export function classifyOrdinaryReference(
       op === "="
         ? ReferenceFlags.Write
         : ReferenceFlags.Read | ReferenceFlags.Write;
-    const right = parent["right"];
-    return reference(flags, false, isAstExpression(right) ? right : null);
+    return reference(flags, false);
   }
   if (t === AST_TYPE.UpdateExpression && key === "argument") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Write, false, null);
+    return reference(ReferenceFlags.Read | ReferenceFlags.Write, false);
   }
   if (t === AST_TYPE.CallExpression && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false, null);
+    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
   }
   if (t === AST_TYPE.NewExpression && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false, null);
+    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
   }
   if (t === AST_TYPE.MemberExpression && key === "object") {
-    return reference(
-      ReferenceFlags.Read | ReferenceFlags.Receiver,
-      false,
-      null,
-    );
+    return reference(ReferenceFlags.Read | ReferenceFlags.Receiver, false);
   }
   let init = false;
   if (t === AST_TYPE.VariableDeclarator && key === "init") {
     init = true;
   }
-  return reference(ReferenceFlags.Read, init, null);
+  return reference(ReferenceFlags.Read, init);
 }

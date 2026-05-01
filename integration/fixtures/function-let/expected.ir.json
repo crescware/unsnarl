@@ -181,11 +181,6 @@
       "owners": [
         "scope#1:v@21"
       ],
-      "writeExpr": {
-        "line": 3,
-        "column": 6,
-        "offset": 34
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -212,11 +207,6 @@
       "owners": [
         "scope#1:v@21"
       ],
-      "writeExpr": {
-        "line": 4,
-        "column": 6,
-        "offset": 43
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -241,7 +231,6 @@
       "from": "scope#1",
       "resolved": "scope#1:v@21",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

@@ -327,7 +327,6 @@
       "owners": [
         "scope#0:b@19"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -354,7 +353,6 @@
       "owners": [
         "scope#0:c@32"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -381,7 +379,6 @@
       "owners": [
         "scope#0:d@45"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -408,7 +405,6 @@
       "owners": [
         "scope#0:e@58"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

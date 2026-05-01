@@ -8,7 +8,6 @@ export function baseRef(): SerializedReference {
     from: "s",
     resolved: null,
     owners: [],
-    writeExpr: null,
     init: false,
     flags: { read: false, write: false, call: false, receiver: false },
     predicateContainer: null,

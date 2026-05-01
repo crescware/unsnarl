@@ -573,7 +573,6 @@
       "owners": [
         "scope#0:color@77"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -598,7 +597,6 @@
       "from": "scope#1",
       "resolved": "scope#0:color@77",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -626,7 +624,6 @@
       "from": "scope#2",
       "resolved": "scope#0:RED@6",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -653,11 +650,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 10,
-        "column": 12,
-        "offset": 132
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -682,7 +674,6 @@
       "from": "scope#3",
       "resolved": "scope#0:GREEN@23",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -709,11 +700,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 13,
-        "column": 12,
-        "offset": 176
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -738,7 +724,6 @@
       "from": "scope#4",
       "resolved": "scope#0:BLUE@42",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -765,11 +750,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 16,
-        "column": 12,
-        "offset": 221
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -796,11 +776,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 19,
-        "column": 12,
-        "offset": 263
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -827,7 +802,6 @@
       "owners": [
         "scope#0:result@283"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

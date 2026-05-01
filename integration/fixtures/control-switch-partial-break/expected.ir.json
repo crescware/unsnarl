@@ -366,7 +366,6 @@
       "from": "scope#1",
       "resolved": "scope#0:kind@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -396,11 +395,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 6,
-        "column": 12,
-        "offset": 75
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -427,11 +421,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 8,
-        "column": 12,
-        "offset": 108
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -458,11 +447,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 11,
-        "column": 12,
-        "offset": 150
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -489,7 +473,6 @@
       "owners": [
         "scope#0:result@168"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

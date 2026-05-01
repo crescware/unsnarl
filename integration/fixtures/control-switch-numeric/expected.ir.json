@@ -404,7 +404,6 @@
       "from": "scope#1",
       "resolved": "scope#0:code@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -434,11 +433,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 6,
-        "column": 12,
-        "offset": 71
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -465,11 +459,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 9,
-        "column": 12,
-        "offset": 112
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -496,11 +485,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 12,
-        "column": 12,
-        "offset": 152
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -527,11 +511,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 15,
-        "column": 12,
-        "offset": 193
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -558,7 +537,6 @@
       "owners": [
         "scope#0:result@210"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

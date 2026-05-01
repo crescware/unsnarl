@@ -40,8 +40,6 @@ export type AstIdentifier = AstNode &
     name: string;
   }>;
 
-export type AstExpression = AstNode;
-
 export const ReferenceFlags = {
   None: 0,
   Read: 1 << 0,
@@ -75,7 +73,6 @@ export type Reference = {
   identifier: AstIdentifier;
   from: Scope;
   resolved: Variable | null;
-  writeExpr: AstExpression | null;
   init: boolean;
   isWrite(): boolean;
   isRead(): boolean;
@@ -190,7 +187,6 @@ export type SerializedReference = Readonly<{
   from: ScopeId;
   resolved: VariableId | null;
   owners: readonly VariableId[];
-  writeExpr: Span | null;
   init: boolean;
   flags: Readonly<{
     read: boolean;

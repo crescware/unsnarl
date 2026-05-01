@@ -1,6 +1,5 @@
 import { ReferenceFlags } from "../ir/model.js";
 import type {
-  AstExpression,
   AstIdentifier,
   AstNode,
   BlockContext,
@@ -84,7 +83,6 @@ export class ReferenceImpl implements Reference {
   unsnarlPredicateContainer: PredicateContainer | null = null;
   unsnarlReturnContainer: ReturnContainer | null = null;
   unsnarlJsxElement: JsxElementContainer | null = null;
-  readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;
 
@@ -93,13 +91,11 @@ export class ReferenceImpl implements Reference {
     from: Scope;
     flags: ReferenceFlagBits;
     init: boolean;
-    writeExpr: AstExpression | null;
   }) {
     this.identifier = opts.identifier;
     this.from = opts.from;
     this.unsnarlFlags = opts.flags;
     this.init = opts.init;
-    this.writeExpr = opts.writeExpr;
   }
 
   isRead(): boolean {

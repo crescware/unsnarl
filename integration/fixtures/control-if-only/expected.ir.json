@@ -253,7 +253,6 @@
       "from": "scope#0",
       "resolved": "scope#0:flag@23",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -283,11 +282,6 @@
       "owners": [
         "scope#0:counter@4"
       ],
-      "writeExpr": {
-        "line": 5,
-        "column": 12,
-        "offset": 61
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -314,7 +308,6 @@
       "owners": [
         "scope#0:result@73"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

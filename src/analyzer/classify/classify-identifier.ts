@@ -15,7 +15,7 @@ export function classifyIdentifier(
   path: readonly PathEntry[],
 ): ClassifyResult {
   if (!parent) {
-    return reference(ReferenceFlags.Read, false, null);
+    return reference(ReferenceFlags.Read, false);
   }
 
   const t = parent.type;
@@ -34,7 +34,7 @@ export function classifyIdentifier(
       return { kind: "binding" };
     }
     if (root === "assign") {
-      return reference(ReferenceFlags.Write, false, null);
+      return reference(ReferenceFlags.Write, false);
     }
   }
 

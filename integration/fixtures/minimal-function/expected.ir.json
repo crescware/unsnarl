@@ -122,7 +122,6 @@
       "from": "scope#0",
       "resolved": "scope#0:greet@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
