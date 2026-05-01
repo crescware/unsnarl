@@ -1,4 +1,5 @@
-import { type ParsedRootQuery, parseRootQueries } from "./root-query.js";
+import { parseRootQueries } from "./root-query/parse-root-queries.js";
+import type { ParsedRootQuery } from "./root-query/parsed-root-query.js";
 
 export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
 export type CliMermaidRenderer = "dagre" | "elk";

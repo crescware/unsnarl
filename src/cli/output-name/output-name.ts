@@ -1,6 +1,6 @@
 import { basename, extname } from "node:path";
 
-import type { ParsedRootQuery } from "../root-query.js";
+import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { radiusSuffix } from "./radius-suffix.js";
 import { rootQueryToken } from "./root-query-token.js";
 

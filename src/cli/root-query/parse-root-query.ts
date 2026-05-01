@@ -1,39 +1,4 @@
-export type ParsedRootQuery =
-  | { readonly kind: "line"; readonly line: number; readonly raw: string }
-  | {
-      readonly kind: "line-name";
-      readonly line: number;
-      readonly name: string;
-      readonly raw: string;
-    }
-  | {
-      readonly kind: "range";
-      readonly start: number;
-      readonly end: number;
-      readonly raw: string;
-    }
-  | {
-      readonly kind: "range-name";
-      readonly start: number;
-      readonly end: number;
-      readonly name: string;
-      readonly raw: string;
-    }
-  | { readonly kind: "name"; readonly name: string; readonly raw: string };
-
-export interface RootQueryParseSuccess {
-  readonly ok: true;
-  readonly queries: readonly ParsedRootQuery[];
-}
-
-export interface RootQueryParseFailure {
-  readonly ok: false;
-  readonly error: string;
-}
-
-export type RootQueryParseResult =
-  | RootQueryParseSuccess
-  | RootQueryParseFailure;
+import type { ParsedRootQuery } from "./parsed-root-query.js";
 
 const ID_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 const LINE_RE = /^([0-9]+)$/;
@@ -103,20 +68,4 @@ export function parseRootQuery(
   }
 
   return { error: `invalid root query '${token}'` };
-}
-
-export function parseRootQueries(value: string): RootQueryParseResult {
-  if (value === "") {
-    return { ok: false, error: "empty --roots value" };
-  }
-  const tokens = value.split(",");
-  const queries: ParsedRootQuery[] = [];
-  for (const token of tokens) {
-    const r = parseRootQuery(token);
-    if ("error" in r) {
-      return { ok: false, error: r.error };
-    }
-    queries.push(r);
-  }
-  return { ok: true, queries };
 }

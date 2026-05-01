@@ -98,13 +98,16 @@ export type {
   CliParseResult,
   CliParseSuccess,
 } from "./cli/args.js";
-export { parseRootQueries, parseRootQuery } from "./cli/root-query.js";
+export { parseRootQuery } from "./cli/root-query/parse-root-query.js";
+export {
+  parseRootQueries,
+} from "./cli/root-query/parse-root-queries.js";
 export type {
-  ParsedRootQuery,
   RootQueryParseFailure,
   RootQueryParseResult,
   RootQueryParseSuccess,
-} from "./cli/root-query.js";
+} from "./cli/root-query/parse-root-queries.js";
+export type { ParsedRootQuery } from "./cli/root-query/parsed-root-query.js";
 export { runCli } from "./cli/main.js";
 export { readSourceFile, readStdin } from "./cli/io.js";
 

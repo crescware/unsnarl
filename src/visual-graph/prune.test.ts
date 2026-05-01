@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { ParsedRootQuery } from "../cli/root-query.js";
+import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
 import type {
   VisualEdge,
   VisualElement,
