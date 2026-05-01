@@ -1,12 +1,13 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { isNodeLike } from "./is-node-like.js";
 
 describe("isNodeLike", () => {
   test.each([
     {
       name: "object with string type -> true",
-      value: { type: "Identifier" },
+      value: { type: AST_TYPE.Identifier },
       expected: true,
     },
     {

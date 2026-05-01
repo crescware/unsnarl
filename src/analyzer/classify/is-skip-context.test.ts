@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { isSkipContext } from "./is-skip-context.js";
 
@@ -12,14 +13,14 @@ describe("isSkipContext", () => {
       isSkipContext(
         "ImportSpecifier",
         "imported",
-        nodeOf({ type: "ImportSpecifier" }),
+        nodeOf({ type: AST_TYPE.ImportSpecifier }),
       ),
     ).toBe(true);
     expect(
       isSkipContext(
         "ImportSpecifier",
         "local",
-        nodeOf({ type: "ImportSpecifier" }),
+        nodeOf({ type: AST_TYPE.ImportSpecifier }),
       ),
     ).toBe(false);
   });
@@ -29,7 +30,7 @@ describe("isSkipContext", () => {
       isSkipContext(
         "ExportSpecifier",
         "exported",
-        nodeOf({ type: "ExportSpecifier" }),
+        nodeOf({ type: AST_TYPE.ExportSpecifier }),
       ),
     ).toBe(true);
   });
@@ -39,14 +40,14 @@ describe("isSkipContext", () => {
       isSkipContext(
         "MemberExpression",
         "property",
-        nodeOf({ type: "MemberExpression", computed: false }),
+        nodeOf({ type: AST_TYPE.MemberExpression, computed: false }),
       ),
     ).toBe(true);
     expect(
       isSkipContext(
         "MemberExpression",
         "property",
-        nodeOf({ type: "MemberExpression", computed: true }),
+        nodeOf({ type: AST_TYPE.MemberExpression, computed: true }),
       ),
     ).toBe(false);
   });
@@ -69,7 +70,11 @@ describe("isSkipContext", () => {
 
   test("JSXAttribute#name is skipped", () => {
     expect(
-      isSkipContext("JSXAttribute", "name", nodeOf({ type: "JSXAttribute" })),
+      isSkipContext(
+        "JSXAttribute",
+        "name",
+        nodeOf({ type: AST_TYPE.JSXAttribute }),
+      ),
     ).toBe(true);
   });
 
@@ -78,7 +83,7 @@ describe("isSkipContext", () => {
       isSkipContext(
         "JSXMemberExpression",
         "property",
-        nodeOf({ type: "JSXMemberExpression" }),
+        nodeOf({ type: AST_TYPE.JSXMemberExpression }),
       ),
     ).toBe(true);
   });
@@ -88,14 +93,14 @@ describe("isSkipContext", () => {
       isSkipContext(
         "JSXClosingElement",
         null,
-        nodeOf({ type: "JSXClosingElement" }),
+        nodeOf({ type: AST_TYPE.JSXClosingElement }),
       ),
     ).toBe(true);
     expect(
       isSkipContext(
         "JSXClosingElement",
         "name",
-        nodeOf({ type: "JSXClosingElement" }),
+        nodeOf({ type: AST_TYPE.JSXClosingElement }),
       ),
     ).toBe(true);
   });
@@ -116,7 +121,7 @@ describe("isSkipContext", () => {
       isSkipContext(
         "CallExpression",
         "callee",
-        nodeOf({ type: "CallExpression" }),
+        nodeOf({ type: AST_TYPE.CallExpression }),
       ),
     ).toBe(false);
   });

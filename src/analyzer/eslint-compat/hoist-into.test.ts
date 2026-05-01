@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIAGNOSTIC_KIND } from "../../constants.js";
+import { AST_TYPE, DIAGNOSTIC_KIND } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -52,7 +52,7 @@ describe("hoistInto", () => {
   });
 
   test("does nothing when program has no body array", () => {
-    const program = { type: "Program" } satisfies NodeLike;
+    const program = { type: AST_TYPE.Program } satisfies NodeLike;
     const manager = freshManager(program);
     const diagnostics = new DiagnosticCollector();
 

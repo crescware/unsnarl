@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
@@ -24,7 +24,7 @@ const newScope = (): ScopeImpl =>
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
 
 describe("handleClassDeclaration", () => {
@@ -39,9 +39,9 @@ describe("handleClassDeclaration", () => {
     const scope = newScope();
     handleClassDeclaration(
       {
-        type: "ClassDeclaration",
+        type: AST_TYPE.ClassDeclaration,
         id: null,
-        body: { type: "ClassBody", body: [] },
+        body: { type: AST_TYPE.ClassBody, body: [] },
       },
       scope,
     );

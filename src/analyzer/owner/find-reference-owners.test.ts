@@ -9,21 +9,21 @@ import type { PathEntry } from "../walk/walk.js";
 import { findReferenceOwners } from "./find-reference-owners.js";
 
 const ident = (name: string): AstIdentifier =>
-  ({ type: "Identifier", name }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name }) as unknown as AstIdentifier;
 
 const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
   for (const n of names) {
     declareVariable(
       scope,
       ident(n),
       DEFINITION_TYPE.Variable,
-      { type: "VariableDeclarator" } as unknown as AstNode,
+      { type: AST_TYPE.VariableDeclarator } as unknown as AstNode,
       null,
     );
   }

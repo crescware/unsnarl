@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import {
+  AST_TYPE,
   IMPORT_KIND,
   LANGUAGE,
   PREDICATE_CONTAINER_TYPE,
@@ -56,7 +57,7 @@ function caseScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) =>
       s.type === SCOPE_TYPE.Block &&
-      s.blockContext?.parentType === "SwitchStatement",
+      s.blockContext?.parentType === AST_TYPE.SwitchStatement,
   );
 }
 
@@ -64,7 +65,7 @@ function ifBranchScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) =>
       s.type === SCOPE_TYPE.Block &&
-      s.blockContext?.parentType === "IfStatement",
+      s.blockContext?.parentType === AST_TYPE.IfStatement,
   );
 }
 
@@ -120,7 +121,7 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
     expect(scopes.size).toBe(3);
     for (const w of writes) {
       const s = scopeFromOf(ir, w);
-      expect(s.blockContext?.parentType).toBe("SwitchStatement");
+      expect(s.blockContext?.parentType).toBe(AST_TYPE.SwitchStatement);
     }
   });
 
@@ -241,7 +242,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the try statement produces a try block, a catch scope, and a finalizer block", () => {
     const tryChildren = ir.scopes.filter(
-      (s) => s.blockContext?.parentType === "TryStatement",
+      (s) => s.blockContext?.parentType === AST_TYPE.TryStatement,
     );
     expect(tryChildren).toHaveLength(3);
     const layout = tryChildren.map((s) => ({
@@ -268,7 +269,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the catch parameter has a CatchClause definition", () => {
     const err = varByName(ir, "err");
-    expect(err.defs[0]?.type).toBe("CatchClause");
+    expect(err.defs[0]?.type).toBe(AST_TYPE.CatchClause);
   });
 });
 

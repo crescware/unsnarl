@@ -8,6 +8,7 @@ import type {
   SerializedIRVersion,
   VariableDeclarationKind,
 } from "../constants.js";
+import { AST_TYPE } from "../constants.js";
 
 export type {
   DefinitionType,
@@ -34,7 +35,7 @@ export type AstNode = Readonly<{
 
 export type AstIdentifier = AstNode &
   Readonly<{
-    type: "Identifier" | "JSXIdentifier";
+    type: typeof AST_TYPE.Identifier | typeof AST_TYPE.JSXIdentifier;
     name: string;
   }>;
 

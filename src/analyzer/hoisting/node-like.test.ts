@@ -1,10 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { isNodeLike } from "./node-like.js";
 
 describe("isNodeLike", () => {
   test("typed object → true", () => {
-    expect(isNodeLike({ type: "Identifier" })).toBe(true);
+    expect(isNodeLike({ type: AST_TYPE.Identifier })).toBe(true);
   });
 
   test("primitives → false", () => {

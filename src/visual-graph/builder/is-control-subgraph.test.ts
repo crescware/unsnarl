@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import { isControlSubgraph } from "./is-control-subgraph.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -22,27 +22,27 @@ describe("isControlSubgraph", () => {
   test.each<{ name: string; ctx: BlockContext; expected: boolean }>([
     {
       name: "block + IfStatement.consequent",
-      ctx: makeBlockContext("IfStatement", "consequent", 0),
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
       expected: true,
     },
     {
       name: "block + IfStatement.alternate",
-      ctx: makeBlockContext("IfStatement", "alternate", 0),
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "alternate", 0),
       expected: true,
     },
     {
       name: "block + TryStatement.block",
-      ctx: makeBlockContext("TryStatement", "block", 0),
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "block", 0),
       expected: true,
     },
     {
       name: "block + TryStatement.finalizer",
-      ctx: makeBlockContext("TryStatement", "finalizer", 0),
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "finalizer", 0),
       expected: true,
     },
     {
       name: "block + SwitchStatement.cases",
-      ctx: makeBlockContext("SwitchStatement", "cases", 0),
+      ctx: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 0),
       expected: true,
     },
     {

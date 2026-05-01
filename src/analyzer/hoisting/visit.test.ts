@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
@@ -25,7 +25,7 @@ const newScope = (): ScopeImpl =>
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
 
 describe("visit dispatch", () => {

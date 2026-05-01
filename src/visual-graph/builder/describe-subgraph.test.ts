@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  AST_TYPE,
   DIRECTION,
   SCOPE_TYPE,
   SUBGRAPH_KIND,
@@ -20,7 +21,7 @@ describe("describeSubgraph", () => {
       id: "fnScope",
       type: SCOPE_TYPE.Function,
       block: {
-        type: "FunctionDeclaration",
+        type: AST_TYPE.FunctionDeclaration,
         span: span(0, 5),
         endSpan: span(50, 10),
       },
@@ -53,7 +54,7 @@ describe("describeSubgraph", () => {
       id: "fn",
       type: SCOPE_TYPE.Function,
       block: {
-        type: "FunctionDeclaration",
+        type: AST_TYPE.FunctionDeclaration,
         span: span(0, 7),
         endSpan: span(20, 9),
       },
@@ -101,7 +102,12 @@ describe("describeSubgraph", () => {
       id: "case1",
       type: SCOPE_TYPE.Block,
       block: { type: "Block", span: span(0, 1), endSpan: span(10, 2) },
-      blockContext: makeBlockContext("SwitchStatement", "cases", 0, "x === 1"),
+      blockContext: makeBlockContext(
+        AST_TYPE.SwitchStatement,
+        "cases",
+        0,
+        "x === 1",
+      ),
     });
     const sg = describeSubgraph(scope, new Map(), new Map());
     expect(sg.kind).toBe("case");
@@ -112,7 +118,7 @@ describe("describeSubgraph", () => {
     const scope = makeScope({
       id: "case-default",
       type: SCOPE_TYPE.Block,
-      blockContext: makeBlockContext("SwitchStatement", "cases", 0),
+      blockContext: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 0),
     });
     const sg = describeSubgraph(scope, new Map(), new Map());
     expect(sg.caseTest).toBeNull();

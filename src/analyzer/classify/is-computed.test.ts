@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { isComputed } from "./is-computed.js";
 
@@ -7,7 +8,7 @@ describe("isComputed", () => {
   test("returns true when computed === true", () => {
     expect(
       isComputed({
-        type: "MemberExpression",
+        type: AST_TYPE.MemberExpression,
         computed: true,
       } as unknown as AstNode),
     ).toBe(true);
@@ -16,16 +17,16 @@ describe("isComputed", () => {
   test("returns false when computed === false", () => {
     expect(
       isComputed({
-        type: "MemberExpression",
+        type: AST_TYPE.MemberExpression,
         computed: false,
       } as unknown as AstNode),
     ).toBe(false);
   });
 
   test("returns false when computed is missing", () => {
-    expect(isComputed({ type: "MemberExpression" } as unknown as AstNode)).toBe(
-      false,
-    );
+    expect(
+      isComputed({ type: AST_TYPE.MemberExpression } as unknown as AstNode),
+    ).toBe(false);
   });
 
   test("returns false when computed is truthy but not strictly true", () => {

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, SERIALIZED_IR_VERSION } from "./constants.js";
+import { AST_TYPE, LANGUAGE, SERIALIZED_IR_VERSION } from "./constants.js";
 import type { Scope, SerializedIR } from "./ir/model.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type {
@@ -27,7 +27,7 @@ const fakeIR = {
 const fakeParser = {
   id: "fake",
   parse: (code, opts) => ({
-    ast: { type: "Program", body: [] },
+    ast: { type: AST_TYPE.Program, body: [] },
     language: opts.language,
     sourcePath: opts.sourcePath,
     raw: code,
@@ -107,7 +107,7 @@ describe("createPipeline", () => {
       parse: (code, opts) => {
         parserCalled = true;
         return {
-          ast: { type: "Program", body: [] },
+          ast: { type: AST_TYPE.Program, body: [] },
           language: opts.language,
           sourcePath: opts.sourcePath,
           raw: code,

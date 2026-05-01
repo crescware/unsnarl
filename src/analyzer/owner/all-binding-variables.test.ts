@@ -1,14 +1,14 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { ScopeImpl } from "../scope.js";
 import { allBindingVariables } from "./all-binding-variables.js";
 
 const ident = (name: string): AstIdentifier =>
-  ({ type: "Identifier", name }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name }) as unknown as AstIdentifier;
 
 const declId = (code: string): AstNode => {
   const program = parseSync("input.ts", code, { lang: "ts" })
@@ -27,14 +27,14 @@ const scopeWith = (...names: readonly string[]): ScopeImpl => {
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
   for (const n of names) {
     declareVariable(
       scope,
       ident(n),
       DEFINITION_TYPE.Variable,
-      { type: "VariableDeclarator" } as unknown as AstNode,
+      { type: AST_TYPE.VariableDeclarator } as unknown as AstNode,
       null,
     );
   }
@@ -66,7 +66,7 @@ describe("allBindingVariables", () => {
       type: SCOPE_TYPE.Block,
       isStrict: true,
       upper,
-      block: { type: "BlockStatement" } as unknown as AstNode,
+      block: { type: AST_TYPE.BlockStatement } as unknown as AstNode,
     });
     const out = allBindingVariables(declId("const outer = 1;"), inner);
     expect(out.map((v) => v.name)).toEqual(["outer"]);
@@ -75,7 +75,7 @@ describe("allBindingVariables", () => {
   test("duplicate identifiers in pattern resolve to the same variable once", () => {
     const scope = scopeWith("a");
     const pattern = {
-      type: "ArrayPattern",
+      type: AST_TYPE.ArrayPattern,
       elements: [ident("a"), ident("a")],
     } as unknown as AstNode;
     const out = allBindingVariables(pattern, scope);
@@ -85,7 +85,7 @@ describe("allBindingVariables", () => {
   test("empty pattern → empty output", () => {
     const scope = scopeWith();
     const empty = {
-      type: "ObjectPattern",
+      type: AST_TYPE.ObjectPattern,
       properties: [],
     } as unknown as AstNode;
     expect(allBindingVariables(empty, scope)).toEqual([]);

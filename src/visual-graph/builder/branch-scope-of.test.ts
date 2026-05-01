@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import { branchScopeOf } from "./branch-scope-of.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -9,7 +10,7 @@ const outer = makeScope({ id: "outer" });
 const ifBranch = makeScope({
   id: "if",
   upper: "outer",
-  blockContext: makeBlockContext("IfStatement", "consequent", 0),
+  blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
 });
 const inner = makeScope({ id: "inner", upper: "if" });
 const deeper = makeScope({ id: "deeper", upper: "inner" });

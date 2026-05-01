@@ -1,4 +1,4 @@
-import { DEFINITION_TYPE } from "../../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../../constants.js";
 import type { SerializedDefinition } from "../../../ir/model.js";
 import { span } from "./span.js";
 
@@ -8,7 +8,7 @@ export function makeDef(
   return {
     type: DEFINITION_TYPE.Variable,
     name: { name: "x", span: span() },
-    node: { type: "Identifier", span: span() },
+    node: { type: AST_TYPE.Identifier, span: span() },
     parent: null,
     initType: null,
     initSpan: null,

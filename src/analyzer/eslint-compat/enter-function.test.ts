@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -11,7 +12,7 @@ describe("enterFunction", () => {
   test("pushes a function scope, declares params, and hoists body declarations", () => {
     const code = "function foo(a, b) { let x = 1; }";
     const program = parse(code);
-    const fn = findFirst(program, "FunctionDeclaration");
+    const fn = findFirst(program, AST_TYPE.FunctionDeclaration);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -29,7 +30,7 @@ describe("enterFunction", () => {
   test("works for arrow function expressions without a body block", () => {
     const code = "const f = (a) => a;";
     const program = parse(code);
-    const fn = findFirst(program, "ArrowFunctionExpression");
+    const fn = findFirst(program, AST_TYPE.ArrowFunctionExpression);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -43,7 +44,7 @@ describe("enterFunction", () => {
   test("does not hoist when body is missing or not a BlockStatement", () => {
     const code = "const f = () => 1;";
     const program = parse(code);
-    const fn = findFirst(program, "ArrowFunctionExpression");
+    const fn = findFirst(program, AST_TYPE.ArrowFunctionExpression);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 

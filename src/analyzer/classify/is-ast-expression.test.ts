@@ -1,10 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { isAstExpression } from "./is-ast-expression.js";
 
 describe("isAstExpression", () => {
   test("typed object → true", () => {
-    expect(isAstExpression({ type: "Identifier" })).toBe(true);
+    expect(isAstExpression({ type: AST_TYPE.Identifier })).toBe(true);
   });
 
   test("primitives, null, missing/non-string type → false", () => {

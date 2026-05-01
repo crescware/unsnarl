@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
 import type {
   AstIdentifier,
   AstNode,
@@ -10,12 +10,12 @@ import type {
 import { pickVariableOffset } from "./pick-variable-offset.js";
 
 const ident = (name: string, start?: number): AstIdentifier =>
-  ({ type: "Identifier", name, start }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name, start }) as unknown as AstIdentifier;
 
 const def = (nameStart?: number): Definition => ({
   type: DEFINITION_TYPE.Variable,
   name: ident("x", nameStart),
-  node: { type: "VariableDeclarator" } as unknown as AstNode,
+  node: { type: AST_TYPE.VariableDeclarator } as unknown as AstNode,
   parent: null,
 });
 

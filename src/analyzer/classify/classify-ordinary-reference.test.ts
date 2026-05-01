@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstNode } from "../../ir/model.js";
 import { classifyOrdinaryReference } from "./classify-ordinary-reference.js";
@@ -9,11 +10,11 @@ const node = (overrides: Record<string, unknown>): AstNode =>
 
 describe("classifyOrdinaryReference", () => {
   test("AssignmentExpression#left with `=` → Write only, writeExpr from `right`", () => {
-    const right = node({ type: "Literal" });
+    const right = node({ type: AST_TYPE.Literal });
     const r = classifyOrdinaryReference(
       "AssignmentExpression",
       "left",
-      node({ type: "AssignmentExpression", operator: "=", right }),
+      node({ type: AST_TYPE.AssignmentExpression, operator: "=", right }),
     );
     expect(r).toEqual({
       kind: "reference",
@@ -24,11 +25,11 @@ describe("classifyOrdinaryReference", () => {
   });
 
   test("AssignmentExpression#left with compound op → Read|Write", () => {
-    const right = node({ type: "Literal" });
+    const right = node({ type: AST_TYPE.Literal });
     const r = classifyOrdinaryReference(
       "AssignmentExpression",
       "left",
-      node({ type: "AssignmentExpression", operator: "+=", right }),
+      node({ type: AST_TYPE.AssignmentExpression, operator: "+=", right }),
     );
     expect(r).toMatchObject({
       kind: "reference",
@@ -41,7 +42,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "AssignmentExpression",
       "left",
-      node({ type: "AssignmentExpression", operator: "=", right: 1 }),
+      node({ type: AST_TYPE.AssignmentExpression, operator: "=", right: 1 }),
     );
     expect(r).toMatchObject({ writeExpr: null });
   });
@@ -50,7 +51,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "UpdateExpression",
       "argument",
-      node({ type: "UpdateExpression" }),
+      node({ type: AST_TYPE.UpdateExpression }),
     );
     expect(r).toMatchObject({
       flags: ReferenceFlags.Read | ReferenceFlags.Write,
@@ -61,7 +62,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "CallExpression",
       "callee",
-      node({ type: "CallExpression" }),
+      node({ type: AST_TYPE.CallExpression }),
     );
     expect(r).toMatchObject({
       flags: ReferenceFlags.Read | ReferenceFlags.Call,
@@ -72,7 +73,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "NewExpression",
       "callee",
-      node({ type: "NewExpression" }),
+      node({ type: AST_TYPE.NewExpression }),
     );
     expect(r).toMatchObject({
       flags: ReferenceFlags.Read | ReferenceFlags.Call,
@@ -83,7 +84,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "MemberExpression",
       "object",
-      node({ type: "MemberExpression" }),
+      node({ type: AST_TYPE.MemberExpression }),
     );
     expect(r).toMatchObject({
       flags: ReferenceFlags.Read | ReferenceFlags.Receiver,
@@ -94,7 +95,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "VariableDeclarator",
       "init",
-      node({ type: "VariableDeclarator" }),
+      node({ type: AST_TYPE.VariableDeclarator }),
     );
     expect(r).toMatchObject({ flags: ReferenceFlags.Read, init: true });
   });
@@ -103,7 +104,7 @@ describe("classifyOrdinaryReference", () => {
     const r = classifyOrdinaryReference(
       "CallExpression",
       "arguments",
-      node({ type: "CallExpression" }),
+      node({ type: AST_TYPE.CallExpression }),
     );
     expect(r).toMatchObject({
       flags: ReferenceFlags.Read,

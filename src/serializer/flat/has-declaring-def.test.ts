@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
 import type {
   AstIdentifier,
   AstNode,
@@ -10,7 +10,7 @@ import type {
 import { hasDeclaringDef } from "./has-declaring-def.js";
 
 const ident = (name: string): AstIdentifier =>
-  ({ type: "Identifier", name }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name }) as unknown as AstIdentifier;
 const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 
 const variableWith = (defs: readonly Definition[]): Variable =>
@@ -22,7 +22,7 @@ describe("hasDeclaringDef", () => {
       {
         type: DEFINITION_TYPE.Variable,
         name: ident("x"),
-        node: node("VariableDeclarator"),
+        node: node(AST_TYPE.VariableDeclarator),
         parent: null,
       },
     ]);
@@ -34,7 +34,7 @@ describe("hasDeclaringDef", () => {
       {
         type: DEFINITION_TYPE.ImplicitGlobalVariable,
         name: ident("x"),
-        node: node("Identifier"),
+        node: node(AST_TYPE.Identifier),
         parent: null,
       },
     ]);
@@ -46,13 +46,13 @@ describe("hasDeclaringDef", () => {
       {
         type: DEFINITION_TYPE.ImplicitGlobalVariable,
         name: ident("x"),
-        node: node("Identifier"),
+        node: node(AST_TYPE.Identifier),
         parent: null,
       },
       {
         type: DEFINITION_TYPE.FunctionName,
         name: ident("x"),
-        node: node("FunctionDeclaration"),
+        node: node(AST_TYPE.FunctionDeclaration),
         parent: null,
       },
     ]);

@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { declareVariable } from "./declare-variable.js";
 
 const ident = (name: string): AstIdentifier =>
-  ({ type: "Identifier", name }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name }) as unknown as AstIdentifier;
 
 const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 
@@ -15,7 +15,7 @@ const makeScope = (): ScopeImpl =>
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: node("Program"),
+    block: node(AST_TYPE.Program),
   });
 
 describe("declareVariable", () => {
@@ -25,7 +25,7 @@ describe("declareVariable", () => {
       scope,
       ident("x"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       null,
     );
     expect(scope.variables).toHaveLength(1);
@@ -37,8 +37,8 @@ describe("declareVariable", () => {
     const scope = makeScope();
     const idA = ident("x");
     const idB = ident("x");
-    const declA = node("VariableDeclarator");
-    const declB = node("FunctionDeclaration");
+    const declA = node(AST_TYPE.VariableDeclarator);
+    const declB = node(AST_TYPE.FunctionDeclaration);
     const v = declareVariable(
       scope,
       idA,
@@ -65,14 +65,14 @@ describe("declareVariable", () => {
       scope,
       ident("x"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       null,
     );
     const second = declareVariable(
       scope,
       ident("x"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       null,
     );
     expect(second).toBe(first);
@@ -85,14 +85,14 @@ describe("declareVariable", () => {
       scope,
       ident("a"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       null,
     );
     const b = declareVariable(
       scope,
       ident("b"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       null,
     );
     expect(a).not.toBe(b);
@@ -101,12 +101,12 @@ describe("declareVariable", () => {
 
   test("parent node is propagated into the def", () => {
     const scope = makeScope();
-    const parent = node("VariableDeclaration");
+    const parent = node(AST_TYPE.VariableDeclaration);
     const v = declareVariable(
       scope,
       ident("x"),
       DEFINITION_TYPE.Variable,
-      node("VariableDeclarator"),
+      node(AST_TYPE.VariableDeclarator),
       parent,
     );
     expect(v.defs[0]?.parent).toBe(parent);

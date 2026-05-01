@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../scope.js";
 import { handleFunctionDeclaration } from "./handle-function-declaration.js";
@@ -24,7 +24,7 @@ const newScope = (): ScopeImpl =>
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
 
 describe("handleFunctionDeclaration", () => {
@@ -39,10 +39,10 @@ describe("handleFunctionDeclaration", () => {
     const scope = newScope();
     handleFunctionDeclaration(
       {
-        type: "FunctionDeclaration",
+        type: AST_TYPE.FunctionDeclaration,
         id: null,
         params: [],
-        body: { type: "BlockStatement", body: [] },
+        body: { type: AST_TYPE.BlockStatement, body: [] },
       },
       scope,
     );
@@ -53,10 +53,10 @@ describe("handleFunctionDeclaration", () => {
     const scope = newScope();
     handleFunctionDeclaration(
       {
-        type: "FunctionDeclaration",
-        id: { type: "Literal", value: "x" },
+        type: AST_TYPE.FunctionDeclaration,
+        id: { type: AST_TYPE.Literal, value: "x" },
         params: [],
-        body: { type: "BlockStatement", body: [] },
+        body: { type: AST_TYPE.BlockStatement, body: [] },
       },
       scope,
     );

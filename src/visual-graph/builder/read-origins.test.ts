@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  AST_TYPE,
   LANGUAGE,
   SCOPE_TYPE,
   SERIALIZED_IR_VERSION,
@@ -79,7 +80,7 @@ describe("readOrigins", () => {
     const cons = makeScope({
       id: "cons",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const op = makeWriteOp({ refId: "rCons", offset: 60, scopeId: "cons" });
     const ctx = makeCtx({
@@ -95,7 +96,7 @@ describe("readOrigins", () => {
     const cons = makeScope({
       id: "cons",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const preIf = makeWriteOp({ refId: "rPre", offset: 10, scopeId: "root" });
     const inIf = makeWriteOp({ refId: "rCons", offset: 60, scopeId: "cons" });
@@ -112,12 +113,12 @@ describe("readOrigins", () => {
     const cons = makeScope({
       id: "cons",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const alt = makeScope({
       id: "alt",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "alternate", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "alternate", 50),
     });
     const opCons = makeWriteOp({ refId: "rCons", offset: 60, scopeId: "cons" });
     const opAlt = makeWriteOp({ refId: "rAlt", offset: 70, scopeId: "alt" });
@@ -140,13 +141,13 @@ describe("readOrigins", () => {
     const c1 = makeScope({
       id: "c1",
       upper: "switch",
-      blockContext: makeBlockContext("SwitchStatement", "cases", 100),
+      blockContext: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 100),
       exitsFunction: true,
     });
     const c2 = makeScope({
       id: "c2",
       upper: "switch",
-      blockContext: makeBlockContext("SwitchStatement", "cases", 100),
+      blockContext: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 100),
     });
     const opC1 = makeWriteOp({ refId: "rC1", offset: 110, scopeId: "c1" });
     const opC2 = makeWriteOp({ refId: "rC2", offset: 120, scopeId: "c2" });
@@ -169,13 +170,13 @@ describe("readOrigins", () => {
     const c1 = makeScope({
       id: "c1",
       upper: "switch",
-      blockContext: makeBlockContext("SwitchStatement", "cases", 100),
+      blockContext: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 100),
       fallsThrough: true,
     });
     const c2 = makeScope({
       id: "c2",
       upper: "switch",
-      blockContext: makeBlockContext("SwitchStatement", "cases", 100),
+      blockContext: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 100),
     });
     const opC1 = makeWriteOp({ refId: "rC1", offset: 110, scopeId: "c1" });
     const opC2 = makeWriteOp({ refId: "rC2", offset: 120, scopeId: "c2" });
@@ -193,12 +194,12 @@ describe("readOrigins", () => {
     const cons = makeScope({
       id: "cons",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const alt = makeScope({
       id: "alt",
       upper: "root",
-      blockContext: makeBlockContext("IfStatement", "alternate", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "alternate", 50),
     });
     const opCons = makeWriteOp({
       refId: "shared",

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { caseFallsThrough } from "./case-falls-through.js";
 
 describe("caseFallsThrough", () => {
@@ -11,27 +12,27 @@ describe("caseFallsThrough", () => {
     },
     {
       name: "ends in BreakStatement -> false",
-      consequent: [{ type: "BreakStatement" }],
+      consequent: [{ type: AST_TYPE.BreakStatement }],
       expected: false,
     },
     {
       name: "ends in ReturnStatement -> false",
-      consequent: [{ type: "ReturnStatement" }],
+      consequent: [{ type: AST_TYPE.ReturnStatement }],
       expected: false,
     },
     {
       name: "ends in ThrowStatement -> false",
-      consequent: [{ type: "ThrowStatement" }],
+      consequent: [{ type: AST_TYPE.ThrowStatement }],
       expected: false,
     },
     {
       name: "ends in ContinueStatement -> false",
-      consequent: [{ type: "ContinueStatement" }],
+      consequent: [{ type: AST_TYPE.ContinueStatement }],
       expected: false,
     },
     {
       name: "ends in ExpressionStatement -> true (no exit)",
-      consequent: [{ type: "ExpressionStatement" }],
+      consequent: [{ type: AST_TYPE.ExpressionStatement }],
       expected: true,
     },
     {
@@ -42,7 +43,10 @@ describe("caseFallsThrough", () => {
     {
       name: "ends in BlockStatement that exits -> false",
       consequent: [
-        { type: "BlockStatement", body: [{ type: "ReturnStatement" }] },
+        {
+          type: AST_TYPE.BlockStatement,
+          body: [{ type: AST_TYPE.ReturnStatement }],
+        },
       ],
       expected: false,
     },

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
@@ -29,18 +29,33 @@ describe("controlSubgraphKindOf", () => {
   });
 
   test.each<{ ctx: BlockContext; expected: Kind }>([
-    { ctx: makeBlockContext("TryStatement", "block", 0), expected: "try" },
     {
-      ctx: makeBlockContext("TryStatement", "finalizer", 0),
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "block", 0),
+      expected: "try",
+    },
+    {
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "finalizer", 0),
       expected: "finally",
     },
-    { ctx: makeBlockContext("TryStatement", "handler", 0), expected: null },
-    { ctx: makeBlockContext("IfStatement", "consequent", 0), expected: "if" },
-    { ctx: makeBlockContext("IfStatement", "alternate", 0), expected: "else" },
-    { ctx: makeBlockContext("IfStatement", "test", 0), expected: null },
-    { ctx: makeBlockContext("SwitchStatement", "cases", 0), expected: "case" },
     {
-      ctx: makeBlockContext("SwitchStatement", "discriminant", 0),
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "handler", 0),
+      expected: null,
+    },
+    {
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
+      expected: "if",
+    },
+    {
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "alternate", 0),
+      expected: "else",
+    },
+    { ctx: makeBlockContext(AST_TYPE.IfStatement, "test", 0), expected: null },
+    {
+      ctx: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 0),
+      expected: "case",
+    },
+    {
+      ctx: makeBlockContext(AST_TYPE.SwitchStatement, "discriminant", 0),
       expected: null,
     },
     { ctx: makeBlockContext("WhileStatement", "body", 0), expected: null },

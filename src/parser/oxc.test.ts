@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../constants.js";
+import { AST_TYPE, LANGUAGE } from "../constants.js";
 import { OxcParser, ParseError } from "./oxc.js";
 
 const parser = new OxcParser();
@@ -33,10 +33,10 @@ describe("OxcParser", () => {
     expect(parsed.raw).toBe(code);
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe("Program");
+    expect(program.type).toBe(AST_TYPE.Program);
     expect(program.body).toHaveLength(2);
-    expect(program.body[0]?.type).toBe("VariableDeclaration");
-    expect(program.body[1]?.type).toBe("VariableDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
+    expect(program.body[1]?.type).toBe(AST_TYPE.VariableDeclaration);
   });
 
   test("parses TSX with JSX elements", () => {
@@ -48,9 +48,9 @@ describe("OxcParser", () => {
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe("Program");
+    expect(program.type).toBe(AST_TYPE.Program);
     expect(program.body).toHaveLength(1);
-    expect(program.body[0]?.type).toBe("VariableDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
   });
 
   test("parses JS with ESM import", () => {
@@ -62,8 +62,8 @@ describe("OxcParser", () => {
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.body[0]?.type).toBe("ImportDeclaration");
-    expect(program.body[1]?.type).toBe("ExportNamedDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.ImportDeclaration);
+    expect(program.body[1]?.type).toBe(AST_TYPE.ExportNamedDeclaration);
   });
 
   test("synthesizes a filename with the correct extension when sourcePath has none", () => {

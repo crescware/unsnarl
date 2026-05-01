@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  AST_TYPE,
   LANGUAGE,
   SCOPE_TYPE,
   SERIALIZED_IR_VERSION,
@@ -75,7 +76,7 @@ describe("buildChildren", () => {
     const cons = makeScope({
       id: "c",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 5),
     });
     const outer = makeScope({ id: "outer", childScopes: ["c"] });
     const ctx = makeCtx([outer, cons]);
@@ -91,13 +92,13 @@ describe("buildChildren", () => {
     const cons = makeScope({
       id: "c",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 5),
       block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
     });
     const alt = makeScope({
       id: "a",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "alternate", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "alternate", 5),
       block: { type: "Block", span: span(11, 3), endSpan: span(20, 5) },
     });
     const outer = makeScope({ id: "outer", childScopes: ["c", "a"] });
@@ -120,13 +121,13 @@ describe("buildChildren", () => {
     const cons = makeScope({
       id: "c",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 5),
       block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
     });
     const alt = makeScope({
       id: "a",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "alternate", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "alternate", 5),
       block: { type: "Block", span: span(11, 3), endSpan: span(20, 7) },
     });
     const outer = makeScope({ id: "outer", childScopes: ["c", "a"] });
@@ -144,12 +145,12 @@ describe("buildChildren", () => {
     const ifA = makeScope({
       id: "ifA",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 5),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 5),
     });
     const ifB = makeScope({
       id: "ifB",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 30),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 30),
     });
     const outer = makeScope({ id: "outer", childScopes: ["ifA", "ifB"] });
     const ctx = makeCtx([outer, ifA, ifB]);

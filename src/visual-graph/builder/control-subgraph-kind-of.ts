@@ -1,4 +1,4 @@
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 
@@ -19,7 +19,7 @@ export function controlSubgraphKindOf(
     if (!ctx) {
       return null;
     }
-    if (ctx.parentType === "TryStatement") {
+    if (ctx.parentType === AST_TYPE.TryStatement) {
       if (ctx.key === "block") {
         return "try";
       }
@@ -27,7 +27,7 @@ export function controlSubgraphKindOf(
         return "finally";
       }
     }
-    if (ctx.parentType === "IfStatement") {
+    if (ctx.parentType === AST_TYPE.IfStatement) {
       if (ctx.key === "consequent") {
         return "if";
       }
@@ -35,7 +35,7 @@ export function controlSubgraphKindOf(
         return "else";
       }
     }
-    if (ctx.parentType === "SwitchStatement" && ctx.key === "cases") {
+    if (ctx.parentType === AST_TYPE.SwitchStatement && ctx.key === "cases") {
       return "case";
     }
   }

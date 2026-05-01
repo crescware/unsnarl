@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeManager } from "../manager.js";
 import { declareFunctionParams } from "./declare-function-params.js";
@@ -9,7 +9,7 @@ import { parse } from "./testing/parse.js";
 
 function setup(code: string) {
   const program = parse(code);
-  const fn = findFirst(program, "FunctionDeclaration");
+  const fn = findFirst(program, AST_TYPE.FunctionDeclaration);
   const manager = new ScopeManager("module", program as unknown as AstNode);
   const fnScope = manager.push("function", fn as unknown as AstNode);
   return { fn, fnScope };
@@ -43,7 +43,7 @@ describe("declareFunctionParams", () => {
     const program = parse("");
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const fnScope = manager.push("function", program as unknown as AstNode);
-    declareFunctionParams({ type: "FunctionDeclaration" }, fnScope);
+    declareFunctionParams({ type: AST_TYPE.FunctionDeclaration }, fnScope);
     expect(fnScope.variables).toHaveLength(0);
   });
 });

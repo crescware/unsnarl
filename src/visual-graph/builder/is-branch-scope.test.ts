@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { BlockContext } from "../../ir/model.js";
 import { isBranchScope } from "./is-branch-scope.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -9,22 +10,22 @@ describe("isBranchScope", () => {
   test.each<{ name: string; ctx: BlockContext | null; expected: boolean }>([
     {
       name: "if consequent block scope -> true",
-      ctx: makeBlockContext("IfStatement", "consequent", 0),
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
       expected: true,
     },
     {
       name: "if alternate block scope -> true",
-      ctx: makeBlockContext("IfStatement", "alternate", 0),
+      ctx: makeBlockContext(AST_TYPE.IfStatement, "alternate", 0),
       expected: true,
     },
     {
       name: "switch case scope -> true",
-      ctx: makeBlockContext("SwitchStatement", "cases", 0),
+      ctx: makeBlockContext(AST_TYPE.SwitchStatement, "cases", 0),
       expected: true,
     },
     {
       name: "try block scope -> false (try is control, not branch)",
-      ctx: makeBlockContext("TryStatement", "block", 0),
+      ctx: makeBlockContext(AST_TYPE.TryStatement, "block", 0),
       expected: false,
     },
     {

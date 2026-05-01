@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeManager } from "../manager.js";
 import { handleLeave } from "./handle-leave.js";
@@ -36,9 +37,11 @@ describe("handleLeave", () => {
 
   test("BlockStatement under FunctionDeclaration does NOT pop", () => {
     const manager = freshManager();
-    const block = { type: "BlockStatement" } as const satisfies NodeLike;
+    const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
     const before = manager.current();
-    const parent = { type: "FunctionDeclaration" } as const satisfies NodeLike;
+    const parent = {
+      type: AST_TYPE.FunctionDeclaration,
+    } as const satisfies NodeLike;
 
     handleLeave(block, parent, "body", manager);
 
@@ -47,9 +50,11 @@ describe("handleLeave", () => {
 
   test("plain BlockStatement (not under fn/catch) pops the current scope", () => {
     const manager = freshManager();
-    manager.push("block", { type: "BlockStatement" } as unknown as AstNode);
-    const block = { type: "BlockStatement" } as const satisfies NodeLike;
-    const parent = { type: "IfStatement" } as const satisfies NodeLike;
+    manager.push("block", {
+      type: AST_TYPE.BlockStatement,
+    } as unknown as AstNode);
+    const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
+    const parent = { type: AST_TYPE.IfStatement } as const satisfies NodeLike;
 
     handleLeave(block, parent, "consequent", manager);
 
@@ -60,7 +65,7 @@ describe("handleLeave", () => {
     const manager = freshManager();
     const before = manager.current();
 
-    handleLeave({ type: "ExpressionStatement" }, null, null, manager);
+    handleLeave({ type: AST_TYPE.ExpressionStatement }, null, null, manager);
 
     expect(manager.current()).toBe(before);
   });

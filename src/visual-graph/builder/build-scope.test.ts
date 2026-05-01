@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import {
+  AST_TYPE,
   DEFINITION_TYPE,
   LANGUAGE,
   NODE_KIND,
@@ -172,7 +173,11 @@ describe("buildScope", () => {
       id: "for1",
       type: SCOPE_TYPE.For,
       variables: ["v"],
-      block: { type: "ForStatement", span: span(0, 1), endSpan: span(10, 3) },
+      block: {
+        type: AST_TYPE.ForStatement,
+        span: span(0, 1),
+        endSpan: span(10, 3),
+      },
     });
     const v = makeVariable({ id: "v", name: "i" });
     const ctx = makeCtx({ scopes: [forScope], variables: [v] });
@@ -195,7 +200,7 @@ describe("buildScope", () => {
       id: "inner",
       upper: "outer",
       variables: ["vIn"],
-      blockContext: makeBlockContext("IfStatement", "consequent", 0),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
     });
     const outer = makeScope({ id: "outer", childScopes: ["inner"] });
     const vIn = makeVariable({ id: "vIn", name: "y" });

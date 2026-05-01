@@ -18,7 +18,7 @@ describe("walk", () => {
         types.push(node.type);
       },
     });
-    expect(types[0]).toBe("Program");
+    expect(types[0]).toBe(AST_TYPE.Program);
   });
 
   test("enter visits descendants in source order", () => {
@@ -56,9 +56,9 @@ describe("walk", () => {
         left.push(node.type);
       },
     });
-    expect(entered).toContain("VariableDeclarator");
-    expect(entered).not.toContain("Identifier");
-    expect(left).toContain("VariableDeclarator");
+    expect(entered).toContain(AST_TYPE.VariableDeclarator);
+    expect(entered).not.toContain(AST_TYPE.Identifier);
+    expect(left).toContain(AST_TYPE.VariableDeclarator);
   });
 
   test("leave fires in post-order (root last)", () => {
@@ -69,7 +69,7 @@ describe("walk", () => {
         left.push(node.type);
       },
     });
-    expect(left[left.length - 1]).toBe("Program");
+    expect(left[left.length - 1]).toBe(AST_TYPE.Program);
   });
 
   test("path passed to enter ends at the parent of the visited node", () => {
@@ -84,8 +84,8 @@ describe("walk", () => {
     });
     expect(identPath).not.toBeNull();
     const types = (identPath as unknown as PathEntry[]).map((p) => p.node.type);
-    expect(types[0]).toBe("Program");
-    expect(types[types.length - 1]).toBe("VariableDeclarator");
+    expect(types[0]).toBe(AST_TYPE.Program);
+    expect(types[types.length - 1]).toBe(AST_TYPE.VariableDeclarator);
   });
 
   test("parent and key are null for the root", () => {

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import { caseExitsFunction } from "./case-exits-function.js";
 
 describe("caseExitsFunction", () => {
@@ -11,27 +12,27 @@ describe("caseExitsFunction", () => {
     },
     {
       name: "ends in ReturnStatement -> true",
-      consequent: [{ type: "ReturnStatement" }],
+      consequent: [{ type: AST_TYPE.ReturnStatement }],
       expected: true,
     },
     {
       name: "ends in ThrowStatement -> true",
-      consequent: [{ type: "ThrowStatement" }],
+      consequent: [{ type: AST_TYPE.ThrowStatement }],
       expected: true,
     },
     {
       name: "ends in BreakStatement -> false (control exit but not fn exit)",
-      consequent: [{ type: "BreakStatement" }],
+      consequent: [{ type: AST_TYPE.BreakStatement }],
       expected: false,
     },
     {
       name: "ends in ContinueStatement -> false",
-      consequent: [{ type: "ContinueStatement" }],
+      consequent: [{ type: AST_TYPE.ContinueStatement }],
       expected: false,
     },
     {
       name: "ends in ExpressionStatement -> false",
-      consequent: [{ type: "ExpressionStatement" }],
+      consequent: [{ type: AST_TYPE.ExpressionStatement }],
       expected: false,
     },
     {

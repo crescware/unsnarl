@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -56,49 +56,49 @@ describe("handleEnter", () => {
     {
       name: "FunctionDeclaration -> pushes function scope",
       code: "function foo() {}",
-      type: "FunctionDeclaration",
+      type: AST_TYPE.FunctionDeclaration,
       expectedScopeType: "function",
     },
     {
       name: "FunctionExpression -> pushes function scope",
       code: "const f = function() {};",
-      type: "FunctionExpression",
+      type: AST_TYPE.FunctionExpression,
       expectedScopeType: "function",
     },
     {
       name: "ArrowFunctionExpression -> pushes function scope",
       code: "const f = () => 1;",
-      type: "ArrowFunctionExpression",
+      type: AST_TYPE.ArrowFunctionExpression,
       expectedScopeType: "function",
     },
     {
       name: "ForStatement -> pushes for scope",
       code: "for (let i = 0; i < 1; i++) {}",
-      type: "ForStatement",
+      type: AST_TYPE.ForStatement,
       expectedScopeType: "for",
     },
     {
       name: "ForOfStatement -> pushes for scope",
       code: "for (const x of items) {}",
-      type: "ForOfStatement",
+      type: AST_TYPE.ForOfStatement,
       expectedScopeType: "for",
     },
     {
       name: "ForInStatement -> pushes for scope",
       code: "for (const k in obj) {}",
-      type: "ForInStatement",
+      type: AST_TYPE.ForInStatement,
       expectedScopeType: "for",
     },
     {
       name: "SwitchStatement -> pushes switch scope",
       code: "switch (x) {}",
-      type: "SwitchStatement",
+      type: AST_TYPE.SwitchStatement,
       expectedScopeType: "switch",
     },
     {
       name: "SwitchCase -> pushes block scope",
       code: "switch (x) { case 1: break; }",
-      type: "SwitchCase",
+      type: AST_TYPE.SwitchCase,
       expectedScopeType: "block",
     },
     {
@@ -128,10 +128,10 @@ describe("handleEnter", () => {
   test("BlockStatement under FunctionDeclaration is NOT pushed (function body is part of fn scope)", () => {
     const code = "function foo() { let x = 1; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
+    const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = makeManager(program);
     const fnParent = {
-      type: "FunctionDeclaration",
+      type: AST_TYPE.FunctionDeclaration,
     } as const satisfies NodeLike;
 
     handleEnter(
@@ -150,10 +150,10 @@ describe("handleEnter", () => {
   test("plain BlockStatement (not under fn/catch) is pushed as block scope", () => {
     const code = "if (x) { let y = 1; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
+    const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = makeManager(program);
     const parent = {
-      type: "IfStatement",
+      type: AST_TYPE.IfStatement,
       start: 0,
     } as const satisfies NodeLike;
 
@@ -176,7 +176,7 @@ describe("handleEnter", () => {
     const before = manager.current();
 
     handleEnter(
-      { type: "ExpressionStatement" },
+      { type: AST_TYPE.ExpressionStatement },
       null,
       null,
       [],

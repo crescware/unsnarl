@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { DIAGNOSTIC_KIND, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DIAGNOSTIC_KIND, SCOPE_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeImpl } from "../scope.js";
@@ -25,7 +25,7 @@ const newScope = (raw = ""): ScopeImpl =>
     type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
   });
 
 describe("handleVariableDeclaration", () => {
@@ -68,7 +68,7 @@ describe("handleVariableDeclaration", () => {
     const scope = newScope();
     const diags = new DiagnosticCollector();
     handleVariableDeclaration(
-      { type: "VariableDeclaration", kind: "using", declarations: [] },
+      { type: AST_TYPE.VariableDeclaration, kind: "using", declarations: [] },
       scope,
       "",
       diags,
@@ -81,7 +81,7 @@ describe("handleVariableDeclaration", () => {
     const scope = newScope();
     const diags = new DiagnosticCollector();
     handleVariableDeclaration(
-      { type: "VariableDeclaration", kind: "const" },
+      { type: AST_TYPE.VariableDeclaration, kind: "const" },
       scope,
       "",
       diags,

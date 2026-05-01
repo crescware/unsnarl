@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -31,7 +31,7 @@ describe("shouldSubgraph", () => {
     {
       name: "branch block (if consequent) without owner -> true",
       type: SCOPE_TYPE.Block,
-      blockContext: makeBlockContext("IfStatement", "consequent", 0),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 0),
       isOwner: false,
       expected: true,
     },

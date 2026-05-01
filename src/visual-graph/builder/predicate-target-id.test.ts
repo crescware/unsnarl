@@ -1,6 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { PREDICATE_CONTAINER_TYPE, SCOPE_TYPE } from "../../constants.js";
+import {
+  AST_TYPE,
+  PREDICATE_CONTAINER_TYPE,
+  SCOPE_TYPE,
+} from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { makeBlockContext } from "./testing/make-block-context.js";
@@ -19,7 +23,7 @@ function withSwitchAt(offset: number): {
     type: SCOPE_TYPE.Switch,
     upper: "outer",
     block: {
-      type: "SwitchStatement",
+      type: AST_TYPE.SwitchStatement,
       span: span(offset),
       endSpan: span(offset + 50),
     },
@@ -69,12 +73,12 @@ describe("predicateTargetId", () => {
     const consequent = makeScope({
       id: "c",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const alternate = makeScope({
       id: "a",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "alternate", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "alternate", 50),
     });
     const scopes = [consequent, alternate] satisfies SerializedScope[];
     const ref = makeRef({
@@ -91,7 +95,7 @@ describe("predicateTargetId", () => {
     const consequent = makeScope({
       id: "lone",
       upper: "outer",
-      blockContext: makeBlockContext("IfStatement", "consequent", 50),
+      blockContext: makeBlockContext(AST_TYPE.IfStatement, "consequent", 50),
     });
     const ref = makeRef({
       from: "outer",

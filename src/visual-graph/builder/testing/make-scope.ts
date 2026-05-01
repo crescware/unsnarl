@@ -1,4 +1,4 @@
-import { SCOPE_TYPE } from "../../../constants.js";
+import { AST_TYPE, SCOPE_TYPE } from "../../../constants.js";
 import type { SerializedScope } from "../../../ir/model.js";
 import { span } from "./span.js";
 
@@ -14,7 +14,7 @@ export function makeScope(
     childScopes: [],
     variableScope: "s",
     block: {
-      type: "BlockStatement",
+      type: AST_TYPE.BlockStatement,
       span: span(offset),
       endSpan: span(offset + 10, 1, offset + 10),
     },
