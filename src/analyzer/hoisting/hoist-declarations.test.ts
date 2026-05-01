@@ -7,7 +7,8 @@ import { ScopeImpl } from "../scope.js";
 import { hoistDeclarations } from "./hoist-declarations.js";
 
 const programBody = (code: string): unknown[] => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: unknown[];
   };
   return program.body;

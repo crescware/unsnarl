@@ -20,21 +20,13 @@ describe("classifyIdentifier dispatch", () => {
 
   test("skip context wins (e.g. ImportSpecifier#imported)", () => {
     expect(
-      classifyIdentifier(
-        node({ type: "ImportSpecifier" }),
-        "imported",
-        [],
-      ),
+      classifyIdentifier(node({ type: "ImportSpecifier" }), "imported", []),
     ).toEqual({ kind: "skip" });
   });
 
   test("direct binding context (e.g. VariableDeclarator#id)", () => {
     expect(
-      classifyIdentifier(
-        node({ type: "VariableDeclarator" }),
-        "id",
-        [],
-      ),
+      classifyIdentifier(node({ type: "VariableDeclarator" }), "id", []),
     ).toEqual({ kind: "binding" });
   });
 
@@ -68,11 +60,7 @@ describe("classifyIdentifier dispatch", () => {
 
   test("falls through to ordinary reference (CallExpression#callee)", () => {
     expect(
-      classifyIdentifier(
-        node({ type: "CallExpression" }),
-        "callee",
-        [],
-      ),
+      classifyIdentifier(node({ type: "CallExpression" }), "callee", []),
     ).toMatchObject({
       kind: "reference",
       flags: ReferenceFlags.Read | ReferenceFlags.Call,

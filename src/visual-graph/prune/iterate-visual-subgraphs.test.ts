@@ -36,10 +36,12 @@ describe("iterateVisualSubgraphs", () => {
   });
 
   test("yields each subgraph in pre-order (parent before children)", () => {
-    const out = [...iterateVisualSubgraphs([
-      sg("outer", [node("x"), sg("inner", [node("y")])]),
-      sg("sibling", []),
-    ])];
+    const out = [
+      ...iterateVisualSubgraphs([
+        sg("outer", [node("x"), sg("inner", [node("y")])]),
+        sg("sibling", []),
+      ]),
+    ];
     expect(out.map((s) => s.id)).toEqual(["outer", "inner", "sibling"]);
   });
 

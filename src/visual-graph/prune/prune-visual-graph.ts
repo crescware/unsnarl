@@ -1,7 +1,4 @@
-import type {
-  VisualBoundaryEdge,
-  VisualGraph,
-} from "../model.js";
+import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
 import { buildAdjacency } from "./build-adjacency.js";
 import { buildParentMap } from "./build-parent-map.js";

@@ -47,32 +47,68 @@ describe("classifyOrdinaryReference", () => {
   });
 
   test("UpdateExpression#argument → Read|Write", () => {
-    const r = classifyOrdinaryReference("UpdateExpression", "argument", node({ type: "UpdateExpression" }));
-    expect(r).toMatchObject({ flags: ReferenceFlags.Read | ReferenceFlags.Write });
+    const r = classifyOrdinaryReference(
+      "UpdateExpression",
+      "argument",
+      node({ type: "UpdateExpression" }),
+    );
+    expect(r).toMatchObject({
+      flags: ReferenceFlags.Read | ReferenceFlags.Write,
+    });
   });
 
   test("CallExpression#callee → Read|Call", () => {
-    const r = classifyOrdinaryReference("CallExpression", "callee", node({ type: "CallExpression" }));
-    expect(r).toMatchObject({ flags: ReferenceFlags.Read | ReferenceFlags.Call });
+    const r = classifyOrdinaryReference(
+      "CallExpression",
+      "callee",
+      node({ type: "CallExpression" }),
+    );
+    expect(r).toMatchObject({
+      flags: ReferenceFlags.Read | ReferenceFlags.Call,
+    });
   });
 
   test("NewExpression#callee → Read|Call", () => {
-    const r = classifyOrdinaryReference("NewExpression", "callee", node({ type: "NewExpression" }));
-    expect(r).toMatchObject({ flags: ReferenceFlags.Read | ReferenceFlags.Call });
+    const r = classifyOrdinaryReference(
+      "NewExpression",
+      "callee",
+      node({ type: "NewExpression" }),
+    );
+    expect(r).toMatchObject({
+      flags: ReferenceFlags.Read | ReferenceFlags.Call,
+    });
   });
 
   test("MemberExpression#object → Read|Receiver", () => {
-    const r = classifyOrdinaryReference("MemberExpression", "object", node({ type: "MemberExpression" }));
-    expect(r).toMatchObject({ flags: ReferenceFlags.Read | ReferenceFlags.Receiver });
+    const r = classifyOrdinaryReference(
+      "MemberExpression",
+      "object",
+      node({ type: "MemberExpression" }),
+    );
+    expect(r).toMatchObject({
+      flags: ReferenceFlags.Read | ReferenceFlags.Receiver,
+    });
   });
 
   test("VariableDeclarator#init → Read with init=true", () => {
-    const r = classifyOrdinaryReference("VariableDeclarator", "init", node({ type: "VariableDeclarator" }));
+    const r = classifyOrdinaryReference(
+      "VariableDeclarator",
+      "init",
+      node({ type: "VariableDeclarator" }),
+    );
     expect(r).toMatchObject({ flags: ReferenceFlags.Read, init: true });
   });
 
   test("default fallback → Read with init=false", () => {
-    const r = classifyOrdinaryReference("CallExpression", "arguments", node({ type: "CallExpression" }));
-    expect(r).toMatchObject({ flags: ReferenceFlags.Read, init: false, writeExpr: null });
+    const r = classifyOrdinaryReference(
+      "CallExpression",
+      "arguments",
+      node({ type: "CallExpression" }),
+    );
+    expect(r).toMatchObject({
+      flags: ReferenceFlags.Read,
+      init: false,
+      writeExpr: null,
+    });
   });
 });

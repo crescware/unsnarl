@@ -1,8 +1,6 @@
 import type { VisualElement, VisualNode } from "../../visual-graph/model.js";
 
-export function collectNodes(
-  elements: readonly VisualElement[],
-): VisualNode[] {
+export function collectNodes(elements: readonly VisualElement[]): VisualNode[] {
   const out: VisualNode[] = [];
   for (const e of elements) {
     if (e.type === "node") {

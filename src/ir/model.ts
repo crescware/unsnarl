@@ -1,8 +1,8 @@
-export interface Span {
+export type Span = {
   line: number;
   column: number;
   offset: number;
-}
+};
 
 export type Language = "ts" | "tsx" | "js" | "jsx";
 
@@ -29,17 +29,17 @@ export type DefinitionType =
   | "Parameter"
   | "Variable";
 
-export interface AstNode {
+export type AstNode = {
   readonly type: string;
   readonly start?: number;
   readonly end?: number;
   readonly [key: string]: unknown;
-}
+};
 
-export interface AstIdentifier extends AstNode {
+export type AstIdentifier = AstNode & {
   readonly type: "Identifier" | "JSXIdentifier";
   readonly name: string;
-}
+};
 
 export type AstExpression = AstNode;
 
@@ -55,22 +55,22 @@ export type ReferenceFlagBits = number;
 
 export type PredicateContainerType = "IfStatement" | "SwitchStatement";
 
-export interface PredicateContainer {
+export type PredicateContainer = {
   type: PredicateContainerType;
   offset: number;
-}
+};
 
-export interface ReturnContainer {
+export type ReturnContainer = {
   startOffset: number;
   endOffset: number;
-}
+};
 
-export interface JsxElementContainer {
+export type JsxElementContainer = {
   startOffset: number;
   endOffset: number;
-}
+};
 
-export interface Reference {
+export type Reference = {
   identifier: AstIdentifier;
   from: Scope;
   resolved: Variable | null;
@@ -88,32 +88,32 @@ export interface Reference {
   unsnarlPredicateContainer?: PredicateContainer | null;
   unsnarlReturnContainer?: ReturnContainer | null;
   unsnarlJsxElement?: JsxElementContainer | null;
-}
+};
 
-export interface Definition {
+export type Definition = {
   type: DefinitionType;
   name: AstIdentifier;
   node: AstNode;
   parent: AstNode | null;
-}
+};
 
-export interface Variable {
+export type Variable = {
   name: string;
   scope: Scope;
   identifiers: AstIdentifier[];
   references: Reference[];
   defs: Definition[];
   unsnarlIsUnused?(): boolean;
-}
+};
 
-export interface BlockContext {
+export type BlockContext = {
   parentType: string;
   key: string;
   parentSpanOffset: number;
   caseTest?: string | null;
-}
+};
 
-export interface Scope {
+export type Scope = {
   type: ScopeType;
   isStrict: boolean;
   upper: Scope | null;
@@ -128,24 +128,24 @@ export interface Scope {
   unsnarlBlockContext?: BlockContext | null;
   unsnarlFallsThrough?: boolean;
   unsnarlExitsFunction?: boolean;
-}
+};
 
 export type DiagnosticKind =
   | "var-detected"
   | "unresolved-identifier"
   | "parse-error";
 
-export interface Diagnostic {
+export type Diagnostic = {
   kind: DiagnosticKind;
   message: string;
   span?: Span;
-}
+};
 
 export type ScopeId = string;
 export type VariableId = string;
 export type ReferenceId = string;
 
-export interface SerializedScope {
+export type SerializedScope = {
   id: ScopeId;
   type: ScopeType;
   isStrict: boolean;
@@ -160,18 +160,18 @@ export interface SerializedScope {
   blockContext: BlockContext | null;
   fallsThrough: boolean;
   exitsFunction: boolean;
-}
+};
 
-export interface SerializedVariable {
+export type SerializedVariable = {
   id: VariableId;
   name: string;
   scope: ScopeId;
   identifiers: Span[];
   references: ReferenceId[];
   defs: SerializedDefinition[];
-}
+};
 
-export interface SerializedReference {
+export type SerializedReference = {
   id: ReferenceId;
   identifier: { name: string; span: Span };
   from: ScopeId;
@@ -188,13 +188,13 @@ export interface SerializedReference {
   predicateContainer: PredicateContainer | null;
   returnContainer: { startSpan: Span; endSpan: Span } | null;
   jsxElement: { startSpan: Span; endSpan: Span } | null;
-}
+};
 
 export type ImportKind = "default" | "named" | "namespace";
 
 export type VariableDeclarationKind = "var" | "let" | "const";
 
-export interface SerializedDefinition {
+export type SerializedDefinition = {
   type: DefinitionType;
   name: { name: string; span: Span };
   node: { type: string; span: Span };
@@ -205,9 +205,9 @@ export interface SerializedDefinition {
   importSource: string | null;
   importedName: string | null;
   declarationKind: VariableDeclarationKind | null;
-}
+};
 
-export interface SerializedIR {
+export type SerializedIR = {
   version: 1;
   source: { path: string; language: Language };
   raw: string;
@@ -216,4 +216,4 @@ export interface SerializedIR {
   references: SerializedReference[];
   unusedVariableIds: VariableId[];
   diagnostics: Diagnostic[];
-}
+};

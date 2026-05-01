@@ -22,19 +22,13 @@ describe("formatLabel", () => {
 
   test('"unused " prefix when node.unused is true', () => {
     expect(
-      formatLabel(
-        "foo.ts",
-        node({ name: "value", line: 10, unused: true }),
-      ),
+      formatLabel("foo.ts", node({ name: "value", line: 10, unused: true })),
     ).toBe("foo.ts:10 unused value");
   });
 
   test("unused=false is treated as not-unused (no prefix)", () => {
     expect(
-      formatLabel(
-        "foo.ts",
-        node({ name: "value", line: 10, unused: false }),
-      ),
+      formatLabel("foo.ts", node({ name: "value", line: 10, unused: false })),
     ).toBe("foo.ts:10 value");
   });
 

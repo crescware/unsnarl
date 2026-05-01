@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { AstNode } from "../../ir/model.js";
 import { ScopeImpl } from "../../analyzer/scope.js";
+import type { AstNode } from "../../ir/model.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";
 
 const block = (type: string): AstNode => ({ type }) as unknown as AstNode;

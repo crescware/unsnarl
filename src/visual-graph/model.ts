@@ -33,7 +33,7 @@ export type SubgraphKind =
   | "for"
   | "return";
 
-export interface VisualNode {
+export type VisualNode = {
   type: "node";
   id: string;
   kind: NodeKind;
@@ -54,9 +54,9 @@ export interface VisualNode {
   importKind?: ImportKind;
   importedName?: string | null;
   importSource?: string;
-}
+};
 
-export interface VisualSubgraph {
+export type VisualSubgraph = {
   type: "subgraph";
   id: string;
   kind: SubgraphKind;
@@ -70,21 +70,21 @@ export interface VisualSubgraph {
   // pruning even when the owner node itself gets cut out of the graph.
   ownerName?: string;
   elements: VisualElement[];
-}
+};
 
 export type VisualElement = VisualNode | VisualSubgraph;
 
-export interface VisualEdge {
+export type VisualEdge = {
   from: string;
   to: string;
   label: string;
-}
+};
 
-export interface VisualGraphPruning {
+export type VisualGraphPruning = {
   roots: ReadonlyArray<{ query: string; matched: number }>;
   descendants: number;
   ancestors: number;
-}
+};
 
 /**
  * An edge whose `inside` end is kept by pruning but whose other end was
@@ -105,7 +105,7 @@ export type VisualBoundaryEdge =
   | { inside: string; direction: "out" }
   | { inside: string; direction: "in"; label: string };
 
-export interface VisualGraph {
+export type VisualGraph = {
   version: 1;
   source: { path: string; language: Language };
   direction: Direction;
@@ -113,4 +113,4 @@ export interface VisualGraph {
   edges: VisualEdge[];
   boundaryEdges?: readonly VisualBoundaryEdge[];
   pruning?: VisualGraphPruning;
-}
+};

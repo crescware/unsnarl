@@ -8,7 +8,8 @@ import type { NodeLike } from "./node-like.js";
 import { visit } from "./visit.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<NodeLike>;
   };
   const stmt = program.body[0];
@@ -47,13 +48,23 @@ describe("visit dispatch", () => {
 
   test("ImportDeclaration → handleImportDeclaration", () => {
     const scope = newScope();
-    visit(firstStmt("import a from 'mod';"), scope, "", new DiagnosticCollector());
+    visit(
+      firstStmt("import a from 'mod';"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["a"]);
   });
 
   test("ExportNamedDeclaration unwraps and recurses into declaration", () => {
     const scope = newScope();
-    visit(firstStmt("export const x = 1;"), scope, "", new DiagnosticCollector());
+    visit(
+      firstStmt("export const x = 1;"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["x"]);
   });
 
@@ -65,19 +76,34 @@ describe("visit dispatch", () => {
 
   test("ExportDefaultDeclaration unwraps FunctionDeclaration", () => {
     const scope = newScope();
-    visit(firstStmt("export default function f() {}"), scope, "", new DiagnosticCollector());
+    visit(
+      firstStmt("export default function f() {}"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["f"]);
   });
 
   test("ExportDefaultDeclaration unwraps ClassDeclaration", () => {
     const scope = newScope();
-    visit(firstStmt("export default class C {}"), scope, "", new DiagnosticCollector());
+    visit(
+      firstStmt("export default class C {}"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["C"]);
   });
 
   test("ExportDefaultDeclaration of an expression is a no-op", () => {
     const scope = newScope();
-    visit(firstStmt("export default 42;"), scope, "", new DiagnosticCollector());
+    visit(
+      firstStmt("export default 42;"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables).toEqual([]);
   });
 

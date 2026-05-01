@@ -10,7 +10,8 @@ const ident = (name: string): AstIdentifier =>
   ({ type: "Identifier", name }) as unknown as AstIdentifier;
 
 const declId = (code: string): AstNode => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<{ declarations: ReadonlyArray<{ id: AstNode }> }>;
   };
   const decl = program.body[0]?.declarations[0]?.id;
@@ -28,7 +29,13 @@ const scopeWith = (...names: string[]): ScopeImpl => {
     block: { type: "Program" } as unknown as AstNode,
   });
   for (const n of names) {
-    declareVariable(scope, ident(n), "Variable", { type: "VariableDeclarator" } as unknown as AstNode, null);
+    declareVariable(
+      scope,
+      ident(n),
+      "Variable",
+      { type: "VariableDeclarator" } as unknown as AstNode,
+      null,
+    );
   }
   return scope;
 };
@@ -66,14 +73,20 @@ describe("allBindingVariables", () => {
 
   test("duplicate identifiers in pattern resolve to the same variable once", () => {
     const scope = scopeWith("a");
-    const pattern = { type: "ArrayPattern", elements: [ident("a"), ident("a")] } as unknown as AstNode;
+    const pattern = {
+      type: "ArrayPattern",
+      elements: [ident("a"), ident("a")],
+    } as unknown as AstNode;
     const out = allBindingVariables(pattern, scope);
     expect(out).toHaveLength(1);
   });
 
   test("empty pattern → empty output", () => {
     const scope = scopeWith();
-    const empty = { type: "ObjectPattern", properties: [] } as unknown as AstNode;
+    const empty = {
+      type: "ObjectPattern",
+      properties: [],
+    } as unknown as AstNode;
     expect(allBindingVariables(empty, scope)).toEqual([]);
   });
 });

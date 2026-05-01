@@ -10,7 +10,7 @@ const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new JsonEmitter();
 
-interface FlatElement {
+type FlatElement = {
   type: "node" | "subgraph";
   id: string;
   kind: string;
@@ -23,7 +23,7 @@ interface FlatElement {
   importedName?: string | null;
   importSource?: string;
   label?: unknown;
-}
+};
 
 function flattenNodes(elements: FlatElement[]): FlatElement[] {
   const out: FlatElement[] = [];

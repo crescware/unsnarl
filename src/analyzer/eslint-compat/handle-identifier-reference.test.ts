@@ -10,12 +10,12 @@ import { hoistInto } from "./hoist-into.js";
 import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
 
-interface CapturedIdentifier {
+type CapturedIdentifier = {
   node: NodeLike;
   parent: NodeLike | null;
   key: string | null;
   path: PathEntry[];
-}
+};
 
 function captureNthIdentifier(
   program: NodeLike,

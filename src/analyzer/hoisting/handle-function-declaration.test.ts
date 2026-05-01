@@ -7,7 +7,8 @@ import { handleFunctionDeclaration } from "./handle-function-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<NodeLike>;
   };
   const stmt = program.body[0];
@@ -36,7 +37,12 @@ describe("handleFunctionDeclaration", () => {
   test("anonymous function (no id) declares nothing", () => {
     const scope = newScope();
     handleFunctionDeclaration(
-      { type: "FunctionDeclaration", id: null, params: [], body: { type: "BlockStatement", body: [] } },
+      {
+        type: "FunctionDeclaration",
+        id: null,
+        params: [],
+        body: { type: "BlockStatement", body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);
@@ -45,7 +51,12 @@ describe("handleFunctionDeclaration", () => {
   test("non-Identifier id is ignored", () => {
     const scope = newScope();
     handleFunctionDeclaration(
-      { type: "FunctionDeclaration", id: { type: "Literal", value: "x" }, params: [], body: { type: "BlockStatement", body: [] } },
+      {
+        type: "FunctionDeclaration",
+        id: { type: "Literal", value: "x" },
+        params: [],
+        body: { type: "BlockStatement", body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);

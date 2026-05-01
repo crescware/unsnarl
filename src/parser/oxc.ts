@@ -2,11 +2,11 @@ import { parseSync } from "oxc-parser";
 
 import type { ParseOptions, ParsedSource, Parser } from "../pipeline/types.js";
 
-export interface ParseErrorDetail {
+export type ParseErrorDetail = {
   message: string;
   start: number;
   end: number;
-}
+};
 
 export class ParseError extends Error {
   override readonly name = "ParseError";

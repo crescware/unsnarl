@@ -1,14 +1,14 @@
 import type { AstNode } from "../../ir/model.js";
 import { walkNode } from "./walk-node.js";
 
-export interface PathEntry {
+export type PathEntry = {
   readonly node: AstNode;
   readonly key: string | null;
-}
+};
 
 export type WalkAction = "skip" | undefined | void;
 
-export interface WalkVisitor {
+export type WalkVisitor = {
   enter?(
     node: AstNode,
     parent: AstNode | null,
@@ -21,7 +21,7 @@ export interface WalkVisitor {
     key: string | null,
     path: ReadonlyArray<PathEntry>,
   ): void;
-}
+};
 
 export function walk(root: AstNode, visitor: WalkVisitor): void {
   walkNode(root, null, null, visitor, []);

@@ -4,11 +4,11 @@ import { OxcParser, ParseError } from "./oxc.js";
 
 const parser = new OxcParser();
 
-interface MinimalProgram {
+type MinimalProgram = {
   type: string;
   body: ReadonlyArray<{ type: string }>;
   sourceType?: string;
-}
+};
 
 function asProgram(ast: unknown): MinimalProgram {
   return ast as MinimalProgram;

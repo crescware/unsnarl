@@ -1,15 +1,15 @@
 import { parseRootQuery } from "./parse-root-query.js";
 import type { ParsedRootQuery } from "./parsed-root-query.js";
 
-export interface RootQueryParseSuccess {
+export type RootQueryParseSuccess = {
   readonly ok: true;
   readonly queries: readonly ParsedRootQuery[];
-}
+};
 
-export interface RootQueryParseFailure {
+export type RootQueryParseFailure = {
   readonly ok: false;
   readonly error: string;
-}
+};
 
 export type RootQueryParseResult =
   | RootQueryParseSuccess

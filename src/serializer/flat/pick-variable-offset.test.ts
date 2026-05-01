@@ -21,11 +21,13 @@ const def = (nameStart?: number): Definition => ({
 const variable = (
   identifiers: AstIdentifier[],
   defs: Definition[] = [],
-): Variable => ({ identifiers, defs } as unknown as Variable);
+): Variable => ({ identifiers, defs }) as unknown as Variable;
 
 describe("pickVariableOffset", () => {
   test("uses first identifier's start when present", () => {
-    expect(pickVariableOffset(variable([ident("x", 7), ident("x", 9)]))).toBe(7);
+    expect(pickVariableOffset(variable([ident("x", 7), ident("x", 9)]))).toBe(
+      7,
+    );
   });
 
   test("falls back to defs[0].name.start when identifiers is empty", () => {

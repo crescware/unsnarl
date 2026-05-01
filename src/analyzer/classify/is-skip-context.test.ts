@@ -8,47 +8,116 @@ const nodeOf = (overrides: Record<string, unknown>): AstNode =>
 
 describe("isSkipContext", () => {
   test("ImportSpecifier#imported is skipped", () => {
-    expect(isSkipContext("ImportSpecifier", "imported", nodeOf({ type: "ImportSpecifier" }))).toBe(true);
-    expect(isSkipContext("ImportSpecifier", "local", nodeOf({ type: "ImportSpecifier" }))).toBe(false);
+    expect(
+      isSkipContext(
+        "ImportSpecifier",
+        "imported",
+        nodeOf({ type: "ImportSpecifier" }),
+      ),
+    ).toBe(true);
+    expect(
+      isSkipContext(
+        "ImportSpecifier",
+        "local",
+        nodeOf({ type: "ImportSpecifier" }),
+      ),
+    ).toBe(false);
   });
 
   test("ExportSpecifier#exported is skipped", () => {
-    expect(isSkipContext("ExportSpecifier", "exported", nodeOf({ type: "ExportSpecifier" }))).toBe(true);
+    expect(
+      isSkipContext(
+        "ExportSpecifier",
+        "exported",
+        nodeOf({ type: "ExportSpecifier" }),
+      ),
+    ).toBe(true);
   });
 
   test("MemberExpression#property: skipped only when not computed", () => {
-    expect(isSkipContext("MemberExpression", "property", nodeOf({ type: "MemberExpression", computed: false }))).toBe(true);
-    expect(isSkipContext("MemberExpression", "property", nodeOf({ type: "MemberExpression", computed: true }))).toBe(false);
+    expect(
+      isSkipContext(
+        "MemberExpression",
+        "property",
+        nodeOf({ type: "MemberExpression", computed: false }),
+      ),
+    ).toBe(true);
+    expect(
+      isSkipContext(
+        "MemberExpression",
+        "property",
+        nodeOf({ type: "MemberExpression", computed: true }),
+      ),
+    ).toBe(false);
   });
 
   test("Property/MethodDefinition/PropertyDefinition/AccessorProperty key is skipped only when not computed", () => {
-    for (const t of ["Property", "MethodDefinition", "PropertyDefinition", "AccessorProperty"]) {
-      expect(isSkipContext(t, "key", nodeOf({ type: t, computed: false }))).toBe(true);
-      expect(isSkipContext(t, "key", nodeOf({ type: t, computed: true }))).toBe(false);
+    for (const t of [
+      "Property",
+      "MethodDefinition",
+      "PropertyDefinition",
+      "AccessorProperty",
+    ]) {
+      expect(
+        isSkipContext(t, "key", nodeOf({ type: t, computed: false })),
+      ).toBe(true);
+      expect(isSkipContext(t, "key", nodeOf({ type: t, computed: true }))).toBe(
+        false,
+      );
     }
   });
 
   test("JSXAttribute#name is skipped", () => {
-    expect(isSkipContext("JSXAttribute", "name", nodeOf({ type: "JSXAttribute" }))).toBe(true);
+    expect(
+      isSkipContext("JSXAttribute", "name", nodeOf({ type: "JSXAttribute" })),
+    ).toBe(true);
   });
 
   test("JSXMemberExpression#property is skipped", () => {
-    expect(isSkipContext("JSXMemberExpression", "property", nodeOf({ type: "JSXMemberExpression" }))).toBe(true);
+    expect(
+      isSkipContext(
+        "JSXMemberExpression",
+        "property",
+        nodeOf({ type: "JSXMemberExpression" }),
+      ),
+    ).toBe(true);
   });
 
   test("JSXClosingElement is skipped regardless of key", () => {
-    expect(isSkipContext("JSXClosingElement", null, nodeOf({ type: "JSXClosingElement" }))).toBe(true);
-    expect(isSkipContext("JSXClosingElement", "name", nodeOf({ type: "JSXClosingElement" }))).toBe(true);
+    expect(
+      isSkipContext(
+        "JSXClosingElement",
+        null,
+        nodeOf({ type: "JSXClosingElement" }),
+      ),
+    ).toBe(true);
+    expect(
+      isSkipContext(
+        "JSXClosingElement",
+        "name",
+        nodeOf({ type: "JSXClosingElement" }),
+      ),
+    ).toBe(true);
   });
 
   test("LabeledStatement/Continue/Break label is skipped", () => {
-    for (const t of ["LabeledStatement", "ContinueStatement", "BreakStatement"]) {
+    for (const t of [
+      "LabeledStatement",
+      "ContinueStatement",
+      "BreakStatement",
+    ]) {
       expect(isSkipContext(t, "label", nodeOf({ type: t }))).toBe(true);
       expect(isSkipContext(t, "body", nodeOf({ type: t }))).toBe(false);
     }
   });
 
   test("unrelated context → false", () => {
-    expect(isSkipContext("CallExpression", "callee", nodeOf({ type: "CallExpression" }))).toBe(false);
+    expect(
+      isSkipContext(
+        "CallExpression",
+        "callee",
+        nodeOf({ type: "CallExpression" }),
+      ),
+    ).toBe(false);
   });
 });

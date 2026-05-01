@@ -2,57 +2,57 @@ import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
 import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
 import type { VisualGraph } from "../visual-graph/model.js";
 
-export interface ParseOptions {
+export type ParseOptions = {
   language: Language;
   sourcePath: string;
-}
+};
 
-export interface ParsedSource {
+export type ParsedSource = {
   ast: unknown;
   language: Language;
   sourcePath: string;
   raw: string;
-}
+};
 
-export interface Parser {
+export type Parser = {
   readonly id: string;
   parse(code: string, opts: ParseOptions): ParsedSource;
-}
+};
 
-export interface AnalyzedSource {
+export type AnalyzedSource = {
   readonly rootScope: Scope;
   readonly diagnostics: readonly Diagnostic[];
   readonly raw: string;
-}
+};
 
-export interface ScopeAnalyzer {
+export type ScopeAnalyzer = {
   readonly id: string;
   analyze(parsed: ParsedSource): AnalyzedSource;
-}
+};
 
-export interface SourceMeta {
+export type SourceMeta = {
   path: string;
   language: Language;
-}
+};
 
-export interface SerializeContext {
+export type SerializeContext = {
   readonly rootScope: Scope;
   readonly source: SourceMeta;
   readonly diagnostics: readonly Diagnostic[];
   readonly raw: string;
-}
+};
 
-export interface IRSerializer {
+export type IRSerializer = {
   readonly id: string;
   serialize(ctx: SerializeContext): SerializedIR;
-}
+};
 
-export interface EmitOptions {
+export type EmitOptions = {
   pretty?: boolean;
   prunedGraph?: VisualGraph;
-}
+};
 
-export interface Emitter {
+export type Emitter = {
   readonly format: string;
   readonly contentType: string;
   // File extension without leading dot, used by `--out-dir` to derive
@@ -60,42 +60,42 @@ export interface Emitter {
   // and json both write JSON).
   readonly extension: string;
   emit(ir: SerializedIR, opts: EmitOptions): string;
-}
+};
 
-export interface EmitterRegistry {
+export type EmitterRegistry = {
   register(emitter: Emitter): void;
   get(format: string): Emitter | undefined;
   list(): readonly string[];
-}
+};
 
-export interface PruningRunOptions {
+export type PruningRunOptions = {
   readonly roots: readonly ParsedRootQuery[];
   readonly descendants: number;
   readonly ancestors: number;
-}
+};
 
-export interface PipelineRunOptions extends ParseOptions {
+export type PipelineRunOptions = ParseOptions & {
   format: string;
   emit?: EmitOptions;
   pruning?: PruningRunOptions;
-}
+};
 
-export interface PipelineRunDetails {
+export type PipelineRunDetails = {
   readonly text: string;
   readonly pruning: ReadonlyArray<{
     readonly query: string;
     readonly matched: number;
   }> | null;
-}
+};
 
-export interface Pipeline {
+export type Pipeline = {
   run(code: string, opts: PipelineRunOptions): string;
   runDetailed(code: string, opts: PipelineRunOptions): PipelineRunDetails;
-}
+};
 
-export interface PipelineConfig {
+export type PipelineConfig = {
   parser: Parser;
   analyzer: ScopeAnalyzer;
   serializer: IRSerializer;
   emitters: EmitterRegistry;
-}
+};

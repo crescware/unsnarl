@@ -6,7 +6,9 @@ import { spanOf } from "./span-of.js";
 describe("spanOf", () => {
   test("derives the span from node.start using spanFromOffset", () => {
     const raw = "abc\ndef";
-    expect(spanOf({ type: "X", start: 5 } as unknown as AstNode, raw)).toMatchObject({
+    expect(
+      spanOf({ type: "X", start: 5 } as unknown as AstNode, raw),
+    ).toMatchObject({
       offset: 5,
     });
   });

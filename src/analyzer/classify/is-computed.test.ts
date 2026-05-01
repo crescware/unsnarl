@@ -5,14 +5,20 @@ import { isComputed } from "./is-computed.js";
 
 describe("isComputed", () => {
   test("returns true when computed === true", () => {
-    expect(isComputed({ type: "MemberExpression", computed: true } as unknown as AstNode)).toBe(
-      true,
-    );
+    expect(
+      isComputed({
+        type: "MemberExpression",
+        computed: true,
+      } as unknown as AstNode),
+    ).toBe(true);
   });
 
   test("returns false when computed === false", () => {
     expect(
-      isComputed({ type: "MemberExpression", computed: false } as unknown as AstNode),
+      isComputed({
+        type: "MemberExpression",
+        computed: false,
+      } as unknown as AstNode),
     ).toBe(false);
   });
 
@@ -23,8 +29,8 @@ describe("isComputed", () => {
   });
 
   test("returns false when computed is truthy but not strictly true", () => {
-    expect(
-      isComputed({ type: "X", computed: 1 } as unknown as AstNode),
-    ).toBe(false);
+    expect(isComputed({ type: "X", computed: 1 } as unknown as AstNode)).toBe(
+      false,
+    );
   });
 });

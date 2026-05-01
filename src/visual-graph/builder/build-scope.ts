@@ -8,9 +8,9 @@ import { makeVariableNode } from "./make-variable-node.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
-interface Container {
+type Container = {
   elements: VisualElement[];
-}
+};
 
 export function buildScope(
   scope: SerializedScope,

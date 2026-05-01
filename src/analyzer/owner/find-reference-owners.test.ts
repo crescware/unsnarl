@@ -35,7 +35,10 @@ const programOf = (code: string): AstNode =>
 // Build the path stack (root-first) up to but not including the visited
 // reference identifier itself, mirroring the way walk.ts hands `path` to
 // the visitor on enter.
-const pathTo = (root: AstNode, predicate: (n: AstNode) => boolean): PathEntry[] => {
+const pathTo = (
+  root: AstNode,
+  predicate: (n: AstNode) => boolean,
+): PathEntry[] => {
   const stack: PathEntry[] = [];
   let found: PathEntry[] | null = null;
   const visit = (node: AstNode, key: string | null): void => {

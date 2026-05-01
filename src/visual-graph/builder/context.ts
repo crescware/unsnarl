@@ -5,7 +5,7 @@ import type {
 } from "../../ir/model.js";
 import type { WriteOp } from "./write-op.js";
 
-export interface BuilderContext {
+export type BuilderContext = {
   ir: SerializedIR;
   variableMap: Map<string, SerializedVariable>;
   scopeMap: Map<string, SerializedScope>;
@@ -15,4 +15,4 @@ export interface BuilderContext {
   writeOpsByScope: Map<string, WriteOp[]>;
   writeOpByRef: Map<string, WriteOp>;
   sortedCasesByContainer: Map<string, SerializedScope[]>;
-}
+};

@@ -5,7 +5,7 @@ import type { CliMermaidRenderer } from "./cli-mermaid-renderer.js";
 // Default generations used when the user gives -r/--roots but no -A/-B/-C.
 export const DEFAULT_GENERATIONS = 10;
 
-export interface CliArgs {
+export type CliArgs = {
   format: string;
   stdin: boolean;
   language: CliLanguage;
@@ -20,4 +20,4 @@ export interface CliArgs {
   ancestors: number | null;
   context: number | null;
   outDir: string | null;
-}
+};

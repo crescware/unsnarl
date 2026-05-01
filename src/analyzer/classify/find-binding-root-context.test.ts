@@ -8,15 +8,15 @@ const node = (type: string): AstNode => ({ type }) as unknown as AstNode;
 
 describe("findBindingRootContext", () => {
   test("non-pattern parent VariableDeclarator#id → 'var'", () => {
-    expect(
-      findBindingRootContext(node("VariableDeclarator"), "id", []),
-    ).toBe("var");
+    expect(findBindingRootContext(node("VariableDeclarator"), "id", [])).toBe(
+      "var",
+    );
   });
 
   test("non-pattern parent VariableDeclarator#init → null", () => {
-    expect(
-      findBindingRootContext(node("VariableDeclarator"), "init", []),
-    ).toBe(null);
+    expect(findBindingRootContext(node("VariableDeclarator"), "init", [])).toBe(
+      null,
+    );
   });
 
   test("CatchClause#param → 'catch'", () => {
@@ -26,16 +26,24 @@ describe("findBindingRootContext", () => {
   });
 
   test("Function/Arrow #params → 'param'", () => {
-    expect(findBindingRootContext(node("FunctionDeclaration"), "params", [])).toBe("param");
-    expect(findBindingRootContext(node("ArrowFunctionExpression"), "params", [])).toBe("param");
+    expect(
+      findBindingRootContext(node("FunctionDeclaration"), "params", []),
+    ).toBe("param");
+    expect(
+      findBindingRootContext(node("ArrowFunctionExpression"), "params", []),
+    ).toBe("param");
   });
 
   test("AssignmentExpression#left → 'assign'", () => {
-    expect(findBindingRootContext(node("AssignmentExpression"), "left", [])).toBe("assign");
+    expect(
+      findBindingRootContext(node("AssignmentExpression"), "left", []),
+    ).toBe("assign");
   });
 
   test("AssignmentExpression#right → null", () => {
-    expect(findBindingRootContext(node("AssignmentExpression"), "right", [])).toBe(null);
+    expect(
+      findBindingRootContext(node("AssignmentExpression"), "right", []),
+    ).toBe(null);
   });
 
   test("walks up through ObjectPattern to reach VariableDeclarator#id", () => {
@@ -48,9 +56,9 @@ describe("findBindingRootContext", () => {
       { node: node("VariableDeclarator"), key: "declarations" },
       { node: node("ObjectPattern"), key: "id" },
     ];
-    expect(
-      findBindingRootContext(node("ObjectPattern"), "id", path),
-    ).toBe("var");
+    expect(findBindingRootContext(node("ObjectPattern"), "id", path)).toBe(
+      "var",
+    );
   });
 
   test("walks up through nested patterns and stops at AssignmentExpression#left", () => {
@@ -65,9 +73,7 @@ describe("findBindingRootContext", () => {
   });
 
   test("path exhausted while still inside patterns → null", () => {
-    expect(
-      findBindingRootContext(node("ObjectPattern"), "id", []),
-    ).toBe(null);
+    expect(findBindingRootContext(node("ObjectPattern"), "id", [])).toBe(null);
   });
 
   test("non-binding parent like CallExpression → null", () => {

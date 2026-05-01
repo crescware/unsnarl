@@ -4,13 +4,13 @@ import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { radiusSuffix } from "./radius-suffix.js";
 import { rootQueryToken } from "./root-query-token.js";
 
-interface OutputNameInputs {
+type OutputNameInputs = {
   readonly roots: readonly ParsedRootQuery[];
   readonly descendants: number | null;
   readonly ancestors: number | null;
   readonly context: number | null;
   readonly inputPath: string | null;
-}
+};
 
 type OutputNameResult =
   | { readonly ok: true; readonly basename: string }

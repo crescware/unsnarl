@@ -8,7 +8,8 @@ import { handleVariableDeclaration } from "./handle-variable-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<NodeLike>;
   };
   const stmt = program.body[0];
@@ -30,14 +31,24 @@ describe("handleVariableDeclaration", () => {
   test("const declares each binding identifier", () => {
     const scope = newScope();
     const diags = new DiagnosticCollector();
-    handleVariableDeclaration(firstStmt("const x = 1, { y, z } = obj;"), scope, "", diags);
+    handleVariableDeclaration(
+      firstStmt("const x = 1, { y, z } = obj;"),
+      scope,
+      "",
+      diags,
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["x", "y", "z"]);
     expect(diags.list()).toEqual([]);
   });
 
   test("let declares each binding identifier", () => {
     const scope = newScope();
-    handleVariableDeclaration(firstStmt("let a, b;"), scope, "", new DiagnosticCollector());
+    handleVariableDeclaration(
+      firstStmt("let a, b;"),
+      scope,
+      "",
+      new DiagnosticCollector(),
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["a", "b"]);
   });
 

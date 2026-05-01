@@ -7,7 +7,8 @@ import { handleImportDeclaration } from "./handle-import-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<NodeLike>;
   };
   const stmt = program.body[0];
@@ -35,7 +36,10 @@ describe("handleImportDeclaration", () => {
 
   test("named specifiers declare each local name", () => {
     const scope = newScope();
-    handleImportDeclaration(firstStmt("import { a, b as c } from 'mod';"), scope);
+    handleImportDeclaration(
+      firstStmt("import { a, b as c } from 'mod';"),
+      scope,
+    );
     expect(scope.variables.map((v) => v.name)).toEqual(["a", "c"]);
   });
 

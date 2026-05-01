@@ -7,7 +7,8 @@ import { handleClassDeclaration } from "./handle-class-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
     body: ReadonlyArray<NodeLike>;
   };
   const stmt = program.body[0];
@@ -36,7 +37,11 @@ describe("handleClassDeclaration", () => {
   test("anonymous class (no id) declares nothing", () => {
     const scope = newScope();
     handleClassDeclaration(
-      { type: "ClassDeclaration", id: null, body: { type: "ClassBody", body: [] } },
+      {
+        type: "ClassDeclaration",
+        id: null,
+        body: { type: "ClassBody", body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);

@@ -33,15 +33,19 @@ const sg = (
 
 describe("iterateVisualNodes", () => {
   test("yields only ROOT_CANDIDATE_KINDS nodes", () => {
-    const out = [...iterateVisualNodes([node("a"), node("b", "PropertyKey" as NodeKind)])];
+    const out = [
+      ...iterateVisualNodes([node("a"), node("b", "PropertyKey" as NodeKind)]),
+    ];
     expect(out.map((n) => n.id)).toEqual(["a"]);
   });
 
   test("recurses into subgraphs", () => {
-    const out = [...iterateVisualNodes([
-      sg("s", [node("inner"), sg("s2", [node("deep")])]),
-      node("top"),
-    ])];
+    const out = [
+      ...iterateVisualNodes([
+        sg("s", [node("inner"), sg("s2", [node("deep")])]),
+        node("top"),
+      ]),
+    ];
     expect(out.map((n) => n.id)).toEqual(["inner", "deep", "top"]);
   });
 

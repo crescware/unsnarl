@@ -32,7 +32,10 @@ const sg = (
 
 describe("rebuildElements", () => {
   test("keeps only nodes whose id is in the keep set", () => {
-    const out = rebuildElements([node("a"), node("b"), node("c")], new Set(["a", "c"]));
+    const out = rebuildElements(
+      [node("a"), node("b"), node("c")],
+      new Set(["a", "c"]),
+    );
     expect(out.map((e) => e.id)).toEqual(["a", "c"]);
   });
 
