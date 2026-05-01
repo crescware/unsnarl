@@ -1,6 +1,7 @@
 import {
-  DIAGNOSTIC_KIND,
+  AST_TYPE,
   DEFINITION_TYPE,
+  DIAGNOSTIC_KIND,
   VARIABLE_DECLARATION_KIND,
 } from "../../constants.js";
 import type { AstNode, Scope } from "../../ir/model.js";
@@ -19,7 +20,7 @@ export function declareForLeft(
 ): void {
   const candidates = [node["init"], node["left"]] satisfies unknown[];
   for (const cand of candidates) {
-    if (!isNodeLike(cand) || cand.type !== "VariableDeclaration") {
+    if (!isNodeLike(cand) || cand.type !== AST_TYPE.VariableDeclaration) {
       continue;
     }
     const kind = cand["kind"];

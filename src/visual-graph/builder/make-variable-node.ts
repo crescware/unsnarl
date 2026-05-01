@@ -29,7 +29,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   if (importKind) {
     node.importKind = importKind;
   }
-  if (def?.type === "ImportBinding") {
+  if (def?.type === DEFINITION_TYPE.ImportBinding) {
     node.importedName = importedName;
     if (importSource) {
       node.importSource = importSource;

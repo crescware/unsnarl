@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import type { PathEntry } from "../walk/walk.js";
 import { isPatternStep } from "./is-pattern-step.js";
@@ -15,15 +16,15 @@ export function findBindingRootContext(
     const isPattern = isPatternStep(curParent, path, i);
     if (!isPattern) {
       switch (t) {
-        case "VariableDeclarator":
+        case AST_TYPE.VariableDeclarator:
           return curKey === "id" ? "var" : null;
-        case "CatchClause":
+        case AST_TYPE.CatchClause:
           return curKey === "param" ? "catch" : null;
-        case "FunctionDeclaration":
-        case "FunctionExpression":
-        case "ArrowFunctionExpression":
+        case AST_TYPE.FunctionDeclaration:
+        case AST_TYPE.FunctionExpression:
+        case AST_TYPE.ArrowFunctionExpression:
           return curKey === "params" ? "param" : null;
-        case "AssignmentExpression":
+        case AST_TYPE.AssignmentExpression:
           return curKey === "left" ? "assign" : null;
         default:
           return null;

@@ -1,4 +1,5 @@
 import {
+  AST_TYPE,
   DEFINITION_TYPE,
   IMPORT_KIND,
   VARIABLE_DECLARATION_KIND,
@@ -17,7 +18,7 @@ export function serializeDefinition(
 ): SerializedDefinition {
   let initType: string | null = null;
   let initSpan: Span | null = null;
-  if (d.node.type === "VariableDeclarator") {
+  if (d.node.type === AST_TYPE.VariableDeclarator) {
     const init = d.node["init"];
     if (
       init !== null &&
@@ -34,11 +35,11 @@ export function serializeDefinition(
   let importSource: string | null = null;
   let importedName: string | null = null;
   if (d.type === DEFINITION_TYPE.ImportBinding) {
-    if (d.node.type === "ImportDefaultSpecifier") {
+    if (d.node.type === AST_TYPE.ImportDefaultSpecifier) {
       importKind = IMPORT_KIND.Default;
-    } else if (d.node.type === "ImportNamespaceSpecifier") {
+    } else if (d.node.type === AST_TYPE.ImportNamespaceSpecifier) {
       importKind = IMPORT_KIND.Namespace;
-    } else if (d.node.type === "ImportSpecifier") {
+    } else if (d.node.type === AST_TYPE.ImportSpecifier) {
       importKind = IMPORT_KIND.Named;
       const imported = d.node["imported"];
       if (imported !== null && typeof imported === "object") {
@@ -51,7 +52,7 @@ export function serializeDefinition(
       }
     }
     const parent = d.parent;
-    if (parent && parent.type === "ImportDeclaration") {
+    if (parent && parent.type === AST_TYPE.ImportDeclaration) {
       const source = parent["source"];
       if (source !== null && typeof source === "object") {
         const value = (source as { value?: unknown }).value;
@@ -65,7 +66,7 @@ export function serializeDefinition(
   if (
     d.type === DEFINITION_TYPE.Variable &&
     d.parent !== null &&
-    d.parent.type === "VariableDeclaration"
+    d.parent.type === AST_TYPE.VariableDeclaration
   ) {
     const kind = d.parent["kind"];
     if (

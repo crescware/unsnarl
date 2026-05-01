@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../constants.js";
 import type { PredicateContainer } from "../ir/model.js";
 import type { PathEntry } from "./walk/walk.js";
 
@@ -21,10 +22,14 @@ export function findPredicateContainer(
     }
     curKey = entry.key;
   }
-  if (parent && key === "test" && parent.type === "IfStatement") {
+  if (parent && key === "test" && parent.type === AST_TYPE.IfStatement) {
     return { type: "IfStatement", offset: parent.start ?? 0 };
   }
-  if (parent && key === "discriminant" && parent.type === "SwitchStatement") {
+  if (
+    parent &&
+    key === "discriminant" &&
+    parent.type === AST_TYPE.SwitchStatement
+  ) {
     return { type: "SwitchStatement", offset: parent.start ?? 0 };
   }
   return null;

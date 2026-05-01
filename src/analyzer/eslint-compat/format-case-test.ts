@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { NodeLike } from "./node-like.js";
 
 const CASE_TEST_MAX_LENGTH = 32;
@@ -15,15 +16,15 @@ export function formatCaseTest(node: NodeLike, raw: string): string {
     return raw.slice(start, end);
   }
   switch (node.type) {
-    case "Identifier": {
+    case AST_TYPE.Identifier: {
       const name = node["name"];
       return typeof name === "string" ? name : "<expr>";
     }
-    case "NullLiteral":
+    case AST_TYPE.NullLiteral:
       return "null";
-    case "BooleanLiteral":
-    case "NumericLiteral":
-    case "StringLiteral": {
+    case AST_TYPE.BooleanLiteral:
+    case AST_TYPE.NumericLiteral:
+    case AST_TYPE.StringLiteral: {
       const value = node["value"];
       if (typeof value === "string") {
         return JSON.stringify(value);

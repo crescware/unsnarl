@@ -1,4 +1,4 @@
-import { DEFINITION_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
@@ -33,7 +33,7 @@ export function enterCatch(
     }
   }
   const body = node["body"];
-  if (isNodeLike(body) && body.type === "BlockStatement") {
+  if (isNodeLike(body) && body.type === AST_TYPE.BlockStatement) {
     const stmts = body["body"];
     if (Array.isArray(stmts)) {
       hoistDeclarations(stmts, scope, raw, diagnostics);

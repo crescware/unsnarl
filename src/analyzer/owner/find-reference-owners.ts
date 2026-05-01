@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { Scope, Variable } from "../../ir/model.js";
 import { resolveInScopeChain } from "../resolve.js";
 import type { PathEntry } from "../walk/walk.js";
@@ -24,7 +25,7 @@ export function findReferenceOwners(
     if (t === "AssignmentExpression") {
       const left = entry.node["left"];
       if (isAstNode(left)) {
-        if (left.type === "Identifier") {
+        if (left.type === AST_TYPE.Identifier) {
           const name = left["name"];
           if (typeof name === "string") {
             const v = resolveInScopeChain(scope, name);

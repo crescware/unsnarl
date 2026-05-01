@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
@@ -25,7 +26,7 @@ function captureNthIdentifier(
   let captured: CapturedIdentifier | null = null;
   walk(program as unknown as AstNode, {
     enter(node, parent, key, path) {
-      if (node.type !== "Identifier") {
+      if (node.type !== AST_TYPE.Identifier) {
         return;
       }
       count++;

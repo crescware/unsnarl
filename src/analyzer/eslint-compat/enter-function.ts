@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
@@ -15,7 +16,7 @@ export function enterFunction(
   const scope = manager.push("function", node as unknown as AstNode);
   declareFunctionParams(node, scope);
   const body = node["body"];
-  if (isNodeLike(body) && body.type === "BlockStatement") {
+  if (isNodeLike(body) && body.type === AST_TYPE.BlockStatement) {
     const stmts = body["body"];
     if (Array.isArray(stmts)) {
       hoistDeclarations(stmts, scope, raw, diagnostics);

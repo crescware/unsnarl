@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../constants.js";
 import type { PathEntry } from "./walk/walk.js";
 
 type JsxElementSpan = Readonly<{
@@ -19,9 +20,9 @@ export function findJsxElementSpan(
     if (!entry) {
       return null;
     }
-    if (entry.node.type === "JSXOpeningElement") {
+    if (entry.node.type === AST_TYPE.JSXOpeningElement) {
       const elementEntry = path[i - 1];
-      if (!elementEntry || elementEntry.node.type !== "JSXElement") {
+      if (!elementEntry || elementEntry.node.type !== AST_TYPE.JSXElement) {
         return null;
       }
       const start = (elementEntry.node as unknown as { start?: number }).start;
@@ -31,7 +32,7 @@ export function findJsxElementSpan(
       }
       return { startOffset: start, endOffset: end };
     }
-    if (entry.node.type === "JSXMemberExpression") {
+    if (entry.node.type === AST_TYPE.JSXMemberExpression) {
       continue;
     }
     return null;

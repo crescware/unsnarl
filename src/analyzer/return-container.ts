@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../constants.js";
 import type { ReturnContainer } from "../ir/model.js";
 import type { PathEntry } from "./walk/walk.js";
 
@@ -20,7 +21,7 @@ export function findReturnContainer(
       const body = (
         entry.node as unknown as { body?: { type?: string } | null }
       ).body;
-      if (body && body.type !== "BlockStatement") {
+      if (body && body.type !== AST_TYPE.BlockStatement) {
         return spanFromNode(body as { start?: number; end?: number });
       }
       return null;

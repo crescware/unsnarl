@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
+import { AST_TYPE, DEFINITION_TYPE, SCOPE_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { ScopeImpl } from "../scope.js";
@@ -77,7 +77,8 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("x", "y");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "y",
+      (n) =>
+        n.type === AST_TYPE.Identifier && (n as { name?: string }).name === "y",
     );
     const owners = findReferenceOwners(path, scope);
     expect(owners.map((v) => v.name)).toEqual(["x"]);
@@ -88,7 +89,8 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("x", "y");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "y",
+      (n) =>
+        n.type === AST_TYPE.Identifier && (n as { name?: string }).name === "y",
     );
     const owners = findReferenceOwners(path, scope);
     expect(owners.map((v) => v.name)).toEqual(["x"]);
@@ -99,7 +101,9 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("a", "b", "src");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "src",
+      (n) =>
+        n.type === AST_TYPE.Identifier &&
+        (n as { name?: string }).name === "src",
     );
     const owners = findReferenceOwners(path, scope);
     expect(owners.map((v) => v.name).sort()).toEqual(["a", "b"]);
@@ -110,7 +114,8 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("y");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "y",
+      (n) =>
+        n.type === AST_TYPE.Identifier && (n as { name?: string }).name === "y",
     );
     expect(findReferenceOwners(path, scope)).toEqual([]);
   });
@@ -120,7 +125,8 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("y");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "y",
+      (n) =>
+        n.type === AST_TYPE.Identifier && (n as { name?: string }).name === "y",
     );
     expect(findReferenceOwners(path, scope)).toEqual([]);
   });
@@ -130,7 +136,8 @@ describe("findReferenceOwners", () => {
     const scope = scopeWith("y", "foo");
     const path = pathTo(
       program,
-      (n) => n.type === "Identifier" && (n as { name?: string }).name === "y",
+      (n) =>
+        n.type === AST_TYPE.Identifier && (n as { name?: string }).name === "y",
     );
     expect(findReferenceOwners(path, scope)).toEqual([]);
   });

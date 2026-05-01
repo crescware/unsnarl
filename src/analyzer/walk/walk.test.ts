@@ -1,6 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import type { PathEntry, WalkVisitor } from "./walk.js";
 import { walk } from "./walk.js";
@@ -25,7 +26,7 @@ describe("walk", () => {
     const declared: /* mutable */ string[] = [];
     walk(program, {
       enter(node) {
-        if (node.type === "VariableDeclarator") {
+        if (node.type === AST_TYPE.VariableDeclarator) {
           const id = node["id"];
           if (
             id !== null &&
@@ -47,7 +48,7 @@ describe("walk", () => {
     walk(program, {
       enter(node) {
         entered.push(node.type);
-        if (node.type === "VariableDeclarator") {
+        if (node.type === AST_TYPE.VariableDeclarator) {
           return "skip";
         }
       },
@@ -76,7 +77,7 @@ describe("walk", () => {
     let identPath: readonly PathEntry[] | null = null;
     walk(program, {
       enter(node, _parent, _key, path) {
-        if (node.type === "Identifier" && identPath === null) {
+        if (node.type === AST_TYPE.Identifier && identPath === null) {
           identPath = path.slice();
         }
       },

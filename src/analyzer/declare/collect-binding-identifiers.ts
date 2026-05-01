@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../constants.js";
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { isAstNode } from "./is-ast-node.js";
 
@@ -11,21 +12,21 @@ export function collectBindingIdentifiers(
 
 function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
   switch (node.type) {
-    case "Identifier":
+    case AST_TYPE.Identifier:
       out.push(node as AstIdentifier);
       return;
-    case "ObjectPattern": {
+    case AST_TYPE.ObjectPattern: {
       const properties = node["properties"] as readonly AstNode[] | undefined;
       if (!properties) {
         return;
       }
       for (const p of properties) {
-        if (p.type === "Property") {
+        if (p.type === AST_TYPE.Property) {
           const value = p["value"];
           if (isAstNode(value)) {
             collect(value, out);
           }
-        } else if (p.type === "RestElement") {
+        } else if (p.type === AST_TYPE.RestElement) {
           const argument = p["argument"];
           if (isAstNode(argument)) {
             collect(argument, out);
@@ -34,7 +35,7 @@ function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
       }
       return;
     }
-    case "ArrayPattern": {
+    case AST_TYPE.ArrayPattern: {
       const elements = node["elements"] as
         | readonly (AstNode | null)[]
         | undefined;
@@ -48,14 +49,14 @@ function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
       }
       return;
     }
-    case "RestElement": {
+    case AST_TYPE.RestElement: {
       const argument = node["argument"];
       if (isAstNode(argument)) {
         collect(argument, out);
       }
       return;
     }
-    case "AssignmentPattern": {
+    case AST_TYPE.AssignmentPattern: {
       const left = node["left"];
       if (isAstNode(left)) {
         collect(left, out);

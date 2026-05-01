@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../../constants.js";
 import type { AstNode } from "../../ir/model.js";
 import { ScopeManager } from "../manager.js";
 import { declareFunctionParams } from "./declare-function-params.js";
@@ -20,7 +21,9 @@ describe("declareFunctionParams", () => {
     declareFunctionParams(fn, fnScope);
     expect(fnScope.variables.map((v) => v.name)).toEqual(["a", "b"]);
     expect(
-      fnScope.variables.every((v) => v.defs[0]?.type === "Parameter"),
+      fnScope.variables.every(
+        (v) => v.defs[0]?.type === DEFINITION_TYPE.Parameter,
+      ),
     ).toBe(true);
   });
 
