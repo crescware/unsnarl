@@ -1,7 +1,6 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../cli/root-query.js";
-import type { SerializedIR, SerializedReference } from "../ir/model.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -10,40 +9,6 @@ import type {
   VisualSubgraph,
 } from "./model.js";
 import { pruneVisualGraph } from "./prune.js";
-
-function makeRef(
-  refId: string,
-  name: string,
-  line: number,
-  resolved: string | null,
-): SerializedReference {
-  return {
-    id: refId,
-    identifier: { name, span: { line, column: 0, offset: 0 } },
-    from: "scope#0",
-    resolved,
-    owners: [],
-    writeExpr: null,
-    init: false,
-    flags: { read: true, write: false, call: false, receiver: false },
-    predicateContainer: null,
-    returnContainer: null,
-    jsxElement: null,
-  };
-}
-
-function makeIr(references: SerializedReference[]): SerializedIR {
-  return {
-    version: 1,
-    source: { path: "x.ts", language: "ts" },
-    raw: "",
-    scopes: [],
-    variables: [],
-    references,
-    unusedVariableIds: [],
-    diagnostics: [],
-  };
-}
 
 function node(
   id: string,
@@ -418,166 +383,106 @@ describe("pruneVisualGraph", () => {
   });
 });
 
-describe("pruneVisualGraph: reference-aware line/range queries", () => {
-  // Simulate a file with one declaration per line and a return-block-style
-  // line where only references appear: builder.ts maps Variable id
-  // "scope#0:foo@<offset>" to VisualNode id "n_scope_0_foo_<offset>".
-  const declA = node("n_scope_0_a_6", "a", 1);
-  const declB = node("n_scope_0_b_19", "b", 2);
-  const declC = node("n_scope_0_c_32", "c", 3);
-
-  test("a line query reaches identifiers that only appear as references on that line", () => {
-    const g = graph([declA, declB, declC], []);
-    const ir = makeIr([
-      // Line 50 references a and c only — neither has a declaration there.
-      makeRef("ref#0", "a", 50, "scope#0:a@6"),
-      makeRef("ref#1", "c", 50, "scope#0:c@32"),
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      {
-        roots: [rawLine(50)],
-        descendants: 0,
-        ancestors: 0,
-      },
-      ir,
+describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
+  test("a line query matches a ReturnUse at that line directly (no longer routed through the resolved declaration)", () => {
+    const declA = node("n_scope_0_a_6", "a", 1);
+    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
+    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const g = graph(
+      [declA, ret],
+      [{ from: declA.id, to: useA.id, label: "read" }],
     );
-    expect(r.graph.elements.map((e) => e.id).sort()).toEqual([
-      "n_scope_0_a_6",
-      "n_scope_0_c_32",
-    ]);
-    expect(r.perQuery[0]?.matched).toBe(2);
-  });
-
-  test("range queries pick up references anywhere inside the range", () => {
-    const g = graph([declA, declB, declC], []);
-    const ir = makeIr([
-      makeRef("ref#0", "a", 49, "scope#0:a@6"),
-      makeRef("ref#1", "b", 51, "scope#0:b@19"),
-      makeRef("ref#2", "c", 60, "scope#0:c@32"), // outside the 49-51 range
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      { roots: [rawRange(49, 51)], descendants: 0, ancestors: 0 },
-      ir,
-    );
-    expect(r.graph.elements.map((e) => e.id).sort()).toEqual([
-      "n_scope_0_a_6",
-      "n_scope_0_b_19",
-    ]);
-  });
-
-  test("line-name narrows the reference sweep by identifier as well", () => {
-    const g = graph([declA, declB], []);
-    const ir = makeIr([
-      makeRef("ref#0", "a", 10, "scope#0:a@6"),
-      makeRef("ref#1", "b", 10, "scope#0:b@19"),
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      {
-        roots: [
-          {
-            kind: "line-name",
-            line: 10,
-            name: "a",
-            raw: "10:a",
-          },
-        ],
-        descendants: 0,
-        ancestors: 0,
-      },
-      ir,
-    );
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
-  });
-
-  test("name-only queries deliberately ignore reference lines (declaration-scoped)", () => {
-    const g = graph([declA, declB], []);
-    const ir = makeIr([
-      // A reference whose resolved Variable is `a`, but with a different name.
-      // A name query for "a" must not be confused into adding b just because b
-      // happens to be referenced somewhere too.
-      makeRef("ref#0", "b", 99, "scope#0:b@19"),
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      { roots: [rawName("a")], descendants: 0, ancestors: 0 },
-      ir,
-    );
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
-  });
-
-  test("references whose resolved Variable has no VisualNode are quietly dropped", () => {
-    const g = graph([declA], []);
-    const ir = makeIr([
-      // Pretend the resolved Variable doesn't exist in the visual graph
-      // (e.g. it was synthesized away). The query must not crash.
-      makeRef("ref#0", "ghost", 5, "scope#9:ghost@999"),
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      { roots: [rawLine(5)], descendants: 0, ancestors: 0 },
-      ir,
-    );
-    expect(r.graph.elements).toEqual([]);
-    expect(r.perQuery[0]?.matched).toBe(0);
-  });
-
-  test("works without ir (existing API path) — references are NOT folded in", () => {
-    const g = graph([declA], []);
-    // No ir argument: the reference-driven expansion is skipped entirely.
     const r = pruneVisualGraph(g, {
-      roots: [rawLine(99)],
+      roots: [rawLine(11)],
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements).toEqual([]);
-    expect(r.perQuery[0]?.matched).toBe(0);
-  });
-
-  test("a line query lying inside a reference's JSX element span matches the resolved declaration", () => {
-    const g = graph([declA], []);
-    const ir = makeIr([
-      // Reference identifier on L11; the wrapping JSX element runs L11-23.
-      // Only the closing-tag line (23) is being queried, which falls inside
-      // the element span and should still seed the declaration as a root.
-      {
-        ...makeRef("ref#0", "a", 11, "scope#0:a@6"),
-        jsxElement: {
-          startSpan: { line: 11, column: 4, offset: 0 },
-          endSpan: { line: 23, column: 7, offset: 0 },
-        },
-      },
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      { roots: [rawLine(23)], descendants: 0, ancestors: 0 },
-      ir,
-    );
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
+    // Only the use is a root; the declaration is reachable via ancestors=N>0.
+    expect(
+      flatten(r.graph.elements)
+        .map((e) => e.id)
+        .sort(),
+    ).toEqual(["ret_use_ref_0", "sg_return"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 
-  test("a range query overlapping a reference's JSX element span seeds the declaration once", () => {
-    const g = graph([declA], []);
-    const ir = makeIr([
-      {
-        ...makeRef("ref#0", "a", 11, "scope#0:a@6"),
-        jsxElement: {
-          startSpan: { line: 11, column: 4, offset: 0 },
-          endSpan: { line: 23, column: 7, offset: 0 },
-        },
-      },
-    ]);
-    const r = pruneVisualGraph(
-      g,
-      // A 20-22 window does not contain the identifier line itself but does
-      // overlap the element span, so the declaration still surfaces.
-      { roots: [rawRange(20, 22)], descendants: 0, ancestors: 0 },
-      ir,
+  test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
+    const declA = node("n_scope_0_a_6", "a", 1);
+    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
+    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const g = graph(
+      [declA, ret],
+      [{ from: declA.id, to: useA.id, label: "read" }],
     );
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(11)],
+      descendants: 0,
+      ancestors: 1,
+    });
+    const ids = flatten(r.graph.elements).map((e) => e.id);
+    expect(ids).toContain("n_scope_0_a_6");
+    expect(ids).toContain("ret_use_ref_0");
+  });
+
+  test("a JSX ReturnUse spanning multiple lines is matched anywhere within [line, endLine]", () => {
+    const useA = node("ret_use_ref_0", "a", 11, {
+      kind: "ReturnUse",
+      endLine: 23,
+    });
+    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const g = graph([ret], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(23)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(flatten(r.graph.elements).map((e) => e.id)).toContain(
+      "ret_use_ref_0",
+    );
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("a WriteOp is also a root candidate", () => {
+    const writeOp = node("wr_ref_0", "x", 5, { kind: "WriteOp" });
+    const g = graph([writeOp], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(5)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["wr_ref_0"]);
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("name queries skip WriteOp / ReturnUse — `-r foo` stays declaration-scoped", () => {
+    // Three "foo"-named nodes share a name. A bare name query should pin
+    // the root on the declaration only; the assignment site and the JSX
+    // usage are reachable via descendants/ancestors but never auto-rooted.
+    const decl = node("n_decl_foo", "foo", 1);
+    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
+    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const g = graph([decl, writeOp, ret], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawName("foo")],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_decl_foo"]);
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("line-name still matches WriteOp / ReturnUse at the requested line", () => {
+    // A line-name query is still positional, so the use-site nodes remain
+    // valid roots. This protects the "use line + name disambiguator" case.
+    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
+    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const g = graph([writeOp, ret], []);
+    const r = pruneVisualGraph(g, {
+      roots: [{ kind: "line-name", line: 11, name: "foo", raw: "11:foo" }],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["ret_foo"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 });

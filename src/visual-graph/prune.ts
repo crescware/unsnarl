@@ -1,6 +1,4 @@
 import type { ParsedRootQuery } from "../cli/root-query.js";
-import type { SerializedIR } from "../ir/model.js";
-import { visualNodeIdFromVariableId } from "./builder.js";
 import type {
   NodeKind,
   VisualBoundaryEdge,
@@ -11,6 +9,11 @@ import type {
   VisualSubgraph,
 } from "./model.js";
 
+// Every visible node that carries a meaningful source line is eligible as a
+// root, including "use" nodes (ReturnUse for JSX/ownerless reads inside a
+// return, WriteOp for assignments). `-r N` should pin the root at whatever
+// is actually at line N; surrounding declarations are reached via the
+// ancestors BFS, not auto-attached as a separate root.
 const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   "Variable",
   "FunctionName",
@@ -19,6 +22,8 @@ const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   "CatchClause",
   "ImportBinding",
   "ImplicitGlobalVariable",
+  "ReturnUse",
+  "WriteOp",
 ]);
 
 export interface PruneOptions {
@@ -38,7 +43,6 @@ export interface PruneResult {
 export function pruneVisualGraph(
   graph: VisualGraph,
   options: PruneOptions,
-  ir?: SerializedIR,
 ): PruneResult {
   if (options.roots.length === 0) {
     return { graph, perQuery: [] };
@@ -49,9 +53,7 @@ export function pruneVisualGraph(
     matched: 0,
   }));
   const rootIds = new Set<string>();
-  const allNodeIds = new Set<string>();
   for (const node of iterateVisualNodes(graph.elements)) {
-    allNodeIds.add(node.id);
     for (let i = 0; i < options.roots.length; i++) {
       const q = options.roots[i];
       if (q !== undefined && nodeMatchesQuery(node, q)) {
@@ -92,41 +94,6 @@ export function pruneVisualGraph(
           perQuery[i] = {
             query: entry.query,
             matched: entry.matched + added,
-          };
-        }
-      }
-    }
-  }
-
-  // Line/range queries are positional, so identifiers that *only*
-  // appear as references on the requested line should also count as
-  // roots (their declaration is the natural seed). `name`-only
-  // queries deliberately stay declaration-scoped, matching the
-  // earlier feedback that bare names should not auto-pull every
-  // WriteOp/ReturnSink that happens to share the spelling.
-  if (ir !== undefined) {
-    for (let i = 0; i < options.roots.length; i++) {
-      const q = options.roots[i];
-      if (q === undefined || q.kind === "name") {
-        continue;
-      }
-      for (const ref of ir.references) {
-        if (ref.resolved === null) {
-          continue;
-        }
-        if (!referenceMatchesQuery(ref, q)) {
-          continue;
-        }
-        const candidate = visualNodeIdFromVariableId(ref.resolved);
-        if (!allNodeIds.has(candidate) || rootIds.has(candidate)) {
-          continue;
-        }
-        rootIds.add(candidate);
-        const entry = perQuery[i];
-        if (entry !== undefined) {
-          perQuery[i] = {
-            query: entry.query,
-            matched: entry.matched + 1,
           };
         }
       }
@@ -273,6 +240,15 @@ function collectNodeIds(elements: readonly VisualElement[]): string[] {
   }
 }
 
+// Use-site nodes (WriteOp, ReturnUse) are positional: they make sense as
+// roots when the user pinpoints a line, but a bare `-r counter` should
+// stay declaration-scoped so it does not light up every assignment and
+// every JSX usage of `counter`.
+const NAME_QUERY_EXCLUDED: ReadonlySet<NodeKind> = new Set<NodeKind>([
+  "WriteOp",
+  "ReturnUse",
+]);
+
 function nodeMatchesQuery(node: VisualNode, q: ParsedRootQuery): boolean {
   const startLine = node.line;
   const endLine = node.endLine ?? node.line;
@@ -286,28 +262,7 @@ function nodeMatchesQuery(node: VisualNode, q: ParsedRootQuery): boolean {
     case "range-name":
       return startLine <= q.end && endLine >= q.start && node.name === q.name;
     case "name":
-      return node.name === q.name;
-  }
-}
-
-function referenceMatchesQuery(
-  ref: SerializedIR["references"][number],
-  q: ParsedRootQuery,
-): boolean {
-  const startLine = ref.identifier.span.line;
-  const endLine = ref.jsxElement?.endSpan.line ?? startLine;
-  const refName = ref.identifier.name;
-  switch (q.kind) {
-    case "line":
-      return q.line >= startLine && q.line <= endLine;
-    case "line-name":
-      return q.line >= startLine && q.line <= endLine && refName === q.name;
-    case "range":
-      return startLine <= q.end && endLine >= q.start;
-    case "range-name":
-      return startLine <= q.end && endLine >= q.start && refName === q.name;
-    case "name":
-      return false;
+      return !NAME_QUERY_EXCLUDED.has(node.kind) && node.name === q.name;
   }
 }
 
