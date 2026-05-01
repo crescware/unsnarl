@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { NODE_KIND } from "../../constants.js";
+import { IMPORT_KIND, NODE_KIND } from "../../constants.js";
 import { nodeHead } from "./node-head.js";
 import { makeNode } from "./testing/make-node.js";
 
@@ -56,7 +56,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.ImportBinding,
         name: "renamed",
-        importKind: "named",
+        importKind: IMPORT_KIND.Named,
         importedName: "original",
       }),
       expected: "renamed",
@@ -66,7 +66,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.ImportBinding,
         name: "foo",
-        importKind: "named",
+        importKind: IMPORT_KIND.Named,
         importedName: "foo",
       }),
       expected: "import foo",
@@ -76,7 +76,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.ImportBinding,
         name: "Foo",
-        importKind: "default",
+        importKind: IMPORT_KIND.Default,
         importedName: null,
       }),
       expected: "import Foo",
@@ -86,7 +86,7 @@ describe("nodeHead", () => {
       node: makeNode({
         kind: NODE_KIND.ImportBinding,
         name: "ns",
-        importKind: "namespace",
+        importKind: IMPORT_KIND.Namespace,
         importedName: null,
       }),
       expected: "import ns",

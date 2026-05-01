@@ -1,13 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import {
-  NODE_KIND,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-  LANGUAGE,
-  type Language,
-} from "../constants.js";
+import { IMPORT_KIND, LANGUAGE, NODE_KIND, SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE, type Language } from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "./builder.js";
@@ -168,7 +162,7 @@ describe("buildVisualGraph: variable nodes", () => {
     const g = build("import { other as renamed } from 'm';\nvoid renamed;\n");
     const node = nodeByName(g, "renamed");
     expect(node?.kind).toBe("ImportBinding");
-    expect(node?.importKind).toBe("named");
+    expect(node?.importKind).toBe(IMPORT_KIND.Named);
     expect(node?.importedName).toBe("other");
     expect(node?.importSource).toBe("m");
   });

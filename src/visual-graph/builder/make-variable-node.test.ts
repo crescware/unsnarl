@@ -1,11 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import {
-  DEFINITION_TYPE,
-  NODE_KIND,
-  VISUAL_ELEMENT_TYPE,
-  type DefinitionType,
-} from "../../constants.js";
+import { DEFINITION_TYPE, IMPORT_KIND, NODE_KIND, VISUAL_ELEMENT_TYPE, type DefinitionType } from "../../constants.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";
@@ -77,7 +72,7 @@ describe("makeVariableNode", () => {
       defs: [
         makeDef({
           type: "ImportBinding",
-          importKind: "named",
+          importKind: IMPORT_KIND.Named,
           importedName: "original",
           importSource: "./mod.js",
         }),
@@ -86,7 +81,7 @@ describe("makeVariableNode", () => {
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
       kind: NODE_KIND.ImportBinding,
-      importKind: "named",
+      importKind: IMPORT_KIND.Named,
       importedName: "original",
       importSource: "./mod.js",
     });
@@ -97,7 +92,7 @@ describe("makeVariableNode", () => {
       defs: [
         makeDef({
           type: "ImportBinding",
-          importKind: "default",
+          importKind: IMPORT_KIND.Default,
           importedName: null,
           importSource: "./mod.js",
         }),

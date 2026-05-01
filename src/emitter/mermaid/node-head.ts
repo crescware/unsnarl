@@ -1,6 +1,8 @@
 import type { VisualNode } from "../../visual-graph/model.js";
 import { escape } from "./escape.js";
 
+import { IMPORT_KIND } from "../../constants.js";
+
 export function nodeHead(n: VisualNode): string {
   const name = escape(n.name);
   if (n.isJsxElement) {
@@ -16,7 +18,7 @@ export function nodeHead(n: VisualNode): string {
       return `class ${name}`;
     case "ImportBinding": {
       const isRenamedNamed =
-        n.importKind === "named" &&
+        n.importKind === IMPORT_KIND.Named &&
         n.importedName !== null &&
         n.importedName !== undefined &&
         n.importedName !== n.name;

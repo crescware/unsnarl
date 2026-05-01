@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { LANGUAGE, SCOPE_TYPE, type Language } from "../constants.js";
+import { IMPORT_KIND, LANGUAGE, SCOPE_TYPE, type Language } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -271,29 +271,29 @@ describe("scenario: import declarations carry kind / source / imported name", ()
   test("default imports record the source and a null importedName", () => {
     const def = varByName(ir, "def").defs[0];
     expect(def?.type).toBe("ImportBinding");
-    expect(def?.importKind).toBe("default");
+    expect(def?.importKind).toBe(IMPORT_KIND.Default);
     expect(def?.importSource).toBe("some-default");
     expect(def?.importedName).toBeNull();
   });
 
   test("named imports record the imported name as the original symbol", () => {
     const named = varByName(ir, "named").defs[0];
-    expect(named?.importKind).toBe("named");
+    expect(named?.importKind).toBe(IMPORT_KIND.Named);
     expect(named?.importSource).toBe("some-named");
-    expect(named?.importedName).toBe("named");
+    expect(named?.importedName).toBe(IMPORT_KIND.Named);
   });
 
   test("renamed imports keep the local name on the variable but the original on importedName", () => {
     const renamed = varByName(ir, "renamed");
     expect(renamed.name).toBe("renamed");
-    expect(renamed.defs[0]?.importKind).toBe("named");
+    expect(renamed.defs[0]?.importKind).toBe(IMPORT_KIND.Named);
     expect(renamed.defs[0]?.importedName).toBe("other");
     expect(renamed.defs[0]?.importSource).toBe("some-named");
   });
 
   test("namespace imports record kind=namespace and a null importedName", () => {
     const ns = varByName(ir, "ns").defs[0];
-    expect(ns?.importKind).toBe("namespace");
+    expect(ns?.importKind).toBe(IMPORT_KIND.Namespace);
     expect(ns?.importSource).toBe("some-namespace");
     expect(ns?.importedName).toBeNull();
   });

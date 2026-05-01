@@ -1,12 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
-import {
-  LANGUAGE,
-  NODE_KIND,
-  SUBGRAPH_KIND,
-  VISUAL_ELEMENT_TYPE,
-} from "../../constants.js";
+import { IMPORT_KIND, LANGUAGE, NODE_KIND, SUBGRAPH_KIND, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { JsonEmitter } from "./json.js";
@@ -114,12 +109,12 @@ describe("JsonEmitter", () => {
     const nodes = flattenNodes(graph.elements);
     const def = nodes.find((n) => n.name === "def");
     expect(def?.kind).toBe("ImportBinding");
-    expect(def?.importKind).toBe("default");
+    expect(def?.importKind).toBe(IMPORT_KIND.Default);
     expect(def?.importSource).toBe("some-default");
     expect(def?.importedName).toBeNull();
 
     const renamed = nodes.find((n) => n.name === "renamed");
-    expect(renamed?.importKind).toBe("named");
+    expect(renamed?.importKind).toBe(IMPORT_KIND.Named);
     expect(renamed?.importedName).toBe("other");
 
     const moduleNode = nodes.find(

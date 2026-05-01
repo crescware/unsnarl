@@ -1,10 +1,4 @@
-import {
-  DEFINITION_TYPE,
-  DIRECTION,
-  NODE_KIND,
-  SCOPE_TYPE,
-  VISUAL_ELEMENT_TYPE,
-} from "../constants.js";
+import { DEFINITION_TYPE, DIRECTION, IMPORT_KIND, NODE_KIND, SCOPE_TYPE, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -369,7 +363,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       });
     }
     if (
-      def.importKind === "named" &&
+      def.importKind === IMPORT_KIND.Named &&
       def.importedName !== null &&
       def.importedName !== v.name
     ) {
@@ -422,7 +416,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
     const localId = nodeId(v.id);
     const isRenamed =
-      def.importKind === "named" &&
+      def.importKind === IMPORT_KIND.Named &&
       def.importedName !== null &&
       def.importedName !== v.name;
     if (isRenamed && def.importedName !== null) {
