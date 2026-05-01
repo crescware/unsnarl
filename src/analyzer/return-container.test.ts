@@ -15,7 +15,7 @@ describe("findReturnContainer", () => {
       entry({ type: "BlockStatement", start: 15, end: 100 }, "body"),
       entry({ type: "ReturnStatement", start: 20, end: 50 }, "body"),
       entry({ type: "Identifier", start: 27, end: 28 }, "argument"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toEqual({
       startOffset: 20,
       endOffset: 50,
@@ -38,7 +38,7 @@ describe("findReturnContainer", () => {
       entry(arrowNode),
       entry(bodyNode, "body"),
       entry({ type: "Identifier", start: 30, end: 31 }, "left"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toEqual({
       startOffset: 30,
       endOffset: 50,
@@ -62,7 +62,7 @@ describe("findReturnContainer", () => {
       entry(bodyNode, "body"),
       entry({ type: "ExpressionStatement", start: 30, end: 50 }, "body"),
       entry({ type: "Identifier", start: 30, end: 31 }, "expression"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toBeNull();
   });
 
@@ -83,7 +83,7 @@ describe("findReturnContainer", () => {
       entry(bodyNode, "body"),
       entry({ type: "ReturnStatement", start: 30, end: 50 }, "body"),
       entry({ type: "Identifier", start: 37, end: 38 }, "argument"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toEqual({
       startOffset: 30,
       endOffset: 50,
@@ -96,7 +96,7 @@ describe("findReturnContainer", () => {
       entry({ type: "BlockStatement", start: 15, end: 80 }, "body"),
       entry({ type: "ExpressionStatement", start: 20, end: 35 }, "body"),
       entry({ type: "Identifier", start: 20, end: 21 }, "expression"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toBeNull();
   });
 
@@ -105,7 +105,7 @@ describe("findReturnContainer", () => {
       entry({ type: "Program", start: 0, end: 100 }),
       entry({ type: "ExpressionStatement", start: 0, end: 10 }, "body"),
       entry({ type: "Identifier", start: 0, end: 5 }, "expression"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toBeNull();
   });
 
@@ -114,7 +114,7 @@ describe("findReturnContainer", () => {
       entry({ type: "FunctionDeclaration", start: 0, end: 100 }),
       entry({ type: "ReturnStatement" }, "body"),
       entry({ type: "Identifier", start: 27, end: 28 }, "argument"),
-    ];
+    ] satisfies PathEntry[];
     expect(findReturnContainer(path)).toBeNull();
   });
 });

@@ -4,6 +4,7 @@ import type { AstNode } from "../../ir/model.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { hoistInto } from "./hoist-into.js";
+import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
 
 function freshManager(program: object): ScopeManager {
@@ -50,7 +51,7 @@ describe("hoistInto", () => {
   });
 
   test("does nothing when program has no body array", () => {
-    const program = { type: "Program" };
+    const program = { type: "Program" } satisfies NodeLike;
     const manager = freshManager(program);
     const diagnostics = new DiagnosticCollector();
 

@@ -12,7 +12,7 @@ export function declareForLeft(
   raw: string,
   diagnostics: DiagnosticCollector,
 ): void {
-  const candidates = [node["init"], node["left"]];
+  const candidates = [node["init"], node["left"]] satisfies unknown[];
   for (const cand of candidates) {
     if (!isNodeLike(cand) || cand.type !== "VariableDeclaration") {
       continue;

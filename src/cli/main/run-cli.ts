@@ -6,7 +6,10 @@ import {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
 } from "../../pipeline/default.js";
-import type { PruningRunOptions } from "../../pipeline/types.js";
+import type {
+  PipelineRunOptions,
+  PruningRunOptions,
+} from "../../pipeline/types.js";
 import { parseCliArgs } from "../args/parse-cli-args.js";
 import { usage } from "../args/usage.js";
 import { readSourceFile, readStdin } from "../io.js";
@@ -99,7 +102,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     language,
     sourcePath,
     emit: { pretty: args.pretty },
-  };
+  } satisfies PipelineRunOptions;
   const pruning: PruningRunOptions | null =
     args.roots.length > 0
       ? {

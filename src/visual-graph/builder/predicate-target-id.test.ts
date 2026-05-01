@@ -25,7 +25,7 @@ function withSwitchAt(offset: number): {
   });
   const inner = makeScope({ id: "inner", upper: "switch1" });
   const outer = makeScope({ id: "outer" });
-  const scopes = [outer, switchScope, inner];
+  const scopes = [outer, switchScope, inner] satisfies SerializedScope[];
   return {
     scopes,
     scopeMap: new Map(scopes.map((s) => [s.id, s])),
@@ -69,7 +69,7 @@ describe("predicateTargetId", () => {
       upper: "outer",
       blockContext: makeBlockContext("IfStatement", "alternate", 50),
     });
-    const scopes = [consequent, alternate];
+    const scopes = [consequent, alternate] satisfies SerializedScope[];
     const ref = makeRef({
       from: "outer",
       predicateContainer: predicateContainer("IfStatement", 50),

@@ -35,7 +35,7 @@ describe("iterateVisualNodes", () => {
   test("yields only ROOT_CANDIDATE_KINDS nodes", () => {
     const out = [
       ...iterateVisualNodes([node("a"), node("b", "PropertyKey" as NodeKind)]),
-    ];
+    ] satisfies VisualNode[];
     expect(out.map((n) => n.id)).toEqual(["a"]);
   });
 
@@ -45,7 +45,7 @@ describe("iterateVisualNodes", () => {
         sg("s", [node("inner"), sg("s2", [node("deep")])]),
         node("top"),
       ]),
-    ];
+    ] satisfies VisualNode[];
     expect(out.map((n) => n.id)).toEqual(["inner", "deep", "top"]);
   });
 

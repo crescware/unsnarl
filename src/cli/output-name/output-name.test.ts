@@ -3,7 +3,11 @@ import { describe, expect, test } from "vitest";
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { deriveOutputBasename } from "./output-name.js";
 
-const noRadius = { descendants: null, ancestors: null, context: null };
+const noRadius = {
+  descendants: null,
+  ancestors: null,
+  context: null,
+} satisfies Record<"descendants" | "ancestors" | "context", number | null>;
 
 const name = (n: string): ParsedRootQuery => ({
   kind: "name",
