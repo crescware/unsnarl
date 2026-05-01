@@ -10,7 +10,7 @@ import {
 import type { PruningRunOptions } from "../pipeline/types.js";
 import { DEFAULT_GENERATIONS, parseCliArgs, usage } from "./args.js";
 import { readSourceFile, readStdin } from "./io.js";
-import { deriveOutputBasename } from "./output-name.js";
+import { deriveOutputBasename } from "./output-name/output-name.js";
 
 const VERSION = "0.0.0";
 

@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import type { ParsedRootQuery } from "../root-query.js";
 import { deriveOutputBasename } from "./output-name.js";
-import type { ParsedRootQuery } from "./root-query.js";
 
 const noRadius = { descendants: null, ancestors: null, context: null };
 
