@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../../constants.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
 import { makeNode } from "./testing/make-node.js";
 import { makeRenderState } from "./testing/make-render-state.js";
@@ -12,7 +13,7 @@ describe("emitPlainSubgraph", () => {
     const sg = makeSubgraph({
       id: "s_x",
       kind: "if",
-      direction: "TB",
+      direction: DIRECTION.TB,
       elements: [makeNode({ id: "n_a" }), makeNode({ id: "n_b" })],
     });
     emitPlainSubgraph(state, sg, "  ");

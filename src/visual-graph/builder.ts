@@ -1,3 +1,4 @@
+import { DIRECTION } from "../constants.js";
 import type {
   SerializedIR,
   SerializedReference,
@@ -33,7 +34,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   const graph = {
     version: 1,
     source: { path: ir.source.path, language: ir.source.language },
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements: [] as VisualElement[],
     edges: [] as VisualEdge[],
   } satisfies VisualGraph;

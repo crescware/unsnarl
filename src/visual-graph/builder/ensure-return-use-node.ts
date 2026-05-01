@@ -1,3 +1,4 @@
+import { DIRECTION } from "../../constants.js";
 import type { SerializedReference } from "../../ir/model.js";
 import type { VisualNode, VisualSubgraph } from "../model.js";
 import type { BuildState } from "./build-state.js";
@@ -33,7 +34,7 @@ export function ensureReturnUseNode(
       id: returnSubgraphId(enclosingFnVarId, containerKey),
       kind: "return",
       line: startLine,
-      direction: "RL",
+      direction: DIRECTION.RL,
       elements: [],
     } satisfies VisualSubgraph;
     if (endLine !== undefined && endLine !== startLine) {

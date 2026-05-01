@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
+import { DIRECTION } from "../../constants.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -38,7 +39,7 @@ function subgraph(
     id,
     kind: "function",
     line,
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements,
     ...extra,
   };
@@ -48,7 +49,7 @@ function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
   return {
     version: 1,
     source: { path: "x.ts", language: "ts" },
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements,
     edges,
   };

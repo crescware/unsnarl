@@ -1,3 +1,4 @@
+import { DIRECTION } from "../../../constants.js";
 import type { VisualSubgraph } from "../../../visual-graph/model.js";
 
 export function makeSubgraph(
@@ -8,7 +9,7 @@ export function makeSubgraph(
     id: "s_x",
     kind: "function",
     line: 1,
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements: [],
     ...overrides,
   };

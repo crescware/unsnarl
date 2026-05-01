@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -22,7 +23,7 @@ function makeHostSubgraph(): VisualSubgraph {
     id: "s_fn",
     kind: "function",
     line: 1,
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements: [],
   };
 }

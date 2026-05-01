@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../../constants.js";
 import type { ScopeType, SerializedVariable } from "../../ir/model.js";
 import type { VisualSubgraph } from "../model.js";
 import { describeSubgraph } from "./describe-subgraph.js";
@@ -33,7 +34,7 @@ describe("describeSubgraph", () => {
       type: "subgraph",
       id: "s_fnScope",
       kind: "function",
-      direction: "RL",
+      direction: DIRECTION.RL,
       ownerNodeId: "n_ownerVar",
       ownerName: "myFn",
       line: 5,

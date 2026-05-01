@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../../constants.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { findNodeById } from "./find-node-by-id.js";
 
@@ -21,7 +22,7 @@ const elements: VisualElement[] = [
     id: "s1",
     kind: "function",
     line: 1,
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements: [
       leafNode("b"),
       {
@@ -29,7 +30,7 @@ const elements: VisualElement[] = [
         id: "s2",
         kind: "if",
         line: 1,
-        direction: "RL",
+        direction: DIRECTION.RL,
         elements: [leafNode("c")],
       },
     ],

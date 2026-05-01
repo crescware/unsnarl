@@ -1,3 +1,4 @@
+import { DIRECTION } from "../../constants.js";
 import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
@@ -27,7 +28,7 @@ export function describeSubgraph(
       kind: "function",
       line: startLine,
       endLine,
-      direction: "RL",
+      direction: DIRECTION.RL,
       ownerNodeId: nodeId(ownerVarId),
       ownerName: ownerVar?.name ?? "",
       elements: [],
@@ -45,7 +46,7 @@ export function describeSubgraph(
     kind,
     line: scope.block.span.line,
     endLine,
-    direction: "RL",
+    direction: DIRECTION.RL,
     elements: [] as VisualElement[],
   } satisfies VisualSubgraph as VisualSubgraph;
   if (kind === "case") {
