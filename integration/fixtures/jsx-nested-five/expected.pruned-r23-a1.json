@@ -21,6 +21,7 @@
           "id": "s_return_scope_0_Main_54_151_331",
           "kind": "return",
           "line": 10,
+          "endLine": 24,
           "direction": "RL",
           "elements": [
             {
@@ -29,11 +30,11 @@
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
+              "endLine": 23,
               "isJsxElement": true,
-              "endLine": 23
+              "unused": false
             }
-          ],
-          "endLine": 24
+          ]
         }
       ]
     }

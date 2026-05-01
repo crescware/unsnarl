@@ -1,5 +1,8 @@
 import { describe, expect, test } from "vitest";
 
+import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
+import { LANGUAGE } from "../language.js";
+import { ROOT_QUERY_KIND } from "../root-query/root-query-kind.js";
 import { parseCliArgs } from "./parse-cli-args.js";
 
 describe("parseCliArgs", () => {
@@ -10,7 +13,7 @@ describe("parseCliArgs", () => {
       expect(r.args).toMatchObject({
         format: "ir",
         stdin: false,
-        language: "ts",
+        language: LANGUAGE.Ts,
         pretty: true,
         listFormats: false,
         help: false,
@@ -92,13 +95,21 @@ describe("parseCliArgs", () => {
     if (def.ok) {
       expect(def.args.mermaidRenderer).toBeNull();
     }
-    const elk = parseCliArgs(["--mermaid-renderer", "elk", "foo.ts"]);
+    const elk = parseCliArgs([
+      "--mermaid-renderer",
+      CLI_MERMAID_RENDERER.Elk,
+      "foo.ts",
+    ]);
     if (elk.ok) {
-      expect(elk.args.mermaidRenderer).toBe("elk");
+      expect(elk.args.mermaidRenderer).toBe(CLI_MERMAID_RENDERER.Elk);
     }
-    const dagre = parseCliArgs(["--mermaid-renderer", "dagre", "foo.ts"]);
+    const dagre = parseCliArgs([
+      "--mermaid-renderer",
+      CLI_MERMAID_RENDERER.Dagre,
+      "foo.ts",
+    ]);
     if (dagre.ok) {
-      expect(dagre.args.mermaidRenderer).toBe("dagre");
+      expect(dagre.args.mermaidRenderer).toBe(CLI_MERMAID_RENDERER.Dagre);
     }
   });
 
@@ -127,7 +138,10 @@ describe("parseCliArgs", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.args.roots).toHaveLength(1);
-      expect(r.args.roots[0]).toMatchObject({ kind: "line-name", line: 10 });
+      expect(r.args.roots[0]).toMatchObject({
+        kind: ROOT_QUERY_KIND.LineName,
+        line: 10,
+      });
     }
   });
 

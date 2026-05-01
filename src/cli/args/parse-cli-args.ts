@@ -8,7 +8,7 @@ import {
 import type { CliParseResult } from "./cli-parse-result.js";
 import { parseGenerationCount } from "./parse-generation-count.js";
 
-export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
+export function parseCliArgs(argv: readonly string[]): CliParseResult {
   let format = "ir";
   let stdin = false;
   let language: CliLanguage = "ts";
@@ -18,7 +18,7 @@ export function parseCliArgs(argv: ReadonlyArray<string>): CliParseResult {
   let version = false;
   let inputFile: string | null = null;
   let mermaidRenderer: CliMermaidRenderer | null = null;
-  const roots: ParsedRootQuery[] = [];
+  const roots: /* mutable */ ParsedRootQuery[] = [];
   let descendants: number | null = null;
   let ancestors: number | null = null;
   let context: number | null = null;

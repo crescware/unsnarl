@@ -87,7 +87,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "Sub",
             "span": {
@@ -112,12 +111,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "./sub",
           "importedName": "Sub",
-          "declarationKind": null
+          "importSource": "./sub"
         }
       ]
     },
@@ -135,7 +132,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "Main",
             "span": {
@@ -153,12 +149,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     }
@@ -177,7 +168,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Sub@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

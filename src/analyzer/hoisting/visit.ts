@@ -1,4 +1,5 @@
 import type { Scope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
 import { handleFunctionDeclaration } from "./handle-function-declaration.js";
@@ -13,31 +14,31 @@ export function visit(
   diagnostics: DiagnosticCollector,
 ): void {
   switch (node.type) {
-    case "VariableDeclaration":
+    case AST_TYPE.VariableDeclaration:
       handleVariableDeclaration(node, scope, raw, diagnostics);
       return;
-    case "FunctionDeclaration":
+    case AST_TYPE.FunctionDeclaration:
       handleFunctionDeclaration(node, scope);
       return;
-    case "ClassDeclaration":
+    case AST_TYPE.ClassDeclaration:
       handleClassDeclaration(node, scope);
       return;
-    case "ImportDeclaration":
+    case AST_TYPE.ImportDeclaration:
       handleImportDeclaration(node, scope);
       return;
-    case "ExportNamedDeclaration": {
+    case AST_TYPE.ExportNamedDeclaration: {
       const decl = node["declaration"];
       if (isNodeLike(decl)) {
         visit(decl, scope, raw, diagnostics);
       }
       return;
     }
-    case "ExportDefaultDeclaration": {
+    case AST_TYPE.ExportDefaultDeclaration: {
       const decl = node["declaration"];
       if (
         isNodeLike(decl) &&
-        (decl.type === "FunctionDeclaration" ||
-          decl.type === "ClassDeclaration")
+        (decl.type === AST_TYPE.FunctionDeclaration ||
+          decl.type === AST_TYPE.ClassDeclaration)
       ) {
         visit(decl, scope, raw, diagnostics);
       }

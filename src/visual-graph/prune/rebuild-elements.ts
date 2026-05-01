@@ -1,12 +1,13 @@
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 
 export function rebuildElements(
   elements: readonly VisualElement[],
   keep: ReadonlySet<string>,
-): VisualElement[] {
-  const result: VisualElement[] = [];
+): /* mutable */ VisualElement[] {
+  const result: /* mutable */ VisualElement[] = [];
   for (const item of elements) {
-    if (item.type === "node") {
+    if (item.type === VISUAL_ELEMENT_TYPE.Node) {
       if (keep.has(item.id)) {
         result.push({ ...item });
       }
@@ -19,7 +20,10 @@ export function rebuildElements(
       // edges that pointed at this subgraph are filtered out below by
       // the `survivors` check, so dropping the cluster is consistent.
       if (children.length > 0) {
-        const cloned: VisualSubgraph = { ...item, elements: children };
+        const cloned = {
+          ...item,
+          elements: children,
+        } as const satisfies VisualSubgraph;
         result.push(cloned);
       }
     }

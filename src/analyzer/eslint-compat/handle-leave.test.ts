@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { ScopeManager } from "../manager.js";
 import { handleLeave } from "./handle-leave.js";
 import type { NodeLike } from "./node-like.js";
@@ -13,19 +14,19 @@ function freshManager(): ScopeManager {
 
 describe("handleLeave", () => {
   test.each([
-    "FunctionDeclaration",
-    "FunctionExpression",
-    "ArrowFunctionExpression",
-    "ForStatement",
+    AST_TYPE.FunctionDeclaration,
+    AST_TYPE.FunctionExpression,
+    AST_TYPE.ArrowFunctionExpression,
+    AST_TYPE.ForStatement,
     "ForOfStatement",
     "ForInStatement",
-    "SwitchStatement",
-    "SwitchCase",
-    "CatchClause",
+    AST_TYPE.SwitchStatement,
+    AST_TYPE.SwitchCase,
+    AST_TYPE.CatchClause,
   ])("pops the current scope for type=%s", (type) => {
     const manager = freshManager();
-    const block: NodeLike = { type };
-    manager.push("function", block as unknown as AstNode);
+    const block = { type } as const satisfies NodeLike;
+    manager.push("function", block as unknown as AstNode, null);
     const before = manager.current();
 
     handleLeave(block, null, null, manager);
@@ -36,9 +37,11 @@ describe("handleLeave", () => {
 
   test("BlockStatement under FunctionDeclaration does NOT pop", () => {
     const manager = freshManager();
-    const block: NodeLike = { type: "BlockStatement" };
+    const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
     const before = manager.current();
-    const parent: NodeLike = { type: "FunctionDeclaration" };
+    const parent = {
+      type: AST_TYPE.FunctionDeclaration,
+    } as const satisfies NodeLike;
 
     handleLeave(block, parent, "body", manager);
 
@@ -47,9 +50,13 @@ describe("handleLeave", () => {
 
   test("plain BlockStatement (not under fn/catch) pops the current scope", () => {
     const manager = freshManager();
-    manager.push("block", { type: "BlockStatement" } as unknown as AstNode);
-    const block: NodeLike = { type: "BlockStatement" };
-    const parent: NodeLike = { type: "IfStatement" };
+    manager.push(
+      "block",
+      { type: AST_TYPE.BlockStatement } as unknown as AstNode,
+      null,
+    );
+    const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
+    const parent = { type: AST_TYPE.IfStatement } as const satisfies NodeLike;
 
     handleLeave(block, parent, "consequent", manager);
 
@@ -60,7 +67,7 @@ describe("handleLeave", () => {
     const manager = freshManager();
     const before = manager.current();
 
-    handleLeave({ type: "ExpressionStatement" }, null, null, manager);
+    handleLeave({ type: AST_TYPE.ExpressionStatement }, null, null, manager);
 
     expect(manager.current()).toBe(before);
   });

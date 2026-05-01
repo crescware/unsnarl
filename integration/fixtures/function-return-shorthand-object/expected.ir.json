@@ -100,7 +100,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "main",
             "span": {
@@ -118,12 +117,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -143,7 +137,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -168,15 +161,15 @@
               "offset": 20
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 12,
-            "offset": 30
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 12,
+              "offset": 30
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -197,7 +190,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -222,15 +214,15 @@
               "offset": 37
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 3,
-            "column": 12,
-            "offset": 47
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 12,
+              "offset": 47
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -251,7 +243,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "c",
             "span": {
@@ -276,15 +267,15 @@
               "offset": 54
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 4,
-            "column": 12,
-            "offset": 64
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 4,
+              "column": 12,
+              "offset": 64
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -305,7 +296,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "d",
             "span": {
@@ -330,15 +320,15 @@
               "offset": 71
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 12,
-            "offset": 81
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 12,
+              "offset": 81
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -359,7 +349,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "e",
             "span": {
@@ -384,15 +373,15 @@
               "offset": 88
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 6,
-            "column": 12,
-            "offset": 98
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 6,
+              "column": 12,
+              "offset": 98
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -413,7 +402,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "f",
             "span": {
@@ -438,15 +426,15 @@
               "offset": 105
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 7,
-            "column": 12,
-            "offset": 115
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 7,
+              "column": 12,
+              "offset": 115
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -467,7 +455,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "g",
             "span": {
@@ -492,15 +479,15 @@
               "offset": 122
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 8,
-            "column": 12,
-            "offset": 132
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 8,
+              "column": 12,
+              "offset": 132
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -521,7 +508,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "h",
             "span": {
@@ -546,15 +532,15 @@
               "offset": 139
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 9,
-            "column": 12,
-            "offset": 149
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 9,
+              "column": 12,
+              "offset": 149
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -574,7 +560,6 @@
       "from": "scope#1",
       "resolved": "scope#1:a@26",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -610,7 +595,6 @@
       "from": "scope#1",
       "resolved": "scope#1:b@43",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -646,7 +630,6 @@
       "from": "scope#1",
       "resolved": "scope#1:c@60",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -682,7 +665,6 @@
       "from": "scope#1",
       "resolved": "scope#1:d@77",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -718,7 +700,6 @@
       "from": "scope#1",
       "resolved": "scope#1:e@94",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -754,7 +735,6 @@
       "from": "scope#1",
       "resolved": "scope#1:f@111",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -790,7 +770,6 @@
       "from": "scope#1",
       "resolved": "scope#1:g@128",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -826,7 +805,6 @@
       "from": "scope#1",
       "resolved": "scope#1:h@145",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

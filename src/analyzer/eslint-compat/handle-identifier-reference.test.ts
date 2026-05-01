@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import type { PathEntry } from "../walk/walk.js";
@@ -10,12 +11,12 @@ import { hoistInto } from "./hoist-into.js";
 import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
 
-interface CapturedIdentifier {
+type CapturedIdentifier = {
   node: NodeLike;
   parent: NodeLike | null;
   key: string | null;
-  path: PathEntry[];
-}
+  path: readonly PathEntry[];
+};
 
 function captureNthIdentifier(
   program: NodeLike,
@@ -25,7 +26,7 @@ function captureNthIdentifier(
   let captured: CapturedIdentifier | null = null;
   walk(program as unknown as AstNode, {
     enter(node, parent, key, path) {
-      if (node.type !== "Identifier") {
+      if (node.type !== AST_TYPE.Identifier) {
         return;
       }
       count++;

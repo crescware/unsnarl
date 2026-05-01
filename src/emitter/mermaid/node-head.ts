@@ -1,4 +1,7 @@
+import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { VisualNode } from "../../visual-graph/model.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { escape } from "./escape.js";
 
 export function nodeHead(n: VisualNode): string {
@@ -10,35 +13,38 @@ export function nodeHead(n: VisualNode): string {
     return `&lt;${name}&gt;`;
   }
   switch (n.kind) {
-    case "FunctionName":
+    case NODE_KIND.FunctionName:
       return `${name}()`;
-    case "ClassName":
+    case NODE_KIND.ClassName:
       return `class ${name}`;
-    case "ImportBinding": {
+    case NODE_KIND.ImportBinding: {
       const isRenamedNamed =
-        n.importKind === "named" &&
-        n.importedName !== null &&
-        n.importedName !== undefined &&
-        n.importedName !== n.name;
+        n.importKind === IMPORT_KIND.Named && n.importedName !== n.name;
       return isRenamedNamed ? name : `import ${name}`;
     }
-    case "CatchClause":
+    case NODE_KIND.CatchClause:
       return `catch ${name}`;
-    case "ImplicitGlobalVariable":
+    case NODE_KIND.ImplicitGlobalVariable:
       return `global ${name}`;
-    case "WriteOp":
-      return n.declarationKind === "let" ? `let ${name}` : name;
-    case "ModuleSource":
+    case NODE_KIND.WriteOp:
+      return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
+        ? `let ${name}`
+        : name;
+    case NODE_KIND.ModuleSource:
       return `module ${name}`;
-    case "ImportIntermediate":
+    case NODE_KIND.ImportIntermediate:
       return `import ${name}`;
-    default:
+    case NODE_KIND.Variable:
       if (n.initIsFunction) {
         return `${name}()`;
       }
-      if (n.declarationKind === "let") {
+      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
         return `let ${name}`;
       }
+      return name;
+    case NODE_KIND.Parameter:
+    case NODE_KIND.ReturnUse:
+    case NODE_KIND.ModuleSink:
       return name;
   }
 }

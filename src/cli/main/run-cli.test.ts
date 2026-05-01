@@ -3,19 +3,22 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
 import { runCli } from "./run-cli.js";
 
-interface CapturedOutput {
+type CapturedOutput = Readonly<{
   stdout: string;
   stderr: string;
-}
+}>;
 
 async function captureRun(
-  argv: ReadonlyArray<string>,
+  argv: readonly string[],
 ): Promise<{ exitCode: number } & CapturedOutput> {
-  const stdout: string[] = [];
-  const stderr: string[] = [];
+  const stdout: /* mutable */ string[] = [];
+  const stderr: /* mutable */ string[] = [];
   const stdoutSpy = vi
     .spyOn(process.stdout, "write")
     .mockImplementation((chunk: unknown) => {
@@ -78,7 +81,7 @@ describe("runCli (end-to-end)", () => {
     const r = await captureRun([inputPath, "--no-pretty"]);
     expect(r.exitCode).toBe(0);
     const ir = JSON.parse(r.stdout);
-    expect(ir.version).toBe(1);
+    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
     expect(ir.source.path).toBe(inputPath);
     expect(ir.variables.map((v: { name: string }) => v.name).sort()).toEqual([
       "answer",
@@ -163,7 +166,7 @@ describe("runCli (end-to-end)", () => {
     expect(graph.pruning.ancestors).toBe(1);
     expect(graph.pruning.roots).toEqual([{ query: "1", matched: 1 }]);
     const names = graph.elements
-      .filter((e: { type: string }) => e.type === "node")
+      .filter((e: { type: string }) => e.type === VISUAL_ELEMENT_TYPE.Node)
       .map((e: { name: string }) => e.name);
     // Inner radius keeps a (root) and b (1 hop). c is past the requested
     // radius and is NOT in the kept node list; instead the outgoing edge
@@ -174,7 +177,7 @@ describe("runCli (end-to-end)", () => {
     expect(names).not.toContain("c");
     expect(names).not.toContain("d");
     expect(graph.boundaryEdges).toEqual([
-      expect.objectContaining({ direction: "out" }),
+      expect.objectContaining({ direction: BOUNDARY_EDGE_DIRECTION.Out }),
     ]);
     // out-direction boundary edges are intentionally label-less because
     // the action's actor (the unseen node beyond the boundary) is unknown.

@@ -1,4 +1,5 @@
 import type { VisualElement } from "../model.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 
 export function collectIds(elements: readonly VisualElement[]): Set<string> {
   const ids = new Set<string>();
@@ -8,7 +9,7 @@ export function collectIds(elements: readonly VisualElement[]): Set<string> {
   function walk(items: readonly VisualElement[]): void {
     for (const item of items) {
       ids.add(item.id);
-      if (item.type === "subgraph") {
+      if (item.type === VISUAL_ELEMENT_TYPE.Subgraph) {
         walk(item.elements);
       }
     }

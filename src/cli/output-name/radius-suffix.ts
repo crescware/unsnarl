@@ -8,7 +8,7 @@ export function radiusSuffix(inputs: {
   ancestors: number | null;
   context: number | null;
 }): string {
-  const parts: string[] = [];
+  const parts: /* mutable */ string[] = [];
   if (inputs.descendants !== null) {
     parts.push(`a${inputs.descendants}`);
   }

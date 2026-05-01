@@ -1,5 +1,9 @@
 import type { SerializedReference } from "../../ir/model.js";
+import { DIRECTION } from "../direction.js";
 import type { VisualNode, VisualSubgraph } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
@@ -24,23 +28,26 @@ export function ensureReturnUseNode(
     perFn = new Map();
     state.returnSubgraphsByFn.set(enclosingFnVarId, perFn);
   }
-  let sg = perFn.get(containerKey);
-  if (!sg) {
+  const existing = perFn.get(containerKey);
+  let sg: VisualSubgraph;
+  if (existing === undefined) {
     const startLine = ref.returnContainer?.startSpan.line ?? host.line;
-    const endLine = ref.returnContainer?.endSpan.line;
+    const rawEndLine = ref.returnContainer?.endSpan.line;
+    const endLine =
+      rawEndLine !== undefined && rawEndLine !== startLine ? rawEndLine : null;
     sg = {
-      type: "subgraph",
+      type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: returnSubgraphId(enclosingFnVarId, containerKey),
-      kind: "return",
+      kind: SUBGRAPH_KIND.Return,
       line: startLine,
-      direction: "RL",
+      endLine,
+      direction: DIRECTION.RL,
       elements: [],
     } satisfies VisualSubgraph;
-    if (endLine !== undefined && endLine !== startLine) {
-      sg.endLine = endLine;
-    }
     host.elements.push(sg);
     perFn.set(containerKey, sg);
+  } else {
+    sg = existing;
   }
   const id = retUseNodeId(ref.id);
   if (!state.returnUseAdded.has(ref.id)) {
@@ -48,18 +55,19 @@ export function ensureReturnUseNode(
     const v = ref.resolved ? ctx.variableMap.get(ref.resolved) : undefined;
     const name = v?.name ?? ref.identifier.name ?? "";
     const startLine = ref.identifier.span.line;
-    const node: VisualNode = {
-      type: "node",
+    const jsxEnd = ref.jsxElement?.endSpan.line;
+    const endLine =
+      jsxEnd !== undefined && jsxEnd !== startLine ? jsxEnd : null;
+    const node = {
+      type: VISUAL_ELEMENT_TYPE.Node,
       id,
-      kind: "ReturnUse",
+      kind: NODE_KIND.ReturnUse,
       name,
       line: startLine,
+      endLine,
       isJsxElement: ref.jsxElement !== null,
-    };
-    const jsxEnd = ref.jsxElement?.endSpan.line;
-    if (jsxEnd !== undefined && jsxEnd !== startLine) {
-      node.endLine = jsxEnd;
-    }
+      unused: false,
+    } satisfies VisualNode;
     sg.elements.push(node);
   }
   return id;

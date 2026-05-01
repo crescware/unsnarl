@@ -131,7 +131,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "Fragment",
             "span": {
@@ -156,12 +155,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "react",
           "importedName": "Fragment",
-          "declarationKind": null
+          "importSource": "react"
         }
       ]
     },
@@ -181,7 +178,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "Hello",
             "span": {
@@ -206,15 +202,15 @@
               "offset": 73
             }
           },
-          "initType": "ArrowFunctionExpression",
-          "initSpan": {
-            "line": 7,
-            "column": 14,
-            "offset": 87
+          "type": "Variable",
+          "init": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 7,
+              "column": 14,
+              "offset": 87
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -235,7 +231,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "App",
             "span": {
@@ -260,15 +255,15 @@
               "offset": 190
             }
           },
-          "initType": "ArrowFunctionExpression",
-          "initSpan": {
-            "line": 13,
-            "column": 12,
-            "offset": 202
+          "type": "Variable",
+          "init": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 13,
+              "column": 12,
+              "offset": 202
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -287,7 +282,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "root",
             "span": {
@@ -312,15 +306,15 @@
               "offset": 231
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 15,
-            "column": 13,
-            "offset": 244
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 15,
+              "column": 13,
+              "offset": 244
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -341,7 +335,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "span",
             "span": {
@@ -359,12 +352,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     },
@@ -384,7 +372,6 @@
       ],
       "defs": [
         {
-          "type": "Parameter",
           "name": {
             "name": "props",
             "span": {
@@ -409,12 +396,7 @@
               "offset": 87
             }
           },
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "Parameter"
         }
       ]
     }
@@ -433,7 +415,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Fragment@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -480,7 +461,6 @@
       "from": "scope#1",
       "resolved": "scope#0:span@125",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -527,7 +507,6 @@
       "from": "scope#1",
       "resolved": "scope#1:props@88",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -563,7 +542,6 @@
       "from": "scope#2",
       "resolved": "scope#0:Hello@79",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -612,7 +590,6 @@
       "owners": [
         "scope#0:root@237"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

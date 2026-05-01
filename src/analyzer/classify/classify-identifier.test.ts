@@ -2,11 +2,12 @@ import { describe, expect, test } from "vitest";
 
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { PathEntry } from "../walk/walk.js";
 import { classifyIdentifier } from "./classify-identifier.js";
 
 const node = (overrides: Record<string, unknown>): AstNode =>
-  ({ type: overrides.type as string, ...overrides }) as unknown as AstNode;
+  ({ type: overrides["type"] as string, ...overrides }) as unknown as AstNode;
 
 describe("classifyIdentifier dispatch", () => {
   test("no parent → plain Read reference", () => {
@@ -14,14 +15,13 @@ describe("classifyIdentifier dispatch", () => {
       kind: "reference",
       flags: ReferenceFlags.Read,
       init: false,
-      writeExpr: null,
     });
   });
 
   test("skip context wins (e.g. ImportSpecifier#imported)", () => {
     expect(
       classifyIdentifier(
-        node({ type: "ImportSpecifier" }),
+        node({ type: AST_TYPE.ImportSpecifier }),
         "imported",
         [],
       ),
@@ -30,49 +30,46 @@ describe("classifyIdentifier dispatch", () => {
 
   test("direct binding context (e.g. VariableDeclarator#id)", () => {
     expect(
-      classifyIdentifier(
-        node({ type: "VariableDeclarator" }),
-        "id",
-        [],
-      ),
+      classifyIdentifier(node({ type: AST_TYPE.VariableDeclarator }), "id", []),
     ).toEqual({ kind: "binding" });
   });
 
   test("pattern step under VariableDeclarator → binding", () => {
-    const path: PathEntry[] = [
-      { node: node({ type: "Program" }), key: null },
-      { node: node({ type: "VariableDeclaration" }), key: "body" },
-      { node: node({ type: "VariableDeclarator" }), key: "declarations" },
-      { node: node({ type: "ObjectPattern" }), key: "id" },
+    const path: readonly PathEntry[] = [
+      { node: node({ type: AST_TYPE.Program }), key: null },
+      { node: node({ type: AST_TYPE.VariableDeclaration }), key: "body" },
+      {
+        node: node({ type: AST_TYPE.VariableDeclarator }),
+        key: "declarations",
+      },
+      { node: node({ type: AST_TYPE.ObjectPattern }), key: "id" },
     ];
     expect(
-      classifyIdentifier(node({ type: "ObjectPattern" }), "id", path),
+      classifyIdentifier(node({ type: AST_TYPE.ObjectPattern }), "id", path),
     ).toEqual({ kind: "binding" });
   });
 
   test("pattern step under AssignmentExpression → Write reference", () => {
-    const path: PathEntry[] = [
-      { node: node({ type: "ExpressionStatement" }), key: null },
-      { node: node({ type: "AssignmentExpression" }), key: "expression" },
-      { node: node({ type: "ArrayPattern" }), key: "left" },
+    const path: readonly PathEntry[] = [
+      { node: node({ type: AST_TYPE.ExpressionStatement }), key: null },
+      {
+        node: node({ type: AST_TYPE.AssignmentExpression }),
+        key: "expression",
+      },
+      { node: node({ type: AST_TYPE.ArrayPattern }), key: "left" },
     ];
     expect(
-      classifyIdentifier(node({ type: "ArrayPattern" }), "left", path),
+      classifyIdentifier(node({ type: AST_TYPE.ArrayPattern }), "left", path),
     ).toEqual({
       kind: "reference",
       flags: ReferenceFlags.Write,
       init: false,
-      writeExpr: null,
     });
   });
 
   test("falls through to ordinary reference (CallExpression#callee)", () => {
     expect(
-      classifyIdentifier(
-        node({ type: "CallExpression" }),
-        "callee",
-        [],
-      ),
+      classifyIdentifier(node({ type: AST_TYPE.CallExpression }), "callee", []),
     ).toMatchObject({
       kind: "reference",
       flags: ReferenceFlags.Read | ReferenceFlags.Call,

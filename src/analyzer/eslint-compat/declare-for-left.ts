@@ -1,8 +1,12 @@
 import type { AstNode, Scope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 
@@ -12,15 +16,15 @@ export function declareForLeft(
   raw: string,
   diagnostics: DiagnosticCollector,
 ): void {
-  const candidates = [node["init"], node["left"]];
+  const candidates = [node["init"], node["left"]] satisfies unknown[];
   for (const cand of candidates) {
-    if (!isNodeLike(cand) || cand.type !== "VariableDeclaration") {
+    if (!isNodeLike(cand) || cand.type !== AST_TYPE.VariableDeclaration) {
       continue;
     }
     const kind = cand["kind"];
-    if (kind === "var") {
+    if (kind === VARIABLE_DECLARATION_KIND.Var) {
       diagnostics.add(
-        "var-detected",
+        DIAGNOSTIC_KIND.VarDetected,
         "var declaration is not supported and was skipped.",
         spanFromOffset(raw, cand.start ?? 0),
       );
@@ -46,7 +50,7 @@ export function declareForLeft(
         declareVariable(
           scope,
           ident,
-          "Variable",
+          DEFINITION_TYPE.Variable,
           dec as unknown as AstNode,
           cand as unknown as AstNode,
         );

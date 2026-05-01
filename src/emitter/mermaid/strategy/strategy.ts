@@ -1,15 +1,15 @@
-interface EmptySubgraphContext {
+type EmptySubgraphContext = Readonly<{
   /** Subgraph id about to close with no body content. */
-  readonly subgraphId: string;
+  subgraphId: string;
   /** Indent prefix to use for any line emitted inside the subgraph. */
-  readonly indent: string;
+  indent: string;
   /** True if any edge in the graph references this subgraph as src or dst. */
-  readonly referencedByEdge: boolean;
-}
+  referencedByEdge: boolean;
+}>;
 
-export interface MermaidStrategy {
+export type MermaidStrategy = Readonly<{
   /** Lines emitted before `flowchart` (e.g. an `%%{init: ...}%%` directive). */
-  readonly preambleLines: readonly string[];
+  preambleLines: readonly string[];
 
   /**
    * Called when a subgraph is about to close with zero emitted children.
@@ -26,4 +26,4 @@ export interface MermaidStrategy {
    * so the strategy can attach a `classDef` / `class` styling block.
    */
   trailerLines(placeholderIds: readonly string[]): readonly string[];
-}
+}>;

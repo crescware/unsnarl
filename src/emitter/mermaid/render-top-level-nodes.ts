@@ -1,4 +1,5 @@
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { emitNode } from "./emit-node.js";
 import { isSyntheticNode } from "./is-synthetic-node.js";
 import type { RenderState } from "./render-state.js";
@@ -9,7 +10,7 @@ export function renderTopLevelNodes(
 ): void {
   for (const e of graph.elements) {
     if (
-      e.type === "node" &&
+      e.type === VISUAL_ELEMENT_TYPE.Node &&
       !isSyntheticNode(e) &&
       !state.wrappedOwnerIds.has(e.id)
     ) {

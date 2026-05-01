@@ -1,10 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { LANGUAGE } from "../../cli/language.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { StatsEmitter } from "./stats.js";
 
 const parser = new OxcParser();
@@ -14,7 +17,7 @@ const emitter = new StatsEmitter();
 
 function emit(code: string): string {
   const parsed = parser.parse(code, {
-    language: "ts",
+    language: LANGUAGE.Ts,
     sourcePath: "x.ts",
   });
   const analyzed = analyzer.analyze(parsed);
@@ -22,9 +25,9 @@ function emit(code: string): string {
     rootScope: analyzed.rootScope,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
   });
-  return emitter.emit(ir, {});
+  return emitter.emit(ir, { pretty: true, prunedGraph: null });
 }
 
 function emitWithBoundary(
@@ -32,7 +35,7 @@ function emitWithBoundary(
   patch: (graph: VisualGraph) => VisualGraph,
 ): string {
   const parsed = parser.parse(code, {
-    language: "ts",
+    language: LANGUAGE.Ts,
     sourcePath: "x.ts",
   });
   const analyzed = analyzer.analyze(parsed);
@@ -40,10 +43,10 @@ function emitWithBoundary(
     rootScope: analyzed.rootScope,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
-    source: { path: "x.ts", language: "ts" },
+    source: { path: "x.ts", language: LANGUAGE.Ts },
   });
   const prunedGraph = patch(buildVisualGraph(ir));
-  return emitter.emit(ir, { prunedGraph });
+  return emitter.emit(ir, { pretty: true, prunedGraph });
 }
 
 describe("StatsEmitter", () => {
@@ -76,12 +79,17 @@ describe("StatsEmitter", () => {
         return {
           ...graph,
           elements: graph.elements.filter(
-            (e) => e.type === "node" && keepIds.has(e.id),
+            (e) => e.type === VISUAL_ELEMENT_TYPE.Node && keepIds.has(e.id),
           ),
           edges: graph.edges.filter(
             (e) => keepIds.has(e.from) && keepIds.has(e.to),
           ),
-          boundaryEdges: [{ inside: "n_scope_0_b_19", direction: "out" }],
+          boundaryEdges: [
+            {
+              inside: "n_scope_0_b_19",
+              direction: BOUNDARY_EDGE_DIRECTION.Out,
+            },
+          ],
         };
       },
     );

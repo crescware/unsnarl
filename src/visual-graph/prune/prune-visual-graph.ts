@@ -1,8 +1,7 @@
-import type {
-  VisualBoundaryEdge,
-  VisualGraph,
-} from "../model.js";
+import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
+import type { VisualBoundaryEdge, VisualGraph } from "../model.js";
 import { bfs } from "./bfs.js";
+import { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
 import { buildAdjacency } from "./build-adjacency.js";
 import { buildParentMap } from "./build-parent-map.js";
 import { collectIds } from "./collect-ids.js";
@@ -46,7 +45,7 @@ export function pruneVisualGraph(
   // body in just because the return subgraph happens to start at L10.
   for (let i = 0; i < options.roots.length; i++) {
     const q = options.roots[i];
-    if (q === undefined || q.kind !== "line") {
+    if (q === undefined || q.kind !== ROOT_QUERY_KIND.Line) {
       continue;
     }
     for (const sg of iterateVisualSubgraphs(graph.elements)) {
@@ -123,13 +122,20 @@ export function pruneVisualGraph(
     }
   }
 
-  const boundaryEdges: VisualBoundaryEdge[] = [];
+  const boundaryEdges: /* mutable */ VisualBoundaryEdge[] = [];
   for (const bucket of buckets.values()) {
     if (bucket.kind === "out") {
-      boundaryEdges.push({ inside: bucket.inside, direction: "out" });
+      boundaryEdges.push({
+        inside: bucket.inside,
+        direction: BOUNDARY_EDGE_DIRECTION.Out,
+      });
     } else {
       const label = [...bucket.labels].sort().join(",");
-      boundaryEdges.push({ inside: bucket.inside, direction: "in", label });
+      boundaryEdges.push({
+        inside: bucket.inside,
+        direction: BOUNDARY_EDGE_DIRECTION.In,
+        label,
+      });
     }
   }
 
@@ -152,7 +158,7 @@ export function pruneVisualGraph(
     survivors.has(b.inside),
   );
 
-  const pruned: VisualGraph = {
+  const pruned = {
     version: graph.version,
     source: graph.source,
     direction: graph.direction,
@@ -167,7 +173,7 @@ export function pruneVisualGraph(
       descendants: options.descendants,
       ancestors: options.ancestors,
     },
-  };
+  } as const satisfies VisualGraph;
 
   return { graph: pruned, perQuery };
 }

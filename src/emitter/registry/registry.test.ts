@@ -1,33 +1,35 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../../cli/language.js";
 import type { SerializedIR } from "../../ir/model.js";
 import type { Emitter } from "../../pipeline/types.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { DefaultEmitterRegistry } from "./registry.js";
 
-const fakeIR: SerializedIR = {
-  version: 1,
-  source: { path: "x.ts", language: "ts" },
+const fakeIR = {
+  version: SERIALIZED_IR_VERSION,
+  source: { path: "x.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],
   references: [],
   unusedVariableIds: [],
   raw: "",
   diagnostics: [],
-};
+} as const satisfies SerializedIR;
 
-const fakeEmitter: Emitter = {
+const fakeEmitter = {
   format: "fake",
   contentType: "text/plain",
   extension: "txt",
   emit: () => "",
-};
+} as const satisfies Emitter;
 
-const otherEmitter: Emitter = {
+const otherEmitter = {
   format: "other",
   contentType: "text/plain",
   extension: "txt",
   emit: () => "",
-};
+} as const satisfies Emitter;
 
 describe("DefaultEmitterRegistry", () => {
   test("registers, looks up, and lists emitters", () => {
@@ -60,6 +62,8 @@ describe("DefaultEmitterRegistry", () => {
       extension: "txt",
       emit: (ir) => `version=${ir.version}`,
     });
-    expect(reg.get("callable")?.emit(fakeIR, {})).toBe("version=1");
+    expect(
+      reg.get("callable")?.emit(fakeIR, { pretty: true, prunedGraph: null }),
+    ).toBe("version=1");
   });
 });

@@ -9,11 +9,14 @@
     {
       "type": "node",
       "id": "n_scope_0_count_4",
-      "kind": "Variable",
       "name": "count",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
@@ -21,7 +24,9 @@
       "kind": "WriteOp",
       "name": "count",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "let"
     }
   ],
@@ -31,5 +36,7 @@
       "to": "wr_ref_0",
       "label": "set"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

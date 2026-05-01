@@ -5,8 +5,9 @@ import type { AstNode } from "../../ir/model.js";
 import { collectBindingIdentifiers } from "./collect-binding-identifiers.js";
 
 const declId = (code: string): AstNode => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
-    body: ReadonlyArray<{ declarations: ReadonlyArray<{ id: AstNode }> }>;
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
+    body: readonly { declarations: readonly { id: AstNode }[] }[];
   };
   const decl = program.body[0]?.declarations[0]?.id;
   if (decl === undefined) {
@@ -15,7 +16,7 @@ const declId = (code: string): AstNode => {
   return decl;
 };
 
-const names = (pattern: AstNode): string[] =>
+const names = (pattern: AstNode): readonly string[] =>
   collectBindingIdentifiers(pattern).map((i) => i.name);
 
 describe("collectBindingIdentifiers", () => {
@@ -59,8 +60,9 @@ describe("collectBindingIdentifiers", () => {
   });
 
   test("unsupported node types yield no identifiers", () => {
-    const program = parseSync("input.ts", "1;", { lang: "ts" }).program as unknown as {
-      body: ReadonlyArray<{ expression: AstNode }>;
+    const program = parseSync("input.ts", "1;", { lang: "ts" })
+      .program as unknown as {
+      body: readonly { expression: AstNode }[];
     };
     const literal = program.body[0]?.expression;
     if (literal === undefined) {

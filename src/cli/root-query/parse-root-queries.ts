@@ -1,15 +1,15 @@
 import { parseRootQuery } from "./parse-root-query.js";
 import type { ParsedRootQuery } from "./parsed-root-query.js";
 
-export interface RootQueryParseSuccess {
-  readonly ok: true;
-  readonly queries: readonly ParsedRootQuery[];
-}
+export type RootQueryParseSuccess = Readonly<{
+  ok: true;
+  queries: readonly ParsedRootQuery[];
+}>;
 
-export interface RootQueryParseFailure {
-  readonly ok: false;
-  readonly error: string;
-}
+export type RootQueryParseFailure = Readonly<{
+  ok: false;
+  error: string;
+}>;
 
 export type RootQueryParseResult =
   | RootQueryParseSuccess
@@ -20,7 +20,7 @@ export function parseRootQueries(value: string): RootQueryParseResult {
     return { ok: false, error: "empty --roots value" };
   }
   const tokens = value.split(",");
-  const queries: ParsedRootQuery[] = [];
+  const queries: /* mutable */ ParsedRootQuery[] = [];
   for (const token of tokens) {
     const r = parseRootQuery(token);
     if ("error" in r) {

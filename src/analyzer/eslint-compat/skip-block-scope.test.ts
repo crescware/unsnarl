@@ -1,17 +1,18 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { skipBlockScope } from "./skip-block-scope.js";
 
 describe("skipBlockScope", () => {
   test.each([
-    { parentType: "FunctionDeclaration", expected: true },
-    { parentType: "FunctionExpression", expected: true },
-    { parentType: "ArrowFunctionExpression", expected: true },
-    { parentType: "CatchClause", expected: true },
-    { parentType: "IfStatement", expected: false },
-    { parentType: "ForStatement", expected: false },
-    { parentType: "BlockStatement", expected: false },
-    { parentType: "Program", expected: false },
+    { parentType: AST_TYPE.FunctionDeclaration, expected: true },
+    { parentType: AST_TYPE.FunctionExpression, expected: true },
+    { parentType: AST_TYPE.ArrowFunctionExpression, expected: true },
+    { parentType: AST_TYPE.CatchClause, expected: true },
+    { parentType: AST_TYPE.IfStatement, expected: false },
+    { parentType: AST_TYPE.ForStatement, expected: false },
+    { parentType: AST_TYPE.BlockStatement, expected: false },
+    { parentType: AST_TYPE.Program, expected: false },
     { parentType: "", expected: false },
   ])("parentType=$parentType -> $expected", ({ parentType, expected }) => {
     expect(skipBlockScope(parentType)).toBe(expected);

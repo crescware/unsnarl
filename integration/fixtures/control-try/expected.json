@@ -9,52 +9,64 @@
     {
       "type": "node",
       "id": "n_scope_0_value_4",
-      "kind": "Variable",
       "name": "value",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_attempts_19",
-      "kind": "Variable",
       "name": "attempts",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_raw_39",
-      "kind": "Variable",
       "name": "raw",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_result_182",
-      "kind": "Variable",
       "name": "result",
       "line": 15,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_Number_84",
-      "kind": "ImplicitGlobalVariable",
       "name": "Number",
       "line": 7,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
       "id": "s_scope_1",
-      "kind": "try",
       "line": 5,
       "endLine": 8,
       "direction": "RL",
@@ -65,7 +77,9 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 7,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         },
         {
@@ -74,15 +88,17 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 6,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         }
-      ]
+      ],
+      "kind": "try"
     },
     {
       "type": "subgraph",
       "id": "s_scope_2",
-      "kind": "catch",
       "line": 8,
       "endLine": 11,
       "direction": "RL",
@@ -90,11 +106,12 @@
         {
           "type": "node",
           "id": "n_scope_2_err_106",
-          "kind": "CatchClause",
           "name": "err",
           "line": 8,
+          "endLine": null,
           "isJsxElement": false,
-          "unused": true
+          "unused": true,
+          "kind": "CatchClause"
         },
         {
           "type": "node",
@@ -102,7 +119,9 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 10,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         },
         {
@@ -111,15 +130,17 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 9,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         }
-      ]
+      ],
+      "kind": "catch"
     },
     {
       "type": "subgraph",
       "id": "s_scope_3",
-      "kind": "finally",
       "line": 11,
       "endLine": 13,
       "direction": "RL",
@@ -130,10 +151,13 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 12,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         }
-      ]
+      ],
+      "kind": "finally"
     }
   ],
   "edges": [
@@ -182,5 +206,7 @@
       "to": "n_scope_0_result_182",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

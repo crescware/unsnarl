@@ -1,4 +1,5 @@
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { CLI_MERMAID_RENDERER } from "../cli/cli-mermaid-renderer.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
@@ -16,14 +17,14 @@ import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { createPipeline } from "./pipeline.js";
 import type { EmitterRegistry, Pipeline } from "./types.js";
 
-export interface DefaultRegistryOptions {
+export type DefaultRegistryOptions = Readonly<{
   mermaidRenderer: MermaidRenderer;
-}
+}>;
 
-const STRATEGIES: Record<MermaidRenderer, MermaidStrategy> = {
+const STRATEGIES = {
   dagre: dagreStrategy,
   elk: elkStrategy,
-};
+} as const satisfies Record<MermaidRenderer, MermaidStrategy>;
 
 export function createDefaultEmitterRegistry(
   options: DefaultRegistryOptions,
@@ -46,6 +47,9 @@ export function createDefaultPipeline(emitters?: EmitterRegistry): Pipeline {
     analyzer: new EslintCompatAnalyzer(),
     serializer: new FlatSerializer(),
     emitters:
-      emitters ?? createDefaultEmitterRegistry({ mermaidRenderer: "elk" }),
+      emitters ??
+      createDefaultEmitterRegistry({
+        mermaidRenderer: CLI_MERMAID_RENDERER.Elk,
+      }),
   });
 }

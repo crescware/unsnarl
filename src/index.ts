@@ -20,7 +20,6 @@ export type {
 } from "./pipeline/types.js";
 
 export type {
-  AstExpression,
   AstIdentifier,
   AstNode,
   BlockContext,
@@ -103,9 +102,7 @@ export type {
   CliParseSuccess,
 } from "./cli/args/cli-parse-result.js";
 export { parseRootQuery } from "./cli/root-query/parse-root-query.js";
-export {
-  parseRootQueries,
-} from "./cli/root-query/parse-root-queries.js";
+export { parseRootQueries } from "./cli/root-query/parse-root-queries.js";
 export type {
   RootQueryParseFailure,
   RootQueryParseResult,

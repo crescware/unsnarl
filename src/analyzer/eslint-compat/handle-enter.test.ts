@@ -1,7 +1,9 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { ScopeManager } from "../manager.js";
 import { handleEnter } from "./handle-enter.js";
 import type { NodeLike } from "./node-like.js";
@@ -18,7 +20,7 @@ describe("handleEnter", () => {
     const program = parse(code);
     const manager = makeManager(program);
     const diagnostics = new DiagnosticCollector();
-    const node: NodeLike = { type: "TSInterfaceDeclaration" };
+    const node = { type: "TSInterfaceDeclaration" } as const satisfies NodeLike;
 
     const action = handleEnter(
       node,
@@ -35,7 +37,7 @@ describe("handleEnter", () => {
 
   test('returns "skip" when key is a TS type-only key', () => {
     const code = "let x: number = 1;";
-    const node: NodeLike = { type: "TSTypeAnnotation" };
+    const node = { type: "TSTypeAnnotation" } as const satisfies NodeLike;
     const manager = makeManager(parse(code));
 
     const action = handleEnter(
@@ -55,55 +57,55 @@ describe("handleEnter", () => {
     {
       name: "FunctionDeclaration -> pushes function scope",
       code: "function foo() {}",
-      type: "FunctionDeclaration",
+      type: AST_TYPE.FunctionDeclaration,
       expectedScopeType: "function",
     },
     {
       name: "FunctionExpression -> pushes function scope",
       code: "const f = function() {};",
-      type: "FunctionExpression",
+      type: AST_TYPE.FunctionExpression,
       expectedScopeType: "function",
     },
     {
       name: "ArrowFunctionExpression -> pushes function scope",
       code: "const f = () => 1;",
-      type: "ArrowFunctionExpression",
+      type: AST_TYPE.ArrowFunctionExpression,
       expectedScopeType: "function",
     },
     {
       name: "ForStatement -> pushes for scope",
       code: "for (let i = 0; i < 1; i++) {}",
-      type: "ForStatement",
+      type: AST_TYPE.ForStatement,
       expectedScopeType: "for",
     },
     {
       name: "ForOfStatement -> pushes for scope",
       code: "for (const x of items) {}",
-      type: "ForOfStatement",
+      type: AST_TYPE.ForOfStatement,
       expectedScopeType: "for",
     },
     {
       name: "ForInStatement -> pushes for scope",
       code: "for (const k in obj) {}",
-      type: "ForInStatement",
+      type: AST_TYPE.ForInStatement,
       expectedScopeType: "for",
     },
     {
       name: "SwitchStatement -> pushes switch scope",
       code: "switch (x) {}",
-      type: "SwitchStatement",
+      type: AST_TYPE.SwitchStatement,
       expectedScopeType: "switch",
     },
     {
       name: "SwitchCase -> pushes block scope",
       code: "switch (x) { case 1: break; }",
-      type: "SwitchCase",
+      type: AST_TYPE.SwitchCase,
       expectedScopeType: "block",
     },
     {
       name: "CatchClause -> pushes catch scope",
       code: "try {} catch (e) {}",
-      type: "CatchClause",
+      type: DEFINITION_TYPE.CatchClause,
       expectedScopeType: "catch",
     },
   ])("$name", ({ code, type, expectedScopeType }) => {
@@ -127,9 +129,11 @@ describe("handleEnter", () => {
   test("BlockStatement under FunctionDeclaration is NOT pushed (function body is part of fn scope)", () => {
     const code = "function foo() { let x = 1; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
+    const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = makeManager(program);
-    const fnParent: NodeLike = { type: "FunctionDeclaration" };
+    const fnParent = {
+      type: AST_TYPE.FunctionDeclaration,
+    } as const satisfies NodeLike;
 
     handleEnter(
       block,
@@ -147,9 +151,12 @@ describe("handleEnter", () => {
   test("plain BlockStatement (not under fn/catch) is pushed as block scope", () => {
     const code = "if (x) { let y = 1; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
+    const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = makeManager(program);
-    const parent: NodeLike = { type: "IfStatement", start: 0 };
+    const parent = {
+      type: AST_TYPE.IfStatement,
+      start: 0,
+    } as const satisfies NodeLike;
 
     handleEnter(
       block,
@@ -170,7 +177,7 @@ describe("handleEnter", () => {
     const before = manager.current();
 
     handleEnter(
-      { type: "ExpressionStatement" },
+      { type: AST_TYPE.ExpressionStatement },
       null,
       null,
       [],

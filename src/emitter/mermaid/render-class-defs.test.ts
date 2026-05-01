@@ -4,13 +4,13 @@ import { renderClassDefs } from "./render-class-defs.js";
 
 describe("renderClassDefs", () => {
   test("emits nothing when both id lists are empty", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderClassDefs([], [], lines);
     expect(lines).toEqual([]);
   });
 
   test("emits the fnWrap classDef and per-id 'class' lines for wrapper ids", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderClassDefs(["wrap_a", "wrap_b"], [], lines);
     expect(lines).toEqual([
       "  classDef fnWrap fill:#1a2030,stroke:#5a7d99;",
@@ -20,7 +20,7 @@ describe("renderClassDefs", () => {
   });
 
   test("emits the boundaryStub classDef and per-id 'class' lines for stub ids", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderClassDefs([], ["stub_1", "stub_2"], lines);
     expect(lines[0]?.startsWith("  classDef boundaryStub ")).toBe(true);
     expect(lines).toContain("  class stub_1 boundaryStub;");
@@ -28,7 +28,7 @@ describe("renderClassDefs", () => {
   });
 
   test("emits both classDefs when both lists are non-empty", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderClassDefs(["wrap_a"], ["stub_1"], lines);
     expect(lines).toEqual([
       "  classDef fnWrap fill:#1a2030,stroke:#5a7d99;",

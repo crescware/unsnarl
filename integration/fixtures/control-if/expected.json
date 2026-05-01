@@ -9,43 +9,51 @@
     {
       "type": "node",
       "id": "n_scope_0_counter_4",
-      "kind": "Variable",
       "name": "counter",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_flag_23",
-      "kind": "Variable",
       "name": "flag",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_result_97",
-      "kind": "Variable",
       "name": "result",
       "line": 10,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
       "id": "cont_if_scope_0_37",
       "kind": "if-else-container",
       "line": 4,
+      "endLine": 8,
       "direction": "RL",
       "hasElse": true,
       "elements": [
         {
           "type": "subgraph",
           "id": "s_scope_1",
-          "kind": "if",
           "line": 4,
           "endLine": 6,
           "direction": "RL",
@@ -56,15 +64,17 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 5,
+              "endLine": null,
               "isJsxElement": false,
+              "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "if"
         },
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "else",
           "line": 6,
           "endLine": 8,
           "direction": "RL",
@@ -75,13 +85,15 @@
               "kind": "WriteOp",
               "name": "counter",
               "line": 7,
+              "endLine": null,
               "isJsxElement": false,
+              "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "else"
         }
-      ],
-      "endLine": 8
+      ]
     }
   ],
   "edges": [
@@ -110,5 +122,7 @@
       "to": "n_scope_0_result_97",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

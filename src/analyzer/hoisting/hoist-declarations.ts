@@ -4,7 +4,7 @@ import { isNodeLike } from "./node-like.js";
 import { visit } from "./visit.js";
 
 export function hoistDeclarations(
-  body: ReadonlyArray<unknown>,
+  body: readonly unknown[],
   scope: Scope,
   raw: string,
   diagnostics: DiagnosticCollector,

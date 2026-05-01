@@ -1,4 +1,5 @@
 import type { VisualSubgraph } from "../../visual-graph/model.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { emitNode } from "./emit-node.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import type { RenderState } from "./render-state.js";
@@ -16,13 +17,16 @@ export function emitPlainSubgraph(
   state.lines.push(`${childIndent}direction ${sg.direction}`);
   let emittedChildren = 0;
   for (const e of sg.elements) {
-    if (e.type === "node" && !state.wrappedOwnerIds.has(e.id)) {
+    if (
+      e.type === VISUAL_ELEMENT_TYPE.Node &&
+      !state.wrappedOwnerIds.has(e.id)
+    ) {
       emitNode(state, e, childIndent);
       emittedChildren++;
     }
   }
   for (const e of sg.elements) {
-    if (e.type === "subgraph") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
       emitSubgraph(state, e, childIndent);
       emittedChildren++;
     }

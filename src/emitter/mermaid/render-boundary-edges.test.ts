@@ -1,28 +1,32 @@
 import { describe, expect, test } from "vitest";
 
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 import { renderBoundaryEdges } from "./render-boundary-edges.js";
-import { makeGraph } from "./testing/make-graph.js";
+import { baseGraph } from "./testing/make-graph.js";
 
 describe("renderBoundaryEdges", () => {
   test("does nothing when boundaryEdges is undefined or empty", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
-    renderBoundaryEdges(makeGraph(), lines, stubIds);
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
+    renderBoundaryEdges(baseGraph(), lines, stubIds);
     expect(lines).toEqual([]);
     expect(stubIds).toEqual([]);
 
-    renderBoundaryEdges(makeGraph({ boundaryEdges: [] }), lines, stubIds);
+    renderBoundaryEdges({ ...baseGraph(), boundaryEdges: [] }, lines, stubIds);
     expect(lines).toEqual([]);
     expect(stubIds).toEqual([]);
   });
 
   test("emits an unlabeled dashed arrow for direction='out' (label is unknowable)", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
-        boundaryEdges: [{ inside: "n_x", direction: "out" }],
-      }),
+      {
+        ...baseGraph(),
+        boundaryEdges: [
+          { inside: "n_x", direction: BOUNDARY_EDGE_DIRECTION.Out },
+        ],
+      },
       lines,
       stubIds,
     );
@@ -32,12 +36,19 @@ describe("renderBoundaryEdges", () => {
   });
 
   test("emits a labeled dashed arrow for direction='in'", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
-        boundaryEdges: [{ inside: "n_x", direction: "in", label: "read" }],
-      }),
+      {
+        ...baseGraph(),
+        boundaryEdges: [
+          {
+            inside: "n_x",
+            direction: BOUNDARY_EDGE_DIRECTION.In,
+            label: "read",
+          },
+        ],
+      },
       lines,
       stubIds,
     );
@@ -46,16 +57,21 @@ describe("renderBoundaryEdges", () => {
   });
 
   test("assigns sequential stub ids and appends them to stubIds", () => {
-    const lines: string[] = [];
-    const stubIds: string[] = [];
+    const lines: /* mutable */ string[] = [];
+    const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(
-      makeGraph({
+      {
+        ...baseGraph(),
         boundaryEdges: [
-          { inside: "a", direction: "out" },
-          { inside: "b", direction: "in", label: "write" },
-          { inside: "c", direction: "out" },
+          { inside: "a", direction: BOUNDARY_EDGE_DIRECTION.Out },
+          {
+            inside: "b",
+            direction: BOUNDARY_EDGE_DIRECTION.In,
+            label: "write",
+          },
+          { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
         ],
-      }),
+      },
       lines,
       stubIds,
     );

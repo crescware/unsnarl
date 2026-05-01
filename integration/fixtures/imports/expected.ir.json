@@ -66,7 +66,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "def",
             "span": {
@@ -91,12 +90,9 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "default",
-          "importSource": "some-default",
-          "importedName": null,
-          "declarationKind": null
+          "importSource": "some-default"
         }
       ]
     },
@@ -116,7 +112,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "named",
             "span": {
@@ -141,12 +136,10 @@
               "offset": 32
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "some-named",
           "importedName": "named",
-          "declarationKind": null
+          "importSource": "some-named"
         }
       ]
     },
@@ -166,7 +159,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "renamed",
             "span": {
@@ -191,12 +183,10 @@
               "offset": 32
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "some-named",
           "importedName": "other",
-          "declarationKind": null
+          "importSource": "some-named"
         }
       ]
     },
@@ -216,7 +206,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "ns",
             "span": {
@@ -241,12 +230,9 @@
               "offset": 86
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "namespace",
-          "importSource": "some-namespace",
-          "importedName": null,
-          "declarationKind": null
+          "importSource": "some-namespace"
         }
       ]
     },
@@ -264,7 +250,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -289,15 +274,15 @@
               "offset": 125
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 5,
-            "column": 10,
-            "offset": 135
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 135
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -316,7 +301,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -341,15 +325,15 @@
               "offset": 140
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 6,
-            "column": 10,
-            "offset": 150
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 6,
+              "column": 10,
+              "offset": 150
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -368,7 +352,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "c",
             "span": {
@@ -393,15 +376,15 @@
               "offset": 157
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 7,
-            "column": 10,
-            "offset": 167
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 7,
+              "column": 10,
+              "offset": 167
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -420,7 +403,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "d",
             "span": {
@@ -445,15 +427,15 @@
               "offset": 176
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 8,
-            "column": 10,
-            "offset": 186
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 8,
+              "column": 10,
+              "offset": 186
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -475,7 +457,6 @@
       "owners": [
         "scope#0:a@131"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -502,7 +483,6 @@
       "owners": [
         "scope#0:b@146"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -529,7 +509,6 @@
       "owners": [
         "scope#0:c@163"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -556,7 +535,6 @@
       "owners": [
         "scope#0:d@182"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

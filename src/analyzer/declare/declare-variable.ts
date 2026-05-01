@@ -22,12 +22,12 @@ export function declareVariable(
     scope.variables.push(variable);
   }
   variable.identifiers.push(identifier);
-  const def: Definition = {
+  const def = {
     type: defType,
     name: identifier,
     node: defNode,
     parent,
-  };
+  } as const satisfies Definition;
   variable.defs.push(def);
   return variable;
 }

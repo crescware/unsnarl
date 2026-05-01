@@ -2,16 +2,20 @@ import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import { allBindingVariables } from "./all-binding-variables.js";
 
 const ident = (name: string): AstIdentifier =>
-  ({ type: "Identifier", name }) as unknown as AstIdentifier;
+  ({ type: AST_TYPE.Identifier, name }) as unknown as AstIdentifier;
 
 const declId = (code: string): AstNode => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
-    body: ReadonlyArray<{ declarations: ReadonlyArray<{ id: AstNode }> }>;
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
+    body: readonly { declarations: readonly { id: AstNode }[] }[];
   };
   const decl = program.body[0]?.declarations[0]?.id;
   if (decl === undefined) {
@@ -20,15 +24,22 @@ const declId = (code: string): AstNode => {
   return decl;
 };
 
-const scopeWith = (...names: string[]): ScopeImpl => {
+const scopeWith = (...names: readonly string[]): ScopeImpl => {
   const scope = new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
   for (const n of names) {
-    declareVariable(scope, ident(n), "Variable", { type: "VariableDeclarator" } as unknown as AstNode, null);
+    declareVariable(
+      scope,
+      ident(n),
+      DEFINITION_TYPE.Variable,
+      { type: AST_TYPE.VariableDeclarator } as unknown as AstNode,
+      null,
+    );
   }
   return scope;
 };
@@ -55,10 +66,11 @@ describe("allBindingVariables", () => {
   test("walks up the scope chain", () => {
     const upper = scopeWith("outer");
     const inner = new ScopeImpl({
-      type: "block",
+      type: SCOPE_TYPE.Block,
       isStrict: true,
       upper,
-      block: { type: "BlockStatement" } as unknown as AstNode,
+      block: { type: AST_TYPE.BlockStatement } as unknown as AstNode,
+      blockContext: null,
     });
     const out = allBindingVariables(declId("const outer = 1;"), inner);
     expect(out.map((v) => v.name)).toEqual(["outer"]);
@@ -66,14 +78,20 @@ describe("allBindingVariables", () => {
 
   test("duplicate identifiers in pattern resolve to the same variable once", () => {
     const scope = scopeWith("a");
-    const pattern = { type: "ArrayPattern", elements: [ident("a"), ident("a")] } as unknown as AstNode;
+    const pattern = {
+      type: AST_TYPE.ArrayPattern,
+      elements: [ident("a"), ident("a")],
+    } as unknown as AstNode;
     const out = allBindingVariables(pattern, scope);
     expect(out).toHaveLength(1);
   });
 
   test("empty pattern → empty output", () => {
     const scope = scopeWith();
-    const empty = { type: "ObjectPattern", properties: [] } as unknown as AstNode;
+    const empty = {
+      type: AST_TYPE.ObjectPattern,
+      properties: [],
+    } as unknown as AstNode;
     expect(allBindingVariables(empty, scope)).toEqual([]);
   });
 });

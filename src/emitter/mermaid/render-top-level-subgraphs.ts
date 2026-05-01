@@ -1,4 +1,5 @@
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import type { RenderState } from "./render-state.js";
 
@@ -7,7 +8,7 @@ export function renderTopLevelSubgraphs(
   graph: VisualGraph,
 ): void {
   for (const e of graph.elements) {
-    if (e.type === "subgraph") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
       emitSubgraph(state, e, "  ");
     }
   }

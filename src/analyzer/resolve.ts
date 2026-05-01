@@ -1,4 +1,5 @@
 import type { AstNode, Reference, Scope, Variable } from "../ir/model.js";
+import { DEFINITION_TYPE } from "./definition-type.js";
 import { VariableImpl } from "./scope.js";
 
 export function resolveInScopeChain(
@@ -36,7 +37,7 @@ export function bindReference(
     globalScope.variables.push(implicit);
     implicit.identifiers.push(reference.identifier);
     implicit.defs.push({
-      type: "ImplicitGlobalVariable",
+      type: DEFINITION_TYPE.ImplicitGlobalVariable,
       name: reference.identifier,
       node: reference.identifier as unknown as AstNode,
       parent: null,

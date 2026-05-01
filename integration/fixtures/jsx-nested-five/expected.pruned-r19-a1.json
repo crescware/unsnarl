@@ -21,6 +21,7 @@
           "id": "s_return_scope_0_Main_54_151_331",
           "kind": "return",
           "line": 10,
+          "endLine": 24,
           "direction": "RL",
           "elements": [
             {
@@ -29,8 +30,9 @@
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
+              "endLine": 23,
               "isJsxElement": true,
-              "endLine": 23
+              "unused": false
             },
             {
               "type": "node",
@@ -38,8 +40,9 @@
               "kind": "ReturnUse",
               "name": "B",
               "line": 13,
+              "endLine": 22,
               "isJsxElement": true,
-              "endLine": 22
+              "unused": false
             },
             {
               "type": "node",
@@ -47,8 +50,9 @@
               "kind": "ReturnUse",
               "name": "C",
               "line": 15,
+              "endLine": 21,
               "isJsxElement": true,
-              "endLine": 21
+              "unused": false
             },
             {
               "type": "node",
@@ -56,8 +60,9 @@
               "kind": "ReturnUse",
               "name": "D",
               "line": 17,
+              "endLine": 20,
               "isJsxElement": true,
-              "endLine": 20
+              "unused": false
             },
             {
               "type": "node",
@@ -65,7 +70,9 @@
               "kind": "ReturnUse",
               "name": "E",
               "line": 19,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
             },
             {
               "type": "node",
@@ -73,10 +80,11 @@
               "kind": "ReturnUse",
               "name": "z",
               "line": 19,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
-          ],
-          "endLine": 24
+          ]
         }
       ]
     }

@@ -1,3 +1,5 @@
+import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedReference, SerializedScope } from "../../ir/model.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
@@ -12,10 +14,13 @@ export function predicateTargetId(
   if (!pc) {
     return null;
   }
-  if (pc.type === "SwitchStatement") {
+  if (pc.type === PREDICATE_CONTAINER_TYPE.SwitchStatement) {
     let cur = scopeMap.get(r.from);
     while (cur) {
-      if (cur.type === "switch" && cur.block.span.offset === pc.offset) {
+      if (
+        cur.type === SCOPE_TYPE.Switch &&
+        cur.block.span.offset === pc.offset
+      ) {
         return `s_${sanitize(cur.id)}`;
       }
       if (!cur.upper) {

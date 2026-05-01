@@ -57,7 +57,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -82,15 +81,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 10,
-            "offset": 10
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 10,
+              "offset": 10
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -109,7 +108,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -134,15 +132,15 @@
               "offset": 15
             }
           },
-          "initType": "ArrayExpression",
-          "initSpan": {
-            "line": 2,
-            "column": 10,
-            "offset": 25
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 2,
+              "column": 10,
+              "offset": 25
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -164,7 +162,6 @@
       "owners": [
         "scope#0:b@21"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

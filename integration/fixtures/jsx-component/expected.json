@@ -9,51 +9,60 @@
     {
       "type": "node",
       "id": "n_scope_0_Fragment_9",
-      "kind": "ImportBinding",
       "name": "Fragment",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "Fragment",
-      "importSource": "react"
+      "importedName": "Fragment"
     },
     {
       "type": "node",
       "id": "n_scope_0_Hello_79",
-      "kind": "Variable",
       "name": "Hello",
       "line": 7,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
       "initIsFunction": true
     },
     {
       "type": "node",
       "id": "n_scope_0_App_196",
-      "kind": "Variable",
       "name": "App",
       "line": 13,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
       "declarationKind": "const",
       "initIsFunction": true
     },
     {
       "type": "node",
       "id": "n_scope_0_root_237",
-      "kind": "Variable",
       "name": "root",
       "line": 15,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_span_125",
-      "kind": "ImplicitGlobalVariable",
       "name": "span",
       "line": 9,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -68,16 +77,19 @@
         {
           "type": "node",
           "id": "n_scope_1_props_88",
-          "kind": "Parameter",
           "name": "props",
           "line": 7,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_Hello_79_105_187",
           "kind": "return",
           "line": 7,
+          "endLine": 11,
           "direction": "RL",
           "elements": [
             {
@@ -86,8 +98,9 @@
               "kind": "ReturnUse",
               "name": "Fragment",
               "line": 8,
+              "endLine": 10,
               "isJsxElement": true,
-              "endLine": 10
+              "unused": false
             },
             {
               "type": "node",
@@ -95,7 +108,9 @@
               "kind": "ReturnUse",
               "name": "span",
               "line": 9,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
             },
             {
               "type": "node",
@@ -103,10 +118,11 @@
               "kind": "ReturnUse",
               "name": "props",
               "line": 9,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
-          ],
-          "endLine": 11
+          ]
         }
       ]
     },
@@ -125,6 +141,7 @@
           "id": "s_return_scope_0_App_196_208_228",
           "kind": "return",
           "line": 13,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -133,7 +150,9 @@
               "kind": "ReturnUse",
               "name": "Hello",
               "line": 13,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
             }
           ]
         }
@@ -145,7 +164,9 @@
       "kind": "ModuleSource",
       "name": "react",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
@@ -179,5 +200,7 @@
       "to": "n_scope_0_Fragment_9",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

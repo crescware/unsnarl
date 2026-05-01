@@ -9,6 +9,7 @@ export function blockContextOf(
     return null;
   }
   return {
+    kind: "other",
     parentType: parent.type,
     key,
     parentSpanOffset: parent.start ?? 0,

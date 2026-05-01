@@ -1,8 +1,11 @@
 import type { AstNode, Scope } from "../../ir/model.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { isNodeLike, type NodeLike } from "./node-like.js";
 
 export function handleVariableDeclaration(
@@ -12,10 +15,10 @@ export function handleVariableDeclaration(
   diagnostics: DiagnosticCollector,
 ): void {
   const kind = node["kind"];
-  if (kind === "var") {
+  if (kind === VARIABLE_DECLARATION_KIND.Var) {
     const start = node.start ?? 0;
     diagnostics.add(
-      "var-detected",
+      DIAGNOSTIC_KIND.VarDetected,
       "var declaration is not supported and was skipped.",
       spanFromOffset(raw, start),
     );
@@ -41,7 +44,7 @@ export function handleVariableDeclaration(
       declareVariable(
         scope,
         ident,
-        "Variable",
+        DEFINITION_TYPE.Variable,
         dec as unknown as AstNode,
         node as unknown as AstNode,
       );

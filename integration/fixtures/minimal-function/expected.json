@@ -9,10 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_greet_9",
-      "kind": "FunctionName",
       "name": "greet",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -31,7 +33,9 @@
       "kind": "ModuleSink",
       "name": "module",
       "line": 0,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
@@ -40,5 +44,7 @@
       "to": "module_root",
       "label": "read,call"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

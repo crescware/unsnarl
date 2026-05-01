@@ -1,25 +1,28 @@
 import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
 function caseScope(
   id: string,
   parentSpanOffset: number,
   fallsThrough: boolean,
 ): SerializedScope {
-  return makeScope({
+  return {
+    ...baseScope(),
     id,
     upper: "switch",
     fallsThrough,
-    blockContext: makeBlockContext(
-      "SwitchStatement",
-      "cases",
+    blockContext: {
+      ...baseBlockContext(),
+      parentType: AST_TYPE.SwitchStatement,
+      key: "cases",
       parentSpanOffset,
-    ),
-  });
+    },
+  };
 }
 
 const c0 = caseScope("c0", 100, true);
@@ -28,7 +31,7 @@ const c2 = caseScope("c2", 100, true);
 const c3 = caseScope("c3", 100, false);
 
 const containerKey = "switch:switch:100";
-const sortedCases = new Map<string, SerializedScope[]>([
+const sortedCases = new Map<string, readonly SerializedScope[]>([
   [containerKey, [c0, c1, c2, c3]],
 ]);
 
@@ -60,7 +63,7 @@ describe("previousFallthroughCase", () => {
 
   test("scope without branchContainerKey -> null", () => {
     expect(
-      previousFallthroughCase(makeScope({ id: "x" }), sortedCases),
+      previousFallthroughCase({ ...baseScope(), id: "x" }, sortedCases),
     ).toBeNull();
   });
 

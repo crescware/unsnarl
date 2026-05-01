@@ -1,13 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { stateAt } from "./state-at.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
 const ops: WriteOp[] = [
-  makeWriteOp({ refId: "r1", varId: "v", offset: 10 }),
-  makeWriteOp({ refId: "r2", varId: "v", offset: 20 }),
-  makeWriteOp({ refId: "r3", varId: "v", offset: 30 }),
+  { ...baseWriteOp(), refId: "r1", varId: "v", offset: 10 },
+  { ...baseWriteOp(), refId: "r2", varId: "v", offset: 20 },
+  { ...baseWriteOp(), refId: "r3", varId: "v", offset: 30 },
 ];
 const byVar = new Map<string, WriteOp[]>([["v", ops]]);
 

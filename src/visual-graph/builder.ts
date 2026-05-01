@@ -1,9 +1,14 @@
+import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
+import { SCOPE_TYPE } from "../analyzer/scope-type.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../ir/model.js";
+import { AST_TYPE } from "../parser/ast-type.js";
+import { IMPORT_KIND } from "../serializer/import-kind.js";
+import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";
 import { branchContainerKey } from "./builder/branch-container-key.js";
 import { buildScope } from "./builder/build-scope.js";
 import type { BuildState } from "./builder/build-state.js";
@@ -25,18 +30,23 @@ import { sanitize } from "./builder/sanitize.js";
 import { stateRefId } from "./builder/state-ref-id.js";
 import { writeOpNodeId } from "./builder/write-op-node-id.js";
 import type { WriteOp } from "./builder/write-op.js";
-import type { VisualGraph } from "./model.js";
+import { DIRECTION } from "./direction.js";
+import type { VisualEdge, VisualElement, VisualGraph } from "./model.js";
+import { NODE_KIND } from "./node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(ir: SerializedIR): VisualGraph {
-  const graph: VisualGraph = {
-    version: 1,
+  const graph = {
+    version: SERIALIZED_IR_VERSION,
     source: { path: ir.source.path, language: ir.source.language },
-    direction: "RL",
-    elements: [],
-    edges: [],
-  };
+    direction: DIRECTION.RL,
+    elements: [] as VisualElement[],
+    edges: [] as VisualEdge[],
+    boundaryEdges: [],
+    pruning: null,
+  } satisfies VisualGraph;
 
   const variableMap = new Map<string, SerializedVariable>();
   for (const v of ir.variables) {
@@ -54,15 +64,15 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     let blockOffset: number | null = null;
-    if (def.type === "FunctionName") {
+    if (def.type === DEFINITION_TYPE.FunctionName) {
       blockOffset = def.node.span.offset;
     } else if (
-      def.type === "Variable" &&
-      def.initSpan !== null &&
-      (def.initType === "FunctionExpression" ||
-        def.initType === "ArrowFunctionExpression")
+      def.type === DEFINITION_TYPE.Variable &&
+      def.init !== null &&
+      (def.init.type === AST_TYPE.FunctionExpression ||
+        def.init.type === AST_TYPE.ArrowFunctionExpression)
     ) {
-      blockOffset = def.initSpan.offset;
+      blockOffset = def.init.span.offset;
     }
     if (blockOffset === null) {
       continue;
@@ -77,7 +87,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   const hiddenVariables = new Set<string>();
   for (const v of ir.variables) {
-    if (v.defs[0]?.type !== "ImplicitGlobalVariable") {
+    if (v.defs[0]?.type !== DEFINITION_TYPE.ImplicitGlobalVariable) {
       continue;
     }
     const refs = ir.references.filter((r) => r.resolved === v.id);
@@ -86,7 +96,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
-  const refsByVariable = new Map<string, SerializedReference[]>();
+  const refsByVariable = new Map<string, /* mutable */ SerializedReference[]>();
   for (const r of ir.references) {
     if (!r.resolved) {
       continue;
@@ -98,27 +108,27 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   for (const [, refs] of refsByVariable) {
     refs.sort((a, b) => a.identifier.span.offset - b.identifier.span.offset);
   }
-  const writeOpsByVariable = new Map<string, WriteOp[]>();
-  const writeOpsByScope = new Map<string, WriteOp[]>();
+  const writeOpsByVariable = new Map<string, /* mutable */ WriteOp[]>();
+  const writeOpsByScope = new Map<string, /* mutable */ WriteOp[]>();
   const writeOpByRef = new Map<string, WriteOp>();
   for (const v of ir.variables) {
     if (hiddenVariables.has(v.id)) {
       continue;
     }
     const refs = refsByVariable.get(v.id) ?? [];
-    const ops: WriteOp[] = [];
+    const ops: /* mutable */ WriteOp[] = [];
     for (const r of refs) {
       if (!r.flags.write) {
         continue;
       }
-      const op: WriteOp = {
+      const op = {
         refId: r.id,
         varId: v.id,
         varName: v.name,
         line: r.identifier.span.line,
         offset: r.identifier.span.offset,
         scopeId: r.from,
-      };
+      } as const satisfies WriteOp;
       ops.push(op);
       writeOpByRef.set(r.id, op);
       const sopArr = writeOpsByScope.get(op.scopeId) ?? [];
@@ -130,7 +140,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
-  const sortedCasesByContainer = new Map<string, SerializedScope[]>();
+  const sortedCasesByContainer = new Map<
+    string,
+    /* mutable */ SerializedScope[]
+  >();
   for (const s of ir.scopes) {
     const ckey = branchContainerKey(s);
     if (ckey?.startsWith("switch:")) {
@@ -143,7 +156,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     arr.sort((a, b) => a.block.span.offset - b.block.span.offset);
   }
 
-  const ctx: BuilderContext = {
+  const ctx = {
     ir,
     variableMap,
     scopeMap,
@@ -153,18 +166,18 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     writeOpsByScope,
     writeOpByRef,
     sortedCasesByContainer,
-  };
-  const state: BuildState = {
+  } as const satisfies BuilderContext;
+  const state = {
     subgraphByScope: new Map(),
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     emittedEdges: new Set(),
     edges: graph.edges,
-  };
+  } as const satisfies BuildState;
 
   const root = ir.scopes.find(
-    (s) => s.type === "module" || s.type === "global",
+    (s) => s.type === SCOPE_TYPE.Module || s.type === SCOPE_TYPE.Global,
   );
   if (root) {
     buildScope(root, graph, ctx, state);
@@ -316,12 +329,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   if (needsModuleRoot) {
     graph.elements.push({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: MODULE_ROOT_ID,
-      kind: "ModuleSink",
+      kind: NODE_KIND.ModuleSink,
       name: "module",
       line: 0,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
     });
   }
 
@@ -344,7 +359,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const def = v.defs[0];
-    if (def?.type !== "ImportBinding") {
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;
     }
     const source = def.importSource;
@@ -359,7 +374,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       });
     }
     if (
-      def.importKind === "named" &&
+      def.importKind === IMPORT_KIND.Named &&
       def.importedName !== null &&
       def.importedName !== v.name
     ) {
@@ -376,22 +391,26 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   for (const mod of moduleNodes.values()) {
     graph.elements.push({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: mod.id,
-      kind: "ModuleSource",
+      kind: NODE_KIND.ModuleSource,
       name: mod.source,
       line: mod.line,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
     });
   }
   for (const inter of intermediates.values()) {
     graph.elements.push({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: inter.id,
-      kind: "ImportIntermediate",
+      kind: NODE_KIND.ImportIntermediate,
       name: inter.name,
       line: inter.line,
+      endLine: null,
       isJsxElement: false,
+      unused: false,
     });
   }
   for (const v of ir.variables) {
@@ -399,7 +418,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const def = v.defs[0];
-    if (def?.type !== "ImportBinding") {
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;
     }
     const source = def.importSource;
@@ -412,7 +431,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
     const localId = nodeId(v.id);
     const isRenamed =
-      def.importKind === "named" &&
+      def.importKind === IMPORT_KIND.Named &&
       def.importedName !== null &&
       def.importedName !== v.name;
     if (isRenamed && def.importedName !== null) {

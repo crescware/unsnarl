@@ -9,11 +9,14 @@
     {
       "type": "node",
       "id": "n_scope_0_counter_4",
-      "kind": "Variable",
       "name": "counter",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     }
   ],
   "edges": [],

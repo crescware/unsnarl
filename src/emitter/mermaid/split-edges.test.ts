@@ -1,15 +1,15 @@
 import { describe, expect, test } from "vitest";
 
 import { splitEdges } from "./split-edges.js";
-import { makeEdge } from "./testing/make-edge.js";
+import { baseEdge } from "./testing/make-edge.js";
 
 describe("splitEdges", () => {
   test("routes edges whose `from` is in importSourceIds to imports", () => {
     const importSources = new Set(["mod_a"]);
     const got = splitEdges(
       [
-        makeEdge({ from: "mod_a", to: "n_x" }),
-        makeEdge({ from: "n_x", to: "n_y" }),
+        { ...baseEdge(), from: "mod_a", to: "n_x" },
+        { ...baseEdge(), from: "n_x", to: "n_y" },
       ],
       importSources,
     );
@@ -21,9 +21,9 @@ describe("splitEdges", () => {
     const importSources = new Set(["mod_a"]);
     const got = splitEdges(
       [
-        makeEdge({ from: "n_a", to: "n_b" }),
-        makeEdge({ from: "mod_a", to: "n_a" }),
-        makeEdge({ from: "n_c", to: "n_d" }),
+        { ...baseEdge(), from: "n_a", to: "n_b" },
+        { ...baseEdge(), from: "mod_a", to: "n_a" },
+        { ...baseEdge(), from: "n_c", to: "n_d" },
       ],
       importSources,
     );
@@ -40,7 +40,7 @@ describe("splitEdges", () => {
     // Behavior: only the `from` side classifies the edge.
     const importSources = new Set(["mod_a"]);
     const got = splitEdges(
-      [makeEdge({ from: "n_x", to: "mod_a" })],
+      [{ ...baseEdge(), from: "n_x", to: "mod_a" }],
       importSources,
     );
     expect(got.imports).toEqual([]);

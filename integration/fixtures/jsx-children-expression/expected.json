@@ -9,22 +9,24 @@
     {
       "type": "node",
       "id": "n_scope_0_Sub_9",
-      "kind": "ImportBinding",
       "name": "Sub",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "Sub",
-      "importSource": "./sub"
+      "importedName": "Sub"
     },
     {
       "type": "node",
       "id": "n_scope_0_Main_46",
-      "kind": "FunctionName",
       "name": "Main",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -39,17 +41,21 @@
         {
           "type": "node",
           "id": "n_scope_1_message_63",
-          "kind": "Variable",
           "name": "message",
           "line": 4,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_Main_46_84_112",
           "kind": "return",
           "line": 5,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -58,7 +64,9 @@
               "kind": "ReturnUse",
               "name": "Sub",
               "line": 5,
-              "isJsxElement": true
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
             },
             {
               "type": "node",
@@ -66,7 +74,9 @@
               "kind": "ReturnUse",
               "name": "message",
               "line": 5,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ]
         }
@@ -78,7 +88,9 @@
       "kind": "ModuleSource",
       "name": "./sub",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
@@ -97,5 +109,7 @@
       "to": "n_scope_0_Sub_9",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

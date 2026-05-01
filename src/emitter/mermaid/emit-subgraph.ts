@@ -1,4 +1,5 @@
 import type { VisualSubgraph } from "../../visual-graph/model.js";
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { emitNode } from "./emit-node.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
 import type { RenderState } from "./render-state.js";
@@ -8,7 +9,7 @@ export function emitSubgraph(
   sg: VisualSubgraph,
   indent: string,
 ): void {
-  if (sg.kind === "function" && sg.ownerNodeId !== undefined) {
+  if (sg.kind === SUBGRAPH_KIND.Function && sg.ownerNodeId !== null) {
     const ownerNode = state.nodeMap.get(sg.ownerNodeId);
     if (ownerNode !== undefined) {
       // Wrap the FunctionName node and the function body subgraph as

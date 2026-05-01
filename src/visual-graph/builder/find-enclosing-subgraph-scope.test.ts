@@ -2,11 +2,11 @@ import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
 import { findEnclosingSubgraphScope } from "./find-enclosing-subgraph-scope.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseScope } from "./testing/make-scope.js";
 
-const grand = makeScope({ id: "grand" });
-const parent = makeScope({ id: "parent", upper: "grand" });
-const child = makeScope({ id: "child", upper: "parent" });
+const grand = { ...baseScope(), id: "grand" };
+const parent = { ...baseScope(), id: "parent", upper: "grand" };
+const child = { ...baseScope(), id: "child", upper: "parent" };
 const ancestorChain = new Map<string, SerializedScope>(
   [grand, parent, child].map((s) => [s.id, s]),
 );
@@ -56,7 +56,9 @@ describe("findEnclosingSubgraphScope", () => {
     },
     {
       name: "broken upper chain (referenced scope missing) -> null",
-      map: new Map([["child", makeScope({ id: "child", upper: "missing" })]]),
+      map: new Map([
+        ["child", { ...baseScope(), id: "child", upper: "missing" }],
+      ]),
       owners: new Map(),
       start: "child",
       expected: null,

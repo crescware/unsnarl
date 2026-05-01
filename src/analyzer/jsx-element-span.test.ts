@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../cli/language.js";
 import { OxcParser } from "../parser/oxc.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
@@ -8,17 +9,17 @@ const analyzer = new EslintCompatAnalyzer();
 
 function analyze(code: string) {
   const parsed = parser.parse(code, {
-    language: "tsx",
+    language: LANGUAGE.Tsx,
     sourcePath: "input.tsx",
   });
   return analyzer.analyze(parsed);
 }
 
-function findRefs(rootScope: { through: ReadonlyArray<unknown> }) {
-  return rootScope.through as ReadonlyArray<{
+function findRefs(rootScope: { through: readonly unknown[] }) {
+  return rootScope.through as readonly {
     identifier: { name: string };
     unsnarlJsxElement: { startOffset: number; endOffset: number } | null;
-  }>;
+  }[];
 }
 
 describe("EslintCompatAnalyzer / JSX element span", () => {

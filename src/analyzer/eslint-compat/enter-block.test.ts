@@ -1,19 +1,22 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { enterBlock } from "./enter-block.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
-
 describe("enterBlock", () => {
   test("pushes a block scope with the given blockContext and hoists body declarations", () => {
     const code = "if (x) { let y = 1; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
-    const parent: NodeLike = { type: "IfStatement", start: 5 };
+    const block = findFirst(program, AST_TYPE.BlockStatement);
+    const parent = {
+      type: AST_TYPE.IfStatement,
+      start: 5,
+    } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -22,9 +25,10 @@ describe("enterBlock", () => {
     const scope = manager.current();
     expect(scope.type).toBe("block");
     expect(scope.unsnarlBlockContext).toEqual({
-      parentType: "IfStatement",
+      parentType: AST_TYPE.IfStatement,
       key: "consequent",
       parentSpanOffset: 5,
+      kind: "other",
     });
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
   });
@@ -32,7 +36,7 @@ describe("enterBlock", () => {
   test("blockContext is null when parent is null", () => {
     const code = "{ let z = 2; }";
     const program = parse(code);
-    const block = findFirst(program, "BlockStatement");
+    const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -42,7 +46,7 @@ describe("enterBlock", () => {
   });
 
   test("does not hoist when body is missing", () => {
-    const block: NodeLike = { type: "BlockStatement" };
+    const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
     const program = parse("");
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();

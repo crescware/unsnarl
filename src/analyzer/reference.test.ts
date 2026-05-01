@@ -1,13 +1,16 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE, type Language } from "../cli/language.js";
 import type { Reference, Scope, Variable } from "../ir/model.js";
 import { OxcParser } from "../parser/oxc.js";
+import { DEFINITION_TYPE } from "./definition-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
+import { SCOPE_TYPE } from "./scope-type.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 
-function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
+function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -19,8 +22,8 @@ function findVariable(scope: Scope, name: string): Variable | undefined {
   return scope.variables.find((v) => v.name === name);
 }
 
-function collectScopes(root: Scope): Scope[] {
-  const out: Scope[] = [];
+function collectScopes(root: Scope): readonly Scope[] {
+  const out: /* mutable */ Scope[] = [];
   function visit(s: Scope) {
     out.push(s);
     for (const c of s.childScopes) {
@@ -31,7 +34,7 @@ function collectScopes(root: Scope): Scope[] {
   return out;
 }
 
-function refsOf(scope: Scope, name: string): Reference[] {
+function refsOf(scope: Scope, name: string): readonly Reference[] {
   const v = findVariable(scope, name);
   return v ? [...v.references] : [];
 }
@@ -150,7 +153,7 @@ describe("EslintCompatAnalyzer / references", () => {
     const implicit = findVariable(rootScope, "globalThing");
     expect(implicit).toBeDefined();
     expect(implicit?.defs.map((d) => d.type)).toEqual([
-      "ImplicitGlobalVariable",
+      DEFINITION_TYPE.ImplicitGlobalVariable,
     ]);
     expect(rootScope.through[0]?.resolved).toBe(implicit);
   });
@@ -213,8 +216,8 @@ describe("EslintCompatAnalyzer / references", () => {
     const all = collectScopes(rootScope);
     const innerB = all.find(
       (s) =>
-        s.type === "function" &&
-        s.upper?.type === "function" &&
+        s.type === SCOPE_TYPE.Function &&
+        s.upper?.type === SCOPE_TYPE.Function &&
         s.upper?.upper === rootScope,
     );
     expect(innerB).toBeDefined();

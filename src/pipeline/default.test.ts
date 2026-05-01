@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { CLI_MERMAID_RENDERER } from "../cli/cli-mermaid-renderer.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
@@ -55,7 +56,7 @@ describe("createDefaultEmitterRegistry", () => {
   });
 
   test("constructs each of the four emitters exactly once", () => {
-    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    createDefaultEmitterRegistry({ mermaidRenderer: CLI_MERMAID_RENDERER.Elk });
     expect(IrEmitter).toHaveBeenCalledTimes(1);
     expect(JsonEmitter).toHaveBeenCalledTimes(1);
     expect(MermaidEmitter).toHaveBeenCalledTimes(1);
@@ -63,16 +64,18 @@ describe("createDefaultEmitterRegistry", () => {
   });
 
   test("forwards the mermaid renderer choice into MermaidEmitter", () => {
-    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    createDefaultEmitterRegistry({ mermaidRenderer: CLI_MERMAID_RENDERER.Elk });
     expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: elkStrategy });
 
     vi.clearAllMocks();
-    createDefaultEmitterRegistry({ mermaidRenderer: "dagre" });
+    createDefaultEmitterRegistry({
+      mermaidRenderer: CLI_MERMAID_RENDERER.Dagre,
+    });
     expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: dagreStrategy });
   });
 
   test("MarkdownEmitter receives the SAME MermaidEmitter instance, not a fresh one", () => {
-    createDefaultEmitterRegistry({ mermaidRenderer: "elk" });
+    createDefaultEmitterRegistry({ mermaidRenderer: CLI_MERMAID_RENDERER.Elk });
     const mermaidConstructor = vi.mocked(MermaidEmitter);
     const markdownConstructor = vi.mocked(MarkdownEmitter);
     expect(mermaidConstructor.mock.results).toHaveLength(1);

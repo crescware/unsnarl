@@ -1,4 +1,4 @@
-import type { AstExpression, ReferenceFlagBits } from "../../ir/model.js";
+import type { ReferenceFlagBits } from "../../ir/model.js";
 
 export type ClassifyResult =
   | { kind: "binding" }
@@ -7,5 +7,4 @@ export type ClassifyResult =
       kind: "reference";
       flags: ReferenceFlagBits;
       init: boolean;
-      writeExpr: AstExpression | null;
     };

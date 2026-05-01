@@ -1,14 +1,16 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../cli/language.js";
+import { AST_TYPE } from "./ast-type.js";
 import { OxcParser, ParseError } from "./oxc.js";
 
 const parser = new OxcParser();
 
-interface MinimalProgram {
+type MinimalProgram = {
   type: string;
-  body: ReadonlyArray<{ type: string }>;
+  body: readonly { type: string }[];
   sourceType?: string;
-}
+};
 
 function asProgram(ast: unknown): MinimalProgram {
   return ast as MinimalProgram;
@@ -23,7 +25,7 @@ describe("OxcParser", () => {
     const code =
       "const greeting: string = 'hi';\nconst length = greeting.length;\n";
     const parsed = parser.parse(code, {
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "input.ts",
     });
 
@@ -32,43 +34,43 @@ describe("OxcParser", () => {
     expect(parsed.raw).toBe(code);
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe("Program");
+    expect(program.type).toBe(AST_TYPE.Program);
     expect(program.body).toHaveLength(2);
-    expect(program.body[0]?.type).toBe("VariableDeclaration");
-    expect(program.body[1]?.type).toBe("VariableDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
+    expect(program.body[1]?.type).toBe(AST_TYPE.VariableDeclaration);
   });
 
   test("parses TSX with JSX elements", () => {
     const code =
       'const Hello = () => <div className="x"><span>{"hi"}</span></div>;\n';
     const parsed = parser.parse(code, {
-      language: "tsx",
+      language: LANGUAGE.Tsx,
       sourcePath: "input.tsx",
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe("Program");
+    expect(program.type).toBe(AST_TYPE.Program);
     expect(program.body).toHaveLength(1);
-    expect(program.body[0]?.type).toBe("VariableDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
   });
 
   test("parses JS with ESM import", () => {
     const code =
       "import { join } from 'node:path';\nexport const sep = join('a', 'b');\n";
     const parsed = parser.parse(code, {
-      language: "js",
+      language: LANGUAGE.Js,
       sourcePath: "input.js",
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.body[0]?.type).toBe("ImportDeclaration");
-    expect(program.body[1]?.type).toBe("ExportNamedDeclaration");
+    expect(program.body[0]?.type).toBe(AST_TYPE.ImportDeclaration);
+    expect(program.body[1]?.type).toBe(AST_TYPE.ExportNamedDeclaration);
   });
 
   test("synthesizes a filename with the correct extension when sourcePath has none", () => {
     const code = "const x = 1;\n";
     expect(() =>
-      parser.parse(code, { language: "ts", sourcePath: "" }),
+      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "" }),
     ).not.toThrow();
   });
 
@@ -76,7 +78,7 @@ describe("OxcParser", () => {
     const code = "const = 1;\n";
     let captured: unknown;
     try {
-      parser.parse(code, { language: "ts", sourcePath: "broken.ts" });
+      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "broken.ts" });
     } catch (e) {
       captured = e;
     }

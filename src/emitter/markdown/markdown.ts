@@ -28,9 +28,9 @@ export class MarkdownEmitter implements Emitter {
       raw,
       "```",
       "",
-    ];
-    const pruning = opts.prunedGraph?.pruning;
-    if (pruning !== undefined) {
+    ] satisfies string[];
+    const pruning = opts.prunedGraph?.pruning ?? null;
+    if (pruning !== null) {
       lines.push(
         "## Query",
         "",

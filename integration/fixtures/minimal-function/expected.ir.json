@@ -86,7 +86,6 @@
       ],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "greet",
             "span": {
@@ -104,12 +103,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     }
@@ -128,7 +122,6 @@
       "from": "scope#0",
       "resolved": "scope#0:greet@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

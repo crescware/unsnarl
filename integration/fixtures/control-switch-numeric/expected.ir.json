@@ -74,6 +74,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "Program",
         "key": "body",
         "parentSpanOffset": 0
@@ -108,6 +109,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 33,
@@ -143,6 +145,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 33,
@@ -178,6 +181,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 33,
@@ -213,6 +217,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 33,
@@ -243,7 +248,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "label",
             "span": {
@@ -268,15 +272,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -297,7 +301,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "code",
             "span": {
@@ -322,15 +325,15 @@
               "offset": 16
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 13,
-            "offset": 29
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 13,
+              "offset": 29
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -349,7 +352,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -374,15 +376,15 @@
               "offset": 204
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 18,
-            "column": 15,
-            "offset": 219
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 18,
+              "column": 15,
+              "offset": 219
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -402,7 +404,6 @@
       "from": "scope#1",
       "resolved": "scope#0:code@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -432,11 +433,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 6,
-        "column": 12,
-        "offset": 71
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -463,11 +459,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 9,
-        "column": 12,
-        "offset": 112
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -494,11 +485,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 12,
-        "column": 12,
-        "offset": 152
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -525,11 +511,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 15,
-        "column": 12,
-        "offset": 193
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -556,7 +537,6 @@
       "owners": [
         "scope#0:result@210"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

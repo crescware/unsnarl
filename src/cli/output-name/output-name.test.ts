@@ -1,34 +1,39 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "../root-query/root-query-kind.js";
 import { deriveOutputBasename } from "./output-name.js";
 
-const noRadius = { descendants: null, ancestors: null, context: null };
+const noRadius = {
+  descendants: null,
+  ancestors: null,
+  context: null,
+} satisfies Record<"descendants" | "ancestors" | "context", number | null>;
 
 const name = (n: string): ParsedRootQuery => ({
-  kind: "name",
+  kind: ROOT_QUERY_KIND.Name,
   name: n,
   raw: n,
 });
 const line = (n: number): ParsedRootQuery => ({
-  kind: "line",
+  kind: ROOT_QUERY_KIND.Line,
   line: n,
   raw: String(n),
 });
 const lineName = (n: number, id: string): ParsedRootQuery => ({
-  kind: "line-name",
+  kind: ROOT_QUERY_KIND.LineName,
   line: n,
   name: id,
   raw: `${n}:${id}`,
 });
 const range = (s: number, e: number): ParsedRootQuery => ({
-  kind: "range",
+  kind: ROOT_QUERY_KIND.Range,
   start: s,
   end: e,
   raw: `${s}-${e}`,
 });
 const rangeName = (s: number, e: number, id: string): ParsedRootQuery => ({
-  kind: "range-name",
+  kind: ROOT_QUERY_KIND.RangeName,
   start: s,
   end: e,
   name: id,

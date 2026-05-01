@@ -1,29 +1,74 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "../../cli/language.js";
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { DIRECTION } from "../direction.js";
 import type {
+  SubgraphKind,
   VisualEdge,
   VisualElement,
   VisualGraph,
   VisualNode,
   VisualSubgraph,
 } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
 import { pruneVisualGraph } from "./prune-visual-graph.js";
 
 function node(
   id: string,
   name: string,
   line: number,
-  extra: Partial<VisualNode> = {},
+  extra: Partial<Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>> = {},
 ): VisualNode {
   return {
-    type: "node",
+    type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: "Variable",
+    kind: NODE_KIND.Variable,
     name,
     line,
+    endLine: null,
     isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+    initIsFunction: false,
     ...extra,
+  };
+}
+
+function writeOpNode(id: string, name: string, line: number): VisualNode {
+  return {
+    type: VISUAL_ELEMENT_TYPE.Node,
+    id,
+    kind: NODE_KIND.WriteOp,
+    name,
+    line,
+    endLine: null,
+    isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+  };
+}
+
+function returnUseNode(
+  id: string,
+  name: string,
+  line: number,
+  endLine: number | null,
+): VisualNode {
+  return {
+    type: VISUAL_ELEMENT_TYPE.Node,
+    id,
+    kind: NODE_KIND.ReturnUse,
+    name,
+    line,
+    endLine,
+    isJsxElement: false,
+    unused: false,
   };
 }
 
@@ -31,47 +76,75 @@ function subgraph(
   id: string,
   line: number,
   elements: VisualElement[],
-  extra: Partial<VisualSubgraph> = {},
+  opts: { kind?: SubgraphKind } = {},
 ): VisualSubgraph {
-  return {
-    type: "subgraph",
+  const common = {
+    type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
-    kind: "function",
     line,
-    direction: "RL",
+    endLine: null,
+    direction: DIRECTION.RL,
     elements,
-    ...extra,
-  };
+  } as const;
+  const kind = opts.kind ?? SUBGRAPH_KIND.Function;
+  switch (kind) {
+    case SUBGRAPH_KIND.Function:
+      return {
+        ...common,
+        kind: SUBGRAPH_KIND.Function,
+        ownerNodeId: "n_owner",
+        ownerName: "owner",
+      };
+    case SUBGRAPH_KIND.Case:
+      return { ...common, kind: SUBGRAPH_KIND.Case, caseTest: null };
+    case SUBGRAPH_KIND.IfElseContainer:
+      return {
+        ...common,
+        kind: SUBGRAPH_KIND.IfElseContainer,
+        hasElse: false,
+      };
+    case SUBGRAPH_KIND.Switch:
+    case SUBGRAPH_KIND.If:
+    case SUBGRAPH_KIND.Else:
+    case SUBGRAPH_KIND.Try:
+    case SUBGRAPH_KIND.Catch:
+    case SUBGRAPH_KIND.Finally:
+    case SUBGRAPH_KIND.For:
+    case SUBGRAPH_KIND.Return:
+      return { ...common, kind };
+  }
 }
 
 function graph(elements: VisualElement[], edges: VisualEdge[]): VisualGraph {
   return {
-    version: 1,
-    source: { path: "x.ts", language: "ts" },
-    direction: "RL",
+    version: SERIALIZED_IR_VERSION,
+    source: { path: "x.ts", language: LANGUAGE.Ts },
+    direction: DIRECTION.RL,
     elements,
     edges,
+    boundaryEdges: [],
+    pruning: null,
   };
 }
 
 const rawLine = (n: number): ParsedRootQuery => ({
-  kind: "line",
+  kind: ROOT_QUERY_KIND.Line,
   line: n,
   raw: String(n),
 });
 const rawLineName = (n: number, name: string): ParsedRootQuery => ({
-  kind: "line-name",
+  kind: ROOT_QUERY_KIND.LineName,
   line: n,
   name,
   raw: `${n}:${name}`,
 });
 const rawName = (name: string): ParsedRootQuery => ({
-  kind: "name",
+  kind: ROOT_QUERY_KIND.Name,
   name,
   raw: name,
 });
 const rawRange = (s: number, e: number): ParsedRootQuery => ({
-  kind: "range",
+  kind: ROOT_QUERY_KIND.Range,
   start: s,
   end: e,
   raw: `${s}-${e}`,
@@ -130,7 +203,9 @@ describe("pruneVisualGraph", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["a", "b", "c"]);
-    expect(r.graph.boundaryEdges).toEqual([{ inside: "c", direction: "out" }]);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
+    ]);
   });
 
   test("expands ancestors by N hops; the inbound boundary hint keeps the label", () => {
@@ -154,7 +229,7 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "b", direction: "in", label: "read" },
+      { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
     ]);
   });
 
@@ -181,8 +256,8 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "d", direction: "out" },
-      { inside: "b", direction: "in", label: "read" },
+      { inside: "d", direction: BOUNDARY_EDGE_DIRECTION.Out },
+      { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
     ]);
   });
 
@@ -204,7 +279,9 @@ describe("pruneVisualGraph", () => {
       descendants: 1,
       ancestors: 0,
     });
-    expect(r.graph.boundaryEdges).toEqual([{ inside: "d", direction: "out" }]);
+    expect(r.graph.boundaryEdges).toEqual([
+      { inside: "d", direction: BOUNDARY_EDGE_DIRECTION.Out },
+    ]);
   });
 
   test("merges in-direction labels into a sorted, deduplicated comma list", () => {
@@ -228,7 +305,11 @@ describe("pruneVisualGraph", () => {
       ancestors: 1,
     });
     expect(r.graph.boundaryEdges).toEqual([
-      { inside: "M", direction: "in", label: "call,read,set" },
+      {
+        inside: "M",
+        direction: BOUNDARY_EDGE_DIRECTION.In,
+        label: "call,read,set",
+      },
     ]);
   });
 
@@ -284,7 +365,7 @@ describe("pruneVisualGraph", () => {
       [
         node("flag", "flag", 1),
         subgraph("cont_if", 3, [node("wr1", "set", 4)], {
-          kind: "if-else-container",
+          kind: SUBGRAPH_KIND.IfElseContainer,
         }),
         node("result", "result", 10),
       ],
@@ -386,8 +467,10 @@ describe("pruneVisualGraph", () => {
 describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("a line query matches a ReturnUse at that line directly (no longer routed through the resolved declaration)", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, null);
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph(
       [declA, ret],
       [{ from: declA.id, to: useA.id, label: "read" }],
@@ -408,8 +491,10 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
 
   test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
     const declA = node("n_scope_0_a_6", "a", 1);
-    const useA = node("ret_use_ref_0", "a", 11, { kind: "ReturnUse" });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, null);
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph(
       [declA, ret],
       [{ from: declA.id, to: useA.id, label: "read" }],
@@ -425,11 +510,10 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   });
 
   test("a JSX ReturnUse spanning multiple lines is matched anywhere within [line, endLine]", () => {
-    const useA = node("ret_use_ref_0", "a", 11, {
-      kind: "ReturnUse",
-      endLine: 23,
+    const useA = returnUseNode("ret_use_ref_0", "a", 11, 23);
+    const ret = subgraph("sg_return", 10, [useA], {
+      kind: SUBGRAPH_KIND.Return,
     });
-    const ret = subgraph("sg_return", 10, [useA], { kind: "return" });
     const g = graph([ret], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(23)],
@@ -443,7 +527,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   });
 
   test("a WriteOp is also a root candidate", () => {
-    const writeOp = node("wr_ref_0", "x", 5, { kind: "WriteOp" });
+    const writeOp = writeOpNode("wr_ref_0", "x", 5);
     const g = graph([writeOp], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(5)],
@@ -459,8 +543,8 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     // the root on the declaration only; the assignment site and the JSX
     // usage are reachable via descendants/ancestors but never auto-rooted.
     const decl = node("n_decl_foo", "foo", 1);
-    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
-    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const writeOp = writeOpNode("wr_foo", "foo", 5);
+    const ret = returnUseNode("ret_foo", "foo", 11, null);
     const g = graph([decl, writeOp, ret], []);
     const r = pruneVisualGraph(g, {
       roots: [rawName("foo")],
@@ -474,11 +558,18 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
   test("line-name still matches WriteOp / ReturnUse at the requested line", () => {
     // A line-name query is still positional, so the use-site nodes remain
     // valid roots. This protects the "use line + name disambiguator" case.
-    const writeOp = node("wr_foo", "foo", 5, { kind: "WriteOp" });
-    const ret = node("ret_foo", "foo", 11, { kind: "ReturnUse" });
+    const writeOp = writeOpNode("wr_foo", "foo", 5);
+    const ret = returnUseNode("ret_foo", "foo", 11, null);
     const g = graph([writeOp, ret], []);
     const r = pruneVisualGraph(g, {
-      roots: [{ kind: "line-name", line: 11, name: "foo", raw: "11:foo" }],
+      roots: [
+        {
+          kind: ROOT_QUERY_KIND.LineName,
+          line: 11,
+          name: "foo",
+          raw: "11:foo",
+        },
+      ],
       descendants: 0,
       ancestors: 0,
     });
@@ -491,7 +582,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
   test("a bare line query equal to a subgraph's start line sweeps every node it contains", () => {
     const inner = node("inner_a", "a", 11);
     const outerOnly = node("outside", "z", 50);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg, outerOnly], []);
     const r = pruneVisualGraph(g, {
       roots: [rawLine(10)],
@@ -507,7 +600,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
 
   test("a range query never auto-pulls a subgraph's body, even if its start line falls inside the range", () => {
     const inner = node("inner_a", "a", 11);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg], []);
     const r = pruneVisualGraph(g, {
       // Range [10..11] would contain both the subgraph's start and the inner
@@ -524,7 +619,9 @@ describe("pruneVisualGraph: subgraph line matching", () => {
 
   test("a line query that is not a subgraph's start line falls back to per-node matching", () => {
     const inner = node("inner_a", "a", 11);
-    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const sg = subgraph("sg_return", 10, [inner], {
+      kind: SUBGRAPH_KIND.Return,
+    });
     const g = graph([sg], []);
     const r = pruneVisualGraph(g, {
       // 11 is the inner node's line, not the subgraph's start line.
@@ -577,26 +674,26 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
   });
 });
 
-function collectIds(elements: ReadonlyArray<VisualElement>): string[] {
-  const out: string[] = [];
+function collectIds(elements: VisualElement[]): readonly string[] {
+  const out: /* mutable */ string[] = [];
   walk(elements);
   return out;
 
-  function walk(items: ReadonlyArray<VisualElement>): void {
+  function walk(items: VisualElement[]): void {
     for (const item of items) {
       out.push(item.id);
-      if (item.type === "subgraph") {
+      if (item.type === VISUAL_ELEMENT_TYPE.Subgraph) {
         walk(item.elements);
       }
     }
   }
 }
 
-function flatten(elements: readonly VisualElement[]): VisualElement[] {
-  const out: VisualElement[] = [];
+function flatten(elements: VisualElement[]): VisualElement[] {
+  const out: /* mutable */ VisualElement[] = [];
   for (const e of elements) {
     out.push(e);
-    if (e.type === "subgraph") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
       out.push(...flatten(e.elements));
     }
   }

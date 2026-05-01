@@ -6,16 +6,20 @@ import {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
 } from "../../pipeline/default.js";
-import type { PruningRunOptions } from "../../pipeline/types.js";
+import type {
+  PipelineRunOptions,
+  PruningRunOptions,
+} from "../../pipeline/types.js";
 import { parseCliArgs } from "../args/parse-cli-args.js";
 import { usage } from "../args/usage.js";
+import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
 import { readSourceFile, readStdin } from "../io.js";
 import { deriveOutputBasename } from "../output-name/output-name.js";
 import { detectLanguage } from "./detect-language.js";
 import { resolveGenerations } from "./resolve-generations.js";
 import { VERSION } from "./version.js";
 
-export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
+export async function runCli(argv: readonly string[]): Promise<number> {
   const parsed = parseCliArgs(argv);
   if (!parsed.ok) {
     process.stderr.write(`error: ${parsed.error}\n`);
@@ -37,7 +41,7 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
   // demands an explicit choice, so the default is resolved here at the
   // boundary instead of being smuggled into the emitter as undefined.
   const emitters = createDefaultEmitterRegistry({
-    mermaidRenderer: args.mermaidRenderer ?? "elk",
+    mermaidRenderer: args.mermaidRenderer ?? CLI_MERMAID_RENDERER.Elk,
   });
   if (args.listFormats) {
     for (const f of emitters.list()) {
@@ -94,12 +98,6 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
     : detectLanguage(args.inputFile, args.language);
 
   const pipeline = createDefaultPipeline(emitters);
-  const baseRunOpts = {
-    format: args.format,
-    language,
-    sourcePath,
-    emit: { pretty: args.pretty },
-  };
   const pruning: PruningRunOptions | null =
     args.roots.length > 0
       ? {
@@ -107,12 +105,16 @@ export async function runCli(argv: ReadonlyArray<string>): Promise<number> {
           ...resolveGenerations(args),
         }
       : null;
+  const runOpts: PipelineRunOptions = {
+    format: args.format,
+    language,
+    sourcePath,
+    emit: { pretty: args.pretty, prunedGraph: null },
+    pruning,
+  };
 
   try {
-    const result = pipeline.runDetailed(
-      code,
-      pruning === null ? baseRunOpts : { ...baseRunOpts, pruning },
-    );
+    const result = pipeline.runDetailed(code, runOpts);
     if (result.pruning !== null) {
       for (const r of result.pruning) {
         if (r.matched === 0) {

@@ -9,35 +9,42 @@
     {
       "type": "node",
       "id": "n_scope_0_label_4",
-      "kind": "Variable",
       "name": "label",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_kind_22",
-      "kind": "Variable",
       "name": "kind",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_result_179",
-      "kind": "Variable",
       "name": "result",
       "line": 15,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
       "id": "s_scope_1",
-      "kind": "switch",
       "line": 4,
       "endLine": 13,
       "direction": "RL",
@@ -45,7 +52,6 @@
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "case",
           "line": 5,
           "endLine": 7,
           "direction": "RL",
@@ -56,16 +62,18 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 6,
+              "endLine": null,
               "isJsxElement": false,
+              "unused": false,
               "declarationKind": "let"
             }
           ],
+          "kind": "case",
           "caseTest": "\"a\""
         },
         {
           "type": "subgraph",
           "id": "s_scope_3",
-          "kind": "case",
           "line": 8,
           "endLine": 10,
           "direction": "RL",
@@ -76,16 +84,18 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 9,
+              "endLine": null,
               "isJsxElement": false,
+              "unused": false,
               "declarationKind": "let"
             }
           ],
+          "kind": "case",
           "caseTest": "\"b\""
         },
         {
           "type": "subgraph",
           "id": "s_scope_4",
-          "kind": "case",
           "line": 11,
           "endLine": 12,
           "direction": "RL",
@@ -96,13 +106,17 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 12,
+              "endLine": null,
               "isJsxElement": false,
+              "unused": false,
               "declarationKind": "let"
             }
           ],
+          "kind": "case",
           "caseTest": null
         }
-      ]
+      ],
+      "kind": "switch"
     }
   ],
   "edges": [
@@ -141,5 +155,7 @@
       "to": "n_scope_0_result_179",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

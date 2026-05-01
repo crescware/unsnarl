@@ -81,6 +81,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "Program",
         "key": "body",
         "parentSpanOffset": 0
@@ -117,6 +118,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 61,
@@ -154,6 +156,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 61,
@@ -192,6 +195,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 61,
@@ -227,6 +231,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 61,
@@ -257,7 +262,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "label",
             "span": {
@@ -282,15 +286,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -312,7 +316,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -337,15 +340,15 @@
               "offset": 16
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 10,
-            "offset": 26
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 10,
+              "offset": 26
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -367,7 +370,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -392,15 +394,15 @@
               "offset": 29
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 3,
-            "column": 10,
-            "offset": 39
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 10,
+              "offset": 39
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -421,7 +423,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "target",
             "span": {
@@ -446,15 +447,15 @@
               "offset": 42
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 4,
-            "column": 15,
-            "offset": 57
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 4,
+              "column": 15,
+              "offset": 57
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -473,7 +474,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -498,15 +498,15 @@
               "offset": 298
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 20,
-            "column": 15,
-            "offset": 313
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 20,
+              "column": 15,
+              "offset": 313
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -527,7 +527,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "Number",
             "span": {
@@ -545,12 +544,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     }
@@ -569,7 +563,6 @@
       "from": "scope#1",
       "resolved": "scope#0:target@48",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -597,7 +590,6 @@
       "from": "scope#2",
       "resolved": "scope#0:a@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -622,7 +614,6 @@
       "from": "scope#2",
       "resolved": "scope#0:b@35",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -649,11 +640,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 8,
-        "column": 12,
-        "offset": 105
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -678,7 +664,6 @@
       "from": "scope#3",
       "resolved": "scope#0:a@22",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -703,7 +688,6 @@
       "from": "scope#3",
       "resolved": "scope#0:b@35",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -730,11 +714,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 11,
-        "column": 12,
-        "offset": 149
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -759,7 +738,6 @@
       "from": "scope#4",
       "resolved": "scope#0:Number@178",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -786,11 +764,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 14,
-        "column": 12,
-        "offset": 215
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -817,11 +790,6 @@
       "owners": [
         "scope#0:label@4"
       ],
-      "writeExpr": {
-        "line": 17,
-        "column": 12,
-        "offset": 286
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -848,7 +816,6 @@
       "owners": [
         "scope#0:result@304"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

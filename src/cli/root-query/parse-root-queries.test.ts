@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { parseRootQueries } from "./parse-root-queries.js";
+import { ROOT_QUERY_KIND } from "./root-query-kind.js";
 
 describe("parseRootQueries", () => {
   test("parses a single token", () => {
@@ -8,7 +9,10 @@ describe("parseRootQueries", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.queries).toHaveLength(1);
-      expect(r.queries[0]).toMatchObject({ kind: "line-name", line: 10 });
+      expect(r.queries[0]).toMatchObject({
+        kind: ROOT_QUERY_KIND.LineName,
+        line: 10,
+      });
     }
   });
 

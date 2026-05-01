@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import type { ScopeManager } from "../manager.js";
 import { isTypeOnlySubtree } from "../skip-types.js";
@@ -16,7 +17,7 @@ export function handleEnter(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
@@ -24,34 +25,37 @@ export function handleEnter(
   if (isTypeOnlySubtree(node.type, key)) {
     return "skip";
   }
-  if (node.type === "Identifier" || node.type === "JSXIdentifier") {
+  if (
+    node.type === AST_TYPE.Identifier ||
+    node.type === AST_TYPE.JSXIdentifier
+  ) {
     handleIdentifierReference(node, parent, key, path, manager);
     return;
   }
   switch (node.type) {
-    case "FunctionDeclaration":
-    case "FunctionExpression":
-    case "ArrowFunctionExpression":
+    case AST_TYPE.FunctionDeclaration:
+    case AST_TYPE.FunctionExpression:
+    case AST_TYPE.ArrowFunctionExpression:
       enterFunction(node, manager, raw, diagnostics);
       return;
-    case "BlockStatement":
+    case AST_TYPE.BlockStatement:
       if (parent && key === "body" && skipBlockScope(parent.type)) {
         return;
       }
       enterBlock(node, parent, key, manager, raw, diagnostics);
       return;
-    case "ForStatement":
-    case "ForOfStatement":
-    case "ForInStatement":
+    case AST_TYPE.ForStatement:
+    case AST_TYPE.ForOfStatement:
+    case AST_TYPE.ForInStatement:
       enterFor(node, parent, key, manager, raw, diagnostics);
       return;
-    case "SwitchStatement":
+    case AST_TYPE.SwitchStatement:
       enterSwitch(node, parent, key, manager);
       return;
-    case "SwitchCase":
+    case AST_TYPE.SwitchCase:
       enterSwitchCase(node, parent, key, manager, raw, diagnostics);
       return;
-    case "CatchClause":
+    case AST_TYPE.CatchClause:
       enterCatch(node, parent, key, manager, raw, diagnostics);
       return;
     default:

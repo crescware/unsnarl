@@ -106,7 +106,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "A",
             "span": {
@@ -131,12 +130,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "components",
           "importedName": "A",
-          "declarationKind": null
+          "importSource": "components"
         }
       ]
     },
@@ -156,7 +153,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "B",
             "span": {
@@ -181,12 +177,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "components",
           "importedName": "B",
-          "declarationKind": null
+          "importSource": "components"
         }
       ]
     },
@@ -206,7 +200,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "C",
             "span": {
@@ -231,12 +224,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "components",
           "importedName": "C",
-          "declarationKind": null
+          "importSource": "components"
         }
       ]
     },
@@ -256,7 +247,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "D",
             "span": {
@@ -281,12 +271,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "components",
           "importedName": "D",
-          "declarationKind": null
+          "importSource": "components"
         }
       ]
     },
@@ -306,7 +294,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "E",
             "span": {
@@ -331,12 +318,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "components",
           "importedName": "E",
-          "declarationKind": null
+          "importSource": "components"
         }
       ]
     },
@@ -354,7 +339,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "Main",
             "span": {
@@ -372,12 +356,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -397,7 +376,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "v",
             "span": {
@@ -422,15 +400,15 @@
               "offset": 65
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 4,
-            "column": 12,
-            "offset": 75
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 4,
+              "column": 12,
+              "offset": 75
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -451,7 +429,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "w",
             "span": {
@@ -476,15 +453,15 @@
               "offset": 82
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 12,
-            "offset": 92
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 12,
+              "offset": 92
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -505,7 +482,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "x",
             "span": {
@@ -530,15 +506,15 @@
               "offset": 99
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 6,
-            "column": 12,
-            "offset": 109
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 6,
+              "column": 12,
+              "offset": 109
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -559,7 +535,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "y",
             "span": {
@@ -584,15 +559,15 @@
               "offset": 116
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 7,
-            "column": 12,
-            "offset": 126
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 7,
+              "column": 12,
+              "offset": 126
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -613,7 +588,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "z",
             "span": {
@@ -638,15 +612,15 @@
               "offset": 133
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 8,
-            "column": 12,
-            "offset": 143
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 8,
+              "column": 12,
+              "offset": 143
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -666,7 +640,6 @@
       "from": "scope#1",
       "resolved": "scope#0:A@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -713,7 +686,6 @@
       "from": "scope#1",
       "resolved": "scope#1:v@71",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -749,7 +721,6 @@
       "from": "scope#1",
       "resolved": "scope#0:B@12",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -796,7 +767,6 @@
       "from": "scope#1",
       "resolved": "scope#1:w@88",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -832,7 +802,6 @@
       "from": "scope#1",
       "resolved": "scope#0:C@15",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -879,7 +848,6 @@
       "from": "scope#1",
       "resolved": "scope#1:x@105",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -915,7 +883,6 @@
       "from": "scope#1",
       "resolved": "scope#0:D@18",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -962,7 +929,6 @@
       "from": "scope#1",
       "resolved": "scope#1:y@122",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -998,7 +964,6 @@
       "from": "scope#1",
       "resolved": "scope#0:E@21",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -1045,7 +1010,6 @@
       "from": "scope#1",
       "resolved": "scope#1:z@139",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

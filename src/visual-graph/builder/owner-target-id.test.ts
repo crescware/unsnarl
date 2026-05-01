@@ -1,12 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import { ownerTargetId } from "./owner-target-id.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
 const ops: WriteOp[] = [
-  makeWriteOp({ refId: "r1", varId: "owner", offset: 10 }),
-  makeWriteOp({ refId: "r2", varId: "owner", offset: 20 }),
+  { ...baseWriteOp(), refId: "r1", varId: "owner", offset: 10 },
+  { ...baseWriteOp(), refId: "r2", varId: "owner", offset: 20 },
 ];
 const byVar = new Map<string, WriteOp[]>([["owner", ops]]);
 

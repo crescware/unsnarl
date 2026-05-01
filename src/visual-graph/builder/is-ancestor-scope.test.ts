@@ -2,12 +2,12 @@ import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/model.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseScope } from "./testing/make-scope.js";
 
-const root = makeScope({ id: "root" });
-const mid = makeScope({ id: "mid", upper: "root" });
-const leaf = makeScope({ id: "leaf", upper: "mid" });
-const sibling = makeScope({ id: "sibling", upper: "root" });
+const root = { ...baseScope(), id: "root" };
+const mid = { ...baseScope(), id: "mid", upper: "root" };
+const leaf = { ...baseScope(), id: "leaf", upper: "mid" };
+const sibling = { ...baseScope(), id: "sibling", upper: "root" };
 const map = new Map<string, SerializedScope>(
   [root, mid, leaf, sibling].map((s) => [s.id, s]),
 );
@@ -60,7 +60,7 @@ describe("isAncestorScope", () => {
   });
 
   test("broken upper chain returns false at the break", () => {
-    const orphan = makeScope({ id: "orphan", upper: "missing" });
+    const orphan = { ...baseScope(), id: "orphan", upper: "missing" };
     const broken = new Map([[orphan.id, orphan]]);
     expect(isAncestorScope("any", "orphan", broken)).toBe(false);
   });

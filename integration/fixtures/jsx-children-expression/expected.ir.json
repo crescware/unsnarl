@@ -90,7 +90,6 @@
       ],
       "defs": [
         {
-          "type": "ImportBinding",
           "name": {
             "name": "Sub",
             "span": {
@@ -115,12 +114,10 @@
               "offset": 0
             }
           },
-          "initType": null,
-          "initSpan": null,
+          "type": "ImportBinding",
           "importKind": "named",
-          "importSource": "./sub",
           "importedName": "Sub",
-          "declarationKind": null
+          "importSource": "./sub"
         }
       ]
     },
@@ -138,7 +135,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "Main",
             "span": {
@@ -156,12 +152,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -181,7 +172,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "message",
             "span": {
@@ -206,15 +196,15 @@
               "offset": 57
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 4,
-            "column": 18,
-            "offset": 73
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 4,
+              "column": 18,
+              "offset": 73
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -234,7 +224,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Sub@9",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -281,7 +270,6 @@
       "from": "scope#1",
       "resolved": "scope#1:message@63",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

@@ -1,7 +1,9 @@
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../manager.js";
 import { blockContextOf } from "./block-context-of.js";
@@ -25,14 +27,14 @@ export function enterCatch(
       declareVariable(
         scope,
         ident,
-        "CatchClause",
+        DEFINITION_TYPE.CatchClause,
         node as unknown as AstNode,
         null,
       );
     }
   }
   const body = node["body"];
-  if (isNodeLike(body) && body.type === "BlockStatement") {
+  if (isNodeLike(body) && body.type === AST_TYPE.BlockStatement) {
     const stmts = body["body"];
     if (Array.isArray(stmts)) {
       hoistDeclarations(stmts, scope, raw, diagnostics);

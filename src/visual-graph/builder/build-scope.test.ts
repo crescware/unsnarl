@@ -1,19 +1,27 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { LANGUAGE } from "../../cli/language.js";
 import type {
   SerializedIR,
   SerializedScope,
   SerializedVariable,
 } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeDef } from "./testing/make-def.js";
-import { makeScope } from "./testing/make-scope.js";
-import { makeVariable } from "./testing/make-variable.js";
-import { makeWriteOp } from "./testing/make-write-op.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseDef } from "./testing/make-def.js";
+import { baseScope } from "./testing/make-scope.js";
+import { baseVariable } from "./testing/make-variable.js";
+import { baseWriteOp } from "./testing/make-write-op.js";
 import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
 
@@ -29,23 +37,23 @@ function emptyState(): BuildState {
 }
 
 function makeCtx(opts: {
-  scopes: SerializedScope[];
-  variables?: SerializedVariable[];
+  scopes: readonly SerializedScope[];
+  variables?: readonly SerializedVariable[];
   subgraphOwnerVar?: Map<string, string>;
   hiddenVariables?: Set<string>;
   writeOpsByScope?: Map<string, WriteOp[]>;
 }): BuilderContext {
   const variables = opts.variables ?? [];
-  const ir: SerializedIR = {
-    version: 1,
-    source: { path: "x.ts", language: "ts" },
+  const ir = {
+    version: SERIALIZED_IR_VERSION,
+    source: { path: "x.ts", language: LANGUAGE.Ts },
     raw: "",
     scopes: opts.scopes,
     variables,
     references: [],
     unusedVariableIds: [],
     diagnostics: [],
-  };
+  } as const satisfies SerializedIR;
   return {
     ir,
     variableMap: new Map(variables.map((v) => [v.id, v])),
@@ -61,8 +69,8 @@ function makeCtx(opts: {
 
 describe("buildScope", () => {
   test("plain block scope appends variable nodes directly to the container (no subgraph)", () => {
-    const scope = makeScope({ id: "s", variables: ["v1"] });
-    const v = makeVariable({ id: "v1", name: "x", scope: "s" });
+    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
+    const v = { ...baseVariable(), id: "v1", name: "x", scope: "s" };
     const ctx = makeCtx({ scopes: [scope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -70,17 +78,17 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     expect(container.elements[0]).toMatchObject({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
-      kind: "Variable",
+      kind: NODE_KIND.Variable,
       name: "x",
     });
   });
 
   test("hidden variables are skipped", () => {
-    const scope = makeScope({ id: "s", variables: ["hidden", "v"] });
-    const hidden = makeVariable({ id: "hidden", name: "h" });
-    const v = makeVariable({ id: "v", name: "x" });
+    const scope = { ...baseScope(), id: "s", variables: ["hidden", "v"] };
+    const hidden = { ...baseVariable(), id: "hidden", name: "h" };
+    const v = { ...baseVariable(), id: "v", name: "x" };
     const ctx = makeCtx({
       scopes: [scope],
       variables: [hidden, v],
@@ -95,13 +103,20 @@ describe("buildScope", () => {
   });
 
   test("writeOps in the scope appear as WriteOp nodes with declarationKind from the owning variable", () => {
-    const scope = makeScope({ id: "s", variables: ["v1"] });
-    const v = makeVariable({
+    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
+    const v = {
+      ...baseVariable(),
       id: "v1",
       name: "x",
-      defs: [makeDef({ declarationKind: "let" })],
-    });
-    const op = makeWriteOp({ refId: "r1", varId: "v1", varName: "x", line: 4 });
+      defs: [{ ...baseDef(), declarationKind: VARIABLE_DECLARATION_KIND.Let }],
+    };
+    const op = {
+      ...baseWriteOp(),
+      refId: "r1",
+      varId: "v1",
+      varName: "x",
+      line: 4,
+    };
     const ctx = makeCtx({
       scopes: [scope],
       variables: [v],
@@ -112,29 +127,31 @@ describe("buildScope", () => {
     buildScope(scope, container, ctx, emptyState());
 
     const writeNode = container.elements.find(
-      (e) => e.type === "node" && e.id === "wr_r1",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
-      kind: "WriteOp",
+      kind: NODE_KIND.WriteOp,
       name: "x",
       line: 4,
-      declarationKind: "let",
+      declarationKind: VARIABLE_DECLARATION_KIND.Let,
     });
   });
 
   test("function-owner scope wraps body in a function subgraph and registers state", () => {
-    const fnScope = makeScope({
+    const fnScope = {
+      ...baseScope(),
       id: "fn",
-      type: "function",
+      type: SCOPE_TYPE.Function,
       variables: ["param"],
       block: { type: "Function", span: span(0, 1), endSpan: span(10, 5) },
-    });
-    const param = makeVariable({
+    };
+    const param = {
+      ...baseVariable(),
       id: "param",
       name: "p",
-      defs: [makeDef({ type: "Parameter" })],
-    });
-    const owner = makeVariable({ id: "ownerVar", name: "myFn" });
+      defs: [{ ...baseDef(), type: DEFINITION_TYPE.Parameter }],
+    };
+    const owner = { ...baseVariable(), id: "ownerVar", name: "myFn" };
     const ctx = makeCtx({
       scopes: [fnScope],
       variables: [param, owner],
@@ -150,20 +167,27 @@ describe("buildScope", () => {
     expect(sg.type).toBe("subgraph");
     expect(sg.kind).toBe("function");
     expect(
-      sg.elements.find((e) => e.type === "node" && e.id === "n_param"),
+      sg.elements.find(
+        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_param",
+      ),
     ).toBeDefined();
     expect(state.subgraphByScope.get("fn")).toBe(sg);
     expect(state.functionSubgraphByFn.get("ownerVar")).toBe(sg);
   });
 
   test("control-kind scope (for) wraps body in a control subgraph", () => {
-    const forScope = makeScope({
+    const forScope = {
+      ...baseScope(),
       id: "for1",
-      type: "for",
+      type: SCOPE_TYPE.For,
       variables: ["v"],
-      block: { type: "ForStatement", span: span(0, 1), endSpan: span(10, 3) },
-    });
-    const v = makeVariable({ id: "v", name: "i" });
+      block: {
+        type: AST_TYPE.ForStatement,
+        span: span(0, 1),
+        endSpan: span(10, 3),
+      },
+    };
+    const v = { ...baseVariable(), id: "v", name: "i" };
     const ctx = makeCtx({ scopes: [forScope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -173,26 +197,34 @@ describe("buildScope", () => {
     const sg = container.elements[0] as VisualSubgraph;
     expect(sg.kind).toBe("for");
     expect(
-      sg.elements.find((e) => e.type === "node" && e.id === "n_v"),
+      sg.elements.find(
+        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_v",
+      ),
     ).toBeDefined();
   });
 
   test("recurses into childScopes", () => {
-    const inner = makeScope({
+    const inner = {
+      ...baseScope(),
       id: "inner",
       upper: "outer",
       variables: ["vIn"],
-      blockContext: makeBlockContext("IfStatement", "consequent", 0),
-    });
-    const outer = makeScope({ id: "outer", childScopes: ["inner"] });
-    const vIn = makeVariable({ id: "vIn", name: "y" });
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 0,
+      },
+    };
+    const outer = { ...baseScope(), id: "outer", childScopes: ["inner"] };
+    const vIn = { ...baseVariable(), id: "vIn", name: "y" };
     const ctx = makeCtx({ scopes: [outer, inner], variables: [vIn] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
     buildScope(outer, container, ctx, emptyState());
 
     const childSg = container.elements.find(
-      (e) => e.type === "subgraph",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Subgraph,
     ) as VisualSubgraph;
     expect(childSg).toBeDefined();
     expect(childSg.kind).toBe("if");

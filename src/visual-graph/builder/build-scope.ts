@@ -1,5 +1,8 @@
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualNode } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
@@ -8,9 +11,9 @@ import { makeVariableNode } from "./make-variable-node.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
-interface Container {
-  elements: VisualElement[];
-}
+type Container = Readonly<{
+  elements: /* mutable */ VisualElement[];
+}>;
 
 export function buildScope(
   scope: SerializedScope,
@@ -43,18 +46,22 @@ export function buildScope(
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];
   for (const op of ops) {
     const ownerVar = ctx.variableMap.get(op.varId);
-    const declarationKind = ownerVar?.defs[0]?.declarationKind;
-    const node: VisualNode = {
-      type: "node",
+    const ownerDef = ownerVar?.defs[0];
+    const declarationKind =
+      ownerDef?.type === DEFINITION_TYPE.Variable
+        ? ownerDef.declarationKind
+        : null;
+    const node = {
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
-      kind: "WriteOp",
+      kind: NODE_KIND.WriteOp,
       name: op.varName,
       line: op.line,
+      endLine: null,
       isJsxElement: false,
-    };
-    if (declarationKind) {
-      node.declarationKind = declarationKind;
-    }
+      unused: false,
+      declarationKind,
+    } satisfies VisualNode;
     bodyContainer.elements.push(node);
   }
   buildChildren(scope, bodyContainer, ctx, state);

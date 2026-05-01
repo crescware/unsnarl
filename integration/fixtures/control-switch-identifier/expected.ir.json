@@ -78,6 +78,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "Program",
         "key": "body",
         "parentSpanOffset": 0
@@ -113,6 +114,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 91,
@@ -149,6 +151,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 91,
@@ -185,6 +188,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 91,
@@ -220,6 +224,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 91,
@@ -247,7 +252,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "RED",
             "span": {
@@ -272,15 +276,15 @@
               "offset": 0
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 1,
-            "column": 12,
-            "offset": 12
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -301,7 +305,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "GREEN",
             "span": {
@@ -326,15 +329,15 @@
               "offset": 17
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 14,
-            "offset": 31
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 14,
+              "offset": 31
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -355,7 +358,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "BLUE",
             "span": {
@@ -380,15 +382,15 @@
               "offset": 36
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 3,
-            "column": 13,
-            "offset": 49
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 13,
+              "offset": 49
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -413,7 +415,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "label",
             "span": {
@@ -438,15 +439,15 @@
               "offset": 55
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 12,
-            "offset": 67
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 12,
+              "offset": 67
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "let"
         }
       ]
@@ -467,7 +468,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "color",
             "span": {
@@ -492,15 +492,15 @@
               "offset": 71
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 6,
-            "column": 14,
-            "offset": 85
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 6,
+              "column": 14,
+              "offset": 85
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -519,7 +519,6 @@
       "references": [],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "result",
             "span": {
@@ -544,15 +543,15 @@
               "offset": 277
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 22,
-            "column": 15,
-            "offset": 292
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 22,
+              "column": 15,
+              "offset": 292
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -574,7 +573,6 @@
       "owners": [
         "scope#0:color@77"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -599,7 +597,6 @@
       "from": "scope#1",
       "resolved": "scope#0:color@77",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -627,7 +624,6 @@
       "from": "scope#2",
       "resolved": "scope#0:RED@6",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -654,11 +650,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 10,
-        "column": 12,
-        "offset": 132
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -683,7 +674,6 @@
       "from": "scope#3",
       "resolved": "scope#0:GREEN@23",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -710,11 +700,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 13,
-        "column": 12,
-        "offset": 176
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -739,7 +724,6 @@
       "from": "scope#4",
       "resolved": "scope#0:BLUE@42",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -766,11 +750,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 16,
-        "column": 12,
-        "offset": 221
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -797,11 +776,6 @@
       "owners": [
         "scope#0:label@59"
       ],
-      "writeExpr": {
-        "line": 19,
-        "column": 12,
-        "offset": 263
-      },
       "init": false,
       "flags": {
         "read": false,
@@ -828,7 +802,6 @@
       "owners": [
         "scope#0:result@283"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,

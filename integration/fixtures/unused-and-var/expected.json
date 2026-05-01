@@ -9,44 +9,50 @@
     {
       "type": "node",
       "id": "n_scope_0_used_9",
-      "kind": "ImportBinding",
       "name": "used",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "used",
-      "importSource": "module"
+      "importedName": "used"
     },
     {
       "type": "node",
       "id": "n_scope_0_neverCalled_15",
-      "kind": "ImportBinding",
       "name": "neverCalled",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "ImportBinding",
       "importKind": "named",
-      "importedName": "neverCalled",
-      "importSource": "module",
-      "unused": true
+      "importedName": "neverCalled"
     },
     {
       "type": "node",
       "id": "n_scope_0_a_67",
-      "kind": "Variable",
       "name": "a",
       "line": 4,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_ignored_83",
-      "kind": "Variable",
       "name": "ignored",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "node",
@@ -54,7 +60,9 @@
       "kind": "ModuleSink",
       "name": "module",
       "line": 0,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     },
     {
       "type": "node",
@@ -62,7 +70,9 @@
       "kind": "ModuleSource",
       "name": "module",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
@@ -86,5 +96,7 @@
       "to": "n_scope_0_neverCalled_15",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

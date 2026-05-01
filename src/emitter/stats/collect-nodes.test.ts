@@ -1,33 +1,44 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../../visual-graph/direction.js";
 import type {
   Direction,
   VisualElement,
   VisualNode,
   VisualSubgraph,
 } from "../../visual-graph/model.js";
+import { NODE_KIND } from "../../visual-graph/node-kind.js";
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { collectNodes } from "./collect-nodes.js";
 
 const node = (id: string, line = 1): VisualNode => ({
-  type: "node",
+  type: VISUAL_ELEMENT_TYPE.Node,
   id,
-  kind: "Variable",
+  kind: NODE_KIND.Variable,
   name: id,
   line,
   isJsxElement: false,
+  endLine: null,
+  unused: false,
+  declarationKind: null,
+  initIsFunction: false,
 });
 
 const sg = (
   id: string,
   elements: VisualElement[],
-  direction: Direction = "TB",
+  direction: Direction = DIRECTION.TB,
 ): VisualSubgraph => ({
-  type: "subgraph",
+  type: VISUAL_ELEMENT_TYPE.Subgraph,
   id,
-  kind: "scope",
+  kind: SUBGRAPH_KIND.Function,
   line: 1,
   direction,
   elements,
+  endLine: null,
+  ownerNodeId: "n_owner",
+  ownerName: "owner",
 });
 
 describe("collectNodes", () => {

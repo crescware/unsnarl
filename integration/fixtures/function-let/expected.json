@@ -9,11 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_f_9",
-      "kind": "FunctionName",
       "name": "f",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -28,11 +29,14 @@
         {
           "type": "node",
           "id": "n_scope_1_v_21",
-          "kind": "Variable",
           "name": "v",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
         },
         {
           "type": "node",
@@ -40,7 +44,9 @@
           "kind": "WriteOp",
           "name": "v",
           "line": 3,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         },
         {
@@ -49,7 +55,9 @@
           "kind": "WriteOp",
           "name": "v",
           "line": 4,
+          "endLine": null,
           "isJsxElement": false,
+          "unused": false,
           "declarationKind": "let"
         },
         {
@@ -57,6 +65,7 @@
           "id": "s_return_scope_0_f_9_48_57",
           "kind": "return",
           "line": 5,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -65,7 +74,9 @@
               "kind": "ReturnUse",
               "name": "v",
               "line": 5,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ]
         }
@@ -88,5 +99,7 @@
       "to": "ret_use_ref_2",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

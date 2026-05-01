@@ -11,16 +11,16 @@ export function subgraphLabel(
     case "function": {
       // Prefer the name baked onto the subgraph at build time; the owner
       // node may be absent after pruning even when the subgraph survives.
-      const ownerNode = sg.ownerNodeId
-        ? nodeMap.get(sg.ownerNodeId)
-        : undefined;
-      const name = sg.ownerName ?? ownerNode?.name ?? "";
+      // ownerName is empty when the owner variable was missing at build
+      // time -- fall back to the live nodeMap entry in that case.
+      const ownerNode = nodeMap.get(sg.ownerNodeId);
+      const name = sg.ownerName !== "" ? sg.ownerName : (ownerNode?.name ?? "");
       return `${escape(name)}()<br/>${range}`;
     }
     case "switch":
       return `switch ${range}`;
     case "case":
-      if (sg.caseTest === null || sg.caseTest === undefined) {
+      if (sg.caseTest === null) {
         return `default ${range}`;
       }
       return `case ${escape(sg.caseTest)} ${range}`;

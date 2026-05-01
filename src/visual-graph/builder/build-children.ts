@@ -1,5 +1,8 @@
 import type { SerializedScope } from "../../ir/model.js";
+import { DIRECTION } from "../direction.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";
@@ -7,9 +10,9 @@ import type { BuilderContext } from "./context.js";
 import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
 import { lineForOffset } from "./line-for-offset.js";
 
-interface Container {
-  elements: VisualElement[];
-}
+type Container = Readonly<{
+  elements: /* mutable */ VisualElement[];
+}>;
 
 export function buildChildren(
   parentScope: SerializedScope,
@@ -17,7 +20,7 @@ export function buildChildren(
   ctx: BuilderContext,
   state: BuildState,
 ): void {
-  const children: SerializedScope[] = [];
+  const children: /* mutable */ SerializedScope[] = [];
   for (const id of parentScope.childScopes) {
     const c = ctx.scopeMap.get(id);
     if (c) {
@@ -37,7 +40,7 @@ export function buildChildren(
       i++;
       continue;
     }
-    const group: SerializedScope[] = [child];
+    const group: /* mutable */ SerializedScope[] = [child];
     let j = i + 1;
     while (j < children.length) {
       const next = children[j];
@@ -57,22 +60,23 @@ export function buildChildren(
     const offset = child.blockContext?.parentSpanOffset ?? 0;
     const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
     const hasElse = group.some((g) => g.blockContext?.key === "alternate");
-    const containerSubgraph: VisualSubgraph = {
-      type: "subgraph",
+    const containerSubgraph = {
+      type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: containerId,
-      kind: "if-else-container",
+      kind: SUBGRAPH_KIND.IfElseContainer,
       line: lineForOffset(ctx.ir.raw, offset),
-      direction: "RL",
+      endLine: null as number | null,
+      direction: DIRECTION.RL,
       hasElse,
-      elements: [],
-    };
+      elements: [] as VisualElement[],
+    } satisfies VisualSubgraph;
     container.elements.push(containerSubgraph);
     for (const g of group) {
       buildScope(g, containerSubgraph, ctx, state);
     }
     let containerEndLine = containerSubgraph.line;
     for (const elem of containerSubgraph.elements) {
-      if (elem.type === "subgraph" && elem.endLine !== undefined) {
+      if (elem.type === VISUAL_ELEMENT_TYPE.Subgraph && elem.endLine !== null) {
         containerEndLine = Math.max(containerEndLine, elem.endLine);
       }
     }

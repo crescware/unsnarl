@@ -1,11 +1,12 @@
 import type { VisualGraph } from "../../visual-graph/model.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 
 export function renderBoundaryEdges(
   graph: VisualGraph,
-  lines: string[],
-  stubIds: string[],
+  lines: /* mutable */ string[],
+  stubIds: /* mutable */ string[],
 ): void {
-  if (graph.boundaryEdges === undefined || graph.boundaryEdges.length === 0) {
+  if (graph.boundaryEdges.length === 0) {
     return;
   }
   // Pruning detected one or more neighbors past the requested radius.
@@ -27,7 +28,7 @@ export function renderBoundaryEdges(
     // ASCII "..." instead of U+2026 -- some Mermaid renderers stumble
     // on multibyte glyphs inside node shape syntax.
     lines.push(`  ${stubId}((...))`);
-    if (be.direction === "out") {
+    if (be.direction === BOUNDARY_EDGE_DIRECTION.Out) {
       lines.push(`  ${be.inside} -.-> ${stubId}`);
     } else {
       lines.push(`  ${stubId} -.->|${be.label}| ${be.inside}`);

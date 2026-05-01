@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { subgraphScopeId } from "./subgraph-scope-id.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseScope } from "./testing/make-scope.js";
 
 describe("subgraphScopeId", () => {
   test.each([
@@ -9,6 +9,6 @@ describe("subgraphScopeId", () => {
     { id: "scope.1-x", expected: "s_scope_1_x" },
     { id: "", expected: "s_" },
   ])("subgraphScopeId(scope id=$id) = $expected", ({ id, expected }) => {
-    expect(subgraphScopeId(makeScope({ id }))).toBe(expected);
+    expect(subgraphScopeId({ ...baseScope(), id })).toBe(expected);
   });
 });

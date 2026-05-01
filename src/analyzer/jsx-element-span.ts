@@ -1,9 +1,10 @@
+import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 
-interface JsxElementSpan {
+type JsxElementSpan = Readonly<{
   startOffset: number;
   endOffset: number;
-}
+}>;
 
 // A JSX opening-tag identifier (and identifiers reached through a
 // JSXMemberExpression chain on the tag name) logically extends from the
@@ -12,16 +13,16 @@ interface JsxElementSpan {
 // else (attribute values, embedded expressions, plain JS identifiers) yields
 // null so callers fall back to the identifier's own line.
 export function findJsxElementSpan(
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
 ): JsxElementSpan | null {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];
     if (!entry) {
       return null;
     }
-    if (entry.node.type === "JSXOpeningElement") {
+    if (entry.node.type === AST_TYPE.JSXOpeningElement) {
       const elementEntry = path[i - 1];
-      if (!elementEntry || elementEntry.node.type !== "JSXElement") {
+      if (!elementEntry || elementEntry.node.type !== AST_TYPE.JSXElement) {
         return null;
       }
       const start = (elementEntry.node as unknown as { start?: number }).start;
@@ -31,7 +32,7 @@ export function findJsxElementSpan(
       }
       return { startOffset: start, endOffset: end };
     }
-    if (entry.node.type === "JSXMemberExpression") {
+    if (entry.node.type === AST_TYPE.JSXMemberExpression) {
       continue;
     }
     return null;

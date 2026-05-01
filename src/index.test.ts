@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE } from "./cli/language.js";
 import type { Scope, SerializedIR } from "./ir/model.js";
+import { AST_TYPE } from "./parser/ast-type.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type {
   Emitter,
@@ -9,48 +11,49 @@ import type {
   Parser,
   ScopeAnalyzer,
 } from "./pipeline/types.js";
+import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
 
 const fakeScope = {} as Scope;
 
-const fakeIR: SerializedIR = {
-  version: 1,
-  source: { path: "test.ts", language: "ts" },
+const fakeIR = {
+  version: SERIALIZED_IR_VERSION,
+  source: { path: "test.ts", language: LANGUAGE.Ts },
   scopes: [],
   variables: [],
   references: [],
   unusedVariableIds: [],
   raw: "",
   diagnostics: [],
-};
+} as const satisfies SerializedIR;
 
-const fakeParser: Parser = {
+const fakeParser = {
   id: "fake",
   parse: (code, opts) => ({
-    ast: { type: "Program", body: [] },
+    ast: { type: AST_TYPE.Program, body: [] },
     language: opts.language,
     sourcePath: opts.sourcePath,
     raw: code,
   }),
-};
+} as const satisfies Parser;
 
-const fakeAnalyzer: ScopeAnalyzer = {
+const fakeAnalyzer = {
   id: "fake",
   analyze: () => ({ rootScope: fakeScope, diagnostics: [], raw: "" }),
-};
+} as const satisfies ScopeAnalyzer;
 
-const fakeSerializer: IRSerializer = {
+const fakeSerializer = {
   id: "fake",
   serialize: () => fakeIR,
-};
+} as const satisfies IRSerializer;
 
-const fakeEmitter: Emitter = {
+const fakeEmitter = {
   format: "fake",
   contentType: "text/plain",
   extension: "txt",
   emit: (ir) => `version=${ir.version}`,
-};
+} as const satisfies Emitter;
 
-function buildRegistry(emitters: Emitter[]): EmitterRegistry {
+function buildRegistry(emitters: readonly Emitter[]): EmitterRegistry {
   const map = new Map<string, Emitter>();
   for (const e of emitters) {
     map.set(e.format, e);
@@ -75,8 +78,10 @@ describe("createPipeline", () => {
 
     const result = pipeline.run("const x = 1;", {
       format: "fake",
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "test.ts",
+      emit: { pretty: true, prunedGraph: null },
+      pruning: null,
     });
 
     expect(result).toBe("version=1");
@@ -93,26 +98,28 @@ describe("createPipeline", () => {
     expect(() =>
       pipeline.run("", {
         format: "missing",
-        language: "ts",
+        language: LANGUAGE.Ts,
         sourcePath: "x.ts",
+        emit: { pretty: true, prunedGraph: null },
+        pruning: null,
       }),
     ).toThrow(/Unknown emitter format/);
   });
 
   test("allows swapping parser without touching downstream layers", () => {
     let parserCalled = false;
-    const swapped: Parser = {
+    const swapped = {
       id: "swapped",
       parse: (code, opts) => {
         parserCalled = true;
         return {
-          ast: { type: "Program", body: [] },
+          ast: { type: AST_TYPE.Program, body: [] },
           language: opts.language,
           sourcePath: opts.sourcePath,
           raw: code,
         };
       },
-    };
+    } as const satisfies Parser;
 
     const pipeline = createPipeline({
       parser: swapped,
@@ -123,8 +130,10 @@ describe("createPipeline", () => {
 
     pipeline.run("", {
       format: "fake",
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "x.ts",
+      emit: { pretty: true, prunedGraph: null },
+      pruning: null,
     });
 
     expect(parserCalled).toBe(true);

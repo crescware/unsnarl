@@ -14,7 +14,7 @@ export function handleIdentifierReference(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   manager: ScopeManager,
 ): void {
   const result = classifyIdentifier(
@@ -30,7 +30,6 @@ export function handleIdentifierReference(
     from: manager.current(),
     flags: result.flags,
     init: result.init,
-    writeExpr: result.writeExpr,
   });
   bindReference(manager.current(), ref, manager.globalScope);
   ref.unsnarlOwners = findReferenceOwners(path, manager.current());

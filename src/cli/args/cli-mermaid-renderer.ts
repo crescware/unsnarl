@@ -1,6 +1,7 @@
-export type CliMermaidRenderer = "dagre" | "elk";
+import { CLI_MERMAID_RENDERER } from "../cli-mermaid-renderer.js";
 
-export const MERMAID_RENDERERS: ReadonlySet<string> = new Set([
-  "dagre",
-  "elk",
-] satisfies CliMermaidRenderer[]);
+export type { CliMermaidRenderer } from "../cli-mermaid-renderer.js";
+
+export const MERMAID_RENDERERS: ReadonlySet<string> = new Set(
+  Object.values(CLI_MERMAID_RENDERER),
+);

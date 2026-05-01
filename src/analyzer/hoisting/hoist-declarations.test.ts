@@ -2,23 +2,28 @@ import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import { hoistDeclarations } from "./hoist-declarations.js";
 
-const programBody = (code: string): unknown[] => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
-    body: unknown[];
+const programBody = (code: string): readonly unknown[] => {
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
+    body: readonly unknown[];
   };
   return program.body;
 };
 
 const newScope = (): ScopeImpl =>
   new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
 
 describe("hoistDeclarations", () => {
@@ -50,7 +55,9 @@ describe("hoistDeclarations", () => {
     const raw = "var x = 1; const y = 2;";
     hoistDeclarations(programBody(raw), scope, raw, diags);
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
-    expect(diags.list().map((d) => d.kind)).toEqual(["var-detected"]);
+    expect(diags.list().map((d) => d.kind)).toEqual([
+      DIAGNOSTIC_KIND.VarDetected,
+    ]);
   });
 
   test("empty body declares nothing", () => {

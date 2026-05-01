@@ -1,16 +1,16 @@
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
 import type { VisualGraph } from "../model.js";
 
-export interface PruneOptions {
-  readonly roots: readonly ParsedRootQuery[];
-  readonly descendants: number;
-  readonly ancestors: number;
-}
+export type PruneOptions = Readonly<{
+  roots: readonly ParsedRootQuery[];
+  descendants: number;
+  ancestors: number;
+}>;
 
-export interface PruneResult {
-  readonly graph: VisualGraph;
-  readonly perQuery: ReadonlyArray<{
-    readonly query: ParsedRootQuery;
-    readonly matched: number;
-  }>;
-}
+export type PruneResult = Readonly<{
+  graph: VisualGraph;
+  perQuery: readonly Readonly<{
+    query: ParsedRootQuery;
+    matched: number;
+  }>[];
+}>;

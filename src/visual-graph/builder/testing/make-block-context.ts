@@ -1,14 +1,21 @@
 import type { BlockContext } from "../../../ir/model.js";
+import { AST_TYPE } from "../../../parser/ast-type.js";
 
-export function makeBlockContext(
-  parentType: string,
-  key: string,
-  parentSpanOffset = 0,
-  caseTest?: string | null,
-): BlockContext {
-  const ctx: BlockContext = { parentType, key, parentSpanOffset };
-  if (caseTest !== undefined) {
-    ctx.caseTest = caseTest;
-  }
-  return ctx;
+export function baseBlockContext(): BlockContext {
+  return {
+    kind: "other",
+    parentType: AST_TYPE.IfStatement,
+    key: "consequent",
+    parentSpanOffset: 0,
+  };
+}
+
+export function baseCaseClauseBlockContext(): BlockContext {
+  return {
+    kind: "case-clause",
+    parentType: AST_TYPE.SwitchStatement,
+    key: "cases",
+    parentSpanOffset: 0,
+    caseTest: null,
+  };
 }

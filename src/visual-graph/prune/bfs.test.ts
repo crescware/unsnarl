@@ -3,13 +3,16 @@ import { describe, expect, test } from "vitest";
 import { bfs } from "./bfs.js";
 
 const adjOf = (
-  pairs: ReadonlyArray<readonly [string, string]>,
+  pairs: readonly (readonly [string, string])[],
 ): Map<string, string[]> => {
   const out = new Map<string, string[]>();
   for (const [from, to] of pairs) {
     const arr = out.get(from);
-    if (arr === undefined) out.set(from, [to]);
-    else arr.push(to);
+    if (arr === undefined) {
+      out.set(from, [to]);
+    } else {
+      arr.push(to);
+    }
   }
   return out;
 };

@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import type {
   DefinitionType,
   Scope,
@@ -7,12 +8,15 @@ import type {
   Variable,
 } from "../../ir/model.js";
 import { OxcParser } from "../../parser/oxc.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 
-function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
+function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -20,7 +24,7 @@ function analyze(code: string, language: "ts" | "tsx" | "js" = "ts") {
   return analyzer.analyze(parsed);
 }
 
-function variableNames(scope: Scope): string[] {
+function variableNames(scope: Scope): /* mutable */ string[] {
   return scope.variables.map((v) => v.name);
 }
 
@@ -28,12 +32,12 @@ function findVariable(scope: Scope, name: string): Variable | undefined {
   return scope.variables.find((v) => v.name === name);
 }
 
-function defTypes(variable: Variable): DefinitionType[] {
+function defTypes(variable: Variable): readonly DefinitionType[] {
   return variable.defs.map((d) => d.type);
 }
 
-function collectScopes(root: Scope): Scope[] {
-  const out: Scope[] = [];
+function collectScopes(root: Scope): readonly Scope[] {
+  const out: /* mutable */ Scope[] = [];
   function visit(s: Scope) {
     out.push(s);
     for (const c of s.childScopes) {
@@ -55,8 +59,8 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     const a = findVariable(rootScope, "a");
     const b = findVariable(rootScope, "b");
-    expect(a && defTypes(a)).toEqual(["Variable"]);
-    expect(b && defTypes(b)).toEqual(["Variable"]);
+    expect(a && defTypes(a)).toEqual([DEFINITION_TYPE.Variable]);
+    expect(b && defTypes(b)).toEqual([DEFINITION_TYPE.Variable]);
   });
 
   test("collects function declarations as FunctionName and class as ClassName", () => {
@@ -67,8 +71,8 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     const foo = findVariable(rootScope, "foo");
     const bar = findVariable(rootScope, "Bar");
-    expect(foo && defTypes(foo)).toEqual(["FunctionName"]);
-    expect(bar && defTypes(bar)).toEqual(["ClassName"]);
+    expect(foo && defTypes(foo)).toEqual([DEFINITION_TYPE.FunctionName]);
+    expect(bar && defTypes(bar)).toEqual([DEFINITION_TYPE.ClassName]);
   });
 
   test("expands destructuring patterns into individual Variables", () => {
@@ -79,7 +83,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     `;
     const { rootScope } = analyze(code);
     const declared = rootScope.variables
-      .filter((v) => v.defs.some((d) => d.type === "Variable"))
+      .filter((v) => v.defs.some((d) => d.type === DEFINITION_TYPE.Variable))
       .map((v) => v.name)
       .sort();
     expect(declared).toEqual(["a", "c", "deep", "rest", "x", "y"]);
@@ -94,7 +98,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     expect(variableNames(rootScope).sort()).toEqual(["a", "c", "def", "ns"]);
     for (const v of rootScope.variables) {
-      expect(defTypes(v)).toEqual(["ImportBinding"]);
+      expect(defTypes(v)).toEqual([DEFINITION_TYPE.ImportBinding]);
     }
   });
 
@@ -114,9 +118,9 @@ describe("EslintCompatAnalyzer / declarations", () => {
       "rest",
     ]);
     const a = fnScope && findVariable(fnScope, "a");
-    expect(a && defTypes(a)).toEqual(["Parameter"]);
+    expect(a && defTypes(a)).toEqual([DEFINITION_TYPE.Parameter]);
     const inner = fnScope && findVariable(fnScope, "inner");
-    expect(inner && defTypes(inner)).toEqual(["Variable"]);
+    expect(inner && defTypes(inner)).toEqual([DEFINITION_TYPE.Variable]);
   });
 
   test("creates block scope only for non-function blocks", () => {
@@ -156,11 +160,11 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     // try block (block scope) と catch scope (catch)
     const allScopes = collectScopes(rootScope);
-    const catchScope = allScopes.find((s) => s.type === "catch");
+    const catchScope = allScopes.find((s) => s.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope && variableNames(catchScope!).sort()).toEqual(["e", "x"]);
     const e = catchScope && findVariable(catchScope!, "e");
-    expect(e && defTypes(e)).toEqual(["CatchClause"]);
+    expect(e && defTypes(e)).toEqual([DEFINITION_TYPE.CatchClause]);
   });
 
   test("records var-detected diagnostic and skips var bindings", () => {
@@ -168,7 +172,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope, diagnostics } = analyze(code);
     expect(variableNames(rootScope)).toEqual(["modern"]);
     expect(diagnostics.length).toBe(1);
-    expect(diagnostics[0]?.kind).toBe("var-detected");
+    expect(diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
     expect(diagnostics[0]?.span?.line).toBe(1);
   });
 

@@ -9,7 +9,7 @@ export function walkNode(
   parent: AstNode | null,
   key: string | null,
   visitor: WalkVisitor,
-  path: PathEntry[],
+  path: /* mutable */ PathEntry[],
 ): void {
   const action = visitor.enter?.(node, parent, key, path);
   if (action === "skip") {

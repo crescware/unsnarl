@@ -21,6 +21,7 @@ export function enterSwitchCase(
   const ctx: BlockContext | null =
     parent && key !== null
       ? {
+          kind: "case-clause",
           parentType: parent.type,
           key,
           parentSpanOffset: parent.start ?? 0,

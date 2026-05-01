@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
@@ -12,7 +13,7 @@ const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new MermaidEmitter({ strategy: elkStrategy });
 
-function emit(code: string, language: "ts" | "tsx" | "js" = "ts"): string {
+function emit(code: string, language: Language = LANGUAGE.Ts): string {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -24,7 +25,7 @@ function emit(code: string, language: "ts" | "tsx" | "js" = "ts"): string {
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },
   });
-  return emitter.emit(ir, {});
+  return emitter.emit(ir, { pretty: true, prunedGraph: null });
 }
 
 describe("MermaidEmitter", () => {
@@ -43,7 +44,7 @@ describe("MermaidEmitter", () => {
   test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
     const dagre = new MermaidEmitter({ strategy: dagreStrategy });
     const parsed = parser.parse("const a = 1;\n", {
-      language: "ts",
+      language: LANGUAGE.Ts,
       sourcePath: "input.ts",
     });
     const analyzed = analyzer.analyze(parsed);
@@ -51,9 +52,9 @@ describe("MermaidEmitter", () => {
       rootScope: analyzed.rootScope,
       diagnostics: analyzed.diagnostics,
       raw: analyzed.raw,
-      source: { path: "input.ts", language: "ts" },
+      source: { path: "input.ts", language: LANGUAGE.Ts },
     });
-    const out = dagre.emit(ir, {});
+    const out = dagre.emit(ir, { pretty: true, prunedGraph: null });
     expect(out).not.toContain("%%{init");
     expect(out).toMatch(/^flowchart RL\n/);
   });
@@ -350,11 +351,11 @@ describe("MermaidEmitter", () => {
   });
 });
 
-function lines(out: string): string[] {
+function lines(out: string): readonly string[] {
   return out.split("\n");
 }
 
-function edgesFor(out: string): string[] {
+function edgesFor(out: string): readonly string[] {
   return lines(out).filter((l) => l.includes(" -->|"));
 }
 

@@ -1,7 +1,7 @@
 import { ReferenceFlags } from "../../ir/model.js";
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { ClassifyResult } from "./classify-result.js";
-import { isAstExpression } from "./is-ast-expression.js";
 import { reference } from "./reference.js";
 
 export function classifyOrdinaryReference(
@@ -9,34 +9,29 @@ export function classifyOrdinaryReference(
   key: string | null,
   parent: AstNode,
 ): ClassifyResult {
-  if (t === "AssignmentExpression" && key === "left") {
+  if (t === AST_TYPE.AssignmentExpression && key === "left") {
     const op = (parent as { operator?: string }).operator ?? "=";
     const flags =
       op === "="
         ? ReferenceFlags.Write
         : ReferenceFlags.Read | ReferenceFlags.Write;
-    const right = parent["right"];
-    return reference(flags, false, isAstExpression(right) ? right : null);
+    return reference(flags, false);
   }
-  if (t === "UpdateExpression" && key === "argument") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Write, false, null);
+  if (t === AST_TYPE.UpdateExpression && key === "argument") {
+    return reference(ReferenceFlags.Read | ReferenceFlags.Write, false);
   }
-  if (t === "CallExpression" && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false, null);
+  if (t === AST_TYPE.CallExpression && key === "callee") {
+    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
   }
-  if (t === "NewExpression" && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false, null);
+  if (t === AST_TYPE.NewExpression && key === "callee") {
+    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
   }
-  if (t === "MemberExpression" && key === "object") {
-    return reference(
-      ReferenceFlags.Read | ReferenceFlags.Receiver,
-      false,
-      null,
-    );
+  if (t === AST_TYPE.MemberExpression && key === "object") {
+    return reference(ReferenceFlags.Read | ReferenceFlags.Receiver, false);
   }
   let init = false;
-  if (t === "VariableDeclarator" && key === "init") {
+  if (t === AST_TYPE.VariableDeclarator && key === "init") {
     init = true;
   }
-  return reference(ReferenceFlags.Read, init, null);
+  return reference(ReferenceFlags.Read, init);
 }

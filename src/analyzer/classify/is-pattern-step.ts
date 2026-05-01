@@ -1,22 +1,23 @@
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { PathEntry } from "../walk/walk.js";
 
 export function isPatternStep(
   node: AstNode,
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   i: number,
 ): boolean {
   const t = node.type;
   if (
-    t === "ObjectPattern" ||
-    t === "ArrayPattern" ||
-    t === "RestElement" ||
-    t === "AssignmentPattern"
+    t === AST_TYPE.ObjectPattern ||
+    t === AST_TYPE.ArrayPattern ||
+    t === AST_TYPE.RestElement ||
+    t === AST_TYPE.AssignmentPattern
   ) {
     return true;
   }
-  if (t === "Property") {
-    return path[i - 1]?.node.type === "ObjectPattern";
+  if (t === AST_TYPE.Property) {
+    return path[i - 1]?.node.type === AST_TYPE.ObjectPattern;
   }
   return false;
 }

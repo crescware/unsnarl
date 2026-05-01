@@ -9,29 +9,36 @@
     {
       "type": "node",
       "id": "n_scope_0_f_9",
-      "kind": "FunctionName",
       "name": "f",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
     },
     {
       "type": "node",
       "id": "n_scope_0_g_111",
-      "kind": "Variable",
       "name": "g",
       "line": 9,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_h_126",
-      "kind": "Variable",
       "name": "h",
       "line": 10,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
@@ -46,44 +53,57 @@
         {
           "type": "node",
           "id": "n_scope_1_a_23",
-          "kind": "Variable",
           "name": "a",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_b_40",
-          "kind": "Variable",
           "name": "b",
           "line": 3,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_c_57",
-          "kind": "Variable",
           "name": "c",
           "line": 4,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
         },
         {
           "type": "node",
           "id": "n_scope_1_d_83",
-          "kind": "Variable",
           "name": "d",
           "line": 5,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "const"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_f_9_92_101",
           "kind": "return",
           "line": 6,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -92,7 +112,9 @@
               "kind": "ReturnUse",
               "name": "d",
               "line": 6,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ]
         }
@@ -130,5 +152,7 @@
       "to": "n_scope_0_h_126",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { ScopeManager } from "../manager.js";
 import { declareFunctionParams } from "./declare-function-params.js";
 import { findFirst } from "./testing/find-first.js";
@@ -8,9 +10,9 @@ import { parse } from "./testing/parse.js";
 
 function setup(code: string) {
   const program = parse(code);
-  const fn = findFirst(program, "FunctionDeclaration");
+  const fn = findFirst(program, AST_TYPE.FunctionDeclaration);
   const manager = new ScopeManager("module", program as unknown as AstNode);
-  const fnScope = manager.push("function", fn as unknown as AstNode);
+  const fnScope = manager.push("function", fn as unknown as AstNode, null);
   return { fn, fnScope };
 }
 
@@ -20,7 +22,9 @@ describe("declareFunctionParams", () => {
     declareFunctionParams(fn, fnScope);
     expect(fnScope.variables.map((v) => v.name)).toEqual(["a", "b"]);
     expect(
-      fnScope.variables.every((v) => v.defs[0]?.type === "Parameter"),
+      fnScope.variables.every(
+        (v) => v.defs[0]?.type === DEFINITION_TYPE.Parameter,
+      ),
     ).toBe(true);
   });
 
@@ -39,8 +43,12 @@ describe("declareFunctionParams", () => {
   test("does nothing when params is missing or not an array", () => {
     const program = parse("");
     const manager = new ScopeManager("module", program as unknown as AstNode);
-    const fnScope = manager.push("function", program as unknown as AstNode);
-    declareFunctionParams({ type: "FunctionDeclaration" }, fnScope);
+    const fnScope = manager.push(
+      "function",
+      program as unknown as AstNode,
+      null,
+    );
+    declareFunctionParams({ type: AST_TYPE.FunctionDeclaration }, fnScope);
     expect(fnScope.variables).toHaveLength(0);
   });
 });

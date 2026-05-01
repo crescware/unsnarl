@@ -1,9 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { BlockContext, ScopeType } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { shouldSubgraph } from "./should-subgraph.js";
-import { makeBlockContext } from "./testing/make-block-context.js";
-import { makeScope } from "./testing/make-scope.js";
+import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseScope } from "./testing/make-scope.js";
 
 describe("shouldSubgraph", () => {
   test.each<{
@@ -15,48 +17,53 @@ describe("shouldSubgraph", () => {
   }>([
     {
       name: "function-subgraph owner on a plain block -> true",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: null,
       isOwner: true,
       expected: true,
     },
     {
       name: "control kind (for) without owner -> true",
-      type: "for",
+      type: SCOPE_TYPE.For,
       blockContext: null,
       isOwner: false,
       expected: true,
     },
     {
       name: "branch block (if consequent) without owner -> true",
-      type: "block",
-      blockContext: makeBlockContext("IfStatement", "consequent", 0),
+      type: SCOPE_TYPE.Block,
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 0,
+      },
       isOwner: false,
       expected: true,
     },
     {
       name: "plain block without owner or branch context -> false",
-      type: "block",
+      type: SCOPE_TYPE.Block,
       blockContext: null,
       isOwner: false,
       expected: false,
     },
     {
       name: "module without owner -> false",
-      type: "module",
+      type: SCOPE_TYPE.Module,
       blockContext: null,
       isOwner: false,
       expected: false,
     },
     {
       name: "global without owner -> false",
-      type: "global",
+      type: SCOPE_TYPE.Global,
       blockContext: null,
       isOwner: false,
       expected: false,
     },
   ])("$name", ({ type, blockContext, isOwner, expected }) => {
-    const scope = makeScope({ id: "s", type, blockContext });
+    const scope = { ...baseScope(), id: "s", type, blockContext };
     const owners = isOwner
       ? new Map([["s", "var"]])
       : new Map<string, string>();

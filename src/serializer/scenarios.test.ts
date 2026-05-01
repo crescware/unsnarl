@@ -1,23 +1,26 @@
 import { describe, expect, test } from "vitest";
 
+import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { PREDICATE_CONTAINER_TYPE } from "../analyzer/predicate-container-type.js";
+import { SCOPE_TYPE } from "../analyzer/scope-type.js";
+import { LANGUAGE, type Language } from "../cli/language.js";
 import type {
   SerializedIR,
   SerializedReference,
   SerializedScope,
   SerializedVariable,
 } from "../ir/model.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "./flat/flat-serializer.js";
+import { IMPORT_KIND } from "./import-kind.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
-function pipe(
-  code: string,
-  language: "ts" | "tsx" | "js" = "ts",
-): SerializedIR {
+function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -41,20 +44,26 @@ function varByName(ir: SerializedIR, name: string): SerializedVariable {
   return matches[0] as SerializedVariable;
 }
 
-function refsToVar(ir: SerializedIR, id: string): SerializedReference[] {
+function refsToVar(
+  ir: SerializedIR,
+  id: string,
+): readonly SerializedReference[] {
   return ir.references.filter((r) => r.resolved === id);
 }
 
-function caseScopesOf(ir: SerializedIR): SerializedScope[] {
+function caseScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
     (s) =>
-      s.type === "block" && s.blockContext?.parentType === "SwitchStatement",
+      s.type === SCOPE_TYPE.Block &&
+      s.blockContext?.parentType === AST_TYPE.SwitchStatement,
   );
 }
 
-function ifBranchScopesOf(ir: SerializedIR): SerializedScope[] {
+function ifBranchScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
-    (s) => s.type === "block" && s.blockContext?.parentType === "IfStatement",
+    (s) =>
+      s.type === SCOPE_TYPE.Block &&
+      s.blockContext?.parentType === AST_TYPE.IfStatement,
   );
 }
 
@@ -91,7 +100,10 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
   test("the switch produces three case-block scopes (two cases + default)", () => {
     const cases = caseScopesOf(ir);
     expect(cases).toHaveLength(3);
-    const tests = cases.map((s) => s.blockContext?.caseTest);
+    const tests = cases.map((s) => {
+      const ctx = s.blockContext;
+      return ctx?.kind === "case-clause" ? ctx.caseTest : null;
+    });
     expect(tests).toEqual(['"a"', '"b"', null]);
   });
 
@@ -110,14 +122,16 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
     expect(scopes.size).toBe(3);
     for (const w of writes) {
       const s = scopeFromOf(ir, w);
-      expect(s.blockContext?.parentType).toBe("SwitchStatement");
+      expect(s.blockContext?.parentType).toBe(AST_TYPE.SwitchStatement);
     }
   });
 
   test("the discriminant identifier carries a SwitchStatement predicate container", () => {
     const kindRefs = ir.references.filter((r) => r.identifier.name === "kind");
     expect(kindRefs).toHaveLength(1);
-    expect(kindRefs[0]?.predicateContainer?.type).toBe("SwitchStatement");
+    expect(kindRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.SwitchStatement,
+    );
   });
 });
 
@@ -174,7 +188,9 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
   test("the predicate identifier carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter((r) => r.identifier.name === "flag");
     expect(flagRefs).toHaveLength(1);
-    expect(flagRefs[0]?.predicateContainer?.type).toBe("IfStatement");
+    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.IfStatement,
+    );
   });
 
   test("counter receives one write per branch, in distinct branch scopes", () => {
@@ -206,7 +222,9 @@ describe("scenario: if without else — only the consequent scope exists", () =>
 
   test("the predicate identifier still carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter((r) => r.identifier.name === "flag");
-    expect(flagRefs[0]?.predicateContainer?.type).toBe("IfStatement");
+    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+      PREDICATE_CONTAINER_TYPE.IfStatement,
+    );
   });
 });
 
@@ -225,7 +243,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the try statement produces a try block, a catch scope, and a finalizer block", () => {
     const tryChildren = ir.scopes.filter(
-      (s) => s.blockContext?.parentType === "TryStatement",
+      (s) => s.blockContext?.parentType === AST_TYPE.TryStatement,
     );
     expect(tryChildren).toHaveLength(3);
     const layout = tryChildren.map((s) => ({
@@ -233,18 +251,18 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
       key: s.blockContext?.key,
     }));
     expect(layout).toEqual([
-      { type: "block", key: "block" },
-      { type: "catch", key: "handler" },
-      { type: "block", key: "finalizer" },
+      { type: SCOPE_TYPE.Block, key: "block" },
+      { type: SCOPE_TYPE.Catch, key: "handler" },
+      { type: SCOPE_TYPE.Block, key: "finalizer" },
     ]);
   });
 
   test("the catch parameter `err` is owned by the catch scope, not the surrounding module", () => {
     const err = varByName(ir, "err");
-    const catchScope = ir.scopes.find((s) => s.type === "catch");
+    const catchScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope?.variables).toContain(err.id);
-    const moduleScope = ir.scopes.find((s) => s.type === "module") as
+    const moduleScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Module) as
       | SerializedScope
       | undefined;
     expect(moduleScope?.variables ?? []).not.toContain(err.id);
@@ -252,7 +270,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the catch parameter has a CatchClause definition", () => {
     const err = varByName(ir, "err");
-    expect(err.defs[0]?.type).toBe("CatchClause");
+    expect(err.defs[0]?.type).toBe(AST_TYPE.CatchClause);
   });
 });
 
@@ -264,34 +282,51 @@ describe("scenario: import declarations carry kind / source / imported name", ()
   ].join("\n");
   const ir = pipe(code);
 
-  test("default imports record the source and a null importedName", () => {
+  test("default imports record the source and no importedName", () => {
     const def = varByName(ir, "def").defs[0];
-    expect(def?.type).toBe("ImportBinding");
-    expect(def?.importKind).toBe("default");
-    expect(def?.importSource).toBe("some-default");
-    expect(def?.importedName).toBeNull();
+    expect(def?.type).toBe(DEFINITION_TYPE.ImportBinding);
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(def.importKind).toBe(IMPORT_KIND.Default);
+    expect(def.importSource).toBe("some-default");
   });
 
   test("named imports record the imported name as the original symbol", () => {
     const named = varByName(ir, "named").defs[0];
-    expect(named?.importKind).toBe("named");
-    expect(named?.importSource).toBe("some-named");
-    expect(named?.importedName).toBe("named");
+    if (named?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(named.importKind).toBe(IMPORT_KIND.Named);
+    expect(named.importSource).toBe("some-named");
+    if (named.importKind !== IMPORT_KIND.Named) {
+      throw new Error("expected Named");
+    }
+    expect(named.importedName).toBe("named");
   });
 
   test("renamed imports keep the local name on the variable but the original on importedName", () => {
     const renamed = varByName(ir, "renamed");
     expect(renamed.name).toBe("renamed");
-    expect(renamed.defs[0]?.importKind).toBe("named");
-    expect(renamed.defs[0]?.importedName).toBe("other");
-    expect(renamed.defs[0]?.importSource).toBe("some-named");
+    const def = renamed.defs[0];
+    if (def?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(def.importKind).toBe(IMPORT_KIND.Named);
+    if (def.importKind !== IMPORT_KIND.Named) {
+      throw new Error("expected Named");
+    }
+    expect(def.importedName).toBe("other");
+    expect(def.importSource).toBe("some-named");
   });
 
-  test("namespace imports record kind=namespace and a null importedName", () => {
+  test("namespace imports record kind=namespace", () => {
     const ns = varByName(ir, "ns").defs[0];
-    expect(ns?.importKind).toBe("namespace");
-    expect(ns?.importSource).toBe("some-namespace");
-    expect(ns?.importedName).toBeNull();
+    if (ns?.type !== DEFINITION_TYPE.ImportBinding) {
+      throw new Error("expected ImportBinding");
+    }
+    expect(ns.importKind).toBe(IMPORT_KIND.Namespace);
+    expect(ns.importSource).toBe("some-namespace");
   });
 });
 
@@ -305,7 +340,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
     expect(objectRefs[0]?.flags.receiver).toBe(true);
     expect(objectRefs[0]?.flags.read).toBe(true);
     const objectDef = varByName(ir, "Object").defs[0];
-    expect(objectDef?.type).toBe("ImplicitGlobalVariable");
+    expect(objectDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 
   test("a global read directly carries flags.receiver=false", () => {
@@ -315,7 +350,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
     expect(argRefs[0]?.flags.receiver).toBe(false);
     expect(argRefs[0]?.flags.read).toBe(true);
     const argDef = varByName(ir, "arg").defs[0];
-    expect(argDef?.type).toBe("ImplicitGlobalVariable");
+    expect(argDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 });
 
@@ -336,7 +371,7 @@ describe("scenario: function parameter references are not duplicated", () => {
 
   test("each parameter has a Parameter definition", () => {
     const ir = pipe("function add(a, b) { return a + b; }\n");
-    expect(varByName(ir, "a").defs[0]?.type).toBe("Parameter");
-    expect(varByName(ir, "b").defs[0]?.type).toBe("Parameter");
+    expect(varByName(ir, "a").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
+    expect(varByName(ir, "b").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
   });
 });

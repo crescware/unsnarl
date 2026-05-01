@@ -1,4 +1,5 @@
 import type { ParsedRootQuery } from "./parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "./root-query-kind.js";
 
 const ID_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
 const LINE_RE = /^([0-9]+)$/;
@@ -19,7 +20,7 @@ export function parseRootQuery(
     if (line <= 0) {
       return { error: `invalid root query '${token}': line must be >= 1` };
     }
-    return { kind: "line", line, raw: token };
+    return { kind: ROOT_QUERY_KIND.Line, line, raw: token };
   }
 
   const lineNameMatch = LINE_NAME_RE.exec(token);
@@ -29,7 +30,7 @@ export function parseRootQuery(
     if (line <= 0) {
       return { error: `invalid root query '${token}': line must be >= 1` };
     }
-    return { kind: "line-name", line, name, raw: token };
+    return { kind: ROOT_QUERY_KIND.LineName, line, name, raw: token };
   }
 
   const rangeNameMatch = RANGE_NAME_RE.exec(token);
@@ -45,7 +46,7 @@ export function parseRootQuery(
         error: `invalid root query '${token}': range start must be <= end`,
       };
     }
-    return { kind: "range-name", start, end, name, raw: token };
+    return { kind: ROOT_QUERY_KIND.RangeName, start, end, name, raw: token };
   }
 
   const rangeMatch = RANGE_RE.exec(token);
@@ -60,11 +61,11 @@ export function parseRootQuery(
         error: `invalid root query '${token}': range start must be <= end`,
       };
     }
-    return { kind: "range", start, end, raw: token };
+    return { kind: ROOT_QUERY_KIND.Range, start, end, raw: token };
   }
 
   if (ID_RE.test(token)) {
-    return { kind: "name", name: token, raw: token };
+    return { kind: ROOT_QUERY_KIND.Name, name: token, raw: token };
   }
 
   return { error: `invalid root query '${token}'` };

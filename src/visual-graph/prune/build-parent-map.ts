@@ -1,4 +1,5 @@
 import type { VisualElement } from "../model.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 
 export function buildParentMap(
   elements: readonly VisualElement[],
@@ -15,7 +16,7 @@ export function buildParentMap(
       if (parentId !== undefined) {
         parent.set(item.id, parentId);
       }
-      if (item.type === "subgraph") {
+      if (item.type === VISUAL_ELEMENT_TYPE.Subgraph) {
         walk(item.elements, item.id);
       }
     }

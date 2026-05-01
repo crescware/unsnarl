@@ -1,13 +1,13 @@
 import type { CliArgs } from "./cli-args.js";
 
-export interface CliParseSuccess {
+export type CliParseSuccess = Readonly<{
   ok: true;
   args: CliArgs;
-}
+}>;
 
-export interface CliParseFailure {
+export type CliParseFailure = Readonly<{
   ok: false;
   error: string;
-}
+}>;
 
 export type CliParseResult = CliParseSuccess | CliParseFailure;

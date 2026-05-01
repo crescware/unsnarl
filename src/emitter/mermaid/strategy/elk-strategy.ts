@@ -1,6 +1,6 @@
 import type { MermaidStrategy } from "./strategy.js";
 
-export const elkStrategy: MermaidStrategy = {
+export const elkStrategy = {
   preambleLines: ['%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%'],
 
   emptySubgraphPlaceholder: ({ subgraphId, indent, referencedByEdge }) => {
@@ -27,7 +27,7 @@ export const elkStrategy: MermaidStrategy = {
     if (placeholderIds.length === 0) {
       return [];
     }
-    const out: string[] = [
+    const out: /* mutable */ string[] = [
       "  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;",
     ];
     for (const id of placeholderIds) {
@@ -35,4 +35,4 @@ export const elkStrategy: MermaidStrategy = {
     }
     return out;
   },
-};
+} as const satisfies MermaidStrategy;

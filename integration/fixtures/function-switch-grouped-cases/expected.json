@@ -9,11 +9,12 @@
     {
       "type": "node",
       "id": "n_scope_0_getDayType_9",
-      "kind": "FunctionName",
       "name": "getDayType",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "unused": true
+      "unused": true,
+      "kind": "FunctionName"
     },
     {
       "type": "subgraph",
@@ -28,24 +29,28 @@
         {
           "type": "node",
           "id": "n_scope_1_day_20",
-          "kind": "Parameter",
           "name": "day",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
         },
         {
           "type": "node",
           "id": "n_scope_1_ret_33",
-          "kind": "Variable",
           "name": "ret",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "switch",
           "line": 3,
           "endLine": 18,
           "direction": "RL",
@@ -53,47 +58,46 @@
             {
               "type": "subgraph",
               "id": "s_scope_3",
-              "kind": "case",
               "line": 4,
               "endLine": 4,
               "direction": "RL",
               "elements": [],
+              "kind": "case",
               "caseTest": "\"mon\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_4",
-              "kind": "case",
               "line": 5,
               "endLine": 5,
               "direction": "RL",
               "elements": [],
+              "kind": "case",
               "caseTest": "\"tue\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_5",
-              "kind": "case",
               "line": 6,
               "endLine": 6,
               "direction": "RL",
               "elements": [],
+              "kind": "case",
               "caseTest": "\"wed\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_6",
-              "kind": "case",
               "line": 7,
               "endLine": 7,
               "direction": "RL",
               "elements": [],
+              "kind": "case",
               "caseTest": "\"thu\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_7",
-              "kind": "case",
               "line": 8,
               "endLine": 10,
               "direction": "RL",
@@ -104,26 +108,28 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 9,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 }
               ],
+              "kind": "case",
               "caseTest": "\"fri\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_8",
-              "kind": "case",
               "line": 11,
               "endLine": 11,
               "direction": "RL",
               "elements": [],
+              "kind": "case",
               "caseTest": "\"sat\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_9",
-              "kind": "case",
               "line": 12,
               "endLine": 14,
               "direction": "RL",
@@ -134,16 +140,18 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 13,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 }
               ],
+              "kind": "case",
               "caseTest": "\"sun\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_10",
-              "kind": "case",
               "line": 15,
               "endLine": 17,
               "direction": "RL",
@@ -154,19 +162,24 @@
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 16,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 }
               ],
+              "kind": "case",
               "caseTest": null
             }
-          ]
+          ],
+          "kind": "switch"
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_getDayType_9_308_319",
           "kind": "return",
           "line": 19,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -175,7 +188,9 @@
               "kind": "ReturnUse",
               "name": "ret",
               "line": 19,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ]
         }
@@ -218,5 +233,7 @@
       "to": "ret_use_ref_4",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

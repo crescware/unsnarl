@@ -5,9 +5,9 @@ import { resolveInScopeChain } from "../resolve.js";
 export function allBindingVariables(
   pattern: AstNode,
   scope: Scope,
-): Variable[] {
+): /* mutable */ Variable[] {
   const idents = collectBindingIdentifiers(pattern);
-  const out: Variable[] = [];
+  const out: /* mutable */ Variable[] = [];
   for (const ident of idents) {
     const v = resolveInScopeChain(scope, ident.name);
     if (v && !out.includes(v)) {

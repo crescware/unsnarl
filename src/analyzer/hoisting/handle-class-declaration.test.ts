@@ -2,13 +2,17 @@ import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
-    body: ReadonlyArray<NodeLike>;
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
+    body: readonly NodeLike[];
   };
   const stmt = program.body[0];
   if (stmt === undefined) {
@@ -19,10 +23,11 @@ const firstStmt = (code: string): NodeLike => {
 
 const newScope = (): ScopeImpl =>
   new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
 
 describe("handleClassDeclaration", () => {
@@ -30,13 +35,17 @@ describe("handleClassDeclaration", () => {
     const scope = newScope();
     handleClassDeclaration(firstStmt("class C {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["C"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe("ClassName");
+    expect(scope.variables[0]?.defs[0]?.type).toBe(DEFINITION_TYPE.ClassName);
   });
 
   test("anonymous class (no id) declares nothing", () => {
     const scope = newScope();
     handleClassDeclaration(
-      { type: "ClassDeclaration", id: null, body: { type: "ClassBody", body: [] } },
+      {
+        type: AST_TYPE.ClassDeclaration,
+        id: null,
+        body: { type: AST_TYPE.ClassBody, body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);

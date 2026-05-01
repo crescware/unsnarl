@@ -2,17 +2,17 @@ import { parseSync } from "oxc-parser";
 
 import type { ParseOptions, ParsedSource, Parser } from "../pipeline/types.js";
 
-export interface ParseErrorDetail {
+export type ParseErrorDetail = Readonly<{
   message: string;
   start: number;
   end: number;
-}
+}>;
 
 export class ParseError extends Error {
   override readonly name = "ParseError";
-  readonly errors: ReadonlyArray<ParseErrorDetail>;
+  readonly errors: readonly ParseErrorDetail[];
 
-  constructor(message: string, errors: ReadonlyArray<ParseErrorDetail>) {
+  constructor(message: string, errors: readonly ParseErrorDetail[]) {
     super(message);
     this.errors = errors;
   }

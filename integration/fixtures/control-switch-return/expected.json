@@ -9,20 +9,24 @@
     {
       "type": "node",
       "id": "n_scope_0_classify_9",
-      "kind": "FunctionName",
       "name": "classify",
       "line": 1,
-      "isJsxElement": false
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
     },
     {
       "type": "node",
       "id": "n_scope_0_result_243",
-      "kind": "Variable",
       "name": "result",
       "line": 18,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "subgraph",
@@ -37,24 +41,28 @@
         {
           "type": "node",
           "id": "n_scope_1_kind_18",
-          "kind": "Parameter",
           "name": "kind",
           "line": 1,
-          "isJsxElement": false
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
         },
         {
           "type": "node",
           "id": "n_scope_1_label_40",
-          "kind": "Variable",
           "name": "label",
           "line": 2,
+          "endLine": null,
           "isJsxElement": false,
-          "declarationKind": "let"
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
         },
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "switch",
           "line": 4,
           "endLine": 13,
           "direction": "RL",
@@ -62,7 +70,6 @@
             {
               "type": "subgraph",
               "id": "s_scope_3",
-              "kind": "case",
               "line": 5,
               "endLine": 7,
               "direction": "RL",
@@ -73,7 +80,9 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 6,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 },
                 {
@@ -81,6 +90,7 @@
                   "id": "s_return_scope_0_classify_9_114_127",
                   "kind": "return",
                   "line": 7,
+                  "endLine": null,
                   "direction": "RL",
                   "elements": [
                     {
@@ -89,17 +99,19 @@
                       "kind": "ReturnUse",
                       "name": "label",
                       "line": 7,
-                      "isJsxElement": false
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
                     }
                   ]
                 }
               ],
+              "kind": "case",
               "caseTest": "\"a\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_4",
-              "kind": "case",
               "line": 8,
               "endLine": 10,
               "direction": "RL",
@@ -110,16 +122,18 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 9,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 }
               ],
+              "kind": "case",
               "caseTest": "\"b\""
             },
             {
               "type": "subgraph",
               "id": "s_scope_5",
-              "kind": "case",
               "line": 11,
               "endLine": 12,
               "direction": "RL",
@@ -130,19 +144,24 @@
                   "kind": "WriteOp",
                   "name": "label",
                   "line": 12,
+                  "endLine": null,
                   "isJsxElement": false,
+                  "unused": false,
                   "declarationKind": "let"
                 }
               ],
+              "kind": "case",
               "caseTest": null
             }
-          ]
+          ],
+          "kind": "switch"
         },
         {
           "type": "subgraph",
           "id": "s_return_scope_0_classify_9_220_233",
           "kind": "return",
           "line": 15,
+          "endLine": null,
           "direction": "RL",
           "elements": [
             {
@@ -151,7 +170,9 @@
               "kind": "ReturnUse",
               "name": "label",
               "line": 15,
-              "isJsxElement": false
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ]
         }
@@ -199,5 +220,7 @@
       "to": "n_scope_0_result_243",
       "label": "read,call"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

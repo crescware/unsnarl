@@ -92,7 +92,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "f",
             "span": {
@@ -110,12 +109,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -135,7 +129,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -160,15 +153,15 @@
               "offset": 17
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 12,
-            "offset": 27
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 12,
+              "offset": 27
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -189,7 +182,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -214,15 +206,15 @@
               "offset": 34
             }
           },
-          "initType": "ArrayExpression",
-          "initSpan": {
-            "line": 3,
-            "column": 12,
-            "offset": 44
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 3,
+              "column": 12,
+              "offset": 44
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -243,7 +235,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "c",
             "span": {
@@ -268,15 +259,15 @@
               "offset": 51
             }
           },
-          "initType": "ObjectExpression",
-          "initSpan": {
-            "line": 4,
-            "column": 12,
-            "offset": 61
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 4,
+              "column": 12,
+              "offset": 61
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -297,7 +288,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "d",
             "span": {
@@ -322,15 +312,15 @@
               "offset": 77
             }
           },
-          "initType": "Identifier",
-          "initSpan": {
-            "line": 5,
-            "column": 12,
-            "offset": 87
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 5,
+              "column": 12,
+              "offset": 87
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -352,7 +342,6 @@
       "owners": [
         "scope#1:b@40"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -379,7 +368,6 @@
       "owners": [
         "scope#1:c@57"
       ],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -406,7 +394,6 @@
       "owners": [
         "scope#1:d@83"
       ],
-      "writeExpr": null,
       "init": true,
       "flags": {
         "read": true,
@@ -431,7 +418,6 @@
       "from": "scope#1",
       "resolved": "scope#1:d@83",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

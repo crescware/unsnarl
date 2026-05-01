@@ -9,40 +9,50 @@
     {
       "type": "node",
       "id": "n_scope_0_greeting_6",
-      "kind": "Variable",
       "name": "greeting",
       "line": 1,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_counter_30",
-      "kind": "Variable",
       "name": "counter",
       "line": 2,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "let"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_message_97",
-      "kind": "Variable",
       "name": "message",
       "line": 6,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_unused_123",
-      "kind": "Variable",
       "name": "unused",
       "line": 7,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     },
     {
       "type": "node",
@@ -50,7 +60,9 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 3,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "let"
     },
     {
@@ -59,7 +71,9 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 4,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "let"
     },
     {
@@ -68,7 +82,9 @@
       "kind": "WriteOp",
       "name": "counter",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": false,
       "declarationKind": "let"
     }
   ],
@@ -93,5 +109,7 @@
       "to": "n_scope_0_message_97",
       "label": "read"
     }
-  ]
+  ],
+  "boundaryEdges": [],
+  "pruning": null
 }

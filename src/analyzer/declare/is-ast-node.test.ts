@@ -1,10 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isAstNode } from "./is-ast-node.js";
 
 describe("isAstNode (declare)", () => {
   test("object with string `type` is an AST node", () => {
-    expect(isAstNode({ type: "Identifier" })).toBe(true);
+    expect(isAstNode({ type: AST_TYPE.Identifier })).toBe(true);
   });
 
   test("non-objects are rejected", () => {

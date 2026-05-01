@@ -1,6 +1,5 @@
 import { ReferenceFlags } from "../ir/model.js";
 import type {
-  AstExpression,
   AstIdentifier,
   AstNode,
   BlockContext,
@@ -14,18 +13,19 @@ import type {
   ScopeType,
   Variable,
 } from "../ir/model.js";
+import { SCOPE_TYPE } from "./scope-type.js";
 
 export class ScopeImpl implements Scope {
   readonly type: ScopeType;
   readonly isStrict: boolean;
   readonly upper: Scope | null;
-  readonly childScopes: Scope[] = [];
+  readonly childScopes: /* mutable */ Scope[] = [];
   readonly variableScope: Scope;
   readonly block: AstNode;
-  readonly variables: Variable[] = [];
+  readonly variables: /* mutable */ Variable[] = [];
   readonly set: Map<string, Variable> = new Map();
-  readonly references: Reference[] = [];
-  readonly through: Reference[] = [];
+  readonly references: /* mutable */ Reference[] = [];
+  readonly through: /* mutable */ Reference[] = [];
   readonly functionExpressionScope: boolean = false;
   unsnarlBlockContext: BlockContext | null = null;
   unsnarlFallsThrough: boolean = false;
@@ -36,20 +36,20 @@ export class ScopeImpl implements Scope {
     isStrict: boolean;
     upper: Scope | null;
     block: AstNode;
-    blockContext?: BlockContext | null;
+    blockContext: BlockContext | null;
   }) {
     this.type = opts.type;
     this.isStrict = opts.isStrict;
     this.upper = opts.upper;
     this.block = opts.block;
-    this.unsnarlBlockContext = opts.blockContext ?? null;
+    this.unsnarlBlockContext = opts.blockContext;
     if (opts.upper) {
       opts.upper.childScopes.push(this);
     }
     if (
-      opts.type === "function" ||
-      opts.type === "module" ||
-      opts.type === "global"
+      opts.type === SCOPE_TYPE.Function ||
+      opts.type === SCOPE_TYPE.Module ||
+      opts.type === SCOPE_TYPE.Global
     ) {
       this.variableScope = this;
     } else {
@@ -61,9 +61,9 @@ export class ScopeImpl implements Scope {
 export class VariableImpl implements Variable {
   readonly name: string;
   readonly scope: Scope;
-  readonly identifiers: AstIdentifier[] = [];
-  readonly references: Reference[] = [];
-  readonly defs: Definition[] = [];
+  readonly identifiers: /* mutable */ AstIdentifier[] = [];
+  readonly references: /* mutable */ Reference[] = [];
+  readonly defs: /* mutable */ Definition[] = [];
 
   constructor(name: string, scope: Scope) {
     this.name = name;
@@ -79,11 +79,10 @@ export class ReferenceImpl implements Reference {
   readonly identifier: AstIdentifier;
   readonly from: Scope;
   resolved: Variable | null = null;
-  unsnarlOwners: Variable[] = [];
+  unsnarlOwners: /* mutable */ Variable[] = [];
   unsnarlPredicateContainer: PredicateContainer | null = null;
   unsnarlReturnContainer: ReturnContainer | null = null;
   unsnarlJsxElement: JsxElementContainer | null = null;
-  readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;
 
@@ -92,13 +91,11 @@ export class ReferenceImpl implements Reference {
     from: Scope;
     flags: ReferenceFlagBits;
     init: boolean;
-    writeExpr?: AstExpression | null;
   }) {
     this.identifier = opts.identifier;
     this.from = opts.from;
     this.unsnarlFlags = opts.flags;
     this.init = opts.init;
-    this.writeExpr = opts.writeExpr ?? null;
   }
 
   isRead(): boolean {

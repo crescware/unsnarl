@@ -26,7 +26,6 @@ export function serializeReference(
     owners: (r.unsnarlOwners ?? [])
       .map((o) => variableIds.get(o))
       .filter((x): x is string => x !== undefined),
-    writeExpr: r.writeExpr ? spanOf(r.writeExpr, raw) : null,
     init: r.init,
     flags: {
       read: r.isRead(),

@@ -9,21 +9,26 @@
     {
       "type": "node",
       "id": "n_scope_0_d_45",
-      "kind": "Variable",
       "name": "d",
       "line": 4,
+      "endLine": null,
       "isJsxElement": false,
-      "declarationKind": "const"
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
     },
     {
       "type": "node",
       "id": "n_scope_0_e_58",
-      "kind": "Variable",
       "name": "e",
       "line": 5,
+      "endLine": null,
       "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
       "declarationKind": "const",
-      "unused": true
+      "initIsFunction": false
     }
   ],
   "edges": [

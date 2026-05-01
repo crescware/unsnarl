@@ -1,9 +1,10 @@
+import { LANGUAGE, type Language } from "../../../cli/language.js";
 import { OxcParser } from "../../../parser/oxc.js";
 import type { NodeLike } from "../node-like.js";
 
 export function parse(
   code: string,
-  language: "ts" | "tsx" | "js" | "jsx" = "ts",
+  language: Language = LANGUAGE.Ts,
 ): NodeLike {
   const parser = new OxcParser();
   const parsed = parser.parse(code, {

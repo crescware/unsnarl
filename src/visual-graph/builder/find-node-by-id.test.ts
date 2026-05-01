@@ -1,35 +1,47 @@
 import { describe, expect, test } from "vitest";
 
+import { DIRECTION } from "../direction.js";
 import type { VisualElement, VisualNode } from "../model.js";
+import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { findNodeById } from "./find-node-by-id.js";
 
 function leafNode(id: string, name = id): VisualNode {
   return {
-    type: "node",
+    type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: "Variable",
+    kind: NODE_KIND.Variable,
     name,
     line: 1,
+    endLine: null,
     isJsxElement: false,
+    unused: false,
+    declarationKind: null,
+    initIsFunction: false,
   };
 }
 
 const elements: VisualElement[] = [
   leafNode("a"),
   {
-    type: "subgraph",
+    type: VISUAL_ELEMENT_TYPE.Subgraph,
     id: "s1",
-    kind: "function",
+    kind: SUBGRAPH_KIND.Function,
     line: 1,
-    direction: "RL",
+    endLine: null,
+    direction: DIRECTION.RL,
+    ownerNodeId: "n_owner",
+    ownerName: "owner",
     elements: [
       leafNode("b"),
       {
-        type: "subgraph",
+        type: VISUAL_ELEMENT_TYPE.Subgraph,
         id: "s2",
-        kind: "if",
+        kind: SUBGRAPH_KIND.If,
         line: 1,
-        direction: "RL",
+        endLine: null,
+        direction: DIRECTION.RL,
         elements: [leafNode("c")],
       },
     ],

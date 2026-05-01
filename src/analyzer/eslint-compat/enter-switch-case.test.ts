@@ -1,20 +1,23 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { enterSwitchCase } from "./enter-switch-case.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
-
-const switchParent: NodeLike = { type: "SwitchStatement", start: 0 };
+const switchParent = {
+  type: AST_TYPE.SwitchStatement,
+  start: 0,
+} as const satisfies NodeLike;
 
 describe("enterSwitchCase", () => {
   test("captures caseTest, marks fallsThrough=false when consequent ends in break", () => {
     const code = "switch (x) { case 1: y; break; }";
     const program = parse(code);
-    const caseNode = findFirst(program, "SwitchCase");
+    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -42,7 +45,7 @@ describe("enterSwitchCase", () => {
   test("marks fallsThrough=true when consequent has no exit statement", () => {
     const code = "switch (x) { case 1: y = 1; case 2: break; }";
     const program = parse(code);
-    const caseNode = findFirst(program, "SwitchCase");
+    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -65,7 +68,7 @@ describe("enterSwitchCase", () => {
     const code =
       "function f() { switch (x) { case 1: return 1; case 2: break; } }";
     const program = parse(code);
-    const caseNode = findFirst(program, "SwitchCase");
+    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -87,7 +90,7 @@ describe("enterSwitchCase", () => {
   test("default case (no test) sets caseTest to null", () => {
     const code = "switch (x) { default: break; }";
     const program = parse(code);
-    const caseNode = findFirst(program, "SwitchCase");
+    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
@@ -109,7 +112,7 @@ describe("enterSwitchCase", () => {
   test("blockContext is null when parent or key is missing", () => {
     const code = "switch (x) { case 1: break; }";
     const program = parse(code);
-    const caseNode = findFirst(program, "SwitchCase");
+    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 

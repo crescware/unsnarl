@@ -1,6 +1,8 @@
 import type { AstNode, Scope } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
 import { declareVariable } from "../declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 
@@ -13,13 +15,13 @@ export function declareFunctionParams(node: NodeLike, scope: Scope): void {
     if (!isNodeLike(p)) {
       continue;
     }
-    const target = p.type === "RestElement" ? (p["argument"] ?? p) : p;
+    const target = p.type === AST_TYPE.RestElement ? (p["argument"] ?? p) : p;
     const idents = collectBindingIdentifiers(target as unknown as AstNode);
     for (const ident of idents) {
       declareVariable(
         scope,
         ident,
-        "Parameter",
+        DEFINITION_TYPE.Parameter,
         p as unknown as AstNode,
         node as unknown as AstNode,
       );

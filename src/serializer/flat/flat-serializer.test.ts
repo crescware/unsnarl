@@ -1,18 +1,19 @@
 import { describe, expect, test } from "vitest";
 
+import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { LANGUAGE, type Language } from "../../cli/language.js";
 import type { SerializedIR } from "../../ir/model.js";
 import { OxcParser } from "../../parser/oxc.js";
+import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "./flat-serializer.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
-function pipe(
-  code: string,
-  language: "ts" | "tsx" | "js" = "ts",
-): SerializedIR {
+function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
@@ -29,8 +30,8 @@ function pipe(
 describe("FlatSerializer", () => {
   test("emits version 1 IR with the source metadata", () => {
     const ir = pipe("const a = 1;\n");
-    expect(ir.version).toBe(1);
-    expect(ir.source).toEqual({ path: "input.ts", language: "ts" });
+    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
+    expect(ir.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
   });
 
   test("assigns deterministic scope and variable ids", () => {
@@ -69,7 +70,7 @@ describe("FlatSerializer", () => {
     const resolvedRef = ir.references.find((r) => r.identifier.name === "f");
     expect(resolvedRef?.resolved).toBe(fVar?.id);
     // Scope.upper も id 参照
-    const fnScope = ir.scopes.find((s) => s.type === "function");
+    const fnScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Function);
     expect(fnScope?.upper).toBe("scope#0");
   });
 
@@ -114,7 +115,7 @@ describe("FlatSerializer", () => {
     const code = "var legacy = 1;\nconst x = 2;\n";
     const ir = pipe(code);
     expect(ir.diagnostics.length).toBe(1);
-    expect(ir.diagnostics[0]?.kind).toBe("var-detected");
+    expect(ir.diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
   });
 
   test("computes line/column for spans", () => {

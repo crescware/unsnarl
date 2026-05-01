@@ -6,7 +6,7 @@ export function lastWriteOpInScopeBefore(
   varId: string,
   scopeId: string,
   offset: number,
-  writeOpsByVariable: ReadonlyMap<string, WriteOp[]>,
+  writeOpsByVariable: ReadonlyMap<string, readonly WriteOp[]>,
   scopeMap: ReadonlyMap<string, SerializedScope>,
 ): WriteOp | null {
   const ops = writeOpsByVariable.get(varId) ?? [];

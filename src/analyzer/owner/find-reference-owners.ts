@@ -1,30 +1,31 @@
 import type { Scope, Variable } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { resolveInScopeChain } from "../resolve.js";
 import type { PathEntry } from "../walk/walk.js";
 import { allBindingVariables } from "./all-binding-variables.js";
 import { isAstNode } from "./is-ast-node.js";
 
 export function findReferenceOwners(
-  path: ReadonlyArray<PathEntry>,
+  path: readonly PathEntry[],
   scope: Scope,
-): Variable[] {
+): /* mutable */ Variable[] {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];
     if (!entry) {
       break;
     }
     const t = entry.node.type;
-    if (t === "VariableDeclarator") {
+    if (t === AST_TYPE.VariableDeclarator) {
       const id = entry.node["id"];
       if (isAstNode(id)) {
         return allBindingVariables(id, scope);
       }
       return [];
     }
-    if (t === "AssignmentExpression") {
+    if (t === AST_TYPE.AssignmentExpression) {
       const left = entry.node["left"];
       if (isAstNode(left)) {
-        if (left.type === "Identifier") {
+        if (left.type === AST_TYPE.Identifier) {
           const name = left["name"];
           if (typeof name === "string") {
             const v = resolveInScopeChain(scope, name);
@@ -36,14 +37,14 @@ export function findReferenceOwners(
       return [];
     }
     if (
-      t === "FunctionDeclaration" ||
-      t === "FunctionExpression" ||
-      t === "ArrowFunctionExpression" ||
-      t === "ClassDeclaration" ||
-      t === "ClassExpression" ||
-      t === "MethodDefinition" ||
-      t === "PropertyDefinition" ||
-      t === "AccessorProperty"
+      t === AST_TYPE.FunctionDeclaration ||
+      t === AST_TYPE.FunctionExpression ||
+      t === AST_TYPE.ArrowFunctionExpression ||
+      t === AST_TYPE.ClassDeclaration ||
+      t === AST_TYPE.ClassExpression ||
+      t === AST_TYPE.MethodDefinition ||
+      t === AST_TYPE.PropertyDefinition ||
+      t === AST_TYPE.AccessorProperty
     ) {
       return [];
     }

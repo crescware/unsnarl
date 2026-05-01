@@ -9,8 +9,7 @@ export class JsonEmitter implements Emitter {
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph = opts.prunedGraph ?? buildVisualGraph(ir);
-    const pretty = opts.pretty !== false;
-    const text = pretty
+    const text = opts.pretty
       ? JSON.stringify(graph, null, 2)
       : JSON.stringify(graph);
     return `${text}\n`;

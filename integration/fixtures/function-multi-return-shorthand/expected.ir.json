@@ -110,6 +110,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "IfStatement",
         "key": "consequent",
         "parentSpanOffset": 38
@@ -133,7 +134,6 @@
       "references": [],
       "defs": [
         {
-          "type": "FunctionName",
           "name": {
             "name": "main",
             "span": {
@@ -151,12 +151,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "FunctionName"
         }
       ]
     },
@@ -176,7 +171,6 @@
       ],
       "defs": [
         {
-          "type": "ImplicitGlobalVariable",
           "name": {
             "name": "Math",
             "span": {
@@ -194,12 +188,7 @@
             }
           },
           "parent": null,
-          "initType": null,
-          "initSpan": null,
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
-          "declarationKind": null
+          "type": "ImplicitGlobalVariable"
         }
       ]
     },
@@ -220,7 +209,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "a",
             "span": {
@@ -245,15 +233,15 @@
               "offset": 20
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 2,
-            "column": 12,
-            "offset": 30
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 12,
+              "offset": 30
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -274,7 +262,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -299,15 +286,15 @@
               "offset": 113
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 9,
-            "column": 12,
-            "offset": 123
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 9,
+              "column": 12,
+              "offset": 123
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -328,7 +315,6 @@
       ],
       "defs": [
         {
-          "type": "Variable",
           "name": {
             "name": "b",
             "span": {
@@ -353,15 +339,15 @@
               "offset": 69
             }
           },
-          "initType": "Literal",
-          "initSpan": {
-            "line": 5,
-            "column": 14,
-            "offset": 79
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 14,
+              "offset": 79
+            }
           },
-          "importKind": null,
-          "importSource": null,
-          "importedName": null,
           "declarationKind": "const"
         }
       ]
@@ -381,7 +367,6 @@
       "from": "scope#1",
       "resolved": "scope#0:Math@42",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -409,7 +394,6 @@
       "from": "scope#2",
       "resolved": "scope#1:a@26",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -445,7 +429,6 @@
       "from": "scope#2",
       "resolved": "scope#2:b@75",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -481,7 +464,6 @@
       "from": "scope#1",
       "resolved": "scope#1:a@26",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,
@@ -517,7 +499,6 @@
       "from": "scope#1",
       "resolved": "scope#1:b@119",
       "owners": [],
-      "writeExpr": null,
       "init": false,
       "flags": {
         "read": true,

@@ -1,9 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
+import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { ScopeManager } from "../manager.js";
 import { hoistInto } from "./hoist-into.js";
+import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
 
 function freshManager(program: object): ScopeManager {
@@ -44,13 +47,13 @@ describe("hoistInto", () => {
 
     hoistInto(program, manager.globalScope, code, diagnostics);
 
-    expect(diagnostics.list().some((d) => d.kind === "var-detected")).toBe(
-      true,
-    );
+    expect(
+      diagnostics.list().some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected),
+    ).toBe(true);
   });
 
   test("does nothing when program has no body array", () => {
-    const program = { type: "Program" };
+    const program = { type: AST_TYPE.Program } satisfies NodeLike;
     const manager = freshManager(program);
     const diagnostics = new DiagnosticCollector();
 

@@ -2,13 +2,17 @@ import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/model.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { DEFINITION_TYPE } from "../definition-type.js";
+import { SCOPE_TYPE } from "../scope-type.js";
 import { ScopeImpl } from "../scope.js";
 import { handleFunctionDeclaration } from "./handle-function-declaration.js";
 import type { NodeLike } from "./node-like.js";
 
 const firstStmt = (code: string): NodeLike => {
-  const program = parseSync("input.ts", code, { lang: "ts" }).program as unknown as {
-    body: ReadonlyArray<NodeLike>;
+  const program = parseSync("input.ts", code, { lang: "ts" })
+    .program as unknown as {
+    body: readonly NodeLike[];
   };
   const stmt = program.body[0];
   if (stmt === undefined) {
@@ -19,10 +23,11 @@ const firstStmt = (code: string): NodeLike => {
 
 const newScope = (): ScopeImpl =>
   new ScopeImpl({
-    type: "module",
+    type: SCOPE_TYPE.Module,
     isStrict: true,
     upper: null,
-    block: { type: "Program" } as unknown as AstNode,
+    block: { type: AST_TYPE.Program } as unknown as AstNode,
+    blockContext: null,
   });
 
 describe("handleFunctionDeclaration", () => {
@@ -30,13 +35,20 @@ describe("handleFunctionDeclaration", () => {
     const scope = newScope();
     handleFunctionDeclaration(firstStmt("function f() {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["f"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe("FunctionName");
+    expect(scope.variables[0]?.defs[0]?.type).toBe(
+      DEFINITION_TYPE.FunctionName,
+    );
   });
 
   test("anonymous function (no id) declares nothing", () => {
     const scope = newScope();
     handleFunctionDeclaration(
-      { type: "FunctionDeclaration", id: null, params: [], body: { type: "BlockStatement", body: [] } },
+      {
+        type: AST_TYPE.FunctionDeclaration,
+        id: null,
+        params: [],
+        body: { type: AST_TYPE.BlockStatement, body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);
@@ -45,7 +57,12 @@ describe("handleFunctionDeclaration", () => {
   test("non-Identifier id is ignored", () => {
     const scope = newScope();
     handleFunctionDeclaration(
-      { type: "FunctionDeclaration", id: { type: "Literal", value: "x" }, params: [], body: { type: "BlockStatement", body: [] } },
+      {
+        type: AST_TYPE.FunctionDeclaration,
+        id: { type: AST_TYPE.Literal, value: "x" },
+        params: [],
+        body: { type: AST_TYPE.BlockStatement, body: [] },
+      },
       scope,
     );
     expect(scope.variables).toEqual([]);

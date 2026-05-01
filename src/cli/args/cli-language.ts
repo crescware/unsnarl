@@ -1,8 +1,5 @@
-export type CliLanguage = "ts" | "tsx" | "js" | "jsx";
+import { LANGUAGE } from "../language.js";
 
-export const LANGUAGES: ReadonlySet<string> = new Set([
-  "ts",
-  "tsx",
-  "js",
-  "jsx",
-] satisfies CliLanguage[]);
+export type { CliLanguage } from "../language.js";
+
+export const LANGUAGES: ReadonlySet<string> = new Set(Object.values(LANGUAGE));

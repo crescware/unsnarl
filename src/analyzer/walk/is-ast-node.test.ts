@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 
+import { AST_TYPE } from "../../parser/ast-type.js";
 import { isAstNode } from "./is-ast-node.js";
 
 describe("isAstNode", () => {
   test("object with string `type` is an AST node", () => {
-    expect(isAstNode({ type: "Identifier" })).toBe(true);
-    expect(isAstNode({ type: "Literal", value: 1 })).toBe(true);
+    expect(isAstNode({ type: AST_TYPE.Identifier })).toBe(true);
+    expect(isAstNode({ type: AST_TYPE.Literal, value: 1 })).toBe(true);
   });
 
   test("object missing `type` is rejected", () => {
@@ -28,6 +29,6 @@ describe("isAstNode", () => {
 
   test("arrays are rejected (no string `type` key)", () => {
     expect(isAstNode([])).toBe(false);
-    expect(isAstNode([{ type: "Identifier" }])).toBe(false);
+    expect(isAstNode([{ type: AST_TYPE.Identifier }])).toBe(false);
   });
 });

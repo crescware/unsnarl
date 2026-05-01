@@ -1,47 +1,44 @@
-export interface Span {
+import type {
+  DEFINITION_TYPE,
+  DefinitionType,
+} from "../analyzer/definition-type.js";
+import type { DiagnosticKind } from "../analyzer/diagnostic-kind.js";
+import type { PredicateContainerType } from "../analyzer/predicate-container-type.js";
+import type { ScopeType } from "../analyzer/scope-type.js";
+import type { Language } from "../cli/language.js";
+import type { AST_TYPE } from "../parser/ast-type.js";
+import type { IMPORT_KIND, ImportKind } from "../serializer/import-kind.js";
+import type { SerializedIRVersion } from "../serializer/serialized-ir-version.js";
+import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
+
+export type {
+  DefinitionType,
+  DiagnosticKind,
+  ImportKind,
+  Language,
+  PredicateContainerType,
+  ScopeType,
+  VariableDeclarationKind,
+};
+
+export type Span = Readonly<{
   line: number;
   column: number;
   offset: number;
-}
+}>;
 
-export type Language = "ts" | "tsx" | "js" | "jsx";
+export type AstNode = Readonly<{
+  type: string;
+  start?: number;
+  end?: number;
+  [key: string]: unknown;
+}>;
 
-export type ScopeType =
-  | "block"
-  | "catch"
-  | "class"
-  | "class-field-initializer"
-  | "class-static-block"
-  | "for"
-  | "function"
-  | "function-expression-name"
-  | "global"
-  | "module"
-  | "switch"
-  | "with";
-
-export type DefinitionType =
-  | "CatchClause"
-  | "ClassName"
-  | "FunctionName"
-  | "ImplicitGlobalVariable"
-  | "ImportBinding"
-  | "Parameter"
-  | "Variable";
-
-export interface AstNode {
-  readonly type: string;
-  readonly start?: number;
-  readonly end?: number;
-  readonly [key: string]: unknown;
-}
-
-export interface AstIdentifier extends AstNode {
-  readonly type: "Identifier" | "JSXIdentifier";
-  readonly name: string;
-}
-
-export type AstExpression = AstNode;
+export type AstIdentifier = AstNode &
+  Readonly<{
+    type: typeof AST_TYPE.Identifier | typeof AST_TYPE.JSXIdentifier;
+    name: string;
+  }>;
 
 export const ReferenceFlags = {
   None: 0,
@@ -53,167 +50,201 @@ export const ReferenceFlags = {
 
 export type ReferenceFlagBits = number;
 
-export type PredicateContainerType = "IfStatement" | "SwitchStatement";
-
-export interface PredicateContainer {
+export type PredicateContainer = Readonly<{
   type: PredicateContainerType;
   offset: number;
-}
+}>;
 
-export interface ReturnContainer {
+export type ReturnContainer = Readonly<{
   startOffset: number;
   endOffset: number;
-}
+}>;
 
-export interface JsxElementContainer {
+export type JsxElementContainer = Readonly<{
   startOffset: number;
   endOffset: number;
-}
+}>;
 
-export interface Reference {
+// Reference / Variable / Scope keep mutable fields and arrays because the
+// builder mutates them in place during scope analysis (ScopeImpl pushes
+// onto `variables`, `references`, etc.; bindReference reassigns
+// `resolved`). Wrapping in Readonly<...> would break those algorithms.
+export type Reference = {
   identifier: AstIdentifier;
   from: Scope;
   resolved: Variable | null;
-  writeExpr: AstExpression | null;
   init: boolean;
   isWrite(): boolean;
   isRead(): boolean;
   isReadOnly(): boolean;
   isWriteOnly(): boolean;
   isReadWrite(): boolean;
-  isCall?(): boolean;
-  isReceiver?(): boolean;
-  unsnarlFlags?: ReferenceFlagBits;
-  unsnarlOwners?: Variable[];
-  unsnarlPredicateContainer?: PredicateContainer | null;
-  unsnarlReturnContainer?: ReturnContainer | null;
-  unsnarlJsxElement?: JsxElementContainer | null;
-}
+  isCall(): boolean;
+  isReceiver(): boolean;
+  unsnarlFlags: ReferenceFlagBits;
+  unsnarlOwners: /* mutable */ Variable[];
+  unsnarlPredicateContainer: PredicateContainer | null;
+  unsnarlReturnContainer: ReturnContainer | null;
+  unsnarlJsxElement: JsxElementContainer | null;
+};
 
-export interface Definition {
+export type Definition = Readonly<{
   type: DefinitionType;
   name: AstIdentifier;
   node: AstNode;
   parent: AstNode | null;
-}
+}>;
 
-export interface Variable {
+// Mutable: declareVariable pushes into identifiers/defs and bindReference
+// pushes into references during analysis.
+export type Variable = {
   name: string;
   scope: Scope;
-  identifiers: AstIdentifier[];
-  references: Reference[];
-  defs: Definition[];
-  unsnarlIsUnused?(): boolean;
-}
+  identifiers: /* mutable */ AstIdentifier[];
+  references: /* mutable */ Reference[];
+  defs: /* mutable */ Definition[];
+  unsnarlIsUnused(): boolean;
+};
 
-export interface BlockContext {
-  parentType: string;
-  key: string;
-  parentSpanOffset: number;
-  caseTest?: string | null;
-}
+// caseTest is only meaningful when this block is a switch-case clause.
+// Other contexts (if/else, try/catch/finally, for body, etc.) carry no
+// kind-specific payload, so the `case-clause` variant is the only one
+// that adds a field.
+export type BlockContext =
+  | Readonly<{
+      kind: "case-clause";
+      parentType: string;
+      key: string;
+      parentSpanOffset: number;
+      caseTest: string | null;
+    }>
+  | Readonly<{
+      kind: "other";
+      parentType: string;
+      key: string;
+      parentSpanOffset: number;
+    }>;
 
-export interface Scope {
+// Mutable: ScopeImpl pushes into childScopes / variables / references /
+// through and reassigns the unsnarl* annotation fields throughout the
+// eslint-compat analyzer pass.
+export type Scope = {
   type: ScopeType;
   isStrict: boolean;
   upper: Scope | null;
-  childScopes: Scope[];
+  childScopes: /* mutable */ Scope[];
   variableScope: Scope;
   block: AstNode;
-  variables: Variable[];
+  variables: /* mutable */ Variable[];
   set: Map<string, Variable>;
-  references: Reference[];
-  through: Reference[];
+  references: /* mutable */ Reference[];
+  through: /* mutable */ Reference[];
   functionExpressionScope: boolean;
-  unsnarlBlockContext?: BlockContext | null;
-  unsnarlFallsThrough?: boolean;
-  unsnarlExitsFunction?: boolean;
-}
+  unsnarlBlockContext: BlockContext | null;
+  unsnarlFallsThrough: boolean;
+  unsnarlExitsFunction: boolean;
+};
 
-export type DiagnosticKind =
-  | "var-detected"
-  | "unresolved-identifier"
-  | "parse-error";
-
-export interface Diagnostic {
+export type Diagnostic = Readonly<{
   kind: DiagnosticKind;
   message: string;
-  span?: Span;
-}
+  span: Span;
+}>;
 
 export type ScopeId = string;
 export type VariableId = string;
 export type ReferenceId = string;
 
-export interface SerializedScope {
+export type SerializedScope = Readonly<{
   id: ScopeId;
   type: ScopeType;
   isStrict: boolean;
   upper: ScopeId | null;
-  childScopes: ScopeId[];
+  childScopes: readonly ScopeId[];
   variableScope: ScopeId;
-  block: { type: string; span: Span; endSpan: Span };
-  variables: VariableId[];
-  references: ReferenceId[];
-  through: ReferenceId[];
+  block: Readonly<{ type: string; span: Span; endSpan: Span }>;
+  variables: readonly VariableId[];
+  references: readonly ReferenceId[];
+  through: readonly ReferenceId[];
   functionExpressionScope: boolean;
   blockContext: BlockContext | null;
   fallsThrough: boolean;
   exitsFunction: boolean;
-}
+}>;
 
-export interface SerializedVariable {
+export type SerializedVariable = Readonly<{
   id: VariableId;
   name: string;
   scope: ScopeId;
-  identifiers: Span[];
-  references: ReferenceId[];
-  defs: SerializedDefinition[];
-}
+  identifiers: readonly Span[];
+  references: readonly ReferenceId[];
+  defs: readonly SerializedDefinition[];
+}>;
 
-export interface SerializedReference {
+export type SerializedReference = Readonly<{
   id: ReferenceId;
-  identifier: { name: string; span: Span };
+  identifier: Readonly<{ name: string; span: Span }>;
   from: ScopeId;
   resolved: VariableId | null;
-  owners: VariableId[];
-  writeExpr: Span | null;
+  owners: readonly VariableId[];
   init: boolean;
-  flags: {
+  flags: Readonly<{
     read: boolean;
     write: boolean;
     call: boolean;
     receiver: boolean;
-  };
+  }>;
   predicateContainer: PredicateContainer | null;
-  returnContainer: { startSpan: Span; endSpan: Span } | null;
-  jsxElement: { startSpan: Span; endSpan: Span } | null;
-}
+  returnContainer: Readonly<{ startSpan: Span; endSpan: Span }> | null;
+  jsxElement: Readonly<{ startSpan: Span; endSpan: Span }> | null;
+}>;
 
-export type ImportKind = "default" | "named" | "namespace";
+type CommonDefFields = Readonly<{
+  name: Readonly<{ name: string; span: Span }>;
+  node: Readonly<{ type: string; span: Span }>;
+  parent: Readonly<{ type: string; span: Span }> | null;
+}>;
 
-export type VariableDeclarationKind = "var" | "let" | "const";
+export type SerializedDefinition =
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.Variable;
+        init: Readonly<{ type: string; span: Span }> | null;
+        declarationKind: VariableDeclarationKind | null;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Named;
+        importedName: string;
+        importSource: string;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Default;
+        importSource: string;
+      }>)
+  | (CommonDefFields &
+      Readonly<{
+        type: typeof DEFINITION_TYPE.ImportBinding;
+        importKind: typeof IMPORT_KIND.Namespace;
+        importSource: string;
+      }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.FunctionName }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.ClassName }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.Parameter }>)
+  | (CommonDefFields & Readonly<{ type: typeof DEFINITION_TYPE.CatchClause }>)
+  | (CommonDefFields &
+      Readonly<{ type: typeof DEFINITION_TYPE.ImplicitGlobalVariable }>);
 
-export interface SerializedDefinition {
-  type: DefinitionType;
-  name: { name: string; span: Span };
-  node: { type: string; span: Span };
-  parent: { type: string; span: Span } | null;
-  initType: string | null;
-  initSpan: Span | null;
-  importKind: ImportKind | null;
-  importSource: string | null;
-  importedName: string | null;
-  declarationKind: VariableDeclarationKind | null;
-}
-
-export interface SerializedIR {
-  version: 1;
-  source: { path: string; language: Language };
+export type SerializedIR = Readonly<{
+  version: SerializedIRVersion;
+  source: Readonly<{ path: string; language: Language }>;
   raw: string;
-  scopes: SerializedScope[];
-  variables: SerializedVariable[];
-  references: SerializedReference[];
-  unusedVariableIds: VariableId[];
-  diagnostics: Diagnostic[];
-}
+  scopes: readonly SerializedScope[];
+  variables: readonly SerializedVariable[];
+  references: readonly SerializedReference[];
+  unusedVariableIds: readonly VariableId[];
+  diagnostics: readonly Diagnostic[];
+}>;

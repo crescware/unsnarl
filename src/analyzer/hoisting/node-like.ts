@@ -1,9 +1,9 @@
-export interface NodeLike {
+export type NodeLike = Readonly<{
   type: string;
   start?: number;
   end?: number;
   [key: string]: unknown;
-}
+}>;
 
 export function isNodeLike(value: unknown): value is NodeLike {
   return (

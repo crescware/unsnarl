@@ -3,8 +3,8 @@ import { ScopeImpl } from "./scope.js";
 
 export class ScopeManager {
   readonly globalScope: Scope;
-  readonly allScopes: Scope[];
-  private readonly stack: Scope[];
+  readonly allScopes: /* mutable */ Scope[];
+  private readonly stack: /* mutable */ Scope[];
 
   constructor(rootKind: "module" | "global", block: AstNode) {
     const root = new ScopeImpl({
@@ -12,6 +12,7 @@ export class ScopeManager {
       isStrict: rootKind === "module",
       upper: null,
       block,
+      blockContext: null,
     });
     this.globalScope = root;
     this.allScopes = [root];
@@ -29,7 +30,7 @@ export class ScopeManager {
   push(
     type: ScopeType,
     block: AstNode,
-    blockContext: BlockContext | null = null,
+    blockContext: BlockContext | null,
   ): Scope {
     const scope = new ScopeImpl({
       type,

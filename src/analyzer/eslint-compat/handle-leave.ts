@@ -1,3 +1,4 @@
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { ScopeManager } from "../manager.js";
 import type { NodeLike } from "./node-like.js";
 import { skipBlockScope } from "./skip-block-scope.js";
@@ -9,18 +10,18 @@ export function handleLeave(
   manager: ScopeManager,
 ): void {
   switch (node.type) {
-    case "FunctionDeclaration":
-    case "FunctionExpression":
-    case "ArrowFunctionExpression":
-    case "ForStatement":
-    case "ForOfStatement":
-    case "ForInStatement":
-    case "SwitchStatement":
-    case "SwitchCase":
-    case "CatchClause":
+    case AST_TYPE.FunctionDeclaration:
+    case AST_TYPE.FunctionExpression:
+    case AST_TYPE.ArrowFunctionExpression:
+    case AST_TYPE.ForStatement:
+    case AST_TYPE.ForOfStatement:
+    case AST_TYPE.ForInStatement:
+    case AST_TYPE.SwitchStatement:
+    case AST_TYPE.SwitchCase:
+    case AST_TYPE.CatchClause:
       manager.pop();
       return;
-    case "BlockStatement":
+    case AST_TYPE.BlockStatement:
       if (parent && key === "body" && skipBlockScope(parent.type)) {
         return;
       }

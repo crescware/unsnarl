@@ -1,19 +1,20 @@
 import { describe, expect, test } from "vitest";
 
 import { renderPruningComment } from "./render-pruning-comment.js";
-import { makeGraph } from "./testing/make-graph.js";
+import { baseGraph } from "./testing/make-graph.js";
 
 describe("renderPruningComment", () => {
   test("does nothing when graph.pruning is undefined", () => {
-    const lines: string[] = [];
-    renderPruningComment(makeGraph(), lines);
+    const lines: /* mutable */ string[] = [];
+    renderPruningComment(baseGraph(), lines);
     expect(lines).toEqual([]);
   });
 
   test("emits a single comment summarising roots, ancestors, and descendants", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
-      makeGraph({
+      {
+        ...baseGraph(),
         pruning: {
           roots: [
             { query: "L5", matched: 1 },
@@ -22,7 +23,7 @@ describe("renderPruningComment", () => {
           ancestors: 3,
           descendants: 4,
         },
-      }),
+      },
       lines,
     );
     expect(lines).toEqual([
@@ -31,9 +32,10 @@ describe("renderPruningComment", () => {
   });
 
   test("appends a warning line for each zero-match root", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
-      makeGraph({
+      {
+        ...baseGraph(),
         pruning: {
           roots: [
             { query: "L1", matched: 0 },
@@ -43,7 +45,7 @@ describe("renderPruningComment", () => {
           ancestors: 0,
           descendants: 0,
         },
-      }),
+      },
       lines,
     );
     expect(lines).toContain("  %% pruning warning query L1 matched 0 roots");
@@ -56,11 +58,12 @@ describe("renderPruningComment", () => {
   });
 
   test("empty roots list still emits the summary line", () => {
-    const lines: string[] = [];
+    const lines: /* mutable */ string[] = [];
     renderPruningComment(
-      makeGraph({
+      {
+        ...baseGraph(),
         pruning: { roots: [], ancestors: 0, descendants: 0 },
-      }),
+      },
       lines,
     );
     expect(lines).toHaveLength(1);
