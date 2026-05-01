@@ -81,10 +81,10 @@
       ],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "TryStatement",
         "key": "block",
-        "parentSpanOffset": 52,
-        "caseTest": null
+        "parentSpanOffset": 52
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -119,10 +119,10 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "TryStatement",
         "key": "handler",
-        "parentSpanOffset": 52,
-        "caseTest": null
+        "parentSpanOffset": 52
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -154,10 +154,10 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "TryStatement",
         "key": "finalizer",
-        "parentSpanOffset": 52,
-        "caseTest": null
+        "parentSpanOffset": 52
       },
       "fallsThrough": false,
       "exitsFunction": false

@@ -28,7 +28,7 @@ describe("enterBlock", () => {
       parentType: AST_TYPE.IfStatement,
       key: "consequent",
       parentSpanOffset: 5,
-      caseTest: null,
+      kind: "other",
     });
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
   });

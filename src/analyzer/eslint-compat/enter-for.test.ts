@@ -29,7 +29,7 @@ describe("enterFor", () => {
       parentType: AST_TYPE.Program,
       key: "body",
       parentSpanOffset: 0,
-      caseTest: null,
+      kind: "other",
     });
   });
 

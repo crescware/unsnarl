@@ -107,10 +107,10 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "BlockStatement",
         "key": "body",
-        "parentSpanOffset": 32,
-        "caseTest": null
+        "parentSpanOffset": 32
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -143,6 +143,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 55,
@@ -178,6 +179,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 55,
@@ -213,6 +215,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "case-clause",
         "parentType": "SwitchStatement",
         "key": "cases",
         "parentSpanOffset": 55,

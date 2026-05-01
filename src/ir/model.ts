@@ -109,12 +109,24 @@ export type Variable = {
   unsnarlIsUnused(): boolean;
 };
 
-export type BlockContext = Readonly<{
-  parentType: string;
-  key: string;
-  parentSpanOffset: number;
-  caseTest: string | null;
-}>;
+// caseTest is only meaningful when this block is a switch-case clause.
+// Other contexts (if/else, try/catch/finally, for body, etc.) carry no
+// kind-specific payload, so the `case-clause` variant is the only one
+// that adds a field.
+export type BlockContext =
+  | Readonly<{
+      kind: "case-clause";
+      parentType: string;
+      key: string;
+      parentSpanOffset: number;
+      caseTest: string | null;
+    }>
+  | Readonly<{
+      kind: "other";
+      parentType: string;
+      key: string;
+      parentSpanOffset: number;
+    }>;
 
 // Mutable: ScopeImpl pushes into childScopes / variables / references /
 // through and reassigns the unsnarl* annotation fields throughout the

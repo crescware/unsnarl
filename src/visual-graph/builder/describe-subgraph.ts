@@ -51,12 +51,11 @@ export function describeSubgraph(
     elements: [] as VisualElement[],
   } as const;
   switch (kind) {
-    case SUBGRAPH_KIND.Case:
-      return {
-        ...common,
-        kind: SUBGRAPH_KIND.Case,
-        caseTest: scope.blockContext?.caseTest ?? null,
-      };
+    case SUBGRAPH_KIND.Case: {
+      const ctx = scope.blockContext;
+      const caseTest = ctx?.kind === "case-clause" ? ctx.caseTest : null;
+      return { ...common, kind: SUBGRAPH_KIND.Case, caseTest };
+    }
     case SUBGRAPH_KIND.IfElseContainer:
       return { ...common, kind: SUBGRAPH_KIND.IfElseContainer, hasElse: false };
     case SUBGRAPH_KIND.Switch:

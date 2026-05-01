@@ -100,7 +100,10 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
   test("the switch produces three case-block scopes (two cases + default)", () => {
     const cases = caseScopesOf(ir);
     expect(cases).toHaveLength(3);
-    const tests = cases.map((s) => s.blockContext?.caseTest);
+    const tests = cases.map((s) => {
+      const ctx = s.blockContext;
+      return ctx?.kind === "case-clause" ? ctx.caseTest : null;
+    });
     expect(tests).toEqual(['"a"', '"b"', null]);
   });
 

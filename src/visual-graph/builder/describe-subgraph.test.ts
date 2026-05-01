@@ -8,7 +8,7 @@ import type { VisualSubgraph } from "../model.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { describeSubgraph } from "./describe-subgraph.js";
-import { baseBlockContext } from "./testing/make-block-context.js";
+import { baseCaseClauseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
 import { baseVariable } from "./testing/make-variable.js";
 import { span } from "./testing/span.js";
@@ -106,10 +106,7 @@ describe("describeSubgraph", () => {
       type: SCOPE_TYPE.Block,
       block: { type: "Block", span: span(0, 1), endSpan: span(10, 2) },
       blockContext: {
-        ...baseBlockContext(),
-        parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
-        parentSpanOffset: 0,
+        ...baseCaseClauseBlockContext(),
         caseTest: "x === 1",
       },
     };
@@ -121,17 +118,12 @@ describe("describeSubgraph", () => {
     expect(sg.caseTest).toBe("x === 1");
   });
 
-  test("case subgraph defaults caseTest to null when blockContext lacks it", () => {
+  test("case subgraph keeps caseTest null when the case clause has no test (default)", () => {
     const scope = {
       ...baseScope(),
       id: "case-default",
       type: SCOPE_TYPE.Block,
-      blockContext: {
-        ...baseBlockContext(),
-        parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
-        parentSpanOffset: 0,
-      },
+      blockContext: baseCaseClauseBlockContext(),
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
     if (sg.kind !== "case") {

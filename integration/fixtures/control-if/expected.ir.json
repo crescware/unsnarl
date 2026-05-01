@@ -71,10 +71,10 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "IfStatement",
         "key": "consequent",
-        "parentSpanOffset": 37,
-        "caseTest": null
+        "parentSpanOffset": 37
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -106,10 +106,10 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
+        "kind": "other",
         "parentType": "IfStatement",
         "key": "alternate",
-        "parentSpanOffset": 37,
-        "caseTest": null
+        "parentSpanOffset": 37
       },
       "fallsThrough": false,
       "exitsFunction": false
