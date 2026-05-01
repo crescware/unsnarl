@@ -112,7 +112,7 @@ export type {
   RootQueryParseSuccess,
 } from "./cli/root-query/parse-root-queries.js";
 export type { ParsedRootQuery } from "./cli/root-query/parsed-root-query.js";
-export { runCli } from "./cli/main.js";
+export { runCli } from "./cli/main/run-cli.js";
 export { readSourceFile, readStdin } from "./cli/io.js";
 
 export { walk } from "./analyzer/walk/walk.js";
