@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
+import { VISUAL_ELEMENT_TYPE } from "../constants.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "./builder.js";
@@ -37,7 +38,7 @@ function build(
 function flattenNodes(elements: VisualElement[]): readonly VisualNode[] {
   const out: /* mutable */ VisualNode[] = [];
   for (const e of elements) {
-    if (e.type === "node") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Node) {
       out.push(e);
     } else {
       out.push(...flattenNodes(e.elements));
@@ -51,7 +52,7 @@ function flattenSubgraphs(
 ): readonly VisualSubgraph[] {
   const out: /* mutable */ VisualSubgraph[] = [];
   for (const e of elements) {
-    if (e.type === "subgraph") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
       out.push(e);
       out.push(...flattenSubgraphs(e.elements));
     }
@@ -86,7 +87,9 @@ function edgesTo(graph: VisualGraph, toId: string): readonly VisualEdge[] {
 }
 
 function childSubgraphsOf(sg: VisualSubgraph): readonly VisualSubgraph[] {
-  return sg.elements.filter((e): e is VisualSubgraph => e.type === "subgraph");
+  return sg.elements.filter(
+    (e): e is VisualSubgraph => e.type === VISUAL_ELEMENT_TYPE.Subgraph,
+  );
 }
 
 describe("buildVisualGraph: top-level structure", () => {
@@ -478,7 +481,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const ret = findSubgraphs(g, "return")[0];
     expect(ret).toBeDefined();
     const uses = ret!.elements.filter(
-      (e) => e.type === "node" && e.kind === "ReturnUse",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
     );
     expect(uses).toHaveLength(2);
   });
@@ -580,7 +583,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const aParam = nodeByName(g, "a");
     const ret = findSubgraphs(g, "return")[0];
     const retUse = ret?.elements.find(
-      (e) => e.type === "node" && e.kind === "ReturnUse",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
     );
     expect(
       g.edges.some(
@@ -622,7 +625,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const g = build("function f(a) { return a; }\n");
     const ret = findSubgraphs(g, "return")[0];
     const retUse = ret?.elements.find(
-      (e) => e.type === "node" && e.kind === "ReturnUse",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
     ) as VisualNode | undefined;
     expect(retUse?.isJsxElement).toBe(false);
     expect(retUse?.endLine).toBeUndefined();
@@ -745,12 +748,15 @@ describe("buildVisualGraph: edge deduplication", () => {
     // Only one ReturnUse for the variable `a` survives because both reads
     // share the same destination.
     const uses = (ret?.elements ?? []).filter(
-      (e) => e.type === "node" && e.kind === "ReturnUse" && e.name === "a",
+      (e) =>
+        e.type === VISUAL_ELEMENT_TYPE.Node &&
+        e.kind === "ReturnUse" &&
+        e.name === "a",
     );
     expect(uses.length).toBeGreaterThanOrEqual(1);
     // Aggregate: only as many edges as there are ReturnUse nodes for `a`.
     const edges = edgesFrom(g, a!.id).filter((e) =>
-      uses.some((u) => u.type === "node" && u.id === e.to),
+      uses.some((u) => u.type === VISUAL_ELEMENT_TYPE.Node && u.id === e.to),
     );
     expect(edges).toHaveLength(uses.length);
   });

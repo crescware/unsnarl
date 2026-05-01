@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement } from "../../visual-graph/model.js";
 
 export function collectWrappedOwnerIds(
@@ -5,7 +6,7 @@ export function collectWrappedOwnerIds(
   out: Set<string>,
 ): void {
   for (const e of elements) {
-    if (e.type !== "subgraph") {
+    if (e.type !== VISUAL_ELEMENT_TYPE.Subgraph) {
       continue;
     }
     if (e.kind === "function" && e.ownerNodeId !== undefined) {

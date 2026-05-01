@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { ROOT_CANDIDATE_KINDS } from "./root-candidate-kinds.js";
 
@@ -5,7 +6,7 @@ export function* iterateVisualNodes(
   elements: readonly VisualElement[],
 ): Generator<VisualNode> {
   for (const e of elements) {
-    if (e.type === "node") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Node) {
       if (ROOT_CANDIDATE_KINDS.has(e.kind)) {
         yield e;
       }

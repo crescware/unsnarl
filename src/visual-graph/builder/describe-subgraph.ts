@@ -1,4 +1,4 @@
-import { DIRECTION } from "../../constants.js";
+import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
@@ -23,7 +23,7 @@ export function describeSubgraph(
     const ownerVar = variableMap.get(ownerVarId);
     const startLine = ownerVar?.identifiers[0]?.line ?? scope.block.span.line;
     return {
-      type: "subgraph",
+      type: VISUAL_ELEMENT_TYPE.Subgraph,
       id,
       kind: "function",
       line: startLine,
@@ -41,7 +41,7 @@ export function describeSubgraph(
     );
   }
   const sg = {
-    type: "subgraph",
+    type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
     kind,
     line: scope.block.span.line,

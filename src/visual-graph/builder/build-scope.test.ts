@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -70,7 +71,7 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     expect(container.elements[0]).toMatchObject({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
       kind: "Variable",
       name: "x",
@@ -112,7 +113,7 @@ describe("buildScope", () => {
     buildScope(scope, container, ctx, emptyState());
 
     const writeNode = container.elements.find(
-      (e) => e.type === "node" && e.id === "wr_r1",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
       kind: "WriteOp",
@@ -150,7 +151,9 @@ describe("buildScope", () => {
     expect(sg.type).toBe("subgraph");
     expect(sg.kind).toBe("function");
     expect(
-      sg.elements.find((e) => e.type === "node" && e.id === "n_param"),
+      sg.elements.find(
+        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_param",
+      ),
     ).toBeDefined();
     expect(state.subgraphByScope.get("fn")).toBe(sg);
     expect(state.functionSubgraphByFn.get("ownerVar")).toBe(sg);
@@ -173,7 +176,9 @@ describe("buildScope", () => {
     const sg = container.elements[0] as VisualSubgraph;
     expect(sg.kind).toBe("for");
     expect(
-      sg.elements.find((e) => e.type === "node" && e.id === "n_v"),
+      sg.elements.find(
+        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_v",
+      ),
     ).toBeDefined();
   });
 
@@ -192,7 +197,7 @@ describe("buildScope", () => {
     buildScope(outer, container, ctx, emptyState());
 
     const childSg = container.elements.find(
-      (e) => e.type === "subgraph",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Subgraph,
     ) as VisualSubgraph;
     expect(childSg).toBeDefined();
     expect(childSg.kind).toBe("if");

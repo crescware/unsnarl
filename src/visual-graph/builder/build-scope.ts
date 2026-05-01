@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { buildChildren } from "./build-children.js";
@@ -45,7 +46,7 @@ export function buildScope(
     const ownerVar = ctx.variableMap.get(op.varId);
     const declarationKind = ownerVar?.defs[0]?.declarationKind;
     const node = {
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
       kind: "WriteOp",
       name: op.varName,

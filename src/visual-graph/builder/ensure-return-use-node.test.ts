@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DIRECTION } from "../../constants.js";
+import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   SerializedIR,
   SerializedScope,
@@ -19,7 +19,7 @@ import type { WriteOp } from "./write-op.js";
 
 function makeHostSubgraph(): VisualSubgraph {
   return {
-    type: "subgraph",
+    type: VISUAL_ELEMENT_TYPE.Subgraph,
     id: "s_fn",
     kind: "function",
     line: 1,
@@ -105,7 +105,7 @@ describe("ensureReturnUseNode", () => {
     expect(sg.kind).toBe("return");
     expect(sg.line).toBe(3);
     expect(sg.endLine).toBe(5);
-    const node = sg.elements.find((e) => e.type === "node");
+    const node = sg.elements.find((e) => e.type === VISUAL_ELEMENT_TYPE.Node);
     expect(node).toMatchObject({ kind: "ReturnUse", name: "x", line: 3 });
   });
 

@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement } from "../model.js";
 
 export function collectNodeIds(
@@ -9,7 +10,7 @@ export function collectNodeIds(
 
   function walk(items: readonly VisualElement[]): void {
     for (const item of items) {
-      if (item.type === "node") {
+      if (item.type === VISUAL_ELEMENT_TYPE.Node) {
         out.push(item.id);
       } else {
         walk(item.elements);

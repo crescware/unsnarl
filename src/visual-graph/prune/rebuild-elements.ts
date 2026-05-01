@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 
 export function rebuildElements(
@@ -6,7 +7,7 @@ export function rebuildElements(
 ): /* mutable */ VisualElement[] {
   const result: /* mutable */ VisualElement[] = [];
   for (const item of elements) {
-    if (item.type === "node") {
+    if (item.type === VISUAL_ELEMENT_TYPE.Node) {
       if (keep.has(item.id)) {
         result.push({ ...item });
       }

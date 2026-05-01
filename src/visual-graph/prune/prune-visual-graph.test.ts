@@ -1,7 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import { BOUNDARY_EDGE_DIRECTION, DIRECTION } from "../../constants.js";
+import {
+  BOUNDARY_EDGE_DIRECTION,
+  DIRECTION,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import type {
   VisualEdge,
   VisualElement,
@@ -18,7 +22,7 @@ function node(
   extra: Partial<VisualNode> = {},
 ): VisualNode {
   return {
-    type: "node",
+    type: VISUAL_ELEMENT_TYPE.Node,
     id,
     kind: "Variable",
     name,
@@ -35,7 +39,7 @@ function subgraph(
   extra: Partial<VisualSubgraph> = {},
 ): VisualSubgraph {
   return {
-    type: "subgraph",
+    type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
     kind: "function",
     line,
@@ -594,7 +598,7 @@ function collectIds(elements: VisualElement[]): readonly string[] {
   function walk(items: VisualElement[]): void {
     for (const item of items) {
       out.push(item.id);
-      if (item.type === "subgraph") {
+      if (item.type === VISUAL_ELEMENT_TYPE.Subgraph) {
         walk(item.elements);
       }
     }
@@ -605,7 +609,7 @@ function flatten(elements: VisualElement[]): VisualElement[] {
   const out: /* mutable */ VisualElement[] = [];
   for (const e of elements) {
     out.push(e);
-    if (e.type === "subgraph") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
       out.push(...flatten(e.elements));
     }
   }

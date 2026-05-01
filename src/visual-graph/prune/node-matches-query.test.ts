@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { NodeKind, VisualNode } from "../model.js";
 import { nodeMatchesQuery } from "./node-matches-query.js";
 
 const node = (overrides: Partial<VisualNode> = {}): VisualNode => ({
-  type: "node",
+  type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
   kind: "Variable",
   name: "x",

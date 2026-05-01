@@ -1,3 +1,4 @@
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { VisualElement, VisualNode } from "../model.js";
 
 export function findNodeById(
@@ -5,7 +6,7 @@ export function findNodeById(
   id: string,
 ): VisualNode | null {
   for (const e of elements) {
-    if (e.type === "node") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Node) {
       if (e.id === id) {
         return e;
       }

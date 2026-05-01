@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import { OxcParser } from "../../parser/oxc.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { JsonEmitter } from "./json.js";
@@ -11,7 +12,9 @@ const serializer = new FlatSerializer();
 const emitter = new JsonEmitter();
 
 type FlatElement = {
-  type: "node" | "subgraph";
+  type:
+    | typeof VISUAL_ELEMENT_TYPE.Node
+    | typeof VISUAL_ELEMENT_TYPE.Subgraph;
   id: string;
   kind: string;
   name?: string;
@@ -30,7 +33,7 @@ function flattenNodes(
 ): readonly FlatElement[] {
   const out: /* mutable */ FlatElement[] = [];
   for (const e of elements) {
-    if (e.type === "node") {
+    if (e.type === VISUAL_ELEMENT_TYPE.Node) {
       out.push(e);
     } else if (e.elements) {
       for (const inner of flattenNodes(e.elements)) {
@@ -46,7 +49,7 @@ function flattenSubgraphs(
 ): readonly FlatElement[] {
   const out: /* mutable */ FlatElement[] = [];
   for (const e of elements) {
-    if (e.type === "subgraph" && e.elements) {
+    if (e.type === VISUAL_ELEMENT_TYPE.Subgraph && e.elements) {
       out.push(e);
       for (const inner of flattenSubgraphs(e.elements)) {
         out.push(inner);
@@ -149,11 +152,11 @@ describe("JsonEmitter", () => {
     expect(ownerNode?.kind).toBe("FunctionName");
     expect(ownerNode?.name).toBe("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
-      (e) => e.type === "subgraph" && e.kind === "return",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Subgraph && e.kind === "return",
     );
     expect(returnSubgraph).toBeDefined();
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
-      (e) => e.type === "node" && e.kind === "ReturnUse",
+      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === "ReturnUse",
     );
     expect(returnUseNodes.length).toBeGreaterThan(0);
   });

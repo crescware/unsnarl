@@ -3,7 +3,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { BOUNDARY_EDGE_DIRECTION } from "../../constants.js";
+import {
+  BOUNDARY_EDGE_DIRECTION,
+  VISUAL_ELEMENT_TYPE,
+} from "../../constants.js";
 import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
 import { runCli } from "./run-cli.js";
 
@@ -164,7 +167,7 @@ describe("runCli (end-to-end)", () => {
     expect(graph.pruning.ancestors).toBe(1);
     expect(graph.pruning.roots).toEqual([{ query: "1", matched: 1 }]);
     const names = graph.elements
-      .filter((e: { type: string }) => e.type === "node")
+      .filter((e: { type: string }) => e.type === VISUAL_ELEMENT_TYPE.Node)
       .map((e: { name: string }) => e.name);
     // Inner radius keeps a (root) and b (1 hop). c is past the requested
     // radius and is NOT in the kept node list; instead the outgoing edge

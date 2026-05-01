@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { makeDef } from "./testing/make-def.js";
 import { makeVariable } from "./testing/make-variable.js";
@@ -10,7 +11,7 @@ describe("makeVariableNode", () => {
     const v = makeVariable({ id: "v1", name: "x", identifiers: [span(0, 2)] });
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
-      type: "node",
+      type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
       kind: "Variable",
       name: "x",

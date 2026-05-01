@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type {
   Direction,
   NodeKind,
@@ -10,7 +11,7 @@ import type {
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
 const node = (id: string, kind: NodeKind = "Variable"): VisualNode => ({
-  type: "node",
+  type: VISUAL_ELEMENT_TYPE.Node,
   id,
   kind,
   name: id,
@@ -23,7 +24,7 @@ const sg = (
   elements: VisualElement[],
   direction: Direction = "TB",
 ): VisualSubgraph => ({
-  type: "subgraph",
+  type: VISUAL_ELEMENT_TYPE.Subgraph,
   id,
   kind: "scope",
   line: 1,

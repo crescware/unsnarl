@@ -1,4 +1,4 @@
-import { DIRECTION } from "../../constants.js";
+import { DIRECTION, VISUAL_ELEMENT_TYPE } from "../../constants.js";
 import type { SerializedScope } from "../../ir/model.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { branchContainerKey } from "./branch-container-key.js";
@@ -59,7 +59,7 @@ export function buildChildren(
     const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
     const hasElse = group.some((g) => g.blockContext?.key === "alternate");
     const containerSubgraph = {
-      type: "subgraph",
+      type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: containerId,
       kind: "if-else-container",
       line: lineForOffset(ctx.ir.raw, offset),
@@ -73,7 +73,10 @@ export function buildChildren(
     }
     let containerEndLine = containerSubgraph.line;
     for (const elem of containerSubgraph.elements) {
-      if (elem.type === "subgraph" && elem.endLine !== undefined) {
+      if (
+        elem.type === VISUAL_ELEMENT_TYPE.Subgraph &&
+        elem.endLine !== undefined
+      ) {
         containerEndLine = Math.max(containerEndLine, elem.endLine);
       }
     }

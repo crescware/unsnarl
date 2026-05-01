@@ -1,4 +1,4 @@
-import { BOUNDARY_EDGE_DIRECTION } from "../constants.js";
+import { BOUNDARY_EDGE_DIRECTION, VISUAL_ELEMENT_TYPE } from "../constants.js";
 import type {
   BoundaryEdgeDirection,
   Direction,
@@ -26,7 +26,7 @@ export type {
 // container. Wrapping in Readonly would force a refactor of every
 // post-construction patch site.
 export type VisualNode = {
-  type: "node";
+  type: typeof VISUAL_ELEMENT_TYPE.Node;
   id: string;
   kind: NodeKind;
   name: string;
@@ -53,7 +53,7 @@ export type VisualNode = {
 // children through `{ ...item, elements: children }`, so we cannot lock
 // the property bindings either.
 export type VisualSubgraph = {
-  type: "subgraph";
+  type: typeof VISUAL_ELEMENT_TYPE.Subgraph;
   id: string;
   kind: SubgraphKind;
   line: number;
