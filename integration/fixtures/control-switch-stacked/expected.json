@@ -45,39 +45,26 @@
     {
       "type": "subgraph",
       "id": "s_scope_1",
-      "kind": "switch",
       "line": 4,
       "endLine": 11,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
-      "ownerNodeId": null,
-      "ownerName": null,
       "elements": [
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "case",
           "line": 5,
           "endLine": 5,
           "direction": "RL",
-          "caseTest": "\"a\"",
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
-          "elements": []
+          "elements": [],
+          "kind": "case",
+          "caseTest": "\"a\""
         },
         {
           "type": "subgraph",
           "id": "s_scope_3",
-          "kind": "case",
           "line": 6,
           "endLine": 8,
           "direction": "RL",
-          "caseTest": "\"b\"",
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -90,19 +77,16 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": "\"b\""
         },
         {
           "type": "subgraph",
           "id": "s_scope_4",
-          "kind": "case",
           "line": 9,
           "endLine": 10,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -115,9 +99,12 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": null
         }
-      ]
+      ],
+      "kind": "switch"
     }
   ],
   "edges": [

@@ -1,10 +1,9 @@
 import type { Language, VariableDeclarationKind } from "../ir/model.js";
 import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { Direction } from "./direction.js";
-import type { NODE_KIND } from "./node-kind.js";
-import { type NodeKind } from "./node-kind.js";
+import type { NODE_KIND, NodeKind } from "./node-kind.js";
 import type { BOUNDARY_EDGE_DIRECTION } from "./prune/boundary-edge-direction.js";
-import type { SubgraphKind } from "./subgraph-kind.js";
+import type { SUBGRAPH_KIND, SubgraphKind } from "./subgraph-kind.js";
 import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
 export type { Direction, NodeKind, SubgraphKind };
@@ -63,25 +62,46 @@ export type VisualNode =
       importKind: typeof IMPORT_KIND.Namespace;
     });
 
-// Mutable: builder patches endLine / caseTest after construction and pushes
-// into elements as it walks scopes. rebuild-elements also rewires
-// children through `{ ...item, elements: children }`, so we cannot lock
-// the property bindings either.
-export type VisualSubgraph = {
+// Common shape across every subgraph kind. Mutable: builder patches
+// endLine after construction and pushes into elements as it walks
+// scopes. rebuild-elements also rewires children through
+// `{ ...item, elements: children }`, so we cannot lock the property
+// bindings either.
+type CommonSubgraphFields = {
   type: typeof VISUAL_ELEMENT_TYPE.Subgraph;
   id: string;
-  kind: SubgraphKind;
   line: number;
   endLine: number | null;
   direction: Direction;
-  caseTest: string | null;
-  hasElse: boolean;
-  ownerNodeId: string | null;
-  // Mirrors the owner node's display name so the subgraph label survives
-  // pruning even when the owner node itself gets cut out of the graph.
-  ownerName: string | null;
   elements: /* mutable */ VisualElement[];
 };
+
+export type VisualSubgraph =
+  | (CommonSubgraphFields & {
+      kind: typeof SUBGRAPH_KIND.Function;
+      ownerNodeId: string;
+      // Mirrors the owner node's display name so the subgraph label
+      // survives pruning even when the owner node itself gets cut out.
+      ownerName: string;
+    })
+  | (CommonSubgraphFields & {
+      kind: typeof SUBGRAPH_KIND.Case;
+      // null when this is the `default:` clause; otherwise the source
+      // text of the case test expression.
+      caseTest: string | null;
+    })
+  | (CommonSubgraphFields & {
+      kind: typeof SUBGRAPH_KIND.IfElseContainer;
+      hasElse: boolean;
+    })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Switch })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.If })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Else })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Try })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Catch })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Finally })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.For })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Return });
 
 export type VisualElement = VisualNode | VisualSubgraph;
 

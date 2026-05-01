@@ -23,8 +23,6 @@
       "line": 1,
       "endLine": 3,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_greet_9",
       "ownerName": "greet",
       "elements": []

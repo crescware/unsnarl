@@ -23,8 +23,6 @@
       "line": 1,
       "endLine": 6,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_f_9",
       "ownerName": "f",
       "elements": [
@@ -69,10 +67,6 @@
           "line": 5,
           "endLine": null,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",

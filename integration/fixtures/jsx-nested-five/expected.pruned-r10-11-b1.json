@@ -25,8 +25,6 @@
       "line": 3,
       "endLine": 25,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_Main_54",
       "ownerName": "Main",
       "elements": [
@@ -37,10 +35,6 @@
           "line": 10,
           "endLine": 24,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",

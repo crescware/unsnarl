@@ -67,10 +67,7 @@ export function buildChildren(
       line: lineForOffset(ctx.ir.raw, offset),
       endLine: null as number | null,
       direction: DIRECTION.RL,
-      caseTest: null,
       hasElse,
-      ownerNodeId: null,
-      ownerName: null,
       elements: [] as VisualElement[],
     } satisfies VisualSubgraph;
     container.elements.push(containerSubgraph);

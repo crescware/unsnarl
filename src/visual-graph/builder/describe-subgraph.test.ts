@@ -115,6 +115,9 @@ describe("describeSubgraph", () => {
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
     expect(sg.kind).toBe("case");
+    if (sg.kind !== "case") {
+      throw new Error("expected case");
+    }
     expect(sg.caseTest).toBe("x === 1");
   });
 
@@ -131,6 +134,9 @@ describe("describeSubgraph", () => {
       },
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
+    if (sg.kind !== "case") {
+      throw new Error("expected case");
+    }
     expect(sg.caseTest).toBeNull();
   });
 

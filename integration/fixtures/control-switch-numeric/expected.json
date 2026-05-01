@@ -45,26 +45,16 @@
     {
       "type": "subgraph",
       "id": "s_scope_1",
-      "kind": "switch",
       "line": 4,
       "endLine": 16,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
-      "ownerNodeId": null,
-      "ownerName": null,
       "elements": [
         {
           "type": "subgraph",
           "id": "s_scope_2",
-          "kind": "case",
           "line": 5,
           "endLine": 7,
           "direction": "RL",
-          "caseTest": "0",
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -77,19 +67,16 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": "0"
         },
         {
           "type": "subgraph",
           "id": "s_scope_3",
-          "kind": "case",
           "line": 8,
           "endLine": 10,
           "direction": "RL",
-          "caseTest": "1",
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -102,19 +89,16 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": "1"
         },
         {
           "type": "subgraph",
           "id": "s_scope_4",
-          "kind": "case",
           "line": 11,
           "endLine": 13,
           "direction": "RL",
-          "caseTest": "2",
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -127,19 +111,16 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": "2"
         },
         {
           "type": "subgraph",
           "id": "s_scope_5",
-          "kind": "case",
           "line": 14,
           "endLine": 15,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -152,9 +133,12 @@
               "unused": false,
               "declarationKind": "let"
             }
-          ]
+          ],
+          "kind": "case",
+          "caseTest": null
         }
-      ]
+      ],
+      "kind": "switch"
     }
   ],
   "edges": [

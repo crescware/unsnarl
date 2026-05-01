@@ -3,36 +3,24 @@ import { describe, expect, test } from "vitest";
 import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { collectWrappedOwnerIds } from "./collect-wrapped-owner-ids.js";
 import { baseNode } from "./testing/make-node.js";
-import { baseSubgraph } from "./testing/make-subgraph.js";
+import { baseSubgraph, basePlainSubgraph } from "./testing/make-subgraph.js";
 
 describe("collectWrappedOwnerIds", () => {
   test("captures ownerNodeId of every function subgraph", () => {
     const out = new Set<string>();
     collectWrappedOwnerIds(
       [
-        { ...baseSubgraph(), kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_a" },
-        { ...baseSubgraph(), kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_b" },
+        { ...baseSubgraph(), ownerNodeId: "n_a" },
+        { ...baseSubgraph(), ownerNodeId: "n_b" },
       ],
       out,
     );
     expect([...out].sort()).toEqual(["n_a", "n_b"]);
   });
 
-  test("ignores function subgraphs without ownerNodeId", () => {
+  test("non-function subgraphs (e.g. if) carry no ownerNodeId by type, so are skipped", () => {
     const out = new Set<string>();
-    collectWrappedOwnerIds(
-      [{ ...baseSubgraph(), kind: SUBGRAPH_KIND.Function }],
-      out,
-    );
-    expect(out.size).toBe(0);
-  });
-
-  test("ignores non-function subgraphs even with ownerNodeId set", () => {
-    const out = new Set<string>();
-    collectWrappedOwnerIds(
-      [{ ...baseSubgraph(), kind: SUBGRAPH_KIND.If, ownerNodeId: "n_x" }],
-      out,
-    );
+    collectWrappedOwnerIds([basePlainSubgraph(SUBGRAPH_KIND.If)], out);
     expect(out.size).toBe(0);
   });
 
@@ -42,15 +30,8 @@ describe("collectWrappedOwnerIds", () => {
       [
         {
           ...baseSubgraph(),
-          kind: SUBGRAPH_KIND.Function,
           ownerNodeId: "n_outer",
-          elements: [
-            {
-              ...baseSubgraph(),
-              kind: SUBGRAPH_KIND.Function,
-              ownerNodeId: "n_inner",
-            },
-          ],
+          elements: [{ ...baseSubgraph(), ownerNodeId: "n_inner" }],
         },
       ],
       out,
@@ -63,7 +44,7 @@ describe("collectWrappedOwnerIds", () => {
     collectWrappedOwnerIds(
       [
         { ...baseNode(), id: "n_a" },
-        { ...baseSubgraph(), kind: SUBGRAPH_KIND.Function, ownerNodeId: "n_b" },
+        { ...baseSubgraph(), ownerNodeId: "n_b" },
       ],
       out,
     );

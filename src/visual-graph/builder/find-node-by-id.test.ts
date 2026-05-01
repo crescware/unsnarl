@@ -31,10 +31,8 @@ const elements: VisualElement[] = [
     line: 1,
     endLine: null,
     direction: DIRECTION.RL,
-    caseTest: null,
-    hasElse: false,
-    ownerNodeId: null,
-    ownerName: null,
+    ownerNodeId: "n_owner",
+    ownerName: "owner",
     elements: [
       leafNode("b"),
       {
@@ -44,10 +42,6 @@ const elements: VisualElement[] = [
         line: 1,
         endLine: null,
         direction: DIRECTION.RL,
-        caseTest: null,
-        hasElse: false,
-        ownerNodeId: null,
-        ownerName: null,
         elements: [leafNode("c")],
       },
     ],

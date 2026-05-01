@@ -64,11 +64,13 @@ function flattenSubgraphs(
   return out;
 }
 
-function findSubgraphs(
+function findSubgraphs<K extends VisualSubgraph["kind"]>(
   graph: VisualGraph,
-  kind: VisualSubgraph["kind"],
-): readonly VisualSubgraph[] {
-  return flattenSubgraphs(graph.elements).filter((s) => s.kind === kind);
+  kind: K,
+): readonly Extract<VisualSubgraph, { kind: K }>[] {
+  return flattenSubgraphs(graph.elements).filter(
+    (s): s is Extract<VisualSubgraph, { kind: K }> => s.kind === kind,
+  );
 }
 
 function findNodes<K extends VisualNode["kind"]>(

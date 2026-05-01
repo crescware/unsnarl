@@ -127,6 +127,9 @@ describe("buildChildren", () => {
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
     expect(sg.kind).toBe("if-else-container");
+    if (sg.kind !== "if-else-container") {
+      throw new Error("expected if-else-container");
+    }
     expect(sg.hasElse).toBe(true);
     expect(sg.elements.map((e) => (e as VisualSubgraph).kind)).toEqual([
       "if",

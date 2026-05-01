@@ -71,8 +71,6 @@
       "line": 7,
       "endLine": 11,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_Hello_79",
       "ownerName": "Hello",
       "elements": [
@@ -93,10 +91,6 @@
           "line": 7,
           "endLine": 11,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
@@ -139,8 +133,6 @@
       "line": 13,
       "endLine": 13,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_App_196",
       "ownerName": "App",
       "elements": [
@@ -151,10 +143,6 @@
           "line": 13,
           "endLine": null,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",

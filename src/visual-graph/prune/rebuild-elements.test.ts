@@ -37,10 +37,8 @@ const sg = (
   direction,
   elements,
   endLine: null,
-  caseTest: null,
-  hasElse: false,
-  ownerNodeId: null,
-  ownerName: null,
+  ownerNodeId: "n_owner",
+  ownerName: "owner",
 });
 
 describe("rebuildElements", () => {

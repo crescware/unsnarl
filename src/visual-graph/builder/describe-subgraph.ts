@@ -31,8 +31,6 @@ export function describeSubgraph(
       line: startLine,
       endLine,
       direction: DIRECTION.RL,
-      caseTest: null,
-      hasElse: false,
       ownerNodeId: nodeId(ownerVarId),
       ownerName: ownerVar?.name ?? "",
       elements: [],
@@ -44,17 +42,35 @@ export function describeSubgraph(
       `expected control subgraph kind for scope ${scope.id} (type=${scope.type})`,
     );
   }
-  return {
+  const common = {
     type: VISUAL_ELEMENT_TYPE.Subgraph,
     id,
-    kind,
     line: scope.block.span.line,
     endLine,
     direction: DIRECTION.RL,
-    caseTest: kind === "case" ? (scope.blockContext?.caseTest ?? null) : null,
-    hasElse: false,
-    ownerNodeId: null,
-    ownerName: null,
     elements: [] as VisualElement[],
-  };
+  } as const;
+  switch (kind) {
+    case SUBGRAPH_KIND.Case:
+      return {
+        ...common,
+        kind: SUBGRAPH_KIND.Case,
+        caseTest: scope.blockContext?.caseTest ?? null,
+      };
+    case SUBGRAPH_KIND.IfElseContainer:
+      return { ...common, kind: SUBGRAPH_KIND.IfElseContainer, hasElse: false };
+    case SUBGRAPH_KIND.Switch:
+    case SUBGRAPH_KIND.If:
+    case SUBGRAPH_KIND.Else:
+    case SUBGRAPH_KIND.Try:
+    case SUBGRAPH_KIND.Catch:
+    case SUBGRAPH_KIND.Finally:
+    case SUBGRAPH_KIND.For:
+    case SUBGRAPH_KIND.Return:
+      return { ...common, kind };
+    case SUBGRAPH_KIND.Function:
+      throw new Error(
+        `unexpected function subgraph kind for scope ${scope.id}`,
+      );
+  }
 }

@@ -28,8 +28,9 @@ export function ensureReturnUseNode(
     perFn = new Map();
     state.returnSubgraphsByFn.set(enclosingFnVarId, perFn);
   }
-  let sg = perFn.get(containerKey);
-  if (sg === undefined) {
+  const existing = perFn.get(containerKey);
+  let sg: VisualSubgraph;
+  if (existing === undefined) {
     const startLine = ref.returnContainer?.startSpan.line ?? host.line;
     const rawEndLine = ref.returnContainer?.endSpan.line;
     const endLine =
@@ -41,14 +42,12 @@ export function ensureReturnUseNode(
       line: startLine,
       endLine,
       direction: DIRECTION.RL,
-      caseTest: null,
-      hasElse: false,
-      ownerNodeId: null,
-      ownerName: null,
       elements: [],
     } satisfies VisualSubgraph;
     host.elements.push(sg);
     perFn.set(containerKey, sg);
+  } else {
+    sg = existing;
   }
   const id = retUseNodeId(ref.id);
   if (!state.returnUseAdded.has(ref.id)) {

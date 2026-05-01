@@ -69,8 +69,6 @@
       "line": 1,
       "endLine": 3,
       "direction": "RL",
-      "caseTest": null,
-      "hasElse": false,
       "ownerNodeId": "n_scope_0_add_9",
       "ownerName": "add",
       "elements": [
@@ -101,10 +99,6 @@
           "line": 2,
           "endLine": null,
           "direction": "RL",
-          "caseTest": null,
-          "hasElse": false,
-          "ownerNodeId": null,
-          "ownerName": null,
           "elements": [
             {
               "type": "node",
