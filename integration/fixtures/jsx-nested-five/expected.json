@@ -12,6 +12,7 @@
       "kind": "ImportBinding",
       "name": "A",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "A",
       "importSource": "components"
@@ -22,6 +23,7 @@
       "kind": "ImportBinding",
       "name": "B",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "B",
       "importSource": "components"
@@ -32,6 +34,7 @@
       "kind": "ImportBinding",
       "name": "C",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "C",
       "importSource": "components"
@@ -42,6 +45,7 @@
       "kind": "ImportBinding",
       "name": "D",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "D",
       "importSource": "components"
@@ -52,6 +56,7 @@
       "kind": "ImportBinding",
       "name": "E",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "E",
       "importSource": "components"
@@ -62,6 +67,7 @@
       "kind": "FunctionName",
       "name": "Main",
       "line": 3,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -80,6 +86,7 @@
           "kind": "Variable",
           "name": "v",
           "line": 4,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -88,6 +95,7 @@
           "kind": "Variable",
           "name": "w",
           "line": 5,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -96,6 +104,7 @@
           "kind": "Variable",
           "name": "x",
           "line": 6,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -104,6 +113,7 @@
           "kind": "Variable",
           "name": "y",
           "line": 7,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -112,6 +122,7 @@
           "kind": "Variable",
           "name": "z",
           "line": 8,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -126,70 +137,84 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "A",
-              "line": 11
+              "line": 11,
+              "isJsxElement": true,
+              "endLine": 23
             },
             {
               "type": "node",
               "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "v",
-              "line": 12
+              "line": 12,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_2",
               "kind": "ReturnUse",
               "name": "B",
-              "line": 13
+              "line": 13,
+              "isJsxElement": true,
+              "endLine": 22
             },
             {
               "type": "node",
               "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "w",
-              "line": 14
+              "line": 14,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_4",
               "kind": "ReturnUse",
               "name": "C",
-              "line": 15
+              "line": 15,
+              "isJsxElement": true,
+              "endLine": 21
             },
             {
               "type": "node",
               "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "x",
-              "line": 16
+              "line": 16,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_6",
               "kind": "ReturnUse",
               "name": "D",
-              "line": 17
+              "line": 17,
+              "isJsxElement": true,
+              "endLine": 20
             },
             {
               "type": "node",
               "id": "ret_use_ref_7",
               "kind": "ReturnUse",
               "name": "y",
-              "line": 18
+              "line": 18,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_8",
               "kind": "ReturnUse",
               "name": "E",
-              "line": 19
+              "line": 19,
+              "isJsxElement": true
             },
             {
               "type": "node",
               "id": "ret_use_ref_9",
               "kind": "ReturnUse",
               "name": "z",
-              "line": 19
+              "line": 19,
+              "isJsxElement": false
             }
           ],
           "endLine": 24
@@ -201,7 +226,8 @@
       "id": "mod_components",
       "kind": "ModuleSource",
       "name": "components",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     }
   ],
   "edges": [

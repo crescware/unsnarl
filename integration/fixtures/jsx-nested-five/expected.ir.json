@@ -686,6 +686,18 @@
           "column": 4,
           "offset": 331
         }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 11,
+          "column": 4,
+          "offset": 164
+        },
+        "endSpan": {
+          "line": 23,
+          "column": 8,
+          "offset": 326
+        }
       }
     },
     {
@@ -721,7 +733,8 @@
           "column": 4,
           "offset": 331
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#2",
@@ -755,6 +768,18 @@
           "line": 24,
           "column": 4,
           "offset": 331
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 13,
+          "column": 6,
+          "offset": 184
+        },
+        "endSpan": {
+          "line": 22,
+          "column": 10,
+          "offset": 317
         }
       }
     },
@@ -791,7 +816,8 @@
           "column": 4,
           "offset": 331
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#4",
@@ -825,6 +851,18 @@
           "line": 24,
           "column": 4,
           "offset": 331
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 15,
+          "column": 8,
+          "offset": 208
+        },
+        "endSpan": {
+          "line": 21,
+          "column": 12,
+          "offset": 306
         }
       }
     },
@@ -861,7 +899,8 @@
           "column": 4,
           "offset": 331
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#6",
@@ -895,6 +934,18 @@
           "line": 24,
           "column": 4,
           "offset": 331
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 17,
+          "column": 10,
+          "offset": 236
+        },
+        "endSpan": {
+          "line": 20,
+          "column": 14,
+          "offset": 293
         }
       }
     },
@@ -931,7 +982,8 @@
           "column": 4,
           "offset": 331
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#8",
@@ -965,6 +1017,18 @@
           "line": 24,
           "column": 4,
           "offset": 331
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 19,
+          "column": 12,
+          "offset": 268
+        },
+        "endSpan": {
+          "line": 19,
+          "column": 22,
+          "offset": 278
         }
       }
     },
@@ -1001,7 +1065,8 @@
           "column": 4,
           "offset": 331
         }
-      }
+      },
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

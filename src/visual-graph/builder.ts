@@ -528,6 +528,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         kind: "WriteOp",
         name: op.varName,
         line: op.line,
+        isJsxElement: false,
       };
       if (declarationKind) {
         node.declarationKind = declarationKind;
@@ -728,13 +729,20 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       returnUseAdded.add(ref.id);
       const v = ref.resolved ? variableMap.get(ref.resolved) : undefined;
       const name = v?.name ?? ref.identifier.name ?? "";
-      sg.elements.push({
+      const startLine = ref.identifier.span.line;
+      const node: VisualNode = {
         type: "node",
         id,
         kind: "ReturnUse",
         name,
-        line: ref.identifier.span.line,
-      });
+        line: startLine,
+        isJsxElement: ref.jsxElement !== null,
+      };
+      const jsxEnd = ref.jsxElement?.endSpan.line;
+      if (jsxEnd !== undefined && jsxEnd !== startLine) {
+        node.endLine = jsxEnd;
+      }
+      sg.elements.push(node);
     }
     return id;
   }
@@ -859,6 +867,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: "ModuleSink",
       name: "module",
       line: 0,
+      isJsxElement: false,
     });
   }
 
@@ -912,6 +921,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: "ModuleSource",
       name: mod.source,
       line: mod.line,
+      isJsxElement: false,
     });
   }
   for (const inter of intermediates.values()) {
@@ -921,6 +931,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       kind: "ImportIntermediate",
       name: inter.name,
       line: inter.line,
+      isJsxElement: false,
     });
   }
   for (const v of ir.variables) {
@@ -1002,6 +1013,7 @@ function makeVariableNode(v: SerializedVariable): VisualNode {
     kind: (def?.type ?? "Variable") as VisualNode["kind"],
     name: v.name,
     line: v.identifiers[0]?.line ?? def?.name.span.line ?? 0,
+    isJsxElement: false,
   };
   if (declarationKind) {
     node.declarationKind = declarationKind;

@@ -12,6 +12,7 @@
       "kind": "ImportBinding",
       "name": "Sub",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "Sub",
       "importSource": "./sub"
@@ -22,6 +23,7 @@
       "kind": "FunctionName",
       "name": "Main",
       "line": 3,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -40,6 +42,7 @@
           "kind": "Variable",
           "name": "message",
           "line": 4,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -54,14 +57,16 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "Sub",
-              "line": 5
+              "line": 5,
+              "isJsxElement": true
             },
             {
               "type": "node",
               "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "message",
-              "line": 5
+              "line": 5,
+              "isJsxElement": false
             }
           ]
         }
@@ -72,7 +77,8 @@
       "id": "mod___sub",
       "kind": "ModuleSource",
       "name": "./sub",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     }
   ],
   "edges": [

@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "source",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "list",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "a",
       "line": 4,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -36,6 +39,7 @@
       "kind": "Variable",
       "name": "renamed",
       "line": 4,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -44,6 +48,7 @@
       "kind": "Variable",
       "name": "d",
       "line": 6,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -52,6 +57,7 @@
       "kind": "Variable",
       "name": "first",
       "line": 8,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -60,6 +66,7 @@
       "kind": "Variable",
       "name": "third",
       "line": 8,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -68,6 +75,7 @@
       "kind": "Variable",
       "name": "rest",
       "line": 8,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -76,6 +84,7 @@
       "kind": "Variable",
       "name": "spread",
       "line": 9,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -84,6 +93,7 @@
       "kind": "Variable",
       "name": "sum",
       "line": 11,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     }

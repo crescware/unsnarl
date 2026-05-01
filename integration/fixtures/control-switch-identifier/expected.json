@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "RED",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "GREEN",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "BLUE",
       "line": 3,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -36,6 +39,7 @@
       "kind": "Variable",
       "name": "label",
       "line": 5,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -44,6 +48,7 @@
       "kind": "Variable",
       "name": "color",
       "line": 6,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -52,6 +57,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 22,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -77,6 +83,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 10,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -96,6 +103,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 13,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -115,6 +123,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 16,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -134,6 +143,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 19,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -146,7 +156,8 @@
       "id": "module_root",
       "kind": "ModuleSink",
       "name": "module",
-      "line": 0
+      "line": 0,
+      "isJsxElement": false
     }
   ],
   "edges": [

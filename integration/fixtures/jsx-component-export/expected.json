@@ -12,6 +12,7 @@
       "kind": "ImportBinding",
       "name": "Sub",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "Sub",
       "importSource": "./sub"
@@ -22,6 +23,7 @@
       "kind": "FunctionName",
       "name": "Main",
       "line": 3,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -46,7 +48,8 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "Sub",
-              "line": 4
+              "line": 4,
+              "isJsxElement": true
             }
           ]
         }
@@ -57,7 +60,8 @@
       "id": "mod___sub",
       "kind": "ModuleSource",
       "name": "./sub",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     }
   ],
   "edges": [

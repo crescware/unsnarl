@@ -12,6 +12,7 @@
       "kind": "ImportBinding",
       "name": "used",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "used",
       "importSource": "module"
@@ -22,6 +23,7 @@
       "kind": "ImportBinding",
       "name": "neverCalled",
       "line": 1,
+      "isJsxElement": false,
       "importKind": "named",
       "importedName": "neverCalled",
       "importSource": "module",
@@ -33,6 +35,7 @@
       "kind": "Variable",
       "name": "a",
       "line": 4,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -41,6 +44,7 @@
       "kind": "Variable",
       "name": "ignored",
       "line": 5,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -49,14 +53,16 @@
       "id": "module_root",
       "kind": "ModuleSink",
       "name": "module",
-      "line": 0
+      "line": 0,
+      "isJsxElement": false
     },
     {
       "type": "node",
       "id": "mod_module",
       "kind": "ModuleSource",
       "name": "module",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     }
   ],
   "edges": [

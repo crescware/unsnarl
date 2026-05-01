@@ -11,7 +11,8 @@
       "id": "n_scope_0_greet_9",
       "kind": "FunctionName",
       "name": "greet",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     },
     {
       "type": "subgraph",
@@ -29,7 +30,8 @@
       "id": "module_root",
       "kind": "ModuleSink",
       "name": "module",
-      "line": 0
+      "line": 0,
+      "isJsxElement": false
     }
   ],
   "edges": [

@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "c",
       "line": 3,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "d",
       "line": 4,
+      "isJsxElement": false,
       "declarationKind": "const"
     }
   ],

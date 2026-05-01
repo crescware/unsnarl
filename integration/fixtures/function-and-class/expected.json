@@ -11,14 +11,16 @@
       "id": "n_scope_0_add_9",
       "kind": "FunctionName",
       "name": "add",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     },
     {
       "type": "node",
       "id": "n_scope_0_Counter_62",
       "kind": "ClassName",
       "name": "Counter",
-      "line": 5
+      "line": 5,
+      "isJsxElement": false
     },
     {
       "type": "node",
@@ -26,6 +28,7 @@
       "kind": "Variable",
       "name": "total",
       "line": 9,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -34,6 +37,7 @@
       "kind": "Variable",
       "name": "c",
       "line": 10,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -43,6 +47,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 11,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -61,14 +66,16 @@
           "id": "n_scope_1_a_13",
           "kind": "Parameter",
           "name": "a",
-          "line": 1
+          "line": 1,
+          "isJsxElement": false
         },
         {
           "type": "node",
           "id": "n_scope_1_b_24",
           "kind": "Parameter",
           "name": "b",
-          "line": 1
+          "line": 1,
+          "isJsxElement": false
         },
         {
           "type": "subgraph",
@@ -82,14 +89,16 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "a",
-              "line": 2
+              "line": 2,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "b",
-              "line": 2
+              "line": 2,
+              "isJsxElement": false
             }
           ]
         }

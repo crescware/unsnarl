@@ -12,6 +12,7 @@
       "kind": "FunctionName",
       "name": "main",
       "line": 1,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -30,6 +31,7 @@
           "kind": "Variable",
           "name": "a",
           "line": 2,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -38,6 +40,7 @@
           "kind": "Variable",
           "name": "b",
           "line": 3,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -46,6 +49,7 @@
           "kind": "Variable",
           "name": "c",
           "line": 4,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -54,6 +58,7 @@
           "kind": "Variable",
           "name": "d",
           "line": 5,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -62,6 +67,7 @@
           "kind": "Variable",
           "name": "e",
           "line": 6,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -70,6 +76,7 @@
           "kind": "Variable",
           "name": "f",
           "line": 7,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -78,6 +85,7 @@
           "kind": "Variable",
           "name": "g",
           "line": 8,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -86,6 +94,7 @@
           "kind": "Variable",
           "name": "h",
           "line": 9,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -100,56 +109,64 @@
               "id": "ret_use_ref_0",
               "kind": "ReturnUse",
               "name": "a",
-              "line": 12
+              "line": 12,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "b",
-              "line": 13
+              "line": 13,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_2",
               "kind": "ReturnUse",
               "name": "c",
-              "line": 14
+              "line": 14,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "d",
-              "line": 15
+              "line": 15,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_4",
               "kind": "ReturnUse",
               "name": "e",
-              "line": 16
+              "line": 16,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "f",
-              "line": 17
+              "line": 17,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_6",
               "kind": "ReturnUse",
               "name": "g",
-              "line": 18
+              "line": 18,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_7",
               "kind": "ReturnUse",
               "name": "h",
-              "line": 19
+              "line": 19,
+              "isJsxElement": false
             }
           ],
           "endLine": 20

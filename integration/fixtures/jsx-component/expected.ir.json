@@ -453,6 +453,18 @@
           "column": 1,
           "offset": 187
         }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 8,
+          "column": 2,
+          "offset": 109
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 13,
+          "offset": 185
+        }
       }
     },
     {
@@ -487,6 +499,18 @@
           "line": 11,
           "column": 1,
           "offset": 187
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 9,
+          "column": 4,
+          "offset": 124
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 51,
+          "offset": 171
         }
       }
     },
@@ -523,7 +547,8 @@
           "column": 1,
           "offset": 187
         }
-      }
+      },
+      "jsxElement": null
     },
     {
       "id": "ref#3",
@@ -548,6 +573,18 @@
       },
       "predicateContainer": null,
       "returnContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 18,
+          "offset": 208
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 38,
+          "offset": 228
+        }
+      },
+      "jsxElement": {
         "startSpan": {
           "line": 13,
           "column": 18,
@@ -584,7 +621,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null
+      "returnContainer": null,
+      "jsxElement": null
     }
   ],
   "unusedVariableIds": [

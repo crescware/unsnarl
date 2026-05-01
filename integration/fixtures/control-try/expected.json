@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "value",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "attempts",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "raw",
       "line": 3,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -36,6 +39,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 15,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -44,7 +48,8 @@
       "id": "n_scope_0_Number_84",
       "kind": "ImplicitGlobalVariable",
       "name": "Number",
-      "line": 7
+      "line": 7,
+      "isJsxElement": false
     },
     {
       "type": "subgraph",
@@ -60,6 +65,7 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 7,
+          "isJsxElement": false,
           "declarationKind": "let"
         },
         {
@@ -68,6 +74,7 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 6,
+          "isJsxElement": false,
           "declarationKind": "let"
         }
       ]
@@ -86,6 +93,7 @@
           "kind": "CatchClause",
           "name": "err",
           "line": 8,
+          "isJsxElement": false,
           "unused": true
         },
         {
@@ -94,6 +102,7 @@
           "kind": "WriteOp",
           "name": "value",
           "line": 10,
+          "isJsxElement": false,
           "declarationKind": "let"
         },
         {
@@ -102,6 +111,7 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 9,
+          "isJsxElement": false,
           "declarationKind": "let"
         }
       ]
@@ -120,6 +130,7 @@
           "kind": "WriteOp",
           "name": "attempts",
           "line": 12,
+          "isJsxElement": false,
           "declarationKind": "let"
         }
       ]

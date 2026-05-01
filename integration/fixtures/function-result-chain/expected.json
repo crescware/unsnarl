@@ -11,7 +11,8 @@
       "id": "n_scope_0_f_9",
       "kind": "FunctionName",
       "name": "f",
-      "line": 1
+      "line": 1,
+      "isJsxElement": false
     },
     {
       "type": "node",
@@ -19,6 +20,7 @@
       "kind": "Variable",
       "name": "g",
       "line": 9,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -27,6 +29,7 @@
       "kind": "Variable",
       "name": "h",
       "line": 10,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -46,6 +49,7 @@
           "kind": "Variable",
           "name": "a",
           "line": 2,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -54,6 +58,7 @@
           "kind": "Variable",
           "name": "b",
           "line": 3,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -62,6 +67,7 @@
           "kind": "Variable",
           "name": "c",
           "line": 4,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -70,6 +76,7 @@
           "kind": "Variable",
           "name": "d",
           "line": 5,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -84,7 +91,8 @@
               "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "d",
-              "line": 6
+              "line": 6,
+              "isJsxElement": false
             }
           ]
         }

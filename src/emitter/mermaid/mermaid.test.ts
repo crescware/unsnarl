@@ -130,6 +130,35 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/subgraph s_return_scope_0_fn_6_\w+\["return L1"\]/);
   });
 
+  test("multi-line JSX opening tags render as &lt;Name&gt; with an L{open}-{close} range", () => {
+    const code = [
+      "import { A } from 'm';",
+      "const App = () => (",
+      "  <A>",
+      "    hello",
+      "  </A>",
+      ");",
+    ].join("\n");
+    const out = emit(code, "tsx");
+    expect(out).toMatch(/ret_use_\w+\["&lt;A&gt;<br\/>L3-5"\]/);
+  });
+
+  test("single-line JSX elements still render as &lt;Name&gt; but collapse to a single line label", () => {
+    const code = [
+      "import { A } from 'm';",
+      "const App = () => <A>hi</A>;",
+    ].join("\n");
+    const out = emit(code, "tsx");
+    expect(out).toMatch(/ret_use_\w+\["&lt;A&gt;<br\/>L2"\]/);
+    expect(out).not.toMatch(/L2-/);
+  });
+
+  test("a non-JSX ReturnUse keeps the bare name without angle-bracket wrapping", () => {
+    const out = emit("function f(a) { return a; }\n");
+    expect(out).toMatch(/ret_use_\w+\["a<br\/>L1"\]/);
+    expect(out).not.toContain("&lt;a&gt;");
+  });
+
   test("a multi-line return statement yields a return subgraph spanning the whole statement", () => {
     const code = [
       "function build() {",

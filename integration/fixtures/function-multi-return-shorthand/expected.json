@@ -12,6 +12,7 @@
       "kind": "FunctionName",
       "name": "main",
       "line": 1,
+      "isJsxElement": false,
       "unused": true
     },
     {
@@ -30,6 +31,7 @@
           "kind": "Variable",
           "name": "a",
           "line": 2,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -38,6 +40,7 @@
           "kind": "Variable",
           "name": "b",
           "line": 9,
+          "isJsxElement": false,
           "declarationKind": "const"
         },
         {
@@ -54,6 +57,7 @@
               "kind": "Variable",
               "name": "b",
               "line": 5,
+              "isJsxElement": false,
               "declarationKind": "const"
             },
             {
@@ -68,14 +72,16 @@
                   "id": "ret_use_ref_1",
                   "kind": "ReturnUse",
                   "name": "a",
-                  "line": 6
+                  "line": 6,
+                  "isJsxElement": false
                 },
                 {
                   "type": "node",
                   "id": "ret_use_ref_2",
                   "kind": "ReturnUse",
                   "name": "b",
-                  "line": 6
+                  "line": 6,
+                  "isJsxElement": false
                 }
               ]
             }
@@ -93,14 +99,16 @@
               "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "a",
-              "line": 10
+              "line": 10,
+              "isJsxElement": false
             },
             {
               "type": "node",
               "id": "ret_use_ref_4",
               "kind": "ReturnUse",
               "name": "b",
-              "line": 10
+              "line": 10,
+              "isJsxElement": false
             }
           ]
         }

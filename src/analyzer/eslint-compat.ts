@@ -9,6 +9,7 @@ import { spanFromOffset } from "../util/span.js";
 import { classifyIdentifier } from "./classify.js";
 import { collectBindingIdentifiers, declareVariable } from "./declare.js";
 import { hoistDeclarations } from "./hoisting.js";
+import { findJsxElementSpan } from "./jsx-element-span.js";
 import { ScopeManager } from "./manager.js";
 import { findReferenceOwners } from "./owner.js";
 import { findPredicateContainer } from "./predicate.js";
@@ -371,6 +372,7 @@ function handleIdentifierReference(
     path,
   );
   ref.unsnarlReturnContainer = findReturnContainer(path);
+  ref.unsnarlJsxElement = findJsxElementSpan(path);
 }
 
 const CASE_TEST_MAX_LENGTH = 32;

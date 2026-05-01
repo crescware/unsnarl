@@ -64,6 +64,40 @@ export function pruneVisualGraph(
     }
   }
 
+  // A bare line query whose number is the start line of a subgraph (e.g.
+  // `-r 10` pointing at the `return (` line) sweeps every node in that
+  // subgraph into the root set. Range queries deliberately stay narrow:
+  // selecting "lines 10-12" should not implicitly drag the whole return
+  // body in just because the return subgraph happens to start at L10.
+  for (let i = 0; i < options.roots.length; i++) {
+    const q = options.roots[i];
+    if (q === undefined || q.kind !== "line") {
+      continue;
+    }
+    for (const sg of iterateVisualSubgraphs(graph.elements)) {
+      if (sg.line !== q.line) {
+        continue;
+      }
+      let added = 0;
+      for (const id of collectNodeIds(sg.elements)) {
+        if (rootIds.has(id)) {
+          continue;
+        }
+        rootIds.add(id);
+        added += 1;
+      }
+      if (added > 0) {
+        const entry = perQuery[i];
+        if (entry !== undefined) {
+          perQuery[i] = {
+            query: entry.query,
+            matched: entry.matched + added,
+          };
+        }
+      }
+    }
+  }
+
   // Line/range queries are positional, so identifiers that *only*
   // appear as references on the requested line should also count as
   // roots (their declaration is the natural seed). `name`-only
@@ -212,16 +246,45 @@ function* iterateVisualNodes(
   }
 }
 
+function* iterateVisualSubgraphs(
+  elements: readonly VisualElement[],
+): Generator<VisualSubgraph> {
+  for (const e of elements) {
+    if (e.type === "subgraph") {
+      yield e;
+      yield* iterateVisualSubgraphs(e.elements);
+    }
+  }
+}
+
+function collectNodeIds(elements: readonly VisualElement[]): string[] {
+  const out: string[] = [];
+  walk(elements);
+  return out;
+
+  function walk(items: readonly VisualElement[]): void {
+    for (const item of items) {
+      if (item.type === "node") {
+        out.push(item.id);
+      } else {
+        walk(item.elements);
+      }
+    }
+  }
+}
+
 function nodeMatchesQuery(node: VisualNode, q: ParsedRootQuery): boolean {
+  const startLine = node.line;
+  const endLine = node.endLine ?? node.line;
   switch (q.kind) {
     case "line":
-      return node.line === q.line;
+      return q.line >= startLine && q.line <= endLine;
     case "line-name":
-      return node.line === q.line && node.name === q.name;
+      return q.line >= startLine && q.line <= endLine && node.name === q.name;
     case "range":
-      return node.line >= q.start && node.line <= q.end;
+      return startLine <= q.end && endLine >= q.start;
     case "range-name":
-      return node.line >= q.start && node.line <= q.end && node.name === q.name;
+      return startLine <= q.end && endLine >= q.start && node.name === q.name;
     case "name":
       return node.name === q.name;
   }
@@ -231,17 +294,18 @@ function referenceMatchesQuery(
   ref: SerializedIR["references"][number],
   q: ParsedRootQuery,
 ): boolean {
-  const refLine = ref.identifier.span.line;
+  const startLine = ref.identifier.span.line;
+  const endLine = ref.jsxElement?.endSpan.line ?? startLine;
   const refName = ref.identifier.name;
   switch (q.kind) {
     case "line":
-      return refLine === q.line;
+      return q.line >= startLine && q.line <= endLine;
     case "line-name":
-      return refLine === q.line && refName === q.name;
+      return q.line >= startLine && q.line <= endLine && refName === q.name;
     case "range":
-      return refLine >= q.start && refLine <= q.end;
+      return startLine <= q.end && endLine >= q.start;
     case "range-name":
-      return refLine >= q.start && refLine <= q.end && refName === q.name;
+      return startLine <= q.end && endLine >= q.start && refName === q.name;
     case "name":
       return false;
   }

@@ -5,6 +5,7 @@ import type {
   AstNode,
   BlockContext,
   Definition,
+  JsxElementContainer,
   PredicateContainer,
   Reference,
   ReferenceFlagBits,
@@ -81,6 +82,7 @@ export class ReferenceImpl implements Reference {
   unsnarlOwners: Variable[] = [];
   unsnarlPredicateContainer: PredicateContainer | null = null;
   unsnarlReturnContainer: ReturnContainer | null = null;
+  unsnarlJsxElement: JsxElementContainer | null = null;
   readonly writeExpr: AstExpression | null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;

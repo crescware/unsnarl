@@ -28,6 +28,7 @@ function makeRef(
     flags: { read: true, write: false, call: false, receiver: false },
     predicateContainer: null,
     returnContainer: null,
+    jsxElement: null,
   };
 }
 
@@ -56,6 +57,7 @@ function node(
     kind: "Variable",
     name,
     line,
+    isJsxElement: false,
     ...extra,
   };
 }
@@ -533,7 +535,157 @@ describe("pruneVisualGraph: reference-aware line/range queries", () => {
     expect(r.graph.elements).toEqual([]);
     expect(r.perQuery[0]?.matched).toBe(0);
   });
+
+  test("a line query lying inside a reference's JSX element span matches the resolved declaration", () => {
+    const g = graph([declA], []);
+    const ir = makeIr([
+      // Reference identifier on L11; the wrapping JSX element runs L11-23.
+      // Only the closing-tag line (23) is being queried, which falls inside
+      // the element span and should still seed the declaration as a root.
+      {
+        ...makeRef("ref#0", "a", 11, "scope#0:a@6"),
+        jsxElement: {
+          startSpan: { line: 11, column: 4, offset: 0 },
+          endSpan: { line: 23, column: 7, offset: 0 },
+        },
+      },
+    ]);
+    const r = pruneVisualGraph(
+      g,
+      { roots: [rawLine(23)], descendants: 0, ancestors: 0 },
+      ir,
+    );
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("a range query overlapping a reference's JSX element span seeds the declaration once", () => {
+    const g = graph([declA], []);
+    const ir = makeIr([
+      {
+        ...makeRef("ref#0", "a", 11, "scope#0:a@6"),
+        jsxElement: {
+          startSpan: { line: 11, column: 4, offset: 0 },
+          endSpan: { line: 23, column: 7, offset: 0 },
+        },
+      },
+    ]);
+    const r = pruneVisualGraph(
+      g,
+      // A 20-22 window does not contain the identifier line itself but does
+      // overlap the element span, so the declaration still surfaces.
+      { roots: [rawRange(20, 22)], descendants: 0, ancestors: 0 },
+      ir,
+    );
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_scope_0_a_6"]);
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
 });
+
+describe("pruneVisualGraph: subgraph line matching", () => {
+  test("a bare line query equal to a subgraph's start line sweeps every node it contains", () => {
+    const inner = node("inner_a", "a", 11);
+    const outerOnly = node("outside", "z", 50);
+    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const g = graph([sg, outerOnly], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(10)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    // The subgraph survives because at least one descendant did.
+    const flat = collectIds(r.graph.elements);
+    expect(flat).toContain("inner_a");
+    expect(flat).not.toContain("outside");
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("a range query never auto-pulls a subgraph's body, even if its start line falls inside the range", () => {
+    const inner = node("inner_a", "a", 11);
+    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const g = graph([sg], []);
+    const r = pruneVisualGraph(g, {
+      // Range [10..11] would contain both the subgraph's start and the inner
+      // node's line; only the inner-node match should keep it, not the
+      // subgraph match (which is line-only by design).
+      roots: [rawRange(10, 11)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    const flat = collectIds(r.graph.elements);
+    expect(flat).toContain("inner_a");
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+
+  test("a line query that is not a subgraph's start line falls back to per-node matching", () => {
+    const inner = node("inner_a", "a", 11);
+    const sg = subgraph("sg_return", 10, [inner], { kind: "return" });
+    const g = graph([sg], []);
+    const r = pruneVisualGraph(g, {
+      // 11 is the inner node's line, not the subgraph's start line.
+      roots: [rawLine(11)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    // The subgraph survives only because its descendant did; the match
+    // count is for the per-node hit, not a subgraph hit.
+    const flat = collectIds(r.graph.elements);
+    expect(flat).toContain("inner_a");
+    expect(flat).toContain("sg_return");
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+});
+
+describe("pruneVisualGraph: VisualNode endLine matching", () => {
+  test("a line inside a node's [line, endLine] window matches it", () => {
+    const ranged = node("a", "a", 11, { endLine: 23 });
+    const g = graph([ranged], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(20)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+  });
+
+  test("a line just past endLine does not match", () => {
+    const ranged = node("a", "a", 11, { endLine: 23 });
+    const g = graph([ranged], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawLine(24)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements).toEqual([]);
+  });
+
+  test("a range query overlapping the node's window matches it once", () => {
+    const ranged = node("a", "a", 11, { endLine: 23 });
+    const g = graph([ranged], []);
+    const r = pruneVisualGraph(g, {
+      roots: [rawRange(20, 30)],
+      descendants: 0,
+      ancestors: 0,
+    });
+    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.perQuery[0]?.matched).toBe(1);
+  });
+});
+
+function collectIds(elements: ReadonlyArray<VisualElement>): string[] {
+  const out: string[] = [];
+  walk(elements);
+  return out;
+
+  function walk(items: ReadonlyArray<VisualElement>): void {
+    for (const item of items) {
+      out.push(item.id);
+      if (item.type === "subgraph") {
+        walk(item.elements);
+      }
+    }
+  }
+}
 
 function flatten(elements: readonly VisualElement[]): VisualElement[] {
   const out: VisualElement[] = [];

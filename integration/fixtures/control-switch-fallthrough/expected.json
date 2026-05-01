@@ -12,6 +12,7 @@
       "kind": "Variable",
       "name": "label",
       "line": 1,
+      "isJsxElement": false,
       "declarationKind": "let"
     },
     {
@@ -20,6 +21,7 @@
       "kind": "Variable",
       "name": "kind",
       "line": 2,
+      "isJsxElement": false,
       "declarationKind": "const"
     },
     {
@@ -28,6 +30,7 @@
       "kind": "Variable",
       "name": "result",
       "line": 13,
+      "isJsxElement": false,
       "declarationKind": "const",
       "unused": true
     },
@@ -53,6 +56,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 6,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -72,6 +76,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 8,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
@@ -91,6 +96,7 @@
               "kind": "WriteOp",
               "name": "label",
               "line": 10,
+              "isJsxElement": false,
               "declarationKind": "let"
             }
           ],
