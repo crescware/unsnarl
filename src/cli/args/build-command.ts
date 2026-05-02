@@ -19,7 +19,7 @@ export type ParsedCliOptions = Readonly<{
   format: string;
   stdin: boolean;
   lang: CliLanguage;
-  pretty: boolean;
+  prettyJson: boolean;
   mermaidRenderer: CliMermaidRenderer | null;
   roots: readonly ParsedRootQuery[];
   descendants: number | null;

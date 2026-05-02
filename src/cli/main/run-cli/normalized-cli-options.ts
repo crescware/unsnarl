@@ -7,7 +7,7 @@ export type NormalizedCliOptions = Readonly<{
   format: string;
   stdin: boolean;
   lang: CliLanguage;
-  pretty: boolean;
+  prettyJson: boolean;
   mermaidRenderer: CliMermaidRenderer | null;
   roots: readonly ParsedRootQuery[];
   descendants: number | null;
@@ -23,7 +23,7 @@ export function normalizeCliOptions(
     format: opts.format,
     stdin: opts.stdin,
     lang: opts.lang,
-    pretty: opts.pretty,
+    prettyJson: opts.prettyJson,
     mermaidRenderer: opts.mermaidRenderer,
     roots: opts.roots,
     descendants: opts.descendants,

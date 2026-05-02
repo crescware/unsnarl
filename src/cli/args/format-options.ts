@@ -20,7 +20,7 @@ export function formatOptions(): readonly Option[] {
       "-f, --format <id>",
       `Emitter format (${availableFormats.join(", ")})`,
     ).default("ir"),
-    new Option("--no-pretty", "Disable pretty-printed JSON output"),
+    new Option("--no-pretty-json", "Disable pretty-printed JSON output"),
     new Option(
       "--mermaid-renderer <renderer>",
       "Layout engine for Mermaid output",

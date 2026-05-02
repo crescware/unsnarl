@@ -17,15 +17,21 @@ const ir = {
 } as const satisfies SerializedIR;
 
 describe("IrEmitter", () => {
-  test("emits pretty JSON when pretty is true with a trailing newline", () => {
-    const out = new IrEmitter().emit(ir, { pretty: true, prunedGraph: null });
+  test("emits pretty-printed JSON when prettyJson is true with a trailing newline", () => {
+    const out = new IrEmitter().emit(ir, {
+      prettyJson: true,
+      prunedGraph: null,
+    });
     expect(out.endsWith("\n")).toBe(true);
     expect(out).toContain('"version": 1');
     expect(JSON.parse(out)).toEqual(ir);
   });
 
-  test("emits compact JSON when pretty is false", () => {
-    const out = new IrEmitter().emit(ir, { pretty: false, prunedGraph: null });
+  test("emits compact JSON when prettyJson is false", () => {
+    const out = new IrEmitter().emit(ir, {
+      prettyJson: false,
+      prunedGraph: null,
+    });
     expect(out).not.toContain("\n  ");
     expect(JSON.parse(out)).toEqual(ir);
   });

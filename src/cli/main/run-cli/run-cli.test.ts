@@ -68,7 +68,7 @@ describe("runCli (end-to-end)", () => {
       inputPath,
       "const used = 1;\nconst answer = used;\nconst ignored = 2;\n",
     );
-    const r = await captureRun([inputPath, "--no-pretty"]);
+    const r = await captureRun([inputPath, "--no-pretty-json"]);
     expect(r.exitCode).toBe(0);
     const ir = JSON.parse(r.stdout);
     expect(ir.version).toBe(SERIALIZED_IR_VERSION);
@@ -188,7 +188,7 @@ describe("runCli (end-to-end)", () => {
   test("ir format ignores --roots (no pruning, no warning)", async () => {
     const inputPath = join(tmpDir, "tiny2.ts");
     writeFileSync(inputPath, "const a = 1;\n");
-    const r = await captureRun(["-r", "999", inputPath, "--no-pretty"]);
+    const r = await captureRun(["-r", "999", inputPath, "--no-pretty-json"]);
     expect(r.exitCode).toBe(0);
     expect(r.stderr).toBe("");
     const ir = JSON.parse(r.stdout);

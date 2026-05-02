@@ -63,7 +63,9 @@ describe("DefaultEmitterRegistry", () => {
       emit: (ir) => `version=${ir.version}`,
     });
     expect(
-      reg.get("callable")?.emit(fakeIR, { pretty: true, prunedGraph: null }),
+      reg
+        .get("callable")
+        ?.emit(fakeIR, { prettyJson: true, prunedGraph: null }),
     ).toBe("version=1");
   });
 });

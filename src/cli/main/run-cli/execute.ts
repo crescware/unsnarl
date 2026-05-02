@@ -84,7 +84,7 @@ export async function execute(
     format: opts.format,
     language,
     sourcePath,
-    emit: { pretty: opts.pretty, prunedGraph: null },
+    emit: { prettyJson: opts.prettyJson, prunedGraph: null },
     pruning,
   };
 

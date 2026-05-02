@@ -48,7 +48,7 @@ export type IRSerializer = Readonly<{
 }>;
 
 export type EmitOptions = Readonly<{
-  pretty: boolean;
+  prettyJson: boolean;
   prunedGraph: VisualGraph | null;
 }>;
 
