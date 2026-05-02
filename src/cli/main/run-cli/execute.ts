@@ -1,5 +1,3 @@
-import { mkdirSync, writeFileSync } from "node:fs";
-
 import {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
@@ -9,6 +7,7 @@ import { emitPruningWarnings } from "./emit-pruning-warnings.js";
 import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 import { resolveOutputPath } from "./resolve-output-path/resolve-output-path.js";
+import { writeOutput } from "./write-output.js";
 
 export async function execute(
   src: ExecuteSource,
@@ -22,12 +21,5 @@ export async function execute(
   const result = pipeline.runDetailed(text, runOpts);
 
   emitPruningWarnings(result.pruning);
-
-  if (outputPath !== null && opts.outDir !== null) {
-    mkdirSync(opts.outDir, { recursive: true });
-    writeFileSync(outputPath, result.text);
-    return;
-  }
-
-  process.stdout.write(result.text);
+  writeOutput(outputPath, result.text);
 }
