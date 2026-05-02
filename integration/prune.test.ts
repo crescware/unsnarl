@@ -26,52 +26,52 @@ describe("control-if (pruned)", () => {
     };
 
     test("emits the pruned VisualGraph JSON", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "json",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-r10-c1.json"),
       );
     });
 
     test("emits the pruned Mermaid flowchart", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "mermaid",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-r10-c1.mermaid"),
       );
     });
 
     test("renders the pruned Markdown preview", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "markdown",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "preview.pruned-r10-c1.md"),
       );
     });
 
     test("emits the pruned stats TSV", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "stats",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-r10-c1.stats"),
       );
@@ -90,52 +90,52 @@ describe("control-if (pruned)", () => {
     };
 
     test("emits the pruned VisualGraph JSON", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "json",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-a2.json"),
       );
     });
 
     test("emits the pruned Mermaid flowchart", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "mermaid",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-a2.mermaid"),
       );
     });
 
     test("renders the pruned Markdown preview", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "markdown",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "preview.pruned-counter-a2.md"),
       );
     });
 
     test("emits the pruned stats TSV", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "stats",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-a2.stats"),
       );
@@ -154,52 +154,52 @@ describe("control-if (pruned)", () => {
     };
 
     test("emits the pruned VisualGraph JSON", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "json",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-b2.json"),
       );
     });
 
     test("emits the pruned Mermaid flowchart", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "mermaid",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-b2.mermaid"),
       );
     });
 
     test("renders the pruned Markdown preview", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "markdown",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "preview.pruned-counter-b2.md"),
       );
     });
 
     test("emits the pruned stats TSV", () => {
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "stats",
         language: "ts",
         sourcePath,
         emit: { prettyJson: true, prunedGraph: null },
         pruning,
-      });
+      }).text;
       expect(out).toMatchFileSnapshot(
         join(fixtureDir, "expected.pruned-counter-b2.stats"),
       );
@@ -229,52 +229,52 @@ describe("const-chain-five (pruned)", () => {
       const pruning = { roots: queries.queries, descendants, ancestors };
 
       test("emits the pruned VisualGraph JSON", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "json",
           language: "ts",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.json`),
         );
       });
 
       test("emits the pruned Mermaid flowchart", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "mermaid",
           language: "ts",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.mermaid`),
         );
       });
 
       test("renders the pruned Markdown preview", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "markdown",
           language: "ts",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `preview.pruned-${slug}.md`),
         );
       });
 
       test("emits the pruned stats TSV", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "stats",
           language: "ts",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.stats`),
         );
@@ -311,52 +311,52 @@ describe("jsx-nested-five (pruned)", () => {
       const pruning = { roots: queries.queries, descendants, ancestors };
 
       test("emits the pruned VisualGraph JSON", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "json",
           language: "tsx",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.json`),
         );
       });
 
       test("emits the pruned Mermaid flowchart", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "mermaid",
           language: "tsx",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.mermaid`),
         );
       });
 
       test("renders the pruned Markdown preview", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "markdown",
           language: "tsx",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `preview.pruned-${slug}.md`),
         );
       });
 
       test("emits the pruned stats TSV", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "stats",
           language: "tsx",
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(fixtureDir, `expected.pruned-${slug}.stats`),
         );

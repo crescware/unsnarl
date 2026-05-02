@@ -76,13 +76,13 @@ describe("createPipeline", () => {
       emitters: buildRegistry([fakeEmitter]),
     });
 
-    const result = pipeline.run("const x = 1;", {
+    const result = pipeline.runDetailed("const x = 1;", {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "test.ts",
       emit: { prettyJson: true, prunedGraph: null },
       pruning: null,
-    });
+    }).text;
 
     expect(result).toBe("version=1");
   });
@@ -95,14 +95,15 @@ describe("createPipeline", () => {
       emitters: buildRegistry([]),
     });
 
-    expect(() =>
-      pipeline.run("", {
-        format: "missing",
-        language: LANGUAGE.Ts,
-        sourcePath: "x.ts",
-        emit: { prettyJson: true, prunedGraph: null },
-        pruning: null,
-      }),
+    expect(
+      () =>
+        pipeline.runDetailed("", {
+          format: "missing",
+          language: LANGUAGE.Ts,
+          sourcePath: "x.ts",
+          emit: { prettyJson: true, prunedGraph: null },
+          pruning: null,
+        }).text,
     ).toThrow(/Unknown emitter format/);
   });
 
@@ -128,7 +129,7 @@ describe("createPipeline", () => {
       emitters: buildRegistry([fakeEmitter]),
     });
 
-    pipeline.run("", {
+    pipeline.runDetailed("", {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "x.ts",

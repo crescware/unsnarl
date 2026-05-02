@@ -92,7 +92,6 @@ export type PipelineRunDetails = Readonly<{
 }>;
 
 export type Pipeline = Readonly<{
-  run(code: string, opts: PipelineRunOptions): string;
   runDetailed(code: string, opts: PipelineRunOptions): PipelineRunDetails;
 }>;
 

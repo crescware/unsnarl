@@ -54,65 +54,65 @@ describe("fixtures (end-to-end pipeline)", () => {
       const sourcePath = `integration/fixtures/${fixture.name}/${fixture.inputFile}`;
 
       test("emits the expected IR JSON", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "ir",
           language: fixture.language,
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning: null,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.ir.json"),
         );
       });
 
       test("emits the expected VisualGraph JSON", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "json",
           language: fixture.language,
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning: null,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.json"),
         );
       });
 
       test("emits the expected Mermaid flowchart", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "mermaid",
           language: fixture.language,
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning: null,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.mermaid"),
         );
       });
 
       test("renders the Markdown preview via the markdown emitter", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "markdown",
           language: fixture.language,
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning: null,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "preview.md"),
         );
       });
 
       test("emits the expected stats TSV", () => {
-        const out = pipeline.run(code, {
+        const out = pipeline.runDetailed(code, {
           format: "stats",
           language: fixture.language,
           sourcePath,
           emit: { prettyJson: true, prunedGraph: null },
           pruning: null,
-        });
+        }).text;
         expect(out).toMatchFileSnapshot(
           join(FIXTURE_DIR, fixture.name, "expected.stats"),
         );
