@@ -1,5 +1,6 @@
 import { InvalidArgumentError, Option } from "commander";
 
+import { createDefaultEmitterRegistry } from "../../pipeline/default.js";
 import {
   type CliMermaidRenderer,
   MERMAID_RENDERERS,
@@ -12,11 +13,19 @@ function coerceMermaidRenderer(value: string): CliMermaidRenderer {
   return value as CliMermaidRenderer;
 }
 
-export function mermaidRendererOptions(): readonly Option[] {
+export function formatOptions(): readonly Option[] {
+  const availableFormats = createDefaultEmitterRegistry().list();
   return [
+    new Option(
+      "-f, --format <id>",
+      `Emitter format (${availableFormats.join(", ")})`,
+    ).default("ir"),
+    new Option("--no-pretty", "Disable pretty-printed JSON output"),
     new Option(
       "--mermaid-renderer <renderer>",
       "Layout engine for Mermaid output",
-    ).argParser(coerceMermaidRenderer),
+    )
+      .argParser(coerceMermaidRenderer)
+      .default(null, "auto"),
   ];
 }

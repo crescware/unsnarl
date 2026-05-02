@@ -1,7 +1,6 @@
 import { CommanderError } from "commander";
 
 import { ParseError } from "../../../parser/oxc.js";
-import { createDefaultEmitterRegistry } from "../../../pipeline/default.js";
 import {
   buildCommand,
   type ParsedCliOptions,
@@ -12,13 +11,13 @@ import { handleCliUsageError } from "./handle-cli-usage-error.js";
 import { handleCommanderError } from "./handle-commander-error.js";
 import { handleError } from "./handle-error.js";
 import { handleParseError } from "./handle-parse-error.js";
+import { normalizeCliOptions } from "./normalized-cli-options.js";
 
 export async function runCli(argv: readonly string[]): Promise<number> {
-  const availableFormats = createDefaultEmitterRegistry().list();
-  const command = buildCommand(availableFormats);
+  const command = buildCommand();
 
   command.action(async (file: string | undefined, opts: ParsedCliOptions) => {
-    await execute(command, file ?? null, opts);
+    await execute(command, file ?? null, normalizeCliOptions(opts));
   });
 
   try {

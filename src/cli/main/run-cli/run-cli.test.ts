@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 import { SERIALIZED_IR_VERSION } from "../../../serializer/serialized-ir-version.js";
 import { BOUNDARY_EDGE_DIRECTION } from "../../../visual-graph/prune/boundary-edge-direction.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
-import { DEFAULT_GENERATIONS } from "../default-generations.js";
+import { DEFAULT_GENERATIONS } from "../../args/default-generations.js";
 import { runCli } from "./run-cli.js";
 
 type CapturedOutput = Readonly<{

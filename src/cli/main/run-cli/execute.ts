@@ -10,17 +10,17 @@ import type {
   PipelineRunOptions,
   PruningRunOptions,
 } from "../../../pipeline/types.js";
-import { type ParsedCliOptions } from "../../args/build-command.js";
 import { readSourceFile, readStdin } from "../../io.js";
 import { deriveOutputBasename } from "../../output-name/output-name.js";
 import { detectLanguage } from "../detect-language.js";
 import { resolveGenerations } from "../resolve-generations.js";
 import { CliUsageError } from "./cli-usage-error.js";
+import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
 export async function execute(
   program: Command,
   file: string | null,
-  opts: ParsedCliOptions,
+  opts: NormalizedCliOptions,
 ): Promise<void> {
   const emitters = createDefaultEmitterRegistry();
 
@@ -28,15 +28,15 @@ export async function execute(
   // produce a filename (e.g. --stdin without -r), bail out before we read
   // any input or do any analysis.
   let outputPath: string | null = null;
-  if (opts.outDir !== undefined) {
+  if (opts.outDir !== null) {
     const derived = deriveOutputBasename({
       roots: opts.roots,
-      descendants: opts.descendants ?? null,
-      ancestors: opts.ancestors ?? null,
-      context: opts.context ?? null,
+      descendants: opts.descendants,
+      ancestors: opts.ancestors,
+      context: opts.context,
       // --stdin overrides any positional file for content, so it should
       // override it for naming too: a stdin run has no usable filename.
-      inputPath: opts.stdin === true ? null : file,
+      inputPath: opts.stdin ? null : file,
     });
     if (!derived.ok) {
       throw new CliUsageError(derived.error, null);
@@ -53,7 +53,7 @@ export async function execute(
 
   let code: string;
   let sourcePath: string;
-  if (opts.stdin === true) {
+  if (opts.stdin) {
     code = await readStdin();
     sourcePath = `stdin.${opts.lang}`;
   } else if (file !== null) {
@@ -66,8 +66,7 @@ export async function execute(
     );
   }
 
-  const language =
-    opts.stdin === true ? opts.lang : detectLanguage(file, opts.lang);
+  const language = opts.stdin ? opts.lang : detectLanguage(file, opts.lang);
 
   const pipeline = createDefaultPipeline(emitters);
   const pruning: PruningRunOptions | null =
@@ -75,9 +74,9 @@ export async function execute(
       ? {
           roots: opts.roots,
           ...resolveGenerations({
-            descendants: opts.descendants ?? null,
-            ancestors: opts.ancestors ?? null,
-            context: opts.context ?? null,
+            descendants: opts.descendants,
+            ancestors: opts.ancestors,
+            context: opts.context,
           }),
         }
       : null;
@@ -99,7 +98,7 @@ export async function execute(
       }
     }
   }
-  if (outputPath !== null && opts.outDir !== undefined) {
+  if (outputPath !== null && opts.outDir !== null) {
     mkdirSync(opts.outDir, { recursive: true });
     writeFileSync(outputPath, result.text);
   } else {

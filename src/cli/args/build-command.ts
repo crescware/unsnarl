@@ -5,7 +5,7 @@ import { VERSION } from "../../version.js";
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { type CliLanguage, LANGUAGES } from "./cli-language.js";
 import type { CliMermaidRenderer } from "./cli-mermaid-renderer.js";
-import { mermaidRendererOptions } from "./mermaid-renderer-options.js";
+import { formatOptions } from "./format-options.js";
 import { scopeOptions } from "./scope-options.js";
 
 function coerceLanguage(value: string): CliLanguage {
@@ -17,18 +17,18 @@ function coerceLanguage(value: string): CliLanguage {
 
 export type ParsedCliOptions = Readonly<{
   format: string;
-  stdin?: true;
+  stdin: boolean;
   lang: CliLanguage;
   pretty: boolean;
-  mermaidRenderer?: CliMermaidRenderer;
+  mermaidRenderer: CliMermaidRenderer | null;
   roots: readonly ParsedRootQuery[];
-  descendants?: number;
-  ancestors?: number;
-  context?: number;
-  outDir?: string;
+  descendants: number | null;
+  ancestors: number | null;
+  context: number | null;
+  outDir: string | null;
 }>;
 
-export function buildCommand(availableFormats: readonly string[]): Command {
+export function buildCommand(): Command {
   const command = new Command();
   command
     .name(NAME)
@@ -39,21 +39,16 @@ export function buildCommand(availableFormats: readonly string[]): Command {
     .argument("[file]", "Input file");
 
   const options: readonly Option[] = [
-    new Option(
-      "-f, --format <id>",
-      `Emitter format (${availableFormats.join(", ")})`,
-    ).default("ir"),
-    new Option("--stdin", "Read from stdin"),
+    ...formatOptions(),
+    new Option("--stdin", "Read from stdin").default(false),
     new Option("--lang <lang>", "Language for stdin input")
       .argParser(coerceLanguage)
       .default("ts" as CliLanguage),
-    new Option("--no-pretty", "Disable pretty-printed JSON output"),
-    ...mermaidRendererOptions(),
     ...scopeOptions(),
     new Option(
       "-o, --out-dir <dir>",
       "Write output to <dir>/<auto-name>.<ext>",
-    ),
+    ).default(null, "stdout"),
   ];
 
   for (const opt of options) {

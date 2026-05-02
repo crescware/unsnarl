@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFAULT_GENERATIONS } from "./default-generations.js";
+import { DEFAULT_GENERATIONS } from "../args/default-generations.js";
 import { resolveGenerations } from "./resolve-generations.js";
 
 describe("resolveGenerations", () => {
