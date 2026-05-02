@@ -339,9 +339,24 @@ describe("runCli (end-to-end)", () => {
 
   test("--out-dir with --stdin and no -r exits with 2 (no naming basis)", async () => {
     const outDir = join(tmpDir, "stdin-out");
-    const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
-    expect(r.exitCode).toBe(2);
-    expect(r.stderr).toMatch(/-r\/--roots|input file/);
-    expect(existsSync(outDir)).toBe(false);
+    // run-cli reads stdin before validating --out-dir naming, so we have to
+    // feed it an immediate EOF or the await blocks on the test harness's
+    // open stdin.
+    const stdinSpy = vi
+      .spyOn(
+        process.stdin as unknown as AsyncIterable<Buffer>,
+        Symbol.asyncIterator,
+      )
+      .mockImplementation(
+        () => (async function* () {})() as AsyncIterator<Buffer>,
+      );
+    try {
+      const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
+      expect(r.exitCode).toBe(2);
+      expect(r.stderr).toMatch(/-r\/--roots|input file/);
+      expect(existsSync(outDir)).toBe(false);
+    } finally {
+      stdinSpy.mockRestore();
+    }
   });
 });

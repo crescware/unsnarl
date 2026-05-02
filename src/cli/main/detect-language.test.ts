@@ -3,35 +3,27 @@ import { describe, expect, test } from "vitest";
 import { detectLanguage } from "./detect-language.js";
 
 describe("detectLanguage", () => {
-  test("null path → fallback verbatim", () => {
-    expect(detectLanguage(null, "ts")).toBe("ts");
-    expect(detectLanguage(null, "tsx")).toBe("tsx");
-    expect(detectLanguage(null, "js")).toBe("js");
-    expect(detectLanguage(null, "jsx")).toBe("jsx");
-  });
-
-  test(".tsx → tsx", () => {
-    expect(detectLanguage("Component.tsx", "ts")).toBe("tsx");
-  });
-
-  test(".jsx → jsx", () => {
-    expect(detectLanguage("Component.jsx", "ts")).toBe("jsx");
-  });
-
-  test(".js → js", () => {
-    expect(detectLanguage("foo.js", "ts")).toBe("js");
-  });
-
-  test(".ts → ts (covered by default branch)", () => {
-    expect(detectLanguage("foo.ts", "tsx")).toBe("ts");
-  });
-
-  test("unknown extension → ts (default branch ignores fallback)", () => {
-    expect(detectLanguage("foo.cjs", "jsx")).toBe("ts");
-    expect(detectLanguage("Makefile", "tsx")).toBe("ts");
-  });
-
-  test("nested paths still inspect the trailing suffix", () => {
-    expect(detectLanguage("src/deep/Component.tsx", "ts")).toBe("tsx");
+  test.each([
+    { name: ".tsx → tsx", path: "Component.tsx", expected: "tsx" },
+    { name: ".jsx → jsx", path: "Component.jsx", expected: "jsx" },
+    { name: ".js → js", path: "foo.js", expected: "js" },
+    { name: ".mjs → js", path: "foo.mjs", expected: "js" },
+    { name: ".cjs → js", path: "foo.cjs", expected: "js" },
+    { name: ".ejs → js", path: "foo.ejs", expected: "js" },
+    { name: ".ts → ts", path: "foo.ts", expected: "ts" },
+    { name: ".mts → ts", path: "foo.mts", expected: "ts" },
+    { name: ".cts → ts", path: "foo.cts", expected: "ts" },
+    {
+      name: "unknown extension → ts (default branch)",
+      path: "Makefile",
+      expected: "ts",
+    },
+    {
+      name: "nested paths still inspect the trailing suffix",
+      path: "src/deep/Component.tsx",
+      expected: "tsx",
+    },
+  ] as const)("$name", ({ path, expected }) => {
+    expect(detectLanguage(path)).toBe(expected);
   });
 });

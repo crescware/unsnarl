@@ -5,6 +5,7 @@ import {
   buildCommand,
   type ParsedCliOptions,
 } from "../../args/build-command.js";
+import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import { execute } from "./execute.js";
 import { handleCliUsageError } from "./handle-cli-usage-error.js";
@@ -17,7 +18,9 @@ export async function runCli(argv: readonly string[]): Promise<number> {
   const command = buildCommand();
 
   command.action(async (file: string | undefined, opts: ParsedCliOptions) => {
-    await execute(command, file ?? null, normalizeCliOptions(opts));
+    const normalized = normalizeCliOptions(opts);
+    const src = await calcSource(command, file, normalized);
+    await execute(src, normalized);
   });
 
   try {

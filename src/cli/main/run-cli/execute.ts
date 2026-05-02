@@ -1,4 +1,3 @@
-import type { Command } from "commander";
 import { mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
@@ -10,23 +9,23 @@ import type {
   PipelineRunOptions,
   PruningRunOptions,
 } from "../../../pipeline/types.js";
-import { readSourceFile, readStdin } from "../../io.js";
+import { readSourceFile } from "../../io.js";
 import { deriveOutputBasename } from "../../output-name/output-name.js";
 import { detectLanguage } from "../detect-language.js";
 import { resolveGenerations } from "../resolve-generations.js";
 import { CliUsageError } from "./cli-usage-error.js";
+import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
 export async function execute(
-  program: Command,
-  file: string | null,
+  src: ExecuteSource,
   opts: NormalizedCliOptions,
 ): Promise<void> {
   const emitters = createDefaultEmitterRegistry();
 
   // Validate the output destination up-front: if -o/--out-dir cannot
-  // produce a filename (e.g. --stdin without -r), bail out before we read
-  // any input or do any analysis.
+  // produce a filename (e.g. --stdin without -r), bail out before we
+  // spend cycles on analysis.
   let outputPath: string | null = null;
   if (opts.outDir !== null) {
     const derived = deriveOutputBasename({
@@ -36,7 +35,7 @@ export async function execute(
       context: opts.context,
       // --stdin overrides any positional file for content, so it should
       // override it for naming too: a stdin run has no usable filename.
-      inputPath: opts.stdin ? null : file,
+      inputPath: src.stdin ? null : src.path,
     });
     if (!derived.ok) {
       throw new CliUsageError(derived.error, null);
@@ -51,44 +50,34 @@ export async function execute(
     outputPath = join(opts.outDir, `${derived.basename}.${emitter.extension}`);
   }
 
-  let code: string;
-  let sourcePath: string;
-  if (opts.stdin) {
-    code = await readStdin();
-    sourcePath = `stdin.${opts.lang}`;
-  } else if (file !== null) {
-    code = readSourceFile(file);
-    sourcePath = file;
-  } else {
-    throw new CliUsageError(
-      "no input file (use --stdin or pass a path)",
-      program.helpInformation(),
-    );
-  }
-
-  const language = opts.stdin ? opts.lang : detectLanguage(file, opts.lang);
+  const text = src.stdin ? src.text : readSourceFile(src.path);
+  const sourcePath = src.stdin ? `stdin.${src.lang}` : src.path;
+  const language = src.stdin ? src.lang : detectLanguage(src.path);
 
   const pipeline = createDefaultPipeline(emitters);
-  const pruning: PruningRunOptions | null =
-    opts.roots.length > 0
-      ? {
+
+  const pruning =
+    0 < opts.roots.length
+      ? ({
           roots: opts.roots,
           ...resolveGenerations({
             descendants: opts.descendants,
             ancestors: opts.ancestors,
             context: opts.context,
           }),
-        }
+        } satisfies PruningRunOptions)
       : null;
-  const runOpts: PipelineRunOptions = {
+
+  const runOpts = {
     format: opts.format,
     language,
     sourcePath,
     emit: { prettyJson: opts.prettyJson, prunedGraph: null },
     pruning,
-  };
+  } satisfies PipelineRunOptions;
 
-  const result = pipeline.runDetailed(code, runOpts);
+  const result = pipeline.runDetailed(text, runOpts);
+
   if (result.pruning !== null) {
     for (const r of result.pruning) {
       if (r.matched === 0) {
@@ -98,10 +87,12 @@ export async function execute(
       }
     }
   }
+
   if (outputPath !== null && opts.outDir !== null) {
     mkdirSync(opts.outDir, { recursive: true });
     writeFileSync(outputPath, result.text);
-  } else {
-    process.stdout.write(result.text);
+    return;
   }
+
+  process.stdout.write(result.text);
 }
