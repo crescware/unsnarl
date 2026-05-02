@@ -3,32 +3,19 @@ import { describe, expect, test } from "vitest";
 import { parseGenerationCount } from "./parse-generation-count.js";
 
 describe("parseGenerationCount", () => {
-  test("parses non-negative integers", () => {
-    expect(parseGenerationCount("0")).toBe(0);
-    expect(parseGenerationCount("1")).toBe(1);
-    expect(parseGenerationCount("42")).toBe(42);
-  });
-
-  test("rejects negative numbers", () => {
-    expect(parseGenerationCount("-1")).toBeNull();
-  });
-
-  test("rejects decimals", () => {
-    expect(parseGenerationCount("1.5")).toBeNull();
-  });
-
-  test("rejects non-numeric input", () => {
-    expect(parseGenerationCount("abc")).toBeNull();
-    expect(parseGenerationCount("")).toBeNull();
-  });
-
-  test("rejects whitespace and signs prefixed", () => {
-    expect(parseGenerationCount(" 1 ")).toBeNull();
-    expect(parseGenerationCount("+1")).toBeNull();
-  });
-
-  test("rejects hex/octal/scientific notation", () => {
-    expect(parseGenerationCount("0x10")).toBeNull();
-    expect(parseGenerationCount("1e3")).toBeNull();
+  test.each<{ name: string; input: string; expected: number | null }>([
+    { name: "non-negative integer 0 → 0", input: "0", expected: 0 },
+    { name: "non-negative integer 1 → 1", input: "1", expected: 1 },
+    { name: "non-negative integer 42 → 42", input: "42", expected: 42 },
+    { name: "negative -1 → null", input: "-1", expected: null },
+    { name: "decimal 1.5 → null", input: "1.5", expected: null },
+    { name: "non-numeric abc → null", input: "abc", expected: null },
+    { name: "empty string → null", input: "", expected: null },
+    { name: "whitespace ' 1 ' → null", input: " 1 ", expected: null },
+    { name: "leading + '+1' → null", input: "+1", expected: null },
+    { name: "hex '0x10' → null", input: "0x10", expected: null },
+    { name: "scientific '1e3' → null", input: "1e3", expected: null },
+  ])("$name", ({ input, expected }) => {
+    expect(parseGenerationCount(input)).toBe(expected);
   });
 });

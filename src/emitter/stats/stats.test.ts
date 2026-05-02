@@ -27,7 +27,7 @@ function emit(code: string): string {
     raw: analyzed.raw,
     source: { path: "x.ts", language: LANGUAGE.Ts },
   });
-  return emitter.emit(ir, { pretty: true, prunedGraph: null });
+  return emitter.emit(ir, { prettyJson: true, prunedGraph: null });
 }
 
 function emitWithBoundary(
@@ -46,7 +46,7 @@ function emitWithBoundary(
     source: { path: "x.ts", language: LANGUAGE.Ts },
   });
   const prunedGraph = patch(buildVisualGraph(ir));
-  return emitter.emit(ir, { pretty: true, prunedGraph });
+  return emitter.emit(ir, { prettyJson: true, prunedGraph });
 }
 
 describe("StatsEmitter", () => {

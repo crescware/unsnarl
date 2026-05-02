@@ -55,13 +55,13 @@ describe("Mermaid output syntax (real parser)", () => {
   for (const fixture of fixtures) {
     test(`${fixture.name} parses with mermaid.parse`, async () => {
       const code = readFileSync(fixture.inputPath, "utf8");
-      const out = pipeline.run(code, {
+      const out = pipeline.runDetailed(code, {
         format: "mermaid",
         language: fixture.language,
         sourcePath: `integration/fixtures/${fixture.name}/input.${fixture.language}`,
-        emit: { pretty: true, prunedGraph: null },
+        emit: { prettyJson: true, prunedGraph: null },
         pruning: null,
-      });
+      }).text;
       expect(out).not.toContain('\\"');
       await mermaid.parse(out);
     });

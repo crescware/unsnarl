@@ -1,16 +1,17 @@
 #!/usr/bin/env node
-import { runCli } from "./main/run-cli.js";
+import { runCli } from "./main/run-cli/run-cli.js";
 
-const isMain = import.meta.url === `file://${process.argv[1] ?? ""}`;
-if (isMain) {
-  runCli(process.argv.slice(2))
-    .then((code) => {
-      process.exit(code);
-    })
-    .catch((e: unknown) => {
-      process.stderr.write(
-        `fatal: ${e instanceof Error ? e.message : String(e)}\n`,
-      );
-      process.exit(1);
-    });
+export async function main(argv: readonly string[]): Promise<number> {
+  try {
+    return await runCli(argv);
+  } catch (e) {
+    process.stderr.write(
+      `fatal: ${e instanceof Error ? e.message : String(e)}\n`,
+    );
+    return 1;
+  }
 }
+
+main(process.argv.slice(2)).then((code) => {
+  process.exit(code);
+});

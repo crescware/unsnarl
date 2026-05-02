@@ -64,7 +64,7 @@ function flattenSubgraphs(
   return out;
 }
 
-function emit(code: string, pretty = true): string {
+function emit(code: string, prettyJson = true): string {
   const parsed = parser.parse(code, {
     language: LANGUAGE.Ts,
     sourcePath: "input.ts",
@@ -76,7 +76,7 @@ function emit(code: string, pretty = true): string {
     raw: analyzed.raw,
     source: { path: "input.ts", language: LANGUAGE.Ts },
   });
-  return emitter.emit(ir, { pretty, prunedGraph: null });
+  return emitter.emit(ir, { prettyJson, prunedGraph: null });
 }
 
 describe("JsonEmitter", () => {
@@ -188,7 +188,7 @@ describe("JsonEmitter", () => {
     expect(caseTests).toContain(null);
   });
 
-  test("emits compact JSON when pretty is false", () => {
+  test("emits compact JSON when prettyJson is false", () => {
     const out = emit("const a = 1;\n", false);
     expect(out).not.toContain("\n  ");
   });

@@ -49,10 +49,5 @@ export function createPipeline(config: PipelineConfig): Pipeline {
     return { text, pruning: perQuery };
   }
 
-  return {
-    run(code: string, opts: PipelineRunOptions): string {
-      return runDetailed(code, opts).text;
-    },
-    runDetailed,
-  };
+  return { runDetailed };
 }

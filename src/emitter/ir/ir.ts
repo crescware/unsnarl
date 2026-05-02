@@ -7,7 +7,9 @@ export class IrEmitter implements Emitter {
   readonly extension = "json";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
-    const text = opts.pretty ? JSON.stringify(ir, null, 2) : JSON.stringify(ir);
+    const text = opts.prettyJson
+      ? JSON.stringify(ir, null, 2)
+      : JSON.stringify(ir);
     return `${text}\n`;
   }
 }

@@ -3,10 +3,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
-import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
-import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
+import { SERIALIZED_IR_VERSION } from "../../../serializer/serialized-ir-version.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../../visual-graph/prune/boundary-edge-direction.js";
+import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
+import { DEFAULT_GENERATIONS } from "../../args/default-generations.js";
 import { runCli } from "./run-cli.js";
 
 type CapturedOutput = Readonly<{
@@ -40,7 +40,7 @@ async function captureRun(
   }
 }
 
-describe("runCli (end-to-end)", () => {
+describe("runCli (integration)", () => {
   let tmpDir: string;
   beforeEach(() => {
     tmpDir = mkdtempSync(join(tmpdir(), "unsnarl-cli-"));
@@ -62,23 +62,13 @@ describe("runCli (end-to-end)", () => {
     expect(r.stdout).toMatch(/--format/);
   });
 
-  test("--list-formats lists ir, json, mermaid, markdown, and stats", async () => {
-    const r = await captureRun(["--list-formats"]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stdout).toContain("ir");
-    expect(r.stdout).toContain("json");
-    expect(r.stdout).toContain("mermaid");
-    expect(r.stdout).toContain("markdown");
-    expect(r.stdout).toContain("stats");
-  });
-
   test("happy path: analyzes a file and prints JSON IR", async () => {
     const inputPath = join(tmpDir, "input.ts");
     writeFileSync(
       inputPath,
       "const used = 1;\nconst answer = used;\nconst ignored = 2;\n",
     );
-    const r = await captureRun([inputPath, "--no-pretty"]);
+    const r = await captureRun([inputPath, "--no-pretty-json"]);
     expect(r.exitCode).toBe(0);
     const ir = JSON.parse(r.stdout);
     expect(ir.version).toBe(SERIALIZED_IR_VERSION);
@@ -124,7 +114,7 @@ describe("runCli (end-to-end)", () => {
   test("unknown option returns exit 2", async () => {
     const r = await captureRun(["--whatever"]);
     expect(r.exitCode).toBe(2);
-    expect(r.stderr).toMatch(/Unknown option/);
+    expect(r.stderr).toMatch(/unknown option/i);
   });
 
   test("parse error returns exit 1", async () => {
@@ -198,7 +188,7 @@ describe("runCli (end-to-end)", () => {
   test("ir format ignores --roots (no pruning, no warning)", async () => {
     const inputPath = join(tmpDir, "tiny2.ts");
     writeFileSync(inputPath, "const a = 1;\n");
-    const r = await captureRun(["-r", "999", inputPath, "--no-pretty"]);
+    const r = await captureRun(["-r", "999", inputPath, "--no-pretty-json"]);
     expect(r.exitCode).toBe(0);
     expect(r.stderr).toBe("");
     const ir = JSON.parse(r.stdout);
@@ -274,8 +264,8 @@ describe("runCli (end-to-end)", () => {
   // One full-dressing happy path: nested out-dir + -A -B -C all set +
   // non-default format. Demonstrates that args parsing -> name derivation
   // -> emitter extension lookup -> mkdir(recursive) -> writeFile is wired
-  // end-to-end. Naming permutations (other -A/-B/-C combos, query forms)
-  // are pure string transforms and live in output-name.test.ts.
+  // through. Naming permutations (other -A/-B/-C combos, query forms)
+  // are pure string transforms and live in resolve-output-path/derive-output-basename.test.ts.
   test("--out-dir writes a file under a not-yet-existing nested directory with the derived name", async () => {
     const inputPath = join(tmpDir, "smoke.ts");
     writeFileSync(inputPath, "const value = 1;\nconst other = value;\n");
@@ -349,9 +339,24 @@ describe("runCli (end-to-end)", () => {
 
   test("--out-dir with --stdin and no -r exits with 2 (no naming basis)", async () => {
     const outDir = join(tmpDir, "stdin-out");
-    const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
-    expect(r.exitCode).toBe(2);
-    expect(r.stderr).toMatch(/-r\/--roots|input file/);
-    expect(existsSync(outDir)).toBe(false);
+    // run-cli reads stdin before validating --out-dir naming, so we have to
+    // feed it an immediate EOF or the await blocks on the test harness's
+    // open stdin.
+    const stdinSpy = vi
+      .spyOn(
+        process.stdin as unknown as AsyncIterable<Buffer>,
+        Symbol.asyncIterator,
+      )
+      .mockImplementation(
+        () => (async function* () {})() as AsyncIterator<Buffer>,
+      );
+    try {
+      const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
+      expect(r.exitCode).toBe(2);
+      expect(r.stderr).toMatch(/-r\/--roots|input file/);
+      expect(existsSync(outDir)).toBe(false);
+    } finally {
+      stdinSpy.mockRestore();
+    }
   });
 });
