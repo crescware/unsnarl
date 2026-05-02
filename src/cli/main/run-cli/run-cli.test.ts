@@ -40,7 +40,7 @@ async function captureRun(
   }
 }
 
-describe("runCli (end-to-end)", () => {
+describe("runCli (integration)", () => {
   let tmpDir: string;
   beforeEach(() => {
     tmpDir = mkdtempSync(join(tmpdir(), "unsnarl-cli-"));
@@ -264,7 +264,7 @@ describe("runCli (end-to-end)", () => {
   // One full-dressing happy path: nested out-dir + -A -B -C all set +
   // non-default format. Demonstrates that args parsing -> name derivation
   // -> emitter extension lookup -> mkdir(recursive) -> writeFile is wired
-  // end-to-end. Naming permutations (other -A/-B/-C combos, query forms)
+  // through. Naming permutations (other -A/-B/-C combos, query forms)
   // are pure string transforms and live in resolve-output-path/derive-output-basename.test.ts.
   test("--out-dir writes a file under a not-yet-existing nested directory with the derived name", async () => {
     const inputPath = join(tmpDir, "smoke.ts");

@@ -2,17 +2,24 @@ import { CommanderError } from "commander";
 
 import { ParseError } from "../../../parser/oxc.js";
 import {
+  createDefaultEmitterRegistry,
+  createDefaultPipeline,
+} from "../../../pipeline/default.js";
+import {
   buildCommand,
   type ParsedCliOptions,
 } from "../../args/build-command.js";
+import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
-import { execute } from "./execute.js";
+import { emitPruningWarnings } from "./emit-pruning-warnings.js";
 import { handleCliUsageError } from "./handle-cli-usage-error.js";
 import { handleCommanderError } from "./handle-commander-error.js";
 import { handleError } from "./handle-error.js";
 import { handleParseError } from "./handle-parse-error.js";
 import { normalizeCliOptions } from "./normalized-cli-options.js";
+import { resolveOutputPath } from "./resolve-output-path/resolve-output-path.js";
+import { writeOutput } from "./write-output.js";
 
 export async function runCli(argv: readonly string[]): Promise<number> {
   const command = buildCommand();
@@ -20,7 +27,16 @@ export async function runCli(argv: readonly string[]): Promise<number> {
   command.action(async (file: string | undefined, opts: ParsedCliOptions) => {
     const normalized = normalizeCliOptions(opts);
     const src = await calcSource(command, file, normalized);
-    await execute(src, normalized);
+
+    const emitters = createDefaultEmitterRegistry();
+    const outputPath = resolveOutputPath(src, normalized, emitters);
+    const { text, runOpts } = buildRunOpts(src, normalized);
+
+    const pipeline = createDefaultPipeline(emitters);
+    const result = pipeline.runDetailed(text, runOpts);
+
+    emitPruningWarnings(result.pruning);
+    writeOutput(outputPath, result.text);
   });
 
   try {
