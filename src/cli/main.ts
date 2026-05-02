@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { runCli } from "./main/run-cli.js";
+import { runCli } from "./main/run-cli/run-cli.js";
 
 const isMain = import.meta.url === `file://${process.argv[1] ?? ""}`;
 if (isMain) {

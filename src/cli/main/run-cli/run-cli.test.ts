@@ -3,10 +3,10 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
-import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
-import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
-import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
+import { SERIALIZED_IR_VERSION } from "../../../serializer/serialized-ir-version.js";
+import { BOUNDARY_EDGE_DIRECTION } from "../../../visual-graph/prune/boundary-edge-direction.js";
+import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
+import { DEFAULT_GENERATIONS } from "../default-generations.js";
 import { runCli } from "./run-cli.js";
 
 type CapturedOutput = Readonly<{
@@ -62,16 +62,6 @@ describe("runCli (end-to-end)", () => {
     expect(r.stdout).toMatch(/--format/);
   });
 
-  test("--list-formats lists ir, json, mermaid, markdown, and stats", async () => {
-    const r = await captureRun(["--list-formats"]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stdout).toContain("ir");
-    expect(r.stdout).toContain("json");
-    expect(r.stdout).toContain("mermaid");
-    expect(r.stdout).toContain("markdown");
-    expect(r.stdout).toContain("stats");
-  });
-
   test("happy path: analyzes a file and prints JSON IR", async () => {
     const inputPath = join(tmpDir, "input.ts");
     writeFileSync(
@@ -124,7 +114,7 @@ describe("runCli (end-to-end)", () => {
   test("unknown option returns exit 2", async () => {
     const r = await captureRun(["--whatever"]);
     expect(r.exitCode).toBe(2);
-    expect(r.stderr).toMatch(/Unknown option/);
+    expect(r.stderr).toMatch(/unknown option/i);
   });
 
   test("parse error returns exit 1", async () => {

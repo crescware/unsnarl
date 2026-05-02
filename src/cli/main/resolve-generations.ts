@@ -1,4 +1,4 @@
-import { DEFAULT_GENERATIONS } from "../args/cli-args.js";
+import { DEFAULT_GENERATIONS } from "./default-generations.js";
 
 // grep -A/-B semantics: an explicit -A says "I asked for descendants only,"
 // so the unspecified side falls to 0 instead of the symmetric DEFAULT.

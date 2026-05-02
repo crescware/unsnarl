@@ -26,7 +26,7 @@ const STRATEGIES = {
   elk: elkStrategy,
 } as const satisfies Record<MermaidRenderer, MermaidStrategy>;
 
-export function createDefaultEmitterRegistry(
+function createConfiguredEmitterRegistry(
   options: DefaultRegistryOptions,
 ): EmitterRegistry {
   const reg = new DefaultEmitterRegistry();
@@ -41,15 +41,17 @@ export function createDefaultEmitterRegistry(
   return reg;
 }
 
+export function createDefaultEmitterRegistry(): EmitterRegistry {
+  return createConfiguredEmitterRegistry({
+    mermaidRenderer: CLI_MERMAID_RENDERER.Elk,
+  });
+}
+
 export function createDefaultPipeline(emitters?: EmitterRegistry): Pipeline {
   return createPipeline({
     parser: new OxcParser(),
     analyzer: new EslintCompatAnalyzer(),
     serializer: new FlatSerializer(),
-    emitters:
-      emitters ??
-      createDefaultEmitterRegistry({
-        mermaidRenderer: CLI_MERMAID_RENDERER.Elk,
-      }),
+    emitters: emitters ?? createDefaultEmitterRegistry(),
   });
 }
