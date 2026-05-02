@@ -11,7 +11,7 @@ vi.mock("../../io.js", () => ({
   readSourceFile: vi.fn(),
 }));
 
-const baseOpts: NormalizedCliOptions = {
+const baseOpts = {
   format: "json",
   stdin: false,
   lang: "ts",
@@ -22,7 +22,7 @@ const baseOpts: NormalizedCliOptions = {
   ancestors: null,
   context: null,
   outDir: null,
-};
+} as const satisfies NormalizedCliOptions;
 
 const fakeCommand = {
   helpInformation: () => "USAGE",
@@ -47,6 +47,7 @@ describe("calcSource", () => {
       text: "piped contents",
       lang: "tsx",
     });
+
     expect(vi.mocked(readStdin)).toHaveBeenCalledTimes(1);
   });
 
@@ -77,9 +78,11 @@ describe("calcSource", () => {
       message: "no input file (use --stdin or pass a path)",
       help: "USAGE",
     });
+
     await expect(
       calcSource(fakeCommand, undefined, baseOpts),
     ).rejects.toBeInstanceOf(CliUsageError);
+
     expect(vi.mocked(readStdin)).not.toHaveBeenCalled();
   });
 });
