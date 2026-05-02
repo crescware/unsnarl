@@ -1,5 +1,4 @@
 import { mkdirSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
 
 import {
   createDefaultEmitterRegistry,
@@ -10,12 +9,11 @@ import type {
   PruningRunOptions,
 } from "../../../pipeline/types.js";
 import { readSourceFile } from "../../io.js";
-import { deriveOutputBasename } from "../../output-name/output-name.js";
 import { detectLanguage } from "../detect-language.js";
 import { resolveGenerations } from "../resolve-generations.js";
-import { CliUsageError } from "./cli-usage-error.js";
 import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
+import { resolveOutputPath } from "./resolve-output-path/resolve-output-path.js";
 
 export async function execute(
   src: ExecuteSource,
@@ -23,32 +21,7 @@ export async function execute(
 ): Promise<void> {
   const emitters = createDefaultEmitterRegistry();
 
-  // Validate the output destination up-front: if -o/--out-dir cannot
-  // produce a filename (e.g. --stdin without -r), bail out before we
-  // spend cycles on analysis.
-  let outputPath: string | null = null;
-  if (opts.outDir !== null) {
-    const derived = deriveOutputBasename({
-      roots: opts.roots,
-      descendants: opts.descendants,
-      ancestors: opts.ancestors,
-      context: opts.context,
-      // --stdin overrides any positional file for content, so it should
-      // override it for naming too: a stdin run has no usable filename.
-      inputPath: src.stdin ? null : src.path,
-    });
-    if (!derived.ok) {
-      throw new CliUsageError(derived.error, null);
-    }
-    const emitter = emitters.get(opts.format);
-    if (emitter === undefined) {
-      const available = emitters.list().join(", ");
-      throw new Error(
-        `Unknown emitter format: ${opts.format}. Available: ${available}`,
-      );
-    }
-    outputPath = join(opts.outDir, `${derived.basename}.${emitter.extension}`);
-  }
+  const outputPath = resolveOutputPath(src, opts, emitters);
 
   const text = src.stdin ? src.text : readSourceFile(src.path);
   const sourcePath = src.stdin ? `stdin.${src.lang}` : src.path;

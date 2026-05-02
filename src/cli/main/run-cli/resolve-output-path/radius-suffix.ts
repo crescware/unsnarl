@@ -1,8 +1,10 @@
-// Stable a-b-c ordering keeps the filename deterministic regardless of
-// CLI argument order. Flags the user did not type are omitted, so an
-// implicit -C 10 default produces no suffix. -C is shorthand for setting
-// both -A and -B; if both are typed explicitly, -C has no remaining
-// effect on the run, so we drop it from the filename too.
+/**
+ * Stable a-b-c ordering keeps the filename deterministic regardless of
+ * CLI argument order. Flags the user did not type are omitted, so an
+ * implicit -C 10 default produces no suffix. -C is shorthand for setting
+ * both -A and -B; if both are typed explicitly, -C has no remaining
+ * effect on the run, so we drop it from the filename too.
+ */
 export function radiusSuffix(inputs: {
   descendants: number | null;
   ancestors: number | null;

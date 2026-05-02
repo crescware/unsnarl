@@ -1,4 +1,4 @@
-import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
+import type { ParsedRootQuery } from "../../../root-query/parsed-root-query.js";
 
 export function rootQueryToken(q: ParsedRootQuery): string {
   switch (q.kind) {

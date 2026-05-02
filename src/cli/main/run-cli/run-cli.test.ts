@@ -265,7 +265,7 @@ describe("runCli (end-to-end)", () => {
   // non-default format. Demonstrates that args parsing -> name derivation
   // -> emitter extension lookup -> mkdir(recursive) -> writeFile is wired
   // end-to-end. Naming permutations (other -A/-B/-C combos, query forms)
-  // are pure string transforms and live in output-name.test.ts.
+  // are pure string transforms and live in resolve-output-path/derive-output-basename.test.ts.
   test("--out-dir writes a file under a not-yet-existing nested directory with the derived name", async () => {
     const inputPath = join(tmpDir, "smoke.ts");
     writeFileSync(inputPath, "const value = 1;\nconst other = value;\n");
