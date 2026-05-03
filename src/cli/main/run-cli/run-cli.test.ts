@@ -68,7 +68,12 @@ describe("runCli (integration)", () => {
       inputPath,
       "const used = 1;\nconst answer = used;\nconst ignored = 2;\n",
     );
-    const r = await captureRun([inputPath, "--no-pretty-json"]);
+    const r = await captureRun([
+      "--format",
+      "ir",
+      inputPath,
+      "--no-pretty-json",
+    ]);
     expect(r.exitCode).toBe(0);
     const ir = JSON.parse(r.stdout);
     expect(ir.version).toBe(SERIALIZED_IR_VERSION);
@@ -102,6 +107,14 @@ describe("runCli (integration)", () => {
     expect(r.exitCode).toBe(0);
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(r.stdout).toContain('"a<br/>');
+  });
+
+  test("default format is mermaid (no --format flag)", async () => {
+    const inputPath = join(tmpDir, "default-format.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const r = await captureRun([inputPath]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
   test("missing input returns exit 2 with usage", async () => {
@@ -188,7 +201,14 @@ describe("runCli (integration)", () => {
   test("ir format ignores --roots (no pruning, no warning)", async () => {
     const inputPath = join(tmpDir, "tiny2.ts");
     writeFileSync(inputPath, "const a = 1;\n");
-    const r = await captureRun(["-r", "999", inputPath, "--no-pretty-json"]);
+    const r = await captureRun([
+      "--format",
+      "ir",
+      "-r",
+      "999",
+      inputPath,
+      "--no-pretty-json",
+    ]);
     expect(r.exitCode).toBe(0);
     expect(r.stderr).toBe("");
     const ir = JSON.parse(r.stdout);

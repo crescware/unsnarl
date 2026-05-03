@@ -1,7 +1,7 @@
 # unsnarl
 
 A single-file ECMAScript / TypeScript scope and reference analyzer that
-emits a deterministic IR (JSON) and a Mermaid flowchart.
+emits a Mermaid flowchart and a deterministic IR (JSON).
 
 ```sh
 npm i -g unsnarl
@@ -24,8 +24,8 @@ member declarations are intentionally out of scope.
 ## CLI
 
 ```sh
-uns <file>                                              # JSON IR to stdout
-uns -f mermaid <file>                                   # Mermaid flowchart
+uns <file>                                              # Mermaid flowchart to stdout
+uns -f ir <file>                                        # JSON IR
 uns -f markdown -r value -A 1 -o ./out file.ts          # write to ./out/value-a1.md
 uns -f json --no-pretty-json <file>                     # compact JSON for piping
 cat foo.ts | uns --stdin --stdin-lang ts
@@ -37,7 +37,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 
 | Short | Long                     | Description                                                   |
 | ----- | ------------------------ | ------------------------------------------------------------- |
-| `-f`  | `--format <id>`          | Emitter: `ir` default, `json`, `mermaid`, `markdown`, `stats` |
+| `-f`  | `--format <id>`          | Emitter: `mermaid` default, `ir`, `json`, `markdown`, `stats` |
 |       | `--no-pretty-json`       | Disable pretty-printed JSON output                            |
 |       | `--mermaid-renderer <r>` | Mermaid layout engine: `elk` default, `dagre`                 |
 |       | `--stdin`                | Read source from stdin                                        |
