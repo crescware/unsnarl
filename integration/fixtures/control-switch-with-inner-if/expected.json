@@ -1,0 +1,273 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-switch-with-inner-if/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_classify_9",
+      "name": "classify",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_307",
+      "name": "result",
+      "line": 20,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 18,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_n_18",
+          "name": "n",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_big_29",
+          "name": "big",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_label_51",
+          "name": "label",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 3,
+          "endLine": 16,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 4,
+              "endLine": 10,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "cont_if_scope_3_91",
+                  "kind": "if-else-container",
+                  "line": 5,
+                  "endLine": 9,
+                  "direction": "RL",
+                  "hasElse": true,
+                  "elements": [
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_4",
+                      "line": 5,
+                      "endLine": 7,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "wr_ref_2",
+                          "kind": "WriteOp",
+                          "name": "label",
+                          "line": 6,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "declarationKind": "let"
+                        }
+                      ],
+                      "kind": "if"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_5",
+                      "line": 7,
+                      "endLine": 9,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "wr_ref_3",
+                          "kind": "WriteOp",
+                          "name": "label",
+                          "line": 8,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "declarationKind": "let"
+                        }
+                      ],
+                      "kind": "else"
+                    }
+                  ]
+                }
+              ],
+              "kind": "case",
+              "caseTest": "0"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_6",
+              "line": 11,
+              "endLine": 13,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_4",
+                  "kind": "WriteOp",
+                  "name": "label",
+                  "line": 12,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "case",
+              "caseTest": "1"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_7",
+              "line": 14,
+              "endLine": 15,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_5",
+                  "kind": "WriteOp",
+                  "name": "label",
+                  "line": 15,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "case",
+              "caseTest": null
+            }
+          ],
+          "kind": "switch"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_284_297",
+          "kind": "return",
+          "line": 17,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "label",
+              "line": 17,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_label_51",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_label_51",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_label_51",
+      "to": "wr_ref_4",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_label_51",
+      "to": "wr_ref_5",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_n_18",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_big_29",
+      "to": "cont_if_scope_3_91",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_classify_9",
+      "to": "n_scope_0_result_307",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

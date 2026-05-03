@@ -1,10 +1,10 @@
 import { branchContainerKey } from "./branch-container-key.js";
+import { branchMergedOrigins } from "./branch-merged-origins.js";
 import { branchScopeOf } from "./branch-scope-of.js";
 import type { BuilderContext } from "./context.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
 import { nodeId } from "./node-id.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
-import type { WriteOp } from "./write-op.js";
 
 export function readOrigins(
   varId: string,
@@ -59,17 +59,9 @@ export function readOrigins(
     if (isSwitch && branchScope !== undefined && branchScope.exitsFunction) {
       continue;
     }
-    let lastOp: WriteOp | null = null;
-    for (const op of prev) {
-      if (
-        op.scopeId === branchId ||
-        isAncestorScope(branchId, op.scopeId, ctx.scopeMap)
-      ) {
-        lastOp = op;
-      }
-    }
-    if (lastOp) {
-      origins.push(writeOpNodeId(lastOp.refId));
+    const sub = branchMergedOrigins(branchId, prev, ctx);
+    for (const id of sub) {
+      origins.push(id);
     }
   }
 
