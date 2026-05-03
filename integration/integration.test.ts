@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
-import { createDefaultPipeline } from "../src/index.js";
+import { createDefaultPipeline } from "../src/pipeline/default.js";
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 
@@ -58,7 +58,7 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "ir",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -71,7 +71,7 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "json",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -84,7 +84,7 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "mermaid",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -97,7 +97,7 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "markdown",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -110,7 +110,7 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "stats",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(

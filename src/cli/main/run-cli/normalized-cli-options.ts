@@ -6,7 +6,7 @@ import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 export type NormalizedCliOptions = Readonly<{
   format: string;
   stdin: boolean;
-  lang: CliLanguage;
+  stdinLang: CliLanguage;
   prettyJson: boolean;
   mermaidRenderer: CliMermaidRenderer | null;
   roots: readonly ParsedRootQuery[];
@@ -22,7 +22,7 @@ export function normalizeCliOptions(
   return {
     format: opts.format,
     stdin: opts.stdin,
-    lang: opts.lang,
+    stdinLang: opts.stdinLang,
     prettyJson: opts.prettyJson,
     mermaidRenderer: opts.mermaidRenderer,
     roots: opts.roots,

@@ -21,4 +21,10 @@ export type ParsedRootQuery =
       name: string;
       raw: string;
     }>
-  | Readonly<{ kind: typeof ROOT_QUERY_KIND.Name; name: string; raw: string }>;
+  | Readonly<{ kind: typeof ROOT_QUERY_KIND.Name; name: string; raw: string }>
+  | Readonly<{
+      kind: typeof ROOT_QUERY_KIND.LineOrName;
+      line: number;
+      name: string;
+      raw: string;
+    }>;

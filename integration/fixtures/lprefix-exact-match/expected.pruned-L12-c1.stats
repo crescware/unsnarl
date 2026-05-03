@@ -1,0 +1,3 @@
+1	0	integration/fixtures/lprefix-exact-match/input.ts:1 L12
+?	1	integration/fixtures/lprefix-exact-match/input.ts:2 beta
+?	1	2 total

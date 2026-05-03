@@ -1,0 +1,4 @@
+1	0	integration/fixtures/lprefix-no-collision/input.ts:1 alpha
+1	1	integration/fixtures/lprefix-no-collision/input.ts:2 beta
+0	1	integration/fixtures/lprefix-no-collision/input.ts:3 unused gamma
+2	2	3 total

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/lprefix-no-collision/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_alpha_6",
+      "name": "alpha",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_beta_23",
+      "name": "beta",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_gamma_47",
+      "name": "gamma",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_alpha_6",
+      "to": "n_scope_0_beta_23",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_beta_23",
+      "to": "n_scope_0_gamma_47",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

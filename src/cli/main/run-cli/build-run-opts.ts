@@ -18,8 +18,8 @@ export function buildRunOpts(
   opts: NormalizedCliOptions,
 ): Return {
   const text = src.stdin ? src.text : readSourceFile(src.path);
-  const sourcePath = src.stdin ? `stdin.${src.lang}` : src.path;
-  const language = src.stdin ? src.lang : detectLanguage(src.path);
+  const sourcePath = src.stdin ? `stdin.${src.stdinLang}` : src.path;
+  const language = src.stdin ? src.stdinLang : detectLanguage(src.path);
 
   const pruning =
     0 < opts.roots.length
@@ -37,7 +37,7 @@ export function buildRunOpts(
     format: opts.format,
     language,
     sourcePath,
-    emit: { prettyJson: opts.prettyJson, prunedGraph: null },
+    emit: { prettyJson: opts.prettyJson, prunedGraph: null, resolutions: null },
     pruning,
   } satisfies PipelineRunOptions;
 

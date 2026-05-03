@@ -14,7 +14,7 @@ vi.mock("../../io.js", () => ({
 const baseOpts = {
   format: "json",
   stdin: false,
-  lang: "ts",
+  stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
   roots: [],
@@ -33,19 +33,19 @@ describe("calcSource", () => {
     vi.mocked(readStdin).mockReset();
   });
 
-  test("stdin: true → reads stdin and returns { stdin: true, text, lang }", async () => {
+  test("stdin: true → reads stdin and returns { stdin: true, text, stdinLang }", async () => {
     vi.mocked(readStdin).mockResolvedValueOnce("piped contents");
 
     const result = await calcSource(fakeCommand, undefined, {
       ...baseOpts,
       stdin: true,
-      lang: "tsx",
+      stdinLang: "tsx",
     });
 
     expect(result).toEqual({
       stdin: true,
       text: "piped contents",
-      lang: "tsx",
+      stdinLang: "tsx",
     });
 
     expect(vi.mocked(readStdin)).toHaveBeenCalledTimes(1);
@@ -57,10 +57,10 @@ describe("calcSource", () => {
     const result = await calcSource(fakeCommand, "ignored.ts", {
       ...baseOpts,
       stdin: true,
-      lang: "ts",
+      stdinLang: "ts",
     });
 
-    expect(result).toEqual({ stdin: true, text: "", lang: "ts" });
+    expect(result).toEqual({ stdin: true, text: "", stdinLang: "ts" });
   });
 
   test("stdin: false with file → returns { stdin: false, path: file }", async () => {

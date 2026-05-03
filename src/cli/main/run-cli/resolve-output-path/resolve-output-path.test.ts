@@ -9,10 +9,10 @@ import type { ExecuteSource } from "../execute-source.js";
 import type { NormalizedCliOptions } from "../normalized-cli-options.js";
 import { resolveOutputPath } from "./resolve-output-path.js";
 
-const baseOpts: NormalizedCliOptions = {
+const baseOpts = {
   format: "json",
   stdin: false,
-  lang: "ts",
+  stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
   roots: [],
@@ -20,7 +20,7 @@ const baseOpts: NormalizedCliOptions = {
   ancestors: null,
   context: null,
   outDir: null,
-};
+} as const satisfies NormalizedCliOptions;
 
 function makeEmitter(format: string, extension: string): Emitter {
   return {
@@ -48,34 +48,40 @@ const nameRoot = (n: string): ParsedRootQuery => ({
   raw: n,
 });
 
-const fileSrc: ExecuteSource = { stdin: false, path: "src/deep/foo.ts" };
-const stdinSrc: ExecuteSource = {
+const stdinSrc = {
   stdin: true,
   text: "",
-  lang: "ts",
-};
+  stdinLang: "ts",
+} as const satisfies ExecuteSource;
+
+const fileSrc = {
+  stdin: false,
+  path: "src/deep/foo.ts",
+} as const satisfies ExecuteSource;
 
 describe("resolveOutputPath", () => {
   test("returns null when outDir is null", () => {
-    const result = resolveOutputPath(
+    const actual = resolveOutputPath(
       fileSrc,
       baseOpts,
       makeEmitters([makeEmitter("json", "json")]),
     );
-    expect(result).toBeNull();
+
+    expect(actual).toBeNull();
   });
 
   test("file input + outDir → joins outDir/<basename>.<ext>", () => {
-    const result = resolveOutputPath(
+    const actual = resolveOutputPath(
       fileSrc,
       { ...baseOpts, outDir: "out" },
       makeEmitters([makeEmitter("json", "json")]),
     );
-    expect(result).toBe("out/foo.json");
+
+    expect(actual).toBe("out/foo.json");
   });
 
   test("roots take precedence over input filename", () => {
-    const result = resolveOutputPath(
+    const actual = resolveOutputPath(
       fileSrc,
       {
         ...baseOpts,
@@ -84,7 +90,8 @@ describe("resolveOutputPath", () => {
       },
       makeEmitters([makeEmitter("json", "json")]),
     );
-    expect(result).toBe("out/render.json");
+
+    expect(actual).toBe("out/render.json");
   });
 
   test("stdin without roots throws CliUsageError (no usable filename)", () => {
@@ -98,7 +105,7 @@ describe("resolveOutputPath", () => {
   });
 
   test("stdin with roots succeeds (positional path is irrelevant)", () => {
-    const result = resolveOutputPath(
+    const actual = resolveOutputPath(
       stdinSrc,
       {
         ...baseOpts,
@@ -107,16 +114,18 @@ describe("resolveOutputPath", () => {
       },
       makeEmitters([makeEmitter("json", "json")]),
     );
-    expect(result).toBe("out/render.json");
+
+    expect(actual).toBe("out/render.json");
   });
 
   test("uses the emitter's extension, not the format name", () => {
-    const result = resolveOutputPath(
+    const actual = resolveOutputPath(
       fileSrc,
       { ...baseOpts, outDir: "out", format: "mermaid" },
       makeEmitters([makeEmitter("mermaid", "mmd")]),
     );
-    expect(result).toBe("out/foo.mmd");
+
+    expect(actual).toBe("out/foo.mmd");
   });
 
   test("unknown format throws Error listing available formats", () => {

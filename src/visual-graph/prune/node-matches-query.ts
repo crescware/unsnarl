@@ -19,5 +19,10 @@ export function nodeMatchesQuery(
       return startLine <= q.end && endLine >= q.start && node.name === q.name;
     case "name":
       return !NAME_QUERY_EXCLUDED.has(node.kind) && node.name === q.name;
+    case "line-or-name":
+      // resolveAmbiguousQueries rewrites every line-or-name into Line or
+      // Name before pruning runs, so this branch is unreachable. The arm
+      // exists to keep the switch exhaustive.
+      return false;
   }
 }

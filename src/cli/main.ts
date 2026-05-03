@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { runCli } from "./main/run-cli/run-cli.js";
 
 export async function main(argv: readonly string[]): Promise<number> {
@@ -11,7 +10,3 @@ export async function main(argv: readonly string[]): Promise<number> {
     return 1;
   }
 }
-
-main(process.argv.slice(2)).then((code) => {
-  process.exit(code);
-});

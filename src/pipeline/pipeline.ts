@@ -1,5 +1,6 @@
 import { buildVisualGraph } from "../visual-graph/builder.js";
 import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
+import { resolveAmbiguousQueries } from "../visual-graph/prune/resolve-ambiguous-queries.js";
 import type {
   EmitOptions,
   Pipeline,
@@ -34,19 +35,29 @@ export function createPipeline(config: PipelineConfig): Pipeline {
 
     let emitOpts: EmitOptions = opts.emit;
     let perQuery: PipelineRunDetails["pruning"] = null;
+    let resolutions: PipelineRunDetails["resolutions"] = null;
 
     if (opts.pruning !== null && emitter.format !== "ir") {
       const built = buildVisualGraph(ir);
-      const pr = pruneVisualGraph(built, opts.pruning);
-      emitOpts = { ...opts.emit, prunedGraph: pr.graph };
+      const resolution = resolveAmbiguousQueries(built, opts.pruning.roots);
+      const pr = pruneVisualGraph(built, {
+        ...opts.pruning,
+        roots: resolution.resolved,
+      });
+      emitOpts = {
+        ...opts.emit,
+        prunedGraph: pr.graph,
+        resolutions: resolution.resolutions,
+      };
       perQuery = pr.perQuery.map(({ query, matched }) => ({
         query: query.raw,
         matched,
       }));
+      resolutions = resolution.resolutions;
     }
 
     const text = emitter.emit(ir, emitOpts);
-    return { text, pruning: perQuery };
+    return { text, pruning: perQuery, resolutions };
   }
 
   return { runDetailed };

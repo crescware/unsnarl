@@ -47,9 +47,7 @@ describe("emitPruningWarnings", () => {
     ] as const satisfies PipelineRunDetails["pruning"];
 
     emitPruningWarnings(pruning);
-    expect(written).toEqual([
-      "unsnarl: warning: query 'render' matched 0 roots\n",
-    ]);
+    expect(written).toEqual(["uns: warning: query 'render' matched 0 roots\n"]);
   });
 
   test("writes one warning line per zero-match entry, skipping the matched ones", () => {
@@ -61,8 +59,8 @@ describe("emitPruningWarnings", () => {
 
     emitPruningWarnings(pruning);
     expect(written).toEqual([
-      "unsnarl: warning: query 'render' matched 0 roots\n",
-      "unsnarl: warning: query 'boot' matched 0 roots\n",
+      "uns: warning: query 'render' matched 0 roots\n",
+      "uns: warning: query 'boot' matched 0 roots\n",
     ]);
   });
 });

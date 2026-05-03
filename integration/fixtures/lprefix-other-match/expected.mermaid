@@ -1,0 +1,8 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_l5_6["l5<br/>L1"]
+  n_scope_0_l99_20["l99<br/>L2"]
+  n_scope_0_sum_40["unused sum<br/>L3"]
+  n_scope_0_l5_6 -->|read| n_scope_0_l99_20
+  n_scope_0_l5_6 -->|read| n_scope_0_sum_40
+  n_scope_0_l99_20 -->|read| n_scope_0_sum_40

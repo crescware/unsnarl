@@ -13,7 +13,7 @@ vi.mock("../../io.js", () => ({
 const baseOpts = {
   format: "json",
   stdin: false,
-  lang: "ts",
+  stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
   roots: [],
@@ -26,7 +26,7 @@ const baseOpts = {
 const stdinSrc = {
   stdin: true,
   text: "const piped = 1;",
-  lang: "tsx",
+  stdinLang: "tsx",
 } as const satisfies ExecuteSource;
 
 const fileSrc = {
@@ -53,7 +53,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -74,7 +74,7 @@ describe("buildRunOpts", () => {
           format: "mermaid",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: false, prunedGraph: null },
+          emit: { prettyJson: false, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -95,7 +95,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -116,7 +116,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
-            emit: { prettyJson: true, prunedGraph: null },
+            emit: { prettyJson: true, prunedGraph: null, resolutions: null },
             pruning: {
               roots,
               descendants: 2,
@@ -143,7 +143,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
-            emit: { prettyJson: true, prunedGraph: null },
+            emit: { prettyJson: true, prunedGraph: null, resolutions: null },
             pruning: {
               roots,
               descendants: DEFAULT_GENERATIONS,
@@ -162,17 +162,17 @@ describe("buildRunOpts", () => {
     const opts = {
       ...baseOpts,
       stdin: true,
-      lang: "tsx",
+      stdinLang: "tsx",
     } as const satisfies Parameters<typeof buildRunOpts>[1];
 
-    test("returns runOpts with text/lang from src and sourcePath set to stdin.<lang>", () => {
+    test("returns runOpts with text/stdinLang from src and sourcePath set to stdin.<stdinLang>", () => {
       const expected = {
         text: "const piped = 1;",
         runOpts: {
           format: "json",
           language: "tsx",
           sourcePath: "stdin.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
