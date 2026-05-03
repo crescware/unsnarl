@@ -39,11 +39,31 @@ describe("isBranchScope", () => {
       expected: true,
     },
     {
-      name: "try block scope -> false (try is control, not branch)",
+      name: "try block scope -> true (try and catch are sibling branches)",
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
         key: "block",
+        parentSpanOffset: 0,
+      },
+      expected: true,
+    },
+    {
+      name: "try handler scope -> true (try and catch are sibling branches)",
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "handler",
+        parentSpanOffset: 0,
+      },
+      expected: true,
+    },
+    {
+      name: "try finalizer scope -> false (finally is post-merge, not branch)",
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "finalizer",
         parentSpanOffset: 0,
       },
       expected: false,

@@ -27,6 +27,7 @@ import { previousFallthroughCase } from "./builder/previous-fallthrough-case.js"
 import { pushEdge } from "./builder/push-edge.js";
 import { readOrigins } from "./builder/read-origins.js";
 import { sanitize } from "./builder/sanitize.js";
+import { setPredecessorOf } from "./builder/set-predecessor-of.js";
 import { stateRefId } from "./builder/state-ref-id.js";
 import { writeOpNodeId } from "./builder/write-op-node-id.js";
 import type { WriteOp } from "./builder/write-op.js";
@@ -280,6 +281,29 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
             writeOpsByVariable,
           );
           pushEdge(state, fromId, edgeLabelOfRef(r), targetId);
+        }
+      }
+      if (r.flags.read) {
+        const op = writeOpByRef.get(r.id);
+        if (op) {
+          const wrTargetId = writeOpNodeId(r.id);
+          const setPredId = setPredecessorOf(
+            op,
+            writeOpsByVariable.get(r.resolved) ?? [],
+            scopeMap,
+          );
+          const fromIds = readOrigins(
+            r.resolved,
+            r.identifier.span.offset,
+            r.from,
+            ctx,
+          );
+          for (const fromId of fromIds) {
+            if (fromId === setPredId || fromId === wrTargetId) {
+              continue;
+            }
+            pushEdge(state, fromId, "read", wrTargetId);
+          }
         }
       }
       continue;

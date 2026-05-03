@@ -1,0 +1,70 @@
+# integration/fixtures/control-if-else-chain/input.ts
+
+## Input
+
+```ts
+function classify(n: number) {
+  let label;
+  if (n > 0) {
+    label = "positive";
+  } else if (n < 0) {
+    label = "negative";
+  } else {
+    label = "zero";
+  }
+  return label;
+}
+
+const result = classify(-1);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_result_189["unused result<br/>L13"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_classify_9["classify()<br/>L1"]
+    subgraph s_scope_1["classify()<br/>L1-11"]
+      direction RL
+      n_scope_1_n_18["n<br/>L1"]
+      n_scope_1_label_37["let label<br/>L2"]
+      subgraph cont_if_scope_1_46["if-else L3-9"]
+        direction RL
+        subgraph s_scope_2["if L3-5"]
+          direction RL
+          wr_ref_1(["let label<br/>L4"])
+        end
+        subgraph s_scope_3["if L5-7"]
+          direction RL
+          wr_ref_3(["let label<br/>L6"])
+        end
+        subgraph s_scope_4["else L7-9"]
+          direction RL
+          wr_ref_4(["let label<br/>L8"])
+        end
+      end
+      subgraph s_return_scope_0_classify_9_implicit["return L1"]
+        direction RL
+        ret_use_ref_2["n<br/>L5"]
+      end
+      subgraph s_return_scope_0_classify_9_166_179["return L10"]
+        direction RL
+        ret_use_ref_5["label<br/>L10"]
+      end
+    end
+  end
+  n_scope_1_label_37 -->|set| wr_ref_1
+  n_scope_1_label_37 -->|set| wr_ref_3
+  n_scope_1_label_37 -->|set| wr_ref_4
+  n_scope_1_n_18 -->|read| cont_if_scope_1_46
+  n_scope_1_n_18 -->|read| ret_use_ref_2
+  wr_ref_1 -->|read| ret_use_ref_5
+  wr_ref_3 -->|read| ret_use_ref_5
+  wr_ref_4 -->|read| ret_use_ref_5
+  n_scope_0_classify_9 -->|read,call| n_scope_0_result_189
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;
+```

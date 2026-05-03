@@ -42,21 +42,21 @@ export function handleEnter(
       if (parent && key === "body" && skipBlockScope(parent.type)) {
         return;
       }
-      enterBlock(node, parent, key, manager, raw, diagnostics);
+      enterBlock(node, parent, key, path, manager, raw, diagnostics);
       return;
     case AST_TYPE.ForStatement:
     case AST_TYPE.ForOfStatement:
     case AST_TYPE.ForInStatement:
-      enterFor(node, parent, key, manager, raw, diagnostics);
+      enterFor(node, parent, key, path, manager, raw, diagnostics);
       return;
     case AST_TYPE.SwitchStatement:
-      enterSwitch(node, parent, key, manager);
+      enterSwitch(node, parent, key, path, manager);
       return;
     case AST_TYPE.SwitchCase:
       enterSwitchCase(node, parent, key, manager, raw, diagnostics);
       return;
     case AST_TYPE.CatchClause:
-      enterCatch(node, parent, key, manager, raw, diagnostics);
+      enterCatch(node, parent, key, path, manager, raw, diagnostics);
       return;
     default:
       return;

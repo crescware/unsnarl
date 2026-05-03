@@ -52,6 +52,9 @@ flowchart RL
   n_scope_0_attempts_19 -->|set| wr_ref_6
   n_scope_0_Number_84 -->|read,call| wr_ref_1
   n_scope_0_raw_39 -->|read| wr_ref_1
+  wr_ref_0 -->|read| wr_ref_6
+  wr_ref_4 -->|read| wr_ref_6
+  wr_ref_1 -->|read| n_scope_0_result_182
   wr_ref_5 -->|read| n_scope_0_result_182
   wr_ref_6 -->|read| n_scope_0_result_182
 ```

@@ -18,7 +18,7 @@ describe("enterSwitch", () => {
     } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
 
-    enterSwitch(switchNode, parent, "body", manager);
+    enterSwitch(switchNode, parent, "body", [], manager);
 
     const scope = manager.current();
     expect(scope.type).toBe("switch");
@@ -36,7 +36,7 @@ describe("enterSwitch", () => {
     const switchNode = findFirst(program, AST_TYPE.SwitchStatement);
     const manager = new ScopeManager("module", program as unknown as AstNode);
 
-    enterSwitch(switchNode, null, null, manager);
+    enterSwitch(switchNode, null, null, [], manager);
 
     expect(manager.current().unsnarlBlockContext).toBeNull();
   });

@@ -20,7 +20,7 @@ describe("enterFor", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFor(forNode, parent, "body", manager, code, diagnostics);
+    enterFor(forNode, parent, "body", [], manager, code, diagnostics);
 
     const scope = manager.current();
     expect(scope.type).toBe("for");
@@ -40,7 +40,7 @@ describe("enterFor", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFor(forNode, null, null, manager, code, diagnostics);
+    enterFor(forNode, null, null, [], manager, code, diagnostics);
 
     expect(manager.current().variables.map((v) => v.name)).toEqual(["x"]);
   });
