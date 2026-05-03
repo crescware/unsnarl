@@ -19,7 +19,7 @@ import type { MermaidStrategy } from "./strategy/strategy.js";
 
 export type { CliMermaidRenderer as MermaidRenderer } from "../../cli/cli-mermaid-renderer.js";
 
-export type MermaidEmitterOptions = Readonly<{
+type MermaidEmitterOptions = Readonly<{
   /**
    * Renderer-specific strategy. The strategy carries the preamble (e.g. the
    * `%%{init: ...}%%` directive that elk needs), the empty-subgraph patch

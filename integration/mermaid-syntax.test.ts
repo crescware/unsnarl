@@ -6,7 +6,7 @@ import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, test } from "vitest";
 
-import { createDefaultPipeline } from "../src/index.js";
+import { createDefaultPipeline } from "../src/pipeline/default.js";
 
 const FIXTURE_DIR = join(process.cwd(), "integration", "fixtures");
 

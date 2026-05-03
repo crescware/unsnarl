@@ -17,7 +17,7 @@ import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { createPipeline } from "./pipeline.js";
 import type { EmitterRegistry, Pipeline } from "./types.js";
 
-export type DefaultRegistryOptions = Readonly<{
+type DefaultRegistryOptions = Readonly<{
   mermaidRenderer: MermaidRenderer;
 }>;
 

@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "bin": {
-    "unsnarl": "./dist/cli/main.js"
+    "unsnarl": "./dist/index.js"
   },
   "files": [
     "dist"
@@ -17,7 +17,7 @@
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
     "check:types": "tsgo -p tsconfig.json --noEmit",
-    "exec": "node dist/cli/main.js",
+    "exec": "node dist/index.js",
     "format": "oxlint --fix && oxfmt",
     "test": "vitest"
   },

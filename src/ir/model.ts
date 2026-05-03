@@ -7,16 +7,14 @@ import type { PredicateContainerType } from "../analyzer/predicate-container-typ
 import type { ScopeType } from "../analyzer/scope-type.js";
 import type { Language } from "../cli/language.js";
 import type { AST_TYPE } from "../parser/ast-type.js";
-import type { IMPORT_KIND, ImportKind } from "../serializer/import-kind.js";
+import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { SerializedIRVersion } from "../serializer/serialized-ir-version.js";
 import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 
 export type {
   DefinitionType,
   DiagnosticKind,
-  ImportKind,
   Language,
-  PredicateContainerType,
   ScopeType,
   VariableDeclarationKind,
 };

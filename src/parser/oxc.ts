@@ -2,7 +2,7 @@ import { parseSync } from "oxc-parser";
 
 import type { ParseOptions, ParsedSource, Parser } from "../pipeline/types.js";
 
-export type ParseErrorDetail = Readonly<{
+type ParseErrorDetail = Readonly<{
   message: string;
   start: number;
   end: number;

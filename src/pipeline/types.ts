@@ -30,7 +30,7 @@ export type ScopeAnalyzer = Readonly<{
   analyze(parsed: ParsedSource): AnalyzedSource;
 }>;
 
-export type SourceMeta = Readonly<{
+type SourceMeta = Readonly<{
   path: string;
   language: Language;
 }>;
