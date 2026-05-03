@@ -21,6 +21,7 @@ describe("IrEmitter", () => {
     const out = new IrEmitter().emit(ir, {
       prettyJson: true,
       prunedGraph: null,
+      resolutions: null,
     });
     expect(out.endsWith("\n")).toBe(true);
     expect(out).toContain('"version": 1');
@@ -31,6 +32,7 @@ describe("IrEmitter", () => {
     const out = new IrEmitter().emit(ir, {
       prettyJson: false,
       prunedGraph: null,
+      resolutions: null,
     });
     expect(out).not.toContain("\n  ");
     expect(JSON.parse(out)).toEqual(ir);

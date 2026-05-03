@@ -37,7 +37,7 @@ export function buildRunOpts(
     format: opts.format,
     language,
     sourcePath,
-    emit: { prettyJson: opts.prettyJson, prunedGraph: null },
+    emit: { prettyJson: opts.prettyJson, prunedGraph: null, resolutions: null },
     pruning,
   } satisfies PipelineRunOptions;
 

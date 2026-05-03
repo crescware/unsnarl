@@ -1,5 +1,13 @@
 # integration/fixtures/lprefix-exact-match/input.ts
 
+## Notice
+
+```
+uns: 'L12' is ambiguous.
+  An exact identifier match was found; interpreting as identifier.
+  To disambiguate, use '-r 12'.
+```
+
 ## Input
 
 ```ts

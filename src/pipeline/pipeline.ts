@@ -44,7 +44,11 @@ export function createPipeline(config: PipelineConfig): Pipeline {
         ...opts.pruning,
         roots: resolution.resolved,
       });
-      emitOpts = { ...opts.emit, prunedGraph: pr.graph };
+      emitOpts = {
+        ...opts.emit,
+        prunedGraph: pr.graph,
+        resolutions: resolution.resolutions,
+      };
       perQuery = pr.perQuery.map(({ query, matched }) => ({
         query: query.raw,
         matched,

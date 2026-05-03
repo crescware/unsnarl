@@ -1,4 +1,5 @@
 import type { PipelineRunDetails } from "../../../pipeline/types.js";
+import { formatResolutionNotice } from "../../../visual-graph/prune/format-resolution-notice.js";
 
 export function emitResolutionNotices(
   resolutions: PipelineRunDetails["resolutions"],
@@ -7,12 +8,6 @@ export function emitResolutionNotices(
     return;
   }
   for (const r of resolutions) {
-    const second =
-      r.resolvedAs === "name"
-        ? "An exact identifier match was found; interpreting as identifier."
-        : "No exact identifier match was found; interpreting as line number.";
-    process.stderr.write(
-      `uns: '${r.raw}' is ambiguous.\n  ${second}\n  To disambiguate, use '-r ${String(r.line)}'.\n`,
-    );
+    process.stderr.write(`${formatResolutionNotice(r).join("\n")}\n`);
   }
 }

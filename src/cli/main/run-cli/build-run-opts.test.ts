@@ -53,7 +53,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -74,7 +74,7 @@ describe("buildRunOpts", () => {
           format: "mermaid",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: false, prunedGraph: null },
+          emit: { prettyJson: false, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -95,7 +95,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
@@ -116,7 +116,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
-            emit: { prettyJson: true, prunedGraph: null },
+            emit: { prettyJson: true, prunedGraph: null, resolutions: null },
             pruning: {
               roots,
               descendants: 2,
@@ -143,7 +143,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
-            emit: { prettyJson: true, prunedGraph: null },
+            emit: { prettyJson: true, prunedGraph: null, resolutions: null },
             pruning: {
               roots,
               descendants: DEFAULT_GENERATIONS,
@@ -172,7 +172,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "stdin.tsx",
-          emit: { prettyJson: true, prunedGraph: null },
+          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
           pruning: null,
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;

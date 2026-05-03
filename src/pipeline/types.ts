@@ -51,6 +51,7 @@ export type IRSerializer = Readonly<{
 export type EmitOptions = Readonly<{
   prettyJson: boolean;
   prunedGraph: VisualGraph | null;
+  resolutions: readonly RootQueryResolution[] | null;
 }>;
 
 export type Emitter = Readonly<{

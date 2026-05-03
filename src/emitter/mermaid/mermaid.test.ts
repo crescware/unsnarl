@@ -25,7 +25,11 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },
   });
-  return emitter.emit(ir, { prettyJson: true, prunedGraph: null });
+  return emitter.emit(ir, {
+    prettyJson: true,
+    prunedGraph: null,
+    resolutions: null,
+  });
 }
 
 describe("MermaidEmitter", () => {
@@ -54,7 +58,11 @@ describe("MermaidEmitter", () => {
       raw: analyzed.raw,
       source: { path: "input.ts", language: LANGUAGE.Ts },
     });
-    const out = dagre.emit(ir, { prettyJson: true, prunedGraph: null });
+    const out = dagre.emit(ir, {
+      prettyJson: true,
+      prunedGraph: null,
+      resolutions: null,
+    });
     expect(out).not.toContain("%%{init");
     expect(out).toMatch(/^flowchart RL\n/);
   });
