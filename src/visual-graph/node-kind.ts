@@ -8,6 +8,7 @@ export const NODE_KIND = {
   ImplicitGlobalVariable: "ImplicitGlobalVariable",
   WriteOp: "WriteOp",
   ReturnUse: "ReturnUse",
+  IfTest: "IfTest",
   ModuleSink: "ModuleSink",
   ModuleSource: "ModuleSource",
   ImportIntermediate: "ImportIntermediate",

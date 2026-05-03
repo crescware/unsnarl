@@ -283,7 +283,7 @@ describe("buildVisualGraph: control subgraphs", () => {
     );
   });
 
-  test("an if without else has no if-else container and the predicate flows to the bare if", () => {
+  test("an if without else has no if-else container and the predicate flows to the if-test anchor", () => {
     const g = build(
       [
         "let counter = 0;",
@@ -296,11 +296,13 @@ describe("buildVisualGraph: control subgraphs", () => {
     expect(findSubgraphs(g, "if-else-container")).toHaveLength(0);
     const ifS = findSubgraphs(g, "if")[0];
     expect(ifS?.line).toBe(3);
+    const anchor = findNodes(g, NODE_KIND.IfTest)[0];
+    expect(anchor?.line).toBe(3);
     const flag = nodeByName(g, "flag");
     expect(flag).toBeDefined();
     expect(
       g.edges.some(
-        (e) => e.from === flag?.id && e.to === ifS?.id && e.label === "read",
+        (e) => e.from === flag?.id && e.to === anchor?.id && e.label === "read",
       ),
     ).toBe(true);
   });
@@ -737,7 +739,7 @@ describe("buildVisualGraph: predicate references", () => {
     ).toBe(true);
   });
 
-  test("an if/else predicate identifier feeds the if-else container subgraph", () => {
+  test("an if/else predicate identifier feeds the if-test anchor inside the container", () => {
     const g = build(
       [
         "let v = 0;",
@@ -747,25 +749,64 @@ describe("buildVisualGraph: predicate references", () => {
     );
     const flag = nodeByName(g, "flag");
     const container = findSubgraphs(g, "if-else-container")[0];
+    const anchor = findNodes(g, NODE_KIND.IfTest)[0];
+    expect(anchor).toBeDefined();
+    expect(container?.elements).toContainEqual(
+      expect.objectContaining({ id: anchor?.id }),
+    );
     expect(
       g.edges.some(
-        (e) =>
-          e.from === flag?.id && e.to === container?.id && e.label === "read",
+        (e) => e.from === flag?.id && e.to === anchor?.id && e.label === "read",
       ),
     ).toBe(true);
   });
 
-  test("a bare if predicate identifier feeds the bare if subgraph (no container)", () => {
+  test("a bare if predicate identifier feeds the if-test anchor (no container)", () => {
     const g = build(
       ["let v = 0;", "const flag = true;", "if (flag) { v = 1; }"].join("\n"),
     );
     const flag = nodeByName(g, "flag");
-    const ifS = findSubgraphs(g, "if")[0];
+    const anchor = findNodes(g, NODE_KIND.IfTest)[0];
+    expect(anchor).toBeDefined();
     expect(
       g.edges.some(
-        (e) => e.from === flag?.id && e.to === ifS?.id && e.label === "read",
+        (e) => e.from === flag?.id && e.to === anchor?.id && e.label === "read",
       ),
     ).toBe(true);
+  });
+
+  test("an else-if chain has one if-test anchor per IfStatement, all inside the merge container", () => {
+    const g = build(
+      [
+        "function classify(n) {",
+        "  let label;",
+        "  if (n > 0) {",
+        "    label = 'positive';",
+        "  } else if (n < 0) {",
+        "    label = 'negative';",
+        "  } else {",
+        "    label = 'zero';",
+        "  }",
+        "  return label;",
+        "}",
+      ].join("\n"),
+    );
+    const container = findSubgraphs(g, "if-else-container")[0];
+    expect(container).toBeDefined();
+    const anchors = findNodes(g, NODE_KIND.IfTest);
+    expect(anchors).toHaveLength(2);
+    const lines = anchors.map((a) => a.line).sort((a, b) => a - b);
+    expect(lines).toEqual([3, 5]);
+    for (const anchor of anchors) {
+      expect(container?.elements).toContainEqual(
+        expect.objectContaining({ id: anchor.id }),
+      );
+    }
+    const n = nodeByName(g, "n");
+    const targets = g.edges
+      .filter((e) => e.from === n?.id && e.label === "read")
+      .map((e) => e.to);
+    expect(new Set(targets)).toEqual(new Set(anchors.map((a) => a.id)));
   });
 });
 

@@ -23,6 +23,7 @@ function emptyState(): BuildState {
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    ifTestAnchorByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -71,7 +72,7 @@ describe("buildChildren", () => {
     expect((container.elements[0] as VisualSubgraph).kind).toBe("for");
   });
 
-  test("a single if branch is not wrapped in an if-else-container", () => {
+  test("a single if branch is not wrapped in an if-else-container; the if-test anchor sits at the parent-scope level alongside it", () => {
     const cons = {
       ...baseScope(),
       id: "c",
@@ -89,8 +90,19 @@ describe("buildChildren", () => {
 
     buildChildren(outer, container, ctx, emptyState());
 
-    expect(container.elements).toHaveLength(1);
-    expect((container.elements[0] as VisualSubgraph).kind).toBe("if");
+    expect(container.elements).toHaveLength(2);
+    const anchor = container.elements[0];
+    expect(anchor?.type).toBe("node");
+    if (anchor?.type === "node") {
+      expect(anchor.kind).toBe("IfTest");
+    }
+    const ifSg = container.elements[1];
+    expect((ifSg as VisualSubgraph).kind).toBe("if");
+    expect(
+      container.elements.some(
+        (e) => e.type === "subgraph" && e.kind === "if-else-container",
+      ),
+    ).toBe(false);
   });
 
   test("consecutive if siblings (consequent + alternate) wrap in an if-else-container with hasElse=true", () => {
@@ -131,10 +143,13 @@ describe("buildChildren", () => {
       throw new Error("expected if-else-container");
     }
     expect(sg.hasElse).toBe(true);
-    expect(sg.elements.map((e) => (e as VisualSubgraph).kind)).toEqual([
-      "if",
-      "else",
+    // Anchor (a node) precedes the branch subgraphs.
+    expect(sg.elements.map((e) => e.type)).toEqual([
+      "node",
+      "subgraph",
+      "subgraph",
     ]);
+    expect(sg.elements.map((e) => e.kind)).toEqual(["IfTest", "if", "else"]);
   });
 
   test("if-else-container endLine is the maximum endLine among grouped branches", () => {
@@ -173,7 +188,7 @@ describe("buildChildren", () => {
     expect(sg.endLine).toBe(7);
   });
 
-  test("two adjacent if-statements with different parentSpanOffsets are not merged", () => {
+  test("two adjacent if-statements with different parentSpanOffsets are not merged; each gets its own anchor", () => {
     const ifA = {
       ...baseScope(),
       id: "ifA",
@@ -202,10 +217,21 @@ describe("buildChildren", () => {
 
     buildChildren(outer, container, ctx, emptyState());
 
-    expect(container.elements).toHaveLength(2);
-    for (const e of container.elements) {
-      expect((e as VisualSubgraph).kind).toBe("if");
-    }
+    // Two lone-ifs at the parent-scope level: each contributes one
+    // anchor + one if subgraph. No merge container in between.
+    expect(container.elements).toHaveLength(4);
+    expect(container.elements.map((e) => e.type)).toEqual([
+      "node",
+      "subgraph",
+      "node",
+      "subgraph",
+    ]);
+    expect(container.elements.map((e) => e.kind)).toEqual([
+      "IfTest",
+      "if",
+      "IfTest",
+      "if",
+    ]);
   });
 
   test("missing child id is skipped silently", () => {

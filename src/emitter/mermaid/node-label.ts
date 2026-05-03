@@ -3,6 +3,9 @@ import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeHead } from "./node-head.js";
 
 export function nodeLabel(n: VisualNode): string {
+  if (n.kind === NODE_KIND.IfTest) {
+    return `if L${n.line}`;
+  }
   const head = nodeHead(n);
   if (n.kind === NODE_KIND.ModuleSink) {
     return "module";

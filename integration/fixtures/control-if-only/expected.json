@@ -43,6 +43,16 @@
       "initIsFunction": false
     },
     {
+      "type": "node",
+      "id": "if_test_scope_0_37",
+      "kind": "IfTest",
+      "name": "if-test",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
       "type": "subgraph",
       "id": "s_scope_1",
       "line": 4,
@@ -72,7 +82,7 @@
     },
     {
       "from": "n_scope_0_flag_23",
-      "to": "s_scope_1",
+      "to": "if_test_scope_0_37",
       "label": "read"
     },
     {

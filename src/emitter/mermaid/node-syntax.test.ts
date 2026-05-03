@@ -25,6 +25,16 @@ describe("nodeSyntax", () => {
     expect(got).toBe("((module))");
   });
 
+  test('IfTest uses diamond brackets {"..."}', () => {
+    const got = nodeSyntax({
+      ...baseNode(),
+      kind: NODE_KIND.IfTest,
+      name: "if-test",
+      line: 5,
+    });
+    expect(got).toBe('{"if L5"}');
+  });
+
   test('default kind uses square brackets ["..."]', () => {
     const got = nodeSyntax({
       ...baseNode(),

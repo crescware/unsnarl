@@ -9,6 +9,8 @@ export function nodeSyntax(n: VisualNode): string {
       return `(["${label}"])`;
     case NODE_KIND.ModuleSink:
       return `((${label}))`;
+    case NODE_KIND.IfTest:
+      return `{"${label}"}`;
     default:
       return `["${label}"]`;
   }
