@@ -5,7 +5,7 @@ import { nodeLabel } from "./node-label.js";
 import { baseNode } from "./testing/make-node.js";
 
 describe("nodeLabel", () => {
-  test("IfTest emits 'if L<line>' without the head/range/unused decorations", () => {
+  test("IfTest emits 'if<br/>L<line>' without the head/range/unused decorations", () => {
     expect(
       nodeLabel({
         ...baseNode(),
@@ -13,7 +13,7 @@ describe("nodeLabel", () => {
         name: "ignored",
         line: 3,
       }),
-    ).toBe("if L3");
+    ).toBe("if<br/>L3");
   });
 
   test("ModuleSink shortcuts to the literal 'module'", () => {

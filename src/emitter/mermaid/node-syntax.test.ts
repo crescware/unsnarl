@@ -32,7 +32,7 @@ describe("nodeSyntax", () => {
       name: "if-test",
       line: 5,
     });
-    expect(got).toBe('{"if L5"}');
+    expect(got).toBe('{"if<br/>L5"}');
   });
 
   test('default kind uses square brackets ["..."]', () => {

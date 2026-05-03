@@ -48,6 +48,36 @@ function pushIfTestAnchor(
   state.ifTestAnchorByOffset.set(offset, node.id);
 }
 
+// Place an IfStatement's test anchor inside the consequent it gates.
+// `else` (alternate) is the fallback path and carries no test of its
+// own. If the consequent did not materialize as a subgraph, fall back
+// to the surrounding container so the anchor is still emitted.
+function attachTestAnchorToConsequent(
+  consequent: SerializedScope,
+  offset: number,
+  fallbackContainer: Container,
+  state: BuildState,
+  raw: string,
+): void {
+  if (state.ifTestAnchorByOffset.has(offset)) {
+    return;
+  }
+  const bodySg = state.subgraphByScope.get(consequent.id);
+  if (bodySg) {
+    const node = makeIfTestAnchor(consequent.upper ?? "", offset, raw);
+    bodySg.elements.unshift(node);
+    state.ifTestAnchorByOffset.set(offset, node.id);
+    return;
+  }
+  pushIfTestAnchor(
+    consequent.upper ?? "",
+    offset,
+    fallbackContainer,
+    state,
+    raw,
+  );
+}
+
 export function buildChildren(
   parentScope: SerializedScope,
   container: Container,
@@ -85,17 +115,23 @@ export function buildChildren(
       j++;
     }
     if (group.length < 2) {
-      // Lone `if` (no `else`). Anchor sits at the parent-scope level
-      // alongside the consequent subgraph because there is no merge
-      // container to host it.
+      // Lone `if` (no `else`). The consequent subgraph itself stands in
+      // for the IfStatement; we skip the IfElseContainer wrapping that
+      // exists only to group sibling branches. The test anchor lives
+      // inside the consequent it gates (same rule as if-else below).
       const lone = group[0];
       const loneOffset = lone?.blockContext?.parentSpanOffset;
-      const loneParent = lone?.upper ?? parentScope.id;
-      if (lone && loneOffset !== undefined) {
-        pushIfTestAnchor(loneParent, loneOffset, container, state, ctx.ir.raw);
-      }
-      for (const g of group) {
-        buildScope(g, container, ctx, state);
+      if (lone) {
+        buildScope(lone, container, ctx, state);
+        if (loneOffset !== undefined) {
+          attachTestAnchorToConsequent(
+            lone,
+            loneOffset,
+            container,
+            state,
+            ctx.ir.raw,
+          );
+        }
       }
       i = j;
       continue;
@@ -114,27 +150,34 @@ export function buildChildren(
       elements: [] as VisualElement[],
     } satisfies VisualSubgraph;
     container.elements.push(containerSubgraph);
-    // Each `IfStatement` in the chain (or the single if/else) gets its
-    // own test anchor. Distinct `parentSpanOffset` values within the
-    // group correspond to distinct IfStatement nodes; emit one anchor
-    // per offset, ahead of the branch subgraphs so it renders first.
+    // Build branch subgraphs first so each consequent has somewhere to
+    // host its own test anchor.
+    for (const g of group) {
+      buildScope(g, containerSubgraph, ctx, state);
+    }
+    // Each IfStatement's test anchor lives inside the consequent it
+    // gates. Distinct `parentSpanOffset` values within the group
+    // correspond to distinct IfStatement nodes; the matching consequent
+    // (key === "consequent") hosts that test. The `else` (alternate)
+    // branch carries no test of its own.
     const seenOffsets = new Set<number>();
     for (const g of group) {
       const off = g.blockContext?.parentSpanOffset;
-      if (off === undefined || seenOffsets.has(off)) {
+      if (
+        off === undefined ||
+        seenOffsets.has(off) ||
+        g.blockContext?.key !== "consequent"
+      ) {
         continue;
       }
       seenOffsets.add(off);
-      pushIfTestAnchor(
-        g.upper ?? "",
+      attachTestAnchorToConsequent(
+        g,
         off,
         containerSubgraph,
         state,
         ctx.ir.raw,
       );
-    }
-    for (const g of group) {
-      buildScope(g, containerSubgraph, ctx, state);
     }
     let containerEndLine = containerSubgraph.line;
     for (const elem of containerSubgraph.elements) {

@@ -493,9 +493,9 @@ describe("MermaidEmitter rendering: if/else", () => {
     expect(out).toMatch(/^\s*subgraph s_scope_\d+\["else L5-7"\]/m);
   });
 
-  test("the predicate identifier feeds the if-test anchor inside the container", () => {
+  test("the predicate identifier feeds the if-test anchor inside the consequent subgraph", () => {
     expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| if_test_scope_0_\d+/);
-    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if L3"\}/m);
+    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if<br\/>L3"\}/m);
   });
 
   test("both branches independently feed result; the declaration does NOT bypass", () => {
@@ -526,9 +526,9 @@ describe("MermaidEmitter rendering: if without else", () => {
     expect(out).toMatch(/^\s*subgraph s_scope_\d+\["if L3-5"\]/m);
   });
 
-  test("the predicate flows into the if-test anchor at the parent-scope level", () => {
+  test("the predicate flows into the if-test anchor inside the consequent subgraph", () => {
     expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| if_test_scope_0_\d+/);
-    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if L3"\}/m);
+    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if<br\/>L3"\}/m);
   });
 
   test("result has two origins: the if-write AND the original declaration", () => {
