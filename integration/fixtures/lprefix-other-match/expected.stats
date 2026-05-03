@@ -1,0 +1,4 @@
+2	0	integration/fixtures/lprefix-other-match/input.ts:1 l5
+1	1	integration/fixtures/lprefix-other-match/input.ts:2 l99
+0	2	integration/fixtures/lprefix-other-match/input.ts:3 unused sum
+3	3	3 total

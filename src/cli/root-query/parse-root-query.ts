@@ -6,6 +6,8 @@ const LINE_RE = /^([0-9]+)$/;
 const LINE_NAME_RE = /^([0-9]+):([A-Za-z_$][A-Za-z0-9_$]*)$/;
 const RANGE_RE = /^([0-9]+)-([0-9]+)$/;
 const RANGE_NAME_RE = /^([0-9]+)-([0-9]+):([A-Za-z_$][A-Za-z0-9_$]*)$/;
+const L_RANGE_RE = /^[Ll]([0-9]+)-([0-9]+)$/;
+const L_LINE_OR_NAME_RE = /^[Ll]([0-9]+)$/;
 
 export function parseRootQuery(
   token: string,
@@ -62,6 +64,35 @@ export function parseRootQuery(
       };
     }
     return { kind: ROOT_QUERY_KIND.Range, start, end, raw: token };
+  }
+
+  const lRangeMatch = L_RANGE_RE.exec(token);
+  if (lRangeMatch !== null) {
+    const start = Number.parseInt(lRangeMatch[1] ?? "", 10);
+    const end = Number.parseInt(lRangeMatch[2] ?? "", 10);
+    if (start <= 0 || end <= 0) {
+      return { error: `invalid root query '${token}': line must be >= 1` };
+    }
+    if (start > end) {
+      return {
+        error: `invalid root query '${token}': range start must be <= end`,
+      };
+    }
+    return { kind: ROOT_QUERY_KIND.Range, start, end, raw: token };
+  }
+
+  const lLineOrNameMatch = L_LINE_OR_NAME_RE.exec(token);
+  if (lLineOrNameMatch !== null) {
+    const line = Number.parseInt(lLineOrNameMatch[1] ?? "", 10);
+    if (line <= 0) {
+      return { error: `invalid root query '${token}': line must be >= 1` };
+    }
+    return {
+      kind: ROOT_QUERY_KIND.LineOrName,
+      line,
+      name: token,
+      raw: token,
+    };
   }
 
   if (ID_RE.test(token)) {

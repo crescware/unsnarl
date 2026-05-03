@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/lprefix-other-match/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_l5_6",
+      "name": "l5",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_l99_20",
+      "name": "l99",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_sum_40",
+      "name": "sum",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_l5_6",
+      "to": "n_scope_0_l99_20",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_l5_6",
+      "to": "n_scope_0_sum_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_l99_20",
+      "to": "n_scope_0_sum_40",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

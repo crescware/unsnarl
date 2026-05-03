@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/lprefix-other-match/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": {
+    "roots": [
+      {
+        "query": "L12",
+        "matched": 0
+      }
+    ],
+    "descendants": 1,
+    "ancestors": 1
+  }
+}

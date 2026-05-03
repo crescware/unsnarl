@@ -1,0 +1,262 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/lprefix-no-collision/input.ts",
+    "language": "ts"
+  },
+  "raw": "const alpha = 1;\nconst beta = alpha + 2;\nconst gamma = beta * 3;\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 65
+        }
+      },
+      "variables": [
+        "scope#0:alpha@6",
+        "scope#0:beta@23",
+        "scope#0:gamma@47"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:alpha@6",
+      "name": "alpha",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "alpha",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 14,
+              "offset": 14
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:beta@23",
+      "name": "beta",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 23
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "beta",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 23
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 23
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 17
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 2,
+              "column": 13,
+              "offset": 30
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:gamma@47",
+      "name": "gamma",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 47
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "gamma",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 47
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 47
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 41
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 3,
+              "column": 14,
+              "offset": 55
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "alpha",
+        "span": {
+          "line": 2,
+          "column": 13,
+          "offset": 30
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:alpha@6",
+      "owners": [
+        "scope#0:beta@23"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "beta",
+        "span": {
+          "line": 3,
+          "column": 14,
+          "offset": 55
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:beta@23",
+      "owners": [
+        "scope#0:gamma@47"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:gamma@47"
+  ],
+  "diagnostics": []
+}

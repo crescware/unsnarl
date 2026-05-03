@@ -117,4 +117,74 @@ describe("parseRootQuery", () => {
       error: expect.stringContaining("invalid"),
     });
   });
+
+  test("parses L<n> as line-or-name (uppercase)", () => {
+    expect(parseRootQuery("L12")).toEqual({
+      kind: ROOT_QUERY_KIND.LineOrName,
+      line: 12,
+      name: "L12",
+      raw: "L12",
+    });
+  });
+
+  test("parses l<n> as line-or-name (lowercase)", () => {
+    expect(parseRootQuery("l1")).toEqual({
+      kind: ROOT_QUERY_KIND.LineOrName,
+      line: 1,
+      name: "l1",
+      raw: "l1",
+    });
+  });
+
+  test("parses L<n>-<m> as range, preserving raw", () => {
+    expect(parseRootQuery("L12-34")).toEqual({
+      kind: ROOT_QUERY_KIND.Range,
+      start: 12,
+      end: 34,
+      raw: "L12-34",
+    });
+    expect(parseRootQuery("l9-13")).toEqual({
+      kind: ROOT_QUERY_KIND.Range,
+      start: 9,
+      end: 13,
+      raw: "l9-13",
+    });
+  });
+
+  test("rejects L0 / l0", () => {
+    expect(parseRootQuery("L0")).toMatchObject({
+      error: expect.stringContaining("line must be >= 1"),
+    });
+    expect(parseRootQuery("l0")).toMatchObject({
+      error: expect.stringContaining("line must be >= 1"),
+    });
+  });
+
+  test("rejects descending L-prefixed range", () => {
+    expect(parseRootQuery("L5-1")).toMatchObject({
+      error: expect.stringContaining("range start must be <= end"),
+    });
+  });
+
+  test("treats LL12 as a plain identifier (Name)", () => {
+    // The L-prefix tolerance only applies to a single L/l followed by
+    // digits, so LL12 falls through to the ID_RE branch as a Name.
+    expect(parseRootQuery("LL12")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "LL12",
+      raw: "LL12",
+    });
+  });
+
+  test("rejects 1L2 (digit-leading, not an identifier)", () => {
+    expect(parseRootQuery("1L2")).toMatchObject({
+      error: expect.stringContaining("invalid"),
+    });
+  });
+
+  test("does not extend tolerance to L<n>:<id>", () => {
+    expect(parseRootQuery("L12:foo")).toMatchObject({
+      error: expect.stringContaining("invalid"),
+    });
+  });
 });

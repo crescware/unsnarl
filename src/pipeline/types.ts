@@ -1,6 +1,7 @@
 import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
 import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
 import type { VisualGraph } from "../visual-graph/model.js";
+import type { RootQueryResolution } from "../visual-graph/prune/resolve-ambiguous-queries.js";
 
 export type ParseOptions = Readonly<{
   language: Language;
@@ -89,6 +90,7 @@ export type PipelineRunDetails = Readonly<{
         matched: number;
       }>[]
     | null;
+  resolutions: readonly RootQueryResolution[] | null;
 }>;
 
 export type Pipeline = Readonly<{

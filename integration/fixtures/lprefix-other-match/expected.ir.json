@@ -1,0 +1,290 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/lprefix-other-match/input.ts",
+    "language": "ts"
+  },
+  "raw": "const l5 = 1;\nconst l99 = l5 + 2;\nconst sum = l5 + l99;\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 56
+        }
+      },
+      "variables": [
+        "scope#0:l5@6",
+        "scope#0:l99@20",
+        "scope#0:sum@40"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:l5@6",
+      "name": "l5",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "l5",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 11,
+              "offset": 11
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:l99@20",
+      "name": "l99",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 20
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "l99",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 20
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 20
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 14
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 2,
+              "column": 12,
+              "offset": 26
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:sum@40",
+      "name": "sum",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 40
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "sum",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 40
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 40
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 34
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 3,
+              "column": 12,
+              "offset": 46
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "l5",
+        "span": {
+          "line": 2,
+          "column": 12,
+          "offset": 26
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:l5@6",
+      "owners": [
+        "scope#0:l99@20"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "l5",
+        "span": {
+          "line": 3,
+          "column": 12,
+          "offset": 46
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:l5@6",
+      "owners": [
+        "scope#0:sum@40"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "l99",
+        "span": {
+          "line": 3,
+          "column": 17,
+          "offset": 51
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:l99@20",
+      "owners": [
+        "scope#0:sum@40"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:sum@40"
+  ],
+  "diagnostics": []
+}

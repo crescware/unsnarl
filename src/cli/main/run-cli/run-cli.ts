@@ -13,6 +13,7 @@ import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import { emitPruningWarnings } from "./emit-pruning-warnings.js";
+import { emitResolutionNotices } from "./emit-resolution-notices.js";
 import { handleCliUsageError } from "./handle-cli-usage-error.js";
 import { handleCommanderError } from "./handle-commander-error.js";
 import { handleError } from "./handle-error.js";
@@ -35,6 +36,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     const pipeline = createDefaultPipeline(emitters);
     const result = pipeline.runDetailed(text, runOpts);
 
+    emitResolutionNotices(result.resolutions);
     emitPruningWarnings(result.pruning);
     writeOutput(outputPath, result.text);
   });

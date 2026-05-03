@@ -1,0 +1,4 @@
+1	0	integration/fixtures/lprefix-exact-match/input.ts:1 L12
+1	1	integration/fixtures/lprefix-exact-match/input.ts:2 beta
+0	1	integration/fixtures/lprefix-exact-match/input.ts:3 unused gamma
+2	2	3 total

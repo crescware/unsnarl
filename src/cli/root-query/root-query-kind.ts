@@ -4,4 +4,5 @@ export const ROOT_QUERY_KIND = {
   Range: "range",
   RangeName: "range-name",
   Name: "name",
+  LineOrName: "line-or-name",
 } as const;
