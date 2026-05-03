@@ -35,6 +35,7 @@ flowchart RL
   n_scope_0_b_35["b<br/>L3"]
   n_scope_0_target_48["target<br/>L4"]
   n_scope_0_result_304["unused result<br/>L20"]
+  n_scope_0_Number_178["global Number"]
   subgraph s_scope_1["switch L6-18"]
     direction RL
     subgraph s_scope_2["case a + b L7-9"]
@@ -61,6 +62,7 @@ flowchart RL
   n_scope_0_target_48 -->|read| s_scope_1
   n_scope_0_a_22 -->|read| module_root
   n_scope_0_b_35 -->|read| module_root
+  n_scope_0_Number_178 -->|read| module_root
   wr_ref_3 -->|read| n_scope_0_result_304
   wr_ref_6 -->|read| n_scope_0_result_304
   wr_ref_8 -->|read| n_scope_0_result_304

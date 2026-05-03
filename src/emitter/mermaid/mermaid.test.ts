@@ -241,20 +241,41 @@ describe("MermaidEmitter", () => {
     expect(out).toMatch(/n_scope_0_a_\d+\["a<br\/>L1"\]/);
   });
 
-  test("renders ImplicitGlobalVariable as a 'global' node when used directly", () => {
+  test("renders ImplicitGlobalVariable as a 'global' node when used directly, with no line suffix", () => {
     const out = emit("function f() { return globalThing; }\n");
-    expect(out).toContain('"global globalThing<br/>');
+    expect(out).toContain('"global globalThing"');
+    expect(out).not.toContain("global globalThing<br/>");
   });
 
-  test("hides ImplicitGlobalVariable that only appears as a member receiver", () => {
+  test("renders ImplicitGlobalVariable that only appears as a member receiver, with no line suffix", () => {
     const out = emit("const xs = Object.keys(arg);\n");
-    expect(out).not.toContain('"global Object');
-    // arg もグローバルだが、引数として直接読まれるので残る
-    expect(out).toContain('"global arg<br/>');
+    expect(out).toContain('"global Object"');
+    expect(out).toContain('"global arg"');
+    expect(out).not.toContain("global Object<br/>");
+    expect(out).not.toContain("global arg<br/>");
   });
 
-  test("falls back to a (module) sink only for module-level owner-less references", () => {
+  test("a top-level call ExpressionStatement renders as a per-statement node carrying the callee head and line", () => {
     const out = emit("function f() {}\nf();\n");
+    expect(out).toMatch(/expr_stmt_\d+\["f\(\)<br\/>L2"\]/);
+    expect(out).not.toContain("module_root((module))");
+  });
+
+  test("a case-predicate ref still falls back to module_root because case routing is unchanged", () => {
+    const out = emit(
+      [
+        "let label = '';",
+        "const a = 1;",
+        "switch (a) {",
+        "  case Number.MAX_SAFE_INTEGER:",
+        "    label = 'max';",
+        "    break;",
+        "  default:",
+        "    label = 'other';",
+        "}",
+        "const r = label;",
+      ].join("\n"),
+    );
     expect(out).toContain("module_root((module))");
   });
 

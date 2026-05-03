@@ -10,7 +10,6 @@ export type BuilderContext = Readonly<{
   variableMap: Map<string, SerializedVariable>;
   scopeMap: Map<string, SerializedScope>;
   subgraphOwnerVar: Map<string, string>;
-  hiddenVariables: Set<string>;
   writeOpsByVariable: Map<string, /* mutable */ WriteOp[]>;
   writeOpsByScope: Map<string, /* mutable */ WriteOp[]>;
   writeOpByRef: Map<string, WriteOp>;

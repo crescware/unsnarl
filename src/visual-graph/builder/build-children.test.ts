@@ -24,6 +24,7 @@ function emptyState(): BuildState {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -46,7 +47,6 @@ function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
     variableMap: new Map(),
     scopeMap: new Map(scopes.map((s) => [s.id, s])),
     subgraphOwnerVar: new Map(),
-    hiddenVariables: new Set(),
     writeOpsByVariable: new Map(),
     writeOpsByScope: new Map(),
     writeOpByRef: new Map(),

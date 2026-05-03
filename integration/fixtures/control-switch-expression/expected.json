@@ -67,6 +67,16 @@
       "initIsFunction": false
     },
     {
+      "type": "node",
+      "id": "n_scope_0_Number_178",
+      "name": "Number",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
       "type": "subgraph",
       "id": "s_scope_1",
       "line": 6,
@@ -208,6 +218,11 @@
     },
     {
       "from": "n_scope_0_b_35",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Number_178",
       "to": "module_root",
       "label": "read"
     },

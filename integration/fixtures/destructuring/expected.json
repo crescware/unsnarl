@@ -125,6 +125,16 @@
       "kind": "Variable",
       "declarationKind": "const",
       "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Object_291",
+      "name": "Object",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
     }
   ],
   "edges": [
@@ -190,6 +200,11 @@
     },
     {
       "from": "n_scope_0_rest_184",
+      "to": "n_scope_0_sum_235",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Object_291",
       "to": "n_scope_0_sum_235",
       "label": "read"
     },

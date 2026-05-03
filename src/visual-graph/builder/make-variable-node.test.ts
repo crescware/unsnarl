@@ -49,6 +49,19 @@ describe("makeVariableNode", () => {
     expect(makeVariableNode(v).line).toBe(0);
   });
 
+  test("ImplicitGlobalVariable forces line=0 because the def is synthetic, not a real source location", () => {
+    const v = {
+      ...baseVariable(),
+      id: "v",
+      name: "Math",
+      identifiers: [span(0, 4)],
+      defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)],
+    };
+    const node = makeVariableNode(v);
+    expect(node.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
+    expect(node.line).toBe(0);
+  });
+
   test.each<{ initType: string; expected: boolean }>([
     { initType: AST_TYPE.ArrowFunctionExpression, expected: true },
     { initType: AST_TYPE.FunctionExpression, expected: true },

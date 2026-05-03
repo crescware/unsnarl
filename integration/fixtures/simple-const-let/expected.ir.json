@@ -284,7 +284,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 43
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 22,
+          "offset": 65
+        },
+        "headStartSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 43
+        },
+        "headEndSpan": {
+          "line": 3,
+          "column": 21,
+          "offset": 64
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#1",
@@ -310,7 +333,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 43
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 22,
+          "offset": 65
+        },
+        "headStartSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 43
+        },
+        "headEndSpan": {
+          "line": 3,
+          "column": 21,
+          "offset": 64
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#2",
@@ -336,7 +382,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 66
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 13,
+          "offset": 79
+        },
+        "headStartSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 66
+        },
+        "headEndSpan": {
+          "line": 4,
+          "column": 12,
+          "offset": 78
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#3",
@@ -360,7 +429,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 5,
+          "column": 0,
+          "offset": 80
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 10,
+          "offset": 90
+        },
+        "headStartSpan": {
+          "line": 5,
+          "column": 0,
+          "offset": 80
+        },
+        "headEndSpan": {
+          "line": 5,
+          "column": 9,
+          "offset": 89
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#4",
@@ -386,7 +478,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

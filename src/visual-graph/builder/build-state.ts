@@ -6,6 +6,7 @@ export type BuildState = Readonly<{
   returnSubgraphsByFn: Map<string, Map<string, VisualSubgraph>>;
   returnUseAdded: Set<string>;
   ifTestAnchorByOffset: Map<number, string>;
+  expressionStatementByOffset: Map<number, string>;
   emittedEdges: Set<string>;
   edges: /* mutable */ VisualEdge[];
 }>;

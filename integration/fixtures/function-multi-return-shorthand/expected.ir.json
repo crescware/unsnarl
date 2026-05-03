@@ -379,7 +379,8 @@
         "offset": 38
       },
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -414,7 +415,8 @@
           "offset": 105
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#2",
@@ -449,7 +451,8 @@
           "offset": 105
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#3",
@@ -484,7 +487,8 @@
           "offset": 147
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#4",
@@ -519,7 +523,8 @@
           "offset": 147
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

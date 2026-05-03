@@ -446,7 +446,8 @@
           "column": 13,
           "offset": 185
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -492,7 +493,8 @@
           "column": 51,
           "offset": 171
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#2",
@@ -527,7 +529,8 @@
           "offset": 187
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#3",
@@ -573,7 +576,8 @@
           "column": 38,
           "offset": 228
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#4",
@@ -599,7 +603,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

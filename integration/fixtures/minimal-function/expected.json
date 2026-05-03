@@ -29,10 +29,10 @@
     },
     {
       "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
+      "id": "expr_stmt_36",
+      "kind": "ExpressionStatement",
+      "name": "greet()",
+      "line": 4,
       "endLine": null,
       "isJsxElement": false,
       "unused": false
@@ -41,7 +41,7 @@
   "edges": [
     {
       "from": "n_scope_0_greet_9",
-      "to": "module_root",
+      "to": "expr_stmt_36",
       "label": "read,call"
     }
   ],

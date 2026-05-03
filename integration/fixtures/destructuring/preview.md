@@ -32,6 +32,7 @@ flowchart RL
   n_scope_0_rest_184["rest<br/>L8"]
   n_scope_0_spread_209["spread<br/>L9"]
   n_scope_0_sum_235["unused sum<br/>L11"]
+  n_scope_0_Object_291["global Object"]
   n_scope_0_source_6 -->|read| n_scope_0_a_95
   n_scope_0_source_6 -->|read| n_scope_0_renamed_101
   n_scope_0_source_6 -->|read| n_scope_0_d_141
@@ -45,5 +46,6 @@ flowchart RL
   n_scope_0_first_165 -->|read| n_scope_0_sum_235
   n_scope_0_third_174 -->|read| n_scope_0_sum_235
   n_scope_0_rest_184 -->|read| n_scope_0_sum_235
+  n_scope_0_Object_291 -->|read| n_scope_0_sum_235
   n_scope_0_spread_209 -->|read| n_scope_0_sum_235
 ```

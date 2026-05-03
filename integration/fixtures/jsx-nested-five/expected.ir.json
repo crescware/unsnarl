@@ -671,7 +671,8 @@
           "column": 8,
           "offset": 326
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -706,7 +707,8 @@
           "offset": 331
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#2",
@@ -752,7 +754,8 @@
           "column": 10,
           "offset": 317
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#3",
@@ -787,7 +790,8 @@
           "offset": 331
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#4",
@@ -833,7 +837,8 @@
           "column": 12,
           "offset": 306
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#5",
@@ -868,7 +873,8 @@
           "offset": 331
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#6",
@@ -914,7 +920,8 @@
           "column": 14,
           "offset": 293
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#7",
@@ -949,7 +956,8 @@
           "offset": 331
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#8",
@@ -995,7 +1003,8 @@
           "column": 22,
           "offset": 278
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#9",
@@ -1030,7 +1039,8 @@
           "offset": 331
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

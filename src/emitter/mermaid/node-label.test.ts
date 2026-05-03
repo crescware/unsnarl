@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeLabel } from "./node-label.js";
-import { baseNode } from "./testing/make-node.js";
+import { baseNode, baseSimpleNode } from "./testing/make-node.js";
 
 describe("nodeLabel", () => {
   test("IfTest emits 'if<br/>L<line>' without the head/range/unused decorations", () => {
@@ -20,6 +20,26 @@ describe("nodeLabel", () => {
     expect(
       nodeLabel({ ...baseNode(), kind: NODE_KIND.ModuleSink, name: "ignored" }),
     ).toBe("module");
+  });
+
+  test("ImplicitGlobalVariable renders without a line suffix because it has no source location", () => {
+    expect(
+      nodeLabel({
+        ...baseSimpleNode(NODE_KIND.ImplicitGlobalVariable),
+        name: "Math",
+        line: 0,
+      }),
+    ).toBe("global Math");
+  });
+
+  test("ExpressionStatement renders the head followed by the statement line", () => {
+    expect(
+      nodeLabel({
+        ...baseSimpleNode(NODE_KIND.ExpressionStatement),
+        name: "console.log()",
+        line: 7,
+      }),
+    ).toBe("console.log()<br/>L7");
   });
 
   test("appends the line range as a single line", () => {

@@ -1,7 +1,8 @@
-0	1	integration/fixtures/unused-and-var/input.ts:0 module
+1	0	integration/fixtures/unused-and-var/input.ts:0 console
 1	1	integration/fixtures/unused-and-var/input.ts:1 used
 0	1	integration/fixtures/unused-and-var/input.ts:1 unused neverCalled
 2	0	integration/fixtures/unused-and-var/input.ts:1 module
 1	1	integration/fixtures/unused-and-var/input.ts:4 a
 0	0	integration/fixtures/unused-and-var/input.ts:5 unused ignored
-4	4	6 total
+0	2	integration/fixtures/unused-and-var/input.ts:7 console.log()
+5	5	7 total

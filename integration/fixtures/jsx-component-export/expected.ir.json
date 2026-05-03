@@ -199,7 +199,8 @@
           "column": 23,
           "offset": 78
         }
-      }
+      },
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

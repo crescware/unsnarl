@@ -477,7 +477,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 2,
+          "offset": 60
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 15,
+          "offset": 73
+        },
+        "headStartSpan": {
+          "line": 6,
+          "column": 2,
+          "offset": 60
+        },
+        "headEndSpan": {
+          "line": 6,
+          "column": 14,
+          "offset": 72
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#1",
@@ -503,7 +526,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 22,
+          "offset": 96
+        },
+        "headStartSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "headEndSpan": {
+          "line": 7,
+          "column": 21,
+          "offset": 95
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#2",
@@ -529,7 +575,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 22,
+          "offset": 96
+        },
+        "headStartSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "headEndSpan": {
+          "line": 7,
+          "column": 21,
+          "offset": 95
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#3",
@@ -555,7 +624,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 22,
+          "offset": 96
+        },
+        "headStartSpan": {
+          "line": 7,
+          "column": 2,
+          "offset": 76
+        },
+        "headEndSpan": {
+          "line": 7,
+          "column": 21,
+          "offset": 95
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#4",
@@ -581,7 +673,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 9,
+          "column": 2,
+          "offset": 115
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 16,
+          "offset": 129
+        },
+        "headStartSpan": {
+          "line": 9,
+          "column": 2,
+          "offset": 115
+        },
+        "headEndSpan": {
+          "line": 9,
+          "column": 15,
+          "offset": 128
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#5",
@@ -607,7 +722,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 10,
+          "column": 2,
+          "offset": 132
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 13,
+          "offset": 143
+        },
+        "headStartSpan": {
+          "line": 10,
+          "column": 2,
+          "offset": 132
+        },
+        "headEndSpan": {
+          "line": 10,
+          "column": 12,
+          "offset": 142
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#6",
@@ -633,7 +771,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 12,
+          "column": 2,
+          "offset": 158
+        },
+        "endSpan": {
+          "line": 12,
+          "column": 16,
+          "offset": 172
+        },
+        "headStartSpan": {
+          "line": 12,
+          "column": 2,
+          "offset": 158
+        },
+        "headEndSpan": {
+          "line": 12,
+          "column": 15,
+          "offset": 171
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#7",
@@ -659,7 +820,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#8",
@@ -685,7 +847,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

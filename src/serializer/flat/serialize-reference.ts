@@ -46,5 +46,26 @@ export function serializeReference(
           endSpan: spanFromOffset(raw, r.unsnarlJsxElement.endOffset),
         }
       : null,
+    expressionStatementContainer: r.unsnarlExpressionStatementContainer
+      ? {
+          startSpan: spanFromOffset(
+            raw,
+            r.unsnarlExpressionStatementContainer.startOffset,
+          ),
+          endSpan: spanFromOffset(
+            raw,
+            r.unsnarlExpressionStatementContainer.endOffset,
+          ),
+          headStartSpan: spanFromOffset(
+            raw,
+            r.unsnarlExpressionStatementContainer.headStartOffset,
+          ),
+          headEndSpan: spanFromOffset(
+            raw,
+            r.unsnarlExpressionStatementContainer.headEndOffset,
+          ),
+          isCall: r.unsnarlExpressionStatementContainer.isCall,
+        }
+      : null,
   };
 }

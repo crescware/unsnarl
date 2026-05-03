@@ -1,0 +1,90 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement-multiline/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_6",
+      "name": "a",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_19",
+      "name": "b",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_32",
+      "name": "c",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_40",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_40",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 5,
+      "endLine": 9,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_40",
+      "to": "expr_stmt_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_6",
+      "to": "expr_stmt_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_19",
+      "to": "expr_stmt_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_32",
+      "to": "expr_stmt_40",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

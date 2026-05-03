@@ -10,6 +10,7 @@ function emptyState(): BuildState {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };

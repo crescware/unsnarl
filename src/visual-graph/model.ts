@@ -40,6 +40,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ImportIntermediate })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ExpressionStatement })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.Variable;
       declarationKind: VariableDeclarationKind | null;

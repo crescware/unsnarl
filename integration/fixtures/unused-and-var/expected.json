@@ -56,10 +56,20 @@
     },
     {
       "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
+      "id": "n_scope_0_console_98",
+      "name": "console",
       "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_98",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 7,
       "endLine": null,
       "isJsxElement": false,
       "unused": false
@@ -82,8 +92,13 @@
       "label": "read"
     },
     {
+      "from": "n_scope_0_console_98",
+      "to": "expr_stmt_98",
+      "label": "read"
+    },
+    {
       "from": "n_scope_0_a_67",
-      "to": "module_root",
+      "to": "expr_stmt_98",
       "label": "read"
     },
     {

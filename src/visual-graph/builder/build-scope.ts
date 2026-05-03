@@ -34,9 +34,6 @@ export function buildScope(
     }
   }
   for (const vid of scope.variables) {
-    if (ctx.hiddenVariables.has(vid)) {
-      continue;
-    }
     const v = ctx.variableMap.get(vid);
     if (!v) {
       continue;

@@ -582,7 +582,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -609,7 +610,8 @@
         "offset": 91
       },
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#2",
@@ -633,7 +635,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#3",
@@ -659,7 +662,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 10,
+          "column": 4,
+          "offset": 124
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 18,
+          "offset": 138
+        },
+        "headStartSpan": {
+          "line": 10,
+          "column": 4,
+          "offset": 124
+        },
+        "headEndSpan": {
+          "line": 10,
+          "column": 17,
+          "offset": 137
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#4",
@@ -683,7 +709,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#5",
@@ -709,7 +736,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 4,
+          "offset": 168
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 20,
+          "offset": 184
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 4,
+          "offset": 168
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 19,
+          "offset": 183
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#6",
@@ -733,7 +783,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#7",
@@ -759,7 +810,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 16,
+          "column": 4,
+          "offset": 213
+        },
+        "endSpan": {
+          "line": 16,
+          "column": 19,
+          "offset": 228
+        },
+        "headStartSpan": {
+          "line": 16,
+          "column": 4,
+          "offset": 213
+        },
+        "headEndSpan": {
+          "line": 16,
+          "column": 18,
+          "offset": 227
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#8",
@@ -785,7 +859,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 19,
+          "column": 4,
+          "offset": 255
+        },
+        "endSpan": {
+          "line": 19,
+          "column": 22,
+          "offset": 273
+        },
+        "headStartSpan": {
+          "line": 19,
+          "column": 4,
+          "offset": 255
+        },
+        "headEndSpan": {
+          "line": 19,
+          "column": 21,
+          "offset": 272
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#9",
@@ -811,7 +908,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [
