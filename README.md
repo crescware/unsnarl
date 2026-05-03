@@ -3,7 +3,12 @@
 A single-file ECMAScript / TypeScript scope and reference analyzer that
 emits a deterministic IR (JSON) and a Mermaid flowchart.
 
-`unsnarl` parses a single source file with [oxc-parser], builds a
+```sh
+npm i -g unsnarl
+uns path/to/your-file.ts
+```
+
+unsnarl parses a single source file with [oxc-parser], builds a
 [scope-manager]-compatible scope tree (`Scope` / `Variable` /
 `Reference` / `Definition`), classifies each identifier reference as
 read / write / call, detects unused declarations, and serializes the
@@ -19,26 +24,49 @@ member declarations are intentionally out of scope.
 ## CLI
 
 ```sh
-unsnarl <file>                      # JSON IR to stdout
-unsnarl --format mermaid <file>     # Mermaid flowchart
-unsnarl --format markdown -r value -A 1 -o ./out file.ts   # write to ./out/value-a1.md
-cat foo.ts | unsnarl --stdin --lang ts
-unsnarl --list-formats
+uns <file>                                              # JSON IR to stdout
+uns -f mermaid <file>                                   # Mermaid flowchart
+uns -f markdown -r value -A 1 -o ./out file.ts          # write to ./out/value-a1.md
+uns -f json --no-pretty-json <file>                     # compact JSON for piping
+cat foo.ts | uns --stdin --lang ts
 ```
 
 Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 
+### Options
+
+| Short | Long                     | Description                                                   |
+| ----- | ------------------------ | ------------------------------------------------------------- |
+| `-f`  | `--format <id>`          | Emitter: `ir` default, `json`, `mermaid`, `markdown`, `stats` |
+|       | `--no-pretty-json`       | Disable pretty-printed JSON output                            |
+|       | `--mermaid-renderer <r>` | Mermaid layout engine: `elk` default, `dagre`                 |
+|       | `--stdin`                | Read source from stdin                                        |
+|       | `--lang <lang>`          | Language for stdin: `ts` default, `tsx`, `js`, `jsx`          |
+| `-r`  | `--roots <queries>`      | Comma-separated root queries (repeatable) — see Pruning       |
+| `-A`  | `--descendants <N>`      | Descendants generations — see Pruning                         |
+| `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
+| `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
+| `-o`  | `--out-dir <dir>`        | Write to directory — see Writing to a directory               |
+| `-v`  | `--version`              | Show version                                                  |
+| `-h`  | `--help`                 | Show help                                                     |
+
+### Mermaid renderer
+
+The `mermaid` and `markdown` emitters use `elk` for layout by default.
+Pass `--mermaid-renderer dagre` to fall back to dagre — required in
+environments that can't register the elk loader (e.g. GitHub's markdown
+preview).
+
 ### Pruning the visual graph
 
 Large files generate dense graphs that can be hard to read. Pass one or more
-root queries with `-r` / `--roots` to keep only the neighborhood of the
-specified nodes. Combine with `-A` / `-B` / `-C` to control how far the
-neighborhood expands.
+root queries with `-r` to keep only the neighborhood of the specified nodes.
+Combine with `-A` / `-B` / `-C` to control how far the neighborhood expands.
 
 ```sh
-unsnarl --format mermaid -r 42:render -C 3 file.tsx       # 3 generations both ways
-unsnarl --format mermaid -r 9-13 -A 2 -B 0 file.ts        # range, descendants only
-unsnarl --format mermaid -r 10:foo,42 -r 99 file.ts       # multiple roots
+uns -f mermaid -r 42:render -C 3 file.tsx       # 3 generations both ways
+uns -f mermaid -r 9-13 -A 2 -B 0 file.ts        # range, descendants only
+uns -f mermaid -r 10:foo,42 -r 99 file.ts       # multiple roots
 ```
 
 Each query token is one of:
@@ -51,12 +79,6 @@ Each query token is one of:
 | `n-m:id` | node named `id` within line range `[n, m]` |
 | `id`     | every node named `id`, regardless of scope |
 
-Generation flags (and their long aliases):
-
-- `-A N` / `--descendants N` – keep `N` generations of descendants
-- `-B N` / `--ancestors N` – keep `N` generations of ancestors
-- `-C N` / `--context N` – shorthand for `-A N -B N`
-
 When `-r` is given but no generation flag is, the default is `-C 10`. Pruning
 applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
 `ir` output is always emitted in full. If a query matches nothing, a warning
@@ -64,16 +86,16 @@ is written to stderr but the command still exits with `0`.
 
 ### Writing to a directory
 
-Pass `-o` / `--out-dir <dir>` to write the output to a file inside `<dir>`
-instead of stdout. The filename is derived from the `-r` queries and the
-radius flags so that successive runs don't clobber each other:
+Pass `-o <dir>` to write the output to a file inside `<dir>` instead of
+stdout. The filename is derived from the `-r` queries and the radius flags
+so that successive runs don't clobber each other:
 
 ```sh
-unsnarl --format markdown -r value -A 1 -o ./out file.ts
+uns -f markdown -r value -A 1 -o ./out file.ts
 # -> ./out/value-a1.md
-unsnarl --format markdown -r 10-12 -C 2 -o ./out file.ts
+uns -f markdown -r 10-12 -C 2 -o ./out file.ts
 # -> ./out/l10-12-c2.md
-unsnarl --format markdown -r 42:render -A 1 -o ./out file.ts
+uns -f markdown -r 42:render -A 1 -o ./out file.ts
 # -> ./out/l42-render-a1.md
 ```
 
@@ -118,7 +140,7 @@ pnpm install
 | `pnpm format`      | Fix lint and format                      |
 | `pnpm build`       | Compile to `dist/` via tsgo              |
 
-After `pnpm build` the CLI is at `dist/cli/main.js`. Use `pnpm pack`
+After `pnpm build` the CLI is at `dist/index.js`. Use `pnpm pack`
 to produce a distributable tarball.
 
 ## Stack
