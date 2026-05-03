@@ -13,7 +13,11 @@ export function branchContainerKey(scope: SerializedScope): string | null {
     ctx.parentType === AST_TYPE.IfStatement &&
     (ctx.key === "consequent" || ctx.key === "alternate")
   ) {
-    return `if:${scope.upper ?? ""}:${ctx.parentSpanOffset}`;
+    const root =
+      ctx.kind === "other" && ctx.ifChainRootOffset !== undefined
+        ? ctx.ifChainRootOffset
+        : ctx.parentSpanOffset;
+    return `if:${scope.upper ?? ""}:${root}`;
   }
   if (
     ctx.parentType === AST_TYPE.TryStatement &&

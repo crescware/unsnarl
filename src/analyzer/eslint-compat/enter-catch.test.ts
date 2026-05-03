@@ -21,7 +21,7 @@ describe("enterCatch", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterCatch(catchNode, tryParent, "handler", manager, code, diagnostics);
+    enterCatch(catchNode, tryParent, "handler", [], manager, code, diagnostics);
 
     const scope = manager.current();
     expect(scope.type).toBe("catch");
@@ -38,7 +38,7 @@ describe("enterCatch", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterCatch(catchNode, tryParent, "handler", manager, code, diagnostics);
+    enterCatch(catchNode, tryParent, "handler", [], manager, code, diagnostics);
 
     expect(manager.current().variables.map((v) => v.name)).toEqual(["message"]);
   });
@@ -50,7 +50,7 @@ describe("enterCatch", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterCatch(catchNode, tryParent, "handler", manager, code, diagnostics);
+    enterCatch(catchNode, tryParent, "handler", [], manager, code, diagnostics);
 
     expect(manager.current().variables.map((v) => v.name)).toEqual(["z"]);
   });

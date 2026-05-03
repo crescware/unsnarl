@@ -20,7 +20,7 @@ describe("enterBlock", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterBlock(block, parent, "consequent", manager, code, diagnostics);
+    enterBlock(block, parent, "consequent", [], manager, code, diagnostics);
 
     const scope = manager.current();
     expect(scope.type).toBe("block");
@@ -40,7 +40,7 @@ describe("enterBlock", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterBlock(block, null, null, manager, code, diagnostics);
+    enterBlock(block, null, null, [], manager, code, diagnostics);
 
     expect(manager.current().unsnarlBlockContext).toBeNull();
   });
@@ -51,7 +51,7 @@ describe("enterBlock", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterBlock(block, null, null, manager, "", diagnostics);
+    enterBlock(block, null, null, [], manager, "", diagnostics);
 
     expect(manager.current().variables).toHaveLength(0);
   });

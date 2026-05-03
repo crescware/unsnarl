@@ -100,6 +100,30 @@ describe("branchContainerKey", () => {
       expected: null,
     },
     {
+      name: "if branch with ifChainRootOffset -> uses chain root for the key",
+      upper: "outer" as string | null,
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "consequent",
+        parentSpanOffset: 40,
+        ifChainRootOffset: 5,
+      },
+      expected: "if:outer:5",
+    },
+    {
+      name: "if branch alternate with ifChainRootOffset -> shares the same chain key",
+      upper: "outer" as string | null,
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.IfStatement,
+        key: "alternate",
+        parentSpanOffset: 40,
+        ifChainRootOffset: 5,
+      },
+      expected: "if:outer:5",
+    },
+    {
       name: "unrelated parent type -> null",
       upper: "outer" as string | null,
       ctx: {

@@ -1,0 +1,229 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/control-if-else-chain/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_classify_9",
+      "name": "classify",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_189",
+      "name": "result",
+      "line": 13,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 11,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_n_18",
+          "name": "n",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_label_37",
+          "name": "label",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "cont_if_scope_1_46",
+          "kind": "if-else-container",
+          "line": 3,
+          "endLine": 9,
+          "direction": "RL",
+          "hasElse": true,
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 3,
+              "endLine": 5,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_1",
+                  "kind": "WriteOp",
+                  "name": "label",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "if"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 7,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_3",
+                  "kind": "WriteOp",
+                  "name": "label",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "if"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_4",
+              "line": 7,
+              "endLine": 9,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_4",
+                  "kind": "WriteOp",
+                  "name": "label",
+                  "line": 8,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "else"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_implicit",
+          "kind": "return",
+          "line": 1,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnUse",
+              "name": "n",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_166_179",
+          "kind": "return",
+          "line": 10,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "label",
+              "line": 10,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_label_37",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_label_37",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_label_37",
+      "to": "wr_ref_4",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_n_18",
+      "to": "cont_if_scope_1_46",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_n_18",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_classify_9",
+      "to": "n_scope_0_result_189",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
