@@ -59,6 +59,16 @@
           "elements": [
             {
               "type": "node",
+              "id": "if_test_scope_1_38",
+              "kind": "IfTest",
+              "name": "if-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
               "id": "n_scope_2_b_75",
               "name": "b",
               "line": 5,

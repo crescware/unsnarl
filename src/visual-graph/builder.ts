@@ -173,6 +173,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    ifTestAnchorByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
   } as const satisfies BuildState;
@@ -255,7 +256,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     if (hiddenVariables.has(r.resolved)) {
       continue;
     }
-    const predicateTarget = predicateTargetId(r, ir.scopes, scopeMap);
+    const predicateTarget = predicateTargetId(r, scopeMap, state);
     if (predicateTarget) {
       const fromIds = readOrigins(
         r.resolved,

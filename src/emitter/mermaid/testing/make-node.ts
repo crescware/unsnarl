@@ -10,6 +10,7 @@ type SimpleKind =
   | typeof NODE_KIND.CatchClause
   | typeof NODE_KIND.ImplicitGlobalVariable
   | typeof NODE_KIND.ReturnUse
+  | typeof NODE_KIND.IfTest
   | typeof NODE_KIND.ModuleSink
   | typeof NODE_KIND.ModuleSource
   | typeof NODE_KIND.ImportIntermediate;

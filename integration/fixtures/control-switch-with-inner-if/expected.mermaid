@@ -17,6 +17,7 @@ flowchart RL
             direction RL
             subgraph s_scope_4["if L5-7"]
               direction RL
+              if_test_scope_3_91{"if<br/>L5"}
               wr_ref_2(["let label<br/>L6"])
             end
             subgraph s_scope_5["else L7-9"]
@@ -45,7 +46,7 @@ flowchart RL
   n_scope_1_label_51 -->|set| wr_ref_4
   n_scope_1_label_51 -->|set| wr_ref_5
   n_scope_1_n_18 -->|read| s_scope_2
-  n_scope_1_big_29 -->|read| cont_if_scope_3_91
+  n_scope_1_big_29 -->|read| if_test_scope_3_91
   wr_ref_2 -->|read| ret_use_ref_6
   wr_ref_3 -->|read| ret_use_ref_6
   wr_ref_4 -->|read| ret_use_ref_6

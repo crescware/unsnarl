@@ -73,6 +73,7 @@ function makeState(host: VisualSubgraph, fnVarId = "fnVar"): BuildState {
     functionSubgraphByFn: new Map([[fnVarId, host]]),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    ifTestAnchorByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -86,6 +87,7 @@ describe("ensureReturnUseNode", () => {
       functionSubgraphByFn: new Map(),
       returnSubgraphsByFn: new Map(),
       returnUseAdded: new Set(),
+      ifTestAnchorByOffset: new Map(),
       emittedEdges: new Set(),
       edges: [],
     } as const satisfies BuildState;

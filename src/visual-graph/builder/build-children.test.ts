@@ -23,6 +23,7 @@ function emptyState(): BuildState {
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    ifTestAnchorByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -71,7 +72,7 @@ describe("buildChildren", () => {
     expect((container.elements[0] as VisualSubgraph).kind).toBe("for");
   });
 
-  test("a single if branch is not wrapped in an if-else-container", () => {
+  test("a single if branch is not wrapped in an if-else-container; the if-test anchor lives inside the consequent subgraph", () => {
     const cons = {
       ...baseScope(),
       id: "c",
@@ -90,10 +91,21 @@ describe("buildChildren", () => {
     buildChildren(outer, container, ctx, emptyState());
 
     expect(container.elements).toHaveLength(1);
-    expect((container.elements[0] as VisualSubgraph).kind).toBe("if");
+    const ifSg = container.elements[0];
+    expect((ifSg as VisualSubgraph).kind).toBe("if");
+    expect(
+      container.elements.some(
+        (e) => e.type === "subgraph" && e.kind === "if-else-container",
+      ),
+    ).toBe(false);
+    const anchor = (ifSg as VisualSubgraph).elements[0];
+    expect(anchor?.type).toBe("node");
+    if (anchor?.type === "node") {
+      expect(anchor.kind).toBe("IfTest");
+    }
   });
 
-  test("consecutive if siblings (consequent + alternate) wrap in an if-else-container with hasElse=true", () => {
+  test("consecutive if siblings (consequent + alternate) wrap in an if-else-container with hasElse=true; the test anchor lives inside the consequent (not the container)", () => {
     const cons = {
       ...baseScope(),
       id: "c",
@@ -131,10 +143,27 @@ describe("buildChildren", () => {
       throw new Error("expected if-else-container");
     }
     expect(sg.hasElse).toBe(true);
-    expect(sg.elements.map((e) => (e as VisualSubgraph).kind)).toEqual([
-      "if",
-      "else",
-    ]);
+    // The container holds only the branch subgraphs; the test anchor
+    // lives inside the `if` (consequent) branch, and the `else`
+    // (alternate) carries no test of its own.
+    expect(sg.elements.map((e) => e.type)).toEqual(["subgraph", "subgraph"]);
+    expect(sg.elements.map((e) => e.kind)).toEqual(["if", "else"]);
+    const ifSg = sg.elements[0];
+    if (ifSg?.type !== "subgraph" || ifSg.kind !== "if") {
+      throw new Error("expected if subgraph at index 0");
+    }
+    const anchor = ifSg.elements[0];
+    expect(anchor?.type).toBe("node");
+    if (anchor?.type === "node") {
+      expect(anchor.kind).toBe("IfTest");
+    }
+    const elseSg = sg.elements[1];
+    if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
+      throw new Error("expected else subgraph at index 1");
+    }
+    expect(
+      elseSg.elements.every((e) => !(e.type === "node" && e.kind === "IfTest")),
+    ).toBe(true);
   });
 
   test("if-else-container endLine is the maximum endLine among grouped branches", () => {
@@ -173,7 +202,7 @@ describe("buildChildren", () => {
     expect(sg.endLine).toBe(7);
   });
 
-  test("two adjacent if-statements with different parentSpanOffsets are not merged", () => {
+  test("two adjacent if-statements with different parentSpanOffsets are not merged; each gets its own anchor", () => {
     const ifA = {
       ...baseScope(),
       id: "ifA",
@@ -202,9 +231,24 @@ describe("buildChildren", () => {
 
     buildChildren(outer, container, ctx, emptyState());
 
+    // Two lone-ifs at the parent-scope level: each contributes one if
+    // subgraph that hosts its own test anchor inside. No merge
+    // container in between.
     expect(container.elements).toHaveLength(2);
-    for (const e of container.elements) {
-      expect((e as VisualSubgraph).kind).toBe("if");
+    expect(container.elements.map((e) => e.type)).toEqual([
+      "subgraph",
+      "subgraph",
+    ]);
+    expect(container.elements.map((e) => e.kind)).toEqual(["if", "if"]);
+    for (const sg of container.elements) {
+      if (sg.type !== "subgraph") {
+        throw new Error("expected subgraph");
+      }
+      const anchor = sg.elements[0];
+      expect(anchor?.type).toBe("node");
+      if (anchor?.type === "node") {
+        expect(anchor.kind).toBe("IfTest");
+      }
     }
   });
 

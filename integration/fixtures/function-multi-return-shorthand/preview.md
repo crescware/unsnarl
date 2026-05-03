@@ -30,6 +30,7 @@ flowchart RL
       n_scope_1_b_119["b<br/>L9"]
       subgraph s_scope_2["if L4-7"]
         direction RL
+        if_test_scope_1_38{"if<br/>L4"}
         n_scope_2_b_75["b<br/>L5"]
         subgraph s_return_scope_0_main_9_89_105["return L6"]
           direction RL

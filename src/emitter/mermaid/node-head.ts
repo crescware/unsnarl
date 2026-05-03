@@ -44,6 +44,7 @@ export function nodeHead(n: VisualNode): string {
       return name;
     case NODE_KIND.Parameter:
     case NODE_KIND.ReturnUse:
+    case NODE_KIND.IfTest:
     case NODE_KIND.ModuleSink:
       return name;
   }

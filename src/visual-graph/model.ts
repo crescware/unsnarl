@@ -36,6 +36,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.CatchClause })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ImplicitGlobalVariable })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnUse })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.IfTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ImportIntermediate })

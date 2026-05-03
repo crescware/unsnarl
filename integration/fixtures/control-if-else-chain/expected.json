@@ -78,6 +78,16 @@
               "elements": [
                 {
                   "type": "node",
+                  "id": "if_test_scope_1_46",
+                  "kind": "IfTest",
+                  "name": "if-test",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
                   "id": "wr_ref_1",
                   "kind": "WriteOp",
                   "name": "label",
@@ -97,6 +107,16 @@
               "endLine": 7,
               "direction": "RL",
               "elements": [
+                {
+                  "type": "node",
+                  "id": "if_test_scope_1_92",
+                  "kind": "IfTest",
+                  "name": "if-test",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
                 {
                   "type": "node",
                   "id": "wr_ref_3",
@@ -131,26 +151,6 @@
                 }
               ],
               "kind": "else"
-            }
-          ]
-        },
-        {
-          "type": "subgraph",
-          "id": "s_return_scope_0_classify_9_implicit",
-          "kind": "return",
-          "line": 1,
-          "endLine": null,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
-              "name": "n",
-              "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
             }
           ]
         },
@@ -195,12 +195,12 @@
     },
     {
       "from": "n_scope_1_n_18",
-      "to": "cont_if_scope_1_46",
+      "to": "if_test_scope_1_46",
       "label": "read"
     },
     {
       "from": "n_scope_1_n_18",
-      "to": "ret_use_ref_2",
+      "to": "if_test_scope_1_92",
       "label": "read"
     },
     {

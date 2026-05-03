@@ -1,14 +1,13 @@
 import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedReference, SerializedScope } from "../../ir/model.js";
-import { branchContainerKey } from "./branch-container-key.js";
-import { ifContainerSubgraphId } from "./if-container-subgraph-id.js";
+import type { BuildState } from "./build-state.js";
 import { sanitize } from "./sanitize.js";
 
 export function predicateTargetId(
   r: SerializedReference,
-  scopes: readonly SerializedScope[],
   scopeMap: ReadonlyMap<string, SerializedScope>,
+  state: BuildState,
 ): string | null {
   const pc = r.predicateContainer;
   if (!pc) {
@@ -30,14 +29,5 @@ export function predicateTargetId(
     }
     return null;
   }
-  const containerKey = `if:${r.from}:${pc.offset}`;
-  const branches = scopes.filter((s) => branchContainerKey(s) === containerKey);
-  if (branches.length >= 2) {
-    return ifContainerSubgraphId(r.from, pc.offset);
-  }
-  const single = branches[0];
-  if (single) {
-    return `s_${sanitize(single.id)}`;
-  }
-  return null;
+  return state.ifTestAnchorByOffset.get(pc.offset) ?? null;
 }

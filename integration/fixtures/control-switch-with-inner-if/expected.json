@@ -102,6 +102,16 @@
                       "elements": [
                         {
                           "type": "node",
+                          "id": "if_test_scope_3_91",
+                          "kind": "IfTest",
+                          "name": "if-test",
+                          "line": 5,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        },
+                        {
+                          "type": "node",
                           "id": "wr_ref_2",
                           "kind": "WriteOp",
                           "name": "label",
@@ -239,7 +249,7 @@
     },
     {
       "from": "n_scope_1_big_29",
-      "to": "cont_if_scope_3_91",
+      "to": "if_test_scope_3_91",
       "label": "read"
     },
     {
