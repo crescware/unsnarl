@@ -4,7 +4,7 @@ export type ExecuteSource =
   | Readonly<{
       stdin: true;
       text: string;
-      lang: CliLanguage;
+      stdinLang: CliLanguage;
     }>
   | Readonly<{
       stdin: false;

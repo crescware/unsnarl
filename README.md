@@ -28,7 +28,7 @@ uns <file>                                              # JSON IR to stdout
 uns -f mermaid <file>                                   # Mermaid flowchart
 uns -f markdown -r value -A 1 -o ./out file.ts          # write to ./out/value-a1.md
 uns -f json --no-pretty-json <file>                     # compact JSON for piping
-cat foo.ts | uns --stdin --lang ts
+cat foo.ts | uns --stdin --stdin-lang ts
 ```
 
 Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
@@ -41,7 +41,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 |       | `--no-pretty-json`       | Disable pretty-printed JSON output                            |
 |       | `--mermaid-renderer <r>` | Mermaid layout engine: `elk` default, `dagre`                 |
 |       | `--stdin`                | Read source from stdin                                        |
-|       | `--lang <lang>`          | Language for stdin: `ts` default, `tsx`, `js`, `jsx`          |
+|       | `--stdin-lang <lang>`    | Language for stdin: `ts` default, `tsx`, `js`, `jsx`          |
 | `-r`  | `--roots <queries>`      | Comma-separated root queries (repeatable) — see Pruning       |
 | `-A`  | `--descendants <N>`      | Descendants generations — see Pruning                         |
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |

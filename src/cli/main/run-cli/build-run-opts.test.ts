@@ -13,7 +13,7 @@ vi.mock("../../io.js", () => ({
 const baseOpts = {
   format: "json",
   stdin: false,
-  lang: "ts",
+  stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
   roots: [],
@@ -26,7 +26,7 @@ const baseOpts = {
 const stdinSrc = {
   stdin: true,
   text: "const piped = 1;",
-  lang: "tsx",
+  stdinLang: "tsx",
 } as const satisfies ExecuteSource;
 
 const fileSrc = {
@@ -162,10 +162,10 @@ describe("buildRunOpts", () => {
     const opts = {
       ...baseOpts,
       stdin: true,
-      lang: "tsx",
+      stdinLang: "tsx",
     } as const satisfies Parameters<typeof buildRunOpts>[1];
 
-    test("returns runOpts with text/lang from src and sourcePath set to stdin.<lang>", () => {
+    test("returns runOpts with text/stdinLang from src and sourcePath set to stdin.<stdinLang>", () => {
       const expected = {
         text: "const piped = 1;",
         runOpts: {

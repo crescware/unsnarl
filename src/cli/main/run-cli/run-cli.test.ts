@@ -351,7 +351,13 @@ describe("runCli (integration)", () => {
         () => (async function* () {})() as AsyncIterator<Buffer>,
       );
     try {
-      const r = await captureRun(["--stdin", "--lang", "ts", "-o", outDir]);
+      const r = await captureRun([
+        "--stdin",
+        "--stdin-lang",
+        "ts",
+        "-o",
+        outDir,
+      ]);
       expect(r.exitCode).toBe(2);
       expect(r.stderr).toMatch(/-r\/--roots|input file/);
       expect(existsSync(outDir)).toBe(false);

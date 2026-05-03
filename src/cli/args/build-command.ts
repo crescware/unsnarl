@@ -18,7 +18,7 @@ function coerceLanguage(value: string): CliLanguage {
 export type ParsedCliOptions = Readonly<{
   format: string;
   stdin: boolean;
-  lang: CliLanguage;
+  stdinLang: CliLanguage;
   prettyJson: boolean;
   mermaidRenderer: CliMermaidRenderer | null;
   roots: readonly ParsedRootQuery[];
@@ -41,7 +41,7 @@ export function buildCommand(): Command {
   const options: readonly Option[] = [
     ...formatOptions(),
     new Option("--stdin", "Read from stdin").default(false),
-    new Option("--lang <lang>", "Language for stdin input")
+    new Option("--stdin-lang <lang>", "Language for stdin input")
       .argParser(coerceLanguage)
       .default("ts" as CliLanguage),
     ...scopeOptions(),

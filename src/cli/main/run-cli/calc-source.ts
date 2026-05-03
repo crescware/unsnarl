@@ -14,7 +14,7 @@ export async function calcSource(
     return {
       stdin: true,
       text: await readStdin(),
-      lang: opts.lang,
+      stdinLang: opts.stdinLang,
     };
   }
 
