@@ -17,6 +17,16 @@
       "kind": "FunctionName"
     },
     {
+      "type": "node",
+      "id": "n_scope_0_Math_42",
+      "name": "Math",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
       "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
@@ -146,6 +156,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "n_scope_0_Math_42",
+      "to": "if_test_scope_1_38",
+      "label": "read"
+    },
     {
       "from": "n_scope_1_a_26",
       "to": "ret_use_ref_1",

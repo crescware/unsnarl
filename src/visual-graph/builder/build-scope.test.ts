@@ -32,6 +32,7 @@ function emptyState(): BuildState {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -41,7 +42,6 @@ function makeCtx(opts: {
   scopes: readonly SerializedScope[];
   variables?: readonly SerializedVariable[];
   subgraphOwnerVar?: Map<string, string>;
-  hiddenVariables?: Set<string>;
   writeOpsByScope?: Map<string, WriteOp[]>;
 }): BuilderContext {
   const variables = opts.variables ?? [];
@@ -60,7 +60,6 @@ function makeCtx(opts: {
     variableMap: new Map(variables.map((v) => [v.id, v])),
     scopeMap: new Map(opts.scopes.map((s) => [s.id, s])),
     subgraphOwnerVar: opts.subgraphOwnerVar ?? new Map(),
-    hiddenVariables: opts.hiddenVariables ?? new Set(),
     writeOpsByVariable: new Map(),
     writeOpsByScope: opts.writeOpsByScope ?? new Map(),
     writeOpByRef: new Map(),
@@ -84,23 +83,6 @@ describe("buildScope", () => {
       kind: NODE_KIND.Variable,
       name: "x",
     });
-  });
-
-  test("hidden variables are skipped", () => {
-    const scope = { ...baseScope(), id: "s", variables: ["hidden", "v"] };
-    const hidden = { ...baseVariable(), id: "hidden", name: "h" };
-    const v = { ...baseVariable(), id: "v", name: "x" };
-    const ctx = makeCtx({
-      scopes: [scope],
-      variables: [hidden, v],
-      hiddenVariables: new Set(["hidden"]),
-    });
-    const container: { elements: VisualElement[] } = { elements: [] };
-
-    buildScope(scope, container, ctx, emptyState());
-
-    expect(container.elements).toHaveLength(1);
-    expect((container.elements[0] as { id: string }).id).toBe("n_v");
   });
 
   test("writeOps in the scope appear as WriteOp nodes with declarationKind from the owning variable", () => {

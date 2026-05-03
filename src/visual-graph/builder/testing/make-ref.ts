@@ -13,5 +13,6 @@ export function baseRef(): SerializedReference {
     predicateContainer: null,
     returnContainer: null,
     jsxElement: null,
+    expressionStatementContainer: null,
   };
 }

@@ -131,7 +131,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 36
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 8,
+          "offset": 44
+        },
+        "headStartSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 36
+        },
+        "headEndSpan": {
+          "line": 4,
+          "column": 5,
+          "offset": 41
+        },
+        "isCall": true
+      }
     }
   ],
   "unusedVariableIds": [],

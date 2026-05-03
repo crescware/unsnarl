@@ -4,9 +4,11 @@ flowchart RL
   n_scope_0_neverCalled_15["unused import neverCalled<br/>L1"]
   n_scope_0_a_67["a<br/>L4"]
   n_scope_0_ignored_83["unused ignored<br/>L5"]
+  n_scope_0_console_98["global console"]
   n_scope_0_used_9 -->|read| n_scope_0_a_67
-  n_scope_0_a_67 -->|read| module_root
-  module_root((module))
+  n_scope_0_console_98 -->|read| expr_stmt_98
+  n_scope_0_a_67 -->|read| expr_stmt_98
+  expr_stmt_98["console.log()<br/>L7"]
   mod_module["module module<br/>L1"]
   mod_module -->|read| n_scope_0_used_9
   mod_module -->|read| n_scope_0_neverCalled_15

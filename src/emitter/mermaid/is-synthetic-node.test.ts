@@ -28,6 +28,7 @@ describe("isSyntheticNode", () => {
     { kind: NODE_KIND.ModuleSink, expected: true },
     { kind: NODE_KIND.ModuleSource, expected: true },
     { kind: NODE_KIND.ImportIntermediate, expected: true },
+    { kind: NODE_KIND.ExpressionStatement, expected: true },
     { kind: NODE_KIND.Variable, expected: false },
     { kind: NODE_KIND.FunctionName, expected: false },
     { kind: NODE_KIND.ClassName, expected: false },

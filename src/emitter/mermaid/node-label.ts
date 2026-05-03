@@ -10,6 +10,9 @@ export function nodeLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.ModuleSink) {
     return "module";
   }
+  if (n.kind === NODE_KIND.ImplicitGlobalVariable) {
+    return head;
+  }
   // Unused declarations are surfaced via a textual prefix instead of a
   // dashed border. This keeps the visual cue legible even when the node
   // already has another classDef applied (boundary stub, fnWrap, ...).

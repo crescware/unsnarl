@@ -21,8 +21,8 @@ flowchart RL
       direction RL
     end
   end
-  n_scope_0_greet_9 -->|read,call| module_root
-  module_root((module))
+  n_scope_0_greet_9 -->|read,call| expr_stmt_36
+  expr_stmt_36["greet()<br/>L4"]
   classDef fnWrap fill:#1a2030,stroke:#5a7d99;
   class wrap_s_scope_1 fnWrap;
 ```

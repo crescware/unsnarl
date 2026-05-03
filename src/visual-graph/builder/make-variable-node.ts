@@ -9,11 +9,19 @@ import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {
   const def = v.defs[0];
+  // ImplicitGlobalVariable has no source-level definition; the analyzer
+  // pins its synthetic def to the first reference, so any line we read
+  // from it would lie about where the global "lives". Treat it as
+  // location-less (line 0), mirroring ModuleSink.
+  const line =
+    def?.type === DEFINITION_TYPE.ImplicitGlobalVariable
+      ? 0
+      : (v.identifiers[0]?.line ?? def?.name.span.line ?? 0);
   const common = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: nodeId(v.id),
     name: v.name,
-    line: v.identifiers[0]?.line ?? def?.name.span.line ?? 0,
+    line,
     endLine: null,
     isJsxElement: false,
     unused: false,

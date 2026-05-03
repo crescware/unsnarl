@@ -59,7 +59,6 @@ function makeCtx(
     variableMap: new Map(variables.map((v) => [v.id, v])),
     scopeMap: new Map(scopes.map((s) => [s.id, s])),
     subgraphOwnerVar: new Map(),
-    hiddenVariables: new Set(),
     writeOpsByVariable: new Map<string, WriteOp[]>(),
     writeOpsByScope: new Map<string, WriteOp[]>(),
     writeOpByRef: new Map<string, WriteOp>(),
@@ -74,6 +73,7 @@ function makeState(host: VisualSubgraph, fnVarId = "fnVar"): BuildState {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
   };
@@ -88,6 +88,7 @@ describe("ensureReturnUseNode", () => {
       returnSubgraphsByFn: new Map(),
       returnUseAdded: new Set(),
       ifTestAnchorByOffset: new Map(),
+      expressionStatementByOffset: new Map(),
       emittedEdges: new Set(),
       edges: [],
     } as const satisfies BuildState;

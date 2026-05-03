@@ -39,6 +39,11 @@ describe("nodeHead", () => {
       name: "named",
       expected: "import named",
     },
+    {
+      kind: NODE_KIND.ExpressionStatement,
+      name: "console.log()",
+      expected: "console.log()",
+    },
   ] as const)("kind $kind formats as $expected", ({ kind, name, expected }) => {
     expect(nodeHead({ ...baseSimpleNode(kind), name })).toBe(expected);
   });

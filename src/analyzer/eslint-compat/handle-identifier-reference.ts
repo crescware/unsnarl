@@ -1,5 +1,6 @@
 import type { AstIdentifier, AstNode } from "../../ir/model.js";
 import { classifyIdentifier } from "../classify/classify-identifier.js";
+import { findExpressionStatementContainer } from "../expression-statement-container.js";
 import { findJsxElementSpan } from "../jsx-element-span.js";
 import type { ScopeManager } from "../manager.js";
 import { findReferenceOwners } from "../owner/find-reference-owners.js";
@@ -40,4 +41,6 @@ export function handleIdentifierReference(
   );
   ref.unsnarlReturnContainer = findReturnContainer(path);
   ref.unsnarlJsxElement = findJsxElementSpan(path);
+  ref.unsnarlExpressionStatementContainer =
+    findExpressionStatementContainer(path);
 }

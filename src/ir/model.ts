@@ -63,6 +63,18 @@ export type JsxElementContainer = Readonly<{
   endOffset: number;
 }>;
 
+export type ExpressionStatementContainer = Readonly<{
+  startOffset: number;
+  endOffset: number;
+  // Span of the expression's "head" used as the display label: the callee
+  // for a CallExpression (`console.log` from `console.log(a)`), the whole
+  // expression otherwise (`x` from `x;`).
+  headStartOffset: number;
+  headEndOffset: number;
+  // When true, the renderer appends `()` after the head text.
+  isCall: boolean;
+}>;
+
 // Reference / Variable / Scope keep mutable fields and arrays because the
 // builder mutates them in place during scope analysis (ScopeImpl pushes
 // onto `variables`, `references`, etc.; bindReference reassigns
@@ -84,6 +96,7 @@ export type Reference = {
   unsnarlPredicateContainer: PredicateContainer | null;
   unsnarlReturnContainer: ReturnContainer | null;
   unsnarlJsxElement: JsxElementContainer | null;
+  unsnarlExpressionStatementContainer: ExpressionStatementContainer | null;
 };
 
 export type Definition = Readonly<{
@@ -198,6 +211,13 @@ export type SerializedReference = Readonly<{
   predicateContainer: PredicateContainer | null;
   returnContainer: Readonly<{ startSpan: Span; endSpan: Span }> | null;
   jsxElement: Readonly<{ startSpan: Span; endSpan: Span }> | null;
+  expressionStatementContainer: Readonly<{
+    startSpan: Span;
+    endSpan: Span;
+    headStartSpan: Span;
+    headEndSpan: Span;
+    isCall: boolean;
+  }> | null;
 }>;
 
 type CommonDefFields = Readonly<{

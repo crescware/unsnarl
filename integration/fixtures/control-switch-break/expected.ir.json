@@ -378,7 +378,8 @@
         "offset": 35
       },
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -404,7 +405,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 67
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 20,
+          "offset": 83
+        },
+        "headStartSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 67
+        },
+        "headEndSpan": {
+          "line": 6,
+          "column": 19,
+          "offset": 82
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#2",
@@ -430,7 +454,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 9,
+          "column": 4,
+          "offset": 111
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 19,
+          "offset": 126
+        },
+        "headStartSpan": {
+          "line": 9,
+          "column": 4,
+          "offset": 111
+        },
+        "headEndSpan": {
+          "line": 9,
+          "column": 18,
+          "offset": 125
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#3",
@@ -456,7 +503,30 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 12,
+          "column": 4,
+          "offset": 153
+        },
+        "endSpan": {
+          "line": 12,
+          "column": 20,
+          "offset": 169
+        },
+        "headStartSpan": {
+          "line": 12,
+          "column": 4,
+          "offset": 153
+        },
+        "headEndSpan": {
+          "line": 12,
+          "column": 19,
+          "offset": 168
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#4",
@@ -482,7 +552,8 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

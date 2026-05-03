@@ -1,5 +1,6 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
+  n_scope_0_Math_42["global Math"]
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_main_9["unused main()<br/>L1"]
@@ -24,6 +25,7 @@ flowchart RL
       end
     end
   end
+  n_scope_0_Math_42 -->|read| if_test_scope_1_38
   n_scope_1_a_26 -->|read| ret_use_ref_1
   n_scope_2_b_75 -->|read| ret_use_ref_2
   n_scope_1_a_26 -->|read| ret_use_ref_3

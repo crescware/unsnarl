@@ -255,7 +255,8 @@
           "column": 29,
           "offset": 111
         }
-      }
+      },
+      "expressionStatementContainer": null
     },
     {
       "id": "ref#1",
@@ -290,7 +291,8 @@
           "offset": 112
         }
       },
-      "jsxElement": null
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [

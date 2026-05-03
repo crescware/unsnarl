@@ -15,6 +15,7 @@ import type { BuildState } from "./builder/build-state.js";
 import type { BuilderContext } from "./builder/context.js";
 import { edgeLabelOfRef } from "./builder/edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./builder/enclosing-function-var.js";
+import { ensureExpressionStatementNode } from "./builder/ensure-expression-statement-node.js";
 import { ensureReturnUseNode } from "./builder/ensure-return-use-node.js";
 import { findNodeById } from "./builder/find-node-by-id.js";
 import { intermediateKey } from "./builder/intermediate-key.js";
@@ -86,17 +87,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
-  const hiddenVariables = new Set<string>();
-  for (const v of ir.variables) {
-    if (v.defs[0]?.type !== DEFINITION_TYPE.ImplicitGlobalVariable) {
-      continue;
-    }
-    const refs = ir.references.filter((r) => r.resolved === v.id);
-    if (refs.length > 0 && refs.every((r) => r.flags.receiver)) {
-      hiddenVariables.add(v.id);
-    }
-  }
-
   const refsByVariable = new Map<string, /* mutable */ SerializedReference[]>();
   for (const r of ir.references) {
     if (!r.resolved) {
@@ -113,9 +103,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   const writeOpsByScope = new Map<string, /* mutable */ WriteOp[]>();
   const writeOpByRef = new Map<string, WriteOp>();
   for (const v of ir.variables) {
-    if (hiddenVariables.has(v.id)) {
-      continue;
-    }
     const refs = refsByVariable.get(v.id) ?? [];
     const ops: /* mutable */ WriteOp[] = [];
     for (const r of refs) {
@@ -162,7 +149,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     variableMap,
     scopeMap,
     subgraphOwnerVar,
-    hiddenVariables,
     writeOpsByVariable,
     writeOpsByScope,
     writeOpByRef,
@@ -174,6 +160,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
   } as const satisfies BuildState;
@@ -251,9 +238,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   for (const r of ir.references) {
     if (!r.resolved) {
-      continue;
-    }
-    if (hiddenVariables.has(r.resolved)) {
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
@@ -344,9 +328,18 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
           }
         }
       } else {
-        needsModuleRoot = true;
+        const exprStmtId = ensureExpressionStatementNode(
+          r,
+          ir.raw,
+          graph.elements,
+          state,
+        );
+        const targetId = exprStmtId ?? MODULE_ROOT_ID;
+        if (!exprStmtId) {
+          needsModuleRoot = true;
+        }
         for (const fromId of fromIds) {
-          pushEdge(state, fromId, label, MODULE_ROOT_ID);
+          pushEdge(state, fromId, label, targetId);
         }
       }
     }
@@ -380,9 +373,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   const intermediates = new Map<string, Intermediate>();
 
   for (const v of ir.variables) {
-    if (hiddenVariables.has(v.id)) {
-      continue;
-    }
     const def = v.defs[0];
     if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;
@@ -439,9 +429,6 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     });
   }
   for (const v of ir.variables) {
-    if (hiddenVariables.has(v.id)) {
-      continue;
-    }
     const def = v.defs[0];
     if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       continue;

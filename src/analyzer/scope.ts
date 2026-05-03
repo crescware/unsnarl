@@ -4,6 +4,7 @@ import type {
   AstNode,
   BlockContext,
   Definition,
+  ExpressionStatementContainer,
   JsxElementContainer,
   PredicateContainer,
   Reference,
@@ -83,6 +84,8 @@ export class ReferenceImpl implements Reference {
   unsnarlPredicateContainer: PredicateContainer | null = null;
   unsnarlReturnContainer: ReturnContainer | null = null;
   unsnarlJsxElement: JsxElementContainer | null = null;
+  unsnarlExpressionStatementContainer: ExpressionStatementContainer | null =
+    null;
   readonly init: boolean;
   readonly unsnarlFlags: ReferenceFlagBits;
 

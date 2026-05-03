@@ -179,7 +179,7 @@ describe("buildVisualGraph: variable nodes", () => {
     expect(variableByName(g, "fn")?.initIsFunction).toBe(true);
   });
 
-  test("ImplicitGlobalVariable that is only a member receiver is hidden, but a direct read is kept", () => {
+  test("ImplicitGlobalVariable is kept as a node regardless of whether refs are receiver-only", () => {
     const directRead = build("function f() { return globalThing; }\n");
     expect(
       nodeByName(directRead, "globalThing")?.kind ===
@@ -187,8 +187,9 @@ describe("buildVisualGraph: variable nodes", () => {
     ).toBe(true);
 
     const onlyReceiver = build("const x = Object.keys({});\n");
-    // Object is only used as a member receiver (Object.keys), so it gets hidden.
-    expect(nodeByName(onlyReceiver, "Object")).toBeUndefined();
+    expect(nodeByName(onlyReceiver, "Object")?.kind).toBe(
+      NODE_KIND.ImplicitGlobalVariable,
+    );
   });
 
   test("named imports renamed at the import site keep the local name on the node", () => {
@@ -834,14 +835,52 @@ describe("buildVisualGraph: predicate references", () => {
 });
 
 describe("buildVisualGraph: ownerless refs at module scope", () => {
-  test("a top-level expression that consumes a variable creates a ModuleSink and routes the read there", () => {
+  test("a top-level ExpressionStatement gets its own node carrying the call head and line, and consuming reads route into it", () => {
     const g = build("const a = 1;\nconsole.log(a);\n");
-    const moduleSink = findNodes(g, NODE_KIND.ModuleSink)[0];
-    expect(moduleSink).toBeDefined();
+    const exprNode = findNodes(g, NODE_KIND.ExpressionStatement)[0];
+    expect(exprNode).toBeDefined();
+    expect(exprNode?.name).toBe("console.log()");
+    expect(exprNode?.line).toBe(2);
     const a = nodeByName(g, "a");
-    // Either directly or via ImplicitGlobalVariable("console") routing — but
-    // an edge into the module sink must exist.
-    expect(edgesFrom(g, a!.id).some((e) => e.to === moduleSink?.id)).toBe(true);
+    expect(edgesFrom(g, a!.id).some((e) => e.to === exprNode?.id)).toBe(true);
+    const consoleNode = nodeByName(g, "console");
+    expect(
+      edgesFrom(g, consoleNode!.id).some((e) => e.to === exprNode?.id),
+    ).toBe(true);
+  });
+
+  test("a non-call top-level ExpressionStatement uses the bare expression as the head", () => {
+    const g = build("const a = 1;\na;\n");
+    const exprNode = findNodes(g, NODE_KIND.ExpressionStatement)[0];
+    expect(exprNode?.name).toBe("a");
+    expect(exprNode?.line).toBe(2);
+  });
+
+  test("a receiver-only ImplicitGlobalVariable in an if-predicate flows into the if-test anchor (issue #20 regression)", () => {
+    const g = build(
+      "function f() { if (Math.random() < 0.5) { return 1; } return 0; }\n",
+    );
+    const math = nodeByName(g, "Math");
+    expect(math?.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
+    const anchor = findNodes(g, NODE_KIND.IfTest)[0];
+    expect(anchor).toBeDefined();
+    expect(
+      g.edges.some(
+        (e) => e.from === math?.id && e.to === anchor?.id && e.label === "read",
+      ),
+    ).toBe(true);
+  });
+
+  test("a receiver-only ImplicitGlobalVariable consumed by a Variable emits an outgoing read edge", () => {
+    const g = build("const xs = Object.keys({});\n");
+    const obj = nodeByName(g, "Object");
+    const xs = nodeByName(g, "xs");
+    expect(obj?.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
+    expect(
+      g.edges.some(
+        (e) => e.from === obj?.id && e.to === xs?.id && e.label === "read",
+      ),
+    ).toBe(true);
   });
 });
 

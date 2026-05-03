@@ -31,7 +31,6 @@ function makeCtx(overrides: Partial<BuilderContext>): BuilderContext {
     variableMap: new Map<string, SerializedVariable>(),
     scopeMap: new Map<string, SerializedScope>(),
     subgraphOwnerVar: new Map<string, string>(),
-    hiddenVariables: new Set<string>(),
     writeOpsByVariable: new Map<string, WriteOp[]>(),
     writeOpsByScope: new Map<string, WriteOp[]>(),
     writeOpByRef: new Map<string, WriteOp>(),
