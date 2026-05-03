@@ -197,6 +197,21 @@
       "label": "read"
     },
     {
+      "from": "wr_ref_0",
+      "to": "wr_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "wr_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_182",
+      "label": "read"
+    },
+    {
       "from": "wr_ref_5",
       "to": "n_scope_0_result_182",
       "label": "read"

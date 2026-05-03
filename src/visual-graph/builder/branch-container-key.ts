@@ -15,5 +15,11 @@ export function branchContainerKey(scope: SerializedScope): string | null {
   ) {
     return `if:${scope.upper ?? ""}:${ctx.parentSpanOffset}`;
   }
+  if (
+    ctx.parentType === AST_TYPE.TryStatement &&
+    (ctx.key === "block" || ctx.key === "handler")
+  ) {
+    return `try:${scope.upper ?? ""}:${ctx.parentSpanOffset}`;
+  }
   return null;
 }

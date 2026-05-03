@@ -90,6 +90,23 @@ export function readOrigins(
     }
   }
 
+  if (containerKey.startsWith("try:")) {
+    const hasHandler = branchScopeIds.some((id) => {
+      const s = ctx.scopeMap.get(id);
+      return s?.blockContext?.key === "handler";
+    });
+    if (!hasHandler) {
+      const tryOffset = lastBranchScope.blockContext?.parentSpanOffset ?? 0;
+      const before = ops.filter((op) => op.offset < tryOffset);
+      const lastBefore = before[before.length - 1];
+      if (lastBefore) {
+        origins.push(writeOpNodeId(lastBefore.refId));
+      } else {
+        origins.push(nodeId(varId));
+      }
+    }
+  }
+
   if (origins.length === 0) {
     return [writeOpNodeId(last.refId)];
   }

@@ -246,6 +246,135 @@ describe("readOrigins", () => {
     expect(readOrigins("v", 200, "root", ctx)).toEqual(["wr_rC2"]);
   });
 
+  test("try/catch with writes in both branches yields one origin per branch", () => {
+    const root = { ...baseScope(), id: "root" };
+    const tryBlock = {
+      ...baseScope(),
+      id: "tryBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "block",
+        parentSpanOffset: 50,
+      },
+    };
+    const catchBlock = {
+      ...baseScope(),
+      id: "catchBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "handler",
+        parentSpanOffset: 50,
+      },
+    };
+    const opTry = {
+      ...baseWriteOp(),
+      refId: "rTry",
+      offset: 60,
+      scopeId: "tryBlock",
+    };
+    const opCatch = {
+      ...baseWriteOp(),
+      refId: "rCatch",
+      offset: 70,
+      scopeId: "catchBlock",
+    };
+    const ctx = makeCtx({
+      scopes: [root, tryBlock, catchBlock],
+      writeOpsByVariable: new Map([["v", [opTry, opCatch]]]),
+    });
+    expect(new Set(readOrigins("v", 100, "root", ctx))).toEqual(
+      new Set(["wr_rTry", "wr_rCatch"]),
+    );
+  });
+
+  test("try without catch handler adds the pre-try origin (variable id when no prior write)", () => {
+    const root = { ...baseScope(), id: "root" };
+    const tryBlock = {
+      ...baseScope(),
+      id: "tryBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "block",
+        parentSpanOffset: 50,
+      },
+    };
+    const opTry = {
+      ...baseWriteOp(),
+      refId: "rTry",
+      offset: 60,
+      scopeId: "tryBlock",
+    };
+    const ctx = makeCtx({
+      scopes: [root, tryBlock],
+      writeOpsByVariable: new Map([["v", [opTry]]]),
+    });
+    expect(new Set(readOrigins("v", 100, "root", ctx))).toEqual(
+      new Set(["wr_rTry", "n_v"]),
+    );
+  });
+
+  test("read inside finally sees writes from try and catch siblings", () => {
+    const root = { ...baseScope(), id: "root" };
+    const tryBlock = {
+      ...baseScope(),
+      id: "tryBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "block",
+        parentSpanOffset: 50,
+      },
+    };
+    const catchBlock = {
+      ...baseScope(),
+      id: "catchBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "handler",
+        parentSpanOffset: 50,
+      },
+    };
+    const finallyBlock = {
+      ...baseScope(),
+      id: "finallyBlock",
+      upper: "root",
+      blockContext: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "finalizer",
+        parentSpanOffset: 50,
+      },
+    };
+    const opTry = {
+      ...baseWriteOp(),
+      refId: "rTry",
+      offset: 60,
+      scopeId: "tryBlock",
+    };
+    const opCatch = {
+      ...baseWriteOp(),
+      refId: "rCatch",
+      offset: 70,
+      scopeId: "catchBlock",
+    };
+    const ctx = makeCtx({
+      scopes: [root, tryBlock, catchBlock, finallyBlock],
+      writeOpsByVariable: new Map([["v", [opTry, opCatch]]]),
+    });
+    expect(new Set(readOrigins("v", 90, "finallyBlock", ctx))).toEqual(
+      new Set(["wr_rTry", "wr_rCatch"]),
+    );
+  });
+
   test("duplicate origins are deduplicated", () => {
     const root = { ...baseScope(), id: "root" };
     const cons = {

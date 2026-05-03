@@ -67,6 +67,39 @@ describe("branchContainerKey", () => {
       expected: null,
     },
     {
+      name: "try block -> try:<upper>:<offset>",
+      upper: "outer" as string | null,
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "block",
+        parentSpanOffset: 9,
+      },
+      expected: "try:outer:9",
+    },
+    {
+      name: "try handler -> try:<upper>:<offset>",
+      upper: "outer" as string | null,
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "handler",
+        parentSpanOffset: 9,
+      },
+      expected: "try:outer:9",
+    },
+    {
+      name: "try finalizer -> null (post-merge node, not a sibling branch)",
+      upper: "outer" as string | null,
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.TryStatement,
+        key: "finalizer",
+        parentSpanOffset: 9,
+      },
+      expected: null,
+    },
+    {
       name: "unrelated parent type -> null",
       upper: "outer" as string | null,
       ctx: {
