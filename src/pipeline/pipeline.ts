@@ -1,4 +1,4 @@
-import { buildVisualGraph } from "../visual-graph/builder.js";
+import { buildVisualGraph } from "../visual-graph/builder/build-visual-graph.js";
 import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
 import { resolveAmbiguousQueries } from "../visual-graph/prune/resolve-ambiguous-queries.js";
 import type { EmitOptions } from "./emit/emit-options.js";

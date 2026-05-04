@@ -1,7 +1,7 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
 import type { Emitter } from "../../pipeline/emit/emitter.js";
-import { buildVisualGraph } from "../../visual-graph/builder.js";
+import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 
 export class JsonEmitter implements Emitter {
   readonly format = "json";
