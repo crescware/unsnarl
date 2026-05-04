@@ -25,7 +25,8 @@ import { writeOutput } from "./write-output.js";
 export async function runCli(argv: readonly string[]): Promise<number> {
   const command = buildCommand();
 
-  command.action(async (file: string | undefined, opts: ParsedCliOptions) => {
+  command.action(async (fileArg: unknown, opts: ParsedCliOptions) => {
+    const file = typeof fileArg === "string" ? fileArg : null;
     const normalized = normalizeCliOptions(opts);
     const src = await calcSource(command, file, normalized);
 

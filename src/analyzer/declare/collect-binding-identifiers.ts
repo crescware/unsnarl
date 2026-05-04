@@ -17,11 +17,11 @@ function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
       out.push(node as AstIdentifier);
       return;
     case AST_TYPE.ObjectPattern: {
-      const properties = node["properties"] as readonly AstNode[] | undefined;
-      if (!properties) {
+      const properties = node["properties"];
+      if (!Array.isArray(properties)) {
         return;
       }
-      for (const p of properties) {
+      for (const p of properties as readonly AstNode[]) {
         if (p.type === AST_TYPE.Property) {
           const value = p["value"];
           if (isAstNode(value)) {
@@ -37,13 +37,11 @@ function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
       return;
     }
     case AST_TYPE.ArrayPattern: {
-      const elements = node["elements"] as
-        | readonly (AstNode | null)[]
-        | undefined;
-      if (!elements) {
+      const elements = node["elements"];
+      if (!Array.isArray(elements)) {
         return;
       }
-      for (const el of elements) {
+      for (const el of elements as readonly (AstNode | null)[]) {
         if (el !== null) {
           collect(el, out);
         }

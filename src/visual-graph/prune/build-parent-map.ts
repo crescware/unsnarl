@@ -5,15 +5,15 @@ export function buildParentMap(
   elements: readonly VisualElement[],
 ): Map<string, string> {
   const parent = new Map<string, string>();
-  walk(elements, undefined);
+  walk(elements, null);
   return parent;
 
   function walk(
     items: readonly VisualElement[],
-    parentId: string | undefined,
+    parentId: string | null,
   ): void {
     for (const item of items) {
-      if (parentId !== undefined) {
+      if (parentId !== null) {
         parent.set(item.id, parentId);
       }
       if (item.type === VISUAL_ELEMENT_TYPE.Subgraph) {

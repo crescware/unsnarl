@@ -260,9 +260,8 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
     const catchScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope?.variables).toContain(err.id);
-    const moduleScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Module) as
-      | SerializedScope
-      | undefined;
+    const moduleScope =
+      ir.scopes.find((s) => s.type === SCOPE_TYPE.Module) ?? null;
     expect(moduleScope?.variables ?? []).not.toContain(err.id);
   });
 

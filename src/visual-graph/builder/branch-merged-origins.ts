@@ -58,8 +58,8 @@ export function branchMergedOrigins(
 
   const isSwitch = innerKey.startsWith("switch:");
   const sortedCases = isSwitch
-    ? ctx.sortedCasesByContainer.get(innerKey)
-    : undefined;
+    ? (ctx.sortedCasesByContainer.get(innerKey) ?? null)
+    : null;
   const merged: /* mutable */ string[] = [];
   for (const sib of innerSiblings) {
     if (isSwitch && sib.fallsThrough && sortedCases) {

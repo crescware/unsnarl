@@ -20,8 +20,8 @@ function analyze(code: string, language: Language = LANGUAGE.Ts) {
   return analyzer.analyze(parsed);
 }
 
-function findVariable(scope: Scope, name: string): Variable | undefined {
-  return scope.variables.find((v) => v.name === name);
+function findVariable(scope: Scope, name: string): Variable | null {
+  return scope.variables.find((v) => v.name === name) ?? null;
 }
 
 function collectScopes(root: Scope): readonly Scope[] {

@@ -24,8 +24,8 @@ function variableNames(scope: Scope): /* mutable */ string[] {
   return scope.variables.map((v) => v.name);
 }
 
-function findVariable(scope: Scope, name: string): Variable | undefined {
-  return scope.variables.find((v) => v.name === name);
+function findVariable(scope: Scope, name: string): Variable | null {
+  return scope.variables.find((v) => v.name === name) ?? null;
 }
 
 function defTypes(variable: Variable): readonly DefinitionType[] {

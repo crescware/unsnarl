@@ -3,8 +3,8 @@ export function pushTo(
   key: string,
   value: string,
 ): void {
-  const arr = map.get(key);
-  if (arr === undefined) {
+  const arr = map.get(key) ?? null;
+  if (arr === null) {
     map.set(key, [value]);
   } else {
     arr.push(value);

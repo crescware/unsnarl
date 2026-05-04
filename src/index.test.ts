@@ -61,7 +61,7 @@ function buildRegistry(emitters: readonly Emitter[]): EmitterRegistry {
     register: (e) => {
       map.set(e.format, e);
     },
-    get: (format) => map.get(format),
+    get: (format) => map.get(format) ?? null,
     list: () => [...map.keys()],
   };
 }

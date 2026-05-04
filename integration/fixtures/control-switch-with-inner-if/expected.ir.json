@@ -111,7 +111,8 @@
         "kind": "other",
         "parentType": "BlockStatement",
         "key": "body",
-        "parentSpanOffset": 43
+        "parentSpanOffset": 43,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -185,7 +186,8 @@
         "kind": "other",
         "parentType": "IfStatement",
         "key": "consequent",
-        "parentSpanOffset": 91
+        "parentSpanOffset": 91,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -220,7 +222,8 @@
         "kind": "other",
         "parentType": "IfStatement",
         "key": "alternate",
-        "parentSpanOffset": 91
+        "parentSpanOffset": 91,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

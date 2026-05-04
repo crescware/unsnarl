@@ -44,9 +44,9 @@ export function readOrigins(
   const origins: /* mutable */ string[] = [];
   const isSwitch = containerKey.startsWith("switch:");
   for (const branchId of branchScopeIds) {
-    const branchScope = ctx.scopeMap.get(branchId);
-    if (isSwitch && branchScope !== undefined && branchScope.fallsThrough) {
-      const cases = ctx.sortedCasesByContainer.get(containerKey);
+    const branchScope = ctx.scopeMap.get(branchId) ?? null;
+    if (isSwitch && branchScope !== null && branchScope.fallsThrough) {
+      const cases = ctx.sortedCasesByContainer.get(containerKey) ?? null;
       if (cases) {
         const idx = cases.indexOf(branchScope);
         if (idx >= 0 && idx < cases.length - 1) {
@@ -56,7 +56,7 @@ export function readOrigins(
     }
     // Cases ending in return/throw exit the function, so their writes
     // never reach a read after the switch.
-    if (isSwitch && branchScope !== undefined && branchScope.exitsFunction) {
+    if (isSwitch && branchScope !== null && branchScope.exitsFunction) {
       continue;
     }
     const sub = branchMergedOrigins(branchId, prev, ctx);

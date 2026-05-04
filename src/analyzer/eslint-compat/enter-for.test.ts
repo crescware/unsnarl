@@ -30,6 +30,7 @@ describe("enterFor", () => {
       key: "body",
       parentSpanOffset: 0,
       kind: "other",
+      ifChainRootOffset: null,
     });
   });
 

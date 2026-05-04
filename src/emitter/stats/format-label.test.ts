@@ -42,7 +42,7 @@ describe("formatLabel", () => {
     ).toBe("foo.ts:10 value");
   });
 
-  test("undefined unused → no prefix", () => {
+  test("default unused (false) → no prefix", () => {
     expect(formatLabel("a/b.ts", node({ name: "y", line: 1 }))).toBe(
       "a/b.ts:1 y",
     );

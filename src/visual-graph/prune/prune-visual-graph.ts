@@ -28,11 +28,11 @@ export function pruneVisualGraph(
   const rootIds = new Set<string>();
   for (const node of iterateVisualNodes(graph.elements)) {
     for (let i = 0; i < options.roots.length; i++) {
-      const q = options.roots[i];
-      if (q !== undefined && nodeMatchesQuery(node, q)) {
+      const q = options.roots[i] ?? null;
+      if (q !== null && nodeMatchesQuery(node, q)) {
         rootIds.add(node.id);
-        const entry = perQuery[i];
-        if (entry !== undefined) {
+        const entry = perQuery[i] ?? null;
+        if (entry !== null) {
           perQuery[i] = { query: entry.query, matched: entry.matched + 1 };
         }
       }
@@ -45,8 +45,8 @@ export function pruneVisualGraph(
   // selecting "lines 10-12" should not implicitly drag the whole return
   // body in just because the return subgraph happens to start at L10.
   for (let i = 0; i < options.roots.length; i++) {
-    const q = options.roots[i];
-    if (q === undefined || q.kind !== ROOT_QUERY_KIND.Line) {
+    const q = options.roots[i] ?? null;
+    if (q === null || q.kind !== ROOT_QUERY_KIND.Line) {
       continue;
     }
     for (const sg of iterateVisualSubgraphs(graph.elements)) {
@@ -62,8 +62,8 @@ export function pruneVisualGraph(
         added += 1;
       }
       if (added > 0) {
-        const entry = perQuery[i];
-        if (entry !== undefined) {
+        const entry = perQuery[i] ?? null;
+        if (entry !== null) {
           perQuery[i] = {
             query: entry.query,
             matched: entry.matched + added,
@@ -110,8 +110,8 @@ export function pruneVisualGraph(
         continue;
       }
       const k = key(e.to, "in");
-      let bucket = buckets.get(k);
-      if (bucket === undefined) {
+      let bucket = buckets.get(k) ?? null;
+      if (bucket === null) {
         bucket = { kind: "in", inside: e.to, labels: new Set<string>() };
         buckets.set(k, bucket);
       }
@@ -143,10 +143,10 @@ export function pruneVisualGraph(
   const parentOf = buildParentMap(graph.elements);
   const initial = Array.from(reachable);
   for (const id of initial) {
-    let cur = parentOf.get(id);
-    while (cur !== undefined && !reachable.has(cur)) {
+    let cur = parentOf.get(id) ?? null;
+    while (cur !== null && !reachable.has(cur)) {
       reachable.add(cur);
-      cur = parentOf.get(cur);
+      cur = parentOf.get(cur) ?? null;
     }
   }
 

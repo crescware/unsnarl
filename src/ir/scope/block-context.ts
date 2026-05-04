@@ -17,5 +17,5 @@ export type BlockContext =
       parentType: string;
       key: string;
       parentSpanOffset: number;
-      ifChainRootOffset?: number;
+      ifChainRootOffset: number | null;
     }>;

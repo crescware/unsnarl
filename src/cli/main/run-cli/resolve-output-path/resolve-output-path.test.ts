@@ -38,7 +38,7 @@ function makeEmitters(emitters: readonly Emitter[]): EmitterRegistry {
     register: () => {
       throw new Error("not implemented in fake");
     },
-    get: (format: string) => map.get(format),
+    get: (format: string) => map.get(format) ?? null,
     list: () => Array.from(map.keys()),
   };
 }

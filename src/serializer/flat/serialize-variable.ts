@@ -12,8 +12,8 @@ export function serializeVariable(
   referenceIds: Map<Reference, string>,
   raw: string,
 ): SerializedVariable {
-  const id = variableIds.get(v);
-  if (id === undefined) {
+  const id = variableIds.get(v) ?? null;
+  if (id === null) {
     throw new Error("Variable id not found");
   }
   return {
@@ -22,8 +22,8 @@ export function serializeVariable(
     scope: scopeIds.get(v.scope) ?? "",
     identifiers: v.identifiers.map((i) => spanOf(i, raw)),
     references: v.references
-      .map((r) => referenceIds.get(r))
-      .filter((x): x is string => x !== undefined),
+      .map((r) => referenceIds.get(r) ?? null)
+      .filter((x): x is string => x !== null),
     defs: v.defs.map((d) => serializeDefinition(d, raw)),
   };
 }

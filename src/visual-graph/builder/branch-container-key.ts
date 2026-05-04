@@ -14,7 +14,7 @@ export function branchContainerKey(scope: SerializedScope): string | null {
     (ctx.key === "consequent" || ctx.key === "alternate")
   ) {
     const root =
-      ctx.kind === "other" && ctx.ifChainRootOffset !== undefined
+      ctx.kind === "other" && ctx.ifChainRootOffset !== null
         ? ctx.ifChainRootOffset
         : ctx.parentSpanOffset;
     return `if:${scope.upper ?? ""}:${root}`;

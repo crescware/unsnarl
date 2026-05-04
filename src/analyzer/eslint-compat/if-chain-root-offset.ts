@@ -12,12 +12,12 @@ export function ifChainRootOffset(
   parent: NodeLike | null,
   key: string | null,
   path: readonly PathEntry[],
-): number | undefined {
+): number | null {
   if (!parent || parent.type !== AST_TYPE.IfStatement) {
-    return undefined;
+    return null;
   }
   if (key !== "consequent" && key !== "alternate") {
-    return undefined;
+    return null;
   }
   let chainTop: NodeLike = parent;
   for (let i = path.length - 1; i >= 1; i--) {
@@ -43,7 +43,7 @@ export function ifChainRootOffset(
     chainTop = ancestor;
   }
   if (chainTop === parent) {
-    return undefined;
+    return null;
   }
   return chainTop.start ?? 0;
 }

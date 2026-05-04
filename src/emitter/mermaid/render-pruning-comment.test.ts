@@ -4,7 +4,7 @@ import { renderPruningComment } from "./render-pruning-comment.js";
 import { baseGraph } from "./testing/make-graph.js";
 
 describe("renderPruningComment", () => {
-  test("does nothing when graph.pruning is undefined", () => {
+  test("does nothing when graph.pruning is null", () => {
     const lines: /* mutable */ string[] = [];
     renderPruningComment(baseGraph(), lines);
     expect(lines).toEqual([]);

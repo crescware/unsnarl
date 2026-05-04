@@ -29,13 +29,13 @@ export function ensureReturnUseNode(
     perFn = new Map();
     state.returnSubgraphsByFn.set(enclosingFnVarId, perFn);
   }
-  const existing = perFn.get(containerKey);
+  const existing = perFn.get(containerKey) ?? null;
   let sg: VisualSubgraph;
-  if (existing === undefined) {
+  if (existing === null) {
     const startLine = ref.returnContainer?.startSpan.line ?? host.line;
-    const rawEndLine = ref.returnContainer?.endSpan.line;
+    const rawEndLine = ref.returnContainer?.endSpan.line ?? null;
     const endLine =
-      rawEndLine !== undefined && rawEndLine !== startLine ? rawEndLine : null;
+      rawEndLine !== null && rawEndLine !== startLine ? rawEndLine : null;
     sg = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: returnSubgraphId(enclosingFnVarId, containerKey),
@@ -53,12 +53,11 @@ export function ensureReturnUseNode(
   const id = retUseNodeId(ref.id);
   if (!state.returnUseAdded.has(ref.id)) {
     state.returnUseAdded.add(ref.id);
-    const v = ref.resolved ? ctx.variableMap.get(ref.resolved) : undefined;
+    const v = ref.resolved ? (ctx.variableMap.get(ref.resolved) ?? null) : null;
     const name = v?.name ?? ref.identifier.name ?? "";
     const startLine = ref.identifier.span.line;
-    const jsxEnd = ref.jsxElement?.endSpan.line;
-    const endLine =
-      jsxEnd !== undefined && jsxEnd !== startLine ? jsxEnd : null;
+    const jsxEnd = ref.jsxElement?.endSpan.line ?? null;
+    const endLine = jsxEnd !== null && jsxEnd !== startLine ? jsxEnd : null;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id,

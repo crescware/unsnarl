@@ -112,7 +112,8 @@
         "kind": "other",
         "parentType": "BlockStatement",
         "key": "body",
-        "parentSpanOffset": 25
+        "parentSpanOffset": 25,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

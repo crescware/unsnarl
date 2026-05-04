@@ -9,8 +9,8 @@ const declId = (code: string): AstNode => {
     .program as unknown as {
     body: readonly { declarations: readonly { id: AstNode }[] }[];
   };
-  const decl = program.body[0]?.declarations[0]?.id;
-  if (decl === undefined) {
+  const decl = program.body[0]?.declarations[0]?.id ?? null;
+  if (decl === null) {
     throw new Error("test fixture missing declarator id");
   }
   return decl;
@@ -64,8 +64,8 @@ describe("collectBindingIdentifiers", () => {
       .program as unknown as {
       body: readonly { expression: AstNode }[];
     };
-    const literal = program.body[0]?.expression;
-    if (literal === undefined) {
+    const literal = program.body[0]?.expression ?? null;
+    if (literal === null) {
       throw new Error("test fixture missing literal");
     }
     expect(collectBindingIdentifiers(literal)).toEqual([]);

@@ -11,8 +11,8 @@ export class DefaultEmitterRegistry implements EmitterRegistry {
     this.map.set(emitter.format, emitter);
   }
 
-  get(format: string): Emitter | undefined {
-    return this.map.get(format);
+  get(format: string): Emitter | null {
+    return this.map.get(format) ?? null;
   }
 
   list(): readonly string[] {

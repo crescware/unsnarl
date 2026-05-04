@@ -36,7 +36,7 @@ describe("calcSource", () => {
   test("stdin: true → reads stdin and returns { stdin: true, text, stdinLang }", async () => {
     vi.mocked(readStdin).mockResolvedValueOnce("piped contents");
 
-    const result = await calcSource(fakeCommand, undefined, {
+    const result = await calcSource(fakeCommand, null, {
       ...baseOpts,
       stdin: true,
       stdinLang: "tsx",
@@ -71,16 +71,16 @@ describe("calcSource", () => {
   });
 
   test("stdin: false without file → throws CliUsageError carrying help text", async () => {
-    await expect(
-      calcSource(fakeCommand, undefined, baseOpts),
-    ).rejects.toMatchObject({
-      name: "CliUsageError",
-      message: "no input file (use --stdin or pass a path)",
-      help: "USAGE",
-    });
+    await expect(calcSource(fakeCommand, null, baseOpts)).rejects.toMatchObject(
+      {
+        name: "CliUsageError",
+        message: "no input file (use --stdin or pass a path)",
+        help: "USAGE",
+      },
+    );
 
     await expect(
-      calcSource(fakeCommand, undefined, baseOpts),
+      calcSource(fakeCommand, null, baseOpts),
     ).rejects.toBeInstanceOf(CliUsageError);
 
     expect(vi.mocked(readStdin)).not.toHaveBeenCalled();

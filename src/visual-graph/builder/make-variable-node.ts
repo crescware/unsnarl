@@ -8,7 +8,7 @@ import type { VisualNode } from "../visual-node.js";
 import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {
-  const def = v.defs[0];
+  const def = v.defs[0] ?? null;
   // ImplicitGlobalVariable has no source-level definition; the analyzer
   // pins its synthetic def to the first reference, so any line we read
   // from it would lie about where the global "lives". Treat it as
@@ -58,7 +58,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     throw new Error(`expected importKind for ImportBinding ${nodeId(v.id)}`);
   }
 
-  if (def === undefined) {
+  if (def === null) {
     return {
       ...common,
       kind: NODE_KIND.Variable,

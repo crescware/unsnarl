@@ -29,8 +29,8 @@ export class FlatSerializer implements IRSerializer {
     const orderedVariables: /* mutable */ Variable[] = [];
     for (const s of scopes) {
       for (const v of s.variables) {
-        const sid = scopeIds.get(s);
-        if (sid === undefined) {
+        const sid = scopeIds.get(s) ?? null;
+        if (sid === null) {
           continue;
         }
         const offset = pickVariableOffset(v);
@@ -72,8 +72,8 @@ export class FlatSerializer implements IRSerializer {
     const unusedVariableIds: /* mutable */ string[] = [];
     for (const v of orderedVariables) {
       if (v.references.length === 0 && hasDeclaringDef(v)) {
-        const id = variableIds.get(v);
-        if (id !== undefined) {
+        const id = variableIds.get(v) ?? null;
+        if (id !== null) {
           unusedVariableIds.push(id);
         }
       }

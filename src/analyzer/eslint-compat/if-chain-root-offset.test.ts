@@ -19,27 +19,27 @@ function entry(node: NodeLike, key: string | null): PathEntry {
 }
 
 describe("ifChainRootOffset", () => {
-  test("returns undefined when parent is null", () => {
-    expect(ifChainRootOffset(null, "consequent", [])).toBeUndefined();
+  test("returns null when parent is null", () => {
+    expect(ifChainRootOffset(null, "consequent", [])).toBeNull();
   });
 
-  test("returns undefined when parent is not an IfStatement", () => {
-    expect(ifChainRootOffset(blockNode(0), "consequent", [])).toBeUndefined();
+  test("returns null when parent is not an IfStatement", () => {
+    expect(ifChainRootOffset(blockNode(0), "consequent", [])).toBeNull();
   });
 
-  test("returns undefined for keys other than consequent / alternate", () => {
+  test("returns null for keys other than consequent / alternate", () => {
     const parent = ifNode(10);
-    expect(ifChainRootOffset(parent, "test", [])).toBeUndefined();
+    expect(ifChainRootOffset(parent, "test", [])).toBeNull();
   });
 
-  test("returns undefined for a standalone if (parent at top level)", () => {
+  test("returns null for a standalone if (parent at top level)", () => {
     const parent = ifNode(10);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
       entry(program as unknown as NodeLike, null),
       entry(parent, "body"),
     ];
-    expect(ifChainRootOffset(parent, "consequent", path)).toBeUndefined();
+    expect(ifChainRootOffset(parent, "consequent", path)).toBeNull();
   });
 
   test("returns outer offset for inner-if consequent in else-if chain (1 step)", () => {
@@ -93,7 +93,7 @@ describe("ifChainRootOffset", () => {
       entry(innerBlock, "alternate"),
       entry(inner, "body"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBeUndefined();
+    expect(ifChainRootOffset(inner, "consequent", path)).toBeNull();
   });
 
   test("does not walk when current if sits in the consequent slot of an outer if", () => {
@@ -109,7 +109,7 @@ describe("ifChainRootOffset", () => {
       entry(consBlock, "consequent"),
       entry(inner, "body"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBeUndefined();
+    expect(ifChainRootOffset(inner, "consequent", path)).toBeNull();
   });
 
   test("falls back to 0 when chainTop has no start offset", () => {

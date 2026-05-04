@@ -9,7 +9,7 @@ export function findHostSubgraph(
   scopeMap: ReadonlyMap<string, SerializedScope>,
   state: BuildState,
 ): VisualSubgraph | null {
-  let cur: SerializedScope | undefined = scopeMap.get(ref.from);
+  let cur: SerializedScope | null = scopeMap.get(ref.from) ?? null;
   while (cur) {
     const sg = state.subgraphByScope.get(cur.id);
     if (sg) {
@@ -18,7 +18,7 @@ export function findHostSubgraph(
     if (!cur.upper) {
       break;
     }
-    cur = scopeMap.get(cur.upper);
+    cur = scopeMap.get(cur.upper) ?? null;
   }
   return state.functionSubgraphByFn.get(enclosingFnVarId) ?? null;
 }

@@ -5,7 +5,7 @@ import { renderBoundaryEdges } from "./render-boundary-edges.js";
 import { baseGraph } from "./testing/make-graph.js";
 
 describe("renderBoundaryEdges", () => {
-  test("does nothing when boundaryEdges is undefined or empty", () => {
+  test("does nothing when boundaryEdges is empty", () => {
     const lines: /* mutable */ string[] = [];
     const stubIds: /* mutable */ string[] = [];
     renderBoundaryEdges(baseGraph(), lines, stubIds);
