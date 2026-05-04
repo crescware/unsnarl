@@ -1,4 +1,4 @@
-import { runCli } from "./cli/main/run-cli/run-cli.js";
+import { runCli } from "./cli/run-cli/run-cli.js";
 
 export async function main(argv: readonly string[]): Promise<number> {
   try {

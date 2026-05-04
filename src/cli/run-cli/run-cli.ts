@@ -1,10 +1,10 @@
 import { CommanderError } from "commander";
 
-import { ParseError } from "../../../parser/parse-error.js";
-import { createDefaultEmitterRegistry } from "../../../pipeline/create-default-emitter-registry.js";
-import { createDefaultPipeline } from "../../../pipeline/create-default-pipeline.js";
-import { buildCommand } from "../../args/build-command.js";
-import type { ParsedCliOptions } from "../../args/parsed-cli-options.js";
+import { ParseError } from "../../parser/parse-error.js";
+import { createDefaultEmitterRegistry } from "../../pipeline/create-default-emitter-registry.js";
+import { createDefaultPipeline } from "../../pipeline/create-default-pipeline.js";
+import { buildCommand } from "../args/build-command.js";
+import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";

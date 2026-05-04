@@ -1,4 +1,4 @@
-import type { Language } from "../../cli/language.js";
+import type { Language } from "../../language.js";
 
 export function codeFenceLang(language: Language): string {
   switch (language) {

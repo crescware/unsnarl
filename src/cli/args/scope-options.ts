@@ -1,7 +1,7 @@
 import { InvalidArgumentError, Option } from "commander";
 
-import { parseRootQueries } from "../root-query/parse-root-queries.js";
-import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
+import { parseRootQueries } from "../../root-query/parse-root-queries.js";
+import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import { DEFAULT_GENERATIONS } from "./default-generations.js";
 import { parseGenerationCount } from "./parse-generation-count.js";
 

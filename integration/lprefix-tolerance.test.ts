@@ -3,8 +3,8 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
-import { parseRootQueries } from "../src/cli/root-query/parse-root-queries.js";
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
+import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 

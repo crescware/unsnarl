@@ -1,4 +1,4 @@
-import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
+import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import type { VisualNode } from "../visual-node.js";
 import { NAME_QUERY_EXCLUDED } from "./name-query-excluded.js";
 

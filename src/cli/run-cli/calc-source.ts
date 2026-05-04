@@ -1,6 +1,6 @@
 import type { Command } from "commander";
 
-import { readStdin } from "../../io.js";
+import { readStdin } from "../io.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";

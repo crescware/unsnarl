@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import type { SerializedIR } from "../../../../ir/serialized/serialized-ir.js";
-import type { EmitterRegistry } from "../../../../pipeline/emit/emitter-registry.js";
-import type { Emitter } from "../../../../pipeline/emit/emitter.js";
+import type { SerializedIR } from "../../../ir/serialized/serialized-ir.js";
+import type { EmitterRegistry } from "../../../pipeline/emit/emitter-registry.js";
+import type { Emitter } from "../../../pipeline/emit/emitter.js";
 import type { ParsedRootQuery } from "../../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../../root-query/root-query-kind.js";
 import { CliUsageError } from "../cli-usage-error.js";

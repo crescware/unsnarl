@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { DEFAULT_GENERATIONS } from "../../args/default-generations.js";
-import { readSourceFile } from "../../io.js";
+import { DEFAULT_GENERATIONS } from "../args/default-generations.js";
+import { readSourceFile } from "../io.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
-vi.mock("../../io.js", () => ({
+vi.mock("../io.js", () => ({
   readSourceFile: vi.fn(),
 }));
 

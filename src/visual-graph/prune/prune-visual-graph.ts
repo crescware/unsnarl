@@ -1,4 +1,4 @@
-import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
+import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
 import type { VisualBoundaryEdge } from "../visual-boundary-edge.js";
 import type { VisualGraph } from "../visual-graph.js";
 import { bfs } from "./bfs.js";
