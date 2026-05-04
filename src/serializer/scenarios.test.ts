@@ -10,7 +10,7 @@ import type { SerializedReference } from "../ir/serialized/serialized-reference.
 import type { SerializedScope } from "../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../parser/ast-type.js";
-import { OxcParser } from "../parser/oxc.js";
+import { OxcParser } from "../parser/oxc-parser.js";
 import { FlatSerializer } from "./flat/flat-serializer.js";
 import { IMPORT_KIND } from "./import-kind.js";
 

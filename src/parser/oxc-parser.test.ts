@@ -2,7 +2,8 @@ import { describe, expect, test } from "vitest";
 
 import { LANGUAGE } from "../cli/language.js";
 import { AST_TYPE } from "./ast-type.js";
-import { OxcParser, ParseError } from "./oxc.js";
+import { OxcParser } from "./oxc-parser.js";
+import { ParseError } from "./parse-error.js";
 
 const parser = new OxcParser();
 

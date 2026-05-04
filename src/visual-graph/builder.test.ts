@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE, type Language } from "../cli/language.js";
-import { OxcParser } from "../parser/oxc.js";
+import { OxcParser } from "../parser/oxc-parser.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { IMPORT_KIND } from "../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";

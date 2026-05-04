@@ -1,10 +1,8 @@
 import { CommanderError } from "commander";
 
-import { ParseError } from "../../../parser/oxc.js";
-import {
-  createDefaultEmitterRegistry,
-  createDefaultPipeline,
-} from "../../../pipeline/default.js";
+import { ParseError } from "../../../parser/parse-error.js";
+import { createDefaultEmitterRegistry } from "../../../pipeline/create-default-emitter-registry.js";
+import { createDefaultPipeline } from "../../../pipeline/create-default-pipeline.js";
 import { buildCommand } from "../../args/build-command.js";
 import type { ParsedCliOptions } from "../../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";

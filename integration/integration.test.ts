@@ -3,7 +3,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
-import { createDefaultPipeline } from "../src/pipeline/default.js";
+import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 

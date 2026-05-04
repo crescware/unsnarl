@@ -3,22 +3,7 @@ import { parseSync } from "oxc-parser";
 import type { ParseOptions } from "../pipeline/parse/parse-options.js";
 import type { ParsedSource } from "../pipeline/parse/parsed-source.js";
 import type { Parser } from "../pipeline/parse/parser.js";
-
-type ParseErrorDetail = Readonly<{
-  message: string;
-  start: number;
-  end: number;
-}>;
-
-export class ParseError extends Error {
-  override readonly name = "ParseError";
-  readonly errors: readonly ParseErrorDetail[];
-
-  constructor(message: string, errors: readonly ParseErrorDetail[]) {
-    super(message);
-    this.errors = errors;
-  }
-}
+import { ParseError } from "./parse-error.js";
 
 export class OxcParser implements Parser {
   readonly id = "oxc";
@@ -35,7 +20,7 @@ export class OxcParser implements Parser {
     if (fatal.length > 0) {
       const first = fatal[0];
       const head = first?.message ?? "Unknown parse error";
-      const detail = fatal.map<ParseErrorDetail>((e) => {
+      const detail = fatal.map((e) => {
         const label = e.labels[0];
         return {
           message: e.message,

@@ -1,5 +1,5 @@
 import { LANGUAGE, type Language } from "../../../cli/language.js";
-import { OxcParser } from "../../../parser/oxc.js";
+import { OxcParser } from "../../../parser/oxc-parser.js";
 import type { NodeLike } from "../node-like.js";
 
 export function parse(

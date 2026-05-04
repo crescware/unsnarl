@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import { LANGUAGE, type Language } from "../cli/language.js";
 import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
-import { OxcParser } from "../parser/oxc.js";
+import { OxcParser } from "../parser/oxc-parser.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
