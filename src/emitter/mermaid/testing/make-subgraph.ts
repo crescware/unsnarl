@@ -1,7 +1,7 @@
 import { DIRECTION } from "../../../visual-graph/direction.js";
-import type { VisualSubgraph } from "../../../visual-graph/model.js";
 import { SUBGRAPH_KIND } from "../../../visual-graph/subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
+import type { VisualSubgraph } from "../../../visual-graph/visual-subgraph.js";
 
 const COMMON = {
   type: VISUAL_ELEMENT_TYPE.Subgraph,

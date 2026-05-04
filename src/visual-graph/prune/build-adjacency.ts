@@ -1,4 +1,4 @@
-import type { VisualEdge } from "../model.js";
+import type { VisualEdge } from "../visual-edge.js";
 import { pushTo } from "./push-to.js";
 
 export function buildAdjacency(edges: readonly VisualEdge[]): {

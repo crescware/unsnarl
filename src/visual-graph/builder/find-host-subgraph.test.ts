@@ -2,9 +2,9 @@ import { describe, expect, test } from "vitest";
 
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { DIRECTION } from "../direction.js";
-import type { VisualSubgraph } from "../model.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import type { BuildState } from "./build-state.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
 import { baseRef } from "./testing/make-ref.js";

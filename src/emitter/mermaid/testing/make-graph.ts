@@ -1,7 +1,7 @@
 import { LANGUAGE } from "../../../cli/language.js";
 import { SERIALIZED_IR_VERSION } from "../../../serializer/serialized-ir-version.js";
 import { DIRECTION } from "../../../visual-graph/direction.js";
-import type { VisualGraph } from "../../../visual-graph/model.js";
+import type { VisualGraph } from "../../../visual-graph/visual-graph.js";
 
 export function baseGraph(): VisualGraph {
   return {

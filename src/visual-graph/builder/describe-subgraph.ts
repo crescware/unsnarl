@@ -1,9 +1,10 @@
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { DIRECTION } from "../direction.js";
-import type { VisualElement, VisualSubgraph } from "../model.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
 import { isFunctionSubgraph } from "./is-function-subgraph.js";
 import { nodeId } from "./node-id.js";

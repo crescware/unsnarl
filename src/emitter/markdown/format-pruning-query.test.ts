@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { VisualGraphPruning } from "../../visual-graph/model.js";
+import type { VisualGraphPruning } from "../../visual-graph/visual-graph-pruning.js";
 import { formatPruningQuery } from "./format-pruning-query.js";
 
 const pruning = (

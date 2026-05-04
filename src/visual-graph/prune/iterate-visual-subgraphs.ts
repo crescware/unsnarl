@@ -1,5 +1,6 @@
-import type { VisualElement, VisualSubgraph } from "../model.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 
 export function* iterateVisualSubgraphs(
   elements: readonly VisualElement[],

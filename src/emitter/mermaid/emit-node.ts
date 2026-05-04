@@ -1,4 +1,4 @@
-import type { VisualNode } from "../../visual-graph/model.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { nodeSyntax } from "./node-syntax.js";
 import type { RenderState } from "./render-state.js";
 

@@ -9,9 +9,10 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
-import type { VisualElement, VisualSubgraph } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";

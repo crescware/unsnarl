@@ -1,5 +1,5 @@
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import type { VisualGraph } from "../model.js";
+import type { VisualGraph } from "../visual-graph.js";
 
 export type PruneOptions = Readonly<{
   roots: readonly ParsedRootQuery[];

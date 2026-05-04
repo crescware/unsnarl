@@ -1,4 +1,4 @@
-import type { VisualNode } from "../../../visual-graph/model.js";
+import type { VisualNode } from "../../../visual-graph/visual-node.js";
 import type { RenderState } from "../render-state.js";
 import { baseStrategy } from "./make-strategy.js";
 

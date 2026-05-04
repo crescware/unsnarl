@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { VisualEdge } from "../model.js";
+import type { VisualEdge } from "../visual-edge.js";
 import { buildAdjacency } from "./build-adjacency.js";
 
 const edge = (from: string, to: string, label = "read"): VisualEdge => ({

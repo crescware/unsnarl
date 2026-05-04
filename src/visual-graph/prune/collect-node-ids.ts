@@ -1,5 +1,5 @@
-import type { VisualElement } from "../model.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
 
 export function collectNodeIds(
   elements: readonly VisualElement[],

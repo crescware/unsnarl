@@ -1,4 +1,5 @@
-import type { VisualEdge, VisualSubgraph } from "../model.js";
+import type { VisualEdge } from "../visual-edge.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 
 export type BuildState = Readonly<{
   subgraphByScope: Map<string, VisualSubgraph>;

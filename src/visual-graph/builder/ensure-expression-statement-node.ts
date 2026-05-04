@@ -1,7 +1,8 @@
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
-import type { VisualElement, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualNode } from "../visual-node.js";
 import type { BuildState } from "./build-state.js";
 import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 
