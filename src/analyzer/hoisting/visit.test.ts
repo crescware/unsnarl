@@ -14,8 +14,8 @@ const firstStmt = (code: string): NodeLike => {
     .program as unknown as {
     body: readonly NodeLike[];
   };
-  const stmt = program.body[0];
-  if (stmt === undefined) {
+  const stmt = program.body[0] ?? null;
+  if (stmt === null) {
     throw new Error("test fixture missing first statement");
   }
   return stmt;

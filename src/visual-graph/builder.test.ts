@@ -80,22 +80,27 @@ function findNodes<K extends VisualNode["kind"]>(
   );
 }
 
-function nodeByName(graph: VisualGraph, name: string): VisualNode | undefined {
-  return flattenNodes(graph.elements).find((n) => n.name === name);
+function nodeByName(graph: VisualGraph, name: string): VisualNode | null {
+  return flattenNodes(graph.elements).find((n) => n.name === name) ?? null;
 }
 
 function variableByName(
   graph: VisualGraph,
   name: string,
-): Extract<VisualNode, { kind: typeof NODE_KIND.Variable }> | undefined {
-  return findNodes(graph, NODE_KIND.Variable).find((n) => n.name === name);
+): Extract<VisualNode, { kind: typeof NODE_KIND.Variable }> | null {
+  return (
+    findNodes(graph, NODE_KIND.Variable).find((n) => n.name === name) ?? null
+  );
 }
 
 function importBindingByName(
   graph: VisualGraph,
   name: string,
-): Extract<VisualNode, { kind: typeof NODE_KIND.ImportBinding }> | undefined {
-  return findNodes(graph, NODE_KIND.ImportBinding).find((n) => n.name === name);
+): Extract<VisualNode, { kind: typeof NODE_KIND.ImportBinding }> | null {
+  return (
+    findNodes(graph, NODE_KIND.ImportBinding).find((n) => n.name === name) ??
+    null
+  );
 }
 
 function edgesFrom(graph: VisualGraph, fromId: string): readonly VisualEdge[] {
@@ -667,10 +672,11 @@ describe("buildVisualGraph: return subgraphs", () => {
   test("non-JSX ReturnUse stays isJsxElement=false with endLine null", () => {
     const g = build("function f(a) { return a; }\n");
     const ret = findSubgraphs(g, "return")[0];
-    const retUse = ret?.elements.find(
-      (e) =>
-        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
-    ) as VisualNode | undefined;
+    const retUse =
+      ret?.elements.find(
+        (e): e is VisualNode =>
+          e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
+      ) ?? null;
     expect(retUse?.isJsxElement).toBe(false);
     expect(retUse?.endLine).toBeNull();
   });

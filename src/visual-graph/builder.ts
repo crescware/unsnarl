@@ -186,17 +186,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         continue;
       }
       let prevId = nodeId(op.varId);
-      const opScope = scopeMap.get(op.scopeId);
+      const opScope = scopeMap.get(op.scopeId) ?? null;
       const opBranchKey = opScope ? branchContainerKey(opScope) : null;
       const isFirstInCase =
-        opScope !== undefined &&
+        opScope !== null &&
         opBranchKey !== null &&
         opBranchKey.startsWith("switch:") &&
-        !ops
-          .slice(0, i)
-          .some(
-            (prevOp) => prevOp !== undefined && prevOp.scopeId === op.scopeId,
-          );
+        !ops.slice(0, i).some((prevOp) => prevOp.scopeId === op.scopeId);
       if (isFirstInCase && opScope) {
         const prevCase = previousFallthroughCase(
           opScope,

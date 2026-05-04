@@ -7,6 +7,7 @@ export function baseBlockContext(): BlockContext {
     parentType: AST_TYPE.IfStatement,
     key: "consequent",
     parentSpanOffset: 0,
+    ifChainRootOffset: null,
   };
 }
 

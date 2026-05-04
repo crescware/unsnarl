@@ -7,8 +7,8 @@ const adjOf = (
 ): Map<string, string[]> => {
   const out = new Map<string, string[]>();
   for (const [from, to] of pairs) {
-    const arr = out.get(from);
-    if (arr === undefined) {
+    const arr = out.get(from) ?? null;
+    if (arr === null) {
       out.set(from, [to]);
     } else {
       arr.push(to);

@@ -121,11 +121,11 @@ export function buildChildren(
       // for the IfStatement; we skip the IfElseContainer wrapping that
       // exists only to group sibling branches. The test anchor lives
       // inside the consequent it gates (same rule as if-else below).
-      const lone = group[0];
-      const loneOffset = lone?.blockContext?.parentSpanOffset;
+      const lone = group[0] ?? null;
+      const loneOffset = lone?.blockContext?.parentSpanOffset ?? null;
       if (lone) {
         buildScope(lone, container, ctx, state);
-        if (loneOffset !== undefined) {
+        if (loneOffset !== null) {
           attachTestAnchorToConsequent(
             lone,
             loneOffset,
@@ -164,9 +164,9 @@ export function buildChildren(
     // branch carries no test of its own.
     const seenOffsets = new Set<number>();
     for (const g of group) {
-      const off = g.blockContext?.parentSpanOffset;
+      const off = g.blockContext?.parentSpanOffset ?? null;
       if (
-        off === undefined ||
+        off === null ||
         seenOffsets.has(off) ||
         g.blockContext?.key !== "consequent"
       ) {

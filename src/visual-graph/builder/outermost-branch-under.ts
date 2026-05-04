@@ -17,7 +17,7 @@ export function outermostBranchUnder(
     return null;
   }
   let result: string | null = null;
-  let cur: SerializedScope | undefined = scopeMap.get(scopeId);
+  let cur: SerializedScope | null = scopeMap.get(scopeId) ?? null;
   while (cur && cur.id !== branchId) {
     if (isBranchScope(cur.id, scopeMap)) {
       result = cur.id;
@@ -25,7 +25,7 @@ export function outermostBranchUnder(
     if (!cur.upper) {
       return null;
     }
-    cur = scopeMap.get(cur.upper);
+    cur = scopeMap.get(cur.upper) ?? null;
   }
   if (cur?.id !== branchId) {
     return null;

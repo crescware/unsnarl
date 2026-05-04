@@ -84,7 +84,8 @@
         "kind": "other",
         "parentType": "TryStatement",
         "key": "block",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -122,7 +123,8 @@
         "kind": "other",
         "parentType": "TryStatement",
         "key": "handler",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -157,7 +159,8 @@
         "kind": "other",
         "parentType": "TryStatement",
         "key": "finalizer",
-        "parentSpanOffset": 52
+        "parentSpanOffset": 52,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

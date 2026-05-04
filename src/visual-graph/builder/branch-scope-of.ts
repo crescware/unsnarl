@@ -5,7 +5,7 @@ export function branchScopeOf(
   scopeId: string,
   scopeMap: ReadonlyMap<string, SerializedScope>,
 ): string | null {
-  let cur: SerializedScope | undefined = scopeMap.get(scopeId);
+  let cur: SerializedScope | null = scopeMap.get(scopeId) ?? null;
   while (cur) {
     if (isBranchScope(cur.id, scopeMap)) {
       return cur.id;
@@ -13,7 +13,7 @@ export function branchScopeOf(
     if (!cur.upper) {
       return null;
     }
-    cur = scopeMap.get(cur.upper);
+    cur = scopeMap.get(cur.upper) ?? null;
   }
   return null;
 }

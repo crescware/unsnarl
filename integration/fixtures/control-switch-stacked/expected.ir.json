@@ -76,7 +76,8 @@
         "kind": "other",
         "parentType": "Program",
         "key": "body",
-        "parentSpanOffset": 0
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

@@ -11,8 +11,8 @@ export function bfs(
   for (let depth = 0; depth < maxDepth && frontier.size > 0; depth++) {
     const next = new Set<string>();
     for (const id of frontier) {
-      const neighbors = adj.get(id);
-      if (neighbors === undefined) {
+      const neighbors = adj.get(id) ?? null;
+      if (neighbors === null) {
         continue;
       }
       for (const n of neighbors) {

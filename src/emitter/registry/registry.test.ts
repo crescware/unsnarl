@@ -41,9 +41,9 @@ describe("DefaultEmitterRegistry", () => {
     expect(reg.list()).toEqual(["fake", "other"]);
   });
 
-  test("returns undefined for unknown formats", () => {
+  test("returns null for unknown formats", () => {
     const reg = new DefaultEmitterRegistry();
-    expect(reg.get("missing")).toBeUndefined();
+    expect(reg.get("missing")).toBeNull();
   });
 
   test("rejects duplicate formats", () => {

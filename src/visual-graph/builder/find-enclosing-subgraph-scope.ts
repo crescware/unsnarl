@@ -5,7 +5,7 @@ export function findEnclosingSubgraphScope(
   scopeMap: ReadonlyMap<string, SerializedScope>,
   subgraphOwnerVar: ReadonlyMap<string, string>,
 ): string | null {
-  let cur: SerializedScope | undefined = scopeMap.get(scopeId);
+  let cur: SerializedScope | null = scopeMap.get(scopeId) ?? null;
   while (cur) {
     if (subgraphOwnerVar.has(cur.id)) {
       return cur.id;
@@ -13,7 +13,7 @@ export function findEnclosingSubgraphScope(
     if (!cur.upper) {
       return null;
     }
-    cur = scopeMap.get(cur.upper);
+    cur = scopeMap.get(cur.upper) ?? null;
   }
   return null;
 }

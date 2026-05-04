@@ -57,16 +57,17 @@ const pathTo = (
     stack.push({ node, key });
     for (const k of Object.keys(node)) {
       const child = (node as Record<string, unknown>)[k];
-      if (child === null || child === undefined) {
-        continue;
-      }
       if (Array.isArray(child)) {
         for (const c of child) {
           if (c !== null && typeof c === "object" && "type" in c) {
             visit(c as AstNode, k);
           }
         }
-      } else if (typeof child === "object" && "type" in (child as object)) {
+      } else if (
+        child !== null &&
+        typeof child === "object" &&
+        "type" in child
+      ) {
         visit(child as AstNode, k);
       }
     }

@@ -113,7 +113,8 @@
         "kind": "other",
         "parentType": "IfStatement",
         "key": "consequent",
-        "parentSpanOffset": 38
+        "parentSpanOffset": 38,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

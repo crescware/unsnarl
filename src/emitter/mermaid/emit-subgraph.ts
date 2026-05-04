@@ -10,8 +10,8 @@ export function emitSubgraph(
   indent: string,
 ): void {
   if (sg.kind === SUBGRAPH_KIND.Function && sg.ownerNodeId !== null) {
-    const ownerNode = state.nodeMap.get(sg.ownerNodeId);
-    if (ownerNode !== undefined) {
+    const ownerNode = state.nodeMap.get(sg.ownerNodeId) ?? null;
+    if (ownerNode !== null) {
       // Wrap the FunctionName node and the function body subgraph as
       // SIBLINGS inside a single wrapper subgraph. The FunctionName node
       // belongs to the parent scope (it names the function from the

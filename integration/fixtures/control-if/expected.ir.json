@@ -74,7 +74,8 @@
         "kind": "other",
         "parentType": "IfStatement",
         "key": "consequent",
-        "parentSpanOffset": 37
+        "parentSpanOffset": 37,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false
@@ -109,7 +110,8 @@
         "kind": "other",
         "parentType": "IfStatement",
         "key": "alternate",
-        "parentSpanOffset": 37
+        "parentSpanOffset": 37,
+        "ifChainRootOffset": null
       },
       "fallsThrough": false,
       "exitsFunction": false

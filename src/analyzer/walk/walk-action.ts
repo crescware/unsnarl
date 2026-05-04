@@ -1,1 +1,1 @@
-export type WalkAction = "skip" | undefined | void;
+export type WalkAction = "skip" | null | void;

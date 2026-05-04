@@ -7,7 +7,7 @@ import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
 export async function calcSource(
   command: Command,
-  file: string | undefined,
+  file: string | null,
   opts: NormalizedCliOptions,
 ): Promise<ExecuteSource> {
   if (opts.stdin) {
@@ -18,7 +18,7 @@ export async function calcSource(
     };
   }
 
-  if (file === undefined) {
+  if (file === null) {
     throw new CliUsageError(
       "no input file (use --stdin or pass a path)",
       command.helpInformation(),

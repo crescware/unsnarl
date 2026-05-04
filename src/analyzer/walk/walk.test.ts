@@ -32,9 +32,10 @@ describe("walk", () => {
           if (
             id !== null &&
             typeof id === "object" &&
-            (id as { name?: unknown }).name !== undefined
+            "name" in id &&
+            typeof id.name === "string"
           ) {
-            declared.push((id as { name: string }).name);
+            declared.push(id.name);
           }
         }
       },
@@ -52,7 +53,7 @@ describe("walk", () => {
         if (node.type === AST_TYPE.VariableDeclarator) {
           return "skip";
         }
-        return undefined;
+        return null;
       },
       leave(node) {
         left.push(node.type);

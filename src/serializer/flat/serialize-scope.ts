@@ -12,8 +12,8 @@ export function serializeScope(
   referenceIds: Map<Reference, string>,
   raw: string,
 ): SerializedScope {
-  const id = scopeIds.get(scope);
-  if (id === undefined) {
+  const id = scopeIds.get(scope) ?? null;
+  if (id === null) {
     throw new Error("Scope id not found");
   }
   return {
@@ -22,8 +22,8 @@ export function serializeScope(
     isStrict: scope.isStrict,
     upper: scope.upper ? (scopeIds.get(scope.upper) ?? null) : null,
     childScopes: scope.childScopes
-      .map((c) => scopeIds.get(c))
-      .filter((x): x is string => x !== undefined),
+      .map((c) => scopeIds.get(c) ?? null)
+      .filter((x): x is string => x !== null),
     variableScope: scopeIds.get(scope.variableScope) ?? id,
     block: {
       type: scope.block.type,
@@ -31,14 +31,14 @@ export function serializeScope(
       endSpan: spanFromOffset(raw, scope.block.end ?? scope.block.start ?? 0),
     },
     variables: scope.variables
-      .map((v) => variableIds.get(v))
-      .filter((x): x is string => x !== undefined),
+      .map((v) => variableIds.get(v) ?? null)
+      .filter((x): x is string => x !== null),
     references: scope.references
-      .map((r) => referenceIds.get(r))
-      .filter((x): x is string => x !== undefined),
+      .map((r) => referenceIds.get(r) ?? null)
+      .filter((x): x is string => x !== null),
     through: scope.through
-      .map((r) => referenceIds.get(r))
-      .filter((x): x is string => x !== undefined),
+      .map((r) => referenceIds.get(r) ?? null)
+      .filter((x): x is string => x !== null),
     functionExpressionScope: scope.functionExpressionScope,
     blockContext: scope.unsnarlBlockContext ?? null,
     fallsThrough: scope.unsnarlFallsThrough ?? false,

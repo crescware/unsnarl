@@ -22,9 +22,6 @@ export function walkNode(
   if (keys) {
     for (const k of keys) {
       const child = node[k];
-      if (child === null || child === undefined) {
-        continue;
-      }
       if (Array.isArray(child)) {
         for (const c of child) {
           if (isAstNode(c)) {

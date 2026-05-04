@@ -5,7 +5,7 @@ export function isAncestorScope(
   descendantId: string,
   scopeMap: ReadonlyMap<string, SerializedScope>,
 ): boolean {
-  let cur: SerializedScope | undefined = scopeMap.get(descendantId);
+  let cur: SerializedScope | null = scopeMap.get(descendantId) ?? null;
   while (cur) {
     if (cur.id === ancestorId) {
       return true;
@@ -13,7 +13,7 @@ export function isAncestorScope(
     if (!cur.upper) {
       return false;
     }
-    cur = scopeMap.get(cur.upper);
+    cur = scopeMap.get(cur.upper) ?? null;
   }
   return false;
 }

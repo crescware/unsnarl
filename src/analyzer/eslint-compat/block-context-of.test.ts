@@ -29,6 +29,7 @@ describe("blockContextOf", () => {
       key: "consequent",
       parentSpanOffset: 12,
       kind: "other",
+      ifChainRootOffset: null,
     });
   });
 
@@ -39,6 +40,7 @@ describe("blockContextOf", () => {
       key: "body",
       parentSpanOffset: 0,
       kind: "other",
+      ifChainRootOffset: null,
     });
   });
 

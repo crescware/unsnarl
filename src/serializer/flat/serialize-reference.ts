@@ -12,8 +12,8 @@ export function serializeReference(
   referenceIds: Map<Reference, string>,
   raw: string,
 ): SerializedReference {
-  const id = referenceIds.get(r);
-  if (id === undefined) {
+  const id = referenceIds.get(r) ?? null;
+  if (id === null) {
     throw new Error("Reference id not found");
   }
   return {
@@ -22,8 +22,8 @@ export function serializeReference(
     from: scopeIds.get(r.from) ?? "",
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
     owners: (r.unsnarlOwners ?? [])
-      .map((o) => variableIds.get(o))
-      .filter((x): x is string => x !== undefined),
+      .map((o) => variableIds.get(o) ?? null)
+      .filter((x): x is string => x !== null),
     init: r.init,
     flags: {
       read: r.isRead(),

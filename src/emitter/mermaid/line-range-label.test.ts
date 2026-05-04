@@ -7,13 +7,13 @@ describe("lineRangeLabel", () => {
   test.each<{
     name: string;
     line: number;
-    endLine: number | undefined;
+    endLine: number | null;
     expected: string;
   }>([
     {
-      name: "single line when endLine is undefined",
+      name: "single line when endLine is null",
       line: 5,
-      endLine: undefined,
+      endLine: null,
       expected: "L5",
     },
     {
@@ -35,10 +35,7 @@ describe("lineRangeLabel", () => {
       expected: "L1-2",
     },
   ])("$name", ({ line, endLine, expected }) => {
-    const sg =
-      endLine === undefined
-        ? { ...baseSubgraph(), line }
-        : { ...baseSubgraph(), line, endLine };
+    const sg = { ...baseSubgraph(), line, endLine };
     expect(lineRangeLabel(sg)).toBe(expected);
   });
 });

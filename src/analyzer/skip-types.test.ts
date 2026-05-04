@@ -18,8 +18,8 @@ function analyze(code: string, language: Language = LANGUAGE.Ts) {
   return analyzer.analyze(parsed);
 }
 
-function findVariable(scope: Scope, name: string): Variable | undefined {
-  return scope.variables.find((v) => v.name === name);
+function findVariable(scope: Scope, name: string): Variable | null {
+  return scope.variables.find((v) => v.name === name) ?? null;
 }
 
 describe("EslintCompatAnalyzer / type annotation skipping", () => {
@@ -30,9 +30,9 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     // SomeType is a type, not a Variable
-    expect(findVariable(rootScope, "SomeType")).toBeUndefined();
+    expect(findVariable(rootScope, "SomeType")).toBeNull();
     // No ImplicitGlobalVariable for SomeType either
-    expect(findVariable(rootScope, "SomeType")).toBeUndefined();
+    expect(findVariable(rootScope, "SomeType")).toBeNull();
     // take は Variable として登録される
     const take = findVariable(rootScope, "take");
     expect(take).toBeDefined();
@@ -45,14 +45,14 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     expect(
-      rootScope.through.find((r) => r.identifier.name === "I"),
-    ).toBeUndefined();
+      rootScope.through.find((r) => r.identifier.name === "I") ?? null,
+    ).toBeNull();
     expect(
-      rootScope.through.find((r) => r.identifier.name === "foo"),
-    ).toBeUndefined();
+      rootScope.through.find((r) => r.identifier.name === "foo") ?? null,
+    ).toBeNull();
     expect(
-      rootScope.through.find((r) => r.identifier.name === "bar"),
-    ).toBeUndefined();
+      rootScope.through.find((r) => r.identifier.name === "bar") ?? null,
+    ).toBeNull();
     // 唯一の Variable は x
     expect(rootScope.variables.map((v) => v.name)).toEqual(["x"]);
   });
@@ -64,8 +64,8 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     // enum 自体も無視
-    expect(findVariable(rootScope, "Color")).toBeUndefined();
-    expect(findVariable(rootScope, "Red")).toBeUndefined();
+    expect(findVariable(rootScope, "Color")).toBeNull();
+    expect(findVariable(rootScope, "Red")).toBeNull();
     expect(rootScope.variables.map((v) => v.name)).toEqual(["c"]);
   });
 
@@ -78,7 +78,7 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     const value = findVariable(rootScope, "value")!;
     expect(value.references.length).toBe(1);
     // `number` は型なので参照にもならない
-    expect(findVariable(rootScope, "number")).toBeUndefined();
+    expect(findVariable(rootScope, "number")).toBeNull();
   });
 
   test("classifies JSX tag names as read references", () => {
@@ -98,8 +98,8 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code, "tsx");
     expect(
-      rootScope.through.find((r) => r.identifier.name === "className"),
-    ).toBeUndefined();
+      rootScope.through.find((r) => r.identifier.name === "className") ?? null,
+    ).toBeNull();
   });
 });
 
