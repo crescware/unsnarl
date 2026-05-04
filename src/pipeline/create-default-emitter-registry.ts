@@ -1,7 +1,7 @@
 import {
   CLI_MERMAID_RENDERER,
   type CliMermaidRenderer,
-} from "../cli/cli-mermaid-renderer.js";
+} from "../cli-mermaid-renderer.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";

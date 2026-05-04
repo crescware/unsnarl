@@ -1,7 +1,7 @@
 import { InvalidArgumentError, Option } from "commander";
 
 import { createDefaultEmitterRegistry } from "../../pipeline/create-default-emitter-registry.js";
-import type { CliMermaidRenderer } from "../cli-mermaid-renderer.js";
+import type { CliMermaidRenderer } from "../../cli-mermaid-renderer.js";
 import { MERMAID_RENDERERS } from "./cli-mermaid-renderer.js";
 
 function coerceMermaidRenderer(value: string): CliMermaidRenderer {
