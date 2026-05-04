@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { isComputed } from "./is-computed.js";
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { ReferenceFlags } from "../../ir/model.js";
+import { ReferenceFlags } from "../../ir/reference/reference-flags.js";
 import { reference } from "./reference.js";
 
 describe("reference factory", () => {

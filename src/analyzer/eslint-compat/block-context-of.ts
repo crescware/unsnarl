@@ -1,4 +1,4 @@
-import type { BlockContext } from "../../ir/model.js";
+import type { BlockContext } from "../../ir/scope/block-context.js";
 import type { PathEntry } from "../walk/walk.js";
 import { ifChainRootOffset } from "./if-chain-root-offset.js";
 import type { NodeLike } from "./node-like.js";

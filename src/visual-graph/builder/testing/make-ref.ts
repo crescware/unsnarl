@@ -1,4 +1,4 @@
-import type { SerializedReference } from "../../../ir/model.js";
+import type { SerializedReference } from "../../../ir/serialized/serialized-reference.js";
 import { span } from "./span.js";
 
 export function baseRef(): SerializedReference {

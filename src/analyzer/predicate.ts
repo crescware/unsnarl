@@ -1,4 +1,4 @@
-import type { PredicateContainer } from "../ir/model.js";
+import type { PredicateContainer } from "../ir/reference/predicate-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 

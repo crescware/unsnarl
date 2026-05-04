@@ -1,4 +1,5 @@
-import type { AstNode, Span } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { Span } from "../../ir/primitive/span.js";
 import { spanFromOffset } from "../../util/span.js";
 
 export function spanOf(node: AstNode, raw: string): Span {

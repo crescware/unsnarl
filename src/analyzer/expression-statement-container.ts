@@ -1,4 +1,4 @@
-import type { ExpressionStatementContainer } from "../ir/model.js";
+import type { ExpressionStatementContainer } from "../ir/reference/expression-statement-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 

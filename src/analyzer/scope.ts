@@ -1,20 +1,17 @@
-import { ReferenceFlags } from "../ir/model.js";
-import type {
-  AstIdentifier,
-  AstNode,
-  BlockContext,
-  Definition,
-  ExpressionStatementContainer,
-  JsxElementContainer,
-  PredicateContainer,
-  Reference,
-  ReferenceFlagBits,
-  ReturnContainer,
-  Scope,
-  ScopeType,
-  Variable,
-} from "../ir/model.js";
-import { SCOPE_TYPE } from "./scope-type.js";
+import type { AstIdentifier } from "../ir/primitive/ast-identifier.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import type { ExpressionStatementContainer } from "../ir/reference/expression-statement-container.js";
+import type { JsxElementContainer } from "../ir/reference/jsx-element-container.js";
+import type { PredicateContainer } from "../ir/reference/predicate-container.js";
+import { ReferenceFlags } from "../ir/reference/reference-flags.js";
+import type { ReferenceFlagBits } from "../ir/reference/reference-flags.js";
+import type { Reference } from "../ir/reference/reference.js";
+import type { ReturnContainer } from "../ir/reference/return-container.js";
+import type { BlockContext } from "../ir/scope/block-context.js";
+import type { Definition } from "../ir/scope/definition.js";
+import type { Scope } from "../ir/scope/scope.js";
+import type { Variable } from "../ir/scope/variable.js";
+import { SCOPE_TYPE, type ScopeType } from "./scope-type.js";
 
 export class ScopeImpl implements Scope {
   readonly type: ScopeType;

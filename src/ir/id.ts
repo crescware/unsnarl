@@ -1,4 +1,4 @@
-import type { ReferenceId, ScopeId, VariableId } from "./model.js";
+import type { ReferenceId, ScopeId, VariableId } from "./serialized/ids.js";
 
 export function makeScopeId(index: number): ScopeId {
   return `scope#${index}`;

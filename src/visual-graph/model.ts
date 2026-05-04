@@ -1,5 +1,6 @@
-import type { Language, VariableDeclarationKind } from "../ir/model.js";
+import type { Language } from "../cli/language.js";
 import type { IMPORT_KIND } from "../serializer/import-kind.js";
+import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 import type { Direction } from "./direction.js";
 import type { NODE_KIND, NodeKind } from "./node-kind.js";
 import type { BOUNDARY_EDGE_DIRECTION } from "./prune/boundary-edge-direction.js";

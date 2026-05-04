@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { isBranchScope } from "./is-branch-scope.js";
 
 export function branchScopeOf(

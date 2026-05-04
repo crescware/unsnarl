@@ -1,7 +1,7 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { collectBindingIdentifiers } from "./collect-binding-identifiers.js";
 
 const declId = (code: string): AstNode => {

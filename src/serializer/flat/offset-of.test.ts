@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { offsetOf } from "./offset-of.js";
 
 describe("offsetOf", () => {

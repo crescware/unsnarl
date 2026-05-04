@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { findEnclosingSubgraphScope } from "./find-enclosing-subgraph-scope.js";
 
 export function enclosingFunctionVar(

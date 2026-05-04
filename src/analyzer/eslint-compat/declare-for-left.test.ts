@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { LANGUAGE, type Language } from "../../cli/language.js";
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";

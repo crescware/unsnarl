@@ -1,5 +1,5 @@
 import { DEFINITION_TYPE } from "../../../analyzer/definition-type.js";
-import type { SerializedDefinition } from "../../../ir/model.js";
+import type { SerializedDefinition } from "../../../ir/serialized/serialized-definition.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 import { span } from "./span.js";
 

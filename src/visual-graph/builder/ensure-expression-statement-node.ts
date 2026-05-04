@@ -1,4 +1,4 @@
-import type { SerializedReference } from "../../ir/model.js";
+import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { VisualElement, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";

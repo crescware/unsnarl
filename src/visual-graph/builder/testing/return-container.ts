@@ -1,4 +1,4 @@
-import type { Span } from "../../../ir/model.js";
+import type { Span } from "../../../ir/primitive/span.js";
 import { span } from "./span.js";
 
 export function returnContainer(

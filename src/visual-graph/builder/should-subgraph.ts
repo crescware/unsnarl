@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { isControlSubgraph } from "./is-control-subgraph.js";
 import { isFunctionSubgraph } from "./is-function-subgraph.js";
 

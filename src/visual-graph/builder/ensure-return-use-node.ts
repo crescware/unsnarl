@@ -1,4 +1,4 @@
-import type { SerializedReference } from "../../ir/model.js";
+import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import type { VisualNode, VisualSubgraph } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";

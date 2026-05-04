@@ -1,5 +1,5 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
-import type { SerializedVariable } from "../../ir/model.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import type { VisualNode } from "../model.js";

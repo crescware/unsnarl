@@ -1,4 +1,4 @@
-import type { ReturnContainer } from "../ir/model.js";
+import type { ReturnContainer } from "../ir/reference/return-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import type { PathEntry } from "./walk/walk.js";
 

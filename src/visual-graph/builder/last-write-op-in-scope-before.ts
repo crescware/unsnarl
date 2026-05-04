@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
 import type { WriteOp } from "./write-op.js";
 

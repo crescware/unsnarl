@@ -1,4 +1,4 @@
-import type { Span } from "../ir/model.js";
+import type { Span } from "../ir/primitive/span.js";
 
 export function spanFromOffset(raw: string, offset: number): Span {
   let line = 1;

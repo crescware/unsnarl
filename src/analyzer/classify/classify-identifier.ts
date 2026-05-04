@@ -1,5 +1,5 @@
-import { ReferenceFlags } from "../../ir/model.js";
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import { ReferenceFlags } from "../../ir/reference/reference-flags.js";
 import type { PathEntry } from "../walk/walk.js";
 import { classifyOrdinaryReference } from "./classify-ordinary-reference.js";
 import type { ClassifyResult } from "./classify-result.js";

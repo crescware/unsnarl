@@ -1,11 +1,9 @@
 import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
 import { SCOPE_TYPE } from "../analyzer/scope-type.js";
-import type {
-  SerializedIR,
-  SerializedReference,
-  SerializedScope,
-  SerializedVariable,
-} from "../ir/model.js";
+import type { SerializedIR } from "../ir/serialized/serialized-ir.js";
+import type { SerializedReference } from "../ir/serialized/serialized-reference.js";
+import type { SerializedScope } from "../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { IMPORT_KIND } from "../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";

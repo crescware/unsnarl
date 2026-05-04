@@ -1,4 +1,5 @@
-import type { AstNode, BlockContext } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { BlockContext } from "../../ir/scope/block-context.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../manager.js";

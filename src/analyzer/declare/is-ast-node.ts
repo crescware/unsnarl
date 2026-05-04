@@ -1,4 +1,4 @@
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 
 export function isAstNode(value: unknown): value is AstNode {
   return (

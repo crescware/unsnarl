@@ -1,4 +1,5 @@
-import type { Scope, Variable } from "../../ir/model.js";
+import type { Scope } from "../../ir/scope/scope.js";
+import type { Variable } from "../../ir/scope/variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { resolveInScopeChain } from "../resolve.js";
 import type { PathEntry } from "../walk/walk.js";

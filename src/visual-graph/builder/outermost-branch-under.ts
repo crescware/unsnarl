@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { isBranchScope } from "./is-branch-scope.js";
 
 // Walk upward from scopeId and return the outermost branch scope strictly

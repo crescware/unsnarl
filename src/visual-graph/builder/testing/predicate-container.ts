@@ -1,4 +1,4 @@
-import type { PredicateContainer } from "../../../ir/model.js";
+import type { PredicateContainer } from "../../../ir/reference/predicate-container.js";
 
 export function predicateContainer(
   type: PredicateContainer["type"],
