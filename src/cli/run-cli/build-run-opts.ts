@@ -2,9 +2,9 @@ import type { PruningRunOptions } from "../../pipeline/prune/pruning-run-options
 import type { PipelineRunOptions } from "../../pipeline/runner/pipeline-run-options.js";
 import { readSourceFile } from "../io.js";
 import { detectLanguage } from "./detect-language.js";
-import { resolveGenerations } from "./resolve-generations.js";
 import type { ExecuteSource } from "./execute-source.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
+import { resolveGenerations } from "./resolve-generations.js";
 
 type Return = Readonly<{
   text: string;

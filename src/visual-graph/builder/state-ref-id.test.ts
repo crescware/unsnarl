@@ -1,10 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../../language.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import { LANGUAGE } from "../../language.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import type { BuilderContext } from "./context.js";
 import { stateRefId } from "./state-ref-id.js";

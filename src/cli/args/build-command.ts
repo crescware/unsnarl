@@ -1,8 +1,8 @@
 import { Command, InvalidArgumentError, Option } from "commander";
 
+import type { CliLanguage } from "../../language.js";
 import { NAME } from "../../name.js";
 import { VERSION } from "../../version.js";
-import type { CliLanguage } from "../../language.js";
 import { LANGUAGES } from "./cli-language.js";
 import { formatOptions } from "./format-options.js";
 import { scopeOptions } from "./scope-options.js";
