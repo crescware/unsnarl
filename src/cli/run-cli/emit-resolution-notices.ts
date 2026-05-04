@@ -1,5 +1,5 @@
-import type { PipelineRunDetails } from "../../../pipeline/runner/pipeline-run-details.js";
-import { formatResolutionNotice } from "../../../visual-graph/prune/format-resolution-notice.js";
+import type { PipelineRunDetails } from "../../pipeline/runner/pipeline-run-details.js";
+import { formatResolutionNotice } from "../../visual-graph/prune/format-resolution-notice.js";
 
 export function emitResolutionNotices(
   resolutions: PipelineRunDetails["resolutions"],

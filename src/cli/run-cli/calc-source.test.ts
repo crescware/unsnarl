@@ -1,12 +1,12 @@
 import type { Command } from "commander";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
-import { readStdin } from "../../io.js";
+import { readStdin } from "../io.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
-vi.mock("../../io.js", () => ({
+vi.mock("../io.js", () => ({
   readStdin: vi.fn(),
   readSourceFile: vi.fn(),
 }));

@@ -1,6 +1,6 @@
 import { join } from "node:path";
 
-import type { EmitterRegistry } from "../../../../pipeline/emit/emitter-registry.js";
+import type { EmitterRegistry } from "../../../pipeline/emit/emitter-registry.js";
 import { CliUsageError } from "../cli-usage-error.js";
 import type { ExecuteSource } from "../execute-source.js";
 import type { NormalizedCliOptions } from "../normalized-cli-options.js";

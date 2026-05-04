@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
-import type { PipelineRunDetails } from "../../../pipeline/runner/pipeline-run-details.js";
+import type { PipelineRunDetails } from "../../pipeline/runner/pipeline-run-details.js";
 import { emitResolutionNotices } from "./emit-resolution-notices.js";
 
 describe("emitResolutionNotices", () => {

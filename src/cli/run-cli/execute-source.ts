@@ -1,4 +1,4 @@
-import type { CliLanguage } from "../../../language.js";
+import type { CliLanguage } from "../../language.js";
 
 export type ExecuteSource =
   | Readonly<{

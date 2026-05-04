@@ -1,4 +1,4 @@
-import type { ParsedCliOptions } from "../../args/parsed-cli-options.js";
+import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
 export function normalizeCliOptions(
