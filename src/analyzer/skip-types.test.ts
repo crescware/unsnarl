@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE, type Language } from "../cli/language.js";
+import { LANGUAGE, type Language } from "../language.js";
 import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
 import { OxcParser } from "../parser/oxc-parser.js";

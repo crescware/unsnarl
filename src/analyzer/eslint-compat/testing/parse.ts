@@ -1,4 +1,4 @@
-import { LANGUAGE, type Language } from "../../../cli/language.js";
+import { LANGUAGE, type Language } from "../../../language.js";
 import { OxcParser } from "../../../parser/oxc-parser.js";
 import type { NodeLike } from "../node-like.js";
 

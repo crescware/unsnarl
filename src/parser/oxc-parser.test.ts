@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../cli/language.js";
+import { LANGUAGE } from "../language.js";
 import { AST_TYPE } from "./ast-type.js";
 import { OxcParser } from "./oxc-parser.js";
 import { ParseError } from "./parse-error.js";

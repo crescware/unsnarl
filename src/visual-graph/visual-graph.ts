@@ -1,4 +1,4 @@
-import type { Language } from "../cli/language.js";
+import type { Language } from "../language.js";
 import type { Direction } from "./direction.js";
 import type { VisualBoundaryEdge } from "./visual-boundary-edge.js";
 import type { VisualEdge } from "./visual-edge.js";

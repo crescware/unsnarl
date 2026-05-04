@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import { LANGUAGE } from "../../cli/language.js";
+import { LANGUAGE } from "../../language.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";

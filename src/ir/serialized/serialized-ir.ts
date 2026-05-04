@@ -1,4 +1,4 @@
-import type { Language } from "../../cli/language.js";
+import type { Language } from "../../language.js";
 import type { SerializedIRVersion } from "../../serializer/serialized-ir-version.js";
 import type { Diagnostic } from "../diagnostic/diagnostic.js";
 import type { VariableId } from "./ids.js";

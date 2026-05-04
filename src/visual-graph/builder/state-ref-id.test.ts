@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { LANGUAGE } from "../../cli/language.js";
+import { LANGUAGE } from "../../language.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";

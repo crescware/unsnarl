@@ -4,7 +4,7 @@ import { DEFINITION_TYPE } from "../analyzer/definition-type.js";
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
 import { PREDICATE_CONTAINER_TYPE } from "../analyzer/predicate-container-type.js";
 import { SCOPE_TYPE } from "../analyzer/scope-type.js";
-import { LANGUAGE, type Language } from "../cli/language.js";
+import { LANGUAGE, type Language } from "../language.js";
 import type { SerializedIR } from "../ir/serialized/serialized-ir.js";
 import type { SerializedReference } from "../ir/serialized/serialized-reference.js";
 import type { SerializedScope } from "../ir/serialized/serialized-scope.js";
