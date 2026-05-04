@@ -4,8 +4,8 @@ import { describe, expect, test } from "vitest";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DEFINITION_TYPE } from "../definition-type.js";
+import { ScopeImpl } from "../scope-impl.js";
 import { SCOPE_TYPE } from "../scope-type.js";
-import { ScopeImpl } from "../scope.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
 import type { NodeLike } from "./node-like.js";
 

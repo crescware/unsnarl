@@ -1,6 +1,6 @@
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 
 export function isPatternStep(
   node: AstNode,

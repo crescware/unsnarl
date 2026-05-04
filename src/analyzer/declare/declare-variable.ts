@@ -4,7 +4,7 @@ import type { Definition } from "../../ir/scope/definition.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
 import type { DefinitionType } from "../definition-type.js";
-import { VariableImpl } from "../scope.js";
+import { VariableImpl } from "../variable-impl.js";
 
 export function declareVariable(
   scope: Scope,

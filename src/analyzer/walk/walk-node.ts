@@ -2,7 +2,8 @@ import { visitorKeys } from "oxc-parser";
 
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { isAstNode } from "./is-ast-node.js";
-import type { PathEntry, WalkVisitor } from "./walk.js";
+import type { PathEntry } from "./path-entry.js";
+import type { WalkVisitor } from "./walk-visitor.js";
 
 export function walkNode(
   node: AstNode,

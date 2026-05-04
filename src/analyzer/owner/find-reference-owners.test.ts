@@ -6,9 +6,9 @@ import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../definition-type.js";
+import { ScopeImpl } from "../scope-impl.js";
 import { SCOPE_TYPE } from "../scope-type.js";
-import { ScopeImpl } from "../scope.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { findReferenceOwners } from "./find-reference-owners.js";
 
 const ident = (name: string): AstIdentifier =>

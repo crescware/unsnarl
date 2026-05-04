@@ -1,6 +1,6 @@
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { ScopeManager } from "../manager.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { blockContextOf } from "./block-context-of.js";
 import type { NodeLike } from "./node-like.js";
 
