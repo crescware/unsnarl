@@ -1,5 +1,6 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
-import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
+import type { Emitter } from "../../pipeline/emit/emitter.js";
 import { formatResolutionNotice } from "../../visual-graph/prune/format-resolution-notice.js";
 import type { MermaidEmitter } from "../mermaid/mermaid.js";
 import { codeFenceLang } from "./code-fence-lang.js";

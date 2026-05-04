@@ -1,4 +1,4 @@
-import type { PipelineRunDetails } from "../../../pipeline/types.js";
+import type { PipelineRunDetails } from "../../../pipeline/runner/pipeline-run-details.js";
 
 export function emitPruningWarnings(
   pruning: PipelineRunDetails["pruning"],

@@ -1,5 +1,6 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
-import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
+import type { Emitter } from "../../pipeline/emit/emitter.js";
 
 export class IrEmitter implements Emitter {
   readonly format = "ir";

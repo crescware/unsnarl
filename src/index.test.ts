@@ -4,14 +4,12 @@ import { LANGUAGE } from "./cli/language.js";
 import type { Scope } from "./ir/scope/scope.js";
 import type { SerializedIR } from "./ir/serialized/serialized-ir.js";
 import { AST_TYPE } from "./parser/ast-type.js";
+import type { ScopeAnalyzer } from "./pipeline/analyze/scope-analyzer.js";
+import type { EmitterRegistry } from "./pipeline/emit/emitter-registry.js";
+import type { Emitter } from "./pipeline/emit/emitter.js";
+import type { Parser } from "./pipeline/parse/parser.js";
 import { createPipeline } from "./pipeline/pipeline.js";
-import type {
-  Emitter,
-  EmitterRegistry,
-  IRSerializer,
-  Parser,
-  ScopeAnalyzer,
-} from "./pipeline/types.js";
+import type { IRSerializer } from "./pipeline/serialize/ir-serializer.js";
 import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
 
 const fakeScope = {} as Scope;

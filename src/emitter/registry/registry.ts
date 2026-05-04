@@ -1,4 +1,5 @@
-import type { Emitter, EmitterRegistry } from "../../pipeline/types.js";
+import type { EmitterRegistry } from "../../pipeline/emit/emitter-registry.js";
+import type { Emitter } from "../../pipeline/emit/emitter.js";
 
 export class DefaultEmitterRegistry implements EmitterRegistry {
   private readonly map = new Map<string, Emitter>();

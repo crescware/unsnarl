@@ -14,8 +14,9 @@ import { DefaultEmitterRegistry } from "../emitter/registry/registry.js";
 import { StatsEmitter } from "../emitter/stats/stats.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
+import type { EmitterRegistry } from "./emit/emitter-registry.js";
 import { createPipeline } from "./pipeline.js";
-import type { EmitterRegistry, Pipeline } from "./types.js";
+import type { Pipeline } from "./runner/pipeline.js";
 
 type DefaultRegistryOptions = Readonly<{
   mermaidRenderer: MermaidRenderer;
