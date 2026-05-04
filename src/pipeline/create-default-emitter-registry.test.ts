@@ -4,7 +4,7 @@ import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
 import { MermaidEmitter } from "../emitter/mermaid/mermaid.js";
-import { createDefaultEmitterRegistry } from "./default.js";
+import { createDefaultEmitterRegistry } from "./create-default-emitter-registry.js";
 
 vi.mock("../emitter/ir/ir.js", () => ({
   IrEmitter: vi.fn(function IrEmitter() {

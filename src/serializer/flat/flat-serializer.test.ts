@@ -5,7 +5,7 @@ import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { LANGUAGE, type Language } from "../../cli/language.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
-import { OxcParser } from "../../parser/oxc.js";
+import { OxcParser } from "../../parser/oxc-parser.js";
 import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "./flat-serializer.js";
 

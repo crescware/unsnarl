@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE, type Language } from "../../cli/language.js";
-import { OxcParser } from "../../parser/oxc.js";
+import { OxcParser } from "../../parser/oxc-parser.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
 import { dagreStrategy } from "./strategy/dagre-strategy.js";

@@ -1,7 +1,7 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
 import type { Emitter } from "../../pipeline/emit/emitter.js";
-import { buildVisualGraph } from "../../visual-graph/builder.js";
+import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { collectEdgeEndpointIds } from "./collect-edge-endpoint-ids.js";
@@ -18,8 +18,6 @@ import { renderTopLevelNodes } from "./render-top-level-nodes.js";
 import { renderTopLevelSubgraphs } from "./render-top-level-subgraphs.js";
 import { splitEdges } from "./split-edges.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
-
-export type { CliMermaidRenderer as MermaidRenderer } from "../../cli/cli-mermaid-renderer.js";
 
 type MermaidEmitterOptions = Readonly<{
   /**

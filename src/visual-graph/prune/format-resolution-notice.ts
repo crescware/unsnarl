@@ -1,4 +1,4 @@
-import type { RootQueryResolution } from "./resolve-ambiguous-queries.js";
+import type { RootQueryResolution } from "./root-query-resolution.js";
 
 // Returns the three lines a resolution notice consists of, sharing the
 // exact wording between the stderr emitter and the markdown Notice

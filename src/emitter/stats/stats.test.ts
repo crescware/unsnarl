@@ -2,9 +2,9 @@ import { describe, expect, test } from "vitest";
 
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE } from "../../cli/language.js";
-import { OxcParser } from "../../parser/oxc.js";
+import { OxcParser } from "../../parser/oxc-parser.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
-import { buildVisualGraph } from "../../visual-graph/builder.js";
+import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
 import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
