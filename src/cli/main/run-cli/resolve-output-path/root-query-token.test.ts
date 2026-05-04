@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
-import type { ParsedRootQuery } from "../../../root-query/parsed-root-query.js";
-import { ROOT_QUERY_KIND } from "../../../root-query/root-query-kind.js";
+import type { ParsedRootQuery } from "../../../../root-query/parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "../../../../root-query/root-query-kind.js";
 import { rootQueryToken } from "./root-query-token.js";
 
 describe("rootQueryToken", () => {

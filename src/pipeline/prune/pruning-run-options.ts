@@ -1,4 +1,4 @@
-import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
+import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 
 export type PruningRunOptions = Readonly<{
   roots: readonly ParsedRootQuery[];

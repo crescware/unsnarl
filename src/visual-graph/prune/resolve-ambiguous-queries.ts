@@ -1,5 +1,5 @@
-import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
-import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
+import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
+import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
 import type { VisualGraph } from "../visual-graph.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 import { NAME_QUERY_EXCLUDED } from "./name-query-excluded.js";
