@@ -1,4 +1,4 @@
-import type { ReferenceFlagBits } from "../../ir/model.js";
+import type { ReferenceFlagBits } from "../../ir/reference/reference-flags.js";
 
 export type ClassifyResult =
   | { kind: "binding" }

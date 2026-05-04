@@ -1,4 +1,4 @@
-import type { AstIdentifier } from "../../ir/model.js";
+import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { isNodeLike } from "./node-like.js";
 

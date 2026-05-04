@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { baseScope } from "./testing/make-scope.js";
 

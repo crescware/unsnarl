@@ -1,4 +1,4 @@
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { PathEntry } from "../walk/walk.js";
 import { isPatternStep } from "./is-pattern-step.js";

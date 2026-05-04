@@ -1,8 +1,6 @@
-import type {
-  SerializedIR,
-  SerializedScope,
-  SerializedVariable,
-} from "../../ir/model.js";
+import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import type { WriteOp } from "./write-op.js";
 
 export type BuilderContext = Readonly<{

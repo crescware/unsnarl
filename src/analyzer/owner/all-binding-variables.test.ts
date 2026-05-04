@@ -1,7 +1,8 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
-import type { AstIdentifier, AstNode } from "../../ir/model.js";
+import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../definition-type.js";

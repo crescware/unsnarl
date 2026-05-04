@@ -1,4 +1,4 @@
-import type { BlockContext } from "../../../ir/model.js";
+import type { BlockContext } from "../../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 
 export function baseBlockContext(): BlockContext {

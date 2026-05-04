@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
-import type { SerializedVariable } from "../../ir/model.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DIRECTION } from "../direction.js";
 import type { VisualSubgraph } from "../model.js";

@@ -1,13 +1,11 @@
 import { makeReferenceId, makeScopeId, makeVariableId } from "../../ir/id.js";
-import type {
-  Reference,
-  Scope,
-  SerializedIR,
-  SerializedReference,
-  SerializedScope,
-  SerializedVariable,
-  Variable,
-} from "../../ir/model.js";
+import type { Reference } from "../../ir/reference/reference.js";
+import type { Scope } from "../../ir/scope/scope.js";
+import type { Variable } from "../../ir/scope/variable.js";
+import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
+import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import type { IRSerializer, SerializeContext } from "../../pipeline/types.js";
 import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";

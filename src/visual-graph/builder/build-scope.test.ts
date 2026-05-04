@@ -3,11 +3,9 @@ import { describe, expect, test } from "vitest";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { LANGUAGE } from "../../cli/language.js";
-import type {
-  SerializedIR,
-  SerializedScope,
-  SerializedVariable,
-} from "../../ir/model.js";
+import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";

@@ -1,10 +1,8 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
-import type {
-  AstNode,
-  Definition,
-  SerializedDefinition,
-  Span,
-} from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { Span } from "../../ir/primitive/span.js";
+import type { Definition } from "../../ir/scope/definition.js";
+import type { SerializedDefinition } from "../../ir/serialized/serialized-definition.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
 import {

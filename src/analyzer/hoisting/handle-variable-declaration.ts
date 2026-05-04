@@ -1,4 +1,5 @@
-import type { AstNode, Scope } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { Scope } from "../../ir/scope/scope.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";

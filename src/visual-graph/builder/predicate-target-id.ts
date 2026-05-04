@@ -1,6 +1,7 @@
 import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import type { SerializedReference, SerializedScope } from "../../ir/model.js";
+import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { BuildState } from "./build-state.js";
 import { sanitize } from "./sanitize.js";
 

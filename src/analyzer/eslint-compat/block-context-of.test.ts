@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { PathEntry } from "../walk/walk.js";
 import { blockContextOf } from "./block-context-of.js";

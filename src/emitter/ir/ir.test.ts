@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { LANGUAGE } from "../../cli/language.js";
-import type { SerializedIR } from "../../ir/model.js";
+import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { IrEmitter } from "./ir.js";
 

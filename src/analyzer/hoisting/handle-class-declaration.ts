@@ -1,4 +1,5 @@
-import type { AstNode, Scope } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { Scope } from "../../ir/scope/scope.js";
 import { declareVariable } from "../declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../definition-type.js";
 import { isIdentifierNode } from "./is-identifier-node.js";

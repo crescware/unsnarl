@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { sanitize } from "./sanitize.js";
 
 export function subgraphScopeId(scope: SerializedScope): string {

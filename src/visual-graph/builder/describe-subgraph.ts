@@ -1,4 +1,5 @@
-import type { SerializedScope, SerializedVariable } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { DIRECTION } from "../direction.js";
 import type { VisualElement, VisualSubgraph } from "../model.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";

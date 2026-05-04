@@ -1,9 +1,7 @@
-import type {
-  Reference,
-  Scope,
-  SerializedScope,
-  Variable,
-} from "../../ir/model.js";
+import type { Reference } from "../../ir/reference/reference.js";
+import type { Scope } from "../../ir/scope/scope.js";
+import type { Variable } from "../../ir/scope/variable.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { spanFromOffset } from "../../util/span.js";
 import { spanOf } from "./span-of.js";
 

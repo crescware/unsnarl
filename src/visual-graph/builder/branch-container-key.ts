@@ -1,4 +1,4 @@
-import type { SerializedScope } from "../../ir/model.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 
 export function branchContainerKey(scope: SerializedScope): string | null {

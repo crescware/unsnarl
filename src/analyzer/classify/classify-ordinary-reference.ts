@@ -1,5 +1,5 @@
-import { ReferenceFlags } from "../../ir/model.js";
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import { ReferenceFlags } from "../../ir/reference/reference-flags.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { ClassifyResult } from "./classify-result.js";
 import { reference } from "./reference.js";

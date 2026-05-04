@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { SerializedIR } from "../../../../ir/model.js";
+import type { SerializedIR } from "../../../../ir/serialized/serialized-ir.js";
 import type { Emitter, EmitterRegistry } from "../../../../pipeline/types.js";
 import type { ParsedRootQuery } from "../../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../../root-query/root-query-kind.js";

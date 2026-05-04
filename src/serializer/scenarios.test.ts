@@ -5,12 +5,10 @@ import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js
 import { PREDICATE_CONTAINER_TYPE } from "../analyzer/predicate-container-type.js";
 import { SCOPE_TYPE } from "../analyzer/scope-type.js";
 import { LANGUAGE, type Language } from "../cli/language.js";
-import type {
-  SerializedIR,
-  SerializedReference,
-  SerializedScope,
-  SerializedVariable,
-} from "../ir/model.js";
+import type { SerializedIR } from "../ir/serialized/serialized-ir.js";
+import type { SerializedReference } from "../ir/serialized/serialized-reference.js";
+import type { SerializedScope } from "../ir/serialized/serialized-scope.js";
+import type { SerializedVariable } from "../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { OxcParser } from "../parser/oxc.js";
 import { FlatSerializer } from "./flat/flat-serializer.js";

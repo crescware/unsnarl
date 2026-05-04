@@ -1,4 +1,4 @@
-import type { SerializedReference } from "../../ir/model.js";
+import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 
 export function edgeLabelOfRef(r: SerializedReference): string {
   const parts: /* mutable */ string[] = [];

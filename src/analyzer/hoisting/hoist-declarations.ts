@@ -1,4 +1,4 @@
-import type { Scope } from "../../ir/model.js";
+import type { Scope } from "../../ir/scope/scope.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { isNodeLike } from "./node-like.js";
 import { visit } from "./visit.js";

@@ -1,4 +1,4 @@
-import type { AstNode } from "../../ir/model.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { walkNode } from "./walk-node.js";
 
 export type PathEntry = Readonly<{

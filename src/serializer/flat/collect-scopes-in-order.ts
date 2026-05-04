@@ -1,4 +1,4 @@
-import type { Scope } from "../../ir/model.js";
+import type { Scope } from "../../ir/scope/scope.js";
 
 export function collectScopesInOrder(root: Scope): readonly Scope[] {
   const out: /* mutable */ Scope[] = [];

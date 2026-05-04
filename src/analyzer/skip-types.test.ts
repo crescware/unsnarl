@@ -1,7 +1,8 @@
 import { describe, expect, test } from "vitest";
 
 import { LANGUAGE, type Language } from "../cli/language.js";
-import type { Scope, Variable } from "../ir/model.js";
+import type { Scope } from "../ir/scope/scope.js";
+import type { Variable } from "../ir/scope/variable.js";
 import { OxcParser } from "../parser/oxc.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";

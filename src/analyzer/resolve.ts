@@ -1,4 +1,7 @@
-import type { AstNode, Reference, Scope, Variable } from "../ir/model.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import type { Reference } from "../ir/reference/reference.js";
+import type { Scope } from "../ir/scope/scope.js";
+import type { Variable } from "../ir/scope/variable.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
 import { VariableImpl } from "./scope.js";
 

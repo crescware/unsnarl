@@ -1,4 +1,4 @@
-import type { SerializedVariable } from "../../../ir/model.js";
+import type { SerializedVariable } from "../../../ir/serialized/serialized-variable.js";
 import { baseDef } from "./make-def.js";
 import { span } from "./span.js";
 

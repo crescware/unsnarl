@@ -1,4 +1,4 @@
-import type { Scope } from "../../ir/model.js";
+import type { Scope } from "../../ir/scope/scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { handleClassDeclaration } from "./handle-class-declaration.js";
