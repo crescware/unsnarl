@@ -1,6 +1,8 @@
 import { parseSync } from "oxc-parser";
 
-import type { ParseOptions, ParsedSource, Parser } from "../pipeline/types.js";
+import type { ParseOptions } from "../pipeline/parse/parse-options.js";
+import type { ParsedSource } from "../pipeline/parse/parsed-source.js";
+import type { Parser } from "../pipeline/parse/parser.js";
 
 type ParseErrorDetail = Readonly<{
   message: string;

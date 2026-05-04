@@ -2,9 +2,9 @@ import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
-import type { VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualNode } from "../visual-node.js";
 import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {

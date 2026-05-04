@@ -1,7 +1,7 @@
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import type { VisualSubgraph } from "../model.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 
 export function controlSubgraphKindOf(
   scope: SerializedScope,

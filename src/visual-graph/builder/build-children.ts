@@ -1,9 +1,11 @@
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { DIRECTION } from "../direction.js";
-import type { VisualElement, VisualNode, VisualSubgraph } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualNode } from "../visual-node.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState } from "./build-state.js";

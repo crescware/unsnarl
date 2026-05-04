@@ -1,5 +1,6 @@
-import type { VisualElement, VisualNode } from "../model.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualNode } from "../visual-node.js";
 import { ROOT_CANDIDATE_KINDS } from "./root-candidate-kinds.js";
 
 export function* iterateVisualNodes(

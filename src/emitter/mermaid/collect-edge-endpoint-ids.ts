@@ -1,4 +1,4 @@
-import type { VisualEdge } from "../../visual-graph/model.js";
+import type { VisualEdge } from "../../visual-graph/visual-edge.js";
 
 export function collectEdgeEndpointIds(
   edges: readonly VisualEdge[],

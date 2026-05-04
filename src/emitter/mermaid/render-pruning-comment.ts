@@ -1,4 +1,4 @@
-import type { VisualGraph } from "../../visual-graph/model.js";
+import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 
 export function renderPruningComment(
   graph: VisualGraph,

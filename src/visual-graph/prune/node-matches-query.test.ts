@@ -2,9 +2,9 @@ import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
-import type { VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualNode } from "../visual-node.js";
 import { nodeMatchesQuery } from "./node-matches-query.js";
 
 const node = (

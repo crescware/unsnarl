@@ -5,17 +5,15 @@ import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js"
 import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { DIRECTION } from "../direction.js";
-import type {
-  SubgraphKind,
-  VisualEdge,
-  VisualElement,
-  VisualGraph,
-  VisualNode,
-  VisualSubgraph,
-} from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
+import type { SubgraphKind } from "../subgraph-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
+import type { VisualEdge } from "../visual-edge.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualGraph } from "../visual-graph.js";
+import type { VisualNode } from "../visual-node.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import { BOUNDARY_EDGE_DIRECTION } from "./boundary-edge-direction.js";
 import { pruneVisualGraph } from "./prune-visual-graph.js";
 

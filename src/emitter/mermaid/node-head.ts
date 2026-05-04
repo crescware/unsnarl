@@ -1,7 +1,7 @@
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
-import type { VisualNode } from "../../visual-graph/model.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { escape } from "./escape.js";
 
 export function nodeHead(n: VisualNode): string {

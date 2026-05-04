@@ -1,4 +1,4 @@
-import type { VisualNode } from "../../visual-graph/model.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
 
 export type RenderState = Readonly<{

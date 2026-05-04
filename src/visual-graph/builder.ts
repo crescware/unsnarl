@@ -31,9 +31,11 @@ import { stateRefId } from "./builder/state-ref-id.js";
 import { writeOpNodeId } from "./builder/write-op-node-id.js";
 import type { WriteOp } from "./builder/write-op.js";
 import { DIRECTION } from "./direction.js";
-import type { VisualEdge, VisualElement, VisualGraph } from "./model.js";
 import { NODE_KIND } from "./node-kind.js";
+import type { VisualEdge } from "./visual-edge.js";
 import { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
+import type { VisualElement } from "./visual-element.js";
+import type { VisualGraph } from "./visual-graph.js";
 
 const MODULE_ROOT_ID = "module_root";
 

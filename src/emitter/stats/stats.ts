@@ -1,8 +1,9 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
-import type { EmitOptions, Emitter } from "../../pipeline/types.js";
+import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
+import type { Emitter } from "../../pipeline/emit/emitter.js";
 import { buildVisualGraph } from "../../visual-graph/builder.js";
-import type { VisualNode } from "../../visual-graph/model.js";
 import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { collectNodes } from "./collect-nodes.js";
 import { formatLabel } from "./format-label.js";
 

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import type { VisualNode } from "../../visual-graph/model.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { subgraphLabel } from "./subgraph-label.js";
 import { baseNode } from "./testing/make-node.js";
 import {

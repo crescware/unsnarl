@@ -1,4 +1,4 @@
-import type { NodeKind } from "../model.js";
+import type { NodeKind } from "../node-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 
 // Use-site nodes (WriteOp, ReturnUse) are positional: they make sense as

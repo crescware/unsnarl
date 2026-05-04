@@ -1,13 +1,11 @@
 import { buildVisualGraph } from "../visual-graph/builder.js";
 import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
 import { resolveAmbiguousQueries } from "../visual-graph/prune/resolve-ambiguous-queries.js";
-import type {
-  EmitOptions,
-  Pipeline,
-  PipelineConfig,
-  PipelineRunDetails,
-  PipelineRunOptions,
-} from "./types.js";
+import type { EmitOptions } from "./emit/emit-options.js";
+import type { PipelineConfig } from "./runner/pipeline-config.js";
+import type { PipelineRunDetails } from "./runner/pipeline-run-details.js";
+import type { PipelineRunOptions } from "./runner/pipeline-run-options.js";
+import type { Pipeline } from "./runner/pipeline.js";
 
 export function createPipeline(config: PipelineConfig): Pipeline {
   function runDetailed(

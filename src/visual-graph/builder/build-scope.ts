@@ -1,8 +1,9 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
-import type { VisualElement, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualNode } from "../visual-node.js";
 import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";

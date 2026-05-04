@@ -9,16 +9,14 @@ import { IMPORT_KIND } from "../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../serializer/serialized-ir-version.js";
 import { buildVisualGraph } from "./builder.js";
 import { DIRECTION } from "./direction.js";
-import type {
-  VisualEdge,
-  VisualElement,
-  VisualGraph,
-  VisualNode,
-  VisualSubgraph,
-} from "./model.js";
 import { NODE_KIND } from "./node-kind.js";
 import { SUBGRAPH_KIND } from "./subgraph-kind.js";
+import type { VisualEdge } from "./visual-edge.js";
 import { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
+import type { VisualElement } from "./visual-element.js";
+import type { VisualGraph } from "./visual-graph.js";
+import type { VisualNode } from "./visual-node.js";
+import type { VisualSubgraph } from "./visual-subgraph.js";
 
 const parser = new OxcParser();
 const analyzer = new EslintCompatAnalyzer();

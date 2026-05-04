@@ -1,15 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import { DIRECTION } from "../../visual-graph/direction.js";
-import type {
-  Direction,
-  VisualElement,
-  VisualNode,
-  VisualSubgraph,
-} from "../../visual-graph/model.js";
+import type { Direction } from "../../visual-graph/direction.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
+import type { VisualElement } from "../../visual-graph/visual-element.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
+import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { collectNodes } from "./collect-nodes.js";
 
 const node = (id: string, line = 1): VisualNode => ({

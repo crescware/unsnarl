@@ -1,4 +1,5 @@
-import type { VisualNode, VisualSubgraph } from "../../visual-graph/model.js";
+import type { VisualNode } from "../../visual-graph/visual-node.js";
+import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { escape } from "./escape.js";
 import { lineRangeLabel } from "./line-range-label.js";
 

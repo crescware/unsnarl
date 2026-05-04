@@ -1,9 +1,7 @@
 import type { AstNode } from "../../ir/primitive/ast-node.js";
-import type {
-  AnalyzedSource,
-  ParsedSource,
-  ScopeAnalyzer,
-} from "../../pipeline/types.js";
+import type { AnalyzedSource } from "../../pipeline/analyze/analyzed-source.js";
+import type { ScopeAnalyzer } from "../../pipeline/analyze/scope-analyzer.js";
+import type { ParsedSource } from "../../pipeline/parse/parsed-source.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { walk } from "../walk/walk.js";

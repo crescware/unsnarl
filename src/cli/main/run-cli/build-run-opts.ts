@@ -1,7 +1,5 @@
-import type {
-  PipelineRunOptions,
-  PruningRunOptions,
-} from "../../../pipeline/types.js";
+import type { PruningRunOptions } from "../../../pipeline/prune/pruning-run-options.js";
+import type { PipelineRunOptions } from "../../../pipeline/runner/pipeline-run-options.js";
 import { readSourceFile } from "../../io.js";
 import { detectLanguage } from "../detect-language.js";
 import { resolveGenerations } from "../resolve-generations.js";

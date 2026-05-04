@@ -3,9 +3,11 @@ import { describe, expect, test } from "vitest";
 import type { ParsedRootQuery } from "../../cli/root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
 import { DIRECTION } from "../direction.js";
-import type { VisualElement, VisualGraph, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualGraph } from "../visual-graph.js";
+import type { VisualNode } from "../visual-node.js";
 import { resolveAmbiguousQueries } from "./resolve-ambiguous-queries.js";
 
 const variableNode = (name: string, line = 1): VisualNode => ({

@@ -2,9 +2,10 @@ import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
-import type { VisualElement, VisualNode } from "../model.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
+import type { VisualElement } from "../visual-element.js";
+import type { VisualNode } from "../visual-node.js";
 import type { BuildState } from "./build-state.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
 import { baseRef } from "./testing/make-ref.js";
