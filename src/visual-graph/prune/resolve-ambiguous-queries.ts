@@ -3,13 +3,7 @@ import { ROOT_QUERY_KIND } from "../../cli/root-query/root-query-kind.js";
 import type { VisualGraph } from "../visual-graph.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 import { NAME_QUERY_EXCLUDED } from "./name-query-excluded.js";
-
-export type RootQueryResolution = Readonly<{
-  raw: string;
-  line: number;
-  name: string;
-  resolvedAs: "name" | "line";
-}>;
+import type { RootQueryResolution } from "./root-query-resolution.js";
 
 const L_PREFIX_RE = /^[Ll][0-9]+$/;
 

@@ -5,10 +5,8 @@ import {
   createDefaultEmitterRegistry,
   createDefaultPipeline,
 } from "../../../pipeline/default.js";
-import {
-  buildCommand,
-  type ParsedCliOptions,
-} from "../../args/build-command.js";
+import { buildCommand } from "../../args/build-command.js";
+import type { ParsedCliOptions } from "../../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
@@ -18,7 +16,7 @@ import { handleCliUsageError } from "./handle-cli-usage-error.js";
 import { handleCommanderError } from "./handle-commander-error.js";
 import { handleError } from "./handle-error.js";
 import { handleParseError } from "./handle-parse-error.js";
-import { normalizeCliOptions } from "./normalized-cli-options.js";
+import { normalizeCliOptions } from "./normalize-cli-options.js";
 import { resolveOutputPath } from "./resolve-output-path/resolve-output-path.js";
 import { writeOutput } from "./write-output.js";
 

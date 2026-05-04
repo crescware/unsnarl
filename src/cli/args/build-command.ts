@@ -2,9 +2,7 @@ import { Command, InvalidArgumentError, Option } from "commander";
 
 import { NAME } from "../../name.js";
 import { VERSION } from "../../version.js";
-import type { CliMermaidRenderer } from "../cli-mermaid-renderer.js";
 import type { CliLanguage } from "../language.js";
-import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
 import { LANGUAGES } from "./cli-language.js";
 import { formatOptions } from "./format-options.js";
 import { scopeOptions } from "./scope-options.js";
@@ -15,19 +13,6 @@ function coerceLanguage(value: string): CliLanguage {
   }
   return value as CliLanguage;
 }
-
-export type ParsedCliOptions = Readonly<{
-  format: string;
-  stdin: boolean;
-  stdinLang: CliLanguage;
-  prettyJson: boolean;
-  mermaidRenderer: CliMermaidRenderer | null;
-  roots: readonly ParsedRootQuery[];
-  descendants: number | null;
-  ancestors: number | null;
-  context: number | null;
-  outDir: string | null;
-}>;
 
 export function buildCommand(): Command {
   const command = new Command();

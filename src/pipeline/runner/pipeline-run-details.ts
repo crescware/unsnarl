@@ -1,4 +1,4 @@
-import type { RootQueryResolution } from "../../visual-graph/prune/resolve-ambiguous-queries.js";
+import type { RootQueryResolution } from "../../visual-graph/prune/root-query-resolution.js";
 
 export type PipelineRunDetails = Readonly<{
   text: string;
