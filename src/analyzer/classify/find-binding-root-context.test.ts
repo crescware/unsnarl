@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { findBindingRootContext } from "./find-binding-root-context.js";
 
 const node = (type: string): AstNode => ({ type }) as unknown as AstNode;

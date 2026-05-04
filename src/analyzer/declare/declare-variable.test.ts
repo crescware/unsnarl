@@ -4,8 +4,8 @@ import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DEFINITION_TYPE } from "../definition-type.js";
+import { ScopeImpl } from "../scope-impl.js";
 import { SCOPE_TYPE } from "../scope-type.js";
-import { ScopeImpl } from "../scope.js";
 import { declareVariable } from "./declare-variable.js";
 
 const ident = (name: string): AstIdentifier =>

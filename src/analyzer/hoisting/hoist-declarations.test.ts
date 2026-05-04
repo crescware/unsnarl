@@ -5,8 +5,8 @@ import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
+import { ScopeImpl } from "../scope-impl.js";
 import { SCOPE_TYPE } from "../scope-type.js";
-import { ScopeImpl } from "../scope.js";
 import { hoistDeclarations } from "./hoist-declarations.js";
 
 const programBody = (code: string): readonly unknown[] => {

@@ -4,7 +4,7 @@ import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { walk } from "../walk/walk.js";
 import { handleIdentifierReference } from "./handle-identifier-reference.js";
 import { hoistInto } from "./hoist-into.js";

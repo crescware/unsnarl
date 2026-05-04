@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { findReturnContainer } from "./return-container.js";
-import type { PathEntry } from "./walk/walk.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 function entry(node: AstNode, key: string | null = null): PathEntry {
   return { node, key };

@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { ReferenceFlags } from "../../ir/reference/reference-flags.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { classifyIdentifier } from "./classify-identifier.js";
 
 const node = (overrides: Record<string, unknown>): AstNode =>

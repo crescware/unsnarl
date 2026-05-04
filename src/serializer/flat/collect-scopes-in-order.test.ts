@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import { ScopeImpl } from "../../analyzer/scope-impl.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import { ScopeImpl } from "../../analyzer/scope.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { collectScopesInOrder } from "./collect-scopes-in-order.js";

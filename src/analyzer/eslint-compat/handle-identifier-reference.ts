@@ -6,10 +6,10 @@ import { findJsxElementSpan } from "../jsx-element-span.js";
 import type { ScopeManager } from "../manager.js";
 import { findReferenceOwners } from "../owner/find-reference-owners.js";
 import { findPredicateContainer } from "../predicate.js";
+import { ReferenceImpl } from "../reference-impl.js";
 import { bindReference } from "../resolve.js";
 import { findReturnContainer } from "../return-container.js";
-import { ReferenceImpl } from "../scope.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import type { NodeLike } from "./node-like.js";
 
 export function handleIdentifierReference(

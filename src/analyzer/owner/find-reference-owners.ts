@@ -2,7 +2,7 @@ import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { resolveInScopeChain } from "../resolve.js";
-import type { PathEntry } from "../walk/walk.js";
+import type { PathEntry } from "../walk/path-entry.js";
 import { allBindingVariables } from "./all-binding-variables.js";
 import { isAstNode } from "./is-ast-node.js";
 

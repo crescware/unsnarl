@@ -3,7 +3,7 @@ import { describe, expect, test } from "vitest";
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { findPredicateContainer } from "./predicate.js";
-import type { PathEntry } from "./walk/walk.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 function ifNode(start: number): AstNode {
   return { type: AST_TYPE.IfStatement, start };

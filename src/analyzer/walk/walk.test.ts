@@ -3,7 +3,8 @@ import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import type { PathEntry, WalkVisitor } from "./walk.js";
+import type { PathEntry } from "./path-entry.js";
+import type { WalkVisitor } from "./walk-visitor.js";
 import { walk } from "./walk.js";
 
 const parse = (code: string): AstNode =>
