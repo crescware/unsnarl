@@ -1,4 +1,4 @@
-import type { CliLanguage } from "../args/cli-language.js";
+import type { CliLanguage } from "../language.js";
 
 export function detectLanguage(path: string): CliLanguage {
   if (path.endsWith(".tsx")) {

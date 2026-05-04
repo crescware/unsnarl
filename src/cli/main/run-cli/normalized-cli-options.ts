@@ -1,6 +1,6 @@
 import type { ParsedCliOptions } from "../../args/build-command.js";
-import type { CliLanguage } from "../../args/cli-language.js";
-import type { CliMermaidRenderer } from "../../args/cli-mermaid-renderer.js";
+import type { CliMermaidRenderer } from "../../cli-mermaid-renderer.js";
+import type { CliLanguage } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 
 export type NormalizedCliOptions = Readonly<{

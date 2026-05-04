@@ -1,12 +1,12 @@
 import { EslintCompatAnalyzer } from "../analyzer/eslint-compat/eslint-compat.js";
-import { CLI_MERMAID_RENDERER } from "../cli/cli-mermaid-renderer.js";
+import {
+  CLI_MERMAID_RENDERER,
+  type CliMermaidRenderer,
+} from "../cli/cli-mermaid-renderer.js";
 import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
-import {
-  MermaidEmitter,
-  type MermaidRenderer,
-} from "../emitter/mermaid/mermaid.js";
+import { MermaidEmitter } from "../emitter/mermaid/mermaid.js";
 import { dagreStrategy } from "../emitter/mermaid/strategy/dagre-strategy.js";
 import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
 import type { MermaidStrategy } from "../emitter/mermaid/strategy/strategy.js";
@@ -19,13 +19,13 @@ import { createPipeline } from "./pipeline.js";
 import type { Pipeline } from "./runner/pipeline.js";
 
 type DefaultRegistryOptions = Readonly<{
-  mermaidRenderer: MermaidRenderer;
+  mermaidRenderer: CliMermaidRenderer;
 }>;
 
 const STRATEGIES = {
   dagre: dagreStrategy,
   elk: elkStrategy,
-} as const satisfies Record<MermaidRenderer, MermaidStrategy>;
+} as const satisfies Record<CliMermaidRenderer, MermaidStrategy>;
 
 function createConfiguredEmitterRegistry(
   options: DefaultRegistryOptions,

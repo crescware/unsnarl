@@ -2,9 +2,10 @@ import { Command, InvalidArgumentError, Option } from "commander";
 
 import { NAME } from "../../name.js";
 import { VERSION } from "../../version.js";
+import type { CliMermaidRenderer } from "../cli-mermaid-renderer.js";
+import type { CliLanguage } from "../language.js";
 import type { ParsedRootQuery } from "../root-query/parsed-root-query.js";
-import { type CliLanguage, LANGUAGES } from "./cli-language.js";
-import type { CliMermaidRenderer } from "./cli-mermaid-renderer.js";
+import { LANGUAGES } from "./cli-language.js";
 import { formatOptions } from "./format-options.js";
 import { scopeOptions } from "./scope-options.js";
 
