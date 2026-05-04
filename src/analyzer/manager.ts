@@ -1,4 +1,5 @@
-import type { AstNode, BlockContext, Scope, ScopeType } from "../ir/model.js";
+import type { AstNode, BlockContext, Scope } from "../ir/model.js";
+import type { ScopeType } from "./scope-type.js";
 import { ScopeImpl } from "./scope.js";
 
 export class ScopeManager {

@@ -1,5 +1,6 @@
+import type { Language } from "../cli/language.js";
 import type { ParsedRootQuery } from "../cli/root-query/parsed-root-query.js";
-import type { Diagnostic, Language, Scope, SerializedIR } from "../ir/model.js";
+import type { Diagnostic, Scope, SerializedIR } from "../ir/model.js";
 import type { VisualGraph } from "../visual-graph/model.js";
 import type { RootQueryResolution } from "../visual-graph/prune/resolve-ambiguous-queries.js";
 

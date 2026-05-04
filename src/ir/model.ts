@@ -11,14 +11,6 @@ import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { SerializedIRVersion } from "../serializer/serialized-ir-version.js";
 import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 
-export type {
-  DefinitionType,
-  DiagnosticKind,
-  Language,
-  ScopeType,
-  VariableDeclarationKind,
-};
-
 export type Span = Readonly<{
   line: number;
   column: number;

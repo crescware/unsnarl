@@ -2,10 +2,10 @@ import type {
   AstIdentifier,
   AstNode,
   Definition,
-  DefinitionType,
   Scope,
   Variable,
 } from "../../ir/model.js";
+import type { DefinitionType } from "../definition-type.js";
 import { VariableImpl } from "../scope.js";
 
 export function declareVariable(

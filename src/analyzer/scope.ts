@@ -11,10 +11,9 @@ import type {
   ReferenceFlagBits,
   ReturnContainer,
   Scope,
-  ScopeType,
   Variable,
 } from "../ir/model.js";
-import { SCOPE_TYPE } from "./scope-type.js";
+import { SCOPE_TYPE, type ScopeType } from "./scope-type.js";
 
 export class ScopeImpl implements Scope {
   readonly type: ScopeType;

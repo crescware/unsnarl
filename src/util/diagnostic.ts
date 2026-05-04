@@ -1,4 +1,5 @@
-import type { Diagnostic, DiagnosticKind, Span } from "../ir/model.js";
+import type { DiagnosticKind } from "../analyzer/diagnostic-kind.js";
+import type { Diagnostic, Span } from "../ir/model.js";
 
 export class DiagnosticCollector {
   private readonly items: /* mutable */ Diagnostic[] = [];

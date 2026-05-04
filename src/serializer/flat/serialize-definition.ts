@@ -4,11 +4,13 @@ import type {
   Definition,
   SerializedDefinition,
   Span,
-  VariableDeclarationKind,
 } from "../../ir/model.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../variable-declaration-kind.js";
+import {
+  VARIABLE_DECLARATION_KIND,
+  type VariableDeclarationKind,
+} from "../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeDefinition(
