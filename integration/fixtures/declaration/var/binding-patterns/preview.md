@@ -1,0 +1,91 @@
+# integration/fixtures/declaration/var/binding-patterns/input.ts
+
+## Input
+
+```ts
+// basic
+var a = 0;
+
+// multiple declarators
+var b = 1,
+  c = 2;
+
+// array pattern + default + hole + rest
+var [d = 100, , e, ...f] = [3, , 5, 6, 7];
+
+// object pattern + rename + default + rest
+var { g, h: renamed = 200, ...others } = { g: 8, h: 9, x: 10, y: 11 };
+
+// non-identifier property name
+var { "kebab-case": kebab, 0: zeroth } = { "kebab-case": 13, 0: 14 };
+
+// nested (array inside object) + default
+var { nested: [p = 0, q] = [] } = { nested: [15, 16] };
+
+// nested (object inside array)
+var [{ r, s = 0 }, [t, u]] = [{ r: 1, s: 2 }, [3, 4]];
+
+console.log(
+  a,
+  b,
+  c,
+  d,
+  e,
+  f,
+  g,
+  renamed,
+  others,
+  kebab,
+  zeroth,
+  p,
+  q,
+  r,
+  s,
+  t,
+  u,
+);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_console_557["global console"]
+  n_scope_0_a_572["global a"]
+  n_scope_0_b_577["global b"]
+  n_scope_0_c_582["global c"]
+  n_scope_0_d_587["global d"]
+  n_scope_0_e_592["global e"]
+  n_scope_0_f_597["global f"]
+  n_scope_0_g_602["global g"]
+  n_scope_0_renamed_607["global renamed"]
+  n_scope_0_others_618["global others"]
+  n_scope_0_kebab_628["global kebab"]
+  n_scope_0_zeroth_637["global zeroth"]
+  n_scope_0_p_647["global p"]
+  n_scope_0_q_652["global q"]
+  n_scope_0_r_657["global r"]
+  n_scope_0_s_662["global s"]
+  n_scope_0_t_667["global t"]
+  n_scope_0_u_672["global u"]
+  n_scope_0_console_557 -->|read| expr_stmt_557
+  n_scope_0_a_572 -->|read| expr_stmt_557
+  n_scope_0_b_577 -->|read| expr_stmt_557
+  n_scope_0_c_582 -->|read| expr_stmt_557
+  n_scope_0_d_587 -->|read| expr_stmt_557
+  n_scope_0_e_592 -->|read| expr_stmt_557
+  n_scope_0_f_597 -->|read| expr_stmt_557
+  n_scope_0_g_602 -->|read| expr_stmt_557
+  n_scope_0_renamed_607 -->|read| expr_stmt_557
+  n_scope_0_others_618 -->|read| expr_stmt_557
+  n_scope_0_kebab_628 -->|read| expr_stmt_557
+  n_scope_0_zeroth_637 -->|read| expr_stmt_557
+  n_scope_0_p_647 -->|read| expr_stmt_557
+  n_scope_0_q_652 -->|read| expr_stmt_557
+  n_scope_0_r_657 -->|read| expr_stmt_557
+  n_scope_0_s_662 -->|read| expr_stmt_557
+  n_scope_0_t_667 -->|read| expr_stmt_557
+  n_scope_0_u_672 -->|read| expr_stmt_557
+  expr_stmt_557["console.log()<br/>L23-41"]
+```

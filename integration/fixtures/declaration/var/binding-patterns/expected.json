@@ -1,0 +1,294 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/var/binding-patterns/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_557",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_572",
+      "name": "a",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_577",
+      "name": "b",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_582",
+      "name": "c",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_d_587",
+      "name": "d",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_e_592",
+      "name": "e",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_f_597",
+      "name": "f",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_g_602",
+      "name": "g",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_renamed_607",
+      "name": "renamed",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_others_618",
+      "name": "others",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_kebab_628",
+      "name": "kebab",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_zeroth_637",
+      "name": "zeroth",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_p_647",
+      "name": "p",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_q_652",
+      "name": "q",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_r_657",
+      "name": "r",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_s_662",
+      "name": "s",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_t_667",
+      "name": "t",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_u_672",
+      "name": "u",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_557",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 23,
+      "endLine": 41,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_557",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_572",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_577",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_582",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_d_587",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_e_592",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_f_597",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_g_602",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_renamed_607",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_others_618",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_kebab_628",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_zeroth_637",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_p_647",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_q_652",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_r_657",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_s_662",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_t_667",
+      "to": "expr_stmt_557",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_u_672",
+      "to": "expr_stmt_557",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
