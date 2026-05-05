@@ -5,4 +5,5 @@ export type EmitOptions = Readonly<{
   prettyJson: boolean;
   prunedGraph: VisualGraph | null;
   resolutions: readonly RootQueryResolution[] | null;
+  debug: boolean;
 }>;

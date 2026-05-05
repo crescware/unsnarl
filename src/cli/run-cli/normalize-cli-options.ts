@@ -15,5 +15,6 @@ export function normalizeCliOptions(
     ancestors: opts.ancestors,
     context: opts.context,
     outDir: opts.outDir,
+    debug: opts.debug,
   };
 }

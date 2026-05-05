@@ -67,6 +67,7 @@ describe("DefaultEmitterRegistry", () => {
         prettyJson: true,
         prunedGraph: null,
         resolutions: null,
+        debug: false,
       }),
     ).toBe("version=1");
   });

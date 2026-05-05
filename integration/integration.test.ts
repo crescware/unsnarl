@@ -58,7 +58,12 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "ir",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -71,7 +76,12 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "json",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -84,7 +94,12 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "mermaid",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -97,7 +112,12 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "markdown",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -110,7 +130,12 @@ describe("fixtures (end-to-end pipeline)", () => {
           format: "stats",
           language: fixture.language,
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text;
         expect(out).toMatchFileSnapshot(

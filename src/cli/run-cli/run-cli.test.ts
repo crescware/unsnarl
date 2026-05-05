@@ -117,6 +117,23 @@ describe("runCli (integration)", () => {
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
+  test("--debug appends NODE_KIND to Mermaid node labels", async () => {
+    const inputPath = join(tmpDir, "debug.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconsole.log(b);\n");
+    const noDebug = await captureRun(["--format", "mermaid", inputPath]);
+    const debug = await captureRun([
+      "--format",
+      "mermaid",
+      "--debug",
+      inputPath,
+    ]);
+    expect(noDebug.exitCode).toBe(0);
+    expect(debug.exitCode).toBe(0);
+    expect(noDebug.stdout).not.toContain("<br/>Variable");
+    expect(debug.stdout).toContain('"a<br/>L1<br/>Variable"');
+    expect(debug.stdout).toContain('"b<br/>L2<br/>Variable"');
+  });
+
   test("missing input returns exit 2 with usage", async () => {
     const r = await captureRun([]);
     expect(r.exitCode).toBe(2);

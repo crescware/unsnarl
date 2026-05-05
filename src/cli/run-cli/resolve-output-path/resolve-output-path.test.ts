@@ -21,6 +21,7 @@ const baseOpts = {
   ancestors: null,
   context: null,
   outDir: null,
+  debug: false,
 } as const satisfies NormalizedCliOptions;
 
 function makeEmitter(format: string, extension: string): Emitter {

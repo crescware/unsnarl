@@ -41,7 +41,12 @@ describe("lprefix-no-collision (-r L12 → silent line)", () => {
       format: "json",
       language: "ts",
       sourcePath,
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning,
     });
     expect(result.resolutions).toEqual([]);
@@ -53,7 +58,12 @@ describe("lprefix-no-collision (-r L12 → silent line)", () => {
         format: fmt.format,
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       const prefix = "filePrefix" in fmt ? fmt.filePrefix : "expected";
@@ -80,7 +90,12 @@ describe("lprefix-exact-match (-r L12 → identifier)", () => {
       format: "json",
       language: "ts",
       sourcePath,
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning,
     });
     expect(result.resolutions).toEqual([
@@ -94,7 +109,12 @@ describe("lprefix-exact-match (-r L12 → identifier)", () => {
         format: fmt.format,
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       const prefix = "filePrefix" in fmt ? fmt.filePrefix : "expected";
@@ -121,7 +141,12 @@ describe("lprefix-other-match (-r L12 → line, with notice)", () => {
       format: "json",
       language: "ts",
       sourcePath,
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning,
     });
     expect(result.resolutions).toEqual([
@@ -135,7 +160,12 @@ describe("lprefix-other-match (-r L12 → line, with notice)", () => {
         format: fmt.format,
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       const prefix = "filePrefix" in fmt ? fmt.filePrefix : "expected";
@@ -164,7 +194,12 @@ describe("lprefix-exact-match (-r L12-34 → range, no resolution)", () => {
       format: "json",
       language: "ts",
       sourcePath,
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning,
     });
     expect(result.resolutions).toEqual([]);
@@ -176,7 +211,12 @@ describe("lprefix-exact-match (-r L12-34 → range, no resolution)", () => {
         format: fmt.format,
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       const prefix = "filePrefix" in fmt ? fmt.filePrefix : "expected";

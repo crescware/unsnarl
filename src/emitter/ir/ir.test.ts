@@ -22,6 +22,7 @@ describe("IrEmitter", () => {
       prettyJson: true,
       prunedGraph: null,
       resolutions: null,
+      debug: false,
     });
     expect(out.endsWith("\n")).toBe(true);
     expect(out).toContain('"version": 1');
@@ -33,6 +34,7 @@ describe("IrEmitter", () => {
       prettyJson: false,
       prunedGraph: null,
       resolutions: null,
+      debug: false,
     });
     expect(out).not.toContain("\n  ");
     expect(JSON.parse(out)).toEqual(ir);

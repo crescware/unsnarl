@@ -13,4 +13,5 @@ export type NormalizedCliOptions = Readonly<{
   ancestors: number | null;
   context: number | null;
   outDir: string | null;
+  debug: boolean;
 }>;

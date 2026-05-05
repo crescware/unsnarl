@@ -11,5 +11,6 @@ export function baseRenderState(): RenderState {
     placeholderIds: [],
     wrapperIds: [],
     strategy: baseStrategy(),
+    debug: false,
   };
 }

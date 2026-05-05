@@ -22,6 +22,7 @@ const baseOpts = {
   ancestors: null,
   context: null,
   outDir: null,
+  debug: false,
 } as const satisfies NormalizedCliOptions;
 
 const fakeCommand = {

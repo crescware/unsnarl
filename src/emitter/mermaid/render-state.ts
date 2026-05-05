@@ -9,4 +9,5 @@ export type RenderState = Readonly<{
   placeholderIds: /* mutable */ string[];
   wrapperIds: /* mutable */ string[];
   strategy: MermaidStrategy;
+  debug: boolean;
 }>;

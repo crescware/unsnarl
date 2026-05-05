@@ -47,6 +47,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
 | `-o`  | `--out-dir <dir>`        | Write to directory — see Writing to a directory               |
+|       | `--debug`                | Annotate Mermaid labels with `NODE_KIND` / `SUBGRAPH_KIND`    |
 | `-v`  | `--version`              | Show version                                                  |
 | `-h`  | `--help`                 | Show help                                                     |
 
