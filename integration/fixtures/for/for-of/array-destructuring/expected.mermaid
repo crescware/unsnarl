@@ -1,0 +1,15 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_pairs_6["pairs<br/>L1"]
+  n_scope_0_console_102["global console"]
+  subgraph s_scope_1["for L5-7"]
+    direction RL
+    for_test_scope_0_63["for ()<br/>L5"]
+    n_scope_1_name_75["name<br/>L5"]
+    n_scope_1_value_81["value<br/>L5"]
+    expr_stmt_102["console.log()<br/>L6"]
+  end
+  n_scope_0_pairs_6 -->|read| for_test_scope_0_63
+  n_scope_0_console_102 -->|read| expr_stmt_102
+  n_scope_1_name_75 -->|read| expr_stmt_102
+  n_scope_1_value_81 -->|read| expr_stmt_102

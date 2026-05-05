@@ -7,6 +7,10 @@ import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.j
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 
+// Subtrees managed by their own colocated *.test.ts files.
+// Skip them here so this central discovery does not double-cover them.
+const IGNORED_FIXTURE_DIRS: readonly string[] = ["for"];
+
 interface FixtureCase {
   name: string;
   inputPath: string;
@@ -18,6 +22,9 @@ function discoverFixtures(): FixtureCase[] {
   const out: FixtureCase[] = [];
   for (const entry of readdirSync(FIXTURE_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) {
+      continue;
+    }
+    if (IGNORED_FIXTURE_DIRS.includes(entry.name)) {
       continue;
     }
     const dir = join(FIXTURE_DIR, entry.name);

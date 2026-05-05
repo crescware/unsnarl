@@ -22,5 +22,5 @@
     "allowUnusedLabels": false
   },
   "include": ["src", "integration"],
-  "exclude": ["integration/fixtures/**"]
+  "exclude": ["integration/fixtures/**/input.*"]
 }

@@ -1,0 +1,29 @@
+# integration/fixtures/for/classic-for/init-omitted/input.ts
+
+## Input
+
+```ts
+let k = 0;
+for (; k < 3; k++) {
+  console.log(k);
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_k_4["let k<br/>L1"]
+  n_scope_0_console_34["global console"]
+  subgraph s_scope_1["for L2-4"]
+    direction RL
+    for_test_scope_0_11["for ()<br/>L2"]
+    wr_ref_1(["let k<br/>L2"])
+    expr_stmt_34["console.log()<br/>L3"]
+  end
+  n_scope_0_k_4 -->|set| wr_ref_1
+  n_scope_0_k_4 -->|read| for_test_scope_0_11
+  n_scope_0_console_34 -->|read| expr_stmt_34
+  wr_ref_1 -->|read| expr_stmt_34
+```
