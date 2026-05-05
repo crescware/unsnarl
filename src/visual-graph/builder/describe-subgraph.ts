@@ -67,6 +67,8 @@ export function describeSubgraph(
     case SUBGRAPH_KIND.Catch:
     case SUBGRAPH_KIND.Finally:
     case SUBGRAPH_KIND.For:
+    case SUBGRAPH_KIND.While:
+    case SUBGRAPH_KIND.DoWhile:
     case SUBGRAPH_KIND.Return:
       return { ...common, kind };
     case SUBGRAPH_KIND.Function:

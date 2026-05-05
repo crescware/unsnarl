@@ -317,9 +317,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         scopeMap,
         subgraphOwnerVar,
       );
-      const host = enclosingFn
-        ? findHostSubgraph(r, enclosingFn, scopeMap, state)
-        : null;
+      const host = findHostSubgraph(r, enclosingFn, scopeMap, state);
       const targetElements = host?.elements ?? graph.elements;
       const exprStmtId = ensureExpressionStatementNode(
         r,

@@ -5,7 +5,7 @@ import type { BuildState } from "./build-state.js";
 
 export function findHostSubgraph(
   ref: SerializedReference,
-  enclosingFnVarId: string,
+  enclosingFnVarId: string | null,
   scopeMap: ReadonlyMap<string, SerializedScope>,
   state: BuildState,
 ): VisualSubgraph | null {
@@ -19,6 +19,9 @@ export function findHostSubgraph(
       break;
     }
     cur = scopeMap.get(cur.upper) ?? null;
+  }
+  if (enclosingFnVarId === null) {
+    return null;
   }
   return state.functionSubgraphByFn.get(enclosingFnVarId) ?? null;
 }

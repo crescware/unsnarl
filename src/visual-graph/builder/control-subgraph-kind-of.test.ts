@@ -105,11 +105,20 @@ describe("controlSubgraphKindOf", () => {
     {
       ctx: {
         ...baseBlockContext(),
-        parentType: "WhileStatement",
+        parentType: AST_TYPE.WhileStatement,
         key: "body",
         parentSpanOffset: 0,
       },
-      expected: null,
+      expected: "while",
+    },
+    {
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.DoWhileStatement,
+        key: "body",
+        parentSpanOffset: 0,
+      },
+      expected: "do-while",
     },
   ])(
     "block + parentType=$ctx.parentType key=$ctx.key -> $expected",
