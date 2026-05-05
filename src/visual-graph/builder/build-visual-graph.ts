@@ -21,6 +21,7 @@ import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
@@ -316,27 +317,26 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         scopeMap,
         subgraphOwnerVar,
       );
-      if (enclosingFn) {
-        const useTargetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
-        if (useTargetId) {
-          for (const fromId of fromIds) {
-            pushEdge(state, fromId, label, useTargetId);
-          }
-        }
-      } else {
-        const exprStmtId = ensureExpressionStatementNode(
-          r,
-          ir.raw,
-          graph.elements,
-          state,
-        );
-        const targetId = exprStmtId ?? MODULE_ROOT_ID;
-        if (!exprStmtId) {
-          needsModuleRoot = true;
-        }
-        for (const fromId of fromIds) {
-          pushEdge(state, fromId, label, targetId);
-        }
+      const host = enclosingFn
+        ? findHostSubgraph(r, enclosingFn, scopeMap, state)
+        : null;
+      const targetElements = host?.elements ?? graph.elements;
+      const exprStmtId = ensureExpressionStatementNode(
+        r,
+        ir.raw,
+        targetElements,
+        state,
+      );
+      let targetId: string | null = exprStmtId;
+      if (targetId === null && enclosingFn) {
+        targetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
+      }
+      if (targetId === null) {
+        targetId = MODULE_ROOT_ID;
+        needsModuleRoot = true;
+      }
+      for (const fromId of fromIds) {
+        pushEdge(state, fromId, label, targetId);
       }
     }
   }

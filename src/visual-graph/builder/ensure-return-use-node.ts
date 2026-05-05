@@ -17,13 +17,15 @@ export function ensureReturnUseNode(
   ctx: BuilderContext,
   state: BuildState,
 ): string | null {
+  if (ref.returnContainer === null) {
+    return null;
+  }
   const host = findHostSubgraph(ref, enclosingFnVarId, ctx.scopeMap, state);
   if (!host) {
     return null;
   }
-  const containerKey = ref.returnContainer
-    ? `${ref.returnContainer.startSpan.offset}-${ref.returnContainer.endSpan.offset}`
-    : "implicit";
+  const returnContainer = ref.returnContainer;
+  const containerKey = `${returnContainer.startSpan.offset}-${returnContainer.endSpan.offset}`;
   let perFn = state.returnSubgraphsByFn.get(enclosingFnVarId);
   if (!perFn) {
     perFn = new Map();
@@ -32,10 +34,9 @@ export function ensureReturnUseNode(
   const existing = perFn.get(containerKey) ?? null;
   let sg: VisualSubgraph;
   if (existing === null) {
-    const startLine = ref.returnContainer?.startSpan.line ?? host.line;
-    const rawEndLine = ref.returnContainer?.endSpan.line ?? null;
-    const endLine =
-      rawEndLine !== null && rawEndLine !== startLine ? rawEndLine : null;
+    const startLine = returnContainer.startSpan.line;
+    const rawEndLine = returnContainer.endSpan.line;
+    const endLine = rawEndLine !== startLine ? rawEndLine : null;
     sg = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: returnSubgraphId(enclosingFnVarId, containerKey),

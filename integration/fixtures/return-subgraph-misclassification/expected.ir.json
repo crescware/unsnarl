@@ -378,7 +378,29 @@
       "predicateContainer": null,
       "returnContainer": null,
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 61
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 19,
+          "offset": 76
+        },
+        "headStartSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 61
+        },
+        "headEndSpan": {
+          "line": 4,
+          "column": 15,
+          "offset": 72
+        },
+        "isCall": true
+      }
     },
     {
       "id": "ref#2",
@@ -403,7 +425,29 @@
       "predicateContainer": null,
       "returnContainer": null,
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 61
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 19,
+          "offset": 76
+        },
+        "headStartSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 61
+        },
+        "headEndSpan": {
+          "line": 4,
+          "column": 15,
+          "offset": 72
+        },
+        "isCall": true
+      }
     }
   ],
   "unusedVariableIds": [

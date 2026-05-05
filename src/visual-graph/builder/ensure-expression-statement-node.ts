@@ -9,7 +9,7 @@ import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 export function ensureExpressionStatementNode(
   ref: SerializedReference,
   raw: string,
-  graphElements: /* mutable */ VisualElement[],
+  targetElements: /* mutable */ VisualElement[],
   state: BuildState,
 ): string | null {
   const c = ref.expressionStatementContainer;
@@ -36,7 +36,7 @@ export function ensureExpressionStatementNode(
     isJsxElement: false,
     unused: false,
   } satisfies VisualNode;
-  graphElements.push(node);
+  targetElements.push(node);
   state.expressionStatementByOffset.set(offset, id);
   return id;
 }

@@ -70,20 +70,32 @@ describe("findExpressionStatementContainer", () => {
     });
   });
 
-  test("stops at function boundaries — a ref inside a function never gets an ExpressionStatement container", () => {
+  test("returns the container even when an ExpressionStatement sits inside a function body", () => {
+    const expr = {
+      type: AST_TYPE.Identifier,
+      start: 30,
+      end: 31,
+    } as const satisfies AstNode;
     const stmt = {
       type: AST_TYPE.ExpressionStatement,
       start: 30,
-      end: 50,
+      end: 32,
+      expression: expr,
     } as const satisfies AstNode;
     const path = [
       entry({ type: AST_TYPE.Program, start: 0, end: 100 }),
       entry({ type: AST_TYPE.FunctionDeclaration, start: 0, end: 100 }),
       entry({ type: AST_TYPE.BlockStatement, start: 15, end: 100 }, "body"),
       entry(stmt, "body"),
-      entry({ type: AST_TYPE.Identifier, start: 30, end: 31 }, "expression"),
+      entry(expr, "expression"),
     ] satisfies PathEntry[];
-    expect(findExpressionStatementContainer(path)).toBeNull();
+    expect(findExpressionStatementContainer(path)).toEqual({
+      startOffset: 30,
+      endOffset: 32,
+      headStartOffset: 30,
+      headEndOffset: 31,
+      isCall: false,
+    });
   });
 
   test("returns null when there is no ExpressionStatement on the path", () => {
