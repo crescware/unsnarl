@@ -20,7 +20,7 @@ const baseOpts = {
   descendants: null,
   ancestors: null,
   context: null,
-  outDir: null,
+  out: null,
   debug: false,
 } as const satisfies NormalizedCliOptions;
 
@@ -62,7 +62,7 @@ const fileSrc = {
 } as const satisfies ExecuteSource;
 
 describe("resolveOutputPath", () => {
-  test("returns null when outDir is null", () => {
+  test("returns null when out is null", () => {
     const actual = resolveOutputPath(
       fileSrc,
       baseOpts,
@@ -72,10 +72,10 @@ describe("resolveOutputPath", () => {
     expect(actual).toBeNull();
   });
 
-  test("file input + outDir → joins outDir/<basename>.<ext>", () => {
+  test("file input + dir mode → joins path/<basename>.<ext>", () => {
     const actual = resolveOutputPath(
       fileSrc,
-      { ...baseOpts, outDir: "out" },
+      { ...baseOpts, out: { mode: "dir", path: "out" } },
       makeEmitters([makeEmitter("json", "json")]),
     );
 
@@ -87,7 +87,7 @@ describe("resolveOutputPath", () => {
       fileSrc,
       {
         ...baseOpts,
-        outDir: "out",
+        out: { mode: "dir", path: "out" },
         roots: [nameRoot("render")],
       },
       makeEmitters([makeEmitter("json", "json")]),
@@ -96,11 +96,11 @@ describe("resolveOutputPath", () => {
     expect(actual).toBe("out/render.json");
   });
 
-  test("stdin without roots throws CliUsageError (no usable filename)", () => {
+  test("stdin without roots in dir mode throws CliUsageError (no usable filename)", () => {
     expect(() =>
       resolveOutputPath(
         stdinSrc,
-        { ...baseOpts, outDir: "out" },
+        { ...baseOpts, out: { mode: "dir", path: "out" } },
         makeEmitters([makeEmitter("json", "json")]),
       ),
     ).toThrow(CliUsageError);
@@ -111,7 +111,7 @@ describe("resolveOutputPath", () => {
       stdinSrc,
       {
         ...baseOpts,
-        outDir: "out",
+        out: { mode: "dir", path: "out" },
         roots: [nameRoot("render")],
       },
       makeEmitters([makeEmitter("json", "json")]),
@@ -123,7 +123,11 @@ describe("resolveOutputPath", () => {
   test("uses the emitter's extension, not the format name", () => {
     const actual = resolveOutputPath(
       fileSrc,
-      { ...baseOpts, outDir: "out", format: "mermaid" },
+      {
+        ...baseOpts,
+        out: { mode: "dir", path: "out" },
+        format: "mermaid",
+      },
       makeEmitters([makeEmitter("mermaid", "mmd")]),
     );
 
@@ -134,12 +138,36 @@ describe("resolveOutputPath", () => {
     expect(() =>
       resolveOutputPath(
         fileSrc,
-        { ...baseOpts, outDir: "out", format: "ghost" },
+        {
+          ...baseOpts,
+          out: { mode: "dir", path: "out" },
+          format: "ghost",
+        },
         makeEmitters([
           makeEmitter("json", "json"),
           makeEmitter("mermaid", "mmd"),
         ]),
       ),
     ).toThrow(/Unknown emitter format: ghost\. Available: json, mermaid/);
+  });
+
+  test("file mode returns the given path verbatim (no auto-naming)", () => {
+    const actual = resolveOutputPath(
+      fileSrc,
+      { ...baseOpts, out: { mode: "file", path: "build/graph.mmd" } },
+      makeEmitters([makeEmitter("json", "json")]),
+    );
+
+    expect(actual).toBe("build/graph.mmd");
+  });
+
+  test("file mode bypasses the stdin+roots requirement", () => {
+    const actual = resolveOutputPath(
+      stdinSrc,
+      { ...baseOpts, out: { mode: "file", path: "out.json" } },
+      makeEmitters([makeEmitter("json", "json")]),
+    );
+
+    expect(actual).toBe("out.json");
   });
 });

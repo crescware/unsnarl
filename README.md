@@ -46,7 +46,8 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-A`  | `--descendants <N>`      | Descendants generations — see Pruning                         |
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
-| `-o`  | `--out-dir <dir>`        | Write to directory — see Writing to a directory               |
+| `-o`  | `--out-dir <dir>`        | Write to directory with auto-named file — see Writing output  |
+|       | `--out-file <path>`      | Write to that exact file path — see Writing output            |
 |       | `--debug`                | Annotate Mermaid labels with `NODE_KIND` / `SUBGRAPH_KIND`    |
 | `-v`  | `--version`              | Show version                                                  |
 | `-h`  | `--help`                 | Show help                                                     |
@@ -85,11 +86,18 @@ applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
 `ir` output is always emitted in full. If a query matches nothing, a warning
 is written to stderr but the command still exits with `0`.
 
-### Writing to a directory
+### Writing output
 
-Pass `-o <dir>` to write the output to a file inside `<dir>` instead of
-stdout. The filename is derived from the `-r` queries and the radius flags
-so that successive runs don't clobber each other:
+There are two ways to send the result somewhere other than stdout:
+`-o/--out-dir <dir>` writes to an auto-named file inside a directory, and
+`--out-file <path>` writes verbatim to the given path. The two flags are
+mutually exclusive — passing both exits with code `2`.
+
+#### Auto-named: `-o <dir>`
+
+Pass `-o <dir>` to write the output to a file inside `<dir>`. The filename
+is derived from the `-r` queries and the radius flags so that successive
+runs don't clobber each other:
 
 ```sh
 uns -f markdown -r value -A 1 -o ./out file.ts
@@ -120,6 +128,28 @@ extension) is used as the basename. Extensions per format:
 `ir` / `json` → `.json`, `mermaid` → `.mmd`, `markdown` → `.md`,
 `stats` → `.tsv`. The directory is created if missing, and existing files
 are overwritten.
+
+`-o` always treats its argument as a directory, even if it looks like a
+filename. `uns -o graph.mmd file.ts` creates a directory `graph.mmd/` and
+writes `graph.mmd/file.mmd` inside it. When the `-o` argument's basename
+contains a dot, a notice is written to stderr suggesting `--out-file`.
+
+#### Exact path: `--out-file <path>`
+
+Pass `--out-file <path>` to write to that exact path with no auto-naming.
+This is the right choice when you want to pin both the filename and the
+extension yourself:
+
+```sh
+uns -f mermaid --out-file build/graph.mmd file.ts
+# -> build/graph.mmd
+cat foo.ts | uns --stdin --out-file out.json -f json
+# -> out.json (works without -r because no naming is required)
+```
+
+Parent directories are created if missing, and the file is overwritten if
+it exists. Unlike `-o`, `--out-file` does not require `-r/--roots` when
+reading from stdin, because it does not derive a basename.
 
 ## Setup
 

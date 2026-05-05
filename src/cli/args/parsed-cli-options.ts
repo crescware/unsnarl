@@ -13,5 +13,6 @@ export type ParsedCliOptions = Readonly<{
   ancestors: number | null;
   context: number | null;
   outDir: string | null;
+  outFile: string | null;
   debug: boolean;
 }>;
