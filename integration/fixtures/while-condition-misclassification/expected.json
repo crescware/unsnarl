@@ -49,6 +49,16 @@
       "elements": [
         {
           "type": "node",
+          "id": "while_test_scope_0_33",
+          "kind": "WhileTest",
+          "name": "while ()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
           "id": "wr_ref_4",
           "kind": "WriteOp",
           "name": "count",
@@ -70,16 +80,6 @@
         }
       ],
       "kind": "while"
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
@@ -90,12 +90,12 @@
     },
     {
       "from": "n_scope_0_count_22",
-      "to": "module_root",
+      "to": "while_test_scope_0_33",
       "label": "read"
     },
     {
       "from": "n_scope_0_limit_6",
-      "to": "module_root",
+      "to": "while_test_scope_0_33",
       "label": "read"
     },
     {

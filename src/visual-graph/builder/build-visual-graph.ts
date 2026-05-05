@@ -15,7 +15,7 @@ import type { VisualElement } from "../visual-element.js";
 import type { VisualGraph } from "../visual-graph.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
-import type { BuildState } from "./build-state.js";
+import type { BuildState, PendingLoopTestAnchor } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
@@ -161,6 +161,10 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    whileTestAnchorByOffset: new Map(),
+    doWhileTestAnchorByOffset: new Map(),
+    forTestAnchorByOffset: new Map(),
+    pendingLoopTestAnchors: [] as PendingLoopTestAnchor[],
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
@@ -238,7 +242,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
-    if (predicateTarget) {
+    if (predicateTarget && !r.flags.write) {
       const fromIds = readOrigins(
         r.resolved,
         r.identifier.span.offset,
@@ -451,6 +455,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       }
     }
     pushEdge(state, mod.id, "read", localId);
+  }
+
+  for (const { subgraph, node, position } of state.pendingLoopTestAnchors) {
+    if (position === "first") {
+      subgraph.elements.unshift(node);
+    } else {
+      subgraph.elements.push(node);
+    }
   }
 
   for (const id of ir.unusedVariableIds) {

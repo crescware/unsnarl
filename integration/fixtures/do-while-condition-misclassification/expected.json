@@ -67,19 +67,19 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false
+        },
+        {
+          "type": "node",
+          "id": "do_while_test_scope_0_33",
+          "kind": "DoWhileTest",
+          "name": "do while ()",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
         }
       ],
       "kind": "do-while"
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
@@ -100,12 +100,12 @@
     },
     {
       "from": "wr_ref_2",
-      "to": "module_root",
+      "to": "do_while_test_scope_0_33",
       "label": "read"
     },
     {
       "from": "n_scope_0_limit_6",
-      "to": "module_root",
+      "to": "do_while_test_scope_0_33",
       "label": "read"
     }
   ],

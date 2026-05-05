@@ -57,6 +57,16 @@
           "elements": [
             {
               "type": "node",
+              "id": "for_test_scope_1_34",
+              "kind": "ForTest",
+              "name": "for ()",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
               "id": "n_scope_2_x_45",
               "name": "x",
               "line": 3,
@@ -81,22 +91,12 @@
           "kind": "for"
         }
       ]
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_arr_6",
-      "to": "module_root",
+      "to": "for_test_scope_1_34",
       "label": "read"
     },
     {

@@ -254,7 +254,10 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null,
+      "predicateContainer": {
+        "type": "WhileStatement",
+        "offset": 33
+      },
       "returnContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -279,7 +282,10 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null,
+      "predicateContainer": {
+        "type": "WhileStatement",
+        "offset": 33
+      },
       "returnContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null

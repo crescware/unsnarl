@@ -350,7 +350,10 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null,
+      "predicateContainer": {
+        "type": "ForOfStatement",
+        "offset": 34
+      },
       "returnContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
