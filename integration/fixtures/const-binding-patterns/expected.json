@@ -1,0 +1,406 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/const-binding-patterns/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_15",
+      "name": "a",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_53",
+      "name": "b",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_62",
+      "name": "c",
+      "line": 6,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_d_118",
+      "name": "d",
+      "line": 9,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_e_129",
+      "name": "e",
+      "line": 9,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_f_135",
+      "name": "f",
+      "line": 9,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_g_209",
+      "name": "g",
+      "line": 12,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_renamed_215",
+      "name": "renamed",
+      "line": 12,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_others_233",
+      "name": "others",
+      "line": 12,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_key_307",
+      "name": "key",
+      "line": 15,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_dynamicValue_339",
+      "name": "dynamicValue",
+      "line": 16,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_sym_434",
+      "name": "sym",
+      "line": 19,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_id_469",
+      "name": "id",
+      "line": 20,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_kebab_561",
+      "name": "kebab",
+      "line": 23,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_zeroth_571",
+      "name": "zeroth",
+      "line": 23,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_p_671",
+      "name": "p",
+      "line": 26,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_q_678",
+      "name": "q",
+      "line": 26,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_r_754",
+      "name": "r",
+      "line": 29,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_s_757",
+      "name": "s",
+      "line": 29,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_t_767",
+      "name": "t",
+      "line": 29,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_u_770",
+      "name": "u",
+      "line": 29,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Symbol_440",
+      "name": "Symbol",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_803",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_803",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 31,
+      "endLine": 51,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Symbol_440",
+      "to": "n_scope_0_sym_434",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_sym_434",
+      "to": "n_scope_0_id_469",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_803",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_15",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_53",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_62",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_d_118",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_e_129",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_f_135",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_g_209",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_renamed_215",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_others_233",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_dynamicValue_339",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_id_469",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_kebab_561",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_zeroth_571",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_p_671",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_q_678",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_r_754",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_s_757",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_t_767",
+      "to": "expr_stmt_803",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_u_770",
+      "to": "expr_stmt_803",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
