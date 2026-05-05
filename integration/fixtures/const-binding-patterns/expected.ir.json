@@ -4,7 +4,7 @@
     "path": "integration/fixtures/const-binding-patterns/input.ts",
     "language": "ts"
   },
-  "raw": "// basic\nconst a = 0;\n\n// multiple declarators\nconst b = 1,\n  c = 2;\n\n// array pattern + default + hole + rest\nconst [d = 100, , e, ...f] = [3, , 5, 6, 7];\n\n// object pattern + rename + default + rest\nconst { g, h: renamed = 200, ...others } = { g: 8, h: 9, x: 10, y: 11 };\n\n// computed property name\nconst key = \"dynamic\";\nconst { [key]: dynamicValue } = { dynamic: 12 };\n\n// computed property name (Symbol) + rename + default\nconst sym = Symbol(\"id\");\nconst { [sym]: id = \"default\" } = { [sym]: \"abc\" };\n\n// non-identifier property name\nconst { \"kebab-case\": kebab, 0: zeroth } = { \"kebab-case\": 13, 0: 14 };\n\n// nested (array inside object) + default\nconst { nested: [p = 0, q] = [] } = { nested: [15, 16] };\n\n// nested (object inside array)\nconst [{ r, s = 0 }, [t, u]] = [{ r: 1, s: 2 }, [3, 4]];\n\nconsole.log(\n  a,\n  b,\n  c,\n  d,\n  e,\n  f,\n  g,\n  renamed,\n  others,\n  dynamicValue,\n  id,\n  kebab,\n  zeroth,\n  p,\n  q,\n  r,\n  s,\n  t,\n  u,\n);\n",
+  "raw": "// basic\nconst a = 0;\n\n// multiple declarators\nconst b = 1,\n  c = 2;\n\n// array pattern + default + hole + rest\nconst [d = 100, , e, ...f] = [3, , 5, 6, 7];\n\n// object pattern + rename + default + rest\nconst { g, h: renamed = 200, ...others } = { g: 8, h: 9, x: 10, y: 11 };\n\n// non-identifier property name\nconst { \"kebab-case\": kebab, 0: zeroth } = { \"kebab-case\": 13, 0: 14 };\n\n// nested (array inside object) + default\nconst { nested: [p = 0, q] = [] } = { nested: [15, 16] };\n\n// nested (object inside array)\nconst [{ r, s = 0 }, [t, u]] = [{ r: 1, s: 2 }, [3, 4]];\n\nconsole.log(\n  a,\n  b,\n  c,\n  d,\n  e,\n  f,\n  g,\n  renamed,\n  others,\n  kebab,\n  zeroth,\n  p,\n  q,\n  r,\n  s,\n  t,\n  u,\n);\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -21,9 +21,9 @@
           "offset": 9
         },
         "endSpan": {
-          "line": 52,
+          "line": 42,
           "column": 0,
-          "offset": 946
+          "offset": 692
         }
       },
       "variables": [
@@ -36,20 +36,15 @@
         "scope#0:g@209",
         "scope#0:renamed@215",
         "scope#0:others@233",
-        "scope#0:key@307",
-        "scope#0:dynamicValue@339",
-        "scope#0:sym@434",
-        "scope#0:id@469",
-        "scope#0:kebab@561",
-        "scope#0:zeroth@571",
-        "scope#0:p@671",
-        "scope#0:q@678",
-        "scope#0:r@754",
-        "scope#0:s@757",
-        "scope#0:t@767",
-        "scope#0:u@770",
-        "scope#0:Symbol@440",
-        "scope#0:console@803"
+        "scope#0:kebab@329",
+        "scope#0:zeroth@339",
+        "scope#0:p@439",
+        "scope#0:q@446",
+        "scope#0:r@522",
+        "scope#0:s@525",
+        "scope#0:t@535",
+        "scope#0:u@538",
+        "scope#0:console@571"
       ],
       "references": [
         "ref#0",
@@ -69,15 +64,10 @@
         "ref#14",
         "ref#15",
         "ref#16",
-        "ref#17",
-        "ref#18",
-        "ref#19",
-        "ref#20",
-        "ref#21"
+        "ref#17"
       ],
       "through": [
-        "ref#0",
-        "ref#2"
+        "ref#0"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -98,7 +88,7 @@
         }
       ],
       "references": [
-        "ref#3"
+        "ref#1"
       ],
       "defs": [
         {
@@ -151,7 +141,7 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#2"
       ],
       "defs": [
         {
@@ -204,7 +194,7 @@
         }
       ],
       "references": [
-        "ref#5"
+        "ref#3"
       ],
       "defs": [
         {
@@ -257,7 +247,7 @@
         }
       ],
       "references": [
-        "ref#6"
+        "ref#4"
       ],
       "defs": [
         {
@@ -310,7 +300,7 @@
         }
       ],
       "references": [
-        "ref#7"
+        "ref#5"
       ],
       "defs": [
         {
@@ -363,7 +353,7 @@
         }
       ],
       "references": [
-        "ref#8"
+        "ref#6"
       ],
       "defs": [
         {
@@ -416,7 +406,7 @@
         }
       ],
       "references": [
-        "ref#9"
+        "ref#7"
       ],
       "defs": [
         {
@@ -469,7 +459,7 @@
         }
       ],
       "references": [
-        "ref#10"
+        "ref#8"
       ],
       "defs": [
         {
@@ -522,7 +512,7 @@
         }
       ],
       "references": [
-        "ref#11"
+        "ref#9"
       ],
       "defs": [
         {
@@ -564,25 +554,27 @@
       ]
     },
     {
-      "id": "scope#0:key@307",
-      "name": "key",
+      "id": "scope#0:kebab@329",
+      "name": "kebab",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 15,
-          "column": 6,
-          "offset": 307
+          "column": 22,
+          "offset": 329
         }
       ],
-      "references": [],
+      "references": [
+        "ref#10"
+      ],
       "defs": [
         {
           "name": {
-            "name": "key",
+            "name": "kebab",
             "span": {
               "line": 15,
-              "column": 6,
-              "offset": 307
+              "column": 22,
+              "offset": 329
             }
           },
           "node": {
@@ -590,7 +582,7 @@
             "span": {
               "line": 15,
               "column": 6,
-              "offset": 307
+              "offset": 313
             }
           },
           "parent": {
@@ -598,16 +590,16 @@
             "span": {
               "line": 15,
               "column": 0,
-              "offset": 301
+              "offset": 307
             }
           },
           "type": "Variable",
           "init": {
-            "type": "Literal",
+            "type": "ObjectExpression",
             "span": {
               "line": 15,
-              "column": 12,
-              "offset": 313
+              "column": 43,
+              "offset": 350
             }
           },
           "declarationKind": "const"
@@ -615,14 +607,67 @@
       ]
     },
     {
-      "id": "scope#0:dynamicValue@339",
-      "name": "dynamicValue",
+      "id": "scope#0:zeroth@339",
+      "name": "zeroth",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 16,
-          "column": 15,
+          "line": 15,
+          "column": 32,
           "offset": 339
+        }
+      ],
+      "references": [
+        "ref#11"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "zeroth",
+            "span": {
+              "line": 15,
+              "column": 32,
+              "offset": 339
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 15,
+              "column": 6,
+              "offset": 313
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 15,
+              "column": 0,
+              "offset": 307
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 15,
+              "column": 43,
+              "offset": 350
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:p@439",
+      "name": "p",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 18,
+          "column": 17,
+          "offset": 439
         }
       ],
       "references": [
@@ -631,36 +676,36 @@
       "defs": [
         {
           "name": {
-            "name": "dynamicValue",
+            "name": "p",
             "span": {
-              "line": 16,
-              "column": 15,
-              "offset": 339
+              "line": 18,
+              "column": 17,
+              "offset": 439
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 16,
+              "line": 18,
               "column": 6,
-              "offset": 330
+              "offset": 428
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 16,
+              "line": 18,
               "column": 0,
-              "offset": 324
+              "offset": 422
             }
           },
           "type": "Variable",
           "init": {
             "type": "ObjectExpression",
             "span": {
-              "line": 16,
-              "column": 32,
-              "offset": 356
+              "line": 18,
+              "column": 36,
+              "offset": 458
             }
           },
           "declarationKind": "const"
@@ -668,67 +713,14 @@
       ]
     },
     {
-      "id": "scope#0:sym@434",
-      "name": "sym",
+      "id": "scope#0:q@446",
+      "name": "q",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 19,
-          "column": 6,
-          "offset": 434
-        }
-      ],
-      "references": [
-        "ref#1"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "sym",
-            "span": {
-              "line": 19,
-              "column": 6,
-              "offset": 434
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 19,
-              "column": 6,
-              "offset": 434
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 19,
-              "column": 0,
-              "offset": 428
-            }
-          },
-          "type": "Variable",
-          "init": {
-            "type": "CallExpression",
-            "span": {
-              "line": 19,
-              "column": 12,
-              "offset": 440
-            }
-          },
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:id@469",
-      "name": "id",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 20,
-          "column": 15,
-          "offset": 469
+          "line": 18,
+          "column": 24,
+          "offset": 446
         }
       ],
       "references": [
@@ -737,36 +729,36 @@
       "defs": [
         {
           "name": {
-            "name": "id",
+            "name": "q",
             "span": {
-              "line": 20,
-              "column": 15,
-              "offset": 469
+              "line": 18,
+              "column": 24,
+              "offset": 446
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 20,
+              "line": 18,
               "column": 6,
-              "offset": 460
+              "offset": 428
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 20,
+              "line": 18,
               "column": 0,
-              "offset": 454
+              "offset": 422
             }
           },
           "type": "Variable",
           "init": {
             "type": "ObjectExpression",
             "span": {
-              "line": 20,
-              "column": 34,
-              "offset": 488
+              "line": 18,
+              "column": 36,
+              "offset": 458
             }
           },
           "declarationKind": "const"
@@ -774,14 +766,14 @@
       ]
     },
     {
-      "id": "scope#0:kebab@561",
-      "name": "kebab",
+      "id": "scope#0:r@522",
+      "name": "r",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 23,
-          "column": 22,
-          "offset": 561
+          "line": 21,
+          "column": 9,
+          "offset": 522
         }
       ],
       "references": [
@@ -790,36 +782,36 @@
       "defs": [
         {
           "name": {
-            "name": "kebab",
+            "name": "r",
             "span": {
-              "line": 23,
-              "column": 22,
-              "offset": 561
+              "line": 21,
+              "column": 9,
+              "offset": 522
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 23,
+              "line": 21,
               "column": 6,
-              "offset": 545
+              "offset": 519
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 23,
+              "line": 21,
               "column": 0,
-              "offset": 539
+              "offset": 513
             }
           },
           "type": "Variable",
           "init": {
-            "type": "ObjectExpression",
+            "type": "ArrayExpression",
             "span": {
-              "line": 23,
-              "column": 43,
-              "offset": 582
+              "line": 21,
+              "column": 31,
+              "offset": 544
             }
           },
           "declarationKind": "const"
@@ -827,14 +819,14 @@
       ]
     },
     {
-      "id": "scope#0:zeroth@571",
-      "name": "zeroth",
+      "id": "scope#0:s@525",
+      "name": "s",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 23,
-          "column": 32,
-          "offset": 571
+          "line": 21,
+          "column": 12,
+          "offset": 525
         }
       ],
       "references": [
@@ -843,36 +835,36 @@
       "defs": [
         {
           "name": {
-            "name": "zeroth",
+            "name": "s",
             "span": {
-              "line": 23,
-              "column": 32,
-              "offset": 571
+              "line": 21,
+              "column": 12,
+              "offset": 525
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 23,
+              "line": 21,
               "column": 6,
-              "offset": 545
+              "offset": 519
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 23,
+              "line": 21,
               "column": 0,
-              "offset": 539
+              "offset": 513
             }
           },
           "type": "Variable",
           "init": {
-            "type": "ObjectExpression",
+            "type": "ArrayExpression",
             "span": {
-              "line": 23,
-              "column": 43,
-              "offset": 582
+              "line": 21,
+              "column": 31,
+              "offset": 544
             }
           },
           "declarationKind": "const"
@@ -880,14 +872,14 @@
       ]
     },
     {
-      "id": "scope#0:p@671",
-      "name": "p",
+      "id": "scope#0:t@535",
+      "name": "t",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 26,
-          "column": 17,
-          "offset": 671
+          "line": 21,
+          "column": 22,
+          "offset": 535
         }
       ],
       "references": [
@@ -896,36 +888,36 @@
       "defs": [
         {
           "name": {
-            "name": "p",
+            "name": "t",
             "span": {
-              "line": 26,
-              "column": 17,
-              "offset": 671
+              "line": 21,
+              "column": 22,
+              "offset": 535
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 26,
+              "line": 21,
               "column": 6,
-              "offset": 660
+              "offset": 519
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 26,
+              "line": 21,
               "column": 0,
-              "offset": 654
+              "offset": 513
             }
           },
           "type": "Variable",
           "init": {
-            "type": "ObjectExpression",
+            "type": "ArrayExpression",
             "span": {
-              "line": 26,
-              "column": 36,
-              "offset": 690
+              "line": 21,
+              "column": 31,
+              "offset": 544
             }
           },
           "declarationKind": "const"
@@ -933,14 +925,14 @@
       ]
     },
     {
-      "id": "scope#0:q@678",
-      "name": "q",
+      "id": "scope#0:u@538",
+      "name": "u",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 26,
-          "column": 24,
-          "offset": 678
+          "line": 21,
+          "column": 25,
+          "offset": 538
         }
       ],
       "references": [
@@ -949,248 +941,36 @@
       "defs": [
         {
           "name": {
-            "name": "q",
-            "span": {
-              "line": 26,
-              "column": 24,
-              "offset": 678
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 26,
-              "column": 6,
-              "offset": 660
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 26,
-              "column": 0,
-              "offset": 654
-            }
-          },
-          "type": "Variable",
-          "init": {
-            "type": "ObjectExpression",
-            "span": {
-              "line": 26,
-              "column": 36,
-              "offset": 690
-            }
-          },
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:r@754",
-      "name": "r",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 29,
-          "column": 9,
-          "offset": 754
-        }
-      ],
-      "references": [
-        "ref#18"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "r",
-            "span": {
-              "line": 29,
-              "column": 9,
-              "offset": 754
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 29,
-              "column": 6,
-              "offset": 751
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 29,
-              "column": 0,
-              "offset": 745
-            }
-          },
-          "type": "Variable",
-          "init": {
-            "type": "ArrayExpression",
-            "span": {
-              "line": 29,
-              "column": 31,
-              "offset": 776
-            }
-          },
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:s@757",
-      "name": "s",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 29,
-          "column": 12,
-          "offset": 757
-        }
-      ],
-      "references": [
-        "ref#19"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "s",
-            "span": {
-              "line": 29,
-              "column": 12,
-              "offset": 757
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 29,
-              "column": 6,
-              "offset": 751
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 29,
-              "column": 0,
-              "offset": 745
-            }
-          },
-          "type": "Variable",
-          "init": {
-            "type": "ArrayExpression",
-            "span": {
-              "line": 29,
-              "column": 31,
-              "offset": 776
-            }
-          },
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:t@767",
-      "name": "t",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 29,
-          "column": 22,
-          "offset": 767
-        }
-      ],
-      "references": [
-        "ref#20"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "t",
-            "span": {
-              "line": 29,
-              "column": 22,
-              "offset": 767
-            }
-          },
-          "node": {
-            "type": "VariableDeclarator",
-            "span": {
-              "line": 29,
-              "column": 6,
-              "offset": 751
-            }
-          },
-          "parent": {
-            "type": "VariableDeclaration",
-            "span": {
-              "line": 29,
-              "column": 0,
-              "offset": 745
-            }
-          },
-          "type": "Variable",
-          "init": {
-            "type": "ArrayExpression",
-            "span": {
-              "line": 29,
-              "column": 31,
-              "offset": 776
-            }
-          },
-          "declarationKind": "const"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:u@770",
-      "name": "u",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 29,
-          "column": 25,
-          "offset": 770
-        }
-      ],
-      "references": [
-        "ref#21"
-      ],
-      "defs": [
-        {
-          "name": {
             "name": "u",
             "span": {
-              "line": 29,
+              "line": 21,
               "column": 25,
-              "offset": 770
+              "offset": 538
             }
           },
           "node": {
             "type": "VariableDeclarator",
             "span": {
-              "line": 29,
+              "line": 21,
               "column": 6,
-              "offset": 751
+              "offset": 519
             }
           },
           "parent": {
             "type": "VariableDeclaration",
             "span": {
-              "line": 29,
+              "line": 21,
               "column": 0,
-              "offset": 745
+              "offset": 513
             }
           },
           "type": "Variable",
           "init": {
             "type": "ArrayExpression",
             "span": {
-              "line": 29,
+              "line": 21,
               "column": 31,
-              "offset": 776
+              "offset": 544
             }
           },
           "declarationKind": "const"
@@ -1198,14 +978,14 @@
       ]
     },
     {
-      "id": "scope#0:Symbol@440",
-      "name": "Symbol",
+      "id": "scope#0:console@571",
+      "name": "console",
       "scope": "scope#0",
       "identifiers": [
         {
-          "line": 19,
-          "column": 12,
-          "offset": 440
+          "line": 23,
+          "column": 0,
+          "offset": 571
         }
       ],
       "references": [
@@ -1214,56 +994,19 @@
       "defs": [
         {
           "name": {
-            "name": "Symbol",
-            "span": {
-              "line": 19,
-              "column": 12,
-              "offset": 440
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 19,
-              "column": 12,
-              "offset": 440
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:console@803",
-      "name": "console",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        }
-      ],
-      "references": [
-        "ref#2"
-      ],
-      "defs": [
-        {
-          "name": {
             "name": "console",
             "span": {
-              "line": 31,
+              "line": 23,
               "column": 0,
-              "offset": 803
+              "offset": 571
             }
           },
           "node": {
             "type": "Identifier",
             "span": {
-              "line": 31,
+              "line": 23,
               "column": 0,
-              "offset": 803
+              "offset": 571
             }
           },
           "parent": null,
@@ -1276,69 +1019,15 @@
     {
       "id": "ref#0",
       "identifier": {
-        "name": "Symbol",
-        "span": {
-          "line": 19,
-          "column": 12,
-          "offset": 440
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:Symbol@440",
-      "owners": [
-        "scope#0:sym@434"
-      ],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": true,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#1",
-      "identifier": {
-        "name": "sym",
-        "span": {
-          "line": 20,
-          "column": 37,
-          "offset": 491
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:sym@434",
-      "owners": [
-        "scope#0:id@469"
-      ],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#2",
-      "identifier": {
         "name": "console",
         "span": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:console@803",
+      "resolved": "scope#0:console@571",
       "owners": [],
       "init": false,
       "flags": {
@@ -1352,36 +1041,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#1",
       "identifier": {
         "name": "a",
         "span": {
-          "line": 32,
+          "line": 24,
           "column": 2,
-          "offset": 818
+          "offset": 586
         }
       },
       "from": "scope#0",
@@ -1399,36 +1088,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#2",
       "identifier": {
         "name": "b",
         "span": {
-          "line": 33,
+          "line": 25,
           "column": 2,
-          "offset": 823
+          "offset": 591
         }
       },
       "from": "scope#0",
@@ -1446,36 +1135,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#5",
+      "id": "ref#3",
       "identifier": {
         "name": "c",
         "span": {
-          "line": 34,
+          "line": 26,
           "column": 2,
-          "offset": 828
+          "offset": 596
         }
       },
       "from": "scope#0",
@@ -1493,36 +1182,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#6",
+      "id": "ref#4",
       "identifier": {
         "name": "d",
         "span": {
-          "line": 35,
+          "line": 27,
           "column": 2,
-          "offset": 833
+          "offset": 601
         }
       },
       "from": "scope#0",
@@ -1540,36 +1229,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#7",
+      "id": "ref#5",
       "identifier": {
         "name": "e",
         "span": {
-          "line": 36,
+          "line": 28,
           "column": 2,
-          "offset": 838
+          "offset": 606
         }
       },
       "from": "scope#0",
@@ -1587,36 +1276,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#8",
+      "id": "ref#6",
       "identifier": {
         "name": "f",
         "span": {
-          "line": 37,
+          "line": 29,
           "column": 2,
-          "offset": 843
+          "offset": 611
         }
       },
       "from": "scope#0",
@@ -1634,36 +1323,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#9",
+      "id": "ref#7",
       "identifier": {
         "name": "g",
         "span": {
-          "line": 38,
+          "line": 30,
           "column": 2,
-          "offset": 848
+          "offset": 616
         }
       },
       "from": "scope#0",
@@ -1681,36 +1370,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#10",
+      "id": "ref#8",
       "identifier": {
         "name": "renamed",
         "span": {
-          "line": 39,
+          "line": 31,
           "column": 2,
-          "offset": 853
+          "offset": 621
         }
       },
       "from": "scope#0",
@@ -1728,36 +1417,36 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#11",
+      "id": "ref#9",
       "identifier": {
         "name": "others",
         "span": {
-          "line": 40,
+          "line": 32,
           "column": 2,
-          "offset": 864
+          "offset": 632
         }
       },
       "from": "scope#0",
@@ -1775,24 +1464,118 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#10",
+      "identifier": {
+        "name": "kebab",
+        "span": {
+          "line": 33,
+          "column": 2,
+          "offset": 642
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:kebab@329",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 23,
+          "column": 0,
+          "offset": 571
+        },
+        "endSpan": {
+          "line": 41,
+          "column": 2,
+          "offset": 691
+        },
+        "headStartSpan": {
+          "line": 23,
+          "column": 0,
+          "offset": 571
+        },
+        "headEndSpan": {
+          "line": 23,
+          "column": 11,
+          "offset": 582
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#11",
+      "identifier": {
+        "name": "zeroth",
+        "span": {
+          "line": 34,
+          "column": 2,
+          "offset": 651
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:zeroth@339",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 23,
+          "column": 0,
+          "offset": 571
+        },
+        "endSpan": {
+          "line": 41,
+          "column": 2,
+          "offset": 691
+        },
+        "headStartSpan": {
+          "line": 23,
+          "column": 0,
+          "offset": 571
+        },
+        "headEndSpan": {
+          "line": 23,
+          "column": 11,
+          "offset": 582
         },
         "isCall": true
       }
@@ -1800,15 +1583,15 @@
     {
       "id": "ref#12",
       "identifier": {
-        "name": "dynamicValue",
+        "name": "p",
         "span": {
-          "line": 41,
+          "line": 35,
           "column": 2,
-          "offset": 874
+          "offset": 661
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:dynamicValue@339",
+      "resolved": "scope#0:p@439",
       "owners": [],
       "init": false,
       "flags": {
@@ -1822,24 +1605,24 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
@@ -1847,15 +1630,15 @@
     {
       "id": "ref#13",
       "identifier": {
-        "name": "id",
+        "name": "q",
         "span": {
-          "line": 42,
+          "line": 36,
           "column": 2,
-          "offset": 890
+          "offset": 666
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:id@469",
+      "resolved": "scope#0:q@446",
       "owners": [],
       "init": false,
       "flags": {
@@ -1869,24 +1652,24 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
@@ -1894,15 +1677,15 @@
     {
       "id": "ref#14",
       "identifier": {
-        "name": "kebab",
+        "name": "r",
         "span": {
-          "line": 43,
+          "line": 37,
           "column": 2,
-          "offset": 896
+          "offset": 671
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:kebab@561",
+      "resolved": "scope#0:r@522",
       "owners": [],
       "init": false,
       "flags": {
@@ -1916,24 +1699,24 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
@@ -1941,15 +1724,15 @@
     {
       "id": "ref#15",
       "identifier": {
-        "name": "zeroth",
+        "name": "s",
         "span": {
-          "line": 44,
+          "line": 38,
           "column": 2,
-          "offset": 905
+          "offset": 676
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:zeroth@571",
+      "resolved": "scope#0:s@525",
       "owners": [],
       "init": false,
       "flags": {
@@ -1963,24 +1746,24 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
@@ -1988,15 +1771,15 @@
     {
       "id": "ref#16",
       "identifier": {
-        "name": "p",
+        "name": "t",
         "span": {
-          "line": 45,
+          "line": 39,
           "column": 2,
-          "offset": 915
+          "offset": 681
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:p@671",
+      "resolved": "scope#0:t@535",
       "owners": [],
       "init": false,
       "flags": {
@@ -2010,24 +1793,24 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
@@ -2035,203 +1818,15 @@
     {
       "id": "ref#17",
       "identifier": {
-        "name": "q",
-        "span": {
-          "line": 46,
-          "column": 2,
-          "offset": 920
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:q@678",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": {
-        "startSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "endSpan": {
-          "line": 51,
-          "column": 2,
-          "offset": 945
-        },
-        "headStartSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "headEndSpan": {
-          "line": 31,
-          "column": 11,
-          "offset": 814
-        },
-        "isCall": true
-      }
-    },
-    {
-      "id": "ref#18",
-      "identifier": {
-        "name": "r",
-        "span": {
-          "line": 47,
-          "column": 2,
-          "offset": 925
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:r@754",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": {
-        "startSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "endSpan": {
-          "line": 51,
-          "column": 2,
-          "offset": 945
-        },
-        "headStartSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "headEndSpan": {
-          "line": 31,
-          "column": 11,
-          "offset": 814
-        },
-        "isCall": true
-      }
-    },
-    {
-      "id": "ref#19",
-      "identifier": {
-        "name": "s",
-        "span": {
-          "line": 48,
-          "column": 2,
-          "offset": 930
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:s@757",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": {
-        "startSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "endSpan": {
-          "line": 51,
-          "column": 2,
-          "offset": 945
-        },
-        "headStartSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "headEndSpan": {
-          "line": 31,
-          "column": 11,
-          "offset": 814
-        },
-        "isCall": true
-      }
-    },
-    {
-      "id": "ref#20",
-      "identifier": {
-        "name": "t",
-        "span": {
-          "line": 49,
-          "column": 2,
-          "offset": 935
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:t@767",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": {
-        "startSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "endSpan": {
-          "line": 51,
-          "column": 2,
-          "offset": 945
-        },
-        "headStartSpan": {
-          "line": 31,
-          "column": 0,
-          "offset": 803
-        },
-        "headEndSpan": {
-          "line": 31,
-          "column": 11,
-          "offset": 814
-        },
-        "isCall": true
-      }
-    },
-    {
-      "id": "ref#21",
-      "identifier": {
         "name": "u",
         "span": {
-          "line": 50,
+          "line": 40,
           "column": 2,
-          "offset": 940
+          "offset": 686
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:u@770",
+      "resolved": "scope#0:u@538",
       "owners": [],
       "init": false,
       "flags": {
@@ -2245,31 +1840,29 @@
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "endSpan": {
-          "line": 51,
+          "line": 41,
           "column": 2,
-          "offset": 945
+          "offset": 691
         },
         "headStartSpan": {
-          "line": 31,
+          "line": 23,
           "column": 0,
-          "offset": 803
+          "offset": 571
         },
         "headEndSpan": {
-          "line": 31,
+          "line": 23,
           "column": 11,
-          "offset": 814
+          "offset": 582
         },
         "isCall": true
       }
     }
   ],
-  "unusedVariableIds": [
-    "scope#0:key@307"
-  ],
+  "unusedVariableIds": [],
   "diagnostics": []
 }

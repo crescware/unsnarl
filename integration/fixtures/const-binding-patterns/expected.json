@@ -116,23 +116,11 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_key_307",
-      "name": "key",
+      "id": "n_scope_0_kebab_329",
+      "name": "kebab",
       "line": 15,
       "endLine": null,
       "isJsxElement": false,
-      "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
-      "initIsFunction": false
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_dynamicValue_339",
-      "name": "dynamicValue",
-      "line": 16,
-      "endLine": null,
-      "isJsxElement": false,
       "unused": false,
       "kind": "Variable",
       "declarationKind": "const",
@@ -140,45 +128,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_sym_434",
-      "name": "sym",
-      "line": 19,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
-      "initIsFunction": false
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_id_469",
-      "name": "id",
-      "line": 20,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
-      "initIsFunction": false
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_kebab_561",
-      "name": "kebab",
-      "line": 23,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
-      "initIsFunction": false
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_zeroth_571",
+      "id": "n_scope_0_zeroth_339",
       "name": "zeroth",
-      "line": 23,
+      "line": 15,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -188,9 +140,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_p_671",
+      "id": "n_scope_0_p_439",
       "name": "p",
-      "line": 26,
+      "line": 18,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -200,9 +152,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_q_678",
+      "id": "n_scope_0_q_446",
       "name": "q",
-      "line": 26,
+      "line": 18,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -212,9 +164,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_r_754",
+      "id": "n_scope_0_r_522",
       "name": "r",
-      "line": 29,
+      "line": 21,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -224,9 +176,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_s_757",
+      "id": "n_scope_0_s_525",
       "name": "s",
-      "line": 29,
+      "line": 21,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -236,9 +188,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_t_767",
+      "id": "n_scope_0_t_535",
       "name": "t",
-      "line": 29,
+      "line": 21,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -248,9 +200,9 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_u_770",
+      "id": "n_scope_0_u_538",
       "name": "u",
-      "line": 29,
+      "line": 21,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
@@ -260,17 +212,7 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_Symbol_440",
-      "name": "Symbol",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "ImplicitGlobalVariable"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_console_803",
+      "id": "n_scope_0_console_571",
       "name": "console",
       "line": 0,
       "endLine": null,
@@ -280,124 +222,104 @@
     },
     {
       "type": "node",
-      "id": "expr_stmt_803",
+      "id": "expr_stmt_571",
       "kind": "ExpressionStatement",
       "name": "console.log()",
-      "line": 31,
-      "endLine": 51,
+      "line": 23,
+      "endLine": 41,
       "isJsxElement": false,
       "unused": false
     }
   ],
   "edges": [
     {
-      "from": "n_scope_0_Symbol_440",
-      "to": "n_scope_0_sym_434",
-      "label": "read,call"
-    },
-    {
-      "from": "n_scope_0_sym_434",
-      "to": "n_scope_0_id_469",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_console_803",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_console_571",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_a_15",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_b_53",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_c_62",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_d_118",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_e_129",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_f_135",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_g_209",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_renamed_215",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
       "from": "n_scope_0_others_233",
-      "to": "expr_stmt_803",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_dynamicValue_339",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_kebab_329",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_id_469",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_zeroth_339",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_kebab_561",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_p_439",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_zeroth_571",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_q_446",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_p_671",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_r_522",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_q_678",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_s_525",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_r_754",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_t_535",
+      "to": "expr_stmt_571",
       "label": "read"
     },
     {
-      "from": "n_scope_0_s_757",
-      "to": "expr_stmt_803",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_t_767",
-      "to": "expr_stmt_803",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_u_770",
-      "to": "expr_stmt_803",
+      "from": "n_scope_0_u_538",
+      "to": "expr_stmt_571",
       "label": "read"
     }
   ],
