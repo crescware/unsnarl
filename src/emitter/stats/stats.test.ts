@@ -31,6 +31,7 @@ function emit(code: string): string {
     prettyJson: true,
     prunedGraph: null,
     resolutions: null,
+    debug: false,
   });
 }
 
@@ -50,7 +51,12 @@ function emitWithBoundary(
     source: { path: "x.ts", language: LANGUAGE.Ts },
   });
   const prunedGraph = patch(buildVisualGraph(ir));
-  return emitter.emit(ir, { prettyJson: true, prunedGraph, resolutions: null });
+  return emitter.emit(ir, {
+    prettyJson: true,
+    prunedGraph,
+    resolutions: null,
+    debug: false,
+  });
 }
 
 describe("StatsEmitter", () => {

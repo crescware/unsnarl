@@ -7,5 +7,5 @@ export function emitNode(
   node: VisualNode,
   indent: string,
 ): void {
-  state.lines.push(`${indent}${node.id}${nodeSyntax(node)}`);
+  state.lines.push(`${indent}${node.id}${nodeSyntax(node, state.debug)}`);
 }

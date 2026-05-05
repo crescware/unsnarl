@@ -79,7 +79,12 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "test.ts",
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning: null,
     }).text;
 
@@ -100,7 +105,12 @@ describe("createPipeline", () => {
           format: "missing",
           language: LANGUAGE.Ts,
           sourcePath: "x.ts",
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning: null,
         }).text,
     ).toThrow(/Unknown emitter format/);
@@ -132,7 +142,12 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "x.ts",
-      emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
       pruning: null,
     });
 

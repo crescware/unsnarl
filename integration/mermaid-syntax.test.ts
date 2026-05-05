@@ -10,6 +10,10 @@ import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.j
 
 const FIXTURE_DIR = join(process.cwd(), "integration", "fixtures");
 
+// Subtrees managed by their own colocated *.test.ts files.
+// Skip them here so this central discovery does not double-cover them.
+const IGNORED_FIXTURE_DIRS: readonly string[] = ["for"];
+
 interface FixtureCase {
   name: string;
   inputPath: string;
@@ -20,6 +24,9 @@ function discoverFixtures(): FixtureCase[] {
   const out: FixtureCase[] = [];
   for (const entry of readdirSync(FIXTURE_DIR, { withFileTypes: true })) {
     if (!entry.isDirectory()) {
+      continue;
+    }
+    if (IGNORED_FIXTURE_DIRS.includes(entry.name)) {
       continue;
     }
     const dir = join(FIXTURE_DIR, entry.name);
@@ -59,7 +66,12 @@ describe("Mermaid output syntax (real parser)", () => {
         format: "mermaid",
         language: fixture.language,
         sourcePath: `integration/fixtures/${fixture.name}/input.${fixture.language}`,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning: null,
       }).text;
       expect(out).not.toContain('\\"');

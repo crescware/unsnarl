@@ -117,6 +117,23 @@ describe("runCli (integration)", () => {
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
+  test("--debug appends NODE_KIND to Mermaid node labels", async () => {
+    const inputPath = join(tmpDir, "debug.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconsole.log(b);\n");
+    const noDebug = await captureRun(["--format", "mermaid", inputPath]);
+    const debug = await captureRun([
+      "--format",
+      "mermaid",
+      "--debug",
+      inputPath,
+    ]);
+    expect(noDebug.exitCode).toBe(0);
+    expect(debug.exitCode).toBe(0);
+    expect(noDebug.stdout).not.toContain("<br/>Variable");
+    expect(debug.stdout).toContain('"a<br/>L1<br/>Variable"');
+    expect(debug.stdout).toContain('"b<br/>L2<br/>Variable"');
+  });
+
   test("missing input returns exit 2 with usage", async () => {
     const r = await captureRun([]);
     expect(r.exitCode).toBe(2);
@@ -384,5 +401,70 @@ describe("runCli (integration)", () => {
     } finally {
       stdinSpy.mockRestore();
     }
+  });
+
+  test("--out-file writes the result to the exact given path", async () => {
+    const inputPath = join(tmpDir, "explicit.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const outFile = join(tmpDir, "explicit-out", "graph.mmd");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--out-file",
+      outFile,
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stdout).toBe("");
+    expect(existsSync(outFile)).toBe(true);
+    expect(readFileSync(outFile, "utf8")).toMatch(/```mermaid|flowchart/);
+  });
+
+  test("-o with a dot in the basename emits a notice but still treats it as a directory", async () => {
+    const inputPath = join(tmpDir, "withdot.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const outDir = join(tmpDir, "looks-like-file.json");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).toMatch(/uns: notice: -o/);
+    expect(r.stderr).toMatch(/--out-file/);
+    expect(existsSync(join(outDir, "withdot.mmd"))).toBe(true);
+  });
+
+  test("-o without a dot does not emit the --out-file notice", async () => {
+    const inputPath = join(tmpDir, "nodot.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const outDir = join(tmpDir, "plain-out");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      outDir,
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(0);
+    expect(r.stderr).not.toMatch(/uns: notice: -o/);
+  });
+
+  test("-o and --out-file together exits with 2", async () => {
+    const inputPath = join(tmpDir, "both.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "-o",
+      join(tmpDir, "out"),
+      "--out-file",
+      join(tmpDir, "out.mmd"),
+      inputPath,
+    ]);
+    expect(r.exitCode).toBe(2);
+    expect(r.stderr).toMatch(/mutually exclusive/);
   });
 });

@@ -29,6 +29,7 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
     prettyJson: true,
     prunedGraph: null,
     resolutions: null,
+    debug: false,
   });
 }
 
@@ -62,6 +63,7 @@ describe("MermaidEmitter", () => {
       prettyJson: true,
       prunedGraph: null,
       resolutions: null,
+      debug: false,
     });
     expect(out).not.toContain("%%{init");
     expect(out).toMatch(/^flowchart RL\n/);

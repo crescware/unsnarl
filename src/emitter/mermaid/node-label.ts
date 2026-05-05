@@ -2,7 +2,12 @@ import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { nodeHead } from "./node-head.js";
 
-export function nodeLabel(n: VisualNode): string {
+export function nodeLabel(n: VisualNode, debug: boolean): string {
+  const base = baseLabel(n);
+  return debug ? `${base}<br/>${n.kind}` : base;
+}
+
+function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.IfTest) {
     return `if ()<br/>L${n.line}`;
   }

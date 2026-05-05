@@ -16,8 +16,12 @@ export function resolveOutputPath(
   opts: NormalizedCliOptions,
   emitters: EmitterRegistry,
 ): string | null {
-  if (opts.outDir === null) {
+  if (opts.out === null) {
     return null;
+  }
+
+  if (opts.out.mode === "file") {
+    return opts.out.path;
   }
 
   // --stdin overrides any positional file for content, so it should
@@ -48,5 +52,5 @@ export function resolveOutputPath(
     );
   }
 
-  return join(opts.outDir, `${baseName}.${emitter.extension}`);
+  return join(opts.out.path, `${baseName}.${emitter.extension}`);
 }

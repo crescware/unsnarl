@@ -8,6 +8,7 @@ import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
+import { emitOutFlagNotice } from "./emit-out-flag-notice.js";
 import { emitPruningWarnings } from "./emit-pruning-warnings.js";
 import { emitResolutionNotices } from "./emit-resolution-notices.js";
 import { handleCliUsageError } from "./handle-cli-usage-error.js";
@@ -24,6 +25,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
   command.action(async (fileArg: unknown, opts: ParsedCliOptions) => {
     const file = typeof fileArg === "string" ? fileArg : null;
     const normalized = normalizeCliOptions(opts);
+    emitOutFlagNotice(normalized);
     const src = await calcSource(command, file, normalized);
 
     const emitters = createDefaultEmitterRegistry();

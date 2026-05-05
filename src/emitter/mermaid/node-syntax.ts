@@ -2,8 +2,8 @@ import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { nodeLabel } from "./node-label.js";
 
-export function nodeSyntax(n: VisualNode): string {
-  const label = nodeLabel(n);
+export function nodeSyntax(n: VisualNode, debug: boolean): string {
+  const label = nodeLabel(n, debug);
   switch (n.kind) {
     case NODE_KIND.WriteOp:
       return `(["${label}"])`;

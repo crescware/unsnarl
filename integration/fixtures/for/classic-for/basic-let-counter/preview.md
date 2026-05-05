@@ -1,0 +1,28 @@
+# integration/fixtures/for/classic-for/basic-let-counter/input.ts
+
+## Input
+
+```ts
+for (let i = 0; i < 3; i++) {
+  console.log(i);
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_console_32["global console"]
+  subgraph s_scope_1["for L1-3"]
+    direction RL
+    for_test_scope_0_0["for ()<br/>L1"]
+    n_scope_1_i_9["let i<br/>L1"]
+    wr_ref_1(["let i<br/>L1"])
+    expr_stmt_32["console.log()<br/>L2"]
+  end
+  n_scope_1_i_9 -->|set| wr_ref_1
+  n_scope_1_i_9 -->|read| for_test_scope_0_0
+  n_scope_0_console_32 -->|read| expr_stmt_32
+  wr_ref_1 -->|read| expr_stmt_32
+```

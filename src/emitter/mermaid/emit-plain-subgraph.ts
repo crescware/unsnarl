@@ -11,7 +11,7 @@ export function emitPlainSubgraph(
   indent: string,
 ): void {
   state.lines.push(
-    `${indent}subgraph ${sg.id}["${subgraphLabel(sg, state.nodeMap)}"]`,
+    `${indent}subgraph ${sg.id}["${subgraphLabel(sg, state.nodeMap, state.debug)}"]`,
   );
   const childIndent = `${indent}  `;
   state.lines.push(`${childIndent}direction ${sg.direction}`);

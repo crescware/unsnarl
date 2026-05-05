@@ -6,6 +6,15 @@ import { lineRangeLabel } from "./line-range-label.js";
 export function subgraphLabel(
   sg: VisualSubgraph,
   nodeMap: ReadonlyMap<string, VisualNode>,
+  debug: boolean,
+): string {
+  const base = baseLabel(sg, nodeMap);
+  return debug ? `${base}<br/>${sg.kind}` : base;
+}
+
+function baseLabel(
+  sg: VisualSubgraph,
+  nodeMap: ReadonlyMap<string, VisualNode>,
 ): string {
   const range = lineRangeLabel(sg);
   switch (sg.kind) {

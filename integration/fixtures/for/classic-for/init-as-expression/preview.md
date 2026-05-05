@@ -1,0 +1,31 @@
+# integration/fixtures/for/classic-for/init-as-expression/input.ts
+
+## Input
+
+```ts
+let p;
+for (p = 0; p < 3; p++) {
+  console.log(p);
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_p_4["let p<br/>L1"]
+  n_scope_0_console_35["global console"]
+  subgraph s_scope_1["for L2-4"]
+    direction RL
+    for_test_scope_0_7["for ()<br/>L2"]
+    wr_ref_0(["let p<br/>L2"])
+    wr_ref_2(["let p<br/>L2"])
+    expr_stmt_35["console.log()<br/>L3"]
+  end
+  n_scope_0_p_4 -->|set| wr_ref_0
+  wr_ref_0 -->|set| wr_ref_2
+  wr_ref_0 -->|read| for_test_scope_0_7
+  n_scope_0_console_35 -->|read| expr_stmt_35
+  wr_ref_2 -->|read| expr_stmt_35
+```

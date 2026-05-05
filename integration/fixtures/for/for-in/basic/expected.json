@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/for/for-in/basic/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_obj_6",
+      "name": "obj",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_59",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_28",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_propKey_39",
+          "name": "propKey",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_59",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_obj_6",
+      "to": "for_test_scope_0_28",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_59",
+      "to": "expr_stmt_59",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_propKey_39",
+      "to": "expr_stmt_59",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_obj_6",
+      "to": "expr_stmt_59",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

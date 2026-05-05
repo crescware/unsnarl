@@ -45,11 +45,15 @@ export class MermaidEmitter implements Emitter {
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph = opts.prunedGraph ?? buildVisualGraph(ir);
-    return renderMermaid(graph, this.strategy);
+    return renderMermaid(graph, this.strategy, opts.debug);
   }
 }
 
-function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
+function renderMermaid(
+  graph: VisualGraph,
+  strategy: MermaidStrategy,
+  debug: boolean,
+): string {
   // The strategy decides which renderer-specific lines (e.g. the elk init
   // directive) and which empty-subgraph patches are needed. dagre struggles
   // with nested subgraphs that share edges across boundaries (the function
@@ -90,6 +94,7 @@ function renderMermaid(graph: VisualGraph, strategy: MermaidStrategy): string {
     placeholderIds: [],
     wrapperIds: [],
     strategy,
+    debug,
   } as const satisfies RenderState;
 
   // Emit top-level "tree" nodes (anything that isn't a synthetic top-level

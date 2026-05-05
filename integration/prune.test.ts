@@ -31,7 +31,12 @@ describe("control-if (pruned)", () => {
         format: "json",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -44,7 +49,12 @@ describe("control-if (pruned)", () => {
         format: "mermaid",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -57,7 +67,12 @@ describe("control-if (pruned)", () => {
         format: "markdown",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -70,7 +85,12 @@ describe("control-if (pruned)", () => {
         format: "stats",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -95,7 +115,12 @@ describe("control-if (pruned)", () => {
         format: "json",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -108,7 +133,12 @@ describe("control-if (pruned)", () => {
         format: "mermaid",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -121,7 +151,12 @@ describe("control-if (pruned)", () => {
         format: "markdown",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -134,7 +169,12 @@ describe("control-if (pruned)", () => {
         format: "stats",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -159,7 +199,12 @@ describe("control-if (pruned)", () => {
         format: "json",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -172,7 +217,12 @@ describe("control-if (pruned)", () => {
         format: "mermaid",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -185,7 +235,12 @@ describe("control-if (pruned)", () => {
         format: "markdown",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -198,7 +253,12 @@ describe("control-if (pruned)", () => {
         format: "stats",
         language: "ts",
         sourcePath,
-        emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
         pruning,
       }).text;
       expect(out).toMatchFileSnapshot(
@@ -234,7 +294,12 @@ describe("const-chain-five (pruned)", () => {
           format: "json",
           language: "ts",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -247,7 +312,12 @@ describe("const-chain-five (pruned)", () => {
           format: "mermaid",
           language: "ts",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -260,7 +330,12 @@ describe("const-chain-five (pruned)", () => {
           format: "markdown",
           language: "ts",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -273,7 +348,12 @@ describe("const-chain-five (pruned)", () => {
           format: "stats",
           language: "ts",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -316,7 +396,12 @@ describe("jsx-nested-five (pruned)", () => {
           format: "json",
           language: "tsx",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -329,7 +414,12 @@ describe("jsx-nested-five (pruned)", () => {
           format: "mermaid",
           language: "tsx",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -342,7 +432,12 @@ describe("jsx-nested-five (pruned)", () => {
           format: "markdown",
           language: "tsx",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(
@@ -355,7 +450,12 @@ describe("jsx-nested-five (pruned)", () => {
           format: "stats",
           language: "tsx",
           sourcePath,
-          emit: { prettyJson: true, prunedGraph: null, resolutions: null },
+          emit: {
+            prettyJson: true,
+            prunedGraph: null,
+            resolutions: null,
+            debug: false,
+          },
           pruning,
         }).text;
         expect(out).toMatchFileSnapshot(

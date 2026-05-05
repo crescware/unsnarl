@@ -35,6 +35,14 @@ export function buildCommand(): Command {
       "-o, --out-dir <dir>",
       "Write output to <dir>/<auto-name>.<ext>",
     ).default(null, "stdout"),
+    new Option(
+      "--out-file <path>",
+      "Write output to <path> (full file path, no auto-naming)",
+    ).default(null, "stdout"),
+    new Option(
+      "--debug",
+      "Annotate Mermaid labels with the underlying NODE_KIND / SUBGRAPH_KIND",
+    ).default(false),
   ];
 
   for (const opt of options) {
