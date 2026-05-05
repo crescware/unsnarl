@@ -1,0 +1,129 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/for-statement/classic-for/closure-let-binding/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_fns_6",
+      "name": "fns",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_87",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_34",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_q_43",
+          "name": "q",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_1",
+          "kind": "WriteOp",
+          "name": "q",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_66",
+          "kind": "ExpressionStatement",
+          "name": "fns.push()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_87",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_q_43",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_q_43",
+      "to": "for_test_scope_0_34",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_fns_6",
+      "to": "expr_stmt_66",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "expr_stmt_66",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_87",
+      "to": "expr_stmt_87",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_fns_6",
+      "to": "expr_stmt_87",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

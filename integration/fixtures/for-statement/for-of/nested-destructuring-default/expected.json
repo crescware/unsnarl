@@ -1,0 +1,93 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/for-statement/for-of/nested-destructuring-default/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_records_6",
+      "name": "records",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_153",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 5,
+      "endLine": 9,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_93",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_tag_116",
+          "name": "tag",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_153",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 8,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_records_6",
+      "to": "for_test_scope_0_93",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_153",
+      "to": "expr_stmt_153",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_tag_116",
+      "to": "expr_stmt_153",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

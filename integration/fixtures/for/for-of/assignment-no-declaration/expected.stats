@@ -1,5 +1,0 @@
-1	0	integration/fixtures/for/for-of/assignment-no-declaration/input.ts:0 console
-2	0	integration/fixtures/for/for-of/assignment-no-declaration/input.ts:1 outer
-0	1	integration/fixtures/for/for-of/assignment-no-declaration/input.ts:2 for-test
-0	2	integration/fixtures/for/for-of/assignment-no-declaration/input.ts:3 console.log()
-3	3	4 total

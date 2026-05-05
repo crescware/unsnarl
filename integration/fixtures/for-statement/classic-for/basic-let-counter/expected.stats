@@ -1,0 +1,6 @@
+1	0	integration/fixtures/for-statement/classic-for/basic-let-counter/input.ts:0 console
+0	1	integration/fixtures/for-statement/classic-for/basic-let-counter/input.ts:1 for-test
+2	0	integration/fixtures/for-statement/classic-for/basic-let-counter/input.ts:1 i
+1	1	integration/fixtures/for-statement/classic-for/basic-let-counter/input.ts:1 i
+0	2	integration/fixtures/for-statement/classic-for/basic-let-counter/input.ts:2 console.log()
+4	4	5 total

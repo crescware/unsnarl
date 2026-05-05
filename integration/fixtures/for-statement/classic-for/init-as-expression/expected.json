@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/for-statement/classic-for/init-as-expression/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_p_4",
+      "name": "p",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_35",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_7",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_0",
+          "kind": "WriteOp",
+          "name": "p",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_2",
+          "kind": "WriteOp",
+          "name": "p",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_35",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_p_4",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "for_test_scope_0_7",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_35",
+      "to": "expr_stmt_35",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "expr_stmt_35",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

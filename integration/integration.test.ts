@@ -9,7 +9,10 @@ const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 
 // Subtrees managed by their own colocated *.test.ts files.
 // Skip them here so this central discovery does not double-cover them.
-const IGNORED_FIXTURE_DIRS: readonly string[] = ["for", "switch-statement"];
+const IGNORED_FIXTURE_DIRS: readonly string[] = [
+  "for-statement",
+  "switch-statement",
+];
 
 interface FixtureCase {
   name: string;

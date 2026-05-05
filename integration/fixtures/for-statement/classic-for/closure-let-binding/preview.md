@@ -1,0 +1,34 @@
+# integration/fixtures/for-statement/classic-for/closure-let-binding/input.ts
+
+## Input
+
+```ts
+const fns: (() => number)[] = [];
+for (let q = 0; q < 3; q++) {
+  fns.push(() => q);
+}
+console.log(fns.length);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_fns_6["fns<br/>L1"]
+  n_scope_0_console_87["global console"]
+  subgraph s_scope_1["for L2-4"]
+    direction RL
+    for_test_scope_0_34["for ()<br/>L2"]
+    n_scope_1_q_43["let q<br/>L2"]
+    wr_ref_1(["let q<br/>L2"])
+    expr_stmt_66["fns.push()<br/>L3"]
+  end
+  n_scope_1_q_43 -->|set| wr_ref_1
+  n_scope_1_q_43 -->|read| for_test_scope_0_34
+  n_scope_0_fns_6 -->|read| expr_stmt_66
+  wr_ref_1 -->|read| expr_stmt_66
+  n_scope_0_console_87 -->|read| expr_stmt_87
+  n_scope_0_fns_6 -->|read| expr_stmt_87
+  expr_stmt_87["console.log()<br/>L5"]
+```

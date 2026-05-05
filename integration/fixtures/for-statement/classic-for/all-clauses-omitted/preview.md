@@ -1,0 +1,20 @@
+# integration/fixtures/for-statement/classic-for/all-clauses-omitted/input.ts
+
+## Input
+
+```ts
+for (;;) {
+  break;
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  subgraph s_scope_1["for L1-3"]
+    direction RL
+    for_test_scope_0_0["for ()<br/>L1"]
+  end
+```

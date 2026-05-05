@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/for-statement/for-await-of/async-iterator/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_asyncLoop_15",
+      "name": "asyncLoop",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_122",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 9,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_asyncLoop_15",
+      "ownerName": "asyncLoop",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_gen_47",
+          "name": "gen",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FunctionName"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 2,
+          "endLine": 5,
+          "direction": "RL",
+          "ownerNodeId": "n_scope_1_gen_47",
+          "ownerName": "gen",
+          "elements": []
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 6,
+          "endLine": 8,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "for_test_scope_1_87",
+              "kind": "ForTest",
+              "name": "for-test",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "n_scope_3_v_104",
+              "name": "v",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_122",
+              "kind": "ExpressionStatement",
+              "name": "console.log()",
+              "line": 7,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "for"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_gen_47",
+      "to": "for_test_scope_1_87",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_122",
+      "to": "expr_stmt_122",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_v_104",
+      "to": "expr_stmt_122",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

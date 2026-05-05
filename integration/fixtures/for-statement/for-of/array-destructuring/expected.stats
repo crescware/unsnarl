@@ -1,0 +1,7 @@
+1	0	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:0 console
+1	0	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:1 pairs
+0	1	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:5 for-test
+1	0	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:5 name
+1	0	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:5 value
+0	3	integration/fixtures/for-statement/for-of/array-destructuring/input.ts:6 console.log()
+4	4	6 total

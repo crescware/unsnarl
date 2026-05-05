@@ -1,0 +1,5 @@
+1	0	integration/fixtures/for-statement/for-of/basic/input.ts:0 console
+0	0	integration/fixtures/for-statement/for-of/basic/input.ts:1 for-test
+1	0	integration/fixtures/for-statement/for-of/basic/input.ts:1 item
+0	2	integration/fixtures/for-statement/for-of/basic/input.ts:2 console.log()
+2	2	4 total

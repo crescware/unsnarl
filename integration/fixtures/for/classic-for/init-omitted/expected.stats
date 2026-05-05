@@ -1,6 +1,0 @@
-1	0	integration/fixtures/for/classic-for/init-omitted/input.ts:0 console
-2	0	integration/fixtures/for/classic-for/init-omitted/input.ts:1 k
-0	1	integration/fixtures/for/classic-for/init-omitted/input.ts:2 for-test
-1	1	integration/fixtures/for/classic-for/init-omitted/input.ts:2 k
-0	2	integration/fixtures/for/classic-for/init-omitted/input.ts:3 console.log()
-4	4	5 total
