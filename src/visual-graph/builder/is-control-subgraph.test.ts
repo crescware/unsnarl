@@ -75,11 +75,21 @@ describe("isControlSubgraph", () => {
       name: "block + WhileStatement.body",
       ctx: {
         ...baseBlockContext(),
-        parentType: "WhileStatement",
+        parentType: AST_TYPE.WhileStatement,
         key: "body",
         parentSpanOffset: 0,
       },
-      expected: false,
+      expected: true,
+    },
+    {
+      name: "block + DoWhileStatement.body",
+      ctx: {
+        ...baseBlockContext(),
+        parentType: AST_TYPE.DoWhileStatement,
+        key: "body",
+        parentSpanOffset: 0,
+      },
+      expected: true,
     },
   ])("$name -> $expected", ({ ctx, expected }) => {
     expect(

@@ -9,6 +9,8 @@ export const SUBGRAPH_KIND = {
   Catch: "catch",
   Finally: "finally",
   For: "for",
+  While: "while",
+  DoWhile: "do-while",
   Return: "return",
 } as const;
 export type SubgraphKind = (typeof SUBGRAPH_KIND)[keyof typeof SUBGRAPH_KIND];

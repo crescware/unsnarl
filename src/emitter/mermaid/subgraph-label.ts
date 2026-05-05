@@ -39,6 +39,10 @@ export function subgraphLabel(
       return `finally ${range}`;
     case "for":
       return `for ${range}`;
+    case "while":
+      return `while ${range}`;
+    case "do-while":
+      return `do-while ${range}`;
     case "return":
       return `return ${range}`;
   }

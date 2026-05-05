@@ -4,12 +4,15 @@ import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualNode } from "../visual-node.js";
+import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { describeSubgraph } from "./describe-subgraph.js";
+import { attachLoopTestAnchor } from "./loop-test-anchor.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { shouldSubgraph } from "./should-subgraph.js";
+import { attachSwitchDiscriminantAnchor } from "./switch-discriminant-anchor.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
 type Container = Readonly<{
@@ -24,10 +27,12 @@ export function buildScope(
 ): void {
   const subgraphHere = shouldSubgraph(scope, ctx.subgraphOwnerVar);
   let bodyContainer: Container = container;
+  let bodySubgraph: VisualSubgraph | null = null;
   if (subgraphHere) {
     const sg = describeSubgraph(scope, ctx.subgraphOwnerVar, ctx.variableMap);
     container.elements.push(sg);
     bodyContainer = sg;
+    bodySubgraph = sg;
     state.subgraphByScope.set(scope.id, sg);
     const ownerVar = ctx.subgraphOwnerVar.get(scope.id);
     if (ownerVar) {
@@ -63,4 +68,8 @@ export function buildScope(
     bodyContainer.elements.push(node);
   }
   buildChildren(scope, bodyContainer, ctx, state);
+  if (bodySubgraph !== null) {
+    attachLoopTestAnchor(scope, bodySubgraph, state);
+    attachSwitchDiscriminantAnchor(scope, bodySubgraph, state);
+  }
 }

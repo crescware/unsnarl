@@ -39,6 +39,7 @@ flowchart RL
       n_scope_1_ret_33["let ret<br/>L2"]
       subgraph s_scope_2["switch L3-18"]
         direction RL
+        switch_discriminant_scope_1_45{"switch ()<br/>L3"}
         subgraph s_scope_3["case &quot;mon&quot; L4"]
           direction RL
         end
@@ -76,7 +77,7 @@ flowchart RL
   n_scope_1_ret_33 -->|fallthrough| wr_ref_1
   n_scope_1_ret_33 -->|fallthrough| wr_ref_2
   n_scope_1_ret_33 -->|set| wr_ref_3
-  n_scope_1_day_20 -->|read| s_scope_2
+  n_scope_1_day_20 -->|read| switch_discriminant_scope_1_45
   wr_ref_1 -->|read| ret_use_ref_4
   wr_ref_2 -->|read| ret_use_ref_4
   wr_ref_3 -->|read| ret_use_ref_4

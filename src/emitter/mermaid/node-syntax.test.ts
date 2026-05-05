@@ -32,7 +32,17 @@ describe("nodeSyntax", () => {
       name: "if-test",
       line: 5,
     });
-    expect(got).toBe('{"if<br/>L5"}');
+    expect(got).toBe('{"if ()<br/>L5"}');
+  });
+
+  test('SwitchDiscriminant uses diamond brackets {"..."}', () => {
+    const got = nodeSyntax({
+      ...baseNode(),
+      kind: NODE_KIND.SwitchDiscriminant,
+      name: "switch-discriminant",
+      line: 7,
+    });
+    expect(got).toBe('{"switch ()<br/>L7"}');
   });
 
   test('default kind uses square brackets ["..."]', () => {

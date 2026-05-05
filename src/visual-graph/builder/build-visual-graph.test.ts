@@ -727,7 +727,7 @@ describe("buildVisualGraph: imports", () => {
 });
 
 describe("buildVisualGraph: predicate references", () => {
-  test("a switch discriminant identifier feeds the switch subgraph itself", () => {
+  test("a switch discriminant identifier feeds the SwitchDiscriminant anchor inside the switch subgraph", () => {
     const g = build(
       [
         "let l = 0;",
@@ -736,10 +736,13 @@ describe("buildVisualGraph: predicate references", () => {
       ].join("\n"),
     );
     const k = nodeByName(g, "k");
+    const anchor = findNodes(g, NODE_KIND.SwitchDiscriminant)[0];
+    expect(anchor).toBeDefined();
     const sw = findSubgraphs(g, "switch")[0];
+    expect(sw?.elements[0]).toBe(anchor);
     expect(
       g.edges.some(
-        (e) => e.from === k?.id && e.to === sw?.id && e.label === "read",
+        (e) => e.from === k?.id && e.to === anchor?.id && e.label === "read",
       ),
     ).toBe(true);
   });

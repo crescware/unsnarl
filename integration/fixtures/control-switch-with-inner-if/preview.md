@@ -41,13 +41,14 @@ flowchart RL
       n_scope_1_label_51["let label<br/>L2"]
       subgraph s_scope_2["switch L3-16"]
         direction RL
+        switch_discriminant_scope_1_60{"switch ()<br/>L3"}
         subgraph s_scope_3["case 0 L4-10"]
           direction RL
           subgraph cont_if_scope_3_91["if-else L5-9"]
             direction RL
             subgraph s_scope_4["if L5-7"]
               direction RL
-              if_test_scope_3_91{"if<br/>L5"}
+              if_test_scope_3_91{"if ()<br/>L5"}
               wr_ref_2(["let label<br/>L6"])
             end
             subgraph s_scope_5["else L7-9"]
@@ -75,7 +76,7 @@ flowchart RL
   n_scope_1_label_51 -->|set| wr_ref_3
   n_scope_1_label_51 -->|set| wr_ref_4
   n_scope_1_label_51 -->|set| wr_ref_5
-  n_scope_1_n_18 -->|read| s_scope_2
+  n_scope_1_n_18 -->|read| switch_discriminant_scope_1_60
   n_scope_1_big_29 -->|read| if_test_scope_3_91
   wr_ref_2 -->|read| ret_use_ref_6
   wr_ref_3 -->|read| ret_use_ref_6

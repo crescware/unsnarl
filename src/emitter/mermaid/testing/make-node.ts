@@ -11,6 +11,10 @@ type SimpleKind =
   | typeof NODE_KIND.ImplicitGlobalVariable
   | typeof NODE_KIND.ReturnUse
   | typeof NODE_KIND.IfTest
+  | typeof NODE_KIND.SwitchDiscriminant
+  | typeof NODE_KIND.WhileTest
+  | typeof NODE_KIND.DoWhileTest
+  | typeof NODE_KIND.ForTest
   | typeof NODE_KIND.ModuleSink
   | typeof NODE_KIND.ModuleSource
   | typeof NODE_KIND.ImportIntermediate

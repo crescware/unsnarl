@@ -15,12 +15,13 @@ import type { VisualElement } from "../visual-element.js";
 import type { VisualGraph } from "../visual-graph.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
-import type { BuildState } from "./build-state.js";
+import type { BuildState, PendingLoopTestAnchor } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
@@ -160,6 +161,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    switchDiscriminantAnchorByOffset: new Map(),
+    whileTestAnchorByOffset: new Map(),
+    doWhileTestAnchorByOffset: new Map(),
+    forTestAnchorByOffset: new Map(),
+    pendingLoopTestAnchors: [] as PendingLoopTestAnchor[],
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
@@ -237,7 +243,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
-    if (predicateTarget) {
+    if (predicateTarget && !r.flags.write) {
       const fromIds = readOrigins(
         r.resolved,
         r.identifier.span.offset,
@@ -316,27 +322,24 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
         scopeMap,
         subgraphOwnerVar,
       );
-      if (enclosingFn) {
-        const useTargetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
-        if (useTargetId) {
-          for (const fromId of fromIds) {
-            pushEdge(state, fromId, label, useTargetId);
-          }
-        }
-      } else {
-        const exprStmtId = ensureExpressionStatementNode(
-          r,
-          ir.raw,
-          graph.elements,
-          state,
-        );
-        const targetId = exprStmtId ?? MODULE_ROOT_ID;
-        if (!exprStmtId) {
-          needsModuleRoot = true;
-        }
-        for (const fromId of fromIds) {
-          pushEdge(state, fromId, label, targetId);
-        }
+      const host = findHostSubgraph(r, enclosingFn, scopeMap, state);
+      const targetElements = host?.elements ?? graph.elements;
+      const exprStmtId = ensureExpressionStatementNode(
+        r,
+        ir.raw,
+        targetElements,
+        state,
+      );
+      let targetId: string | null = exprStmtId;
+      if (targetId === null && enclosingFn) {
+        targetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
+      }
+      if (targetId === null) {
+        targetId = MODULE_ROOT_ID;
+        needsModuleRoot = true;
+      }
+      for (const fromId of fromIds) {
+        pushEdge(state, fromId, label, targetId);
       }
     }
   }
@@ -453,6 +456,14 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       }
     }
     pushEdge(state, mod.id, "read", localId);
+  }
+
+  for (const { subgraph, node, position } of state.pendingLoopTestAnchors) {
+    if (position === "first") {
+      subgraph.elements.unshift(node);
+    } else {
+      subgraph.elements.push(node);
+    }
   }
 
   for (const id of ir.unusedVariableIds) {

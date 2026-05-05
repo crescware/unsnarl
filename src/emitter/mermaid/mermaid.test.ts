@@ -452,9 +452,14 @@ describe("MermaidEmitter rendering: switch with break", () => {
     expect(reads).toHaveLength(3);
   });
 
-  test("the discriminant routes into the switch subgraph, not the module sink", () => {
-    expect(out).toMatch(/n_scope_0_kind_\d+ -->\|read\| s_scope_1\b/);
+  test("the discriminant routes into the switch-discriminant anchor inside the switch subgraph, not the module sink", () => {
+    expect(out).toMatch(
+      /n_scope_0_kind_\d+ -->\|read\| switch_discriminant_scope_0_\d+/,
+    );
     expect(out).not.toMatch(/n_scope_0_kind_\d+ -->\|read\| module_root/);
+    expect(out).toMatch(
+      /^\s*switch_discriminant_scope_0_\d+\{"switch \(\)<br\/>L\d+"\}/m,
+    );
   });
 });
 
@@ -516,7 +521,7 @@ describe("MermaidEmitter rendering: if/else", () => {
 
   test("the predicate identifier feeds the if-test anchor inside the consequent subgraph", () => {
     expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| if_test_scope_0_\d+/);
-    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if<br\/>L3"\}/m);
+    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if \(\)<br\/>L3"\}/m);
   });
 
   test("both branches independently feed result; the declaration does NOT bypass", () => {
@@ -549,7 +554,7 @@ describe("MermaidEmitter rendering: if without else", () => {
 
   test("the predicate flows into the if-test anchor inside the consequent subgraph", () => {
     expect(out).toMatch(/n_scope_0_flag_\d+ -->\|read\| if_test_scope_0_\d+/);
-    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if<br\/>L3"\}/m);
+    expect(out).toMatch(/^\s*if_test_scope_0_\d+\{"if \(\)<br\/>L3"\}/m);
   });
 
   test("result has two origins: the if-write AND the original declaration", () => {

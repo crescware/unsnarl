@@ -17,6 +17,7 @@ export const AST_TYPE = {
   ClassDeclaration: "ClassDeclaration",
   ClassExpression: "ClassExpression",
   ContinueStatement: "ContinueStatement",
+  DoWhileStatement: "DoWhileStatement",
   ExportDefaultDeclaration: "ExportDefaultDeclaration",
   ExportNamedDeclaration: "ExportNamedDeclaration",
   ExportSpecifier: "ExportSpecifier",
@@ -61,4 +62,5 @@ export const AST_TYPE = {
   UpdateExpression: "UpdateExpression",
   VariableDeclaration: "VariableDeclaration",
   VariableDeclarator: "VariableDeclarator",
+  WhileStatement: "WhileStatement",
 } as const;

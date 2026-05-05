@@ -39,6 +39,12 @@ export function controlSubgraphKindOf(
     if (ctx.parentType === AST_TYPE.SwitchStatement && ctx.key === "cases") {
       return "case";
     }
+    if (ctx.parentType === AST_TYPE.WhileStatement && ctx.key === "body") {
+      return "while";
+    }
+    if (ctx.parentType === AST_TYPE.DoWhileStatement && ctx.key === "body") {
+      return "do-while";
+    }
   }
   return null;
 }

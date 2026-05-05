@@ -31,6 +31,11 @@ function emptyState(overrides: Partial<BuildState> = {}): BuildState {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    switchDiscriminantAnchorByOffset: new Map(),
+    whileTestAnchorByOffset: new Map(),
+    doWhileTestAnchorByOffset: new Map(),
+    forTestAnchorByOffset: new Map(),
+    pendingLoopTestAnchors: [],
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
@@ -79,5 +84,22 @@ describe("findHostSubgraph", () => {
     expect(
       findHostSubgraph(ref, "missingFn", scopeMap, emptyState()),
     ).toBeNull();
+  });
+
+  test("returns the scope-chain subgraph even when enclosingFnVarId is null", () => {
+    const sg = baseSubgraph("s_root");
+    const state = emptyState({ subgraphByScope: new Map([["root", sg]]) });
+    const ref = { ...baseRef(), from: "leaf" };
+    expect(findHostSubgraph(ref, null, scopeMap, state)).toBe(sg);
+  });
+
+  test("returns null when enclosingFnVarId is null and the scope chain yields no subgraph", () => {
+    const ref = { ...baseRef(), from: "leaf" };
+    const fnSg = baseSubgraph("s_fn");
+    const state = emptyState({
+      // A function subgraph exists but it must be ignored when fnVarId is null.
+      functionSubgraphByFn: new Map([["fnVar", fnSg]]),
+    });
+    expect(findHostSubgraph(ref, null, scopeMap, state)).toBeNull();
   });
 });

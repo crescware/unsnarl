@@ -4,9 +4,10 @@
 1	0	integration/fixtures/control-switch-expression/input.ts:2 a
 1	0	integration/fixtures/control-switch-expression/input.ts:3 b
 1	0	integration/fixtures/control-switch-expression/input.ts:4 target
+0	1	integration/fixtures/control-switch-expression/input.ts:6 switch-discriminant
 1	1	integration/fixtures/control-switch-expression/input.ts:8 label
 1	1	integration/fixtures/control-switch-expression/input.ts:11 label
 1	1	integration/fixtures/control-switch-expression/input.ts:14 label
 1	1	integration/fixtures/control-switch-expression/input.ts:17 label
 0	4	integration/fixtures/control-switch-expression/input.ts:20 unused result
-12	11	11 total
+12	12	12 total

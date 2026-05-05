@@ -427,7 +427,29 @@
       "predicateContainer": null,
       "returnContainer": null,
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 63
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 23,
+          "offset": 82
+        },
+        "headStartSpan": {
+          "line": 4,
+          "column": 4,
+          "offset": 63
+        },
+        "headEndSpan": {
+          "line": 4,
+          "column": 22,
+          "offset": 81
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#2",
@@ -482,7 +504,29 @@
       "predicateContainer": null,
       "returnContainer": null,
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 109
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 23,
+          "offset": 128
+        },
+        "headStartSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 109
+        },
+        "headEndSpan": {
+          "line": 6,
+          "column": 22,
+          "offset": 127
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#4",
@@ -509,7 +553,29 @@
       "predicateContainer": null,
       "returnContainer": null,
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 8,
+          "column": 4,
+          "offset": 144
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 19,
+          "offset": 159
+        },
+        "headStartSpan": {
+          "line": 8,
+          "column": 4,
+          "offset": 144
+        },
+        "headEndSpan": {
+          "line": 8,
+          "column": 18,
+          "offset": 158
+        },
+        "isCall": false
+      }
     },
     {
       "id": "ref#5",

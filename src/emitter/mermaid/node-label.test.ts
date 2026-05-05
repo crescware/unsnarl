@@ -5,7 +5,7 @@ import { nodeLabel } from "./node-label.js";
 import { baseNode, baseSimpleNode } from "./testing/make-node.js";
 
 describe("nodeLabel", () => {
-  test("IfTest emits 'if<br/>L<line>' without the head/range/unused decorations", () => {
+  test("IfTest emits 'if ()<br/>L<line>' without the head/range/unused decorations", () => {
     expect(
       nodeLabel({
         ...baseNode(),
@@ -13,7 +13,51 @@ describe("nodeLabel", () => {
         name: "ignored",
         line: 3,
       }),
-    ).toBe("if<br/>L3");
+    ).toBe("if ()<br/>L3");
+  });
+
+  test("SwitchDiscriminant emits 'switch ()<br/>L<line>'", () => {
+    expect(
+      nodeLabel({
+        ...baseNode(),
+        kind: NODE_KIND.SwitchDiscriminant,
+        name: "ignored",
+        line: 6,
+      }),
+    ).toBe("switch ()<br/>L6");
+  });
+
+  test("WhileTest emits 'while ()<br/>L<line>'", () => {
+    expect(
+      nodeLabel({
+        ...baseNode(),
+        kind: NODE_KIND.WhileTest,
+        name: "ignored",
+        line: 5,
+      }),
+    ).toBe("while ()<br/>L5");
+  });
+
+  test("DoWhileTest emits 'do while ()<br/>L<line>'", () => {
+    expect(
+      nodeLabel({
+        ...baseNode(),
+        kind: NODE_KIND.DoWhileTest,
+        name: "ignored",
+        line: 7,
+      }),
+    ).toBe("do while ()<br/>L7");
+  });
+
+  test("ForTest emits 'for ()<br/>L<line>'", () => {
+    expect(
+      nodeLabel({
+        ...baseNode(),
+        kind: NODE_KIND.ForTest,
+        name: "ignored",
+        line: 4,
+      }),
+    ).toBe("for ()<br/>L4");
   });
 
   test("ModuleSink shortcuts to the literal 'module'", () => {
