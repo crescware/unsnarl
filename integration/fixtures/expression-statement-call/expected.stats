@@ -1,0 +1,4 @@
+1	0	integration/fixtures/expression-statement-call/input.ts:0 console
+1	0	integration/fixtures/expression-statement-call/input.ts:1 x
+0	2	integration/fixtures/expression-statement-call/input.ts:2 console.log()
+2	2	3 total
