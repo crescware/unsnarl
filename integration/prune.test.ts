@@ -8,12 +8,12 @@ import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
 
 const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 
-describe("control-if (pruned)", () => {
+describe("if-statement/with-else (pruned)", () => {
   const pipeline = createDefaultPipeline();
-  const fixtureDir = join(FIXTURE_DIR, "control-if");
+  const fixtureDir = join(FIXTURE_DIR, "if-statement", "with-else");
   const inputPath = join(fixtureDir, "input.ts");
   const code = readFileSync(inputPath, "utf8");
-  const sourcePath = "integration/fixtures/control-if/input.ts";
+  const sourcePath = "integration/fixtures/if-statement/with-else/input.ts";
 
   describe("--roots 10 -C 1", () => {
     const queries = parseRootQueries("10");

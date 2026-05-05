@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/control-if-else-chain/input.ts",
+    "path": "integration/fixtures/if-statement/else-if-chain/input.ts",
     "language": "ts"
   },
   "direction": "RL",

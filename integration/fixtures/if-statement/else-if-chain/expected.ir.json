@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/control-if-else-chain/input.ts",
+    "path": "integration/fixtures/if-statement/else-if-chain/input.ts",
     "language": "ts"
   },
   "raw": "function classify(n: number) {\n  let label;\n  if (n > 0) {\n    label = \"positive\";\n  } else if (n < 0) {\n    label = \"negative\";\n  } else {\n    label = \"zero\";\n  }\n  return label;\n}\n\nconst result = classify(-1);\n",

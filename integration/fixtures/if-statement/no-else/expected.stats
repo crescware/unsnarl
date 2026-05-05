@@ -1,0 +1,6 @@
+2	0	integration/fixtures/if-statement/no-else/input.ts:1 counter
+1	0	integration/fixtures/if-statement/no-else/input.ts:2 flag
+0	1	integration/fixtures/if-statement/no-else/input.ts:4 if-test
+1	1	integration/fixtures/if-statement/no-else/input.ts:5 counter
+0	2	integration/fixtures/if-statement/no-else/input.ts:8 unused result
+4	4	5 total

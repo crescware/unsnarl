@@ -1,4 +1,4 @@
-# integration/fixtures/control-if-else-chain/input.ts
+# integration/fixtures/if-statement/else-if-chain/input.ts
 
 ## Input
 

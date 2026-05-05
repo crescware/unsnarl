@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/control-if-only/input.ts",
+    "path": "integration/fixtures/if-statement/no-else/input.ts",
     "language": "ts"
   },
   "raw": "let counter = 0;\nconst flag = true;\n\nif (flag) {\n  counter = 1;\n}\n\nconst result = counter;\n",
