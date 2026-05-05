@@ -9,6 +9,7 @@ export const NODE_KIND = {
   WriteOp: "WriteOp",
   ReturnUse: "ReturnUse",
   IfTest: "IfTest",
+  SwitchDiscriminant: "SwitchDiscriminant",
   WhileTest: "WhileTest",
   DoWhileTest: "DoWhileTest",
   ForTest: "ForTest",

@@ -32,6 +32,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.ImplicitGlobalVariable })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnUse })
   | (CommonNodeFields & { kind: typeof NODE_KIND.IfTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SwitchDiscriminant })
   | (CommonNodeFields & { kind: typeof NODE_KIND.WhileTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.DoWhileTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.ForTest })

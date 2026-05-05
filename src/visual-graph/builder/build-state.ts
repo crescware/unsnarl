@@ -14,6 +14,7 @@ export type BuildState = Readonly<{
   returnSubgraphsByFn: Map<string, Map<string, VisualSubgraph>>;
   returnUseAdded: Set<string>;
   ifTestAnchorByOffset: Map<number, string>;
+  switchDiscriminantAnchorByOffset: Map<number, string>;
   whileTestAnchorByOffset: Map<number, string>;
   doWhileTestAnchorByOffset: Map<number, string>;
   forTestAnchorByOffset: Map<number, string>;

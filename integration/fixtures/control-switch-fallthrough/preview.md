@@ -28,6 +28,7 @@ flowchart RL
   n_scope_0_result_157["unused result<br/>L13"]
   subgraph s_scope_1["switch L4-11"]
     direction RL
+    switch_discriminant_scope_0_35{"switch ()<br/>L4"}
     subgraph s_scope_2["case &quot;a&quot; L5-6"]
       direction RL
       wr_ref_1(["let label<br/>L6"])
@@ -44,6 +45,6 @@ flowchart RL
   n_scope_0_label_4 -->|set| wr_ref_1
   wr_ref_1 -->|fallthrough| wr_ref_2
   wr_ref_2 -->|fallthrough| wr_ref_3
-  n_scope_0_kind_22 -->|read| s_scope_1
+  n_scope_0_kind_22 -->|read| switch_discriminant_scope_0_35
   wr_ref_3 -->|read| n_scope_0_result_157
 ```

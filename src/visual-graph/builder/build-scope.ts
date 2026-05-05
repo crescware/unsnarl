@@ -12,6 +12,7 @@ import { describeSubgraph } from "./describe-subgraph.js";
 import { attachLoopTestAnchor } from "./loop-test-anchor.js";
 import { makeVariableNode } from "./make-variable-node.js";
 import { shouldSubgraph } from "./should-subgraph.js";
+import { attachSwitchDiscriminantAnchor } from "./switch-discriminant-anchor.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
 type Container = Readonly<{
@@ -69,5 +70,6 @@ export function buildScope(
   buildChildren(scope, bodyContainer, ctx, state);
   if (bodySubgraph !== null) {
     attachLoopTestAnchor(scope, bodySubgraph, state);
+    attachSwitchDiscriminantAnchor(scope, bodySubgraph, state);
   }
 }

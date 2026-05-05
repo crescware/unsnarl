@@ -86,6 +86,16 @@
       "direction": "RL",
       "elements": [
         {
+          "type": "node",
+          "id": "switch_discriminant_scope_0_91",
+          "kind": "SwitchDiscriminant",
+          "name": "switch-discriminant",
+          "line": 8,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
           "type": "subgraph",
           "id": "s_scope_2",
           "line": 9,
@@ -215,7 +225,7 @@
     },
     {
       "from": "n_scope_0_color_77",
-      "to": "s_scope_1",
+      "to": "switch_discriminant_scope_0_91",
       "label": "read"
     },
     {

@@ -16,6 +16,17 @@ describe("nodeLabel", () => {
     ).toBe("if ()<br/>L3");
   });
 
+  test("SwitchDiscriminant emits 'switch ()<br/>L<line>'", () => {
+    expect(
+      nodeLabel({
+        ...baseNode(),
+        kind: NODE_KIND.SwitchDiscriminant,
+        name: "ignored",
+        line: 6,
+      }),
+    ).toBe("switch ()<br/>L6");
+  });
+
   test("WhileTest emits 'while ()<br/>L<line>'", () => {
     expect(
       nodeLabel({

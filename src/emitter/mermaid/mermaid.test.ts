@@ -452,9 +452,14 @@ describe("MermaidEmitter rendering: switch with break", () => {
     expect(reads).toHaveLength(3);
   });
 
-  test("the discriminant routes into the switch subgraph, not the module sink", () => {
-    expect(out).toMatch(/n_scope_0_kind_\d+ -->\|read\| s_scope_1\b/);
+  test("the discriminant routes into the switch-discriminant anchor inside the switch subgraph, not the module sink", () => {
+    expect(out).toMatch(
+      /n_scope_0_kind_\d+ -->\|read\| switch_discriminant_scope_0_\d+/,
+    );
     expect(out).not.toMatch(/n_scope_0_kind_\d+ -->\|read\| module_root/);
+    expect(out).toMatch(
+      /^\s*switch_discriminant_scope_0_\d+\{"switch \(\)<br\/>L\d+"\}/m,
+    );
   });
 });
 

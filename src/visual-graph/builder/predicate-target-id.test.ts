@@ -1,23 +1,19 @@
 import { describe, expect, test } from "vitest";
 
 import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
-import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
 import type { BuildState } from "./build-state.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { baseRef } from "./testing/make-ref.js";
-import { baseScope } from "./testing/make-scope.js";
 import { predicateContainer } from "./testing/predicate-container.js";
-import { span } from "./testing/span.js";
 
-function makeState(): BuildState {
+function makeState(overrides: Partial<BuildState> = {}): BuildState {
   return {
     subgraphByScope: new Map(),
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
     doWhileTestAnchorByOffset: new Map(),
     forTestAnchorByOffset: new Map(),
@@ -25,68 +21,43 @@ function makeState(): BuildState {
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: [],
+    ...overrides,
   };
 }
 
-function withSwitchAt(offset: number): {
-  scopeMap: Map<string, SerializedScope>;
-  refFrom: string;
-} {
-  const switchScope = {
-    ...baseScope(),
-    id: "switch1",
-    type: SCOPE_TYPE.Switch,
-    upper: "outer",
-    block: {
-      type: AST_TYPE.SwitchStatement,
-      span: span(offset),
-      endSpan: span(offset + 50),
-    },
-  };
-  const inner = { ...baseScope(), id: "inner", upper: "switch1" };
-  const outer = { ...baseScope(), id: "outer" };
-  const scopes = [outer, switchScope, inner] satisfies SerializedScope[];
-  return {
-    scopeMap: new Map(scopes.map((s) => [s.id, s])),
-    refFrom: "inner",
-  };
-}
-
-// Switch routing intentionally diverges from IfStatement: switch reads
-// target the entire Switch subgraph because there is no chain-collapse
-// pathology, and per-case anchoring would add noise without separating
-// any conflated relationships. Only the if path uses the test anchor.
 describe("predicateTargetId", () => {
   test("no predicateContainer -> null", () => {
     const ref = { ...baseRef(), predicateContainer: null };
     expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
   });
 
-  test("SwitchStatement matches an enclosing switch scope by offset", () => {
-    const offset = 100;
-    const { scopeMap, refFrom } = withSwitchAt(offset);
+  test("SwitchStatement resolves to the registered switch-discriminant anchor by offset", () => {
     const ref = {
       ...baseRef(),
-      from: refFrom,
       predicateContainer: predicateContainer(
         PREDICATE_CONTAINER_TYPE.SwitchStatement,
-        offset,
+        100,
       ),
     };
-    expect(predicateTargetId(ref, scopeMap, makeState())).toBe("s_switch1");
+    const state = makeState({
+      switchDiscriminantAnchorByOffset: new Map([
+        [100, "switch_discriminant_x"],
+      ]),
+    });
+    expect(predicateTargetId(ref, new Map(), state)).toBe(
+      "switch_discriminant_x",
+    );
   });
 
-  test("SwitchStatement with no enclosing switch at that offset -> null", () => {
-    const { scopeMap, refFrom } = withSwitchAt(100);
+  test("SwitchStatement with no anchor registered at that offset -> null", () => {
     const ref = {
       ...baseRef(),
-      from: refFrom,
       predicateContainer: predicateContainer(
         PREDICATE_CONTAINER_TYPE.SwitchStatement,
-        999,
+        100,
       ),
     };
-    expect(predicateTargetId(ref, scopeMap, makeState())).toBeNull();
+    expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
   });
 
   test("IfStatement with no anchor registered at that offset -> null", () => {
@@ -99,5 +70,50 @@ describe("predicateTargetId", () => {
       ),
     };
     expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
+  });
+
+  test("WhileStatement resolves to the registered while-test anchor by offset", () => {
+    const ref = {
+      ...baseRef(),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.WhileStatement,
+        33,
+      ),
+    };
+    const state = makeState({
+      whileTestAnchorByOffset: new Map([[33, "while_test_x"]]),
+    });
+    expect(predicateTargetId(ref, new Map(), state)).toBe("while_test_x");
+  });
+
+  test("DoWhileStatement resolves to the registered do-while-test anchor", () => {
+    const ref = {
+      ...baseRef(),
+      predicateContainer: predicateContainer(
+        PREDICATE_CONTAINER_TYPE.DoWhileStatement,
+        33,
+      ),
+    };
+    const state = makeState({
+      doWhileTestAnchorByOffset: new Map([[33, "do_while_test_x"]]),
+    });
+    expect(predicateTargetId(ref, new Map(), state)).toBe("do_while_test_x");
+  });
+
+  test("ForStatement / ForOfStatement / ForInStatement all resolve through forTestAnchorByOffset", () => {
+    const state = makeState({
+      forTestAnchorByOffset: new Map([[40, "for_test_x"]]),
+    });
+    for (const type of [
+      PREDICATE_CONTAINER_TYPE.ForStatement,
+      PREDICATE_CONTAINER_TYPE.ForOfStatement,
+      PREDICATE_CONTAINER_TYPE.ForInStatement,
+    ] as const) {
+      const ref = {
+        ...baseRef(),
+        predicateContainer: predicateContainer(type, 40),
+      };
+      expect(predicateTargetId(ref, new Map(), state)).toBe("for_test_x");
+    }
   });
 });

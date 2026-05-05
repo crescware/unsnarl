@@ -6,6 +6,9 @@ export function nodeLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.IfTest) {
     return `if ()<br/>L${n.line}`;
   }
+  if (n.kind === NODE_KIND.SwitchDiscriminant) {
+    return `switch ()<br/>L${n.line}`;
+  }
   if (n.kind === NODE_KIND.WhileTest) {
     return `while ()<br/>L${n.line}`;
   }

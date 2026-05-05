@@ -8,6 +8,7 @@ flowchart RL
   n_scope_0_Number_178["global Number"]
   subgraph s_scope_1["switch L6-18"]
     direction RL
+    switch_discriminant_scope_0_61{"switch ()<br/>L6"}
     subgraph s_scope_2["case a + b L7-9"]
       direction RL
       wr_ref_3(["let label<br/>L8"])
@@ -29,7 +30,7 @@ flowchart RL
   n_scope_0_label_4 -->|set| wr_ref_6
   n_scope_0_label_4 -->|set| wr_ref_8
   n_scope_0_label_4 -->|set| wr_ref_9
-  n_scope_0_target_48 -->|read| s_scope_1
+  n_scope_0_target_48 -->|read| switch_discriminant_scope_0_61
   n_scope_0_a_22 -->|read| module_root
   n_scope_0_b_35 -->|read| module_root
   n_scope_0_Number_178 -->|read| module_root

@@ -2,6 +2,7 @@
 1	0	integration/fixtures/control-switch-with-inner-if/input.ts:1 n
 1	0	integration/fixtures/control-switch-with-inner-if/input.ts:1 big
 4	0	integration/fixtures/control-switch-with-inner-if/input.ts:2 label
+0	1	integration/fixtures/control-switch-with-inner-if/input.ts:3 switch-discriminant
 0	1	integration/fixtures/control-switch-with-inner-if/input.ts:5 if-test
 1	1	integration/fixtures/control-switch-with-inner-if/input.ts:6 label
 1	1	integration/fixtures/control-switch-with-inner-if/input.ts:8 label
@@ -9,4 +10,4 @@
 1	1	integration/fixtures/control-switch-with-inner-if/input.ts:15 label
 0	4	integration/fixtures/control-switch-with-inner-if/input.ts:17 label
 0	1	integration/fixtures/control-switch-with-inner-if/input.ts:20 unused result
-11	10	11 total
+11	11	12 total

@@ -161,6 +161,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
+    switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
     doWhileTestAnchorByOffset: new Map(),
     forTestAnchorByOffset: new Map(),
