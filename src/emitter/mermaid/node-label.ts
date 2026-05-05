@@ -4,7 +4,16 @@ import { nodeHead } from "./node-head.js";
 
 export function nodeLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.IfTest) {
-    return `if<br/>L${n.line}`;
+    return `if ()<br/>L${n.line}`;
+  }
+  if (n.kind === NODE_KIND.WhileTest) {
+    return `while ()<br/>L${n.line}`;
+  }
+  if (n.kind === NODE_KIND.DoWhileTest) {
+    return `do while ()<br/>L${n.line}`;
+  }
+  if (n.kind === NODE_KIND.ForTest) {
+    return `for ()<br/>L${n.line}`;
   }
   const head = nodeHead(n);
   if (n.kind === NODE_KIND.ModuleSink) {
