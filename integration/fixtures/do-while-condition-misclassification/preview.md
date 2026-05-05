@@ -1,0 +1,30 @@
+# integration/fixtures/do-while-condition-misclassification/input.ts
+
+## Input
+
+```ts
+const limit = 10;
+let count = 0;
+do {
+  console.log(count);
+  count++;
+} while (count < limit);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_limit_6["limit<br/>L1"]
+  n_scope_0_count_22["let count<br/>L2"]
+  n_scope_0_console_40["global console"]
+  wr_ref_2(["let count<br/>L5"])
+  n_scope_0_count_22 -->|set| wr_ref_2
+  n_scope_0_console_40 -->|read| expr_stmt_40
+  n_scope_0_count_22 -->|read| expr_stmt_40
+  wr_ref_2 -->|read| module_root
+  n_scope_0_limit_6 -->|read| module_root
+  expr_stmt_40["console.log()<br/>L4"]
+  module_root((module))
+```
