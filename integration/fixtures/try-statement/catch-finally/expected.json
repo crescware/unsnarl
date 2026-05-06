@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/control-try/input.ts",
+    "path": "integration/fixtures/try-statement/catch-finally/input.ts",
     "language": "ts"
   },
   "direction": "RL",

@@ -1,4 +1,4 @@
-# integration/fixtures/control-try/input.ts
+# integration/fixtures/try-statement/catch-finally/input.ts
 
 ## Input
 

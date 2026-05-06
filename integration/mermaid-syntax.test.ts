@@ -17,6 +17,7 @@ const IGNORED_FIXTURE_DIRS: readonly string[] = [
   "for-statement",
   "if-statement",
   "switch-statement",
+  "try-statement",
 ];
 
 interface FixtureCase {
