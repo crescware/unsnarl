@@ -1,0 +1,6 @@
+1	0	integration/fixtures/declaration/var/with-implicit-global-and-read/input.ts:0 global
+1	0	integration/fixtures/declaration/var/with-implicit-global-and-read/input.ts:0 console
+1	0	integration/fixtures/declaration/var/with-implicit-global-and-read/input.ts:0 a
+1	1	integration/fixtures/declaration/var/with-implicit-global-and-read/input.ts:2 global
+0	3	integration/fixtures/declaration/var/with-implicit-global-and-read/input.ts:3 console.log()
+4	4	5 total
