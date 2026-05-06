@@ -1,0 +1,6 @@
+0	0	integration/fixtures/function/expression/parameter-reassignment/input.ts:1 unused f
+1	0	integration/fixtures/function/expression/parameter-reassignment/input.ts:1 x
+1	1	integration/fixtures/function/expression/parameter-reassignment/input.ts:2 x
+1	1	integration/fixtures/function/expression/parameter-reassignment/input.ts:3 x
+0	1	integration/fixtures/function/expression/parameter-reassignment/input.ts:4 x
+3	3	5 total

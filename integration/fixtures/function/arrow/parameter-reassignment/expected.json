@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/arrow/parameter-reassignment/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_6",
+      "name": "f",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_6",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_x_11",
+          "name": "x",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_0",
+          "kind": "WriteOp",
+          "name": "x",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_2",
+          "kind": "WriteOp",
+          "name": "x",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": null
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_6_55_64",
+          "kind": "return",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "x",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_x_11",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
