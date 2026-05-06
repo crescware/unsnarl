@@ -64,6 +64,7 @@
         }
       },
       "variables": [
+        "scope#1:arguments@0",
         "scope#1:v@71",
         "scope#1:w@88",
         "scope#1:x@105",
@@ -364,6 +365,14 @@
           "type": "FunctionName"
         }
       ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
     },
     {
       "id": "scope#1:v@71",

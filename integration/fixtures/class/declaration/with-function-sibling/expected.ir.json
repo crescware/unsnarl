@@ -70,6 +70,7 @@
         }
       },
       "variables": [
+        "scope#1:arguments@0",
         "scope#1:a@13",
         "scope#1:b@24"
       ],
@@ -318,6 +319,14 @@
           "declarationKind": "const"
         }
       ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
     },
     {
       "id": "scope#1:a@13",

@@ -108,6 +108,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(fnScope?.type).toBe("function");
     expect(fnScope && variableNames(fnScope).sort()).toEqual([
       "a",
+      "arguments",
       "b",
       "c",
       "inner",
@@ -136,8 +137,9 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const inner = fn?.childScopes[0];
     expect(inner?.type).toBe("block");
     expect(inner && variableNames(inner)).toEqual(["b"]);
-    // a は function scope に
-    expect(fn && variableNames(fn)).toEqual(["a"]);
+    // a は function scope に。`arguments` は FunctionDeclarationInstantiation
+    // による暗黙束縛として function scope に並ぶ。
+    expect(fn && variableNames(fn).sort()).toEqual(["a", "arguments"]);
   });
 
   test("creates for scope and binds let inside the for-init", () => {
@@ -210,7 +212,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     expect(variableNames(rootScope).sort()).toEqual(["inner", "x"]);
     const inner = rootScope.childScopes[0];
-    expect(inner && variableNames(inner)).toEqual(["x"]);
+    expect(inner && variableNames(inner).sort()).toEqual(["arguments", "x"]);
     const outerX = findVariable(rootScope, "x");
     const innerX = inner && findVariable(inner, "x");
     expect(outerX).not.toBe(innerX);
