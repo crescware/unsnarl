@@ -1,7 +1,29 @@
 {
   "name": "unsnarl",
   "version": "0.0.0",
-  "private": true,
+  "description": "Single-file ECMAScript / TypeScript scope and reference analyzer that emits a Mermaid flowchart and a deterministic IR (JSON).",
+  "keywords": [
+    "analyzer",
+    "ast",
+    "cli",
+    "ecmascript",
+    "ir",
+    "mermaid",
+    "scope",
+    "scope-manager",
+    "static-analysis",
+    "typescript"
+  ],
+  "homepage": "https://github.com/crescware/unsnarl#readme",
+  "bugs": {
+    "url": "https://github.com/crescware/unsnarl/issues"
+  },
+  "license": "MIT",
+  "author": "Crescware Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crescware/unsnarl.git"
+  },
   "bin": {
     "uns": "./dist/index.js"
   },
@@ -11,6 +33,9 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "build": "tsgo -p tsconfig.build.json",
     "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test",
@@ -20,6 +45,7 @@
     "check:types": "tsgo -p tsconfig.json --noEmit",
     "exec": "node dist/index.js",
     "format": "oxlint --fix && oxfmt",
+    "prepublishOnly": "pnpm build",
     "test": "vitest run --project default --project fixtures"
   },
   "dependencies": {
