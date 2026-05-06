@@ -1,0 +1,55 @@
+# integration/fixtures/switch-statement/default-middle/input.ts
+
+## Input
+
+```ts
+let label = "";
+const kind = "a";
+
+switch (kind) {
+  case "a":
+    label = "alpha";
+    break;
+  default:
+    label = "other";
+    break;
+  case "b":
+    label = "beta";
+    break;
+}
+
+const result = label;
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_label_4["let label<br/>L1"]
+  n_scope_0_kind_22["kind<br/>L2"]
+  n_scope_0_result_190["unused result<br/>L16"]
+  subgraph s_scope_1["switch L4-14"]
+    direction RL
+    switch_discriminant_scope_0_35{"switch ()<br/>L4"}
+    subgraph s_scope_2["case &quot;a&quot; L5-7"]
+      direction RL
+      wr_ref_1(["let label<br/>L6"])
+    end
+    subgraph s_scope_3["default L8-10"]
+      direction RL
+      wr_ref_2(["let label<br/>L9"])
+    end
+    subgraph s_scope_4["case &quot;b&quot; L11-13"]
+      direction RL
+      wr_ref_3(["let label<br/>L12"])
+    end
+  end
+  n_scope_0_label_4 -->|set| wr_ref_1
+  n_scope_0_label_4 -->|set| wr_ref_2
+  n_scope_0_label_4 -->|set| wr_ref_3
+  n_scope_0_kind_22 -->|read| switch_discriminant_scope_0_35
+  wr_ref_1 -->|read| n_scope_0_result_190
+  wr_ref_2 -->|read| n_scope_0_result_190
+  wr_ref_3 -->|read| n_scope_0_result_190
+```

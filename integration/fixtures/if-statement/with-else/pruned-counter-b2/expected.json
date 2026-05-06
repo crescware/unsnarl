@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/if-statement/with-else/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_counter_4",
+      "name": "counter",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": {
+    "roots": [
+      {
+        "query": "counter",
+        "matched": 1
+      }
+    ],
+    "descendants": 0,
+    "ancestors": 2
+  }
+}

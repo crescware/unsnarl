@@ -1,0 +1,117 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/mixed/with-unused/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_used_9",
+      "name": "used",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
+      "importKind": "named",
+      "importedName": "used"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_neverCalled_15",
+      "name": "neverCalled",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ImportBinding",
+      "importKind": "named",
+      "importedName": "neverCalled"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_67",
+      "name": "a",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_ignored_83",
+      "name": "ignored",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_98",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_98",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 7,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "mod_module",
+      "kind": "ModuleSource",
+      "name": "module",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_used_9",
+      "to": "n_scope_0_a_67",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_98",
+      "to": "expr_stmt_98",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_67",
+      "to": "expr_stmt_98",
+      "label": "read"
+    },
+    {
+      "from": "mod_module",
+      "to": "n_scope_0_used_9",
+      "label": "read"
+    },
+    {
+      "from": "mod_module",
+      "to": "n_scope_0_neverCalled_15",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

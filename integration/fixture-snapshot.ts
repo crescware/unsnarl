@@ -6,6 +6,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
+import type { PipelineRunOptions } from "../src/pipeline/runner/pipeline-run-options.js";
+import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
+import type { RootQueryResolution } from "../src/visual-graph/prune/root-query-resolution.js";
 
 // Under the jsdom Vitest environment, import.meta.url is not a file:// URL,
 // so fileURLToPath would throw. Resolve via cwd, which Vitest sets to the
@@ -31,7 +34,30 @@ function ensureMermaid(): void {
   mermaidReady = true;
 }
 
-export function fixtureSnapshot(metaUrl: string): void {
+type SnapshotFormat = "ir" | "json" | "mermaid" | "markdown" | "stats";
+
+const FORMAT_FILE: Readonly<Record<SnapshotFormat, string>> = {
+  ir: "expected.ir.json",
+  json: "expected.json",
+  mermaid: "expected.mermaid",
+  markdown: "preview.md",
+  stats: "expected.stats",
+};
+
+type PruneVariant = Readonly<{
+  // Raw --roots argument; passed verbatim to parseRootQueries.
+  roots: string;
+  descendants: number;
+  ancestors: number;
+  // Filename slug; output goes under pruned-<slug>/. Not auto-derived
+  // because existing fixtures use ad-hoc conventions (`r10-c1`,
+  // `counter-a2`, `<base>-a1`) that diverge per fixture.
+  slug: string;
+  // describe label; defaults to `pruned: ${slug}`.
+  label?: string;
+}>;
+
+export function fixtureSnapshot(metaUrl: string, variant?: PruneVariant): void {
   const here = metaUrlToDir(metaUrl);
   const inputFile = readdirSync(here).find((f) => f.startsWith("input."));
   if (!inputFile) {
@@ -47,7 +73,7 @@ export function fixtureSnapshot(metaUrl: string): void {
   const pipeline = createDefaultPipeline();
   ensureMermaid();
 
-  const opts = {
+  const baseOpts = {
     language: ext,
     sourcePath,
     emit: {
@@ -56,43 +82,116 @@ export function fixtureSnapshot(metaUrl: string): void {
       resolutions: null,
       debug: false,
     },
-    pruning: null,
   } as const;
 
-  describe(name, () => {
-    test("emits the expected IR JSON", () => {
-      const out = pipeline.runDetailed(code, { ...opts, format: "ir" }).text;
-      expect(out).toMatchFileSnapshot(join(here, "expected.ir.json"));
+  type Opts = Omit<PipelineRunOptions, "format">;
+
+  function makeSnap(dir: string, opts: Opts) {
+    return (title: string, format: SnapshotFormat): void => {
+      test(title, () => {
+        const out = pipeline.runDetailed(code, { ...opts, format }).text;
+        expect(out).toMatchFileSnapshot(join(dir, FORMAT_FILE[format]));
+      });
+    };
+  }
+
+  if (variant === undefined) {
+    const opts = { ...baseOpts, pruning: null } as const;
+    describe(name, () => {
+      const snap = makeSnap(here, opts);
+      snap("emits the expected IR JSON", "ir");
+      snap("emits the expected VisualGraph JSON", "json");
+      snap("emits the expected Mermaid flowchart", "mermaid");
+      snap("renders the Markdown preview", "markdown");
+      snap("emits the expected stats TSV", "stats");
+      test("Mermaid output parses with mermaid.parse", async () => {
+        const out = pipeline.runDetailed(code, {
+          ...opts,
+          format: "mermaid",
+        }).text;
+        expect(out).not.toContain('\\"');
+        await mermaid.parse(out);
+      });
     });
-    test("emits the expected VisualGraph JSON", () => {
-      const out = pipeline.runDetailed(code, { ...opts, format: "json" }).text;
-      expect(out).toMatchFileSnapshot(join(here, "expected.json"));
-    });
-    test("emits the expected Mermaid flowchart", () => {
-      const out = pipeline.runDetailed(code, {
-        ...opts,
-        format: "mermaid",
-      }).text;
-      expect(out).toMatchFileSnapshot(join(here, "expected.mermaid"));
-    });
-    test("renders the Markdown preview", () => {
-      const out = pipeline.runDetailed(code, {
-        ...opts,
-        format: "markdown",
-      }).text;
-      expect(out).toMatchFileSnapshot(join(here, "preview.md"));
-    });
-    test("emits the expected stats TSV", () => {
-      const out = pipeline.runDetailed(code, { ...opts, format: "stats" }).text;
-      expect(out).toMatchFileSnapshot(join(here, "expected.stats"));
-    });
-    test("Mermaid output parses with mermaid.parse", async () => {
-      const out = pipeline.runDetailed(code, {
-        ...opts,
-        format: "mermaid",
-      }).text;
-      expect(out).not.toContain('\\"');
-      await mermaid.parse(out);
+    return;
+  }
+
+  const queries = parseRootQueries(variant.roots);
+  if (!queries.ok) {
+    throw new Error(
+      `unexpected --roots parse failure for "${variant.roots}": ${queries.error}`,
+    );
+  }
+  const opts: Opts = {
+    ...baseOpts,
+    pruning: {
+      roots: queries.queries,
+      descendants: variant.descendants,
+      ancestors: variant.ancestors,
+    },
+  };
+  const label = variant.label ?? `pruned: ${variant.slug}`;
+  const variantDir = join(here, `pruned-${variant.slug}`);
+  describe(`${name} (${label})`, () => {
+    const snap = makeSnap(variantDir, opts);
+    snap("emits the pruned VisualGraph JSON", "json");
+    snap("emits the pruned Mermaid flowchart", "mermaid");
+    snap("renders the pruned Markdown preview", "markdown");
+    snap("emits the pruned stats TSV", "stats");
+  });
+}
+
+type ResolutionsAssertion = Readonly<{
+  roots: string;
+  descendants: number;
+  ancestors: number;
+  expected: readonly RootQueryResolution[];
+  label?: string;
+}>;
+
+export function fixtureResolutions(
+  metaUrl: string,
+  v: ResolutionsAssertion,
+): void {
+  const here = metaUrlToDir(metaUrl);
+  const inputFile = readdirSync(here).find((f) => f.startsWith("input."));
+  if (!inputFile) {
+    throw new Error(`no input.* file under ${here}`);
+  }
+  const ext = inputFile.slice("input.".length);
+  if (ext !== "ts" && ext !== "tsx" && ext !== "js" && ext !== "jsx") {
+    throw new Error(`unsupported input extension: ${inputFile}`);
+  }
+  const code = readFileSync(join(here, inputFile), "utf8");
+  const sourcePath = relative(PROJECT_ROOT, join(here, inputFile));
+  const name = relative(FIXTURE_DIR, here);
+  const queries = parseRootQueries(v.roots);
+  if (!queries.ok) {
+    throw new Error(
+      `unexpected --roots parse failure for "${v.roots}": ${queries.error}`,
+    );
+  }
+  const pipeline = createDefaultPipeline();
+  const label = v.label ?? `resolves --roots ${v.roots}`;
+  describe(`${name} (${label})`, () => {
+    test("logs the expected resolution entries", () => {
+      const result = pipeline.runDetailed(code, {
+        format: "json",
+        language: ext,
+        sourcePath,
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
+        pruning: {
+          roots: queries.queries,
+          descendants: v.descendants,
+          ancestors: v.ancestors,
+        },
+      });
+      expect(result.resolutions).toEqual(v.expected);
     });
   });
 }

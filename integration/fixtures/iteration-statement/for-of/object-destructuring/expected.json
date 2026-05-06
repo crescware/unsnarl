@@ -1,0 +1,110 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/for-of/object-destructuring/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_items_6",
+      "name": "items",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_108",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 5,
+      "endLine": 7,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_69",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_id_82",
+          "name": "id",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_label_86",
+          "name": "label",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_108",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_items_6",
+      "to": "for_test_scope_0_69",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_108",
+      "to": "expr_stmt_108",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_id_82",
+      "to": "expr_stmt_108",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_label_86",
+      "to": "expr_stmt_108",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -8,15 +8,15 @@ export default defineConfig({
         test: {
           name: "default",
           environment: "node",
-          exclude: ["**/node_modules/**", "integration/fixtures/for/**"],
+          exclude: ["**/node_modules/**", "integration/fixtures/**"],
         },
       },
       {
         extends: true,
         test: {
-          name: "fixtures-for",
+          name: "fixtures",
           environment: "jsdom",
-          include: ["integration/fixtures/for/**/*.test.ts"],
+          include: ["integration/fixtures/**/*.test.ts"],
         },
       },
     ],

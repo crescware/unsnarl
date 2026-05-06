@@ -1,0 +1,11 @@
+1	0	integration/fixtures/switch-statement/return/input.ts:1 classify
+1	0	integration/fixtures/switch-statement/return/input.ts:1 kind
+3	0	integration/fixtures/switch-statement/return/input.ts:2 label
+0	1	integration/fixtures/switch-statement/return/input.ts:4 switch-discriminant
+1	1	integration/fixtures/switch-statement/return/input.ts:6 label
+0	1	integration/fixtures/switch-statement/return/input.ts:7 label
+1	1	integration/fixtures/switch-statement/return/input.ts:9 label
+1	1	integration/fixtures/switch-statement/return/input.ts:12 label
+0	2	integration/fixtures/switch-statement/return/input.ts:15 label
+0	1	integration/fixtures/switch-statement/return/input.ts:18 unused result
+8	8	10 total

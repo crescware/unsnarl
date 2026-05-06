@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/do-while/basic/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_limit_6",
+      "name": "limit",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_count_22",
+      "name": "count",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_40",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 3,
+      "endLine": 6,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_2",
+          "kind": "WriteOp",
+          "name": "count",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_40",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 4,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "do_while_test_scope_0_33",
+          "kind": "DoWhileTest",
+          "name": "do-while-test",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "do-while"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_count_22",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_console_40",
+      "to": "expr_stmt_40",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_count_22",
+      "to": "expr_stmt_40",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "do_while_test_scope_0_33",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_limit_6",
+      "to": "do_while_test_scope_0_33",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

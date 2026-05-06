@@ -1,0 +1,8 @@
+1	0	integration/fixtures/declaration/let/multi-write/input.ts:1 greeting
+1	0	integration/fixtures/declaration/let/multi-write/input.ts:2 counter
+1	1	integration/fixtures/declaration/let/multi-write/input.ts:3 counter
+1	1	integration/fixtures/declaration/let/multi-write/input.ts:4 counter
+0	1	integration/fixtures/declaration/let/multi-write/input.ts:5 counter
+0	1	integration/fixtures/declaration/let/multi-write/input.ts:6 unused message
+0	0	integration/fixtures/declaration/let/multi-write/input.ts:7 unused unused
+4	4	7 total

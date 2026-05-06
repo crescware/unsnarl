@@ -1,0 +1,227 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/try-statement/catch-finally/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_value_4",
+      "name": "value",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_attempts_19",
+      "name": "attempts",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_raw_39",
+      "name": "raw",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_182",
+      "name": "result",
+      "line": 15,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Number_84",
+      "name": "Number",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 5,
+      "endLine": 8,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_1",
+          "kind": "WriteOp",
+          "name": "value",
+          "line": 7,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_0",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        }
+      ],
+      "kind": "try"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "line": 8,
+      "endLine": 11,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_2_err_106",
+          "name": "err",
+          "line": 8,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "CatchClause"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_5",
+          "kind": "WriteOp",
+          "name": "value",
+          "line": 10,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_4",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 9,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        }
+      ],
+      "kind": "catch"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_3",
+      "line": 11,
+      "endLine": 13,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "wr_ref_6",
+          "kind": "WriteOp",
+          "name": "attempts",
+          "line": 12,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        }
+      ],
+      "kind": "finally"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_value_4",
+      "to": "wr_ref_1",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_value_4",
+      "to": "wr_ref_5",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_attempts_19",
+      "to": "wr_ref_0",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_attempts_19",
+      "to": "wr_ref_4",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_attempts_19",
+      "to": "wr_ref_6",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_Number_84",
+      "to": "wr_ref_1",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_raw_39",
+      "to": "wr_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_0",
+      "to": "wr_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "wr_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_1",
+      "to": "n_scope_0_result_182",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "n_scope_0_result_182",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_6",
+      "to": "n_scope_0_result_182",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

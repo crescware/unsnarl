@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/nested-return/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_main_9",
+      "name": "main",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Math_42",
+      "name": "Math",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 11,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_main_9",
+      "ownerName": "main",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_a_26",
+          "name": "a",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_119",
+          "name": "b",
+          "line": 9,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "if_test_scope_1_38",
+              "kind": "IfTest",
+              "name": "if-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "n_scope_2_b_75",
+              "name": "b",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_0_main_9_89_105",
+              "kind": "return",
+              "line": 6,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_1",
+                  "kind": "ReturnUse",
+                  "name": "a",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_2",
+                  "kind": "ReturnUse",
+                  "name": "b",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ],
+          "kind": "if"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_main_9_131_147",
+          "kind": "return",
+          "line": 10,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnUse",
+              "name": "a",
+              "line": 10,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnUse",
+              "name": "b",
+              "line": 10,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Math_42",
+      "to": "if_test_scope_1_38",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_b_75",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_119",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

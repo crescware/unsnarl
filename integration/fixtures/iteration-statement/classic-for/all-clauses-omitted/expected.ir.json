@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/classic-for/all-clauses-omitted/input.ts",
+    "language": "ts"
+  },
+  "raw": "for (;;) {\n  break;\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 22
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    },
+    {
+      "id": "scope#1",
+      "type": "for",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "ForStatement",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 21
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "Program",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 21
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ForStatement",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false
+    }
+  ],
+  "variables": [],
+  "references": [],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

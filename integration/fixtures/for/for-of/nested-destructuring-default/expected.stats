@@ -1,6 +1,0 @@
-1	0	integration/fixtures/for/for-of/nested-destructuring-default/input.ts:0 console
-1	0	integration/fixtures/for/for-of/nested-destructuring-default/input.ts:1 records
-0	1	integration/fixtures/for/for-of/nested-destructuring-default/input.ts:5 for-test
-1	0	integration/fixtures/for/for-of/nested-destructuring-default/input.ts:6 tag
-0	2	integration/fixtures/for/for-of/nested-destructuring-default/input.ts:8 console.log()
-3	3	5 total
