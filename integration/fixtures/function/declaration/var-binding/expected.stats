@@ -1,0 +1,4 @@
+1	0	integration/fixtures/function/declaration/var-binding/input.ts:1 f
+0	0	integration/fixtures/function/declaration/var-binding/input.ts:2 x
+0	1	integration/fixtures/function/declaration/var-binding/input.ts:6 unused g
+1	1	3 total
