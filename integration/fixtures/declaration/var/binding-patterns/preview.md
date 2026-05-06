@@ -83,4 +83,22 @@ flowchart RL
   n_scope_0_console_557["global console"]
   n_scope_0_console_557 -->|read| expr_stmt_557
   expr_stmt_557["console.log()<br/>L23-41"]
+  classDef varNode stroke-dasharray:5 5;
+  class n_scope_0_a_13 varNode;
+  class n_scope_0_b_49 varNode;
+  class n_scope_0_c_58 varNode;
+  class n_scope_0_d_112 varNode;
+  class n_scope_0_e_123 varNode;
+  class n_scope_0_f_129 varNode;
+  class n_scope_0_g_201 varNode;
+  class n_scope_0_renamed_207 varNode;
+  class n_scope_0_others_225 varNode;
+  class n_scope_0_kebab_319 varNode;
+  class n_scope_0_zeroth_329 varNode;
+  class n_scope_0_p_427 varNode;
+  class n_scope_0_q_434 varNode;
+  class n_scope_0_r_508 varNode;
+  class n_scope_0_s_511 varNode;
+  class n_scope_0_t_521 varNode;
+  class n_scope_0_u_524 varNode;
 ```

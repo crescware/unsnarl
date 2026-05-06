@@ -29,4 +29,6 @@ flowchart RL
   n_scope_0_console_36 -->|read| expr_stmt_36
   wr_ref_1 -->|read| expr_stmt_36
   expr_stmt_36["console.log()<br/>L5"]
+  classDef varNode stroke-dasharray:5 5;
+  class n_scope_0_a_4 varNode;
 ```

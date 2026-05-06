@@ -36,4 +36,6 @@ flowchart RL
   mod_module["module module<br/>L1"]
   mod_module -->|read| n_scope_0_used_9
   mod_module -->|read| n_scope_0_neverCalled_15
+  classDef varNode stroke-dasharray:5 5;
+  class n_scope_0_legacy_49 varNode;
 ```
