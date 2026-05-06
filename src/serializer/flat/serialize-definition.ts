@@ -5,10 +5,7 @@ import type { Definition } from "../../ir/scope/definition.js";
 import type { SerializedDefinition } from "../../ir/serialized/serialized-definition.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
-import {
-  VARIABLE_DECLARATION_KIND,
-  type VariableDeclarationKind,
-} from "../variable-declaration-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeDefinition(
@@ -104,22 +101,26 @@ export function serializeDefinition(
         init = { type: node.type, span: spanOf(node, raw) };
       }
     }
-    let declarationKind: VariableDeclarationKind | null = null;
-    if (d.parent !== null && d.parent.type === AST_TYPE.VariableDeclaration) {
-      const kind = d.parent["kind"];
-      if (
-        kind === VARIABLE_DECLARATION_KIND.Var ||
-        kind === VARIABLE_DECLARATION_KIND.Let ||
-        kind === VARIABLE_DECLARATION_KIND.Const
-      ) {
-        declarationKind = kind;
-      }
+    if (d.parent === null || d.parent.type !== AST_TYPE.VariableDeclaration) {
+      throw new Error(
+        `expected VariableDeclaration parent for Variable definition ${d.name.name}`,
+      );
+    }
+    const kind = d.parent["kind"];
+    if (
+      kind !== VARIABLE_DECLARATION_KIND.Var &&
+      kind !== VARIABLE_DECLARATION_KIND.Let &&
+      kind !== VARIABLE_DECLARATION_KIND.Const
+    ) {
+      throw new Error(
+        `expected var/let/const kind on VariableDeclaration parent for Variable definition ${d.name.name}, got ${String(kind)}`,
+      );
     }
     return {
       ...common,
       type: DEFINITION_TYPE.Variable,
       init,
-      declarationKind,
+      declarationKind: kind,
     };
   }
 

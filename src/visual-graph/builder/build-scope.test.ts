@@ -95,7 +95,7 @@ describe("buildScope", () => {
       ...baseVariable(),
       id: "v1",
       name: "x",
-      defs: [{ ...baseDef(), declarationKind: VARIABLE_DECLARATION_KIND.Let }],
+      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)],
     };
     const op = {
       ...baseWriteOp(),
@@ -136,7 +136,12 @@ describe("buildScope", () => {
       ...baseVariable(),
       id: "param",
       name: "p",
-      defs: [{ ...baseDef(), type: DEFINITION_TYPE.Parameter }],
+      defs: [
+        {
+          ...baseDef(VARIABLE_DECLARATION_KIND.Let),
+          type: DEFINITION_TYPE.Parameter,
+        },
+      ],
     };
     const owner = { ...baseVariable(), id: "ownerVar", name: "myFn" };
     const ctx = makeCtx({

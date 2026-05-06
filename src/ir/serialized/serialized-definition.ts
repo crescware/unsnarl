@@ -14,7 +14,7 @@ export type SerializedDefinition =
       Readonly<{
         type: typeof DEFINITION_TYPE.Variable;
         init: Readonly<{ type: string; span: Span }> | null;
-        declarationKind: VariableDeclarationKind | null;
+        declarationKind: VariableDeclarationKind;
       }>)
   | (CommonDefFields &
       Readonly<{

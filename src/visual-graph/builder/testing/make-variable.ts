@@ -1,5 +1,4 @@
 import type { SerializedVariable } from "../../../ir/serialized/serialized-variable.js";
-import { baseDef } from "./make-def.js";
 import { span } from "./span.js";
 
 export function baseVariable(): SerializedVariable {
@@ -9,6 +8,6 @@ export function baseVariable(): SerializedVariable {
     scope: "s",
     identifiers: [span()],
     references: [],
-    defs: [baseDef()],
+    defs: [],
   };
 }

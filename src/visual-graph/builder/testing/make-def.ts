@@ -1,6 +1,7 @@
 import { DEFINITION_TYPE } from "../../../analyzer/definition-type.js";
 import type { SerializedDefinition } from "../../../ir/serialized/serialized-definition.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
+import type { VariableDeclarationKind } from "../../../serializer/variable-declaration-kind.js";
 import { span } from "./span.js";
 
 const COMMON = {
@@ -9,15 +10,14 @@ const COMMON = {
   parent: null,
 } as const;
 
-export function baseDef(): Extract<
-  SerializedDefinition,
-  { type: typeof DEFINITION_TYPE.Variable }
-> {
+export function baseDef(
+  declarationKind: VariableDeclarationKind,
+): Extract<SerializedDefinition, { type: typeof DEFINITION_TYPE.Variable }> {
   return {
     ...COMMON,
     type: DEFINITION_TYPE.Variable,
     init: null,
-    declarationKind: null,
+    declarationKind,
   };
 }
 

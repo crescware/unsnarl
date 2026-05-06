@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { makeVariableNode } from "./make-variable-node.js";
@@ -17,6 +18,7 @@ describe("makeVariableNode", () => {
       id: "v1",
       name: "x",
       identifiers: [span(0, 2)],
+      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)],
     };
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
@@ -31,7 +33,7 @@ describe("makeVariableNode", () => {
       throw new Error("expected Variable kind");
     }
     expect(node.initIsFunction).toBe(false);
-    expect(node.declarationKind).toBeNull();
+    expect(node.declarationKind).toBe("let");
   });
 
   test("falls back to def.name.span.line when identifiers is empty", () => {
@@ -39,7 +41,12 @@ describe("makeVariableNode", () => {
       ...baseVariable(),
       id: "v",
       identifiers: [],
-      defs: [{ ...baseDef(), name: { name: "x", span: span(0, 7) } }],
+      defs: [
+        {
+          ...baseDef(VARIABLE_DECLARATION_KIND.Let),
+          name: { name: "x", span: span(0, 7) },
+        },
+      ],
     };
     expect(makeVariableNode(v).line).toBe(7);
   });
@@ -71,7 +78,12 @@ describe("makeVariableNode", () => {
     ({ initType, expected }) => {
       const v = {
         ...baseVariable(),
-        defs: [{ ...baseDef(), init: { type: initType, span: span() } }],
+        defs: [
+          {
+            ...baseDef(VARIABLE_DECLARATION_KIND.Let),
+            init: { type: initType, span: span() },
+          },
+        ],
       };
       const node = makeVariableNode(v);
       if (node.kind !== NODE_KIND.Variable) {
@@ -88,7 +100,7 @@ describe("makeVariableNode", () => {
   ])("preserves declarationKind=$kind", ({ kind }) => {
     const v = {
       ...baseVariable(),
-      defs: [{ ...baseDef(), declarationKind: kind }],
+      defs: [baseDef(kind)],
     };
     const node = makeVariableNode(v);
     if (node.kind !== NODE_KIND.Variable) {
@@ -103,7 +115,7 @@ describe("makeVariableNode", () => {
       name: "renamed",
       defs: [
         {
-          ...baseDef(),
+          ...baseDef(VARIABLE_DECLARATION_KIND.Let),
           type: DEFINITION_TYPE.ImportBinding,
           importKind: IMPORT_KIND.Named,
           importedName: "original",
@@ -124,7 +136,7 @@ describe("makeVariableNode", () => {
       ...baseVariable(),
       defs: [
         {
-          ...baseDef(),
+          ...baseDef(VARIABLE_DECLARATION_KIND.Let),
           type: DEFINITION_TYPE.ImportBinding,
           importKind: IMPORT_KIND.Default,
           importedName: null,
