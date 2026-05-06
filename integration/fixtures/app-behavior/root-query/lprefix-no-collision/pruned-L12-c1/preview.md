@@ -1,4 +1,4 @@
-# integration/fixtures/lprefix-no-collision/input.ts
+# integration/fixtures/app-behavior/root-query/lprefix-no-collision/input.ts
 
 ## Input
 

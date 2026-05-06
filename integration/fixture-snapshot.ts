@@ -8,6 +8,7 @@ import { describe, expect, test } from "vitest";
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
 import type { PipelineRunOptions } from "../src/pipeline/runner/pipeline-run-options.js";
 import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
+import type { RootQueryResolution } from "../src/visual-graph/prune/root-query-resolution.js";
 
 // Under the jsdom Vitest environment, import.meta.url is not a file:// URL,
 // so fileURLToPath would throw. Resolve via cwd, which Vitest sets to the
@@ -137,5 +138,60 @@ export function fixtureSnapshot(metaUrl: string, variant?: PruneVariant): void {
     snap("emits the pruned Mermaid flowchart", "mermaid");
     snap("renders the pruned Markdown preview", "markdown");
     snap("emits the pruned stats TSV", "stats");
+  });
+}
+
+type ResolutionsAssertion = Readonly<{
+  roots: string;
+  descendants: number;
+  ancestors: number;
+  expected: readonly RootQueryResolution[];
+  label?: string;
+}>;
+
+export function fixtureResolutions(
+  metaUrl: string,
+  v: ResolutionsAssertion,
+): void {
+  const here = metaUrlToDir(metaUrl);
+  const inputFile = readdirSync(here).find((f) => f.startsWith("input."));
+  if (!inputFile) {
+    throw new Error(`no input.* file under ${here}`);
+  }
+  const ext = inputFile.slice("input.".length);
+  if (ext !== "ts" && ext !== "tsx" && ext !== "js" && ext !== "jsx") {
+    throw new Error(`unsupported input extension: ${inputFile}`);
+  }
+  const code = readFileSync(join(here, inputFile), "utf8");
+  const sourcePath = relative(PROJECT_ROOT, join(here, inputFile));
+  const name = relative(FIXTURE_DIR, here);
+  const queries = parseRootQueries(v.roots);
+  if (!queries.ok) {
+    throw new Error(
+      `unexpected --roots parse failure for "${v.roots}": ${queries.error}`,
+    );
+  }
+  const pipeline = createDefaultPipeline();
+  const label = v.label ?? `resolves --roots ${v.roots}`;
+  describe(`${name} (${label})`, () => {
+    test("logs the expected resolution entries", () => {
+      const result = pipeline.runDetailed(code, {
+        format: "json",
+        language: ext,
+        sourcePath,
+        emit: {
+          prettyJson: true,
+          prunedGraph: null,
+          resolutions: null,
+          debug: false,
+        },
+        pruning: {
+          roots: queries.queries,
+          descendants: v.descendants,
+          ancestors: v.ancestors,
+        },
+      });
+      expect(result.resolutions).toEqual(v.expected);
+    });
   });
 }

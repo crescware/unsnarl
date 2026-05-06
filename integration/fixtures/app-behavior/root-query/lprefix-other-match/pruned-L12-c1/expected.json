@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/lprefix-other-match/input.ts",
+    "path": "integration/fixtures/app-behavior/root-query/lprefix-other-match/input.ts",
     "language": "ts"
   },
   "direction": "RL",

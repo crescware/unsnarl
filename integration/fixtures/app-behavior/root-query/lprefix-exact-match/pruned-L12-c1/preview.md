@@ -1,4 +1,4 @@
-# integration/fixtures/lprefix-exact-match/input.ts
+# integration/fixtures/app-behavior/root-query/lprefix-exact-match/input.ts
 
 ## Notice
 

@@ -1,15 +1,15 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/lprefix-exact-match/input.ts",
+    "path": "integration/fixtures/app-behavior/root-query/lprefix-no-collision/input.ts",
     "language": "ts"
   },
   "direction": "RL",
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_L12_6",
-      "name": "L12",
+      "id": "n_scope_0_alpha_6",
+      "name": "alpha",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
@@ -20,7 +20,7 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_beta_21",
+      "id": "n_scope_0_beta_23",
       "name": "beta",
       "line": 2,
       "endLine": null,
@@ -32,7 +32,7 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_gamma_43",
+      "id": "n_scope_0_gamma_47",
       "name": "gamma",
       "line": 3,
       "endLine": null,
@@ -45,25 +45,16 @@
   ],
   "edges": [
     {
-      "from": "n_scope_0_L12_6",
-      "to": "n_scope_0_beta_21",
+      "from": "n_scope_0_alpha_6",
+      "to": "n_scope_0_beta_23",
       "label": "read"
     },
     {
-      "from": "n_scope_0_beta_21",
-      "to": "n_scope_0_gamma_43",
+      "from": "n_scope_0_beta_23",
+      "to": "n_scope_0_gamma_47",
       "label": "read"
     }
   ],
   "boundaryEdges": [],
-  "pruning": {
-    "roots": [
-      {
-        "query": "L1-3",
-        "matched": 3
-      }
-    ],
-    "descendants": 1,
-    "ancestors": 1
-  }
+  "pruning": null
 }

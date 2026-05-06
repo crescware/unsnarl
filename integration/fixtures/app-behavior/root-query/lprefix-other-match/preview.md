@@ -1,4 +1,4 @@
-# integration/fixtures/lprefix-other-match/input.ts
+# integration/fixtures/app-behavior/root-query/lprefix-other-match/input.ts
 
 ## Input
 

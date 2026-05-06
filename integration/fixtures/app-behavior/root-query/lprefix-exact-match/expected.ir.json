@@ -1,10 +1,10 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/lprefix-other-match/input.ts",
+    "path": "integration/fixtures/app-behavior/root-query/lprefix-exact-match/input.ts",
     "language": "ts"
   },
-  "raw": "const l5 = 1;\nconst l99 = l5 + 2;\nconst sum = l5 + l99;\n",
+  "raw": "const L12 = 1;\nconst beta = L12 + 2;\nconst gamma = beta * 3;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -23,18 +23,17 @@
         "endSpan": {
           "line": 4,
           "column": 0,
-          "offset": 56
+          "offset": 61
         }
       },
       "variables": [
-        "scope#0:l5@6",
-        "scope#0:l99@20",
-        "scope#0:sum@40"
+        "scope#0:L12@6",
+        "scope#0:beta@21",
+        "scope#0:gamma@43"
       ],
       "references": [
         "ref#0",
-        "ref#1",
-        "ref#2"
+        "ref#1"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -45,8 +44,8 @@
   ],
   "variables": [
     {
-      "id": "scope#0:l5@6",
-      "name": "l5",
+      "id": "scope#0:L12@6",
+      "name": "L12",
       "scope": "scope#0",
       "identifiers": [
         {
@@ -56,13 +55,12 @@
         }
       ],
       "references": [
-        "ref#0",
-        "ref#1"
+        "ref#0"
       ],
       "defs": [
         {
           "name": {
-            "name": "l5",
+            "name": "L12",
             "span": {
               "line": 1,
               "column": 6,
@@ -90,8 +88,8 @@
             "type": "Literal",
             "span": {
               "line": 1,
-              "column": 11,
-              "offset": 11
+              "column": 12,
+              "offset": 12
             }
           },
           "declarationKind": "const"
@@ -99,27 +97,27 @@
       ]
     },
     {
-      "id": "scope#0:l99@20",
-      "name": "l99",
+      "id": "scope#0:beta@21",
+      "name": "beta",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 2,
           "column": 6,
-          "offset": 20
+          "offset": 21
         }
       ],
       "references": [
-        "ref#2"
+        "ref#1"
       ],
       "defs": [
         {
           "name": {
-            "name": "l99",
+            "name": "beta",
             "span": {
               "line": 2,
               "column": 6,
-              "offset": 20
+              "offset": 21
             }
           },
           "node": {
@@ -127,7 +125,7 @@
             "span": {
               "line": 2,
               "column": 6,
-              "offset": 20
+              "offset": 21
             }
           },
           "parent": {
@@ -135,7 +133,7 @@
             "span": {
               "line": 2,
               "column": 0,
-              "offset": 14
+              "offset": 15
             }
           },
           "type": "Variable",
@@ -143,8 +141,8 @@
             "type": "BinaryExpression",
             "span": {
               "line": 2,
-              "column": 12,
-              "offset": 26
+              "column": 13,
+              "offset": 28
             }
           },
           "declarationKind": "const"
@@ -152,25 +150,25 @@
       ]
     },
     {
-      "id": "scope#0:sum@40",
-      "name": "sum",
+      "id": "scope#0:gamma@43",
+      "name": "gamma",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 3,
           "column": 6,
-          "offset": 40
+          "offset": 43
         }
       ],
       "references": [],
       "defs": [
         {
           "name": {
-            "name": "sum",
+            "name": "gamma",
             "span": {
               "line": 3,
               "column": 6,
-              "offset": 40
+              "offset": 43
             }
           },
           "node": {
@@ -178,7 +176,7 @@
             "span": {
               "line": 3,
               "column": 6,
-              "offset": 40
+              "offset": 43
             }
           },
           "parent": {
@@ -186,7 +184,7 @@
             "span": {
               "line": 3,
               "column": 0,
-              "offset": 34
+              "offset": 37
             }
           },
           "type": "Variable",
@@ -194,8 +192,8 @@
             "type": "BinaryExpression",
             "span": {
               "line": 3,
-              "column": 12,
-              "offset": 46
+              "column": 14,
+              "offset": 51
             }
           },
           "declarationKind": "const"
@@ -207,17 +205,17 @@
     {
       "id": "ref#0",
       "identifier": {
-        "name": "l5",
+        "name": "L12",
         "span": {
           "line": 2,
-          "column": 12,
-          "offset": 26
+          "column": 13,
+          "offset": 28
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:l5@6",
+      "resolved": "scope#0:L12@6",
       "owners": [
-        "scope#0:l99@20"
+        "scope#0:beta@21"
       ],
       "init": false,
       "flags": {
@@ -234,44 +232,17 @@
     {
       "id": "ref#1",
       "identifier": {
-        "name": "l5",
+        "name": "beta",
         "span": {
           "line": 3,
-          "column": 12,
-          "offset": 46
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:l5@6",
-      "owners": [
-        "scope#0:sum@40"
-      ],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#2",
-      "identifier": {
-        "name": "l99",
-        "span": {
-          "line": 3,
-          "column": 17,
+          "column": 14,
           "offset": 51
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:l99@20",
+      "resolved": "scope#0:beta@21",
       "owners": [
-        "scope#0:sum@40"
+        "scope#0:gamma@43"
       ],
       "init": false,
       "flags": {
@@ -287,7 +258,7 @@
     }
   ],
   "unusedVariableIds": [
-    "scope#0:sum@40"
+    "scope#0:gamma@43"
   ],
   "diagnostics": []
 }

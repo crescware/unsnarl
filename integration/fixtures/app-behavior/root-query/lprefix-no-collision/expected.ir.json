@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/lprefix-no-collision/input.ts",
+    "path": "integration/fixtures/app-behavior/root-query/lprefix-no-collision/input.ts",
     "language": "ts"
   },
   "raw": "const alpha = 1;\nconst beta = alpha + 2;\nconst gamma = beta * 3;\n",
