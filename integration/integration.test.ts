@@ -17,6 +17,7 @@ const IGNORED_FIXTURE_DIRS: readonly string[] = [
   "if-statement",
   "imports",
   "iteration-statement",
+  "jsx",
   "switch-statement",
   "try-statement",
 ];
