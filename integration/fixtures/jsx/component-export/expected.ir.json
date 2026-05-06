@@ -59,7 +59,9 @@
           "offset": 81
         }
       },
-      "variables": [],
+      "variables": [
+        "scope#1:arguments@0"
+      ],
       "references": [
         "ref#0"
       ],
@@ -152,6 +154,14 @@
           "type": "FunctionName"
         }
       ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
     }
   ],
   "references": [

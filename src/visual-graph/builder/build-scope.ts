@@ -44,6 +44,14 @@ export function buildScope(
     if (!v) {
       continue;
     }
+    // Implicit bindings such as `arguments` (FunctionDeclarationInstantiation,
+    // ES spec 9.2.13) carry no source-level identifier or definition; they
+    // exist only to satisfy resolution for in-source references. Surfacing
+    // them as data-flow nodes would add line-0 phantoms with no incident
+    // edges, so skip them here while keeping them in the IR for parity.
+    if (v.defs.length === 0 && v.identifiers.length === 0) {
+      continue;
+    }
     bodyContainer.elements.push(makeVariableNode(v));
   }
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];

@@ -60,6 +60,7 @@
         }
       },
       "variables": [
+        "scope#1:arguments@0",
         "scope#1:message@63"
       ],
       "references": [
@@ -156,6 +157,14 @@
           "type": "FunctionName"
         }
       ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
     },
     {
       "id": "scope#1:message@63",

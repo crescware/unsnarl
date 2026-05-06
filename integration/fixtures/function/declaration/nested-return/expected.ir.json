@@ -64,6 +64,7 @@
         }
       },
       "variables": [
+        "scope#1:arguments@0",
         "scope#1:a@26",
         "scope#1:b@119"
       ],
@@ -195,6 +196,14 @@
           "type": "ImplicitGlobalVariable"
         }
       ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
     },
     {
       "id": "scope#1:a@26",

@@ -1,6 +1,7 @@
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
+import { declareImplicitArguments } from "../declare/declare-implicit-arguments.js";
 import { hoistDeclarations } from "../hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../manager.js";
 import { declareFunctionParams } from "./declare-function-params.js";
@@ -14,6 +15,9 @@ export function enterFunction(
   diagnostics: DiagnosticCollector,
 ): void {
   const scope = manager.push("function", node as unknown as AstNode, null);
+  if (node.type !== AST_TYPE.ArrowFunctionExpression) {
+    declareImplicitArguments(scope);
+  }
   declareFunctionParams(node, scope);
   const body = node["body"];
   if (isNodeLike(body) && body.type === AST_TYPE.BlockStatement) {
