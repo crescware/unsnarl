@@ -1,4 +1,4 @@
-# integration/fixtures/function-and-class/input.ts
+# integration/fixtures/class/declaration/with-function-sibling/input.ts
 
 ## Input
 
