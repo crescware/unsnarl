@@ -29,6 +29,7 @@
     "@mermaid-js/layout-elk": "0.2.1",
     "@types/node": "^24.12.2",
     "@typescript/native-preview": "7.0.0-dev.20260422.1",
+    "eslint-scope": "9.1.2",
     "jsdom": "29.1.0",
     "knip": "6.7.0",
     "mermaid": "11.14.0",
