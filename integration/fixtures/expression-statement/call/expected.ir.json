@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/expression-statement-call/input.ts",
+    "path": "integration/fixtures/expression-statement/call/input.ts",
     "language": "ts"
   },
   "raw": "const x = \"x\";\nconsole.log(x);\n",

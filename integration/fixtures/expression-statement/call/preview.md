@@ -1,4 +1,4 @@
-# integration/fixtures/expression-statement-call/input.ts
+# integration/fixtures/expression-statement/call/input.ts
 
 ## Input
 

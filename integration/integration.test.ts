@@ -11,6 +11,7 @@ const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 // Skip them here so this central discovery does not double-cover them.
 const IGNORED_FIXTURE_DIRS: readonly string[] = [
   "declaration",
+  "expression-statement",
   "for-statement",
   "if-statement",
   "switch-statement",

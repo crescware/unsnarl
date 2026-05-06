@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/expression-statement-multiline/input.ts",
+    "path": "integration/fixtures/expression-statement/multiline/input.ts",
     "language": "ts"
   },
   "raw": "const a = 1;\nconst b = 2;\nconst c = 3;\n\nconsole.log(\n  a, // first\n  b, // second\n  c, // third\n);\n",

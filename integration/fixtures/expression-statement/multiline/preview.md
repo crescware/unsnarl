@@ -1,4 +1,4 @@
-# integration/fixtures/expression-statement-multiline/input.ts
+# integration/fixtures/expression-statement/multiline/input.ts
 
 ## Input
 
