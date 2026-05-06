@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/return-subgraph-misclassification/input.ts",
+    "path": "integration/fixtures/iteration-statement/for-of/in-function-body/input.ts",
     "language": "ts"
   },
   "raw": "const arr = [1];\nfunction f() {\n  for (const x of arr) {\n    console.log(x);\n  }\n}\n",

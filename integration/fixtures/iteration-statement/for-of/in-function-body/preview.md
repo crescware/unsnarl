@@ -1,4 +1,4 @@
-# integration/fixtures/return-subgraph-misclassification/input.ts
+# integration/fixtures/iteration-statement/for-of/in-function-body/input.ts
 
 ## Input
 
