@@ -1,4 +1,4 @@
-# integration/fixtures/imports/input.ts
+# integration/fixtures/imports/mixed-forms/input.ts
 
 ## Input
 

@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/imports/input.ts",
+    "path": "integration/fixtures/imports/mixed-forms/input.ts",
     "language": "ts"
   },
   "direction": "RL",
