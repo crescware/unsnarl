@@ -15,6 +15,7 @@ const FIXTURE_DIR = join(process.cwd(), "integration", "fixtures");
 const IGNORED_FIXTURE_DIRS: readonly string[] = [
   "declaration",
   "expression-statement",
+  "function",
   "if-statement",
   "imports",
   "iteration-statement",

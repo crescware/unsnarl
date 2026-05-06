@@ -12,6 +12,7 @@ const FIXTURE_DIR = fileURLToPath(new URL("./fixtures", import.meta.url));
 const IGNORED_FIXTURE_DIRS: readonly string[] = [
   "declaration",
   "expression-statement",
+  "function",
   "if-statement",
   "imports",
   "iteration-statement",

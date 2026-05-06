@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-multi-return-shorthand/input.ts",
+    "path": "integration/fixtures/function/declaration/nested-return/input.ts",
     "language": "ts"
   },
   "direction": "RL",

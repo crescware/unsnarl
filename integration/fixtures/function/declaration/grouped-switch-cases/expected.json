@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-switch-grouped-cases/input.ts",
+    "path": "integration/fixtures/function/declaration/grouped-switch-cases/input.ts",
     "language": "ts"
   },
   "direction": "RL",

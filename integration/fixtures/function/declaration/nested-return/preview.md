@@ -1,4 +1,4 @@
-# integration/fixtures/function-multi-return-shorthand/input.ts
+# integration/fixtures/function/declaration/nested-return/input.ts
 
 ## Input
 

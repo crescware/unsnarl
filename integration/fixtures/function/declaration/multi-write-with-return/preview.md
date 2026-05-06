@@ -1,4 +1,4 @@
-# integration/fixtures/function-let/input.ts
+# integration/fixtures/function/declaration/multi-write-with-return/input.ts
 
 ## Input
 

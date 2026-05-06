@@ -1,4 +1,4 @@
-# integration/fixtures/function-switch-grouped-cases/input.ts
+# integration/fixtures/function/declaration/grouped-switch-cases/input.ts
 
 ## Input
 

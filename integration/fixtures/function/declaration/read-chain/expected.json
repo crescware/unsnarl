@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-result-chain/input.ts",
+    "path": "integration/fixtures/function/declaration/read-chain/input.ts",
     "language": "ts"
   },
   "direction": "RL",

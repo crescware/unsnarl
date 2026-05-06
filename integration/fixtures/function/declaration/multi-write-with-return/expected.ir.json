@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-let/input.ts",
+    "path": "integration/fixtures/function/declaration/multi-write-with-return/input.ts",
     "language": "ts"
   },
   "raw": "function f() {\n  let v = 0;\n  v = 1;\n  v = 2;\n  return v;\n}\n",

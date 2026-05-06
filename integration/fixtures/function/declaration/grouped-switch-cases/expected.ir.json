@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-switch-grouped-cases/input.ts",
+    "path": "integration/fixtures/function/declaration/grouped-switch-cases/input.ts",
     "language": "ts"
   },
   "raw": "function getDayType(day) {\n  let ret = \"\";\n  switch (day.toLowerCase()) {\n    case \"mon\":\n    case \"tue\":\n    case \"wed\":\n    case \"thu\":\n    case \"fri\":\n      ret = \"weekday\";\n      break;\n    case \"sat\":\n    case \"sun\":\n      ret = \"weekend\";\n      break;\n    default:\n      ret = null;\n      break;\n  }\n  return ret;\n}\n",

@@ -1,4 +1,4 @@
-# integration/fixtures/function-result-chain/input.ts
+# integration/fixtures/function/declaration/read-chain/input.ts
 
 ## Input
 

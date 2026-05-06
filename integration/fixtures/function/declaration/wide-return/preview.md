@@ -1,4 +1,4 @@
-# integration/fixtures/function-return-shorthand-object/input.ts
+# integration/fixtures/function/declaration/wide-return/input.ts
 
 ## Input
 

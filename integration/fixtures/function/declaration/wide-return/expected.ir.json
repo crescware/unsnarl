@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-return-shorthand-object/input.ts",
+    "path": "integration/fixtures/function/declaration/wide-return/input.ts",
     "language": "ts"
   },
   "raw": "function main() {\n  const a = \"a\";\n  const b = \"b\";\n  const c = \"c\";\n  const d = \"d\";\n  const e = \"e\";\n  const f = \"f\";\n  const g = \"g\";\n  const h = \"h\";\n\n  return {\n    a,\n    b,\n    c,\n    d,\n    e,\n    f,\n    g,\n    h,\n  };\n}\n",

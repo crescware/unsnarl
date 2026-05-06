@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/function-return-shorthand-object/input.ts",
+    "path": "integration/fixtures/function/declaration/wide-return/input.ts",
     "language": "ts"
   },
   "direction": "RL",
