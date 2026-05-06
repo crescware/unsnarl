@@ -37,10 +37,15 @@
         "scope#0:Number@178"
       ],
       "references": [
-        "ref#10"
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#14",
+        "ref#15"
       ],
       "through": [
-        "ref#7"
+        "ref#11"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -74,10 +79,10 @@
       },
       "variables": [],
       "references": [
-        "ref#0"
+        "ref#4"
       ],
       "through": [
-        "ref#7"
+        "ref#11"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -112,9 +117,9 @@
       },
       "variables": [],
       "references": [
-        "ref#1",
-        "ref#2",
-        "ref#3"
+        "ref#5",
+        "ref#6",
+        "ref#7"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -150,9 +155,9 @@
       },
       "variables": [],
       "references": [
-        "ref#4",
-        "ref#5",
-        "ref#6"
+        "ref#8",
+        "ref#9",
+        "ref#10"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -188,11 +193,11 @@
       },
       "variables": [],
       "references": [
-        "ref#7",
-        "ref#8"
+        "ref#11",
+        "ref#12"
       ],
       "through": [
-        "ref#7"
+        "ref#11"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -227,7 +232,7 @@
       },
       "variables": [],
       "references": [
-        "ref#9"
+        "ref#13"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -255,11 +260,12 @@
         }
       ],
       "references": [
-        "ref#3",
-        "ref#6",
-        "ref#8",
-        "ref#9",
-        "ref#10"
+        "ref#0",
+        "ref#7",
+        "ref#10",
+        "ref#12",
+        "ref#13",
+        "ref#15"
       ],
       "defs": [
         {
@@ -313,7 +319,8 @@
       ],
       "references": [
         "ref#1",
-        "ref#4"
+        "ref#5",
+        "ref#8"
       ],
       "defs": [
         {
@@ -367,7 +374,8 @@
       ],
       "references": [
         "ref#2",
-        "ref#5"
+        "ref#6",
+        "ref#9"
       ],
       "defs": [
         {
@@ -420,7 +428,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#3",
+        "ref#4"
       ],
       "defs": [
         {
@@ -472,7 +481,9 @@
           "offset": 304
         }
       ],
-      "references": [],
+      "references": [
+        "ref#14"
+      ],
       "defs": [
         {
           "name": {
@@ -524,7 +535,7 @@
         }
       ],
       "references": [
-        "ref#7"
+        "ref#11"
       ],
       "defs": [
         {
@@ -554,6 +565,114 @@
     {
       "id": "ref#0",
       "identifier": {
+        "name": "label",
+        "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:label@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 22
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@22",
+      "owners": [
+        "scope#0:a@22"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 35
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:b@35",
+      "owners": [
+        "scope#0:b@35"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "target",
+        "span": {
+          "line": 4,
+          "column": 6,
+          "offset": 48
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:target@48",
+      "owners": [
+        "scope#0:target@48"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
         "name": "target",
         "span": {
           "line": 6,
@@ -580,7 +699,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#5",
       "identifier": {
         "name": "a",
         "span": {
@@ -605,7 +724,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#6",
       "identifier": {
         "name": "b",
         "span": {
@@ -630,7 +749,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#3",
+      "id": "ref#7",
       "identifier": {
         "name": "label",
         "span": {
@@ -679,7 +798,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#8",
       "identifier": {
         "name": "a",
         "span": {
@@ -704,7 +823,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#5",
+      "id": "ref#9",
       "identifier": {
         "name": "b",
         "span": {
@@ -729,7 +848,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#6",
+      "id": "ref#10",
       "identifier": {
         "name": "label",
         "span": {
@@ -778,7 +897,7 @@
       }
     },
     {
-      "id": "ref#7",
+      "id": "ref#11",
       "identifier": {
         "name": "Number",
         "span": {
@@ -803,7 +922,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#8",
+      "id": "ref#12",
       "identifier": {
         "name": "label",
         "span": {
@@ -852,7 +971,7 @@
       }
     },
     {
-      "id": "ref#9",
+      "id": "ref#13",
       "identifier": {
         "name": "label",
         "span": {
@@ -901,7 +1020,34 @@
       }
     },
     {
-      "id": "ref#10",
+      "id": "ref#14",
+      "identifier": {
+        "name": "result",
+        "span": {
+          "line": 20,
+          "column": 6,
+          "offset": 304
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:result@304",
+      "owners": [
+        "scope#0:result@304"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#15",
       "identifier": {
         "name": "label",
         "span": {

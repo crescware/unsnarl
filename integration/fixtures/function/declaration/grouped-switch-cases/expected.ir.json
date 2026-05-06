@@ -65,7 +65,8 @@
         "scope#1:ret@33"
       ],
       "references": [
-        "ref#4"
+        "ref#0",
+        "ref#5"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -104,7 +105,7 @@
       },
       "variables": [],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -276,7 +277,7 @@
       },
       "variables": [],
       "references": [
-        "ref#1"
+        "ref#2"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -346,7 +347,7 @@
       },
       "variables": [],
       "references": [
-        "ref#2"
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -382,7 +383,7 @@
       },
       "variables": [],
       "references": [
-        "ref#3"
+        "ref#4"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -445,7 +446,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "defs": [
         {
@@ -489,10 +490,11 @@
         }
       ],
       "references": [
-        "ref#1",
+        "ref#0",
         "ref#2",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5"
       ],
       "defs": [
         {
@@ -538,6 +540,33 @@
     {
       "id": "ref#0",
       "identifier": {
+        "name": "ret",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 33
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:ret@33",
+      "owners": [
+        "scope#1:ret@33"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
         "name": "day",
         "span": {
           "line": 3,
@@ -564,7 +593,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "ret",
         "span": {
@@ -613,7 +642,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "ret",
         "span": {
@@ -662,7 +691,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#4",
       "identifier": {
         "name": "ret",
         "span": {
@@ -711,7 +740,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#5",
       "identifier": {
         "name": "ret",
         "span": {

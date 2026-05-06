@@ -48,12 +48,12 @@ flowchart RL
     n_scope_1_v_71["v<br/>L4"]
     subgraph s_return_scope_0_Main_54_151_331["return L10-24"]
       direction RL
-      ret_use_ref_0["&lt;A&gt;<br/>L11-23"]
-      ret_use_ref_1["v<br/>L12"]
+      ret_use_ref_5["&lt;A&gt;<br/>L11-23"]
+      ret_use_ref_6["v<br/>L12"]
     end
   end
-  n_scope_0_A_9 -->|read| ret_use_ref_0
-  n_scope_1_v_71 -->|read| ret_use_ref_1
+  n_scope_0_A_9 -->|read| ret_use_ref_5
+  n_scope_1_v_71 -->|read| ret_use_ref_6
   boundary_stub_1((...))
   boundary_stub_1 -.->|read| n_scope_0_A_9
   classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;

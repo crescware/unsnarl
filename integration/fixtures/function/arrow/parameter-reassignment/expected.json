@@ -40,7 +40,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_0",
+          "id": "wr_ref_1",
           "kind": "WriteOp",
           "name": "x",
           "line": 2,
@@ -51,7 +51,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_2",
+          "id": "wr_ref_3",
           "kind": "WriteOp",
           "name": "x",
           "line": 3,
@@ -70,7 +70,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_4",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "x",
               "line": 4,
@@ -86,17 +86,17 @@
   "edges": [
     {
       "from": "n_scope_1_x_11",
-      "to": "wr_ref_0",
+      "to": "wr_ref_1",
       "label": "set"
     },
     {
-      "from": "wr_ref_0",
-      "to": "wr_ref_2",
+      "from": "wr_ref_1",
+      "to": "wr_ref_3",
       "label": "set"
     },
     {
-      "from": "wr_ref_2",
-      "to": "ret_use_ref_4",
+      "from": "wr_ref_3",
+      "to": "ret_use_ref_5",
       "label": "read"
     }
   ],

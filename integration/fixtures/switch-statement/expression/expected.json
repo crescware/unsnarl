@@ -102,7 +102,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_3",
+              "id": "wr_ref_7",
               "kind": "WriteOp",
               "name": "label",
               "line": 8,
@@ -124,7 +124,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_6",
+              "id": "wr_ref_10",
               "kind": "WriteOp",
               "name": "label",
               "line": 11,
@@ -146,7 +146,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_8",
+              "id": "wr_ref_12",
               "kind": "WriteOp",
               "name": "label",
               "line": 14,
@@ -168,7 +168,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_9",
+              "id": "wr_ref_13",
               "kind": "WriteOp",
               "name": "label",
               "line": 17,
@@ -198,22 +198,22 @@
   "edges": [
     {
       "from": "n_scope_0_label_4",
-      "to": "wr_ref_3",
+      "to": "wr_ref_7",
       "label": "set"
     },
     {
       "from": "n_scope_0_label_4",
-      "to": "wr_ref_6",
+      "to": "wr_ref_10",
       "label": "set"
     },
     {
       "from": "n_scope_0_label_4",
-      "to": "wr_ref_8",
+      "to": "wr_ref_12",
       "label": "set"
     },
     {
       "from": "n_scope_0_label_4",
-      "to": "wr_ref_9",
+      "to": "wr_ref_13",
       "label": "set"
     },
     {
@@ -237,22 +237,22 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_3",
+      "from": "wr_ref_7",
       "to": "n_scope_0_result_304",
       "label": "read"
     },
     {
-      "from": "wr_ref_6",
+      "from": "wr_ref_10",
       "to": "n_scope_0_result_304",
       "label": "read"
     },
     {
-      "from": "wr_ref_8",
+      "from": "wr_ref_12",
       "to": "n_scope_0_result_304",
       "label": "read"
     },
     {
-      "from": "wr_ref_9",
+      "from": "wr_ref_13",
       "to": "n_scope_0_result_304",
       "label": "read"
     }

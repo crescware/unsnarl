@@ -47,7 +47,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_1",
+          "id": "wr_ref_2",
           "kind": "WriteOp",
           "name": "i",
           "line": 1,
@@ -73,7 +73,7 @@
   "edges": [
     {
       "from": "n_scope_1_i_9",
-      "to": "wr_ref_1",
+      "to": "wr_ref_2",
       "label": "set"
     },
     {
@@ -87,7 +87,7 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_1",
+      "from": "wr_ref_2",
       "to": "expr_stmt_32",
       "label": "read"
     }

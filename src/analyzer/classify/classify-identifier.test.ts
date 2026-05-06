@@ -28,10 +28,31 @@ describe("classifyIdentifier dispatch", () => {
     ).toEqual({ kind: "skip" });
   });
 
-  test("direct binding context (e.g. VariableDeclarator#id)", () => {
+  test("direct binding context (e.g. VariableDeclarator#id without initializer)", () => {
     expect(
-      classifyIdentifier(node({ type: AST_TYPE.VariableDeclarator }), "id", []),
+      classifyIdentifier(
+        node({ type: AST_TYPE.VariableDeclarator, init: null }),
+        "id",
+        [],
+      ),
     ).toEqual({ kind: "binding" });
+  });
+
+  test("VariableDeclarator#id with initializer → Write reference with init=true", () => {
+    expect(
+      classifyIdentifier(
+        node({
+          type: AST_TYPE.VariableDeclarator,
+          init: { type: AST_TYPE.Literal },
+        }),
+        "id",
+        [],
+      ),
+    ).toEqual({
+      kind: "reference",
+      flags: ReferenceFlags.Write,
+      init: true,
+    });
   });
 
   test("pattern step under VariableDeclarator → binding", () => {

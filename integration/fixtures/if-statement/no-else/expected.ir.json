@@ -35,7 +35,10 @@
       ],
       "references": [
         "ref#0",
-        "ref#2"
+        "ref#1",
+        "ref#2",
+        "ref#4",
+        "ref#5"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -65,7 +68,7 @@
       },
       "variables": [],
       "references": [
-        "ref#1"
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -93,8 +96,9 @@
         }
       ],
       "references": [
-        "ref#1",
-        "ref#2"
+        "ref#0",
+        "ref#3",
+        "ref#5"
       ],
       "defs": [
         {
@@ -147,7 +151,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1",
+        "ref#2"
       ],
       "defs": [
         {
@@ -199,7 +204,9 @@
           "offset": 73
         }
       ],
-      "references": [],
+      "references": [
+        "ref#4"
+      ],
       "defs": [
         {
           "name": {
@@ -244,6 +251,60 @@
     {
       "id": "ref#0",
       "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@4",
+      "owners": [
+        "scope#0:counter@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "flag",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 23
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:flag@23",
+      "owners": [
+        "scope#0:flag@23"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
         "name": "flag",
         "span": {
           "line": 4,
@@ -270,7 +331,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
       "identifier": {
         "name": "counter",
         "span": {
@@ -319,7 +380,34 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#4",
+      "identifier": {
+        "name": "result",
+        "span": {
+          "line": 8,
+          "column": 6,
+          "offset": 73
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:result@73",
+      "owners": [
+        "scope#0:result@73"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#5",
       "identifier": {
         "name": "counter",
         "span": {

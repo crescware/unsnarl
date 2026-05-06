@@ -34,8 +34,10 @@
         "scope#0:h@126"
       ],
       "references": [
-        "ref#4",
-        "ref#5"
+        "ref#8",
+        "ref#9",
+        "ref#10",
+        "ref#11"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -73,7 +75,11 @@
         "ref#0",
         "ref#1",
         "ref#2",
-        "ref#3"
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#6",
+        "ref#7"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -95,7 +101,7 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#9"
       ],
       "defs": [
         {
@@ -132,7 +138,8 @@
         }
       ],
       "references": [
-        "ref#5"
+        "ref#8",
+        "ref#11"
       ],
       "defs": [
         {
@@ -184,7 +191,9 @@
           "offset": 126
         }
       ],
-      "references": [],
+      "references": [
+        "ref#10"
+      ],
       "defs": [
         {
           "name": {
@@ -236,7 +245,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#2"
       ],
       "defs": [
         {
@@ -289,7 +299,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#1",
+        "ref#4"
       ],
       "defs": [
         {
@@ -342,7 +353,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#3",
+        "ref#6"
       ],
       "defs": [
         {
@@ -395,7 +407,8 @@
         }
       ],
       "references": [
-        "ref#3"
+        "ref#5",
+        "ref#7"
       ],
       "defs": [
         {
@@ -443,6 +456,60 @@
       "identifier": {
         "name": "a",
         "span": {
+          "line": 2,
+          "column": 8,
+          "offset": 23
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:a@23",
+      "owners": [
+        "scope#1:a@23"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 3,
+          "column": 8,
+          "offset": 40
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:b@40",
+      "owners": [
+        "scope#1:b@40"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "a",
+        "span": {
           "line": 3,
           "column": 13,
           "offset": 45
@@ -466,7 +533,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 4,
+          "column": 8,
+          "offset": 57
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:c@57",
+      "owners": [
+        "scope#1:c@57"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
       "identifier": {
         "name": "b",
         "span": {
@@ -493,7 +587,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#5",
+      "identifier": {
+        "name": "d",
+        "span": {
+          "line": 5,
+          "column": 8,
+          "offset": 83
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:d@83",
+      "owners": [
+        "scope#1:d@83"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#6",
       "identifier": {
         "name": "c",
         "span": {
@@ -520,7 +641,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#3",
+      "id": "ref#7",
       "identifier": {
         "name": "d",
         "span": {
@@ -556,7 +677,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#4",
+      "id": "ref#8",
+      "identifier": {
+        "name": "g",
+        "span": {
+          "line": 9,
+          "column": 6,
+          "offset": 111
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:g@111",
+      "owners": [
+        "scope#0:g@111"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#9",
       "identifier": {
         "name": "f",
         "span": {
@@ -583,7 +731,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#5",
+      "id": "ref#10",
+      "identifier": {
+        "name": "h",
+        "span": {
+          "line": 10,
+          "column": 6,
+          "offset": 126
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:h@126",
+      "owners": [
+        "scope#0:h@126"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#11",
       "identifier": {
         "name": "g",
         "span": {

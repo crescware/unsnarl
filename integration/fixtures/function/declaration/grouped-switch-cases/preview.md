@@ -54,33 +54,33 @@ flowchart RL
         end
         subgraph s_scope_7["case &quot;fri&quot; L8-10"]
           direction RL
-          wr_ref_1(["let ret<br/>L9"])
+          wr_ref_2(["let ret<br/>L9"])
         end
         subgraph s_scope_8["case &quot;sat&quot; L11"]
           direction RL
         end
         subgraph s_scope_9["case &quot;sun&quot; L12-14"]
           direction RL
-          wr_ref_2(["let ret<br/>L13"])
+          wr_ref_3(["let ret<br/>L13"])
         end
         subgraph s_scope_10["default L15-17"]
           direction RL
-          wr_ref_3(["let ret<br/>L16"])
+          wr_ref_4(["let ret<br/>L16"])
         end
       end
       subgraph s_return_scope_0_getDayType_9_308_319["return L19"]
         direction RL
-        ret_use_ref_4["ret<br/>L19"]
+        ret_use_ref_5["ret<br/>L19"]
       end
     end
   end
-  n_scope_1_ret_33 -->|fallthrough| wr_ref_1
   n_scope_1_ret_33 -->|fallthrough| wr_ref_2
-  n_scope_1_ret_33 -->|set| wr_ref_3
+  n_scope_1_ret_33 -->|fallthrough| wr_ref_3
+  n_scope_1_ret_33 -->|set| wr_ref_4
   n_scope_1_day_20 -->|read| switch_discriminant_scope_1_45
-  wr_ref_1 -->|read| ret_use_ref_4
-  wr_ref_2 -->|read| ret_use_ref_4
-  wr_ref_3 -->|read| ret_use_ref_4
+  wr_ref_2 -->|read| ret_use_ref_5
+  wr_ref_3 -->|read| ret_use_ref_5
+  wr_ref_4 -->|read| ret_use_ref_5
   classDef fnWrap fill:#1a2030,stroke:#5a7d99;
   class wrap_s_scope_1 fnWrap;
 ```

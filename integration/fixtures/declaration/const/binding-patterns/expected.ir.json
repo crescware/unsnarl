@@ -64,10 +64,13 @@
         "ref#14",
         "ref#15",
         "ref#16",
-        "ref#17"
+        "ref#17",
+        "ref#18",
+        "ref#19",
+        "ref#20"
       ],
       "through": [
-        "ref#0"
+        "ref#3"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -88,7 +91,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0",
+        "ref#4"
       ],
       "defs": [
         {
@@ -141,7 +145,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#1",
+        "ref#5"
       ],
       "defs": [
         {
@@ -194,7 +199,8 @@
         }
       ],
       "references": [
-        "ref#3"
+        "ref#2",
+        "ref#6"
       ],
       "defs": [
         {
@@ -247,7 +253,7 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#7"
       ],
       "defs": [
         {
@@ -300,7 +306,7 @@
         }
       ],
       "references": [
-        "ref#5"
+        "ref#8"
       ],
       "defs": [
         {
@@ -353,7 +359,7 @@
         }
       ],
       "references": [
-        "ref#6"
+        "ref#9"
       ],
       "defs": [
         {
@@ -406,7 +412,7 @@
         }
       ],
       "references": [
-        "ref#7"
+        "ref#10"
       ],
       "defs": [
         {
@@ -459,7 +465,7 @@
         }
       ],
       "references": [
-        "ref#8"
+        "ref#11"
       ],
       "defs": [
         {
@@ -512,7 +518,7 @@
         }
       ],
       "references": [
-        "ref#9"
+        "ref#12"
       ],
       "defs": [
         {
@@ -565,7 +571,7 @@
         }
       ],
       "references": [
-        "ref#10"
+        "ref#13"
       ],
       "defs": [
         {
@@ -618,7 +624,7 @@
         }
       ],
       "references": [
-        "ref#11"
+        "ref#14"
       ],
       "defs": [
         {
@@ -671,7 +677,7 @@
         }
       ],
       "references": [
-        "ref#12"
+        "ref#15"
       ],
       "defs": [
         {
@@ -724,7 +730,7 @@
         }
       ],
       "references": [
-        "ref#13"
+        "ref#16"
       ],
       "defs": [
         {
@@ -777,7 +783,7 @@
         }
       ],
       "references": [
-        "ref#14"
+        "ref#17"
       ],
       "defs": [
         {
@@ -830,7 +836,7 @@
         }
       ],
       "references": [
-        "ref#15"
+        "ref#18"
       ],
       "defs": [
         {
@@ -883,7 +889,7 @@
         }
       ],
       "references": [
-        "ref#16"
+        "ref#19"
       ],
       "defs": [
         {
@@ -936,7 +942,7 @@
         }
       ],
       "references": [
-        "ref#17"
+        "ref#20"
       ],
       "defs": [
         {
@@ -989,7 +995,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#3"
       ],
       "defs": [
         {
@@ -1018,6 +1024,87 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 15
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@15",
+      "owners": [
+        "scope#0:a@15"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 5,
+          "column": 6,
+          "offset": 53
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:b@53",
+      "owners": [
+        "scope#0:b@53"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 6,
+          "column": 2,
+          "offset": 62
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:c@62",
+      "owners": [
+        "scope#0:c@62"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
       "identifier": {
         "name": "console",
         "span": {
@@ -1064,7 +1151,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#4",
       "identifier": {
         "name": "a",
         "span": {
@@ -1111,7 +1198,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#5",
       "identifier": {
         "name": "b",
         "span": {
@@ -1158,7 +1245,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#6",
       "identifier": {
         "name": "c",
         "span": {
@@ -1205,7 +1292,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#7",
       "identifier": {
         "name": "d",
         "span": {
@@ -1252,7 +1339,7 @@
       }
     },
     {
-      "id": "ref#5",
+      "id": "ref#8",
       "identifier": {
         "name": "e",
         "span": {
@@ -1299,7 +1386,7 @@
       }
     },
     {
-      "id": "ref#6",
+      "id": "ref#9",
       "identifier": {
         "name": "f",
         "span": {
@@ -1346,7 +1433,7 @@
       }
     },
     {
-      "id": "ref#7",
+      "id": "ref#10",
       "identifier": {
         "name": "g",
         "span": {
@@ -1393,7 +1480,7 @@
       }
     },
     {
-      "id": "ref#8",
+      "id": "ref#11",
       "identifier": {
         "name": "renamed",
         "span": {
@@ -1440,7 +1527,7 @@
       }
     },
     {
-      "id": "ref#9",
+      "id": "ref#12",
       "identifier": {
         "name": "others",
         "span": {
@@ -1487,7 +1574,7 @@
       }
     },
     {
-      "id": "ref#10",
+      "id": "ref#13",
       "identifier": {
         "name": "kebab",
         "span": {
@@ -1534,7 +1621,7 @@
       }
     },
     {
-      "id": "ref#11",
+      "id": "ref#14",
       "identifier": {
         "name": "zeroth",
         "span": {
@@ -1581,7 +1668,7 @@
       }
     },
     {
-      "id": "ref#12",
+      "id": "ref#15",
       "identifier": {
         "name": "p",
         "span": {
@@ -1628,7 +1715,7 @@
       }
     },
     {
-      "id": "ref#13",
+      "id": "ref#16",
       "identifier": {
         "name": "q",
         "span": {
@@ -1675,7 +1762,7 @@
       }
     },
     {
-      "id": "ref#14",
+      "id": "ref#17",
       "identifier": {
         "name": "r",
         "span": {
@@ -1722,7 +1809,7 @@
       }
     },
     {
-      "id": "ref#15",
+      "id": "ref#18",
       "identifier": {
         "name": "s",
         "span": {
@@ -1769,7 +1856,7 @@
       }
     },
     {
-      "id": "ref#16",
+      "id": "ref#19",
       "identifier": {
         "name": "t",
         "span": {
@@ -1816,7 +1903,7 @@
       }
     },
     {
-      "id": "ref#17",
+      "id": "ref#20",
       "identifier": {
         "name": "u",
         "span": {

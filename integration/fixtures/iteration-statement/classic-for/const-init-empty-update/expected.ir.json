@@ -33,7 +33,7 @@
       ],
       "references": [],
       "through": [
-        "ref#0"
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -65,9 +65,11 @@
       "variables": [
         "scope#1:j@113"
       ],
-      "references": [],
-      "through": [
+      "references": [
         "ref#0"
+      ],
+      "through": [
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -102,11 +104,11 @@
       },
       "variables": [],
       "references": [
-        "ref#0",
-        "ref#1"
+        "ref#1",
+        "ref#2"
       ],
       "through": [
-        "ref#0"
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -133,7 +135,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "defs": [
         {
@@ -170,7 +172,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0",
+        "ref#2"
       ],
       "defs": [
         {
@@ -215,6 +218,36 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "j",
+        "span": {
+          "line": 3,
+          "column": 11,
+          "offset": 113
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:j@113",
+      "owners": [
+        "scope#1:j@113"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "ForStatement",
+        "offset": 102
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
       "identifier": {
         "name": "console",
         "span": {
@@ -261,7 +294,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "j",
         "span": {

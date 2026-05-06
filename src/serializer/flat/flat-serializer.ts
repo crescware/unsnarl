@@ -71,7 +71,7 @@ export class FlatSerializer implements IRSerializer {
 
     const unusedVariableIds: /* mutable */ string[] = [];
     for (const v of orderedVariables) {
-      if (v.references.length === 0 && hasDeclaringDef(v)) {
+      if (v.unsnarlIsUnused() && hasDeclaringDef(v)) {
         const id = variableIds.get(v) ?? null;
         if (id !== null) {
           unusedVariableIds.push(id);

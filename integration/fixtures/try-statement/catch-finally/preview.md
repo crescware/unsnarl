@@ -32,29 +32,29 @@ flowchart RL
   n_scope_0_Number_84["global Number"]
   subgraph s_scope_1["try L5-8"]
     direction RL
-    wr_ref_1(["let value<br/>L7"])
-    wr_ref_0(["let attempts<br/>L6"])
+    wr_ref_4(["let value<br/>L7"])
+    wr_ref_3(["let attempts<br/>L6"])
   end
   subgraph s_scope_2["catch L8-11"]
     direction RL
     n_scope_2_err_106["unused catch err<br/>L8"]
-    wr_ref_5(["let value<br/>L10"])
-    wr_ref_4(["let attempts<br/>L9"])
+    wr_ref_8(["let value<br/>L10"])
+    wr_ref_7(["let attempts<br/>L9"])
   end
   subgraph s_scope_3["finally L11-13"]
     direction RL
-    wr_ref_6(["let attempts<br/>L12"])
+    wr_ref_9(["let attempts<br/>L12"])
   end
-  n_scope_0_value_4 -->|set| wr_ref_1
-  n_scope_0_value_4 -->|set| wr_ref_5
-  n_scope_0_attempts_19 -->|set| wr_ref_0
-  n_scope_0_attempts_19 -->|set| wr_ref_4
-  n_scope_0_attempts_19 -->|set| wr_ref_6
-  n_scope_0_Number_84 -->|read,call| wr_ref_1
-  n_scope_0_raw_39 -->|read| wr_ref_1
-  wr_ref_0 -->|read| wr_ref_6
-  wr_ref_4 -->|read| wr_ref_6
-  wr_ref_1 -->|read| n_scope_0_result_182
-  wr_ref_5 -->|read| n_scope_0_result_182
-  wr_ref_6 -->|read| n_scope_0_result_182
+  n_scope_0_value_4 -->|set| wr_ref_4
+  n_scope_0_value_4 -->|set| wr_ref_8
+  n_scope_0_attempts_19 -->|set| wr_ref_3
+  n_scope_0_attempts_19 -->|set| wr_ref_7
+  n_scope_0_attempts_19 -->|set| wr_ref_9
+  n_scope_0_Number_84 -->|read,call| wr_ref_4
+  n_scope_0_raw_39 -->|read| wr_ref_4
+  wr_ref_3 -->|read| wr_ref_9
+  wr_ref_7 -->|read| wr_ref_9
+  wr_ref_4 -->|read| n_scope_0_result_182
+  wr_ref_8 -->|read| n_scope_0_result_182
+  wr_ref_9 -->|read| n_scope_0_result_182
 ```

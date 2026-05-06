@@ -32,9 +32,11 @@
         "scope#0:k@4",
         "scope#0:console@34"
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "through": [
-        "ref#2"
+        "ref#3"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -65,11 +67,11 @@
       },
       "variables": [],
       "references": [
-        "ref#0",
-        "ref#1"
+        "ref#1",
+        "ref#2"
       ],
       "through": [
-        "ref#2"
+        "ref#3"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -104,11 +106,11 @@
       },
       "variables": [],
       "references": [
-        "ref#2",
-        "ref#3"
+        "ref#3",
+        "ref#4"
       ],
       "through": [
-        "ref#2"
+        "ref#3"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -137,7 +139,8 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#3"
+        "ref#2",
+        "ref#4"
       ],
       "defs": [
         {
@@ -190,7 +193,7 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#3"
       ],
       "defs": [
         {
@@ -222,6 +225,33 @@
       "identifier": {
         "name": "k",
         "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:k@4",
+      "owners": [
+        "scope#0:k@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "k",
+        "span": {
           "line": 2,
           "column": 7,
           "offset": 18
@@ -246,7 +276,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "k",
         "span": {
@@ -274,7 +304,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "console",
         "span": {
@@ -321,7 +351,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#4",
       "identifier": {
         "name": "k",
         "span": {

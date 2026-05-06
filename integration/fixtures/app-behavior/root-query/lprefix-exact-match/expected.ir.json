@@ -33,7 +33,10 @@
       ],
       "references": [
         "ref#0",
-        "ref#1"
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -55,7 +58,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#2"
       ],
       "defs": [
         {
@@ -108,7 +112,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#1",
+        "ref#4"
       ],
       "defs": [
         {
@@ -160,7 +165,9 @@
           "offset": 43
         }
       ],
-      "references": [],
+      "references": [
+        "ref#3"
+      ],
       "defs": [
         {
           "name": {
@@ -207,6 +214,60 @@
       "identifier": {
         "name": "L12",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:L12@6",
+      "owners": [
+        "scope#0:L12@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "beta",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 21
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:beta@21",
+      "owners": [
+        "scope#0:beta@21"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "L12",
+        "span": {
           "line": 2,
           "column": 13,
           "offset": 28
@@ -230,7 +291,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
+      "identifier": {
+        "name": "gamma",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 43
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:gamma@43",
+      "owners": [
+        "scope#0:gamma@43"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
       "identifier": {
         "name": "beta",
         "span": {

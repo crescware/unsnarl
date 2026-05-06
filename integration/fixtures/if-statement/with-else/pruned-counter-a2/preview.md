@@ -33,15 +33,15 @@ flowchart RL
     direction RL
     subgraph s_scope_1["if L4-6"]
       direction RL
-      wr_ref_1(["let counter<br/>L5"])
+      wr_ref_3(["let counter<br/>L5"])
     end
     subgraph s_scope_2["else L6-8"]
       direction RL
-      wr_ref_2(["let counter<br/>L7"])
+      wr_ref_4(["let counter<br/>L7"])
     end
   end
-  n_scope_0_counter_4 -->|set| wr_ref_1
-  n_scope_0_counter_4 -->|set| wr_ref_2
-  wr_ref_1 -->|read| n_scope_0_result_97
-  wr_ref_2 -->|read| n_scope_0_result_97
+  n_scope_0_counter_4 -->|set| wr_ref_3
+  n_scope_0_counter_4 -->|set| wr_ref_4
+  wr_ref_3 -->|read| n_scope_0_result_97
+  wr_ref_4 -->|read| n_scope_0_result_97
 ```

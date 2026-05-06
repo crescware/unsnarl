@@ -32,9 +32,11 @@
         "scope#0:pairs@6",
         "scope#0:console@102"
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -68,10 +70,10 @@
         "scope#1:value@81"
       ],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -106,12 +108,12 @@
       },
       "variables": [],
       "references": [
-        "ref#1",
         "ref#2",
-        "ref#3"
+        "ref#3",
+        "ref#4"
       ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -138,7 +140,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#1"
       ],
       "defs": [
         {
@@ -191,7 +194,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#2"
       ],
       "defs": [
         {
@@ -228,7 +231,7 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#3"
       ],
       "defs": [
         {
@@ -274,7 +277,7 @@
         }
       ],
       "references": [
-        "ref#3"
+        "ref#4"
       ],
       "defs": [
         {
@@ -315,6 +318,33 @@
       "identifier": {
         "name": "pairs",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:pairs@6",
+      "owners": [
+        "scope#0:pairs@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "pairs",
+        "span": {
           "line": 5,
           "column": 28,
           "offset": 91
@@ -339,7 +369,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "console",
         "span": {
@@ -386,7 +416,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "name",
         "span": {
@@ -433,7 +463,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#4",
       "identifier": {
         "name": "value",
         "span": {

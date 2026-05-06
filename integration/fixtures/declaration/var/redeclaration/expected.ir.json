@@ -32,10 +32,12 @@
       ],
       "references": [
         "ref#0",
-        "ref#1"
+        "ref#1",
+        "ref#2",
+        "ref#3"
       ],
       "through": [
-        "ref#0"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -61,7 +63,9 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0",
+        "ref#1",
+        "ref#3"
       ],
       "defs": [
         {
@@ -150,7 +154,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#2"
       ],
       "defs": [
         {
@@ -179,6 +183,60 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@4",
+      "owners": [
+        "scope#0:x@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 2,
+          "column": 4,
+          "offset": 15
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@4",
+      "owners": [
+        "scope#0:x@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
       "identifier": {
         "name": "console",
         "span": {
@@ -225,7 +283,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
       "identifier": {
         "name": "x",
         "span": {

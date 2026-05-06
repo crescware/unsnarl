@@ -73,7 +73,7 @@
       "elements": [
         {
           "type": "node",
-          "id": "wr_ref_1",
+          "id": "wr_ref_4",
           "kind": "WriteOp",
           "name": "value",
           "line": 7,
@@ -84,7 +84,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_0",
+          "id": "wr_ref_3",
           "kind": "WriteOp",
           "name": "attempts",
           "line": 6,
@@ -115,7 +115,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_5",
+          "id": "wr_ref_8",
           "kind": "WriteOp",
           "name": "value",
           "line": 10,
@@ -126,7 +126,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_4",
+          "id": "wr_ref_7",
           "kind": "WriteOp",
           "name": "attempts",
           "line": 9,
@@ -147,7 +147,7 @@
       "elements": [
         {
           "type": "node",
-          "id": "wr_ref_6",
+          "id": "wr_ref_9",
           "kind": "WriteOp",
           "name": "attempts",
           "line": 12,
@@ -163,61 +163,61 @@
   "edges": [
     {
       "from": "n_scope_0_value_4",
-      "to": "wr_ref_1",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_value_4",
-      "to": "wr_ref_5",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_attempts_19",
-      "to": "wr_ref_0",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_attempts_19",
       "to": "wr_ref_4",
       "label": "set"
     },
     {
+      "from": "n_scope_0_value_4",
+      "to": "wr_ref_8",
+      "label": "set"
+    },
+    {
       "from": "n_scope_0_attempts_19",
-      "to": "wr_ref_6",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_attempts_19",
+      "to": "wr_ref_7",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_attempts_19",
+      "to": "wr_ref_9",
       "label": "set"
     },
     {
       "from": "n_scope_0_Number_84",
-      "to": "wr_ref_1",
+      "to": "wr_ref_4",
       "label": "read,call"
     },
     {
       "from": "n_scope_0_raw_39",
-      "to": "wr_ref_1",
+      "to": "wr_ref_4",
       "label": "read"
     },
     {
-      "from": "wr_ref_0",
-      "to": "wr_ref_6",
+      "from": "wr_ref_3",
+      "to": "wr_ref_9",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_7",
+      "to": "wr_ref_9",
       "label": "read"
     },
     {
       "from": "wr_ref_4",
-      "to": "wr_ref_6",
-      "label": "read"
-    },
-    {
-      "from": "wr_ref_1",
       "to": "n_scope_0_result_182",
       "label": "read"
     },
     {
-      "from": "wr_ref_5",
+      "from": "wr_ref_8",
       "to": "n_scope_0_result_182",
       "label": "read"
     },
     {
-      "from": "wr_ref_6",
+      "from": "wr_ref_9",
       "to": "n_scope_0_result_182",
       "label": "read"
     }

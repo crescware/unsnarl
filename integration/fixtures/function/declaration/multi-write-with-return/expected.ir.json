@@ -64,7 +64,8 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2"
+        "ref#2",
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -123,7 +124,8 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2"
+        "ref#2",
+        "ref#3"
       ],
       "defs": [
         {
@@ -168,6 +170,33 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 21
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v@21",
+      "owners": [
+        "scope#1:v@21"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
       "identifier": {
         "name": "v",
         "span": {
@@ -216,7 +245,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "v",
         "span": {
@@ -265,7 +294,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "v",
         "span": {

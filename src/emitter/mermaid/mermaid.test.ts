@@ -607,9 +607,12 @@ describe("MermaidEmitter rendering: let writes form a state chain", () => {
   const out = emit(code);
 
   test("the chain passes through one wr_ref node per assignment, in source order", () => {
-    expect(out).toMatch(/n_scope_1_v_\d+ -->\|set\| wr_ref_0/);
-    expect(out).toMatch(/wr_ref_0 -->\|set\| wr_ref_1/);
-    expect(out).toMatch(/wr_ref_1 -->\|read\| ret_use_\w+/);
+    // ref#0 is the init Write at `let v = 0` and is not emitted as a WriteOp.
+    // The chain therefore starts at the declaration node and runs through
+    // wr_ref_1 (`v = 1`) and wr_ref_2 (`v = 2`).
+    expect(out).toMatch(/n_scope_1_v_\d+ -->\|set\| wr_ref_1/);
+    expect(out).toMatch(/wr_ref_1 -->\|set\| wr_ref_2/);
+    expect(out).toMatch(/wr_ref_2 -->\|read\| ret_use_\w+/);
   });
 
   test("there is no v -> v self loop", () => {
@@ -618,8 +621,8 @@ describe("MermaidEmitter rendering: let writes form a state chain", () => {
 
   test("the declaration node uses a rectangle and write ops use stadium", () => {
     expect(out).toMatch(/n_scope_1_v_\d+\["let v<br\/>L2"\]/);
-    expect(out).toMatch(/wr_ref_0\(\["let v<br\/>L3"\]\)/);
-    expect(out).toMatch(/wr_ref_1\(\["let v<br\/>L4"\]\)/);
+    expect(out).toMatch(/wr_ref_1\(\["let v<br\/>L3"\]\)/);
+    expect(out).toMatch(/wr_ref_2\(\["let v<br\/>L4"\]\)/);
   });
 });
 

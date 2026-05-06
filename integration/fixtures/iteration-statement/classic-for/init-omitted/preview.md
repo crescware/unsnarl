@@ -19,11 +19,11 @@ flowchart RL
   subgraph s_scope_1["for L2-4"]
     direction RL
     for_test_scope_0_11["for ()<br/>L2"]
-    wr_ref_1(["let k<br/>L2"])
+    wr_ref_2(["let k<br/>L2"])
     expr_stmt_34["console.log()<br/>L3"]
   end
-  n_scope_0_k_4 -->|set| wr_ref_1
+  n_scope_0_k_4 -->|set| wr_ref_2
   n_scope_0_k_4 -->|read| for_test_scope_0_11
   n_scope_0_console_34 -->|read| expr_stmt_34
-  wr_ref_1 -->|read| expr_stmt_34
+  wr_ref_2 -->|read| expr_stmt_34
 ```

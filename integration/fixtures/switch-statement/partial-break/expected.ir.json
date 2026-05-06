@@ -34,7 +34,10 @@
         "scope#0:result@168"
       ],
       "references": [
-        "ref#4"
+        "ref#0",
+        "ref#1",
+        "ref#6",
+        "ref#7"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -68,7 +71,7 @@
       },
       "variables": [],
       "references": [
-        "ref#0"
+        "ref#2"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -104,7 +107,7 @@
       },
       "variables": [],
       "references": [
-        "ref#1"
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -140,7 +143,7 @@
       },
       "variables": [],
       "references": [
-        "ref#2"
+        "ref#4"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -176,7 +179,7 @@
       },
       "variables": [],
       "references": [
-        "ref#3"
+        "ref#5"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -204,10 +207,11 @@
         }
       ],
       "references": [
-        "ref#1",
-        "ref#2",
+        "ref#0",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5",
+        "ref#7"
       ],
       "defs": [
         {
@@ -260,7 +264,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1",
+        "ref#2"
       ],
       "defs": [
         {
@@ -312,7 +317,9 @@
           "offset": 168
         }
       ],
-      "references": [],
+      "references": [
+        "ref#6"
+      ],
       "defs": [
         {
           "name": {
@@ -357,6 +364,60 @@
     {
       "id": "ref#0",
       "identifier": {
+        "name": "label",
+        "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:label@4",
+      "owners": [
+        "scope#0:label@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "kind",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 22
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:kind@22",
+      "owners": [
+        "scope#0:kind@22"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
         "name": "kind",
         "span": {
           "line": 4,
@@ -383,7 +444,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
       "identifier": {
         "name": "label",
         "span": {
@@ -432,7 +493,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#4",
       "identifier": {
         "name": "label",
         "span": {
@@ -481,7 +542,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#5",
       "identifier": {
         "name": "label",
         "span": {
@@ -530,7 +591,34 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#6",
+      "identifier": {
+        "name": "result",
+        "span": {
+          "line": 14,
+          "column": 6,
+          "offset": 168
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:result@168",
+      "owners": [
+        "scope#0:result@168"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#7",
       "identifier": {
         "name": "label",
         "span": {

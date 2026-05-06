@@ -132,7 +132,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_8",
               "kind": "ReturnUse",
               "name": "a",
               "line": 12,
@@ -142,7 +142,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_1",
+              "id": "ret_use_ref_9",
               "kind": "ReturnUse",
               "name": "b",
               "line": 13,
@@ -152,7 +152,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_2",
+              "id": "ret_use_ref_10",
               "kind": "ReturnUse",
               "name": "c",
               "line": 14,
@@ -162,7 +162,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_3",
+              "id": "ret_use_ref_11",
               "kind": "ReturnUse",
               "name": "d",
               "line": 15,
@@ -172,7 +172,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_4",
+              "id": "ret_use_ref_12",
               "kind": "ReturnUse",
               "name": "e",
               "line": 16,
@@ -182,7 +182,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_5",
+              "id": "ret_use_ref_13",
               "kind": "ReturnUse",
               "name": "f",
               "line": 17,
@@ -192,7 +192,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_6",
+              "id": "ret_use_ref_14",
               "kind": "ReturnUse",
               "name": "g",
               "line": 18,
@@ -202,7 +202,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_7",
+              "id": "ret_use_ref_15",
               "kind": "ReturnUse",
               "name": "h",
               "line": 19,
@@ -218,42 +218,42 @@
   "edges": [
     {
       "from": "n_scope_1_a_26",
-      "to": "ret_use_ref_0",
+      "to": "ret_use_ref_8",
       "label": "read"
     },
     {
       "from": "n_scope_1_b_43",
-      "to": "ret_use_ref_1",
+      "to": "ret_use_ref_9",
       "label": "read"
     },
     {
       "from": "n_scope_1_c_60",
-      "to": "ret_use_ref_2",
+      "to": "ret_use_ref_10",
       "label": "read"
     },
     {
       "from": "n_scope_1_d_77",
-      "to": "ret_use_ref_3",
+      "to": "ret_use_ref_11",
       "label": "read"
     },
     {
       "from": "n_scope_1_e_94",
-      "to": "ret_use_ref_4",
+      "to": "ret_use_ref_12",
       "label": "read"
     },
     {
       "from": "n_scope_1_f_111",
-      "to": "ret_use_ref_5",
+      "to": "ret_use_ref_13",
       "label": "read"
     },
     {
       "from": "n_scope_1_g_128",
-      "to": "ret_use_ref_6",
+      "to": "ret_use_ref_14",
       "label": "read"
     },
     {
       "from": "n_scope_1_h_145",
-      "to": "ret_use_ref_7",
+      "to": "ret_use_ref_15",
       "label": "read"
     }
   ],

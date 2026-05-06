@@ -32,19 +32,19 @@ flowchart RL
     direction RL
     subgraph s_scope_1["if L4-6"]
       direction RL
-      wr_ref_1(["let counter<br/>L5"])
+      wr_ref_3(["let counter<br/>L5"])
     end
     subgraph s_scope_2["else L6-8"]
       direction RL
-      wr_ref_2(["let counter<br/>L7"])
+      wr_ref_4(["let counter<br/>L7"])
     end
   end
-  wr_ref_1 -->|read| n_scope_0_result_97
-  wr_ref_2 -->|read| n_scope_0_result_97
+  wr_ref_3 -->|read| n_scope_0_result_97
+  wr_ref_4 -->|read| n_scope_0_result_97
   boundary_stub_1((...))
-  boundary_stub_1 -.->|set| wr_ref_1
+  boundary_stub_1 -.->|set| wr_ref_3
   boundary_stub_2((...))
-  boundary_stub_2 -.->|set| wr_ref_2
+  boundary_stub_2 -.->|set| wr_ref_4
   classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
   class boundary_stub_1 boundaryStub;
   class boundary_stub_2 boundaryStub;
