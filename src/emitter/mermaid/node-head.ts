@@ -41,6 +41,9 @@ export function nodeHead(n: VisualNode): string {
       if (n.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
         return `let ${name}`;
       }
+      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Var) {
+        return `var ${name}`;
+      }
       return name;
     case NODE_KIND.Parameter:
     case NODE_KIND.ReturnUse:
