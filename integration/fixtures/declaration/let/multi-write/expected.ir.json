@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/simple-const-let/input.ts",
+    "path": "integration/fixtures/declaration/let/multi-write/input.ts",
     "language": "ts"
   },
   "raw": "const greeting = \"hello\";\nlet counter = 0;\ncounter = counter + 1;\ncounter += 2;\ncounter++;\nconst message = greeting;\nconst unused = 99;\n",

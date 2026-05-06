@@ -1,4 +1,4 @@
-# integration/fixtures/unused-and-var/input.ts
+# integration/fixtures/declaration/mixed/with-unused/input.ts
 
 ## Input
 

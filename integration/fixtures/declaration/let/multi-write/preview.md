@@ -1,4 +1,4 @@
-# integration/fixtures/simple-const-let/input.ts
+# integration/fixtures/declaration/let/multi-write/input.ts
 
 ## Input
 

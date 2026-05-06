@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/simple-const-let/input.ts",
+    "path": "integration/fixtures/declaration/let/multi-write/input.ts",
     "language": "ts"
   },
   "direction": "RL",

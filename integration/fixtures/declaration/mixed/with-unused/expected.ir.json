@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/unused-and-var/input.ts",
+    "path": "integration/fixtures/declaration/mixed/with-unused/input.ts",
     "language": "ts"
   },
   "raw": "import { used, neverCalled } from \"module\";\n\nvar legacy = 1;\nconst a = used;\nconst ignored = 99;\n\nconsole.log(a);\n",
