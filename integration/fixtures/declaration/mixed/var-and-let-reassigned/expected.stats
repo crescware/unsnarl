@@ -1,0 +1,6 @@
+1	0	integration/fixtures/declaration/mixed/var-and-let-reassigned/input.ts:0 console
+0	0	integration/fixtures/declaration/mixed/var-and-let-reassigned/input.ts:1 a
+1	0	integration/fixtures/declaration/mixed/var-and-let-reassigned/input.ts:3 b
+1	1	integration/fixtures/declaration/mixed/var-and-let-reassigned/input.ts:4 b
+0	2	integration/fixtures/declaration/mixed/var-and-let-reassigned/input.ts:5 console.log()
+3	3	5 total
