@@ -16,10 +16,11 @@
     "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test",
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
+    "check:parity": "vitest run --project parity",
     "check:types": "tsgo -p tsconfig.json --noEmit",
     "exec": "node dist/index.js",
     "format": "oxlint --fix && oxfmt",
-    "test": "vitest"
+    "test": "vitest run --project default --project fixtures"
   },
   "dependencies": {
     "commander": "14.0.3",
