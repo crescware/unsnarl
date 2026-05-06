@@ -921,6 +921,16 @@ describe("buildVisualGraph: var declarations", () => {
     );
     expect(implicitGlobals).toHaveLength(0);
   });
+
+  test("an unused var node is not flagged as unused in the visual graph", () => {
+    // The IR still records the variable as unused; the visual graph
+    // intentionally drops the flag because the var node has no edges that
+    // would otherwise back up the usage signal.
+    const varName = freshName();
+    const graph = build(`var ${varName} = 0;\n`);
+    const varNode = nodeByName(graph, varName);
+    expect(varNode?.unused).toBe(false);
+  });
 });
 
 describe("buildVisualGraph: edge deduplication", () => {

@@ -487,6 +487,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   }
 
   for (const id of ir.unusedVariableIds) {
+    // var bindings have no edges in the visual graph, so surfacing their
+    // unused state would imply a usage signal the rendering can otherwise
+    // not show. Keep the IR-level fact (ir.unusedVariableIds) intact and
+    // skip the visual mark.
+    if (varVarIds.has(id)) {
+      continue;
+    }
     const target = nodeId(id);
     const node = findNodeById(graph.elements, target);
     if (node) {

@@ -37,7 +37,7 @@
       "line": 3,
       "endLine": null,
       "isJsxElement": false,
-      "unused": true,
+      "unused": false,
       "kind": "Variable",
       "declarationKind": "var",
       "initIsFunction": false
