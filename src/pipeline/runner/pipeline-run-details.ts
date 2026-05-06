@@ -1,3 +1,4 @@
+import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { RootQueryResolution } from "../../visual-graph/prune/root-query-resolution.js";
 
 export type PipelineRunDetails = Readonly<{
@@ -9,4 +10,5 @@ export type PipelineRunDetails = Readonly<{
       }>[]
     | null;
   resolutions: readonly RootQueryResolution[] | null;
+  diagnostics: readonly Diagnostic[];
 }>;

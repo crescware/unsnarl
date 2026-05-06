@@ -57,14 +57,16 @@ describe("declareForLeft", () => {
     expect(forScope.variables.map((v) => v.name).sort()).toEqual(["a", "b"]);
   });
 
-  test("emits a var-detected diagnostic and skips the binding when var is used", () => {
+  test("hoists var binding to the enclosing variable scope and emits a diagnostic", () => {
     const { forNode, forScope, code, diagnostics } = setup(
       "for (var i = 0; i < 1; i++) {}",
       AST_TYPE.ForStatement,
       "js",
     );
     declareForLeft(forNode, forScope, code, diagnostics);
+    // var hoists out of the for-statement scope.
     expect(forScope.variables).toHaveLength(0);
+    expect(forScope.variableScope.variables.map((v) => v.name)).toEqual(["i"]);
     const events = diagnostics.list();
     expect(events.some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected)).toBe(
       true,

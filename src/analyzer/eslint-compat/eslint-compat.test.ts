@@ -163,10 +163,10 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(e && defTypes(e)).toEqual([DEFINITION_TYPE.CatchClause]);
   });
 
-  test("records var-detected diagnostic and skips var bindings", () => {
+  test("declares var bindings while still emitting a var-detected diagnostic", () => {
     const code = "var legacy = 1;\nconst modern = 2;\n";
     const { rootScope, diagnostics } = analyze(code);
-    expect(variableNames(rootScope)).toEqual(["modern"]);
+    expect(variableNames(rootScope).sort()).toEqual(["legacy", "modern"]);
     expect(diagnostics.length).toBe(1);
     expect(diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
     expect(diagnostics[0]?.span?.line).toBe(1);

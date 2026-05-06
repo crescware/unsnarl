@@ -27,9 +27,9 @@
         }
       },
       "variables": [
+        "scope#0:a@4",
         "scope#0:global@11",
-        "scope#0:console@23",
-        "scope#0:a@35"
+        "scope#0:console@23"
       ],
       "references": [
         "ref#0",
@@ -39,8 +39,7 @@
       ],
       "through": [
         "ref#0",
-        "ref#1",
-        "ref#2"
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -49,6 +48,59 @@
     }
   ],
   "variables": [
+    {
+      "id": "scope#0:a@4",
+      "name": "a",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 8,
+              "offset": 8
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
     {
       "id": "scope#0:global@11",
       "name": "global",
@@ -117,43 +169,6 @@
               "line": 3,
               "column": 0,
               "offset": 23
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:a@35",
-      "name": "a",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 3,
-          "column": 12,
-          "offset": 35
-        }
-      ],
-      "references": [
-        "ref#2"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "a",
-            "span": {
-              "line": 3,
-              "column": 12,
-              "offset": 35
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 3,
-              "column": 12,
-              "offset": 35
             }
           },
           "parent": null,
@@ -270,7 +285,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:a@35",
+      "resolved": "scope#0:a@4",
       "owners": [],
       "init": false,
       "flags": {
@@ -358,7 +373,7 @@
   "diagnostics": [
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 1,
         "column": 0,

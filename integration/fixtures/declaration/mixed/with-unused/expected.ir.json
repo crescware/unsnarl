@@ -29,6 +29,7 @@
       "variables": [
         "scope#0:used@9",
         "scope#0:neverCalled@15",
+        "scope#0:legacy@49",
         "scope#0:a@67",
         "scope#0:ignored@83",
         "scope#0:console@98"
@@ -137,6 +138,57 @@
           "importKind": "named",
           "importedName": "neverCalled",
           "importSource": "module"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:legacy@49",
+      "name": "legacy",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 4,
+          "offset": 49
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "legacy",
+            "span": {
+              "line": 3,
+              "column": 4,
+              "offset": 49
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 4,
+              "offset": 49
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 45
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 13,
+              "offset": 58
+            }
+          },
+          "declarationKind": "var"
         }
       ]
     },
@@ -407,12 +459,13 @@
   ],
   "unusedVariableIds": [
     "scope#0:neverCalled@15",
+    "scope#0:legacy@49",
     "scope#0:ignored@83"
   ],
   "diagnostics": [
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 3,
         "column": 0,

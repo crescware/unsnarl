@@ -16,22 +16,28 @@ export function handleVariableDeclaration(
   diagnostics: DiagnosticCollector,
 ): void {
   const kind = node["kind"];
-  if (kind === VARIABLE_DECLARATION_KIND.Var) {
-    const start = node.start ?? 0;
-    diagnostics.add(
-      DIAGNOSTIC_KIND.VarDetected,
-      "var declaration is not supported and was skipped.",
-      spanFromOffset(raw, start),
-    );
+  if (
+    kind !== VARIABLE_DECLARATION_KIND.Var &&
+    kind !== VARIABLE_DECLARATION_KIND.Let &&
+    kind !== VARIABLE_DECLARATION_KIND.Const
+  ) {
     return;
   }
-  if (kind !== "const" && kind !== "let") {
-    return;
+  if (kind === VARIABLE_DECLARATION_KIND.Var) {
+    diagnostics.add(
+      DIAGNOSTIC_KIND.VarDetected,
+      "var declaration detected; rendered as node only (no edges).",
+      spanFromOffset(raw, node.start ?? 0),
+    );
   }
   const declarations = node["declarations"];
   if (!Array.isArray(declarations)) {
     return;
   }
+  // var bindings hoist to the enclosing function / module / global scope;
+  // let / const bind in the lexical scope.
+  const target =
+    kind === VARIABLE_DECLARATION_KIND.Var ? scope.variableScope : scope;
   for (const dec of declarations) {
     if (!isNodeLike(dec)) {
       continue;
@@ -43,7 +49,7 @@ export function handleVariableDeclaration(
     const idents = collectBindingIdentifiers(id as unknown as AstNode);
     for (const ident of idents) {
       declareVariable(
-        scope,
+        target,
         ident,
         DEFINITION_TYPE.Variable,
         dec as unknown as AstNode,

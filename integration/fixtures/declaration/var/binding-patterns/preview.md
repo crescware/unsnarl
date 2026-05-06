@@ -1,5 +1,17 @@
 # integration/fixtures/declaration/var/binding-patterns/input.ts
 
+## Notice
+
+```
+uns: warning: L2:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L5:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L9:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L12:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L15:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L18:0: var declaration detected; rendered as node only (no edges).
+uns: warning: L21:0: var declaration detected; rendered as node only (no edges).
+```
+
 ## Input
 
 ```ts
@@ -51,41 +63,24 @@ console.log(
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
+  n_scope_0_a_13["a<br/>L2"]
+  n_scope_0_b_49["b<br/>L5"]
+  n_scope_0_c_58["c<br/>L6"]
+  n_scope_0_d_112["d<br/>L9"]
+  n_scope_0_e_123["e<br/>L9"]
+  n_scope_0_f_129["f<br/>L9"]
+  n_scope_0_g_201["g<br/>L12"]
+  n_scope_0_renamed_207["renamed<br/>L12"]
+  n_scope_0_others_225["others<br/>L12"]
+  n_scope_0_kebab_319["kebab<br/>L15"]
+  n_scope_0_zeroth_329["zeroth<br/>L15"]
+  n_scope_0_p_427["p<br/>L18"]
+  n_scope_0_q_434["q<br/>L18"]
+  n_scope_0_r_508["r<br/>L21"]
+  n_scope_0_s_511["s<br/>L21"]
+  n_scope_0_t_521["t<br/>L21"]
+  n_scope_0_u_524["u<br/>L21"]
   n_scope_0_console_557["global console"]
-  n_scope_0_a_572["global a"]
-  n_scope_0_b_577["global b"]
-  n_scope_0_c_582["global c"]
-  n_scope_0_d_587["global d"]
-  n_scope_0_e_592["global e"]
-  n_scope_0_f_597["global f"]
-  n_scope_0_g_602["global g"]
-  n_scope_0_renamed_607["global renamed"]
-  n_scope_0_others_618["global others"]
-  n_scope_0_kebab_628["global kebab"]
-  n_scope_0_zeroth_637["global zeroth"]
-  n_scope_0_p_647["global p"]
-  n_scope_0_q_652["global q"]
-  n_scope_0_r_657["global r"]
-  n_scope_0_s_662["global s"]
-  n_scope_0_t_667["global t"]
-  n_scope_0_u_672["global u"]
   n_scope_0_console_557 -->|read| expr_stmt_557
-  n_scope_0_a_572 -->|read| expr_stmt_557
-  n_scope_0_b_577 -->|read| expr_stmt_557
-  n_scope_0_c_582 -->|read| expr_stmt_557
-  n_scope_0_d_587 -->|read| expr_stmt_557
-  n_scope_0_e_592 -->|read| expr_stmt_557
-  n_scope_0_f_597 -->|read| expr_stmt_557
-  n_scope_0_g_602 -->|read| expr_stmt_557
-  n_scope_0_renamed_607 -->|read| expr_stmt_557
-  n_scope_0_others_618 -->|read| expr_stmt_557
-  n_scope_0_kebab_628 -->|read| expr_stmt_557
-  n_scope_0_zeroth_637 -->|read| expr_stmt_557
-  n_scope_0_p_647 -->|read| expr_stmt_557
-  n_scope_0_q_652 -->|read| expr_stmt_557
-  n_scope_0_r_657 -->|read| expr_stmt_557
-  n_scope_0_s_662 -->|read| expr_stmt_557
-  n_scope_0_t_667 -->|read| expr_stmt_557
-  n_scope_0_u_672 -->|read| expr_stmt_557
   expr_stmt_557["console.log()<br/>L23-41"]
 ```

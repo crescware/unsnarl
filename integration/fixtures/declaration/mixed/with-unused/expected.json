@@ -32,6 +32,18 @@
     },
     {
       "type": "node",
+      "id": "n_scope_0_legacy_49",
+      "name": "legacy",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "var",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
       "id": "n_scope_0_a_67",
       "name": "a",
       "line": 4,

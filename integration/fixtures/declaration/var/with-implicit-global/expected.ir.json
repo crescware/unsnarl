@@ -27,6 +27,7 @@
         }
       },
       "variables": [
+        "scope#0:a@4",
         "scope#0:global@11"
       ],
       "references": [
@@ -42,6 +43,57 @@
     }
   ],
   "variables": [
+    {
+      "id": "scope#0:a@4",
+      "name": "a",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 8,
+              "offset": 8
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
     {
       "id": "scope#0:global@11",
       "name": "global",
@@ -131,11 +183,13 @@
       }
     }
   ],
-  "unusedVariableIds": [],
+  "unusedVariableIds": [
+    "scope#0:a@4"
+  ],
   "diagnostics": [
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 1,
         "column": 0,

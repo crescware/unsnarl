@@ -49,12 +49,12 @@ describe("hoistDeclarations", () => {
     expect(scope.variables.map((v) => v.name)).toEqual(["a"]);
   });
 
-  test("var emits a diagnostic but does not abort the rest of the body", () => {
+  test("var hoists alongside the rest and emits a var-detected diagnostic", () => {
     const scope = newScope();
     const diags = new DiagnosticCollector();
     const raw = "var x = 1; const y = 2;";
     hoistDeclarations(programBody(raw), scope, raw, diags);
-    expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
+    expect(scope.variables.map((v) => v.name)).toEqual(["x", "y"]);
     expect(diags.list().map((d) => d.kind)).toEqual([
       DIAGNOSTIC_KIND.VarDetected,
     ]);
