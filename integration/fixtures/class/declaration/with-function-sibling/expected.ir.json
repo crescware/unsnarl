@@ -344,14 +344,6 @@
             }
           },
           "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 1,
-              "column": 13,
-              "offset": 13
-            }
-          },
-          "parent": {
             "type": "FunctionDeclaration",
             "span": {
               "line": 1,
@@ -359,6 +351,7 @@
               "offset": 0
             }
           },
+          "parent": null,
           "type": "Parameter"
         }
       ]
@@ -388,14 +381,6 @@
             }
           },
           "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 1,
-              "column": 24,
-              "offset": 24
-            }
-          },
-          "parent": {
             "type": "FunctionDeclaration",
             "span": {
               "line": 1,
@@ -403,6 +388,7 @@
               "offset": 0
             }
           },
+          "parent": null,
           "type": "Parameter"
         }
       ]

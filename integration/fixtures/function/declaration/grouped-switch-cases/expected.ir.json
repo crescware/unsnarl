@@ -459,14 +459,6 @@
             }
           },
           "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 1,
-              "column": 20,
-              "offset": 20
-            }
-          },
-          "parent": {
             "type": "FunctionDeclaration",
             "span": {
               "line": 1,
@@ -474,6 +466,7 @@
               "offset": 0
             }
           },
+          "parent": null,
           "type": "Parameter"
         }
       ]

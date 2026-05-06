@@ -23,8 +23,8 @@ export function declareFunctionParams(node: NodeLike, scope: Scope): void {
         scope,
         ident,
         DEFINITION_TYPE.Parameter,
-        p as unknown as AstNode,
         node as unknown as AstNode,
+        null,
       );
     }
   }

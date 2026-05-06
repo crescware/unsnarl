@@ -20,24 +20,75 @@ describe("declareFunctionParams", () => {
   test("declares simple identifier parameters as Parameter definitions", () => {
     const { fn, fnScope } = setup("function f(a, b) {}");
     declareFunctionParams(fn, fnScope);
-    expect(fnScope.variables.map((v) => v.name)).toEqual(["a", "b"]);
     expect(
-      fnScope.variables.every(
-        (v) => v.defs[0]?.type === DEFINITION_TYPE.Parameter,
-      ),
-    ).toBe(true);
+      fnScope.variables.map((v) => ({
+        name: v.name,
+        defType: v.defs[0]?.type,
+        defNode: v.defs[0]?.node,
+        defParent: v.defs[0]?.parent,
+      })),
+    ).toEqual([
+      {
+        name: "a",
+        defType: DEFINITION_TYPE.Parameter,
+        defNode: fn,
+        defParent: null,
+      },
+      {
+        name: "b",
+        defType: DEFINITION_TYPE.Parameter,
+        defNode: fn,
+        defParent: null,
+      },
+    ]);
   });
 
   test("declares destructured parameters at the binding identifiers", () => {
     const { fn, fnScope } = setup("function f({ x, y }) {}");
     declareFunctionParams(fn, fnScope);
-    expect(fnScope.variables.map((v) => v.name).sort()).toEqual(["x", "y"]);
+    expect(
+      [...fnScope.variables]
+        .sort((a, b) => a.name.localeCompare(b.name))
+        .map((v) => ({
+          name: v.name,
+          defType: v.defs[0]?.type,
+          defNode: v.defs[0]?.node,
+          defParent: v.defs[0]?.parent,
+        })),
+    ).toEqual([
+      {
+        name: "x",
+        defType: DEFINITION_TYPE.Parameter,
+        defNode: fn,
+        defParent: null,
+      },
+      {
+        name: "y",
+        defType: DEFINITION_TYPE.Parameter,
+        defNode: fn,
+        defParent: null,
+      },
+    ]);
   });
 
   test("declares the underlying identifier when the parameter is a RestElement", () => {
     const { fn, fnScope } = setup("function f(...rest) {}");
     declareFunctionParams(fn, fnScope);
-    expect(fnScope.variables.map((v) => v.name)).toEqual(["rest"]);
+    expect(
+      fnScope.variables.map((v) => ({
+        name: v.name,
+        defType: v.defs[0]?.type,
+        defNode: v.defs[0]?.node,
+        defParent: v.defs[0]?.parent,
+      })),
+    ).toEqual([
+      {
+        name: "rest",
+        defType: DEFINITION_TYPE.Parameter,
+        defNode: fn,
+        defParent: null,
+      },
+    ]);
   });
 
   test("does nothing when params is missing or not an array", () => {

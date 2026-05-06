@@ -160,14 +160,6 @@
             }
           },
           "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 1,
-              "column": 11,
-              "offset": 11
-            }
-          },
-          "parent": {
             "type": "ArrowFunctionExpression",
             "span": {
               "line": 1,
@@ -175,6 +167,7 @@
               "offset": 10
             }
           },
+          "parent": null,
           "type": "Parameter"
         }
       ]
