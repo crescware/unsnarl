@@ -21,6 +21,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false
   },
-  "include": ["src", "integration"],
+  "include": ["src", "integration", "parity"],
   "exclude": ["integration/fixtures/**/input.*"]
 }

@@ -1,0 +1,15 @@
+export type MismatchKind =
+  | "scope-type-mismatch"
+  | "scope-block-type-mismatch"
+  | "scope-block-range-mismatch"
+  | "child-scope-count-mismatch"
+  | "variable-missing"
+  | "variable-extra"
+  | "definition-count-mismatch"
+  | "definition-type-mismatch"
+  | "definition-node-range-mismatch"
+  | "reference-missing"
+  | "reference-extra"
+  | "reference-flag-mismatch"
+  | "reference-init-mismatch"
+  | "reference-resolution-mismatch";
