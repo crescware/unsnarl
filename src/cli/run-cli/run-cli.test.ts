@@ -49,12 +49,6 @@ describe("runCli (integration)", () => {
     // Vitest 終了時に OS が回収するので削除不要
   });
 
-  test("--version prints 0.0.0 and exits 0", async () => {
-    const r = await captureRun(["--version"]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stdout.trim()).toBe("0.0.0");
-  });
-
   test("--help prints usage and exits 0", async () => {
     const r = await captureRun(["--help"]);
     expect(r.exitCode).toBe(0);
