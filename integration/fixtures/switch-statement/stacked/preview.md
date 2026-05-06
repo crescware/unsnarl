@@ -34,16 +34,16 @@ flowchart RL
     end
     subgraph s_scope_3["case &quot;b&quot; L6-8"]
       direction RL
-      wr_ref_1(["let label<br/>L7"])
+      wr_ref_3(["let label<br/>L7"])
     end
     subgraph s_scope_4["default L9-10"]
       direction RL
-      wr_ref_2(["let label<br/>L10"])
+      wr_ref_4(["let label<br/>L10"])
     end
   end
-  n_scope_0_label_4 -->|fallthrough| wr_ref_1
-  n_scope_0_label_4 -->|set| wr_ref_2
+  n_scope_0_label_4 -->|fallthrough| wr_ref_3
+  n_scope_0_label_4 -->|set| wr_ref_4
   n_scope_0_kind_22 -->|read| switch_discriminant_scope_0_35
-  wr_ref_1 -->|read| n_scope_0_result_145
-  wr_ref_2 -->|read| n_scope_0_result_145
+  wr_ref_3 -->|read| n_scope_0_result_145
+  wr_ref_4 -->|read| n_scope_0_result_145
 ```

@@ -34,7 +34,10 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2"
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -57,7 +60,8 @@
       ],
       "references": [
         "ref#0",
-        "ref#1"
+        "ref#2",
+        "ref#4"
       ],
       "defs": [
         {
@@ -110,7 +114,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#1",
+        "ref#5"
       ],
       "defs": [
         {
@@ -162,7 +167,9 @@
           "offset": 40
         }
       ],
-      "references": [],
+      "references": [
+        "ref#3"
+      ],
       "defs": [
         {
           "name": {
@@ -209,6 +216,60 @@
       "identifier": {
         "name": "l5",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:l5@6",
+      "owners": [
+        "scope#0:l5@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "l99",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 20
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:l99@20",
+      "owners": [
+        "scope#0:l99@20"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "l5",
+        "span": {
           "line": 2,
           "column": 12,
           "offset": 26
@@ -232,7 +293,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
+      "identifier": {
+        "name": "sum",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 40
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:sum@40",
+      "owners": [
+        "scope#0:sum@40"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
       "identifier": {
         "name": "l5",
         "span": {
@@ -259,7 +347,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#5",
       "identifier": {
         "name": "l99",
         "span": {

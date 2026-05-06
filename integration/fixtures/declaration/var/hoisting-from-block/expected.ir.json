@@ -36,10 +36,11 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2"
+        "ref#3",
+        "ref#4"
       ],
       "through": [
-        "ref#1"
+        "ref#3"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -67,7 +68,9 @@
         }
       },
       "variables": [],
-      "references": [],
+      "references": [
+        "ref#2"
+      ],
       "through": [],
       "functionExpressionScope": false,
       "blockContext": {
@@ -94,7 +97,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#1"
       ],
       "defs": [
         {
@@ -147,7 +151,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#2",
+        "ref#4"
       ],
       "defs": [
         {
@@ -200,7 +205,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#3"
       ],
       "defs": [
         {
@@ -232,6 +237,33 @@
       "identifier": {
         "name": "cond",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:cond@6",
+      "owners": [
+        "scope#0:cond@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "cond",
+        "span": {
           "line": 2,
           "column": 4,
           "offset": 23
@@ -256,7 +288,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
+      "identifier": {
+        "name": "y",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 37
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:y@37",
+      "owners": [
+        "scope#0:y@37"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
       "identifier": {
         "name": "console",
         "span": {
@@ -303,7 +362,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#4",
       "identifier": {
         "name": "y",
         "span": {

@@ -68,7 +68,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_1",
+              "id": "wr_ref_3",
               "kind": "WriteOp",
               "name": "label",
               "line": 6,
@@ -90,7 +90,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_2",
+              "id": "wr_ref_4",
               "kind": "WriteOp",
               "name": "label",
               "line": 8,
@@ -112,7 +112,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_3",
+              "id": "wr_ref_5",
               "kind": "WriteOp",
               "name": "label",
               "line": 10,
@@ -132,17 +132,17 @@
   "edges": [
     {
       "from": "n_scope_0_label_4",
-      "to": "wr_ref_1",
+      "to": "wr_ref_3",
       "label": "set"
     },
     {
-      "from": "wr_ref_1",
-      "to": "wr_ref_2",
+      "from": "wr_ref_3",
+      "to": "wr_ref_4",
       "label": "fallthrough"
     },
     {
-      "from": "wr_ref_2",
-      "to": "wr_ref_3",
+      "from": "wr_ref_4",
+      "to": "wr_ref_5",
       "label": "fallthrough"
     },
     {
@@ -151,7 +151,7 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_3",
+      "from": "wr_ref_5",
       "to": "n_scope_0_result_157",
       "label": "read"
     }

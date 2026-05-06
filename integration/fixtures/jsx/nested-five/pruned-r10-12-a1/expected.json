@@ -26,7 +26,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
@@ -36,7 +36,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_1",
+              "id": "ret_use_ref_6",
               "kind": "ReturnUse",
               "name": "v",
               "line": 12,

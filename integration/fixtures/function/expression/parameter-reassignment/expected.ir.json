@@ -31,7 +31,9 @@
       "variables": [
         "scope#0:f@6"
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -62,11 +64,11 @@
         "scope#1:x@20"
       ],
       "references": [
-        "ref#0",
         "ref#1",
         "ref#2",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -87,7 +89,9 @@
           "offset": 6
         }
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "defs": [
         {
           "name": {
@@ -139,11 +143,11 @@
         }
       ],
       "references": [
-        "ref#0",
         "ref#1",
         "ref#2",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5"
       ],
       "defs": [
         {
@@ -179,6 +183,33 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "f",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:f@6",
+      "owners": [
+        "scope#0:f@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
       "identifier": {
         "name": "x",
         "span": {
@@ -227,7 +258,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "x",
         "span": {
@@ -276,7 +307,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "x",
         "span": {
@@ -325,7 +356,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#4",
       "identifier": {
         "name": "x",
         "span": {
@@ -374,7 +405,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#5",
       "identifier": {
         "name": "x",
         "span": {

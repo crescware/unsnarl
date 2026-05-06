@@ -1,5 +1,6 @@
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { ReferenceFlags } from "../../ir/reference/reference-flags.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
 import type { PathEntry } from "../walk/path-entry.js";
 import { classifyOrdinaryReference } from "./classify-ordinary-reference.js";
 import type { ClassifyResult } from "./classify-result.js";
@@ -25,6 +26,13 @@ export function classifyIdentifier(
   }
 
   if (isDirectBinding(t, key)) {
+    if (
+      t === AST_TYPE.VariableDeclarator &&
+      key === "id" &&
+      parent["init"] !== null
+    ) {
+      return reference(ReferenceFlags.Write, true);
+    }
     return { kind: "binding" };
   }
 

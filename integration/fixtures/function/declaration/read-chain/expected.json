@@ -108,7 +108,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_3",
+              "id": "ret_use_ref_7",
               "kind": "ReturnUse",
               "name": "d",
               "line": 6,
@@ -139,7 +139,7 @@
     },
     {
       "from": "n_scope_1_d_83",
-      "to": "ret_use_ref_3",
+      "to": "ret_use_ref_7",
       "label": "read"
     },
     {

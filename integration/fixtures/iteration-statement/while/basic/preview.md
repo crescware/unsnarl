@@ -22,10 +22,10 @@ flowchart RL
   subgraph s_scope_1["while L3-6"]
     direction RL
     while_test_scope_0_33["while ()<br/>L3"]
-    wr_ref_4(["let count<br/>L5"])
+    wr_ref_6(["let count<br/>L5"])
     expr_stmt_59["console.log()<br/>L4"]
   end
-  n_scope_0_count_22 -->|set| wr_ref_4
+  n_scope_0_count_22 -->|set| wr_ref_6
   n_scope_0_count_22 -->|read| while_test_scope_0_33
   n_scope_0_limit_6 -->|read| while_test_scope_0_33
   n_scope_0_console_59 -->|read| expr_stmt_59

@@ -47,10 +47,10 @@ flowchart RL
     direction RL
     subgraph s_return_scope_0_Main_54_151_331["return L10-24"]
       direction RL
-      ret_use_ref_0["&lt;A&gt;<br/>L11-23"]
+      ret_use_ref_5["&lt;A&gt;<br/>L11-23"]
     end
   end
-  n_scope_0_A_9 -->|read| ret_use_ref_0
+  n_scope_0_A_9 -->|read| ret_use_ref_5
   mod_components["module components<br/>L1"]
   mod_components -->|read| n_scope_0_A_9
   boundary_stub_1((...))

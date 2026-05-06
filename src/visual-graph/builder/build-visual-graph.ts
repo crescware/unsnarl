@@ -127,6 +127,12 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       if (!r.flags.write) {
         continue;
       }
+      if (r.init) {
+        // init Write reference is the binding's initial PutValue; the Variable
+        // node already represents the declaration, so emitting a WriteOp here
+        // would double-count the initialization as an explicit assignment.
+        continue;
+      }
       const op = {
         refId: r.id,
         varId: v.id,

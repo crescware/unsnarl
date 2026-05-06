@@ -31,10 +31,11 @@
         "scope#0:global@11"
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#1"
       ],
       "through": [
-        "ref#0"
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -54,7 +55,9 @@
           "offset": 4
         }
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "defs": [
         {
           "name": {
@@ -106,7 +109,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "defs": [
         {
@@ -135,6 +138,33 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@4",
+      "owners": [
+        "scope#0:a@4"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
       "identifier": {
         "name": "global",
         "span": {

@@ -36,7 +36,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_1",
+              "id": "wr_ref_3",
               "kind": "WriteOp",
               "name": "counter",
               "line": 5,
@@ -57,7 +57,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_2",
+              "id": "wr_ref_4",
               "kind": "WriteOp",
               "name": "counter",
               "line": 7,
@@ -74,24 +74,24 @@
   ],
   "edges": [
     {
-      "from": "wr_ref_1",
+      "from": "wr_ref_3",
       "to": "n_scope_0_result_97",
       "label": "read"
     },
     {
-      "from": "wr_ref_2",
+      "from": "wr_ref_4",
       "to": "n_scope_0_result_97",
       "label": "read"
     }
   ],
   "boundaryEdges": [
     {
-      "inside": "wr_ref_1",
+      "inside": "wr_ref_3",
       "direction": "in",
       "label": "set"
     },
     {
-      "inside": "wr_ref_2",
+      "inside": "wr_ref_4",
       "direction": "in",
       "label": "set"
     }

@@ -33,7 +33,8 @@
         "scope#0:g@49"
       ],
       "references": [
-        "ref#1"
+        "ref#2",
+        "ref#3"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -65,7 +66,8 @@
         "scope#1:x@21"
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#1"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -87,7 +89,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#3"
       ],
       "defs": [
         {
@@ -123,7 +125,9 @@
           "offset": 49
         }
       ],
-      "references": [],
+      "references": [
+        "ref#2"
+      ],
       "defs": [
         {
           "name": {
@@ -175,7 +179,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#1"
       ],
       "defs": [
         {
@@ -223,6 +228,33 @@
       "identifier": {
         "name": "x",
         "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 21
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:x@21",
+      "owners": [
+        "scope#1:x@21"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
           "line": 3,
           "column": 9,
           "offset": 37
@@ -255,7 +287,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
+      "identifier": {
+        "name": "g",
+        "span": {
+          "line": 6,
+          "column": 6,
+          "offset": 49
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:g@49",
+      "owners": [
+        "scope#0:g@49"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
       "identifier": {
         "name": "f",
         "span": {

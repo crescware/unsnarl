@@ -99,7 +99,7 @@
               "elements": [
                 {
                   "type": "node",
-                  "id": "ret_use_ref_1",
+                  "id": "ret_use_ref_3",
                   "kind": "ReturnUse",
                   "name": "a",
                   "line": 6,
@@ -109,7 +109,7 @@
                 },
                 {
                   "type": "node",
-                  "id": "ret_use_ref_2",
+                  "id": "ret_use_ref_4",
                   "kind": "ReturnUse",
                   "name": "b",
                   "line": 6,
@@ -132,7 +132,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_3",
+              "id": "ret_use_ref_6",
               "kind": "ReturnUse",
               "name": "a",
               "line": 10,
@@ -142,7 +142,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_4",
+              "id": "ret_use_ref_7",
               "kind": "ReturnUse",
               "name": "b",
               "line": 10,
@@ -163,22 +163,22 @@
     },
     {
       "from": "n_scope_1_a_26",
-      "to": "ret_use_ref_1",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_2_b_75",
-      "to": "ret_use_ref_2",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_1_a_26",
       "to": "ret_use_ref_3",
       "label": "read"
     },
     {
-      "from": "n_scope_1_b_119",
+      "from": "n_scope_2_b_75",
       "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_26",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_119",
+      "to": "ret_use_ref_7",
       "label": "read"
     }
   ],

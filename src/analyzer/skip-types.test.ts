@@ -76,8 +76,9 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     const value = findVariable(rootScope, "value")!;
-    expect(value.references.length).toBe(1);
-    // `number` は型なので参照にもならない
+    // [0] is the init Write at value's declarator id; [1] is the read in
+    // `value as number` whose type annotation is skipped.
+    expect(value.references.length).toBe(2);
     expect(findVariable(rootScope, "number")).toBeNull();
   });
 
@@ -88,8 +89,9 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code, "tsx");
     const Comp = findVariable(rootScope, "Comp")!;
-    expect(Comp.references.length).toBe(1);
-    expect(Comp.references[0]?.isRead()).toBe(true);
+    // [0] is the init Write at Comp's declarator id; [1] is the JSX tag read.
+    expect(Comp.references.length).toBe(2);
+    expect(Comp.references[1]?.isRead()).toBe(true);
   });
 
   test("does not register JSX attribute names as references", () => {

@@ -50,7 +50,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
@@ -60,7 +60,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_1",
+              "id": "ret_use_ref_6",
               "kind": "ReturnUse",
               "name": "v",
               "line": 12,
@@ -86,12 +86,12 @@
   "edges": [
     {
       "from": "n_scope_0_A_9",
-      "to": "ret_use_ref_0",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {
       "from": "n_scope_1_v_71",
-      "to": "ret_use_ref_1",
+      "to": "ret_use_ref_6",
       "label": "read"
     },
     {

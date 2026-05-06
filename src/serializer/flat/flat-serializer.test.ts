@@ -52,12 +52,24 @@ describe("FlatSerializer", () => {
       a;
     `;
     const ir = pipe(code);
-    expect(ir.references.map((r) => r.id)).toEqual(["ref#0", "ref#1"]);
-    expect(ir.references[0]?.identifier.name).toBe("a");
-    expect(ir.references[1]?.identifier.name).toBe("a");
-    expect(ir.references[0]?.identifier.span.offset).toBeLessThan(
-      ir.references[1]?.identifier.span.offset ?? Infinity,
-    );
+    // 4 refs in source order: init Write on a, init Write on b, init Read on
+    // a (RHS of `const b = a;`), and the trailing `a;` read.
+    expect(ir.references.map((r) => r.id)).toEqual([
+      "ref#0",
+      "ref#1",
+      "ref#2",
+      "ref#3",
+    ]);
+    expect(ir.references.map((r) => r.identifier.name)).toEqual([
+      "a",
+      "b",
+      "a",
+      "a",
+    ]);
+    const offsets = ir.references.map((r) => r.identifier.span.offset);
+    expect(offsets[0]).toBeLessThan(offsets[1] ?? Infinity);
+    expect(offsets[1]).toBeLessThan(offsets[2] ?? Infinity);
+    expect(offsets[2]).toBeLessThan(offsets[3] ?? Infinity);
   });
 
   test("breaks circular references by linking ids only", () => {
@@ -90,7 +102,8 @@ describe("FlatSerializer", () => {
       (r) => r.identifier.name === "x" && r.flags.write,
     );
     expect(xReads.length).toBeGreaterThan(0);
-    expect(xWrites.length).toBe(1);
+    // Two writes: the init Write at `let x = 0` and the explicit `x = 1`.
+    expect(xWrites.length).toBe(2);
     const addRef = refs.find((r) => r.identifier.name === "add");
     expect(addRef?.flags.call).toBe(true);
     expect(addRef?.flags.read).toBe(true);

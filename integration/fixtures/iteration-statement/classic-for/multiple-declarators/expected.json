@@ -59,7 +59,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_2",
+          "id": "wr_ref_4",
           "kind": "WriteOp",
           "name": "m",
           "line": 1,
@@ -70,7 +70,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_3",
+          "id": "wr_ref_5",
           "kind": "WriteOp",
           "name": "n",
           "line": 1,
@@ -96,12 +96,12 @@
   "edges": [
     {
       "from": "n_scope_1_m_9",
-      "to": "wr_ref_2",
+      "to": "wr_ref_4",
       "label": "set"
     },
     {
       "from": "n_scope_1_n_16",
-      "to": "wr_ref_3",
+      "to": "wr_ref_5",
       "label": "set"
     },
     {
@@ -120,12 +120,12 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_2",
+      "from": "wr_ref_4",
       "to": "expr_stmt_45",
       "label": "read"
     },
     {
-      "from": "wr_ref_3",
+      "from": "wr_ref_5",
       "to": "expr_stmt_45",
       "label": "read"
     }

@@ -34,11 +34,12 @@
         "scope#0:console@51"
       ],
       "references": [
-        "ref#5",
-        "ref#6"
+        "ref#0",
+        "ref#6",
+        "ref#7"
       ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -69,10 +70,10 @@
       },
       "variables": [],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -107,13 +108,13 @@
       },
       "variables": [],
       "references": [
-        "ref#1",
         "ref#2",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5"
       ],
       "through": [
-        "ref#1"
+        "ref#2"
       ],
       "functionExpressionScope": false,
       "blockContext": {
@@ -141,7 +142,8 @@
       ],
       "references": [
         "ref#0",
-        "ref#3"
+        "ref#1",
+        "ref#4"
       ],
       "defs": [
         {
@@ -194,9 +196,9 @@
         }
       ],
       "references": [
-        "ref#2",
-        "ref#4",
-        "ref#6"
+        "ref#3",
+        "ref#5",
+        "ref#7"
       ],
       "defs": [
         {
@@ -242,8 +244,8 @@
         }
       ],
       "references": [
-        "ref#1",
-        "ref#5"
+        "ref#2",
+        "ref#6"
       ],
       "defs": [
         {
@@ -275,6 +277,33 @@
       "identifier": {
         "name": "obj",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:obj@6",
+      "owners": [
+        "scope#0:obj@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "obj",
+        "span": {
           "line": 2,
           "column": 14,
           "offset": 42
@@ -299,7 +328,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "console",
         "span": {
@@ -346,7 +375,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#3",
       "identifier": {
         "name": "k",
         "span": {
@@ -393,7 +422,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#4",
       "identifier": {
         "name": "obj",
         "span": {
@@ -440,7 +469,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#5",
       "identifier": {
         "name": "k",
         "span": {
@@ -487,7 +516,7 @@
       }
     },
     {
-      "id": "ref#5",
+      "id": "ref#6",
       "identifier": {
         "name": "console",
         "span": {
@@ -534,7 +563,7 @@
       }
     },
     {
-      "id": "ref#6",
+      "id": "ref#7",
       "identifier": {
         "name": "k",
         "span": {

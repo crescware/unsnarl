@@ -38,7 +38,13 @@
       ],
       "references": [
         "ref#0",
-        "ref#9"
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#14",
+        "ref#15"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -73,7 +79,7 @@
       },
       "variables": [],
       "references": [
-        "ref#1"
+        "ref#6"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -109,8 +115,8 @@
       },
       "variables": [],
       "references": [
-        "ref#2",
-        "ref#3"
+        "ref#7",
+        "ref#8"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -146,8 +152,8 @@
       },
       "variables": [],
       "references": [
-        "ref#4",
-        "ref#5"
+        "ref#9",
+        "ref#10"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -183,8 +189,8 @@
       },
       "variables": [],
       "references": [
-        "ref#6",
-        "ref#7"
+        "ref#11",
+        "ref#12"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -220,7 +226,7 @@
       },
       "variables": [],
       "references": [
-        "ref#8"
+        "ref#13"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -249,7 +255,8 @@
       ],
       "references": [
         "ref#0",
-        "ref#2"
+        "ref#5",
+        "ref#7"
       ],
       "defs": [
         {
@@ -302,7 +309,8 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#1",
+        "ref#9"
       ],
       "defs": [
         {
@@ -355,7 +363,8 @@
         }
       ],
       "references": [
-        "ref#6"
+        "ref#2",
+        "ref#11"
       ],
       "defs": [
         {
@@ -409,10 +418,11 @@
       ],
       "references": [
         "ref#3",
-        "ref#5",
-        "ref#7",
         "ref#8",
-        "ref#9"
+        "ref#10",
+        "ref#12",
+        "ref#13",
+        "ref#15"
       ],
       "defs": [
         {
@@ -465,7 +475,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#4",
+        "ref#6"
       ],
       "defs": [
         {
@@ -517,7 +528,9 @@
           "offset": 283
         }
       ],
-      "references": [],
+      "references": [
+        "ref#14"
+      ],
       "defs": [
         {
           "name": {
@@ -564,6 +577,141 @@
       "identifier": {
         "name": "RED",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:RED@6",
+      "owners": [
+        "scope#0:RED@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "GREEN",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 23
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:GREEN@23",
+      "owners": [
+        "scope#0:GREEN@23"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "BLUE",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 42
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:BLUE@42",
+      "owners": [
+        "scope#0:BLUE@42"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "label",
+        "span": {
+          "line": 5,
+          "column": 4,
+          "offset": 59
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:label@59",
+      "owners": [
+        "scope#0:label@59"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "color",
+        "span": {
+          "line": 6,
+          "column": 6,
+          "offset": 77
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:color@77",
+      "owners": [
+        "scope#0:color@77"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "RED",
+        "span": {
           "line": 6,
           "column": 14,
           "offset": 85
@@ -587,7 +735,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#6",
       "identifier": {
         "name": "color",
         "span": {
@@ -615,7 +763,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#7",
       "identifier": {
         "name": "RED",
         "span": {
@@ -640,7 +788,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#3",
+      "id": "ref#8",
       "identifier": {
         "name": "label",
         "span": {
@@ -689,7 +837,7 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#9",
       "identifier": {
         "name": "GREEN",
         "span": {
@@ -714,7 +862,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#5",
+      "id": "ref#10",
       "identifier": {
         "name": "label",
         "span": {
@@ -763,7 +911,7 @@
       }
     },
     {
-      "id": "ref#6",
+      "id": "ref#11",
       "identifier": {
         "name": "BLUE",
         "span": {
@@ -788,7 +936,7 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#7",
+      "id": "ref#12",
       "identifier": {
         "name": "label",
         "span": {
@@ -837,7 +985,7 @@
       }
     },
     {
-      "id": "ref#8",
+      "id": "ref#13",
       "identifier": {
         "name": "label",
         "span": {
@@ -886,7 +1034,34 @@
       }
     },
     {
-      "id": "ref#9",
+      "id": "ref#14",
+      "identifier": {
+        "name": "result",
+        "span": {
+          "line": 22,
+          "column": 6,
+          "offset": 283
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:result@283",
+      "owners": [
+        "scope#0:result@283"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#15",
       "identifier": {
         "name": "label",
         "span": {

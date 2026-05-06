@@ -37,10 +37,13 @@
       "references": [
         "ref#0",
         "ref#1",
-        "ref#2"
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5"
       ],
       "through": [
-        "ref#1"
+        "ref#4"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -61,7 +64,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#2"
       ],
       "defs": [
         {
@@ -152,7 +155,9 @@
           "offset": 49
         }
       ],
-      "references": [],
+      "references": [
+        "ref#0"
+      ],
       "defs": [
         {
           "name": {
@@ -204,7 +209,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#1",
+        "ref#5"
       ],
       "defs": [
         {
@@ -256,7 +262,9 @@
           "offset": 83
         }
       ],
-      "references": [],
+      "references": [
+        "ref#3"
+      ],
       "defs": [
         {
           "name": {
@@ -308,7 +316,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#4"
       ],
       "defs": [
         {
@@ -338,6 +346,60 @@
     {
       "id": "ref#0",
       "identifier": {
+        "name": "legacy",
+        "span": {
+          "line": 3,
+          "column": 4,
+          "offset": 49
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:legacy@49",
+      "owners": [
+        "scope#0:legacy@49"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 4,
+          "column": 6,
+          "offset": 67
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@67",
+      "owners": [
+        "scope#0:a@67"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
         "name": "used",
         "span": {
           "line": 4,
@@ -363,7 +425,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
+      "identifier": {
+        "name": "ignored",
+        "span": {
+          "line": 5,
+          "column": 6,
+          "offset": 83
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:ignored@83",
+      "owners": [
+        "scope#0:ignored@83"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
       "identifier": {
         "name": "console",
         "span": {
@@ -410,7 +499,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#5",
       "identifier": {
         "name": "a",
         "span": {

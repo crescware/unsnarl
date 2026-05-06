@@ -45,13 +45,15 @@ describe("EslintCompatAnalyzer / references", () => {
   test("classifies a simple read reference", () => {
     const { rootScope } = analyze("const a = 1;\nconsole.log(a);\n");
     const a = findVariable(rootScope, "a")!;
-    expect(a.references.length).toBe(1);
-    expect(a.references[0]?.isRead()).toBe(true);
-    expect(a.references[0]?.isWrite()).toBe(false);
-    expect(a.references[0]?.isCall?.()).toBe(false);
+    expect(a.references.length).toBe(2);
+    // [0] is the init Write recorded at the declarator id; [1] is the read.
+    const read = a.references[1];
+    expect(read?.isRead()).toBe(true);
+    expect(read?.isWrite()).toBe(false);
+    expect(read?.isCall?.()).toBe(false);
   });
 
-  test("classifies write on `=`, read+write on compound assignment, read+write on update", () => {
+  test("classifies init write on declarator, write on `=`, read+write on compound assignment, read+write on update", () => {
     const code = `
       let x = 0;
       x = 1;
@@ -60,11 +62,17 @@ describe("EslintCompatAnalyzer / references", () => {
     `;
     const { rootScope } = analyze(code);
     const refs = refsOf(rootScope, "x");
-    expect(refs.length).toBe(3);
-    const [r1, r2, r3] = refs;
+    expect(refs.length).toBe(4);
+    const [r0, r1, r2, r3] = refs;
+    expect([r0?.isWrite(), r0?.isRead(), r0?.init]).toEqual([
+      true,
+      false,
+      true,
+    ]);
     expect([r1?.isWrite(), r1?.isRead()]).toEqual([true, false]);
     expect([r2?.isWrite(), r2?.isRead()]).toEqual([true, true]);
     expect([r3?.isWrite(), r3?.isRead()]).toEqual([true, true]);
+    expect(r0?.isWriteOnly()).toBe(true);
     expect(r1?.isWriteOnly()).toBe(true);
     expect(r2?.isReadWrite()).toBe(true);
     expect(r3?.isReadWrite()).toBe(true);
@@ -96,8 +104,9 @@ describe("EslintCompatAnalyzer / references", () => {
     `;
     const { rootScope } = analyze(code);
     const obj = findVariable(rootScope, "obj")!;
-    expect(obj.references.length).toBe(1);
-    expect(obj.references[0]?.isRead()).toBe(true);
+    expect(obj.references.length).toBe(2);
+    // [0] is the init Write at the declarator id; [1] is the member read.
+    expect(obj.references[1]?.isRead()).toBe(true);
   });
 
   test("does not generate references for object literal property keys (computed=false)", () => {
@@ -137,10 +146,14 @@ describe("EslintCompatAnalyzer / references", () => {
     const outerX = findVariable(rootScope, "x")!;
     const innerScope = rootScope.childScopes[0]!;
     const innerX = findVariable(innerScope, "x")!;
-    expect(outerX.references.length).toBe(0);
+    // outer x has only the init Write at its declarator; no other refs reach
+    // it (the inner `return x;` resolves to the inner shadowing variable).
+    expect(outerX.references.length).toBe(1);
+    expect(outerX.references[0]?.init).toBe(true);
     expect(outerX.unsnarlIsUnused?.()).toBe(true);
-    expect(innerX.references.length).toBe(1);
-    expect(innerX.references[0]?.isRead()).toBe(true);
+    expect(innerX.references.length).toBe(2);
+    // [0] is inner x's init Write; [1] is the `return x;` read.
+    expect(innerX.references[1]?.isRead()).toBe(true);
   });
 
   test("unresolved identifier resolves to an ImplicitGlobalVariable and is propagated through", () => {
@@ -202,8 +215,12 @@ describe("EslintCompatAnalyzer / references", () => {
     `;
     const { rootScope } = analyze(code);
     const seed = findVariable(rootScope, "seed")!;
-    expect(seed.references.length).toBe(1);
+    // [0] is the init Write at seed's declarator id; [1] is the read on the
+    // RHS of `const x = seed;` which is also flagged init=true since it sits
+    // in another VariableDeclarator's initializer.
+    expect(seed.references.length).toBe(2);
     expect(seed.references[0]?.init).toBe(true);
+    expect(seed.references[1]?.init).toBe(true);
   });
 
   test("through propagates upward across nested scopes", () => {

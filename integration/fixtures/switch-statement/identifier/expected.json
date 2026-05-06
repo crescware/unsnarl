@@ -104,7 +104,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_3",
+              "id": "wr_ref_8",
               "kind": "WriteOp",
               "name": "label",
               "line": 10,
@@ -126,7 +126,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_5",
+              "id": "wr_ref_10",
               "kind": "WriteOp",
               "name": "label",
               "line": 13,
@@ -148,7 +148,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_7",
+              "id": "wr_ref_12",
               "kind": "WriteOp",
               "name": "label",
               "line": 16,
@@ -170,7 +170,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "wr_ref_8",
+              "id": "wr_ref_13",
               "kind": "WriteOp",
               "name": "label",
               "line": 19,
@@ -200,22 +200,22 @@
   "edges": [
     {
       "from": "n_scope_0_label_59",
-      "to": "wr_ref_3",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_label_59",
-      "to": "wr_ref_5",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_label_59",
-      "to": "wr_ref_7",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_label_59",
       "to": "wr_ref_8",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_10",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_12",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_label_59",
+      "to": "wr_ref_13",
       "label": "set"
     },
     {
@@ -244,22 +244,22 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_3",
-      "to": "n_scope_0_result_283",
-      "label": "read"
-    },
-    {
-      "from": "wr_ref_5",
-      "to": "n_scope_0_result_283",
-      "label": "read"
-    },
-    {
-      "from": "wr_ref_7",
-      "to": "n_scope_0_result_283",
-      "label": "read"
-    },
-    {
       "from": "wr_ref_8",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_10",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_12",
+      "to": "n_scope_0_result_283",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_13",
       "to": "n_scope_0_result_283",
       "label": "read"
     }

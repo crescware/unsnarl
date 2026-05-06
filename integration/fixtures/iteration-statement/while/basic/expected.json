@@ -59,7 +59,7 @@
         },
         {
           "type": "node",
-          "id": "wr_ref_4",
+          "id": "wr_ref_6",
           "kind": "WriteOp",
           "name": "count",
           "line": 5,
@@ -85,7 +85,7 @@
   "edges": [
     {
       "from": "n_scope_0_count_22",
-      "to": "wr_ref_4",
+      "to": "wr_ref_6",
       "label": "set"
     },
     {

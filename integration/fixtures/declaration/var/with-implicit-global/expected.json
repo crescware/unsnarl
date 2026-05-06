@@ -30,7 +30,7 @@
     },
     {
       "type": "node",
-      "id": "wr_ref_0",
+      "id": "wr_ref_1",
       "kind": "WriteOp",
       "name": "global",
       "line": 2,
@@ -43,7 +43,7 @@
   "edges": [
     {
       "from": "n_scope_0_global_11",
-      "to": "wr_ref_0",
+      "to": "wr_ref_1",
       "label": "set"
     }
   ],

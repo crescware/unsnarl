@@ -37,7 +37,12 @@
         "ref#0",
         "ref#1",
         "ref#2",
-        "ref#3"
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#6",
+        "ref#7",
+        "ref#8"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -59,7 +64,8 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#0",
+        "ref#2"
       ],
       "defs": [
         {
@@ -112,7 +118,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#1",
+        "ref#4"
       ],
       "defs": [
         {
@@ -165,7 +172,8 @@
         }
       ],
       "references": [
-        "ref#2"
+        "ref#3",
+        "ref#6"
       ],
       "defs": [
         {
@@ -218,7 +226,8 @@
         }
       ],
       "references": [
-        "ref#3"
+        "ref#5",
+        "ref#8"
       ],
       "defs": [
         {
@@ -270,7 +279,9 @@
           "offset": 58
         }
       ],
-      "references": [],
+      "references": [
+        "ref#7"
+      ],
       "defs": [
         {
           "name": {
@@ -317,6 +328,60 @@
       "identifier": {
         "name": "a",
         "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@6",
+      "owners": [
+        "scope#0:a@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 19
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:b@19",
+      "owners": [
+        "scope#0:b@19"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "a",
+        "span": {
           "line": 2,
           "column": 10,
           "offset": 23
@@ -340,7 +405,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 32
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:c@32",
+      "owners": [
+        "scope#0:c@32"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
       "identifier": {
         "name": "b",
         "span": {
@@ -367,7 +459,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
+      "id": "ref#5",
+      "identifier": {
+        "name": "d",
+        "span": {
+          "line": 4,
+          "column": 6,
+          "offset": 45
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:d@45",
+      "owners": [
+        "scope#0:d@45"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#6",
       "identifier": {
         "name": "c",
         "span": {
@@ -394,7 +513,34 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#3",
+      "id": "ref#7",
+      "identifier": {
+        "name": "e",
+        "span": {
+          "line": 5,
+          "column": 6,
+          "offset": 58
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:e@58",
+      "owners": [
+        "scope#0:e@58"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#8",
       "identifier": {
         "name": "d",
         "span": {

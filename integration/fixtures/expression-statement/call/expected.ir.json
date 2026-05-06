@@ -32,10 +32,11 @@
       ],
       "references": [
         "ref#0",
-        "ref#1"
+        "ref#1",
+        "ref#2"
       ],
       "through": [
-        "ref#0"
+        "ref#1"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -56,7 +57,8 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#0",
+        "ref#2"
       ],
       "defs": [
         {
@@ -109,7 +111,7 @@
         }
       ],
       "references": [
-        "ref#0"
+        "ref#1"
       ],
       "defs": [
         {
@@ -138,6 +140,33 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@6",
+      "owners": [
+        "scope#0:x@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
       "identifier": {
         "name": "console",
         "span": {
@@ -184,7 +213,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#2",
       "identifier": {
         "name": "x",
         "span": {

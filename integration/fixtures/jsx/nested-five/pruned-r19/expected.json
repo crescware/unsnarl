@@ -98,7 +98,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
@@ -108,7 +108,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_2",
+              "id": "ret_use_ref_7",
               "kind": "ReturnUse",
               "name": "B",
               "line": 13,
@@ -118,7 +118,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_4",
+              "id": "ret_use_ref_9",
               "kind": "ReturnUse",
               "name": "C",
               "line": 15,
@@ -128,7 +128,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_6",
+              "id": "ret_use_ref_11",
               "kind": "ReturnUse",
               "name": "D",
               "line": 17,
@@ -138,7 +138,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_8",
+              "id": "ret_use_ref_13",
               "kind": "ReturnUse",
               "name": "E",
               "line": 19,
@@ -148,7 +148,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_9",
+              "id": "ret_use_ref_14",
               "kind": "ReturnUse",
               "name": "z",
               "line": 19,
@@ -174,32 +174,32 @@
   "edges": [
     {
       "from": "n_scope_0_A_9",
-      "to": "ret_use_ref_0",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {
       "from": "n_scope_0_B_12",
-      "to": "ret_use_ref_2",
+      "to": "ret_use_ref_7",
       "label": "read"
     },
     {
       "from": "n_scope_0_C_15",
-      "to": "ret_use_ref_4",
+      "to": "ret_use_ref_9",
       "label": "read"
     },
     {
       "from": "n_scope_0_D_18",
-      "to": "ret_use_ref_6",
+      "to": "ret_use_ref_11",
       "label": "read"
     },
     {
       "from": "n_scope_0_E_21",
-      "to": "ret_use_ref_8",
+      "to": "ret_use_ref_13",
       "label": "read"
     },
     {
       "from": "n_scope_1_z_139",
-      "to": "ret_use_ref_9",
+      "to": "ret_use_ref_14",
       "label": "read"
     },
     {

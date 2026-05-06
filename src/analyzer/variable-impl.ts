@@ -17,6 +17,6 @@ export class VariableImpl implements Variable {
   }
 
   unsnarlIsUnused(): boolean {
-    return this.references.length === 0;
+    return this.references.every((r) => r.init && r.isWriteOnly());
   }
 }

@@ -114,7 +114,7 @@
               "elements": [
                 {
                   "type": "node",
-                  "id": "wr_ref_1",
+                  "id": "wr_ref_2",
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 9,
@@ -146,7 +146,7 @@
               "elements": [
                 {
                   "type": "node",
-                  "id": "wr_ref_2",
+                  "id": "wr_ref_3",
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 13,
@@ -168,7 +168,7 @@
               "elements": [
                 {
                   "type": "node",
-                  "id": "wr_ref_3",
+                  "id": "wr_ref_4",
                   "kind": "WriteOp",
                   "name": "ret",
                   "line": 16,
@@ -194,7 +194,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_4",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "ret",
               "line": 19,
@@ -210,17 +210,17 @@
   "edges": [
     {
       "from": "n_scope_1_ret_33",
-      "to": "wr_ref_1",
-      "label": "fallthrough"
-    },
-    {
-      "from": "n_scope_1_ret_33",
       "to": "wr_ref_2",
       "label": "fallthrough"
     },
     {
       "from": "n_scope_1_ret_33",
       "to": "wr_ref_3",
+      "label": "fallthrough"
+    },
+    {
+      "from": "n_scope_1_ret_33",
+      "to": "wr_ref_4",
       "label": "set"
     },
     {
@@ -229,18 +229,18 @@
       "label": "read"
     },
     {
-      "from": "wr_ref_1",
-      "to": "ret_use_ref_4",
-      "label": "read"
-    },
-    {
       "from": "wr_ref_2",
-      "to": "ret_use_ref_4",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {
       "from": "wr_ref_3",
-      "to": "ret_use_ref_4",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "ret_use_ref_5",
       "label": "read"
     }
   ],

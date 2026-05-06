@@ -38,7 +38,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "A",
               "line": 11,
@@ -54,7 +54,7 @@
   "edges": [
     {
       "from": "n_scope_0_A_9",
-      "to": "ret_use_ref_0",
+      "to": "ret_use_ref_5",
       "label": "read"
     }
   ],

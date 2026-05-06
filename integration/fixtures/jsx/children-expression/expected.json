@@ -60,7 +60,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "Sub",
               "line": 5,
@@ -70,7 +70,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_1",
+              "id": "ret_use_ref_2",
               "kind": "ReturnUse",
               "name": "message",
               "line": 5,
@@ -96,12 +96,12 @@
   "edges": [
     {
       "from": "n_scope_0_Sub_9",
-      "to": "ret_use_ref_0",
+      "to": "ret_use_ref_1",
       "label": "read"
     },
     {
       "from": "n_scope_1_message_63",
-      "to": "ret_use_ref_1",
+      "to": "ret_use_ref_2",
       "label": "read"
     },
     {

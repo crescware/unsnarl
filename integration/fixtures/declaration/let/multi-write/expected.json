@@ -56,7 +56,7 @@
     },
     {
       "type": "node",
-      "id": "wr_ref_0",
+      "id": "wr_ref_2",
       "kind": "WriteOp",
       "name": "counter",
       "line": 3,
@@ -67,7 +67,7 @@
     },
     {
       "type": "node",
-      "id": "wr_ref_2",
+      "id": "wr_ref_4",
       "kind": "WriteOp",
       "name": "counter",
       "line": 4,
@@ -78,7 +78,7 @@
     },
     {
       "type": "node",
-      "id": "wr_ref_3",
+      "id": "wr_ref_5",
       "kind": "WriteOp",
       "name": "counter",
       "line": 5,
@@ -91,17 +91,17 @@
   "edges": [
     {
       "from": "n_scope_0_counter_30",
-      "to": "wr_ref_0",
-      "label": "set"
-    },
-    {
-      "from": "wr_ref_0",
       "to": "wr_ref_2",
       "label": "set"
     },
     {
       "from": "wr_ref_2",
-      "to": "wr_ref_3",
+      "to": "wr_ref_4",
+      "label": "set"
+    },
+    {
+      "from": "wr_ref_4",
+      "to": "wr_ref_5",
       "label": "set"
     },
     {

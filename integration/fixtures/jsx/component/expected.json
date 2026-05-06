@@ -94,7 +94,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_0",
+              "id": "ret_use_ref_1",
               "kind": "ReturnUse",
               "name": "Fragment",
               "line": 8,
@@ -104,7 +104,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_1",
+              "id": "ret_use_ref_2",
               "kind": "ReturnUse",
               "name": "span",
               "line": 9,
@@ -114,7 +114,7 @@
             },
             {
               "type": "node",
-              "id": "ret_use_ref_2",
+              "id": "ret_use_ref_3",
               "kind": "ReturnUse",
               "name": "props",
               "line": 9,
@@ -146,7 +146,7 @@
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_3",
+              "id": "ret_use_ref_5",
               "kind": "ReturnUse",
               "name": "Hello",
               "line": 13,
@@ -172,22 +172,22 @@
   "edges": [
     {
       "from": "n_scope_0_Fragment_9",
-      "to": "ret_use_ref_0",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_span_125",
       "to": "ret_use_ref_1",
       "label": "read"
     },
     {
-      "from": "n_scope_1_props_88",
+      "from": "n_scope_0_span_125",
       "to": "ret_use_ref_2",
       "label": "read"
     },
     {
-      "from": "n_scope_0_Hello_79",
+      "from": "n_scope_1_props_88",
       "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Hello_79",
+      "to": "ret_use_ref_5",
       "label": "read"
     },
     {

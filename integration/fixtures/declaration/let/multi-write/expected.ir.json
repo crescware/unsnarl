@@ -37,7 +37,11 @@
         "ref#1",
         "ref#2",
         "ref#3",
-        "ref#4"
+        "ref#4",
+        "ref#5",
+        "ref#6",
+        "ref#7",
+        "ref#8"
       ],
       "through": [],
       "functionExpressionScope": false,
@@ -59,7 +63,8 @@
         }
       ],
       "references": [
-        "ref#4"
+        "ref#0",
+        "ref#7"
       ],
       "defs": [
         {
@@ -112,10 +117,11 @@
         }
       ],
       "references": [
-        "ref#0",
         "ref#1",
         "ref#2",
-        "ref#3"
+        "ref#3",
+        "ref#4",
+        "ref#5"
       ],
       "defs": [
         {
@@ -167,7 +173,9 @@
           "offset": 97
         }
       ],
-      "references": [],
+      "references": [
+        "ref#6"
+      ],
       "defs": [
         {
           "name": {
@@ -218,7 +226,9 @@
           "offset": 123
         }
       ],
-      "references": [],
+      "references": [
+        "ref#8"
+      ],
       "defs": [
         {
           "name": {
@@ -262,6 +272,60 @@
   "references": [
     {
       "id": "ref#0",
+      "identifier": {
+        "name": "greeting",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:greeting@6",
+      "owners": [
+        "scope#0:greeting@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "counter",
+        "span": {
+          "line": 2,
+          "column": 4,
+          "offset": 30
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:counter@30",
+      "owners": [
+        "scope#0:counter@30"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
       "identifier": {
         "name": "counter",
         "span": {
@@ -310,7 +374,7 @@
       }
     },
     {
-      "id": "ref#1",
+      "id": "ref#3",
       "identifier": {
         "name": "counter",
         "span": {
@@ -359,7 +423,7 @@
       }
     },
     {
-      "id": "ref#2",
+      "id": "ref#4",
       "identifier": {
         "name": "counter",
         "span": {
@@ -408,7 +472,7 @@
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#5",
       "identifier": {
         "name": "counter",
         "span": {
@@ -455,7 +519,34 @@
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#6",
+      "identifier": {
+        "name": "message",
+        "span": {
+          "line": 6,
+          "column": 6,
+          "offset": 97
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:message@97",
+      "owners": [
+        "scope#0:message@97"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#7",
       "identifier": {
         "name": "greeting",
         "span": {
@@ -473,6 +564,33 @@
       "flags": {
         "read": true,
         "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#8",
+      "identifier": {
+        "name": "unused",
+        "span": {
+          "line": 7,
+          "column": 6,
+          "offset": 123
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:unused@123",
+      "owners": [
+        "scope#0:unused@123"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
         "call": false,
         "receiver": false
       },
