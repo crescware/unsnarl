@@ -1,0 +1,296 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/var/redeclaration/input.ts",
+    "language": "ts"
+  },
+  "raw": "var x = 1;\nvar x = 2;\nconsole.log(x);\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 38
+        }
+      },
+      "variables": [
+        "scope#0:x@4",
+        "scope#0:console@22"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "through": [
+        "ref#0"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:x@4",
+      "name": "x",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 4,
+          "offset": 4
+        },
+        {
+          "line": 2,
+          "column": 4,
+          "offset": 15
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 4,
+              "offset": 4
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 8,
+              "offset": 8
+            }
+          },
+          "declarationKind": "var"
+        },
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 15
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 15
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 11
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 8,
+              "offset": 19
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@22",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 22
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 22
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:console@22",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 15,
+          "offset": 37
+        },
+        "headStartSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        },
+        "headEndSpan": {
+          "line": 3,
+          "column": 11,
+          "offset": 33
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 3,
+          "column": 12,
+          "offset": 34
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@4",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 15,
+          "offset": 37
+        },
+        "headStartSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 22
+        },
+        "headEndSpan": {
+          "line": 3,
+          "column": 11,
+          "offset": 33
+        },
+        "isCall": true
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": [
+    {
+      "kind": "var-detected",
+      "message": "var declaration detected; rendered as node only (no edges).",
+      "span": {
+        "line": 1,
+        "column": 0,
+        "offset": 0
+      }
+    },
+    {
+      "kind": "var-detected",
+      "message": "var declaration detected; rendered as node only (no edges).",
+      "span": {
+        "line": 2,
+        "column": 0,
+        "offset": 11
+      }
+    }
+  ]
+}

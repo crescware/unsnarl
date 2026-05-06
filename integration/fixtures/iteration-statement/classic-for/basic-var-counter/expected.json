@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/classic-for/basic-var-counter/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_i_9",
+      "name": "i",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "var",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_32",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_0",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_32",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "for"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_50",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_32",
+      "to": "expr_stmt_32",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_32",
+      "to": "expr_stmt_50",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

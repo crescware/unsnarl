@@ -56,12 +56,12 @@ describe("handleVariableDeclaration", () => {
     expect(scope.variables.map((v) => v.name)).toEqual(["a", "b"]);
   });
 
-  test("var emits a var-detected diagnostic and declares nothing", () => {
+  test("var declares each binding identifier and emits a var-detected diagnostic", () => {
     const scope = newScope();
     const diags = new DiagnosticCollector();
     const raw = "var x = 1;";
     handleVariableDeclaration(firstStmt(raw), scope, raw, diags);
-    expect(scope.variables).toEqual([]);
+    expect(scope.variables.map((v) => v.name)).toEqual(["x"]);
     const items = diags.list();
     expect(items).toHaveLength(1);
     expect(items[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);

@@ -1,3 +1,5 @@
+import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
+import { formatVarDiagnostic } from "../../analyzer/format-var-diagnostic.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
 import type { Emitter } from "../../pipeline/emit/emitter.js";
@@ -22,10 +24,17 @@ export class MarkdownEmitter implements Emitter {
     const raw = ir.raw.replace(/\n+$/, "");
     const fence = codeFenceLang(ir.source.language);
     const lines: string[] = [`# ${ir.source.path}`, ""];
-    if (opts.resolutions !== null && opts.resolutions.length > 0) {
+    const resolutions = opts.resolutions ?? [];
+    const varDiagnostics = ir.diagnostics.filter(
+      (diagnostic) => diagnostic.kind === DIAGNOSTIC_KIND.VarDetected,
+    );
+    if (resolutions.length > 0 || varDiagnostics.length > 0) {
       lines.push("## Notice", "", "```");
-      for (const r of opts.resolutions) {
-        lines.push(...formatResolutionNotice(r));
+      for (const resolution of resolutions) {
+        lines.push(...formatResolutionNotice(resolution));
+      }
+      for (const diagnostic of varDiagnostics) {
+        lines.push(...formatVarDiagnostic(diagnostic));
       }
       lines.push("```", "");
     }

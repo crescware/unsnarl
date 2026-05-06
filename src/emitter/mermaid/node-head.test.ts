@@ -126,6 +126,15 @@ describe("nodeHead", () => {
       expected: "x",
     },
     {
+      name: "var-declared Variable prepends 'var'",
+      node: {
+        ...baseNode(),
+        name: "x",
+        declarationKind: VARIABLE_DECLARATION_KIND.Var,
+      },
+      expected: "var x",
+    },
+    {
       name: "Variable without declarationKind has no prefix",
       node: { ...baseNode(), name: "x" },
       expected: "x",

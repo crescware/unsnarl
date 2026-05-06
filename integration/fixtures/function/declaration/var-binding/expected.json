@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/var-binding/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "name": "f",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_g_49",
+      "name": "g",
+      "line": 6,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 4,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_x_21",
+          "name": "x",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "var",
+          "initIsFunction": false
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_f_9",
+      "to": "n_scope_0_g_49",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

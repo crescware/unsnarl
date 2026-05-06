@@ -39,7 +39,7 @@ describe("hoistInto", () => {
     expect(manager.globalScope.variables.map((v) => v.name)).toEqual(["x"]);
   });
 
-  test("emits a diagnostic for var declarations", () => {
+  test("hoists var declarations and emits a diagnostic", () => {
     const code = "var legacy = 1;";
     const program = parse(code, "js");
     const manager = freshManager(program);
@@ -47,6 +47,9 @@ describe("hoistInto", () => {
 
     hoistInto(program, manager.globalScope, code, diagnostics);
 
+    expect(manager.globalScope.variables.map((v) => v.name)).toEqual([
+      "legacy",
+    ]);
     expect(
       diagnostics.list().some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected),
     ).toBe(true);

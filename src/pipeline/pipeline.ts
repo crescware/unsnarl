@@ -55,7 +55,12 @@ export function createPipeline(config: PipelineConfig): Pipeline {
     }
 
     const text = emitter.emit(ir, emitOpts);
-    return { text, pruning: perQuery, resolutions };
+    return {
+      text,
+      pruning: perQuery,
+      resolutions,
+      diagnostics: ir.diagnostics,
+    };
   }
 
   return { runDetailed };

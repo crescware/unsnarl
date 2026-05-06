@@ -27,24 +27,24 @@
         }
       },
       "variables": [
-        "scope#0:console@557",
-        "scope#0:a@572",
-        "scope#0:b@577",
-        "scope#0:c@582",
-        "scope#0:d@587",
-        "scope#0:e@592",
-        "scope#0:f@597",
-        "scope#0:g@602",
-        "scope#0:renamed@607",
-        "scope#0:others@618",
-        "scope#0:kebab@628",
-        "scope#0:zeroth@637",
-        "scope#0:p@647",
-        "scope#0:q@652",
-        "scope#0:r@657",
-        "scope#0:s@662",
-        "scope#0:t@667",
-        "scope#0:u@672"
+        "scope#0:a@13",
+        "scope#0:b@49",
+        "scope#0:c@58",
+        "scope#0:d@112",
+        "scope#0:e@123",
+        "scope#0:f@129",
+        "scope#0:g@201",
+        "scope#0:renamed@207",
+        "scope#0:others@225",
+        "scope#0:kebab@319",
+        "scope#0:zeroth@329",
+        "scope#0:p@427",
+        "scope#0:q@434",
+        "scope#0:r@508",
+        "scope#0:s@511",
+        "scope#0:t@521",
+        "scope#0:u@524",
+        "scope#0:console@557"
       ],
       "references": [
         "ref#0",
@@ -67,24 +67,7 @@
         "ref#17"
       ],
       "through": [
-        "ref#0",
-        "ref#1",
-        "ref#2",
-        "ref#3",
-        "ref#4",
-        "ref#5",
-        "ref#6",
-        "ref#7",
-        "ref#8",
-        "ref#9",
-        "ref#10",
-        "ref#11",
-        "ref#12",
-        "ref#13",
-        "ref#14",
-        "ref#15",
-        "ref#16",
-        "ref#17"
+        "ref#0"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -93,6 +76,907 @@
     }
   ],
   "variables": [
+    {
+      "id": "scope#0:a@13",
+      "name": "a",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 4,
+          "offset": 13
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 13
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 13
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 9
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 8,
+              "offset": 17
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:b@49",
+      "name": "b",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 4,
+          "offset": 49
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "b",
+            "span": {
+              "line": 5,
+              "column": 4,
+              "offset": 49
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 5,
+              "column": 4,
+              "offset": 49
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 45
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 8,
+              "offset": 53
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:c@58",
+      "name": "c",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 6,
+          "column": 2,
+          "offset": 58
+        }
+      ],
+      "references": [
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 6,
+              "column": 2,
+              "offset": 58
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 6,
+              "column": 2,
+              "offset": 58
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 45
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 6,
+              "column": 6,
+              "offset": 62
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:d@112",
+      "name": "d",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 5,
+          "offset": 112
+        }
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "d",
+            "span": {
+              "line": 9,
+              "column": 5,
+              "offset": 112
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 4,
+              "offset": 111
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 0,
+              "offset": 107
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 9,
+              "column": 27,
+              "offset": 134
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:e@123",
+      "name": "e",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 16,
+          "offset": 123
+        }
+      ],
+      "references": [
+        "ref#5"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "e",
+            "span": {
+              "line": 9,
+              "column": 16,
+              "offset": 123
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 4,
+              "offset": 111
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 0,
+              "offset": 107
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 9,
+              "column": 27,
+              "offset": 134
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:f@129",
+      "name": "f",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 22,
+          "offset": 129
+        }
+      ],
+      "references": [
+        "ref#6"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "f",
+            "span": {
+              "line": 9,
+              "column": 22,
+              "offset": 129
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 4,
+              "offset": 111
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 0,
+              "offset": 107
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 9,
+              "column": 27,
+              "offset": 134
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:g@201",
+      "name": "g",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 12,
+          "column": 6,
+          "offset": 201
+        }
+      ],
+      "references": [
+        "ref#7"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "g",
+            "span": {
+              "line": 12,
+              "column": 6,
+              "offset": 201
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 12,
+              "column": 4,
+              "offset": 199
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 12,
+              "column": 0,
+              "offset": 195
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 12,
+              "column": 41,
+              "offset": 236
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:renamed@207",
+      "name": "renamed",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 12,
+          "column": 12,
+          "offset": 207
+        }
+      ],
+      "references": [
+        "ref#8"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "renamed",
+            "span": {
+              "line": 12,
+              "column": 12,
+              "offset": 207
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 12,
+              "column": 4,
+              "offset": 199
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 12,
+              "column": 0,
+              "offset": 195
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 12,
+              "column": 41,
+              "offset": 236
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:others@225",
+      "name": "others",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 12,
+          "column": 30,
+          "offset": 225
+        }
+      ],
+      "references": [
+        "ref#9"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "others",
+            "span": {
+              "line": 12,
+              "column": 30,
+              "offset": 225
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 12,
+              "column": 4,
+              "offset": 199
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 12,
+              "column": 0,
+              "offset": 195
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 12,
+              "column": 41,
+              "offset": 236
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:kebab@319",
+      "name": "kebab",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 15,
+          "column": 20,
+          "offset": 319
+        }
+      ],
+      "references": [
+        "ref#10"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "kebab",
+            "span": {
+              "line": 15,
+              "column": 20,
+              "offset": 319
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 15,
+              "column": 4,
+              "offset": 303
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 15,
+              "column": 0,
+              "offset": 299
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 15,
+              "column": 41,
+              "offset": 340
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:zeroth@329",
+      "name": "zeroth",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 15,
+          "column": 30,
+          "offset": 329
+        }
+      ],
+      "references": [
+        "ref#11"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "zeroth",
+            "span": {
+              "line": 15,
+              "column": 30,
+              "offset": 329
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 15,
+              "column": 4,
+              "offset": 303
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 15,
+              "column": 0,
+              "offset": 299
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 15,
+              "column": 41,
+              "offset": 340
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:p@427",
+      "name": "p",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 18,
+          "column": 15,
+          "offset": 427
+        }
+      ],
+      "references": [
+        "ref#12"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "p",
+            "span": {
+              "line": 18,
+              "column": 15,
+              "offset": 427
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 18,
+              "column": 4,
+              "offset": 416
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 18,
+              "column": 0,
+              "offset": 412
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 18,
+              "column": 34,
+              "offset": 446
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:q@434",
+      "name": "q",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 18,
+          "column": 22,
+          "offset": 434
+        }
+      ],
+      "references": [
+        "ref#13"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "q",
+            "span": {
+              "line": 18,
+              "column": 22,
+              "offset": 434
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 18,
+              "column": 4,
+              "offset": 416
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 18,
+              "column": 0,
+              "offset": 412
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ObjectExpression",
+            "span": {
+              "line": 18,
+              "column": 34,
+              "offset": 446
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:r@508",
+      "name": "r",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 21,
+          "column": 7,
+          "offset": 508
+        }
+      ],
+      "references": [
+        "ref#14"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "r",
+            "span": {
+              "line": 21,
+              "column": 7,
+              "offset": 508
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 21,
+              "column": 4,
+              "offset": 505
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 21,
+              "column": 0,
+              "offset": 501
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 21,
+              "column": 29,
+              "offset": 530
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:s@511",
+      "name": "s",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 21,
+          "column": 10,
+          "offset": 511
+        }
+      ],
+      "references": [
+        "ref#15"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "s",
+            "span": {
+              "line": 21,
+              "column": 10,
+              "offset": 511
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 21,
+              "column": 4,
+              "offset": 505
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 21,
+              "column": 0,
+              "offset": 501
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 21,
+              "column": 29,
+              "offset": 530
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:t@521",
+      "name": "t",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 21,
+          "column": 20,
+          "offset": 521
+        }
+      ],
+      "references": [
+        "ref#16"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "t",
+            "span": {
+              "line": 21,
+              "column": 20,
+              "offset": 521
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 21,
+              "column": 4,
+              "offset": 505
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 21,
+              "column": 0,
+              "offset": 501
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 21,
+              "column": 29,
+              "offset": 530
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:u@524",
+      "name": "u",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 21,
+          "column": 23,
+          "offset": 524
+        }
+      ],
+      "references": [
+        "ref#17"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "u",
+            "span": {
+              "line": 21,
+              "column": 23,
+              "offset": 524
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 21,
+              "column": 4,
+              "offset": 505
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 21,
+              "column": 0,
+              "offset": 501
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 21,
+              "column": 29,
+              "offset": 530
+            }
+          },
+          "declarationKind": "var"
+        }
+      ]
+    },
     {
       "id": "scope#0:console@557",
       "name": "console",
@@ -123,635 +1007,6 @@
               "line": 23,
               "column": 0,
               "offset": 557
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:a@572",
-      "name": "a",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 24,
-          "column": 2,
-          "offset": 572
-        }
-      ],
-      "references": [
-        "ref#1"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "a",
-            "span": {
-              "line": 24,
-              "column": 2,
-              "offset": 572
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 24,
-              "column": 2,
-              "offset": 572
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:b@577",
-      "name": "b",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 25,
-          "column": 2,
-          "offset": 577
-        }
-      ],
-      "references": [
-        "ref#2"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "b",
-            "span": {
-              "line": 25,
-              "column": 2,
-              "offset": 577
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 25,
-              "column": 2,
-              "offset": 577
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:c@582",
-      "name": "c",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 26,
-          "column": 2,
-          "offset": 582
-        }
-      ],
-      "references": [
-        "ref#3"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "c",
-            "span": {
-              "line": 26,
-              "column": 2,
-              "offset": 582
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 26,
-              "column": 2,
-              "offset": 582
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:d@587",
-      "name": "d",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 27,
-          "column": 2,
-          "offset": 587
-        }
-      ],
-      "references": [
-        "ref#4"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "d",
-            "span": {
-              "line": 27,
-              "column": 2,
-              "offset": 587
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 27,
-              "column": 2,
-              "offset": 587
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:e@592",
-      "name": "e",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 28,
-          "column": 2,
-          "offset": 592
-        }
-      ],
-      "references": [
-        "ref#5"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "e",
-            "span": {
-              "line": 28,
-              "column": 2,
-              "offset": 592
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 28,
-              "column": 2,
-              "offset": 592
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:f@597",
-      "name": "f",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 29,
-          "column": 2,
-          "offset": 597
-        }
-      ],
-      "references": [
-        "ref#6"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "f",
-            "span": {
-              "line": 29,
-              "column": 2,
-              "offset": 597
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 29,
-              "column": 2,
-              "offset": 597
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:g@602",
-      "name": "g",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 30,
-          "column": 2,
-          "offset": 602
-        }
-      ],
-      "references": [
-        "ref#7"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "g",
-            "span": {
-              "line": 30,
-              "column": 2,
-              "offset": 602
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 30,
-              "column": 2,
-              "offset": 602
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:renamed@607",
-      "name": "renamed",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 31,
-          "column": 2,
-          "offset": 607
-        }
-      ],
-      "references": [
-        "ref#8"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "renamed",
-            "span": {
-              "line": 31,
-              "column": 2,
-              "offset": 607
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 31,
-              "column": 2,
-              "offset": 607
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:others@618",
-      "name": "others",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 32,
-          "column": 2,
-          "offset": 618
-        }
-      ],
-      "references": [
-        "ref#9"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "others",
-            "span": {
-              "line": 32,
-              "column": 2,
-              "offset": 618
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 32,
-              "column": 2,
-              "offset": 618
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:kebab@628",
-      "name": "kebab",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 33,
-          "column": 2,
-          "offset": 628
-        }
-      ],
-      "references": [
-        "ref#10"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "kebab",
-            "span": {
-              "line": 33,
-              "column": 2,
-              "offset": 628
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 33,
-              "column": 2,
-              "offset": 628
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:zeroth@637",
-      "name": "zeroth",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 34,
-          "column": 2,
-          "offset": 637
-        }
-      ],
-      "references": [
-        "ref#11"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "zeroth",
-            "span": {
-              "line": 34,
-              "column": 2,
-              "offset": 637
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 34,
-              "column": 2,
-              "offset": 637
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:p@647",
-      "name": "p",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 35,
-          "column": 2,
-          "offset": 647
-        }
-      ],
-      "references": [
-        "ref#12"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "p",
-            "span": {
-              "line": 35,
-              "column": 2,
-              "offset": 647
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 35,
-              "column": 2,
-              "offset": 647
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:q@652",
-      "name": "q",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 36,
-          "column": 2,
-          "offset": 652
-        }
-      ],
-      "references": [
-        "ref#13"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "q",
-            "span": {
-              "line": 36,
-              "column": 2,
-              "offset": 652
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 36,
-              "column": 2,
-              "offset": 652
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:r@657",
-      "name": "r",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 37,
-          "column": 2,
-          "offset": 657
-        }
-      ],
-      "references": [
-        "ref#14"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "r",
-            "span": {
-              "line": 37,
-              "column": 2,
-              "offset": 657
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 37,
-              "column": 2,
-              "offset": 657
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:s@662",
-      "name": "s",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 38,
-          "column": 2,
-          "offset": 662
-        }
-      ],
-      "references": [
-        "ref#15"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "s",
-            "span": {
-              "line": 38,
-              "column": 2,
-              "offset": 662
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 38,
-              "column": 2,
-              "offset": 662
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:t@667",
-      "name": "t",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 39,
-          "column": 2,
-          "offset": 667
-        }
-      ],
-      "references": [
-        "ref#16"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "t",
-            "span": {
-              "line": 39,
-              "column": 2,
-              "offset": 667
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 39,
-              "column": 2,
-              "offset": 667
-            }
-          },
-          "parent": null,
-          "type": "ImplicitGlobalVariable"
-        }
-      ]
-    },
-    {
-      "id": "scope#0:u@672",
-      "name": "u",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 40,
-          "column": 2,
-          "offset": 672
-        }
-      ],
-      "references": [
-        "ref#17"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "u",
-            "span": {
-              "line": 40,
-              "column": 2,
-              "offset": 672
-            }
-          },
-          "node": {
-            "type": "Identifier",
-            "span": {
-              "line": 40,
-              "column": 2,
-              "offset": 672
             }
           },
           "parent": null,
@@ -819,7 +1074,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:a@572",
+      "resolved": "scope#0:a@13",
       "owners": [],
       "init": false,
       "flags": {
@@ -866,7 +1121,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:b@577",
+      "resolved": "scope#0:b@49",
       "owners": [],
       "init": false,
       "flags": {
@@ -913,7 +1168,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:c@582",
+      "resolved": "scope#0:c@58",
       "owners": [],
       "init": false,
       "flags": {
@@ -960,7 +1215,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:d@587",
+      "resolved": "scope#0:d@112",
       "owners": [],
       "init": false,
       "flags": {
@@ -1007,7 +1262,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:e@592",
+      "resolved": "scope#0:e@123",
       "owners": [],
       "init": false,
       "flags": {
@@ -1054,7 +1309,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:f@597",
+      "resolved": "scope#0:f@129",
       "owners": [],
       "init": false,
       "flags": {
@@ -1101,7 +1356,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:g@602",
+      "resolved": "scope#0:g@201",
       "owners": [],
       "init": false,
       "flags": {
@@ -1148,7 +1403,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:renamed@607",
+      "resolved": "scope#0:renamed@207",
       "owners": [],
       "init": false,
       "flags": {
@@ -1195,7 +1450,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:others@618",
+      "resolved": "scope#0:others@225",
       "owners": [],
       "init": false,
       "flags": {
@@ -1242,7 +1497,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:kebab@628",
+      "resolved": "scope#0:kebab@319",
       "owners": [],
       "init": false,
       "flags": {
@@ -1289,7 +1544,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:zeroth@637",
+      "resolved": "scope#0:zeroth@329",
       "owners": [],
       "init": false,
       "flags": {
@@ -1336,7 +1591,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:p@647",
+      "resolved": "scope#0:p@427",
       "owners": [],
       "init": false,
       "flags": {
@@ -1383,7 +1638,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:q@652",
+      "resolved": "scope#0:q@434",
       "owners": [],
       "init": false,
       "flags": {
@@ -1430,7 +1685,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:r@657",
+      "resolved": "scope#0:r@508",
       "owners": [],
       "init": false,
       "flags": {
@@ -1477,7 +1732,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:s@662",
+      "resolved": "scope#0:s@511",
       "owners": [],
       "init": false,
       "flags": {
@@ -1524,7 +1779,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:t@667",
+      "resolved": "scope#0:t@521",
       "owners": [],
       "init": false,
       "flags": {
@@ -1571,7 +1826,7 @@
         }
       },
       "from": "scope#0",
-      "resolved": "scope#0:u@672",
+      "resolved": "scope#0:u@524",
       "owners": [],
       "init": false,
       "flags": {
@@ -1612,7 +1867,7 @@
   "diagnostics": [
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 2,
         "column": 0,
@@ -1621,7 +1876,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 5,
         "column": 0,
@@ -1630,7 +1885,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 9,
         "column": 0,
@@ -1639,7 +1894,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 12,
         "column": 0,
@@ -1648,7 +1903,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 15,
         "column": 0,
@@ -1657,7 +1912,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 18,
         "column": 0,
@@ -1666,7 +1921,7 @@
     },
     {
       "kind": "var-detected",
-      "message": "var declaration is not supported and was skipped.",
+      "message": "var declaration detected; rendered as node only (no edges).",
       "span": {
         "line": 21,
         "column": 0,

@@ -7,6 +7,7 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import type { VisualEdge } from "../visual-edge.js";
@@ -60,6 +61,19 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     scopeMap.set(s.id, s);
   }
 
+  // var declarations remain visible as nodes (via scope.variables) but their
+  // references are excluded from edge / WriteOp emission below.
+  const varVarIds = new Set<string>();
+  for (const v of ir.variables) {
+    const def = v.defs[0];
+    if (
+      def?.type === DEFINITION_TYPE.Variable &&
+      def.declarationKind === VARIABLE_DECLARATION_KIND.Var
+    ) {
+      varVarIds.add(v.id);
+    }
+  }
+
   const subgraphOwnerVar = new Map<string, string>();
   for (const v of ir.variables) {
     const def = v.defs[0];
@@ -91,6 +105,9 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   const refsByVariable = new Map<string, /* mutable */ SerializedReference[]>();
   for (const r of ir.references) {
     if (!r.resolved) {
+      continue;
+    }
+    if (varVarIds.has(r.resolved)) {
       continue;
     }
     const arr = refsByVariable.get(r.resolved) ?? [];
@@ -240,6 +257,9 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
 
   for (const r of ir.references) {
     if (!r.resolved) {
+      continue;
+    }
+    if (varVarIds.has(r.resolved)) {
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
@@ -467,6 +487,13 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
   }
 
   for (const id of ir.unusedVariableIds) {
+    // var bindings have no edges in the visual graph, so surfacing their
+    // unused state would imply a usage signal the rendering can otherwise
+    // not show. Keep the IR-level fact (ir.unusedVariableIds) intact and
+    // skip the visual mark.
+    if (varVarIds.has(id)) {
+      continue;
+    }
     const target = nodeId(id);
     const node = findNodeById(graph.elements, target);
     if (node) {

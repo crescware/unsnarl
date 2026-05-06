@@ -8,6 +8,7 @@ import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
+import { emitAnalyzerWarnings } from "./emit-analyzer-warnings.js";
 import { emitOutFlagNotice } from "./emit-out-flag-notice.js";
 import { emitPruningWarnings } from "./emit-pruning-warnings.js";
 import { emitResolutionNotices } from "./emit-resolution-notices.js";
@@ -37,6 +38,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
 
     emitResolutionNotices(result.resolutions);
     emitPruningWarnings(result.pruning);
+    emitAnalyzerWarnings(result.diagnostics);
     writeOutput(outputPath, result.text);
   });
 

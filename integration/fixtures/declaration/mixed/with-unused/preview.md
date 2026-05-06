@@ -1,5 +1,11 @@
 # integration/fixtures/declaration/mixed/with-unused/input.ts
 
+## Notice
+
+```
+uns: warning: L3:0: var declaration detected; rendered as node only (no edges).
+```
+
 ## Input
 
 ```ts
@@ -19,6 +25,7 @@ console.log(a);
 flowchart RL
   n_scope_0_used_9["import used<br/>L1"]
   n_scope_0_neverCalled_15["unused import neverCalled<br/>L1"]
+  n_scope_0_legacy_49["var legacy<br/>L3"]
   n_scope_0_a_67["a<br/>L4"]
   n_scope_0_ignored_83["unused ignored<br/>L5"]
   n_scope_0_console_98["global console"]
@@ -29,4 +36,6 @@ flowchart RL
   mod_module["module module<br/>L1"]
   mod_module -->|read| n_scope_0_used_9
   mod_module -->|read| n_scope_0_neverCalled_15
+  classDef varNode stroke-dasharray:5 5;
+  class n_scope_0_legacy_49 varNode;
 ```

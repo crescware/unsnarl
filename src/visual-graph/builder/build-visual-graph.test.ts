@@ -7,6 +7,7 @@ import { OxcParser } from "../../parser/oxc-parser.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { freshName } from "../../testing/fresh-name.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
@@ -171,7 +172,7 @@ describe("buildVisualGraph: variable nodes", () => {
     expect(nodeByName(g, "b")?.unused).toBe(true);
   });
 
-  test("declarationKind is preserved on Variable nodes for let / const (var is intentionally skipped)", () => {
+  test("declarationKind is preserved on Variable nodes for let / const", () => {
     const g = build("let a = 1;\nconst b = 2;\n");
     expect(variableByName(g, "a")?.declarationKind).toBe("let");
     expect(variableByName(g, "b")?.declarationKind).toBe("const");
@@ -888,6 +889,47 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
         (e) => e.from === obj?.id && e.to === xs?.id && e.label === "read",
       ),
     ).toBe(true);
+  });
+});
+
+describe("buildVisualGraph: var declarations", () => {
+  test("var-declared variables emit a node but no edges to/from references", () => {
+    const varName = freshName();
+    const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
+    const varNode = nodeByName(graph, varName);
+    expect(varNode).not.toBeNull();
+    expect(varNode?.kind).toBe(NODE_KIND.Variable);
+    // No edges incident on the var node.
+    expect(edgesFrom(graph, varNode!.id)).toHaveLength(0);
+    expect(edgesTo(graph, varNode!.id)).toHaveLength(0);
+    // No WriteOp nodes for the var (the init `= 0` does not produce one).
+    const writeOps = flattenNodes(graph.elements).filter(
+      (node) => node.kind === NODE_KIND.WriteOp && node.name === varName,
+    );
+    expect(writeOps).toHaveLength(0);
+  });
+
+  test("var-declared name does not get classified as ImplicitGlobalVariable", () => {
+    const varName = freshName();
+    const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
+    const varNode = nodeByName(graph, varName);
+    expect(varNode?.kind).toBe(NODE_KIND.Variable);
+    // Implicit global classification would have produced this kind.
+    const implicitGlobals = flattenNodes(graph.elements).filter(
+      (node) =>
+        node.kind === NODE_KIND.ImplicitGlobalVariable && node.name === varName,
+    );
+    expect(implicitGlobals).toHaveLength(0);
+  });
+
+  test("an unused var node is not flagged as unused in the visual graph", () => {
+    // The IR still records the variable as unused; the visual graph
+    // intentionally drops the flag because the var node has no edges that
+    // would otherwise back up the usage signal.
+    const varName = freshName();
+    const graph = build(`var ${varName} = 0;\n`);
+    const varNode = nodeByName(graph, varName);
+    expect(varNode?.unused).toBe(false);
   });
 });
 

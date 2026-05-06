@@ -23,21 +23,28 @@ export function declareForLeft(
       continue;
     }
     const kind = cand["kind"];
+    if (
+      kind !== VARIABLE_DECLARATION_KIND.Var &&
+      kind !== VARIABLE_DECLARATION_KIND.Let &&
+      kind !== VARIABLE_DECLARATION_KIND.Const
+    ) {
+      continue;
+    }
     if (kind === VARIABLE_DECLARATION_KIND.Var) {
       diagnostics.add(
         DIAGNOSTIC_KIND.VarDetected,
-        "var declaration is not supported and was skipped.",
+        "var declaration detected; rendered as node only (no edges).",
         spanFromOffset(raw, cand.start ?? 0),
       );
-      continue;
-    }
-    if (kind !== "const" && kind !== "let") {
-      continue;
     }
     const declarations = cand["declarations"];
     if (!Array.isArray(declarations)) {
       continue;
     }
+    // var bindings hoist out of the for-statement scope into the
+    // enclosing function / module / global scope.
+    const target =
+      kind === VARIABLE_DECLARATION_KIND.Var ? scope.variableScope : scope;
     for (const dec of declarations) {
       if (!isNodeLike(dec)) {
         continue;
@@ -49,7 +56,7 @@ export function declareForLeft(
       const idents = collectBindingIdentifiers(id as unknown as AstNode);
       for (const ident of idents) {
         declareVariable(
-          scope,
+          target,
           ident,
           DEFINITION_TYPE.Variable,
           dec as unknown as AstNode,

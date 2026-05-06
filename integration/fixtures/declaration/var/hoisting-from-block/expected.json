@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/var/hoisting-from-block/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_cond_6",
+      "name": "cond",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_y_37",
+      "name": "y",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "var",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_46",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "if_test_scope_0_19",
+          "kind": "IfTest",
+          "name": "if-test",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "if"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_46",
+      "kind": "ExpressionStatement",
+      "name": "console.log()",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_cond_6",
+      "to": "if_test_scope_0_19",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_46",
+      "to": "expr_stmt_46",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
