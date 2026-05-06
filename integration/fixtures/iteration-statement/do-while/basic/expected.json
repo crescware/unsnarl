@@ -1,7 +1,7 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/do-while-condition-misclassification/input.ts",
+    "path": "integration/fixtures/iteration-statement/do-while/basic/input.ts",
     "language": "ts"
   },
   "direction": "RL",

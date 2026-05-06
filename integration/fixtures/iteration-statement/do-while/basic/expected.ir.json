@@ -1,10 +1,10 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/while-condition-misclassification/input.ts",
+    "path": "integration/fixtures/iteration-statement/do-while/basic/input.ts",
     "language": "ts"
   },
-  "raw": "const limit = 10;\nlet count = 0;\nwhile (count < limit) {\n  console.log(count);\n  count++;\n}\n",
+  "raw": "const limit = 10;\nlet count = 0;\ndo {\n  console.log(count);\n  count++;\n} while (count < limit);\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -25,20 +25,20 @@
         "endSpan": {
           "line": 7,
           "column": 0,
-          "offset": 92
+          "offset": 96
         }
       },
       "variables": [
         "scope#0:limit@6",
         "scope#0:count@22",
-        "scope#0:console@59"
+        "scope#0:console@40"
       ],
       "references": [
-        "ref#0",
-        "ref#1"
+        "ref#3",
+        "ref#4"
       ],
       "through": [
-        "ref#2"
+        "ref#0"
       ],
       "functionExpressionScope": false,
       "blockContext": null,
@@ -56,28 +56,28 @@
         "type": "BlockStatement",
         "span": {
           "line": 3,
-          "column": 22,
-          "offset": 55
+          "column": 3,
+          "offset": 36
         },
         "endSpan": {
           "line": 6,
           "column": 1,
-          "offset": 91
+          "offset": 72
         }
       },
       "variables": [],
       "references": [
-        "ref#2",
-        "ref#3",
-        "ref#4"
+        "ref#0",
+        "ref#1",
+        "ref#2"
       ],
       "through": [
-        "ref#2"
+        "ref#0"
       ],
       "functionExpressionScope": false,
       "blockContext": {
         "kind": "other",
-        "parentType": "WhileStatement",
+        "parentType": "DoWhileStatement",
         "key": "body",
         "parentSpanOffset": 33,
         "ifChainRootOffset": null
@@ -99,7 +99,7 @@
         }
       ],
       "references": [
-        "ref#1"
+        "ref#4"
       ],
       "defs": [
         {
@@ -152,9 +152,9 @@
         }
       ],
       "references": [
-        "ref#0",
-        "ref#3",
-        "ref#4"
+        "ref#1",
+        "ref#2",
+        "ref#3"
       ],
       "defs": [
         {
@@ -196,18 +196,18 @@
       ]
     },
     {
-      "id": "scope#0:console@59",
+      "id": "scope#0:console@40",
       "name": "console",
       "scope": "scope#0",
       "identifiers": [
         {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         }
       ],
       "references": [
-        "ref#2"
+        "ref#0"
       ],
       "defs": [
         {
@@ -216,7 +216,7 @@
             "span": {
               "line": 4,
               "column": 2,
-              "offset": 59
+              "offset": 40
             }
           },
           "node": {
@@ -224,7 +224,7 @@
             "span": {
               "line": 4,
               "column": 2,
-              "offset": 59
+              "offset": 40
             }
           },
           "parent": null,
@@ -237,71 +237,15 @@
     {
       "id": "ref#0",
       "identifier": {
-        "name": "count",
-        "span": {
-          "line": 3,
-          "column": 7,
-          "offset": 40
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:count@22",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": {
-        "type": "WhileStatement",
-        "offset": 33
-      },
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#1",
-      "identifier": {
-        "name": "limit",
-        "span": {
-          "line": 3,
-          "column": 15,
-          "offset": 48
-        }
-      },
-      "from": "scope#0",
-      "resolved": "scope#0:limit@6",
-      "owners": [],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": {
-        "type": "WhileStatement",
-        "offset": 33
-      },
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#2",
-      "identifier": {
         "name": "console",
         "span": {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         }
       },
       "from": "scope#1",
-      "resolved": "scope#0:console@59",
+      "resolved": "scope#0:console@40",
       "owners": [],
       "init": false,
       "flags": {
@@ -317,34 +261,34 @@
         "startSpan": {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         },
         "endSpan": {
           "line": 4,
           "column": 21,
-          "offset": 78
+          "offset": 59
         },
         "headStartSpan": {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         },
         "headEndSpan": {
           "line": 4,
           "column": 13,
-          "offset": 70
+          "offset": 51
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#3",
+      "id": "ref#1",
       "identifier": {
         "name": "count",
         "span": {
           "line": 4,
           "column": 14,
-          "offset": 71
+          "offset": 52
         }
       },
       "from": "scope#1",
@@ -364,34 +308,34 @@
         "startSpan": {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         },
         "endSpan": {
           "line": 4,
           "column": 21,
-          "offset": 78
+          "offset": 59
         },
         "headStartSpan": {
           "line": 4,
           "column": 2,
-          "offset": 59
+          "offset": 40
         },
         "headEndSpan": {
           "line": 4,
           "column": 13,
-          "offset": 70
+          "offset": 51
         },
         "isCall": true
       }
     },
     {
-      "id": "ref#4",
+      "id": "ref#2",
       "identifier": {
         "name": "count",
         "span": {
           "line": 5,
           "column": 2,
-          "offset": 81
+          "offset": 62
         }
       },
       "from": "scope#1",
@@ -411,25 +355,81 @@
         "startSpan": {
           "line": 5,
           "column": 2,
-          "offset": 81
+          "offset": 62
         },
         "endSpan": {
           "line": 5,
           "column": 10,
-          "offset": 89
+          "offset": 70
         },
         "headStartSpan": {
           "line": 5,
           "column": 2,
-          "offset": 81
+          "offset": 62
         },
         "headEndSpan": {
           "line": 5,
           "column": 9,
-          "offset": 88
+          "offset": 69
         },
         "isCall": false
       }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "count",
+        "span": {
+          "line": 6,
+          "column": 9,
+          "offset": 80
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:count@22",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "DoWhileStatement",
+        "offset": 33
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "limit",
+        "span": {
+          "line": 6,
+          "column": 17,
+          "offset": 88
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:limit@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "DoWhileStatement",
+        "offset": 33
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
     }
   ],
   "unusedVariableIds": [],

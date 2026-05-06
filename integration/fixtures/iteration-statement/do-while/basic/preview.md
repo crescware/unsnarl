@@ -1,4 +1,4 @@
-# integration/fixtures/do-while-condition-misclassification/input.ts
+# integration/fixtures/iteration-statement/do-while/basic/input.ts
 
 ## Input
 
