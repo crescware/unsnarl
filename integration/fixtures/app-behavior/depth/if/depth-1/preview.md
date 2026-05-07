@@ -47,13 +47,16 @@ flowchart RL
     direction RL
     if_test_scope_0_97{"if ()<br/>L8"}
     n_scope_1_v1_114["v1<br/>L9"]
+    beyond_depth_s_scope_1((...))
   end
   n_scope_0_a_6 -->|read| if_test_scope_0_97
-  n_scope_0_b_22 -->|read| s_scope_1
-  n_scope_1_v1_114 -->|read| s_scope_1
-  n_scope_0_c_38 -->|read| s_scope_1
-  n_scope_0_d_54 -->|read| s_scope_1
-  n_scope_0_e_70 -->|read| s_scope_1
-  n_scope_0_f_86 -->|read| s_scope_1
-  n_scope_0_console_324 -->|read| s_scope_1
+  n_scope_0_b_22 -.->|read| beyond_depth_s_scope_1
+  n_scope_1_v1_114 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_c_38 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_d_54 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_e_70 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_f_86 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_console_324 -.->|read| beyond_depth_s_scope_1
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_1 boundaryStub;
 ```

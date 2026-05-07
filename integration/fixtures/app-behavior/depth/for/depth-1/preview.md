@@ -34,13 +34,16 @@ flowchart RL
       for_test_scope_2_35["for ()<br/>L2"]
       n_scope_3_i2_44["let i2<br/>L2"]
       wr_ref_5(["let i2<br/>L2"])
+      beyond_depth_s_scope_3((...))
     end
   end
   n_scope_1_i1_9 -->|set| wr_ref_2
   n_scope_3_i2_44 -->|set| wr_ref_5
   n_scope_1_i1_9 -->|read| for_test_scope_0_0
   n_scope_3_i2_44 -->|read| for_test_scope_2_35
-  n_scope_0_console_240 -->|read| s_scope_3
-  wr_ref_2 -->|read| s_scope_3
-  wr_ref_5 -->|read| s_scope_3
+  n_scope_0_console_240 -.->|read| beyond_depth_s_scope_3
+  wr_ref_2 -.->|read| beyond_depth_s_scope_3
+  wr_ref_5 -.->|read| beyond_depth_s_scope_3
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_3 boundaryStub;
 ```

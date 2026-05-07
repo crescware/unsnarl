@@ -63,6 +63,7 @@ flowchart RL
             direction RL
             if_test_scope_4_232{"if ()<br/>L16"}
             n_scope_5_v5_257["v5<br/>L17"]
+            beyond_depth_s_scope_5((...))
           end
         end
       end
@@ -77,7 +78,9 @@ flowchart RL
   n_scope_3_v3_177 -->|read| n_scope_4_v4_215
   n_scope_0_e_70 -->|read| if_test_scope_4_232
   n_scope_4_v4_215 -->|read| n_scope_5_v5_257
-  n_scope_0_f_86 -->|read| s_scope_5
-  n_scope_5_v5_257 -->|read| s_scope_5
-  n_scope_0_console_324 -->|read| s_scope_5
+  n_scope_0_f_86 -.->|read| beyond_depth_s_scope_5
+  n_scope_5_v5_257 -.->|read| beyond_depth_s_scope_5
+  n_scope_0_console_324 -.->|read| beyond_depth_s_scope_5
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_5 boundaryStub;
 ```

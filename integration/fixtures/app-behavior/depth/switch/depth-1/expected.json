@@ -51,7 +51,18 @@
           "line": 4,
           "endLine": 26,
           "direction": "RL",
-          "elements": [],
+          "elements": [
+            {
+              "type": "node",
+              "id": "beyond_depth_s_scope_2",
+              "kind": "BeyondDepth",
+              "name": "...",
+              "line": 4,
+              "endLine": 26,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
           "kind": "case",
           "caseTest": "1"
         }
@@ -67,12 +78,12 @@
     },
     {
       "from": "n_scope_0_x_6",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     },
     {
       "from": "n_scope_0_console_296",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     }
   ],

@@ -54,6 +54,7 @@ flowchart RL
               for_test_scope_10_195["for ()<br/>L6"]
               n_scope_11_i6_204["let i6<br/>L6"]
               wr_ref_17(["let i6<br/>L6"])
+              beyond_depth_s_scope_11((...))
             end
           end
         end
@@ -72,11 +73,13 @@ flowchart RL
   n_scope_7_i4_120 -->|read| for_test_scope_6_111
   n_scope_9_i5_161 -->|read| for_test_scope_8_152
   n_scope_11_i6_204 -->|read| for_test_scope_10_195
-  n_scope_0_console_240 -->|read| s_scope_11
-  wr_ref_2 -->|read| s_scope_11
-  wr_ref_5 -->|read| s_scope_11
-  wr_ref_8 -->|read| s_scope_11
-  wr_ref_11 -->|read| s_scope_11
-  wr_ref_14 -->|read| s_scope_11
-  wr_ref_17 -->|read| s_scope_11
+  n_scope_0_console_240 -.->|read| beyond_depth_s_scope_11
+  wr_ref_2 -.->|read| beyond_depth_s_scope_11
+  wr_ref_5 -.->|read| beyond_depth_s_scope_11
+  wr_ref_8 -.->|read| beyond_depth_s_scope_11
+  wr_ref_11 -.->|read| beyond_depth_s_scope_11
+  wr_ref_14 -.->|read| beyond_depth_s_scope_11
+  wr_ref_17 -.->|read| beyond_depth_s_scope_11
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_11 boundaryStub;
 ```

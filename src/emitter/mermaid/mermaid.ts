@@ -117,13 +117,16 @@ function renderMermaid(
     graph.edges,
     importSources,
   );
-  pushEdgeLines(bodyEdges, lines);
+  pushEdgeLines(bodyEdges, lines, nodeMap);
 
   renderSyntheticNodeBlock(state, graph);
-  pushEdgeLines(importEdges, lines);
+  pushEdgeLines(importEdges, lines, nodeMap);
 
   const stubIds: /* mutable */ string[] = [];
   renderBoundaryEdges(graph, lines, stubIds);
+  // BeyondDepth stubs share the boundary-stub class so they pick up the
+  // same dashed-circle treatment as the pruning ones.
+  collectBeyondDepthStubIds(nodeMap, stubIds);
 
   const varIds = collectVarNodeIds(nodeMap);
   renderClassDefs(state.wrapperIds, stubIds, varIds, lines);
@@ -148,4 +151,15 @@ function collectVarNodeIds(
     }
   }
   return ids;
+}
+
+function collectBeyondDepthStubIds(
+  nodeMap: ReadonlyMap<string, VisualNode>,
+  out: /* mutable */ string[],
+): void {
+  for (const node of nodeMap.values()) {
+    if (node.kind === NODE_KIND.BeyondDepth) {
+      out.push(node.id);
+    }
+  }
 }

@@ -201,6 +201,7 @@ export function buildVisualGraph(
     collapsedRootByScope: new Map(),
     collapsedAnchorByRoot: new Map(),
     suppressedPredicateRedirect: new Map(),
+    beyondDepthStubByParent: new Map(),
     nodeIdOriginScope: new Map(),
   } as const satisfies BuildState;
 
@@ -292,7 +293,7 @@ export function buildVisualGraph(
       if (r.flags.write) {
         continue;
       }
-      const target = collapsedTargetFor(collapsedRoot, scopeMap, state);
+      const target = collapsedTargetFor(collapsedRoot, state);
       if (target === null) {
         continue;
       }
@@ -574,48 +575,28 @@ export function buildVisualGraph(
   // Edges between two endpoints that resolve to the same target collapse
   // into nothing (self-loops are dropped).
   if ((state.collapsedRootByScope?.size ?? 0) > 0) {
-    redirectEdgesIntoCollapsed(graph.edges, ir, scopeMap, state);
+    redirectEdgesIntoCollapsed(graph.edges, ir, state);
   }
 
   return graph;
 }
 
-// Pick the visible target a collapsed subtree should be represented by:
-// the parent-scope variable that owns the subtree if any, otherwise the
-// closest surviving ancestor subgraph. Returns null only when nothing
-// upward is visible (which forces the caller to drop the edge).
+// Pick the visible target a collapsed subtree should be represented
+// by: either the parent-scope variable that owns it (e.g. `fnB`) or a
+// shared BeyondDepth stub placed inside the closest visible ancestor
+// subgraph. The choice is made once during buildScope; this lookup is
+// just the cache hit. Returns null when nothing upward was visible at
+// build time (forces the caller to drop the edge).
 function collapsedTargetFor(
   rootScopeId: string,
-  scopeMap: ReadonlyMap<string, SerializedScope>,
   state: BuildState,
 ): string | null {
-  const anchor = state.collapsedAnchorByRoot?.get(rootScopeId);
-  if (anchor !== undefined) {
-    return anchor;
-  }
-  const root = scopeMap.get(rootScopeId);
-  if (!root) {
-    return null;
-  }
-  let parentId = root.upper;
-  while (parentId !== null) {
-    const sg = state.subgraphByScope.get(parentId);
-    if (sg) {
-      return sg.id;
-    }
-    const parent = scopeMap.get(parentId);
-    if (!parent) {
-      return null;
-    }
-    parentId = parent.upper;
-  }
-  return null;
+  return state.collapsedAnchorByRoot?.get(rootScopeId) ?? null;
 }
 
 function redirectEdgesIntoCollapsed(
   edges: /* mutable */ VisualEdge[],
   ir: SerializedIR,
-  scopeMap: ReadonlyMap<string, SerializedScope>,
   state: BuildState,
 ): void {
   const collapsedRootByScope =
@@ -662,7 +643,7 @@ function redirectEdgesIntoCollapsed(
     if (root === undefined) {
       return id;
     }
-    return collapsedTargetFor(root, scopeMap, state);
+    return collapsedTargetFor(root, state);
   }
 
   const redirected: VisualEdge[] = [];

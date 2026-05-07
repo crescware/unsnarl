@@ -232,6 +232,16 @@
                           "kind": "Variable",
                           "declarationKind": "const",
                           "initIsFunction": false
+                        },
+                        {
+                          "type": "node",
+                          "id": "beyond_depth_s_scope_5",
+                          "kind": "BeyondDepth",
+                          "name": "...",
+                          "line": 16,
+                          "endLine": 22,
+                          "isJsxElement": false,
+                          "unused": false
                         }
                       ],
                       "kind": "if"
@@ -297,17 +307,17 @@
     },
     {
       "from": "n_scope_0_f_86",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     },
     {
       "from": "n_scope_5_v5_257",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     },
     {
       "from": "n_scope_0_console_324",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     }
   ],

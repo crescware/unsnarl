@@ -17,5 +17,6 @@ export const NODE_KIND = {
   ModuleSource: "ModuleSource",
   ImportIntermediate: "ImportIntermediate",
   ExpressionStatement: "ExpressionStatement",
+  BeyondDepth: "BeyondDepth",
 } as const;
 export type NodeKind = (typeof NODE_KIND)[keyof typeof NODE_KIND];

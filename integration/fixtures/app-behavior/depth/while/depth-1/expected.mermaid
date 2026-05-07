@@ -10,16 +10,19 @@ flowchart RL
     direction RL
     while_test_scope_0_73["while ()<br/>L8"]
     wr_ref_7(["let n1<br/>L9"])
+    beyond_depth_s_scope_1((...))
   end
   n_scope_0_n1_4 -->|set| wr_ref_7
-  n_scope_0_n2_16 -->|set| s_scope_1
-  n_scope_0_n3_28 -->|set| s_scope_1
-  n_scope_0_n4_40 -->|set| s_scope_1
-  n_scope_0_n5_52 -->|set| s_scope_1
-  n_scope_0_n6_64 -->|set| s_scope_1
+  n_scope_0_n2_16 -.->|set| beyond_depth_s_scope_1
+  n_scope_0_n3_28 -.->|set| beyond_depth_s_scope_1
+  n_scope_0_n4_40 -.->|set| beyond_depth_s_scope_1
+  n_scope_0_n5_52 -.->|set| beyond_depth_s_scope_1
+  n_scope_0_n6_64 -.->|set| beyond_depth_s_scope_1
   n_scope_0_n1_4 -->|read| while_test_scope_0_73
-  n_scope_0_n2_16 -->|read| s_scope_1
-  n_scope_0_n3_28 -->|read| s_scope_1
-  n_scope_0_n4_40 -->|read| s_scope_1
-  n_scope_0_n5_52 -->|read| s_scope_1
-  n_scope_0_n6_64 -->|read| s_scope_1
+  n_scope_0_n2_16 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_n3_28 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_n4_40 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_n5_52 -.->|read| beyond_depth_s_scope_1
+  n_scope_0_n6_64 -.->|read| beyond_depth_s_scope_1
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_1 boundaryStub;

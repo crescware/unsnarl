@@ -45,6 +45,7 @@ flowchart RL
   n_scope_0_console_103["global console"]
   subgraph s_scope_1["try L1-29"]
     direction RL
+    beyond_depth_s_scope_1((...))
     subgraph s_scope_11["catch L25-28"]
       direction RL
       n_scope_11_e2_453["e2<br/>L26"]
@@ -56,9 +57,11 @@ flowchart RL
     n_scope_12_e1_507["e1<br/>L30"]
     expr_stmt_520["console.log()<br/>L31"]
   end
-  n_scope_0_console_103 -->|read| s_scope_1
+  n_scope_0_console_103 -.->|read| beyond_depth_s_scope_1
   n_scope_0_console_103 -->|read| expr_stmt_468
   n_scope_11_e2_453 -->|read| expr_stmt_468
   n_scope_0_console_103 -->|read| expr_stmt_520
   n_scope_12_e1_507 -->|read| expr_stmt_520
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_1 boundaryStub;
 ```

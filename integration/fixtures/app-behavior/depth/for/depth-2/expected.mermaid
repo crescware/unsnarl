@@ -16,6 +16,7 @@ flowchart RL
         for_test_scope_4_72["for ()<br/>L3"]
         n_scope_5_i3_81["let i3<br/>L3"]
         wr_ref_8(["let i3<br/>L3"])
+        beyond_depth_s_scope_5((...))
       end
     end
   end
@@ -25,7 +26,9 @@ flowchart RL
   n_scope_1_i1_9 -->|read| for_test_scope_0_0
   n_scope_3_i2_44 -->|read| for_test_scope_2_35
   n_scope_5_i3_81 -->|read| for_test_scope_4_72
-  n_scope_0_console_240 -->|read| s_scope_5
-  wr_ref_2 -->|read| s_scope_5
-  wr_ref_5 -->|read| s_scope_5
-  wr_ref_8 -->|read| s_scope_5
+  n_scope_0_console_240 -.->|read| beyond_depth_s_scope_5
+  wr_ref_2 -.->|read| beyond_depth_s_scope_5
+  wr_ref_5 -.->|read| beyond_depth_s_scope_5
+  wr_ref_8 -.->|read| beyond_depth_s_scope_5
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_5 boundaryStub;

@@ -135,6 +135,16 @@
                   "isJsxElement": false,
                   "unused": false,
                   "declarationKind": "let"
+                },
+                {
+                  "type": "node",
+                  "id": "beyond_depth_s_scope_5",
+                  "kind": "BeyondDepth",
+                  "name": "...",
+                  "line": 3,
+                  "endLine": 11,
+                  "isJsxElement": false,
+                  "unused": false
                 }
               ],
               "kind": "for"
@@ -179,22 +189,22 @@
     },
     {
       "from": "n_scope_0_console_240",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     },
     {
       "from": "wr_ref_2",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     },
     {
       "from": "wr_ref_5",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     },
     {
       "from": "wr_ref_8",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     }
   ],

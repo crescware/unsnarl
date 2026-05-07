@@ -95,6 +95,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "beyond_depth_s_scope_3",
+              "kind": "BeyondDepth",
+              "name": "...",
+              "line": 2,
+              "endLine": 12,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "for"
@@ -126,17 +136,17 @@
     },
     {
       "from": "n_scope_0_console_240",
-      "to": "s_scope_3",
+      "to": "beyond_depth_s_scope_3",
       "label": "read"
     },
     {
       "from": "wr_ref_2",
-      "to": "s_scope_3",
+      "to": "beyond_depth_s_scope_3",
       "label": "read"
     },
     {
       "from": "wr_ref_5",
-      "to": "s_scope_3",
+      "to": "beyond_depth_s_scope_3",
       "label": "read"
     }
   ],

@@ -37,13 +37,19 @@ export type BuildState = Readonly<{
   // predicate-anchor counterpart) instead of being dropped silently.
   collapsedAnchorByRoot?: Map<string, string>;
   // Maps a control-statement offset (if / for / while / do-while /
-  // switch) to the subgraph id of its closest visible ancestor. Recorded
-  // when the gated body collapses past the depth threshold, so the test
-  // anchor of that statement cannot be created. Refs whose predicate
-  // pointed at the now-missing anchor (e.g. `f` in `if (f) { ... }`
-  // where the `if (f)` body collapsed) land here instead of dangling
-  // off into module_root.
+  // switch) to the BeyondDepth stub id its predicate-anchor refs should
+  // land on. Recorded when the gated body collapses past the depth
+  // threshold, so the test anchor of that statement cannot be created.
+  // Refs whose predicate pointed at the now-missing anchor (e.g. `f` in
+  // `if (f) { ... }` where the `if (f)` body collapsed) land here
+  // instead of dangling off into module_root.
   suppressedPredicateRedirect?: Map<number, string>;
+  // One BeyondDepth stub per visible ancestor subgraph. All anonymous
+  // collapsed subtrees that share the same surviving outer container
+  // funnel into the same `((...))` placeholder, so the rendered graph
+  // shows a single boundary marker per visible parent rather than one
+  // per hidden child.
+  beyondDepthStubByParent?: Map<string, string>;
   // Maps every emitted node id back to the scope id whose contents
   // produced it. Used during edge post-processing to decide whether an
   // endpoint lives inside a collapsed scope and should be redirected to

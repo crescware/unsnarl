@@ -133,6 +133,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "beyond_depth_s_scope_2",
+              "kind": "BeyondDepth",
+              "name": "...",
+              "line": 10,
+              "endLine": 24,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "while"
@@ -154,22 +164,22 @@
     },
     {
       "from": "n_scope_0_n3_28",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "set"
     },
     {
       "from": "n_scope_0_n4_40",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "set"
     },
     {
       "from": "n_scope_0_n5_52",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "set"
     },
     {
       "from": "n_scope_0_n6_64",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "set"
     },
     {
@@ -184,22 +194,22 @@
     },
     {
       "from": "n_scope_0_n3_28",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     },
     {
       "from": "n_scope_0_n4_40",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     },
     {
       "from": "n_scope_0_n5_52",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     },
     {
       "from": "n_scope_0_n6_64",
-      "to": "s_scope_2",
+      "to": "beyond_depth_s_scope_2",
       "label": "read"
     }
   ],

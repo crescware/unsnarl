@@ -24,6 +24,16 @@
       "direction": "RL",
       "elements": [
         {
+          "type": "node",
+          "id": "beyond_depth_s_scope_1",
+          "kind": "BeyondDepth",
+          "name": "...",
+          "line": 1,
+          "endLine": 29,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
           "type": "subgraph",
           "id": "s_scope_11",
           "line": 25,
@@ -94,7 +104,7 @@
   "edges": [
     {
       "from": "n_scope_0_console_103",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {

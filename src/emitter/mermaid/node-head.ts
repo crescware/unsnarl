@@ -55,5 +55,9 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.ModuleSink:
     case NODE_KIND.ExpressionStatement:
       return name;
+    case NODE_KIND.BeyondDepth:
+      // ASCII "..." rather than U+2026; some Mermaid renderers stumble on
+      // multibyte glyphs inside a node-shape label.
+      return "...";
   }
 }

@@ -116,6 +116,16 @@
           "kind": "Variable",
           "declarationKind": "const",
           "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "beyond_depth_s_scope_1",
+          "kind": "BeyondDepth",
+          "name": "...",
+          "line": 8,
+          "endLine": 26,
+          "isJsxElement": false,
+          "unused": false
         }
       ],
       "kind": "if"
@@ -129,37 +139,37 @@
     },
     {
       "from": "n_scope_0_b_22",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_1_v1_114",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_0_c_38",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_0_d_54",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_0_e_70",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_0_f_86",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     },
     {
       "from": "n_scope_0_console_324",
-      "to": "s_scope_1",
+      "to": "beyond_depth_s_scope_1",
       "label": "read"
     }
   ],

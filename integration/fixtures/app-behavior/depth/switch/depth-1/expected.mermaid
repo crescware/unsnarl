@@ -7,11 +7,11 @@ flowchart RL
     switch_discriminant_scope_0_14{"switch ()<br/>L3"}
     subgraph s_scope_2["case 1 L4-26"]
       direction RL
-      elk_empty_s_scope_2[" "]
+      beyond_depth_s_scope_2((...))
     end
   end
   n_scope_0_x_6 -->|read| switch_discriminant_scope_0_14
-  n_scope_0_x_6 -->|read| s_scope_2
-  n_scope_0_console_296 -->|read| s_scope_2
-  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;
-  class elk_empty_s_scope_2 elkEmptyPlaceholder;
+  n_scope_0_x_6 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_console_296 -.->|read| beyond_depth_s_scope_2
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_2 boundaryStub;

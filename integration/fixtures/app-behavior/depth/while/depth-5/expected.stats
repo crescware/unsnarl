@@ -13,5 +13,6 @@
 0	1	integration/fixtures/app-behavior/depth/while/input.ts:14 while-test
 0	1	integration/fixtures/app-behavior/depth/while/input.ts:15 n4
 0	1	integration/fixtures/app-behavior/depth/while/input.ts:16 while-test
+0	2	integration/fixtures/app-behavior/depth/while/input.ts:16 ...
 0	1	integration/fixtures/app-behavior/depth/while/input.ts:17 n5
-12	10	16 total
+12	12	17 total

@@ -23,6 +23,13 @@ function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.ForTest) {
     return `for ()<br/>L${n.line}`;
   }
+  if (n.kind === NODE_KIND.BeyondDepth) {
+    // The stub stands in for an arbitrary range of source lines that
+    // collapsed past the queried depth; printing a single line number
+    // here would be misleading, and printing the full range would
+    // duplicate the surrounding subgraph's L<x>-<y> label.
+    return nodeHead(n);
+  }
   const head = nodeHead(n);
   if (n.kind === NODE_KIND.ModuleSink) {
     return "module";

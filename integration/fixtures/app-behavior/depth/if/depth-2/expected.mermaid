@@ -15,14 +15,17 @@ flowchart RL
       direction RL
       if_test_scope_1_124{"if ()<br/>L10"}
       n_scope_2_v2_143["v2<br/>L11"]
+      beyond_depth_s_scope_2((...))
     end
   end
   n_scope_0_a_6 -->|read| if_test_scope_0_97
   n_scope_0_b_22 -->|read| if_test_scope_1_124
   n_scope_1_v1_114 -->|read| n_scope_2_v2_143
-  n_scope_0_c_38 -->|read| s_scope_2
-  n_scope_2_v2_143 -->|read| s_scope_2
-  n_scope_0_d_54 -->|read| s_scope_2
-  n_scope_0_e_70 -->|read| s_scope_2
-  n_scope_0_f_86 -->|read| s_scope_2
-  n_scope_0_console_324 -->|read| s_scope_2
+  n_scope_0_c_38 -.->|read| beyond_depth_s_scope_2
+  n_scope_2_v2_143 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_d_54 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_e_70 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_f_86 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_console_324 -.->|read| beyond_depth_s_scope_2
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_2 boundaryStub;

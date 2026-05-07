@@ -14,5 +14,6 @@
 0	1	integration/fixtures/app-behavior/depth/if/input.ts:14 if-test
 1	1	integration/fixtures/app-behavior/depth/if/input.ts:15 v4
 0	1	integration/fixtures/app-behavior/depth/if/input.ts:16 if-test
+0	3	integration/fixtures/app-behavior/depth/if/input.ts:16 ...
 1	1	integration/fixtures/app-behavior/depth/if/input.ts:17 v5
-12	9	17 total
+12	12	18 total

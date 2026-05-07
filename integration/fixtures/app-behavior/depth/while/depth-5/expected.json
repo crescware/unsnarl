@@ -217,6 +217,16 @@
                           "isJsxElement": false,
                           "unused": false,
                           "declarationKind": "let"
+                        },
+                        {
+                          "type": "node",
+                          "id": "beyond_depth_s_scope_5",
+                          "kind": "BeyondDepth",
+                          "name": "...",
+                          "line": 16,
+                          "endLine": 21,
+                          "isJsxElement": false,
+                          "unused": false
                         }
                       ],
                       "kind": "while"
@@ -262,7 +272,7 @@
     },
     {
       "from": "n_scope_0_n6_64",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "set"
     },
     {
@@ -292,7 +302,7 @@
     },
     {
       "from": "n_scope_0_n6_64",
-      "to": "s_scope_5",
+      "to": "beyond_depth_s_scope_5",
       "label": "read"
     }
   ],
