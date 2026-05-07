@@ -1,0 +1,143 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/function/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f1_9",
+      "name": "f1",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 19,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f1_9",
+      "ownerName": "f1",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_f2_27",
+          "name": "f2",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FunctionName"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 2,
+          "endLine": 17,
+          "direction": "RL",
+          "ownerNodeId": "n_scope_1_f2_27",
+          "ownerName": "f2",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_f3_47",
+              "name": "f3",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FunctionName"
+            },
+            {
+              "type": "node",
+              "id": "collapsed_scope_3",
+              "kind": "CollapsedScope",
+              "name": "scope#3",
+              "line": 3,
+              "endLine": 15,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_f2_27_276_288",
+              "kind": "return",
+              "line": 16,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_5",
+                  "kind": "ReturnUse",
+                  "name": "f3",
+                  "line": 16,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f1_9_295_307",
+          "kind": "return",
+          "line": 18,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "f2",
+              "line": 18,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_311",
+      "kind": "ExpressionStatement",
+      "name": "f1()",
+      "line": 21,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_2_f3_47",
+      "to": "ret_use_ref_5",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_1_f2_27",
+      "to": "ret_use_ref_6",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_f1_9",
+      "to": "expr_stmt_311",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

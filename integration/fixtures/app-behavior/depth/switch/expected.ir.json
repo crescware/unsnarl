@@ -1,0 +1,1025 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/switch/input.ts",
+    "language": "ts"
+  },
+  "raw": "const x = 1;\n\nswitch (x) {\n  case 1:\n    switch (x) {\n      case 1:\n        switch (x) {\n          case 1:\n            switch (x) {\n              case 1:\n                switch (x) {\n                  case 1:\n                    switch (x) {\n                      case 1:\n                        console.log(x);\n                        break;\n                    }\n                    break;\n                }\n                break;\n            }\n            break;\n        }\n        break;\n    }\n    break;\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 28,
+          "column": 0,
+          "offset": 510
+        }
+      },
+      "variables": [
+        "scope#0:x@6",
+        "scope#0:console@296"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 3,
+          "column": 0,
+          "offset": 14
+        },
+        "endSpan": {
+          "line": 27,
+          "column": 1,
+          "offset": 509
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#1"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "Program",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [
+        "scope#3"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 4,
+          "column": 2,
+          "offset": 29
+        },
+        "endSpan": {
+          "line": 26,
+          "column": 10,
+          "offset": 507
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 14,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#3",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [
+        "scope#4"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 5,
+          "column": 4,
+          "offset": 41
+        },
+        "endSpan": {
+          "line": 25,
+          "column": 5,
+          "offset": 496
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#2"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "SwitchCase",
+        "key": "consequent",
+        "parentSpanOffset": 29,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 2,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#4",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#3",
+      "childScopes": [
+        "scope#5"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 6,
+          "column": 6,
+          "offset": 60
+        },
+        "endSpan": {
+          "line": 24,
+          "column": 14,
+          "offset": 490
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 41,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 2,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#5",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#4",
+      "childScopes": [
+        "scope#6"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 7,
+          "column": 8,
+          "offset": 76
+        },
+        "endSpan": {
+          "line": 23,
+          "column": 9,
+          "offset": 475
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#3"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "SwitchCase",
+        "key": "consequent",
+        "parentSpanOffset": 60,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 3,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#6",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#5",
+      "childScopes": [
+        "scope#7"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 8,
+          "column": 10,
+          "offset": 99
+        },
+        "endSpan": {
+          "line": 22,
+          "column": 18,
+          "offset": 465
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 76,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 3,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#7",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#6",
+      "childScopes": [
+        "scope#8"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 9,
+          "column": 12,
+          "offset": 119
+        },
+        "endSpan": {
+          "line": 21,
+          "column": 13,
+          "offset": 446
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#4"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "SwitchCase",
+        "key": "consequent",
+        "parentSpanOffset": 99,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 4,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#8",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#7",
+      "childScopes": [
+        "scope#9"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 10,
+          "column": 14,
+          "offset": 146
+        },
+        "endSpan": {
+          "line": 20,
+          "column": 22,
+          "offset": 432
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 119,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 4,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#9",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#8",
+      "childScopes": [
+        "scope#10"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 11,
+          "column": 16,
+          "offset": 170
+        },
+        "endSpan": {
+          "line": 19,
+          "column": 17,
+          "offset": 409
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#5"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "SwitchCase",
+        "key": "consequent",
+        "parentSpanOffset": 146,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 5,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#10",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#9",
+      "childScopes": [
+        "scope#11"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 12,
+          "column": 18,
+          "offset": 201
+        },
+        "endSpan": {
+          "line": 18,
+          "column": 26,
+          "offset": 391
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 170,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 5,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#11",
+      "type": "switch",
+      "isStrict": true,
+      "upper": "scope#10",
+      "childScopes": [
+        "scope#12"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchStatement",
+        "span": {
+          "line": 13,
+          "column": 20,
+          "offset": 229
+        },
+        "endSpan": {
+          "line": 17,
+          "column": 21,
+          "offset": 364
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#6"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "SwitchCase",
+        "key": "consequent",
+        "parentSpanOffset": 201,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 6,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#12",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#11",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "SwitchCase",
+        "span": {
+          "line": 14,
+          "column": 22,
+          "offset": 264
+        },
+        "endSpan": {
+          "line": 16,
+          "column": 30,
+          "offset": 342
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#7",
+        "ref#8"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "case-clause",
+        "parentType": "SwitchStatement",
+        "key": "cases",
+        "parentSpanOffset": 229,
+        "caseTest": "1"
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 6,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:x@6",
+      "name": "x",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#6",
+        "ref#8"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 10,
+              "offset": 10
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@296",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        }
+      ],
+      "references": [
+        "ref#7"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 15,
+              "column": 24,
+              "offset": 296
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 15,
+              "column": 24,
+              "offset": 296
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@6",
+      "owners": [
+        "scope#0:x@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 3,
+          "column": 8,
+          "offset": 22
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 14
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 5,
+          "column": 12,
+          "offset": 49
+        }
+      },
+      "from": "scope#3",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 41
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 7,
+          "column": 16,
+          "offset": 84
+        }
+      },
+      "from": "scope#5",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 76
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 9,
+          "column": 20,
+          "offset": 127
+        }
+      },
+      "from": "scope#7",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 119
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 11,
+          "column": 24,
+          "offset": 178
+        }
+      },
+      "from": "scope#9",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 170
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#6",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 13,
+          "column": 28,
+          "offset": 237
+        }
+      },
+      "from": "scope#11",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "SwitchStatement",
+        "offset": 229
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#7",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        }
+      },
+      "from": "scope#12",
+      "resolved": "scope#0:console@296",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        },
+        "endSpan": {
+          "line": 15,
+          "column": 39,
+          "offset": 311
+        },
+        "headStartSpan": {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        },
+        "headEndSpan": {
+          "line": 15,
+          "column": 35,
+          "offset": 307
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#8",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 15,
+          "column": 36,
+          "offset": 308
+        }
+      },
+      "from": "scope#12",
+      "resolved": "scope#0:x@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        },
+        "endSpan": {
+          "line": 15,
+          "column": 39,
+          "offset": 311
+        },
+        "headStartSpan": {
+          "line": 15,
+          "column": 24,
+          "offset": 296
+        },
+        "headEndSpan": {
+          "line": 15,
+          "column": 35,
+          "offset": 307
+        },
+        "isCall": true
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

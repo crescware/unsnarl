@@ -1,0 +1,368 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/try-catch-finally/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_103",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 29,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 2,
+          "endLine": 25,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 3,
+              "endLine": 21,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 4,
+                  "endLine": 17,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_5",
+                      "line": 5,
+                      "endLine": 13,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "subgraph",
+                          "id": "s_scope_6",
+                          "line": 6,
+                          "endLine": 9,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "node",
+                              "id": "n_scope_6_x_84",
+                              "name": "x",
+                              "line": 7,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false,
+                              "kind": "Variable",
+                              "declarationKind": "const",
+                              "initIsFunction": false
+                            },
+                            {
+                              "type": "node",
+                              "id": "expr_stmt_103",
+                              "kind": "ExpressionStatement",
+                              "name": "console.log()",
+                              "line": 8,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            }
+                          ],
+                          "kind": "try"
+                        },
+                        {
+                          "type": "subgraph",
+                          "id": "s_scope_7",
+                          "line": 9,
+                          "endLine": 12,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "node",
+                              "id": "n_scope_7_e6_157",
+                              "name": "e6",
+                              "line": 10,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false,
+                              "kind": "Variable",
+                              "declarationKind": "const",
+                              "initIsFunction": false
+                            },
+                            {
+                              "type": "node",
+                              "id": "expr_stmt_180",
+                              "kind": "ExpressionStatement",
+                              "name": "console.log()",
+                              "line": 11,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            }
+                          ],
+                          "kind": "catch"
+                        }
+                      ],
+                      "kind": "try"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_8",
+                      "line": 13,
+                      "endLine": 16,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "n_scope_8_e5_243",
+                          "name": "e5",
+                          "line": 14,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "kind": "Variable",
+                          "declarationKind": "const",
+                          "initIsFunction": false
+                        },
+                        {
+                          "type": "node",
+                          "id": "expr_stmt_264",
+                          "kind": "ExpressionStatement",
+                          "name": "console.log()",
+                          "line": 15,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ],
+                      "kind": "catch"
+                    }
+                  ],
+                  "kind": "try"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_9",
+                  "line": 17,
+                  "endLine": 20,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "n_scope_9_e4_321",
+                      "name": "e4",
+                      "line": 18,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "kind": "Variable",
+                      "declarationKind": "const",
+                      "initIsFunction": false
+                    },
+                    {
+                      "type": "node",
+                      "id": "expr_stmt_340",
+                      "kind": "ExpressionStatement",
+                      "name": "console.log()",
+                      "line": 19,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ],
+                  "kind": "catch"
+                }
+              ],
+              "kind": "try"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_10",
+              "line": 21,
+              "endLine": 24,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_10_e3_391",
+                  "name": "e3",
+                  "line": 22,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Variable",
+                  "declarationKind": "const",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_408",
+                  "kind": "ExpressionStatement",
+                  "name": "console.log()",
+                  "line": 23,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "catch"
+            }
+          ],
+          "kind": "try"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_11",
+          "line": 25,
+          "endLine": 28,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_11_e2_453",
+              "name": "e2",
+              "line": 26,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_468",
+              "kind": "ExpressionStatement",
+              "name": "console.log()",
+              "line": 27,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "catch"
+        }
+      ],
+      "kind": "try"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_12",
+      "line": 29,
+      "endLine": 32,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_12_e1_507",
+          "name": "e1",
+          "line": 30,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_520",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 31,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "catch"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_103",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_6_x_84",
+      "to": "expr_stmt_103",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_180",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_7_e6_157",
+      "to": "expr_stmt_180",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_264",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_8_e5_243",
+      "to": "expr_stmt_264",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_340",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_9_e4_321",
+      "to": "expr_stmt_340",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_408",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_10_e3_391",
+      "to": "expr_stmt_408",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_468",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_11_e2_453",
+      "to": "expr_stmt_468",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_520",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_12_e1_507",
+      "to": "expr_stmt_520",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,7 @@
+2	0	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:0 console
+0	0	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:2 scope#2
+1	0	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:26 e2
+0	2	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:27 console.log()
+1	0	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:30 e1
+0	2	integration/fixtures/app-behavior/depth/try-catch-finally/input.ts:31 console.log()
+4	4	6 total

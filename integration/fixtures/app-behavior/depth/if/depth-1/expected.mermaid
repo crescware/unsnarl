@@ -1,0 +1,18 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_a_6["a<br/>L1"]
+  n_scope_0_b_22["b<br/>L2"]
+  n_scope_0_c_38["c<br/>L3"]
+  n_scope_0_d_54["d<br/>L4"]
+  n_scope_0_e_70["e<br/>L5"]
+  n_scope_0_f_86["f<br/>L6"]
+  n_scope_0_console_324["global console"]
+  subgraph s_scope_1["if L8-26"]
+    direction RL
+    if_test_scope_0_97{"if ()<br/>L8"}
+    n_scope_1_v1_114["v1<br/>L9"]
+    collapsed_scope_2["[hidden]<br/>L10-25"]
+    if_test_scope_1_124{"if ()<br/>L10"}
+  end
+  n_scope_0_a_6 -->|read| if_test_scope_0_97
+  n_scope_0_b_22 -->|read| if_test_scope_1_124

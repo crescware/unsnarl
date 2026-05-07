@@ -1,0 +1,43 @@
+# integration/fixtures/app-behavior/depth/block/input.ts
+
+## Input
+
+```ts
+{
+  const v1 = 1;
+  {
+    const v2 = v1;
+    {
+      const v3 = v2;
+      {
+        const v4 = v3;
+        {
+          const v5 = v4;
+          {
+            const v6 = v5;
+            console.log(v6);
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_console_185["global console"]
+  n_scope_1_v1_10["v1<br/>L2"]
+  n_scope_2_v2_32["v2<br/>L4"]
+  n_scope_3_v3_59["v3<br/>L6"]
+  n_scope_4_v4_90["v4<br/>L8"]
+  n_scope_5_v5_125["v5<br/>L10"]
+  collapsed_scope_6["[hidden]<br/>L11-14"]
+  n_scope_1_v1_10 -->|read| n_scope_2_v2_32
+  n_scope_2_v2_32 -->|read| n_scope_3_v3_59
+  n_scope_3_v3_59 -->|read| n_scope_4_v4_90
+  n_scope_4_v4_90 -->|read| n_scope_5_v5_125
+```

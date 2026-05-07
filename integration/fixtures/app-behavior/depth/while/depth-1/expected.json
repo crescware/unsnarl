@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/while/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_n1_4",
+      "name": "n1",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_n2_16",
+      "name": "n2",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_n3_28",
+      "name": "n3",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_n4_40",
+      "name": "n4",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_n5_52",
+      "name": "n5",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_n6_64",
+      "name": "n6",
+      "line": 6,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 8,
+      "endLine": 25,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "while_test_scope_0_73",
+          "kind": "WhileTest",
+          "name": "while-test",
+          "line": 8,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_7",
+          "kind": "WriteOp",
+          "name": "n1",
+          "line": 9,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "node",
+          "id": "collapsed_scope_2",
+          "kind": "CollapsedScope",
+          "name": "scope#2",
+          "line": 10,
+          "endLine": 24,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "while"
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "ModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_n1_4",
+      "to": "wr_ref_7",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n2_16",
+      "to": "collapsed_scope_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n3_28",
+      "to": "collapsed_scope_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n4_40",
+      "to": "collapsed_scope_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n5_52",
+      "to": "collapsed_scope_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n6_64",
+      "to": "collapsed_scope_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_n1_4",
+      "to": "while_test_scope_0_73",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_n2_16",
+      "to": "module_root",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

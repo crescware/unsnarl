@@ -1,0 +1,387 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/for/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_240",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 13,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "for_test_scope_0_0",
+          "kind": "ForTest",
+          "name": "for-test",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_i1_9",
+          "name": "i1",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "let",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_2",
+          "kind": "WriteOp",
+          "name": "i1",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 2,
+          "endLine": 12,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "for_test_scope_2_35",
+              "kind": "ForTest",
+              "name": "for-test",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "n_scope_3_i2_44",
+              "name": "i2",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "let",
+              "initIsFunction": false
+            },
+            {
+              "type": "node",
+              "id": "wr_ref_5",
+              "kind": "WriteOp",
+              "name": "i2",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "declarationKind": "let"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_5",
+              "line": 3,
+              "endLine": 11,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "for_test_scope_4_72",
+                  "kind": "ForTest",
+                  "name": "for-test",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "n_scope_5_i3_81",
+                  "name": "i3",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Variable",
+                  "declarationKind": "let",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "node",
+                  "id": "wr_ref_8",
+                  "kind": "WriteOp",
+                  "name": "i3",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_7",
+                  "line": 4,
+                  "endLine": 10,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "for_test_scope_6_111",
+                      "kind": "ForTest",
+                      "name": "for-test",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    },
+                    {
+                      "type": "node",
+                      "id": "n_scope_7_i4_120",
+                      "name": "i4",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "kind": "Variable",
+                      "declarationKind": "let",
+                      "initIsFunction": false
+                    },
+                    {
+                      "type": "node",
+                      "id": "wr_ref_11",
+                      "kind": "WriteOp",
+                      "name": "i4",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "declarationKind": "let"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_9",
+                      "line": 5,
+                      "endLine": 9,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "for_test_scope_8_152",
+                          "kind": "ForTest",
+                          "name": "for-test",
+                          "line": 5,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        },
+                        {
+                          "type": "node",
+                          "id": "n_scope_9_i5_161",
+                          "name": "i5",
+                          "line": 5,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "kind": "Variable",
+                          "declarationKind": "let",
+                          "initIsFunction": false
+                        },
+                        {
+                          "type": "node",
+                          "id": "wr_ref_14",
+                          "kind": "WriteOp",
+                          "name": "i5",
+                          "line": 5,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "declarationKind": "let"
+                        },
+                        {
+                          "type": "subgraph",
+                          "id": "s_scope_11",
+                          "line": 6,
+                          "endLine": 8,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "node",
+                              "id": "for_test_scope_10_195",
+                              "kind": "ForTest",
+                              "name": "for-test",
+                              "line": 6,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            },
+                            {
+                              "type": "node",
+                              "id": "n_scope_11_i6_204",
+                              "name": "i6",
+                              "line": 6,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false,
+                              "kind": "Variable",
+                              "declarationKind": "let",
+                              "initIsFunction": false
+                            },
+                            {
+                              "type": "node",
+                              "id": "wr_ref_17",
+                              "kind": "WriteOp",
+                              "name": "i6",
+                              "line": 6,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false,
+                              "declarationKind": "let"
+                            },
+                            {
+                              "type": "node",
+                              "id": "expr_stmt_240",
+                              "kind": "ExpressionStatement",
+                              "name": "console.log()",
+                              "line": 7,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            }
+                          ],
+                          "kind": "for"
+                        }
+                      ],
+                      "kind": "for"
+                    }
+                  ],
+                  "kind": "for"
+                }
+              ],
+              "kind": "for"
+            }
+          ],
+          "kind": "for"
+        }
+      ],
+      "kind": "for"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_i1_9",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_3_i2_44",
+      "to": "wr_ref_5",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_5_i3_81",
+      "to": "wr_ref_8",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_7_i4_120",
+      "to": "wr_ref_11",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_9_i5_161",
+      "to": "wr_ref_14",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_11_i6_204",
+      "to": "wr_ref_17",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_i1_9",
+      "to": "for_test_scope_0_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_i2_44",
+      "to": "for_test_scope_2_35",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_5_i3_81",
+      "to": "for_test_scope_4_72",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_7_i4_120",
+      "to": "for_test_scope_6_111",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_9_i5_161",
+      "to": "for_test_scope_8_152",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_11_i6_204",
+      "to": "for_test_scope_10_195",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_240",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_8",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_11",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_14",
+      "to": "expr_stmt_240",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_17",
+      "to": "expr_stmt_240",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
