@@ -1,18 +1,19 @@
-{
-  "$schema": "https://unpkg.com/knip@6/schema.json",
-  "entry": [
+import type { KnipConfig } from "knip";
+
+const config = {
+  entry: [
     "src/index.ts",
     "src/main.ts",
     "integration/**/*.test.ts",
     "parity/**/*.test.ts",
   ],
-  "project": [
+  project: [
     "src/**/*.{ts,tsx}",
     "integration/**/*.{ts,tsx}",
     "!integration/fixtures/**",
     "parity/**/*.{ts,tsx}",
   ],
-  "ignoreDependencies": [
+  ignoreDependencies: [
     // type-fest is pulled in solely because `mermaid`'s bundled `.d.ts` files
     // reference types from it. No `project` source imports type-fest directly,
     // so knip's source-graph scan reports it as "Unused devDependencies".
@@ -22,10 +23,12 @@
     // "Unused devDependencies" because the source-graph scan finds no use.
     "rimraf",
   ],
-  "ignoreBinaries": [
+  ignoreBinaries: [
     // rimraf is invoked from the `build` npm script (`rimraf dist && tsgo ...`).
     // knip's binary resolver does not match the script-level invocation back
     // to the devDependency, so it reports rimraf as an "Unlisted binary".
     "rimraf",
   ],
-}
+} as const satisfies KnipConfig;
+
+export default config;
