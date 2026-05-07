@@ -1,6 +1,7 @@
 import type { Command } from "commander";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { defaultDepths } from "../args/depth-options.js";
 import { readStdin } from "../io.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
@@ -21,6 +22,7 @@ const baseOpts = {
   descendants: null,
   ancestors: null,
   context: null,
+  depths: defaultDepths(),
   out: null,
   debug: false,
 } as const satisfies NormalizedCliOptions;

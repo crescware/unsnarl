@@ -5,6 +5,7 @@ import type { EmitterRegistry } from "../../../pipeline/emit/emitter-registry.js
 import type { Emitter } from "../../../pipeline/emit/emitter.js";
 import type { ParsedRootQuery } from "../../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../../root-query/root-query-kind.js";
+import { defaultDepths } from "../../args/depth-options.js";
 import { CliUsageError } from "../cli-usage-error.js";
 import type { ExecuteSource } from "../execute-source.js";
 import type { NormalizedCliOptions } from "../normalized-cli-options.js";
@@ -20,6 +21,7 @@ const baseOpts = {
   descendants: null,
   ancestors: null,
   context: null,
+  depths: defaultDepths(),
   out: null,
   debug: false,
 } as const satisfies NormalizedCliOptions;

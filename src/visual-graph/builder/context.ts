@@ -1,3 +1,4 @@
+import type { CategoryDepths } from "../../ir/annotations/scope-annotation.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
@@ -12,4 +13,9 @@ export type BuilderContext = Readonly<{
   writeOpsByScope: Map<string, /* mutable */ WriteOp[]>;
   writeOpByRef: Map<string, WriteOp>;
   sortedCasesByContainer: Map<string, /* mutable */ SerializedScope[]>;
+  depths?: CategoryDepths;
+}>;
+
+export type BuildVisualGraphOptions = Readonly<{
+  depths?: CategoryDepths;
 }>;

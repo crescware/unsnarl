@@ -43,8 +43,10 @@ export function buildRunOpts(
       prunedGraph: null,
       resolutions: null,
       debug: opts.debug,
+      depths: opts.depths,
     },
     pruning,
+    depths: opts.depths,
   } satisfies PipelineRunOptions;
 
   return { text, runOpts };

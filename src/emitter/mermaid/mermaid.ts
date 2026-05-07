@@ -46,7 +46,9 @@ export class MermaidEmitter implements Emitter {
   }
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
-    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
+    const graph =
+      opts.prunedGraph ??
+      buildVisualGraph(ir, opts.depths ? { depths: opts.depths } : undefined);
     return renderMermaid(graph, this.strategy, opts.debug);
   }
 }

@@ -17,7 +17,7 @@ import type { VisualGraph } from "../visual-graph.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState, PendingLoopTestAnchor } from "./build-state.js";
-import type { BuilderContext } from "./context.js";
+import type { BuilderContext, BuildVisualGraphOptions } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
@@ -41,7 +41,10 @@ import type { WriteOp } from "./write-op.js";
 
 const MODULE_ROOT_ID = "module_root";
 
-export function buildVisualGraph(ir: SerializedIR): VisualGraph {
+export function buildVisualGraph(
+  ir: SerializedIR,
+  opts?: BuildVisualGraphOptions,
+): VisualGraph {
   const graph = {
     version: SERIALIZED_IR_VERSION,
     source: { path: ir.source.path, language: ir.source.language },
@@ -177,6 +180,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     writeOpsByScope,
     writeOpByRef,
     sortedCasesByContainer,
+    ...(opts?.depths ? { depths: opts.depths } : {}),
   } as const satisfies BuilderContext;
   const state = {
     subgraphByScope: new Map(),
