@@ -17,14 +17,10 @@ export function describeSubgraph(
 ): VisualSubgraph {
   const id = subgraphScopeId(scope);
   const endLine = scope.block.endSpan.line;
-  if (isFunctionSubgraph(scope, subgraphOwnerVar)) {
-    const ownerVarId = subgraphOwnerVar.get(scope.id);
-    if (!ownerVarId) {
-      throw new Error(
-        `expected owner variable for function subgraph ${scope.id}`,
-      );
-    }
-    const ownerVar = variableMap.get(ownerVarId);
+  if (isFunctionSubgraph(scope)) {
+    const ownerVarId = subgraphOwnerVar.get(scope.id) ?? null;
+    const ownerVar =
+      ownerVarId !== null ? (variableMap.get(ownerVarId) ?? null) : null;
     const startLine = ownerVar?.identifiers[0]?.line ?? scope.block.span.line;
     return {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
@@ -33,7 +29,7 @@ export function describeSubgraph(
       line: startLine,
       endLine,
       direction: DIRECTION.RL,
-      ownerNodeId: nodeId(ownerVarId),
+      ownerNodeId: ownerVarId !== null ? nodeId(ownerVarId) : null,
       ownerName: ownerVar?.name ?? "",
       elements: [],
     };

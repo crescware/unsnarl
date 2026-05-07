@@ -65,24 +65,88 @@
           "initIsFunction": true
         },
         {
-          "type": "node",
-          "id": "n_scope_2_arr_83",
-          "name": "arr",
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
           "line": 4,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false,
-          "kind": "Parameter"
-        },
-        {
-          "type": "node",
-          "id": "n_scope_3_n_110",
-          "name": "n",
-          "line": 4,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false,
-          "kind": "Parameter"
+          "endLine": 4,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_arr_83",
+              "name": "arr",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Parameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "kind": "function",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_3_n_110",
+                  "name": "n",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Parameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_C_44_116_121",
+                  "kind": "return",
+                  "line": 4,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_4",
+                      "kind": "ReturnUse",
+                      "name": "n",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_0_C_44_101_122",
+              "kind": "return",
+              "line": 4,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_3",
+                  "kind": "ReturnUse",
+                  "name": "arr",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
         },
         {
           "type": "subgraph",
@@ -105,14 +169,46 @@
               "kind": "Parameter"
             },
             {
-              "type": "node",
-              "id": "n_scope_5_n_171",
-              "name": "n",
+              "type": "subgraph",
+              "id": "s_scope_5",
+              "kind": "function",
               "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "Parameter"
+              "endLine": 5,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_5_n_171",
+                  "name": "n",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Parameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_1_fnB_137_177_182",
+                  "kind": "return",
+                  "line": 5,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_7",
+                      "kind": "ReturnUse",
+                      "name": "n",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
             },
             {
               "type": "subgraph",
@@ -133,66 +229,6 @@
                   "unused": false
                 }
               ]
-            },
-            {
-              "type": "subgraph",
-              "id": "s_return_scope_1_fnB_137_177_182",
-              "kind": "return",
-              "line": 5,
-              "endLine": null,
-              "direction": "RL",
-              "elements": [
-                {
-                  "type": "node",
-                  "id": "ret_use_ref_7",
-                  "kind": "ReturnUse",
-                  "name": "n",
-                  "line": 5,
-                  "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "type": "subgraph",
-          "id": "s_return_scope_0_C_44_101_122",
-          "kind": "return",
-          "line": 4,
-          "endLine": null,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
-              "name": "arr",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            }
-          ]
-        },
-        {
-          "type": "subgraph",
-          "id": "s_return_scope_0_C_44_116_121",
-          "kind": "return",
-          "line": 4,
-          "endLine": null,
-          "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_4",
-              "kind": "ReturnUse",
-              "name": "n",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
             }
           ]
         }

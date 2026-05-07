@@ -8,6 +8,9 @@ flowchart RL
     n_scope_1_q_43["let q<br/>L2"]
     wr_ref_3(["let q<br/>L2"])
     expr_stmt_66["fns.push()<br/>L3"]
+    subgraph s_scope_3["(anonymous)<br/>L3"]
+      direction RL
+    end
   end
   n_scope_1_q_43 -->|set| wr_ref_3
   n_scope_1_q_43 -->|read| for_test_scope_0_34

@@ -12,25 +12,22 @@ describe("shouldSubgraph", () => {
     name: string;
     type: ScopeType;
     blockContext: BlockContext | null;
-    isOwner: boolean;
     expected: boolean;
   }>([
     {
-      name: "function-subgraph owner on a plain block -> true",
-      type: SCOPE_TYPE.Block,
+      name: "function scope -> true",
+      type: SCOPE_TYPE.Function,
       blockContext: null,
-      isOwner: true,
       expected: true,
     },
     {
-      name: "control kind (for) without owner -> true",
+      name: "control kind (for) -> true",
       type: SCOPE_TYPE.For,
       blockContext: null,
-      isOwner: false,
       expected: true,
     },
     {
-      name: "branch block (if consequent) without owner -> true",
+      name: "branch block (if consequent) -> true",
       type: SCOPE_TYPE.Block,
       blockContext: {
         ...baseBlockContext(),
@@ -38,35 +35,28 @@ describe("shouldSubgraph", () => {
         key: "consequent",
         parentSpanOffset: 0,
       },
-      isOwner: false,
       expected: true,
     },
     {
-      name: "plain block without owner or branch context -> false",
+      name: "plain block without branch context -> false",
       type: SCOPE_TYPE.Block,
       blockContext: null,
-      isOwner: false,
       expected: false,
     },
     {
-      name: "module without owner -> false",
+      name: "module -> false",
       type: SCOPE_TYPE.Module,
       blockContext: null,
-      isOwner: false,
       expected: false,
     },
     {
-      name: "global without owner -> false",
+      name: "global -> false",
       type: SCOPE_TYPE.Global,
       blockContext: null,
-      isOwner: false,
       expected: false,
     },
-  ])("$name", ({ type, blockContext, isOwner, expected }) => {
+  ])("$name", ({ type, blockContext, expected }) => {
     const scope = { ...baseScope(), id: "s", type, blockContext };
-    const owners = isOwner
-      ? new Map([["s", "var"]])
-      : new Map<string, string>();
-    expect(shouldSubgraph(scope, owners)).toBe(expected);
+    expect(shouldSubgraph(scope)).toBe(expected);
   });
 });

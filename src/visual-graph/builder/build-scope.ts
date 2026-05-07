@@ -25,7 +25,7 @@ export function buildScope(
   ctx: BuilderContext,
   state: BuildState,
 ): void {
-  const subgraphHere = shouldSubgraph(scope, ctx.subgraphOwnerVar);
+  const subgraphHere = shouldSubgraph(scope);
   let bodyContainer: Container = container;
   let bodySubgraph: VisualSubgraph | null = null;
   if (subgraphHere) {
