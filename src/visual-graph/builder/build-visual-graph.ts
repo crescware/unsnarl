@@ -276,6 +276,15 @@ export function buildVisualGraph(
     if (varVarIds.has(r.resolved)) {
       continue;
     }
+    // When the ref's containing scope (or any ancestor) was collapsed
+    // away, the placeholder node already represents the entire interior;
+    // creating extra ret-use / expr-stmt nodes for refs that live inside
+    // would surface fragments of the hidden body in unrelated outer
+    // subgraphs. Skip the ref entirely; the post-processing redirect
+    // routes any incoming/outgoing edge to the placeholder.
+    if (state.collapsedPlaceholderByScope?.has(r.from)) {
+      continue;
+    }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
     if (predicateTarget && !r.flags.write) {
       const fromIds = readOrigins(
