@@ -7,6 +7,7 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "noEmit": true,
+    "skipLibCheck": true,
     "types": ["node"],
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -21,6 +22,6 @@
     "allowUnreachableCode": false,
     "allowUnusedLabels": false
   },
-  "include": ["src", "integration", "parity"],
+  "include": ["src", "integration", "parity", "knip.ts"],
   "exclude": ["integration/fixtures/**/input.*"]
 }
