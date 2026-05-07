@@ -9,8 +9,10 @@ import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { describeSubgraph } from "./describe-subgraph.js";
+import { isCollapsed } from "./is-collapsed.js";
 import { attachLoopTestAnchor } from "./loop-test-anchor.js";
 import { makeVariableNode } from "./make-variable-node.js";
+import { collapsedPlaceholderId } from "./node-id.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { attachSwitchDiscriminantAnchor } from "./switch-discriminant-anchor.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
@@ -19,12 +21,45 @@ type Container = Readonly<{
   elements: /* mutable */ VisualElement[];
 }>;
 
+function recordCollapsedDescendants(
+  scope: SerializedScope,
+  placeholderId: string,
+  ctx: BuilderContext,
+  state: BuildState,
+): void {
+  state.collapsedPlaceholderByScope?.set(scope.id, placeholderId);
+  for (const childId of scope.childScopes) {
+    const child = ctx.scopeMap.get(childId);
+    if (!child) {
+      continue;
+    }
+    recordCollapsedDescendants(child, placeholderId, ctx, state);
+  }
+}
+
 export function buildScope(
   scope: SerializedScope,
   container: Container,
   ctx: BuilderContext,
   state: BuildState,
 ): void {
+  if (isCollapsed(scope, ctx.depths)) {
+    const placeholderId = collapsedPlaceholderId(scope.id);
+    const placeholder = {
+      type: VISUAL_ELEMENT_TYPE.Node,
+      id: placeholderId,
+      kind: NODE_KIND.CollapsedScope,
+      name: scope.id,
+      line: scope.block.span.line,
+      endLine: scope.block.endSpan.line,
+      isJsxElement: false,
+      unused: false,
+    } satisfies VisualNode;
+    container.elements.push(placeholder);
+    recordCollapsedDescendants(scope, placeholderId, ctx, state);
+    return;
+  }
+
   const subgraphHere = shouldSubgraph(scope);
   let bodyContainer: Container = container;
   let bodySubgraph: VisualSubgraph | null = null;
@@ -52,7 +87,9 @@ export function buildScope(
     if (v.defs.length === 0 && v.identifiers.length === 0) {
       continue;
     }
-    bodyContainer.elements.push(makeVariableNode(v));
+    const node = makeVariableNode(v);
+    state.nodeIdOriginScope?.set(node.id, scope.id);
+    bodyContainer.elements.push(node);
   }
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];
   for (const op of ops) {
@@ -73,6 +110,7 @@ export function buildScope(
       unused: false,
       declarationKind,
     } satisfies VisualNode;
+    state.nodeIdOriginScope?.set(node.id, scope.id);
     bodyContainer.elements.push(node);
   }
   buildChildren(scope, bodyContainer, ctx, state);

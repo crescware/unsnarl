@@ -18,7 +18,8 @@ type SimpleKind =
   | typeof NODE_KIND.ModuleSink
   | typeof NODE_KIND.ModuleSource
   | typeof NODE_KIND.ImportIntermediate
-  | typeof NODE_KIND.ExpressionStatement;
+  | typeof NODE_KIND.ExpressionStatement
+  | typeof NODE_KIND.CollapsedScope;
 
 const COMMON = {
   type: VISUAL_ELEMENT_TYPE.Node,

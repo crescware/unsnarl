@@ -22,6 +22,7 @@ import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
@@ -33,6 +34,7 @@ import { predicateTargetId } from "./predicate-target-id.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { pushEdge } from "./push-edge.js";
 import { readOrigins } from "./read-origins.js";
+import { retUseNodeId } from "./ret-use-node-id.js";
 import { sanitize } from "./sanitize.js";
 import { setPredecessorOf } from "./set-predecessor-of.js";
 import { stateRefId } from "./state-ref-id.js";
@@ -196,6 +198,8 @@ export function buildVisualGraph(
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
+    collapsedPlaceholderByScope: new Map(),
+    nodeIdOriginScope: new Map(),
   } as const satisfies BuildState;
 
   const root = ir.scopes.find(
@@ -511,5 +515,78 @@ export function buildVisualGraph(
     }
   }
 
+  // Edge redirection for collapsed scopes: any node id that came from a
+  // collapsed scope (or a descendant of one) is rewritten to that scope's
+  // placeholder node id, so the rendered graph shows a single opaque node
+  // instead of dangling references into hidden subgraphs.
+  if ((state.collapsedPlaceholderByScope?.size ?? 0) > 0) {
+    redirectEdgesIntoCollapsed(graph.edges, ir, state);
+  }
+
   return graph;
+}
+
+function redirectEdgesIntoCollapsed(
+  edges: /* mutable */ VisualEdge[],
+  ir: SerializedIR,
+  state: BuildState,
+): void {
+  const collapsedPlaceholderByScope =
+    state.collapsedPlaceholderByScope ?? new Map<string, string>();
+  const originScopeByNodeId = new Map<string, string>(
+    state.nodeIdOriginScope ?? new Map(),
+  );
+  // Variables: include every variable (even those whose nodes were never
+  // emitted because they live inside a collapsed scope).
+  for (const v of ir.variables) {
+    const id = nodeId(v.id);
+    if (!originScopeByNodeId.has(id)) {
+      originScopeByNodeId.set(id, v.scope);
+    }
+  }
+  // References whose nodes (write op / return-use / expression statement)
+  // were never created because their containing scope collapsed.
+  for (const r of ir.references) {
+    const wid = writeOpNodeId(r.id);
+    if (!originScopeByNodeId.has(wid)) {
+      originScopeByNodeId.set(wid, r.from);
+    }
+    const ruid = retUseNodeId(r.id);
+    if (!originScopeByNodeId.has(ruid)) {
+      originScopeByNodeId.set(ruid, r.from);
+    }
+    const c = r.expressionStatementContainer;
+    if (c) {
+      const sid = expressionStatementNodeId(c.startSpan.offset);
+      if (!originScopeByNodeId.has(sid)) {
+        originScopeByNodeId.set(sid, r.from);
+      }
+    }
+  }
+
+  function redirect(id: string): string {
+    const scope = originScopeByNodeId.get(id);
+    if (scope === undefined) {
+      return id;
+    }
+    return collapsedPlaceholderByScope.get(scope) ?? id;
+  }
+
+  const redirected: VisualEdge[] = [];
+  const seen = new Set<string>();
+  for (const e of edges) {
+    const from = redirect(e.from);
+    const to = redirect(e.to);
+    if (from === to) {
+      continue;
+    }
+    const key = `${from}\t${to}\t${e.label}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    redirected.push({ ...e, from, to });
+  }
+  edges.length = 0;
+  edges.push(...redirected);
 }
