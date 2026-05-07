@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { LANGUAGE } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
 const parser = new OxcParser();
@@ -11,6 +12,7 @@ function analyze(code: string) {
   const parsed = parser.parse(code, {
     language: LANGUAGE.Tsx,
     sourcePath: "input.tsx",
+    sourceType: defaultSourceTypeFor(LANGUAGE.Tsx),
   });
   return analyzer.analyze(parsed);
 }

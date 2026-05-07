@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
+import { defaultSourceTypeFor } from "../src/pipeline/parse/default-source-type-for.js";
 import type { PipelineRunOptions } from "../src/pipeline/runner/pipeline-run-options.js";
 import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
 import type { RootQueryResolution } from "../src/visual-graph/prune/root-query-resolution.js";
@@ -76,6 +77,7 @@ export function fixtureSnapshot(metaUrl: string, variant?: PruneVariant): void {
   const baseOpts = {
     language: ext,
     sourcePath,
+    sourceType: defaultSourceTypeFor(ext),
     emit: {
       prettyJson: true,
       prunedGraph: null,
@@ -179,6 +181,7 @@ export function fixtureResolutions(
         format: "json",
         language: ext,
         sourcePath,
+        sourceType: defaultSourceTypeFor(ext),
         emit: {
           prettyJson: true,
           prunedGraph: null,

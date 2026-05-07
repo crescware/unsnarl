@@ -13,6 +13,7 @@ export function runParity(input: ParityInput): readonly Mismatch[] {
   const parsed = parser.parse(input.code, {
     language: input.language,
     sourcePath: `parity.${input.language}`,
+    sourceType: input.sourceType,
   });
 
   const analyzer = new EslintCompatAnalyzer();

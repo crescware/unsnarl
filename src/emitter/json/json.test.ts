@@ -4,6 +4,7 @@ import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
@@ -68,6 +69,7 @@ function emit(code: string, prettyJson = true): string {
   const parsed = parser.parse(code, {
     language: LANGUAGE.Ts,
     sourcePath: "input.ts",
+    sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({

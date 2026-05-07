@@ -1,3 +1,4 @@
+import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import type { PruningRunOptions } from "../../pipeline/prune/pruning-run-options.js";
 import type { PipelineRunOptions } from "../../pipeline/runner/pipeline-run-options.js";
 import { readSourceFile } from "../io.js";
@@ -18,6 +19,7 @@ export function buildRunOpts(
   const text = src.stdin ? src.text : readSourceFile(src.path);
   const sourcePath = src.stdin ? `stdin.${src.stdinLang}` : src.path;
   const language = src.stdin ? src.stdinLang : detectLanguage(src.path);
+  const sourceType = defaultSourceTypeFor(language);
 
   const pruning =
     0 < opts.roots.length
@@ -35,6 +37,7 @@ export function buildRunOpts(
     format: opts.format,
     language,
     sourcePath,
+    sourceType,
     emit: {
       prettyJson: opts.prettyJson,
       prunedGraph: null,

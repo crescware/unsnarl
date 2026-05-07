@@ -4,6 +4,11 @@ import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
+import {
+  SOURCE_TYPE,
+  type SourceType,
+} from "../../pipeline/parse/source-type.js";
 import { DEFINITION_TYPE, type DefinitionType } from "../definition-type.js";
 import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { SCOPE_TYPE, type ScopeType } from "../scope-type.js";
@@ -16,6 +21,16 @@ function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
+    sourceType: defaultSourceTypeFor(language),
+  });
+  return analyzer.analyze(parsed);
+}
+
+function analyzeAs(code: string, language: Language, sourceType: SourceType) {
+  const parsed = parser.parse(code, {
+    language,
+    sourcePath: `input.${language}`,
+    sourceType,
   });
   return analyzer.analyze(parsed);
 }
@@ -200,6 +215,19 @@ describe("EslintCompatAnalyzer / declarations", () => {
     `;
     const { rootScope } = analyze(code);
     expect(variableNames(rootScope).sort()).toEqual(["foo", "result"]);
+  });
+
+  test("treats a JS source parsed as module as a module scope (strict)", () => {
+    const code = "const x = 1;\n";
+    const { rootScope } = analyzeAs(code, LANGUAGE.Js, SOURCE_TYPE.Module);
+    expect(rootScope.type).toBe<ScopeType>("module");
+    expect(rootScope.isStrict).toBe(true);
+  });
+
+  test("treats a TS source parsed as script as a global scope", () => {
+    const code = "const x = 1;\n";
+    const { rootScope } = analyzeAs(code, LANGUAGE.Ts, SOURCE_TYPE.Script);
+    expect(rootScope.type).toBe<ScopeType>("global");
   });
 
   test("creates separate Variables for shadowing inside nested function", () => {

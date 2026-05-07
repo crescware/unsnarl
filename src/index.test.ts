@@ -8,6 +8,7 @@ import type { ScopeAnalyzer } from "./pipeline/analyze/scope-analyzer.js";
 import type { EmitterRegistry } from "./pipeline/emit/emitter-registry.js";
 import type { Emitter } from "./pipeline/emit/emitter.js";
 import type { Parser } from "./pipeline/parse/parser.js";
+import { SOURCE_TYPE } from "./pipeline/parse/source-type.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type { IRSerializer } from "./pipeline/serialize/ir-serializer.js";
 import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
@@ -31,6 +32,7 @@ const fakeParser = {
     ast: { type: AST_TYPE.Program, body: [] },
     language: opts.language,
     sourcePath: opts.sourcePath,
+    sourceType: opts.sourceType,
     raw: code,
   }),
 } as const satisfies Parser;
@@ -79,6 +81,7 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "test.ts",
+      sourceType: SOURCE_TYPE.Module,
       emit: {
         prettyJson: true,
         prunedGraph: null,
@@ -105,6 +108,7 @@ describe("createPipeline", () => {
           format: "missing",
           language: LANGUAGE.Ts,
           sourcePath: "x.ts",
+          sourceType: SOURCE_TYPE.Module,
           emit: {
             prettyJson: true,
             prunedGraph: null,
@@ -126,6 +130,7 @@ describe("createPipeline", () => {
           ast: { type: AST_TYPE.Program, body: [] },
           language: opts.language,
           sourcePath: opts.sourcePath,
+          sourceType: opts.sourceType,
           raw: code,
         };
       },
@@ -142,6 +147,7 @@ describe("createPipeline", () => {
       format: "fake",
       language: LANGUAGE.Ts,
       sourcePath: "x.ts",
+      sourceType: SOURCE_TYPE.Module,
       emit: {
         prettyJson: true,
         prunedGraph: null,

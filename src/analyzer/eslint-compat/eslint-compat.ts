@@ -2,6 +2,7 @@ import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { AnalyzedSource } from "../../pipeline/analyze/analyzed-source.js";
 import type { ScopeAnalyzer } from "../../pipeline/analyze/scope-analyzer.js";
 import type { ParsedSource } from "../../pipeline/parse/parsed-source.js";
+import { SOURCE_TYPE } from "../../pipeline/parse/source-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { walk } from "../walk/walk.js";
@@ -15,9 +16,8 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
 
   analyze(parsed: ParsedSource): AnalyzedSource {
     const program = parsed.ast as NodeLike;
-    const isModule = parsed.language !== "js";
     const manager = new ScopeManager(
-      isModule ? "module" : "global",
+      parsed.sourceType === SOURCE_TYPE.Module ? "module" : "global",
       program as unknown as AstNode,
     );
     const diagnostics = new DiagnosticCollector();

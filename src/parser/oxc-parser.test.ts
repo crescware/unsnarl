@@ -1,6 +1,8 @@
 import { describe, expect, test } from "vitest";
 
 import { LANGUAGE } from "../language.js";
+import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
+import { SOURCE_TYPE } from "../pipeline/parse/source-type.js";
 import { AST_TYPE } from "./ast-type.js";
 import { OxcParser } from "./oxc-parser.js";
 import { ParseError } from "./parse-error.js";
@@ -28,10 +30,12 @@ describe("OxcParser", () => {
     const parsed = parser.parse(code, {
       language: LANGUAGE.Ts,
       sourcePath: "input.ts",
+      sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
     });
 
     expect(parsed.language).toBe("ts");
     expect(parsed.sourcePath).toBe("input.ts");
+    expect(parsed.sourceType).toBe(SOURCE_TYPE.Module);
     expect(parsed.raw).toBe(code);
 
     const program = asProgram(parsed.ast);
@@ -47,6 +51,7 @@ describe("OxcParser", () => {
     const parsed = parser.parse(code, {
       language: LANGUAGE.Tsx,
       sourcePath: "input.tsx",
+      sourceType: defaultSourceTypeFor(LANGUAGE.Tsx),
     });
 
     const program = asProgram(parsed.ast);
@@ -61,6 +66,7 @@ describe("OxcParser", () => {
     const parsed = parser.parse(code, {
       language: LANGUAGE.Js,
       sourcePath: "input.js",
+      sourceType: SOURCE_TYPE.Module,
     });
 
     const program = asProgram(parsed.ast);
@@ -68,10 +74,24 @@ describe("OxcParser", () => {
     expect(program.body[1]?.type).toBe(AST_TYPE.ExportNamedDeclaration);
   });
 
+  test("preserves an explicitly requested sourceType regardless of the language extension", () => {
+    const code = "var legacy = 1;\n";
+    const parsed = parser.parse(code, {
+      language: LANGUAGE.Js,
+      sourcePath: "input.js",
+      sourceType: SOURCE_TYPE.Script,
+    });
+    expect(parsed.sourceType).toBe(SOURCE_TYPE.Script);
+  });
+
   test("synthesizes a filename with the correct extension when sourcePath has none", () => {
     const code = "const x = 1;\n";
     expect(() =>
-      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "" }),
+      parser.parse(code, {
+        language: LANGUAGE.Ts,
+        sourcePath: "",
+        sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
+      }),
     ).not.toThrow();
   });
 
@@ -79,7 +99,11 @@ describe("OxcParser", () => {
     const code = "const = 1;\n";
     let captured: unknown;
     try {
-      parser.parse(code, { language: LANGUAGE.Ts, sourcePath: "broken.ts" });
+      parser.parse(code, {
+        language: LANGUAGE.Ts,
+        sourcePath: "broken.ts",
+        sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
+      });
     } catch (e) {
       captured = e;
     }

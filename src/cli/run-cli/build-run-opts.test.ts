@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { SOURCE_TYPE } from "../../pipeline/parse/source-type.js";
 import { DEFAULT_GENERATIONS } from "../args/default-generations.js";
 import { readSourceFile } from "../io.js";
 import { buildRunOpts } from "./build-run-opts.js";
@@ -54,6 +55,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
+          sourceType: SOURCE_TYPE.Module,
           emit: {
             prettyJson: true,
             prunedGraph: null,
@@ -80,6 +82,7 @@ describe("buildRunOpts", () => {
           format: "mermaid",
           language: "tsx",
           sourcePath: "src/foo.tsx",
+          sourceType: SOURCE_TYPE.Module,
           emit: {
             prettyJson: false,
             prunedGraph: null,
@@ -99,6 +102,16 @@ describe("buildRunOpts", () => {
       expect(actual).toEqual(expected);
     });
 
+    test("a .js source path produces sourceType 'script' (Node.js default)", () => {
+      const jsSrc = {
+        stdin: false,
+        path: "src/legacy.js",
+      } as const satisfies ExecuteSource;
+      const actual = buildRunOpts(jsSrc, baseOpts);
+      expect(actual.runOpts.language).toBe("js");
+      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Script);
+    });
+
     test("no roots → pruning is null", () => {
       const expected = {
         text,
@@ -106,6 +119,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "src/foo.tsx",
+          sourceType: SOURCE_TYPE.Module,
           emit: {
             prettyJson: true,
             prunedGraph: null,
@@ -132,6 +146,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
+            sourceType: SOURCE_TYPE.Module,
             emit: {
               prettyJson: true,
               prunedGraph: null,
@@ -164,6 +179,7 @@ describe("buildRunOpts", () => {
             format: "json",
             language: "tsx",
             sourcePath: "src/foo.tsx",
+            sourceType: SOURCE_TYPE.Module,
             emit: {
               prettyJson: true,
               prunedGraph: null,
@@ -198,6 +214,7 @@ describe("buildRunOpts", () => {
           format: "json",
           language: "tsx",
           sourcePath: "stdin.tsx",
+          sourceType: SOURCE_TYPE.Module,
           emit: {
             prettyJson: true,
             prunedGraph: null,

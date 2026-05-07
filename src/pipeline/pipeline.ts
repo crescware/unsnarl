@@ -15,6 +15,7 @@ export function createPipeline(config: PipelineConfig): Pipeline {
     const parsed = config.parser.parse(code, {
       language: opts.language,
       sourcePath: opts.sourcePath,
+      sourceType: opts.sourceType,
     });
     const analyzed = config.analyzer.analyze(parsed);
     const ir = config.serializer.serialize({

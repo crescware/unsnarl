@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 import { BOUNDARY_EDGE_DIRECTION } from "../../visual-graph/prune/boundary-edge-direction.js";
@@ -19,6 +20,7 @@ function emit(code: string): string {
   const parsed = parser.parse(code, {
     language: LANGUAGE.Ts,
     sourcePath: "x.ts",
+    sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({
@@ -42,6 +44,7 @@ function emitWithBoundary(
   const parsed = parser.parse(code, {
     language: LANGUAGE.Ts,
     sourcePath: "x.ts",
+    sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({
