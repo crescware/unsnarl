@@ -38,6 +38,7 @@ export class OxcParser implements Parser {
       ast: result.program,
       language: opts.language,
       sourcePath: opts.sourcePath,
+      sourceType: opts.sourceType,
       raw: code,
     };
   }

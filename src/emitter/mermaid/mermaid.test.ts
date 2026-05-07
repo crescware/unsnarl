@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
 import { dagreStrategy } from "./strategy/dagre-strategy.js";
@@ -17,6 +18,7 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
+    sourceType: defaultSourceTypeFor(language),
   });
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({
@@ -51,6 +53,7 @@ describe("MermaidEmitter", () => {
     const parsed = parser.parse("const a = 1;\n", {
       language: LANGUAGE.Ts,
       sourcePath: "input.ts",
+      sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
     });
     const analyzed = analyzer.analyze(parsed);
     const ir = serializer.serialize({

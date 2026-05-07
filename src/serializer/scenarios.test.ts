@@ -11,6 +11,7 @@ import type { SerializedVariable } from "../ir/serialized/serialized-variable.js
 import { LANGUAGE, type Language } from "../language.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { OxcParser } from "../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "./flat/flat-serializer.js";
 import { IMPORT_KIND } from "./import-kind.js";
 
@@ -22,6 +23,7 @@ function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
+    sourceType: defaultSourceTypeFor(language),
   });
   const analyzed = analyzer.analyze(parsed);
   return serializer.serialize({

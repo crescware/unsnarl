@@ -5,6 +5,7 @@ import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
 import { LANGUAGE, type Language } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
+import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
 import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 import { SCOPE_TYPE } from "./scope-type.js";
@@ -16,6 +17,7 @@ function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
     language,
     sourcePath: `input.${language}`,
+    sourceType: defaultSourceTypeFor(language),
   });
   return analyzer.analyze(parsed);
 }

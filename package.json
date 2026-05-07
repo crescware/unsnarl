@@ -38,7 +38,7 @@
   },
   "scripts": {
     "build": "rimraf dist && tsgo -p tsconfig.build.json",
-    "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test",
+    "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test && pnpm run check:parity",
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
     "check:parity": "vitest run --project parity",
