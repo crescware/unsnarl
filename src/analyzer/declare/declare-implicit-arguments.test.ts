@@ -14,7 +14,6 @@ const makeFunctionScope = (): ScopeImpl =>
     isStrict: true,
     upper: null,
     block: node(AST_TYPE.FunctionDeclaration),
-    blockContext: null,
   });
 
 describe("declareImplicitArguments", () => {

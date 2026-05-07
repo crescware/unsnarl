@@ -1,3 +1,4 @@
+import { isUnused } from "../../analyzer/is-unused.js";
 import { makeReferenceId, makeScopeId, makeVariableId } from "../../ir/id.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
@@ -56,7 +57,14 @@ export class FlatSerializer implements IRSerializer {
     allReferences.forEach((r, i) => referenceIds.set(r, makeReferenceId(i)));
 
     const serializedScopes: readonly SerializedScope[] = scopes.map((s) =>
-      serializeScope(s, scopeIds, variableIds, referenceIds, ctx.raw),
+      serializeScope(
+        s,
+        scopeIds,
+        variableIds,
+        referenceIds,
+        ctx.annotations,
+        ctx.raw,
+      ),
     );
 
     const serializedVariables: readonly SerializedVariable[] =
@@ -66,12 +74,19 @@ export class FlatSerializer implements IRSerializer {
 
     const serializedReferences: readonly SerializedReference[] =
       allReferences.map((r) =>
-        serializeReference(r, scopeIds, variableIds, referenceIds, ctx.raw),
+        serializeReference(
+          r,
+          scopeIds,
+          variableIds,
+          referenceIds,
+          ctx.annotations,
+          ctx.raw,
+        ),
       );
 
     const unusedVariableIds: /* mutable */ string[] = [];
     for (const v of orderedVariables) {
-      if (v.unsnarlIsUnused() && hasDeclaringDef(v)) {
+      if (isUnused(v) && hasDeclaringDef(v)) {
         const id = variableIds.get(v) ?? null;
         if (id !== null) {
           unusedVariableIds.push(id);

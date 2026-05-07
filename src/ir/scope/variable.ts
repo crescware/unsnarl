@@ -11,5 +11,4 @@ export type Variable = {
   identifiers: /* mutable */ AstIdentifier[];
   references: /* mutable */ Reference[];
   defs: /* mutable */ Definition[];
-  unsnarlIsUnused(): boolean;
 };

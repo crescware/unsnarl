@@ -1,5 +1,4 @@
 import type { AstNode } from "../ir/primitive/ast-node.js";
-import type { BlockContext } from "../ir/scope/block-context.js";
 import type { Scope } from "../ir/scope/scope.js";
 import { ScopeImpl } from "./scope-impl.js";
 import type { ScopeType } from "./scope-type.js";
@@ -15,7 +14,6 @@ export class ScopeManager {
       isStrict: rootKind === "module",
       upper: null,
       block,
-      blockContext: null,
     });
     this.globalScope = root;
     this.allScopes = [root];
@@ -30,17 +28,12 @@ export class ScopeManager {
     return top;
   }
 
-  push(
-    type: ScopeType,
-    block: AstNode,
-    blockContext: BlockContext | null,
-  ): Scope {
+  push(type: ScopeType, block: AstNode): Scope {
     const scope = new ScopeImpl({
       type,
       isStrict: this.current().isStrict,
       upper: this.current(),
       block,
-      blockContext,
     });
     this.stack.push(scope);
     this.allScopes.push(scope);

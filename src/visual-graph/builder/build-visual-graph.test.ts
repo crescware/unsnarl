@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
@@ -21,7 +21,6 @@ import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildVisualGraph } from "./build-visual-graph.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
 function build(code: string, language: Language = LANGUAGE.Ts): VisualGraph {
@@ -30,9 +29,10 @@ function build(code: string, language: Language = LANGUAGE.Ts): VisualGraph {
     sourcePath: `input.${language}`,
     sourceType: defaultSourceTypeFor(language),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },

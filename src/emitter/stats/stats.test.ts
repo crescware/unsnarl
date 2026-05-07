@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
@@ -12,7 +12,6 @@ import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 import { StatsEmitter } from "./stats.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new StatsEmitter();
 
@@ -22,9 +21,10 @@ function emit(code: string): string {
     sourcePath: "x.ts",
     sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: "x.ts", language: LANGUAGE.Ts },
@@ -46,9 +46,10 @@ function emitWithBoundary(
     sourcePath: "x.ts",
     sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: "x.ts", language: LANGUAGE.Ts },

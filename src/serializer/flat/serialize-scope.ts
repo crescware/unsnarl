@@ -1,3 +1,4 @@
+import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
@@ -10,12 +11,14 @@ export function serializeScope(
   scopeIds: Map<Scope, string>,
   variableIds: Map<Variable, string>,
   referenceIds: Map<Reference, string>,
+  annotations: Annotations,
   raw: string,
 ): SerializedScope {
   const id = scopeIds.get(scope) ?? null;
   if (id === null) {
     throw new Error("Scope id not found");
   }
+  const ann = annotations.ofScope(scope);
   return {
     id,
     type: scope.type,
@@ -40,8 +43,8 @@ export function serializeScope(
       .map((r) => referenceIds.get(r) ?? null)
       .filter((x): x is string => x !== null),
     functionExpressionScope: scope.functionExpressionScope,
-    blockContext: scope.unsnarlBlockContext ?? null,
-    fallsThrough: scope.unsnarlFallsThrough ?? false,
-    exitsFunction: scope.unsnarlExitsFunction ?? false,
+    blockContext: ann.blockContext,
+    fallsThrough: ann.fallsThrough,
+    exitsFunction: ann.exitsFunction,
   };
 }

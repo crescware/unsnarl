@@ -1,6 +1,7 @@
 import { buildVisualGraph } from "../visual-graph/builder/build-visual-graph.js";
 import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
 import { resolveAmbiguousQueries } from "../visual-graph/prune/resolve-ambiguous-queries.js";
+import { runAnalysis } from "./analyze/run-analysis.js";
 import type { EmitOptions } from "./emit/emit-options.js";
 import type { PipelineConfig } from "./runner/pipeline-config.js";
 import type { PipelineRunDetails } from "./runner/pipeline-run-details.js";
@@ -17,9 +18,10 @@ export function createPipeline(config: PipelineConfig): Pipeline {
       sourcePath: opts.sourcePath,
       sourceType: opts.sourceType,
     });
-    const analyzed = config.analyzer.analyze(parsed);
+    const analyzed = runAnalysis(parsed);
     const ir = config.serializer.serialize({
       rootScope: analyzed.rootScope,
+      annotations: analyzed.annotations,
       diagnostics: analyzed.diagnostics,
       raw: analyzed.raw,
       source: { path: opts.sourcePath, language: opts.language },

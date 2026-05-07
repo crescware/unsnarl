@@ -1,3 +1,4 @@
+import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
@@ -10,18 +11,20 @@ export function serializeReference(
   scopeIds: Map<Scope, string>,
   variableIds: Map<Variable, string>,
   referenceIds: Map<Reference, string>,
+  annotations: Annotations,
   raw: string,
 ): SerializedReference {
   const id = referenceIds.get(r) ?? null;
   if (id === null) {
     throw new Error("Reference id not found");
   }
+  const ann = annotations.ofReference(r);
   return {
     id,
     identifier: { name: r.identifier.name, span: spanOf(r.identifier, raw) },
     from: scopeIds.get(r.from) ?? "",
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
-    owners: (r.unsnarlOwners ?? [])
+    owners: ann.owners
       .map((o) => variableIds.get(o) ?? null)
       .filter((x): x is string => x !== null),
     init: r.init,
@@ -31,38 +34,38 @@ export function serializeReference(
       call: r.isCall?.() ?? false,
       receiver: r.isReceiver?.() ?? false,
     },
-    predicateContainer: r.unsnarlPredicateContainer ?? null,
-    returnContainer: r.unsnarlReturnContainer
+    predicateContainer: ann.predicateContainer,
+    returnContainer: ann.returnContainer
       ? {
-          startSpan: spanFromOffset(raw, r.unsnarlReturnContainer.startOffset),
-          endSpan: spanFromOffset(raw, r.unsnarlReturnContainer.endOffset),
+          startSpan: spanFromOffset(raw, ann.returnContainer.startOffset),
+          endSpan: spanFromOffset(raw, ann.returnContainer.endOffset),
         }
       : null,
-    jsxElement: r.unsnarlJsxElement
+    jsxElement: ann.jsxElement
       ? {
-          startSpan: spanFromOffset(raw, r.unsnarlJsxElement.startOffset),
-          endSpan: spanFromOffset(raw, r.unsnarlJsxElement.endOffset),
+          startSpan: spanFromOffset(raw, ann.jsxElement.startOffset),
+          endSpan: spanFromOffset(raw, ann.jsxElement.endOffset),
         }
       : null,
-    expressionStatementContainer: r.unsnarlExpressionStatementContainer
+    expressionStatementContainer: ann.expressionStatementContainer
       ? {
           startSpan: spanFromOffset(
             raw,
-            r.unsnarlExpressionStatementContainer.startOffset,
+            ann.expressionStatementContainer.startOffset,
           ),
           endSpan: spanFromOffset(
             raw,
-            r.unsnarlExpressionStatementContainer.endOffset,
+            ann.expressionStatementContainer.endOffset,
           ),
           headStartSpan: spanFromOffset(
             raw,
-            r.unsnarlExpressionStatementContainer.headStartOffset,
+            ann.expressionStatementContainer.headStartOffset,
           ),
           headEndSpan: spanFromOffset(
             raw,
-            r.unsnarlExpressionStatementContainer.headEndOffset,
+            ann.expressionStatementContainer.headEndOffset,
           ),
-          isCall: r.unsnarlExpressionStatementContainer.isCall,
+          isCall: ann.expressionStatementContainer.isCall,
         }
       : null,
   };

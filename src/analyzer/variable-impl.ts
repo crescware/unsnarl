@@ -15,8 +15,4 @@ export class VariableImpl implements Variable {
     this.name = name;
     this.scope = scope;
   }
-
-  unsnarlIsUnused(): boolean {
-    return this.references.every((r) => r.init && r.isWriteOnly());
-  }
 }

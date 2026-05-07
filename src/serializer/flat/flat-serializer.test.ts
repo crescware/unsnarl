@@ -1,17 +1,16 @@
 import { describe, expect, test } from "vitest";
 
 import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "./flat-serializer.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
 function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
@@ -20,9 +19,10 @@ function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
     sourcePath: `input.${language}`,
     sourceType: defaultSourceTypeFor(language),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   return serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },

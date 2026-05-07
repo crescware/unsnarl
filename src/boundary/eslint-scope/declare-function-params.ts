@@ -1,0 +1,31 @@
+import { collectBindingIdentifiers } from "../../analyzer/declare/collect-binding-identifiers.js";
+import { declareVariable } from "../../analyzer/declare/declare-variable.js";
+import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import type { AstNode } from "../../ir/primitive/ast-node.js";
+import type { Scope } from "../../ir/scope/scope.js";
+import { AST_TYPE } from "../../parser/ast-type.js";
+import { isNodeLike } from "./is-node-like.js";
+import type { NodeLike } from "./node-like.js";
+
+export function declareFunctionParams(node: NodeLike, scope: Scope): void {
+  const params = node["params"];
+  if (!Array.isArray(params)) {
+    return;
+  }
+  for (const p of params) {
+    if (!isNodeLike(p)) {
+      continue;
+    }
+    const target = p.type === AST_TYPE.RestElement ? (p["argument"] ?? p) : p;
+    const idents = collectBindingIdentifiers(target as unknown as AstNode);
+    for (const ident of idents) {
+      declareVariable(
+        scope,
+        ident,
+        DEFINITION_TYPE.Parameter,
+        node as unknown as AstNode,
+        null,
+      );
+    }
+  }
+}
