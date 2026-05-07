@@ -10,6 +10,7 @@ import { handleIdentifierReference } from "./handle-identifier-reference.js";
 import { hoistInto } from "./hoist-into.js";
 import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
+import { stubAnnotationBuilder } from "./testing/stub-annotation-builder.js";
 
 type CapturedIdentifier = {
   node: NodeLike;
@@ -63,6 +64,7 @@ describe("handleIdentifierReference", () => {
       captured.key,
       captured.path,
       manager,
+      stubAnnotationBuilder,
     );
 
     const fooVar = manager.globalScope.variables.find((v) => v.name === "foo");
@@ -89,6 +91,7 @@ describe("handleIdentifierReference", () => {
       captured.key,
       captured.path,
       manager,
+      stubAnnotationBuilder,
     );
     expect(manager.globalScope.references.length).toBe(refsBefore);
   });

@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { createEslintCompatAnalyzer } from "../../analyzer/create-eslint-compat-analyzer.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
@@ -10,7 +10,7 @@ import { dagreStrategy } from "./strategy/dagre-strategy.js";
 import { elkStrategy } from "./strategy/elk-strategy.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new MermaidEmitter({ strategy: elkStrategy });
 

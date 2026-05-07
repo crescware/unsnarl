@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
+import { createEslintCompatAnalyzer } from "../../analyzer/create-eslint-compat-analyzer.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
@@ -12,7 +12,7 @@ import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 import { StatsEmitter } from "./stats.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new StatsEmitter();
 

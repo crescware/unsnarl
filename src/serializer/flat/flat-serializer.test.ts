@@ -1,7 +1,7 @@
 import { describe, expect, test } from "vitest";
 
+import { createEslintCompatAnalyzer } from "../../analyzer/create-eslint-compat-analyzer.js";
 import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
-import { EslintCompatAnalyzer } from "../../analyzer/eslint-compat/eslint-compat.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import { LANGUAGE, type Language } from "../../language.js";
@@ -11,7 +11,7 @@ import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
 import { FlatSerializer } from "./flat-serializer.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 
 function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {

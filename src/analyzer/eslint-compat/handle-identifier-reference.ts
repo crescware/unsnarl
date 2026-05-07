@@ -1,15 +1,11 @@
 import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { classifyIdentifier } from "../classify/classify-identifier.js";
-import { findExpressionStatementContainer } from "../expression-statement-container.js";
-import { findJsxElementSpan } from "../jsx-element-span.js";
 import type { ScopeManager } from "../manager.js";
-import { findReferenceOwners } from "../owner/find-reference-owners.js";
-import { findPredicateContainer } from "../predicate.js";
 import { ReferenceImpl } from "../reference-impl.js";
 import { bindReference } from "../resolve.js";
-import { findReturnContainer } from "../return-container.js";
 import type { PathEntry } from "../walk/path-entry.js";
+import type { AnnotationBuilder } from "./annotation-builder.js";
 import type { NodeLike } from "./node-like.js";
 
 export function handleIdentifierReference(
@@ -18,6 +14,7 @@ export function handleIdentifierReference(
   key: string | null,
   path: readonly PathEntry[],
   manager: ScopeManager,
+  annotationBuilder: AnnotationBuilder,
 ): void {
   const result = classifyIdentifier(
     parent as unknown as AstNode | null,
@@ -34,14 +31,16 @@ export function handleIdentifierReference(
     init: result.init,
   });
   bindReference(manager.current(), ref, manager.globalScope);
-  ref.unsnarlOwners = findReferenceOwners(path, manager.current());
-  ref.unsnarlPredicateContainer = findPredicateContainer(
-    parent as unknown as { type: string; start?: number } | null,
+  const annotation = annotationBuilder.buildReferenceAnnotation({
+    parent,
     key,
     path,
-  );
-  ref.unsnarlReturnContainer = findReturnContainer(path);
-  ref.unsnarlJsxElement = findJsxElementSpan(path);
+    scope: manager.current(),
+  });
+  ref.unsnarlOwners = annotation.owners;
+  ref.unsnarlPredicateContainer = annotation.predicateContainer;
+  ref.unsnarlReturnContainer = annotation.returnContainer;
+  ref.unsnarlJsxElement = annotation.jsxElement;
   ref.unsnarlExpressionStatementContainer =
-    findExpressionStatementContainer(path);
+    annotation.expressionStatementContainer;
 }

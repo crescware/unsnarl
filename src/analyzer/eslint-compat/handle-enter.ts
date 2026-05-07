@@ -4,6 +4,7 @@ import type { ScopeManager } from "../manager.js";
 import { isTypeOnlySubtree } from "../skip-types.js";
 import type { PathEntry } from "../walk/path-entry.js";
 import type { WalkAction } from "../walk/walk-action.js";
+import type { AnnotationBuilder } from "./annotation-builder.js";
 import { enterBlock } from "./enter-block.js";
 import { enterCatch } from "./enter-catch.js";
 import { enterFor } from "./enter-for.js";
@@ -22,6 +23,7 @@ export function handleEnter(
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
+  annotationBuilder: AnnotationBuilder,
 ): WalkAction {
   if (isTypeOnlySubtree(node.type, key)) {
     return "skip";
@@ -30,7 +32,14 @@ export function handleEnter(
     node.type === AST_TYPE.Identifier ||
     node.type === AST_TYPE.JSXIdentifier
   ) {
-    handleIdentifierReference(node, parent, key, path, manager);
+    handleIdentifierReference(
+      node,
+      parent,
+      key,
+      path,
+      manager,
+      annotationBuilder,
+    );
     return;
   }
   switch (node.type) {

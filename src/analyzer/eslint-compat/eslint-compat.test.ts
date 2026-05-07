@@ -9,13 +9,13 @@ import {
   SOURCE_TYPE,
   type SourceType,
 } from "../../pipeline/parse/source-type.js";
+import { createEslintCompatAnalyzer } from "../create-eslint-compat-analyzer.js";
 import { DEFINITION_TYPE, type DefinitionType } from "../definition-type.js";
 import { DIAGNOSTIC_KIND } from "../diagnostic-kind.js";
 import { SCOPE_TYPE, type ScopeType } from "../scope-type.js";
-import { EslintCompatAnalyzer } from "./eslint-compat.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 
 function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {

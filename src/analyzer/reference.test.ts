@@ -6,12 +6,12 @@ import type { Variable } from "../ir/scope/variable.js";
 import { LANGUAGE, type Language } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
 import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
+import { createEslintCompatAnalyzer } from "./create-eslint-compat-analyzer.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
-import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 import { SCOPE_TYPE } from "./scope-type.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 
 function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {

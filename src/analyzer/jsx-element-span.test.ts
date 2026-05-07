@@ -3,10 +3,10 @@ import { describe, expect, test } from "vitest";
 import { LANGUAGE } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
 import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
-import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
+import { createEslintCompatAnalyzer } from "./create-eslint-compat-analyzer.js";
 
 const parser = new OxcParser();
-const analyzer = new EslintCompatAnalyzer();
+const analyzer = createEslintCompatAnalyzer();
 
 function analyze(code: string) {
   const parsed = parser.parse(code, {

@@ -1,4 +1,4 @@
-import { EslintCompatAnalyzer } from "../src/analyzer/eslint-compat/eslint-compat.js";
+import { createEslintCompatAnalyzer } from "../src/analyzer/create-eslint-compat-analyzer.js";
 import { OxcParser } from "../src/parser/oxc-parser.js";
 import { analyzeWithEslintScope } from "./baseline/analyze-with-eslint-scope.js";
 import { compareNormalized } from "./compare/compare-normalized.js";
@@ -16,7 +16,7 @@ export function runParity(input: ParityInput): readonly Mismatch[] {
     sourceType: input.sourceType,
   });
 
-  const analyzer = new EslintCompatAnalyzer();
+  const analyzer = createEslintCompatAnalyzer();
   const unsnarlAnalyzed = analyzer.analyze(parsed);
   const unsnarlNormalized = normalizeFromUnsnarl(unsnarlAnalyzed.rootScope);
 

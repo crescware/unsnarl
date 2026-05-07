@@ -6,6 +6,7 @@ import { SOURCE_TYPE } from "../../pipeline/parse/source-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { ScopeManager } from "../manager.js";
 import { walk } from "../walk/walk.js";
+import type { AnnotationBuilder } from "./annotation-builder.js";
 import { handleEnter } from "./handle-enter.js";
 import { handleLeave } from "./handle-leave.js";
 import { hoistInto } from "./hoist-into.js";
@@ -14,6 +15,8 @@ import type { NodeLike } from "./node-like.js";
 export class EslintCompatAnalyzer implements ScopeAnalyzer {
   readonly id = "eslint-compat";
 
+  constructor(private readonly annotationBuilder: AnnotationBuilder) {}
+
   analyze(parsed: ParsedSource): AnalyzedSource {
     const program = parsed.ast as NodeLike;
     const manager = new ScopeManager(
@@ -21,6 +24,7 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
       program as unknown as AstNode,
     );
     const diagnostics = new DiagnosticCollector();
+    const annotationBuilder = this.annotationBuilder;
 
     hoistInto(program, manager.current(), parsed.raw, diagnostics);
 
@@ -34,6 +38,7 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
           manager,
           parsed.raw,
           diagnostics,
+          annotationBuilder,
         );
       },
       leave(node, parent, key) {
