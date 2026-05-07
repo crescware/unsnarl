@@ -44,7 +44,6 @@ flowchart RL
     switch_discriminant_scope_0_14{"switch ()<br/>L3"}
     subgraph s_scope_2["case 1 L4-26"]
       direction RL
-      collapsed_scope_3["[hidden]<br/>L5-25"]
     end
   end
   n_scope_0_x_6 -->|read| switch_discriminant_scope_0_14

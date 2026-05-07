@@ -2,5 +2,4 @@
 2	0	integration/fixtures/app-behavior/depth/switch/input.ts:1 x
 0	1	integration/fixtures/app-behavior/depth/switch/input.ts:3 switch-discriminant
 0	1	integration/fixtures/app-behavior/depth/switch/input.ts:5 switch-discriminant
-0	0	integration/fixtures/app-behavior/depth/switch/input.ts:7 scope#5
-2	2	5 total
+2	2	4 total

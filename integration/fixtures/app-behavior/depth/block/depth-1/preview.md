@@ -31,5 +31,4 @@
 flowchart RL
   n_scope_0_console_185["global console"]
   n_scope_1_v1_10["v1<br/>L2"]
-  collapsed_scope_2["[hidden]<br/>L3-18"]
 ```

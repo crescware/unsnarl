@@ -53,7 +53,10 @@ function pushIfTestAnchor(
 // Place an IfStatement's test anchor inside the consequent it gates.
 // `else` (alternate) is the fallback path and carries no test of its
 // own. If the consequent did not materialize as a subgraph, fall back
-// to the surrounding container so the anchor is still emitted.
+// to the surrounding container so the anchor is still emitted -- unless
+// the consequent collapsed past the depth threshold, in which case the
+// IfStatement itself is part of the hidden subtree and its test anchor
+// must not leak into the surviving outer container.
 function attachTestAnchorToConsequent(
   consequent: SerializedScope,
   offset: number,
@@ -69,6 +72,9 @@ function attachTestAnchorToConsequent(
     const node = makeIfTestAnchor(consequent.upper ?? "", offset, raw);
     bodySg.elements.unshift(node);
     state.ifTestAnchorByOffset.set(offset, node.id);
+    return;
+  }
+  if (state.collapsedRootByScope?.has(consequent.id)) {
     return;
   }
   pushIfTestAnchor(

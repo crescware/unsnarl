@@ -198,7 +198,8 @@ export function buildVisualGraph(
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
-    collapsedPlaceholderByScope: new Map(),
+    collapsedRootByScope: new Map(),
+    collapsedAnchorByRoot: new Map(),
     nodeIdOriginScope: new Map(),
   } as const satisfies BuildState;
 
@@ -277,12 +278,12 @@ export function buildVisualGraph(
       continue;
     }
     // When the ref's containing scope (or any ancestor) was collapsed
-    // away, the placeholder node already represents the entire interior;
-    // creating extra ret-use / expr-stmt nodes for refs that live inside
-    // would surface fragments of the hidden body in unrelated outer
-    // subgraphs. Skip the ref entirely; the post-processing redirect
-    // routes any incoming/outgoing edge to the placeholder.
-    if (state.collapsedPlaceholderByScope?.has(r.from)) {
+    // away, the parent-scope variable owner (if any) already stands for
+    // the whole hidden interior; creating extra ret-use / expr-stmt
+    // nodes for refs that live inside would surface fragments of the
+    // hidden body in unrelated outer subgraphs. Skip the ref entirely;
+    // edge post-processing handles cross-boundary redirection.
+    if (state.collapsedRootByScope?.has(r.from)) {
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
@@ -296,6 +297,13 @@ export function buildVisualGraph(
       for (const fromId of fromIds) {
         pushEdge(state, fromId, edgeLabelOfRef(r), predicateTarget);
       }
+      continue;
+    }
+    // The ref reads a predicate (if/while/for/switch test) whose anchor
+    // was suppressed because the gated scope collapsed. Without an
+    // anchor the read has nowhere meaningful to land in the rendered
+    // graph, so drop it instead of letting it tail off into module_root.
+    if (predicateTarget === null && r.predicateContainer && !r.flags.write) {
       continue;
     }
     if (r.flags.write) {
@@ -524,11 +532,12 @@ export function buildVisualGraph(
     }
   }
 
-  // Edge redirection for collapsed scopes: any node id that came from a
-  // collapsed scope (or a descendant of one) is rewritten to that scope's
-  // placeholder node id, so the rendered graph shows a single opaque node
-  // instead of dangling references into hidden subgraphs.
-  if ((state.collapsedPlaceholderByScope?.size ?? 0) > 0) {
+  // Edge redirection for collapsed scopes: an endpoint that originated
+  // inside a collapsed subtree is rewritten to the parent-scope variable
+  // anchor for that subtree; if there's no anchor (anonymous callbacks,
+  // branch / loop / try bodies, bare blocks), the edge drops entirely so
+  // nothing deeper than the queried depth survives the render.
+  if ((state.collapsedRootByScope?.size ?? 0) > 0) {
     redirectEdgesIntoCollapsed(graph.edges, ir, state);
   }
 
@@ -540,8 +549,10 @@ function redirectEdgesIntoCollapsed(
   ir: SerializedIR,
   state: BuildState,
 ): void {
-  const collapsedPlaceholderByScope =
-    state.collapsedPlaceholderByScope ?? new Map<string, string>();
+  const collapsedRootByScope =
+    state.collapsedRootByScope ?? new Map<string, string>();
+  const collapsedAnchorByRoot =
+    state.collapsedAnchorByRoot ?? new Map<string, string>();
   const originScopeByNodeId = new Map<string, string>(
     state.nodeIdOriginScope ?? new Map(),
   );
@@ -573,12 +584,18 @@ function redirectEdgesIntoCollapsed(
     }
   }
 
-  function redirect(id: string): string {
+  // Returns a redirected node id, or null when the endpoint lives inside
+  // a collapsed subtree with no parent-scope anchor (drop signal).
+  function redirect(id: string): string | null {
     const scope = originScopeByNodeId.get(id);
     if (scope === undefined) {
       return id;
     }
-    return collapsedPlaceholderByScope.get(scope) ?? id;
+    const root = collapsedRootByScope.get(scope);
+    if (root === undefined) {
+      return id;
+    }
+    return collapsedAnchorByRoot.get(root) ?? null;
   }
 
   const redirected: VisualEdge[] = [];
@@ -586,6 +603,9 @@ function redirectEdgesIntoCollapsed(
   for (const e of edges) {
     const from = redirect(e.from);
     const to = redirect(e.to);
+    if (from === null || to === null) {
+      continue;
+    }
     if (from === to) {
       continue;
     }

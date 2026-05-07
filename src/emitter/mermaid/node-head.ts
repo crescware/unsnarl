@@ -55,7 +55,5 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.ModuleSink:
     case NODE_KIND.ExpressionStatement:
       return name;
-    case NODE_KIND.CollapsedScope:
-      return `[hidden]`;
   }
 }

@@ -95,16 +95,6 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
-            },
-            {
-              "type": "node",
-              "id": "collapsed_scope_4",
-              "kind": "CollapsedScope",
-              "name": "scope#4",
-              "line": 2,
-              "endLine": 12,
-              "isJsxElement": false,
-              "unused": false
             }
           ],
           "kind": "for"

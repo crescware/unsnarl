@@ -145,26 +145,6 @@
               "kind": "Variable",
               "declarationKind": "const",
               "initIsFunction": false
-            },
-            {
-              "type": "node",
-              "id": "collapsed_scope_3",
-              "kind": "CollapsedScope",
-              "name": "scope#3",
-              "line": 12,
-              "endLine": 24,
-              "isJsxElement": false,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "if_test_scope_2_156",
-              "kind": "IfTest",
-              "name": "if-test",
-              "line": 12,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
             }
           ],
           "kind": "if"
@@ -187,11 +167,6 @@
     {
       "from": "n_scope_1_v1_114",
       "to": "n_scope_2_v2_143",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_c_38",
-      "to": "if_test_scope_2_156",
       "label": "read"
     }
   ],

@@ -147,18 +147,7 @@
                                           "line": 12,
                                           "endLine": 18,
                                           "direction": "RL",
-                                          "elements": [
-                                            {
-                                              "type": "node",
-                                              "id": "collapsed_scope_11",
-                                              "kind": "CollapsedScope",
-                                              "name": "scope#11",
-                                              "line": 13,
-                                              "endLine": 17,
-                                              "isJsxElement": false,
-                                              "unused": false
-                                            }
-                                          ],
+                                          "elements": [],
                                           "kind": "case",
                                           "caseTest": "1"
                                         }

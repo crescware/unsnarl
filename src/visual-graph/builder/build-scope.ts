@@ -12,7 +12,7 @@ import { describeSubgraph } from "./describe-subgraph.js";
 import { isCollapsed } from "./is-collapsed.js";
 import { attachLoopTestAnchor } from "./loop-test-anchor.js";
 import { makeVariableNode } from "./make-variable-node.js";
-import { collapsedPlaceholderId } from "./node-id.js";
+import { nodeId } from "./node-id.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { attachSwitchDiscriminantAnchor } from "./switch-discriminant-anchor.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
@@ -23,17 +23,17 @@ type Container = Readonly<{
 
 function recordCollapsedDescendants(
   scope: SerializedScope,
-  placeholderId: string,
+  rootScopeId: string,
   ctx: BuilderContext,
   state: BuildState,
 ): void {
-  state.collapsedPlaceholderByScope?.set(scope.id, placeholderId);
+  state.collapsedRootByScope?.set(scope.id, rootScopeId);
   for (const childId of scope.childScopes) {
     const child = ctx.scopeMap.get(childId);
     if (!child) {
       continue;
     }
-    recordCollapsedDescendants(child, placeholderId, ctx, state);
+    recordCollapsedDescendants(child, rootScopeId, ctx, state);
   }
 }
 
@@ -44,19 +44,17 @@ export function buildScope(
   state: BuildState,
 ): void {
   if (isCollapsed(scope, ctx.depths)) {
-    const placeholderId = collapsedPlaceholderId(scope.id);
-    const placeholder = {
-      type: VISUAL_ELEMENT_TYPE.Node,
-      id: placeholderId,
-      kind: NODE_KIND.CollapsedScope,
-      name: scope.id,
-      line: scope.block.span.line,
-      endLine: scope.block.endSpan.line,
-      isJsxElement: false,
-      unused: false,
-    } satisfies VisualNode;
-    container.elements.push(placeholder);
-    recordCollapsedDescendants(scope, placeholderId, ctx, state);
+    // Nothing rendered for the collapsed subtree itself. The owning
+    // variable (when there is one) lives in the *parent* scope and is
+    // already emitted by the caller, so it doubles as the visual anchor
+    // for any edge that would otherwise have crossed into the collapsed
+    // body. Anonymous scopes have no anchor; their boundary-crossing
+    // edges drop during post-processing.
+    recordCollapsedDescendants(scope, scope.id, ctx, state);
+    const ownerVarId = ctx.subgraphOwnerVar.get(scope.id) ?? null;
+    if (ownerVarId !== null) {
+      state.collapsedAnchorByRoot?.set(scope.id, nodeId(ownerVarId));
+    }
     return;
   }
 

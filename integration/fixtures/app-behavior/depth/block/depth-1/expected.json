@@ -27,16 +27,6 @@
       "kind": "Variable",
       "declarationKind": "const",
       "initIsFunction": false
-    },
-    {
-      "type": "node",
-      "id": "collapsed_scope_2",
-      "kind": "CollapsedScope",
-      "name": "scope#2",
-      "line": 3,
-      "endLine": 18,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [],

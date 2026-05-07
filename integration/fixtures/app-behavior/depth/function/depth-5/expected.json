@@ -117,16 +117,6 @@
                           "kind": "FunctionName"
                         },
                         {
-                          "type": "node",
-                          "id": "collapsed_scope_6",
-                          "kind": "CollapsedScope",
-                          "name": "scope#6",
-                          "line": 6,
-                          "endLine": 9,
-                          "isJsxElement": false,
-                          "unused": false
-                        },
-                        {
                           "type": "subgraph",
                           "id": "s_return_scope_4_f5_93_195_207",
                           "kind": "return",

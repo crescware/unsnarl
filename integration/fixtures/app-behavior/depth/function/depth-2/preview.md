@@ -42,7 +42,6 @@ flowchart RL
         subgraph s_scope_2["f2()<br/>L2-17"]
           direction RL
           n_scope_2_f3_47["f3()<br/>L3"]
-          collapsed_scope_3["[hidden]<br/>L3-15"]
           subgraph s_return_scope_1_f2_27_276_288["return L16"]
             direction RL
             ret_use_ref_5["f3<br/>L16"]

@@ -47,7 +47,6 @@ flowchart RL
     direction RL
     subgraph s_scope_2["try L2-25"]
       direction RL
-      collapsed_scope_3["[hidden]<br/>L3-21"]
       subgraph s_scope_10["catch L21-24"]
         direction RL
         n_scope_10_e3_391["e3<br/>L22"]

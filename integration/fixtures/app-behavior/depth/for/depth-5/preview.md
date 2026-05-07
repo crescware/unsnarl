@@ -54,7 +54,6 @@ flowchart RL
               for_test_scope_10_195["for ()<br/>L6"]
               n_scope_11_i6_204["let i6<br/>L6"]
               wr_ref_17(["let i6<br/>L6"])
-              collapsed_scope_12["[hidden]<br/>L6-8"]
             end
           end
         end

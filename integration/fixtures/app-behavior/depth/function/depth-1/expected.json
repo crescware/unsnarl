@@ -37,16 +37,6 @@
           "kind": "FunctionName"
         },
         {
-          "type": "node",
-          "id": "collapsed_scope_2",
-          "kind": "CollapsedScope",
-          "name": "scope#2",
-          "line": 2,
-          "endLine": 17,
-          "isJsxElement": false,
-          "unused": false
-        },
-        {
           "type": "subgraph",
           "id": "s_return_scope_0_f1_9_295_307",
           "kind": "return",

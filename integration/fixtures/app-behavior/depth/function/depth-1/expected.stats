@@ -1,6 +1,5 @@
 1	0	integration/fixtures/app-behavior/depth/function/input.ts:1 f1
 1	0	integration/fixtures/app-behavior/depth/function/input.ts:2 f2
-0	0	integration/fixtures/app-behavior/depth/function/input.ts:2 scope#2
 0	1	integration/fixtures/app-behavior/depth/function/input.ts:18 f2
 0	1	integration/fixtures/app-behavior/depth/function/input.ts:21 f1()
-2	2	5 total
+2	2	4 total

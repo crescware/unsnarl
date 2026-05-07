@@ -133,32 +133,12 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
-            },
-            {
-              "type": "node",
-              "id": "collapsed_scope_3",
-              "kind": "CollapsedScope",
-              "name": "scope#3",
-              "line": 12,
-              "endLine": 23,
-              "isJsxElement": false,
-              "unused": false
             }
           ],
           "kind": "while"
         }
       ],
       "kind": "while"
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
@@ -173,26 +153,6 @@
       "label": "set"
     },
     {
-      "from": "n_scope_0_n3_28",
-      "to": "collapsed_scope_3",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_n4_40",
-      "to": "collapsed_scope_3",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_n5_52",
-      "to": "collapsed_scope_3",
-      "label": "set"
-    },
-    {
-      "from": "n_scope_0_n6_64",
-      "to": "collapsed_scope_3",
-      "label": "set"
-    },
-    {
       "from": "n_scope_0_n1_4",
       "to": "while_test_scope_0_73",
       "label": "read"
@@ -200,11 +160,6 @@
     {
       "from": "n_scope_0_n2_16",
       "to": "while_test_scope_1_100",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_n3_28",
-      "to": "module_root",
       "label": "read"
     }
   ],

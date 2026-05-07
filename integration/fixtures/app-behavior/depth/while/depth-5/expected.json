@@ -217,16 +217,6 @@
                           "isJsxElement": false,
                           "unused": false,
                           "declarationKind": "let"
-                        },
-                        {
-                          "type": "node",
-                          "id": "collapsed_scope_6",
-                          "kind": "CollapsedScope",
-                          "name": "scope#6",
-                          "line": 18,
-                          "endLine": 20,
-                          "isJsxElement": false,
-                          "unused": false
                         }
                       ],
                       "kind": "while"
@@ -242,16 +232,6 @@
         }
       ],
       "kind": "while"
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "ModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
@@ -281,11 +261,6 @@
       "label": "set"
     },
     {
-      "from": "n_scope_0_n6_64",
-      "to": "collapsed_scope_6",
-      "label": "set"
-    },
-    {
       "from": "n_scope_0_n1_4",
       "to": "while_test_scope_0_73",
       "label": "read"
@@ -308,11 +283,6 @@
     {
       "from": "n_scope_0_n5_52",
       "to": "while_test_scope_4_205",
-      "label": "read"
-    },
-    {
-      "from": "n_scope_0_n6_64",
-      "to": "module_root",
       "label": "read"
     }
   ],

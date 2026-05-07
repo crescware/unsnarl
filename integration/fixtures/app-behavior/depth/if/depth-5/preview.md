@@ -63,8 +63,6 @@ flowchart RL
             direction RL
             if_test_scope_4_232{"if ()<br/>L16"}
             n_scope_5_v5_257["v5<br/>L17"]
-            collapsed_scope_6["[hidden]<br/>L18-21"]
-            if_test_scope_5_276{"if ()<br/>L18"}
           end
         end
       end
@@ -79,5 +77,4 @@ flowchart RL
   n_scope_3_v3_177 -->|read| n_scope_4_v4_215
   n_scope_0_e_70 -->|read| if_test_scope_4_232
   n_scope_4_v4_215 -->|read| n_scope_5_v5_257
-  n_scope_0_f_86 -->|read| if_test_scope_5_276
 ```

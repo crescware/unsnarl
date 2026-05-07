@@ -45,15 +45,7 @@ flowchart RL
     direction RL
     while_test_scope_0_73["while ()<br/>L8"]
     wr_ref_7(["let n1<br/>L9"])
-    collapsed_scope_2["[hidden]<br/>L10-24"]
   end
   n_scope_0_n1_4 -->|set| wr_ref_7
-  n_scope_0_n2_16 -->|set| collapsed_scope_2
-  n_scope_0_n3_28 -->|set| collapsed_scope_2
-  n_scope_0_n4_40 -->|set| collapsed_scope_2
-  n_scope_0_n5_52 -->|set| collapsed_scope_2
-  n_scope_0_n6_64 -->|set| collapsed_scope_2
   n_scope_0_n1_4 -->|read| while_test_scope_0_73
-  n_scope_0_n2_16 -->|read| module_root
-  module_root((module))
 ```
