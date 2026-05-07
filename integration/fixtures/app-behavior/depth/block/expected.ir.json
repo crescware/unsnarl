@@ -4,7 +4,7 @@
     "path": "integration/fixtures/app-behavior/depth/block/input.ts",
     "language": "ts"
   },
-  "raw": "{\n  const v1 = 1;\n  {\n    const v2 = v1;\n    {\n      const v3 = v2;\n      {\n        const v4 = v3;\n        {\n          const v5 = v4;\n          {\n            const v6 = v5;\n            console.log(v6);\n          }\n        }\n      }\n    }\n  }\n}\n",
+  "raw": "{\n  const v1 = 1;\n  {\n    const v2 = v1;\n    {\n      const v3 = v2;\n      {\n        const v4 = v3;\n        {\n          const v5 = v4;\n          {\n            const v6 = v5;\n            console.log(v1, v2, v3, v4, v5, v6);\n          }\n        }\n      }\n    }\n  }\n}\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -25,7 +25,7 @@
         "endSpan": {
           "line": 20,
           "column": 0,
-          "offset": 244
+          "offset": 264
         }
       },
       "variables": [
@@ -68,7 +68,7 @@
         "endSpan": {
           "line": 19,
           "column": 1,
-          "offset": 243
+          "offset": 263
         }
       },
       "variables": [
@@ -119,7 +119,7 @@
         "endSpan": {
           "line": 18,
           "column": 3,
-          "offset": 241
+          "offset": 261
         }
       },
       "variables": [
@@ -171,7 +171,7 @@
         "endSpan": {
           "line": 17,
           "column": 5,
-          "offset": 237
+          "offset": 257
         }
       },
       "variables": [
@@ -223,7 +223,7 @@
         "endSpan": {
           "line": 16,
           "column": 7,
-          "offset": 231
+          "offset": 251
         }
       },
       "variables": [
@@ -275,7 +275,7 @@
         "endSpan": {
           "line": 15,
           "column": 9,
-          "offset": 223
+          "offset": 243
         }
       },
       "variables": [
@@ -325,7 +325,7 @@
         "endSpan": {
           "line": 14,
           "column": 11,
-          "offset": 213
+          "offset": 233
         }
       },
       "variables": [
@@ -335,7 +335,12 @@
         "ref#9",
         "ref#10",
         "ref#11",
-        "ref#12"
+        "ref#12",
+        "ref#13",
+        "ref#14",
+        "ref#15",
+        "ref#16",
+        "ref#17"
       ],
       "through": [
         "ref#11"
@@ -412,7 +417,8 @@
       ],
       "references": [
         "ref#0",
-        "ref#2"
+        "ref#2",
+        "ref#12"
       ],
       "defs": [
         {
@@ -466,7 +472,8 @@
       ],
       "references": [
         "ref#1",
-        "ref#4"
+        "ref#4",
+        "ref#13"
       ],
       "defs": [
         {
@@ -520,7 +527,8 @@
       ],
       "references": [
         "ref#3",
-        "ref#6"
+        "ref#6",
+        "ref#14"
       ],
       "defs": [
         {
@@ -574,7 +582,8 @@
       ],
       "references": [
         "ref#5",
-        "ref#8"
+        "ref#8",
+        "ref#15"
       ],
       "defs": [
         {
@@ -628,7 +637,8 @@
       ],
       "references": [
         "ref#7",
-        "ref#10"
+        "ref#10",
+        "ref#16"
       ],
       "defs": [
         {
@@ -682,7 +692,7 @@
       ],
       "references": [
         "ref#9",
-        "ref#12"
+        "ref#17"
       ],
       "defs": [
         {
@@ -1053,8 +1063,8 @@
         },
         "endSpan": {
           "line": 13,
-          "column": 28,
-          "offset": 201
+          "column": 48,
+          "offset": 221
         },
         "headStartSpan": {
           "line": 13,
@@ -1072,11 +1082,246 @@
     {
       "id": "ref#12",
       "identifier": {
-        "name": "v6",
+        "name": "v1",
         "span": {
           "line": 13,
           "column": 24,
           "offset": 197
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#1:v1@10",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 48,
+          "offset": 221
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 23,
+          "offset": 196
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#13",
+      "identifier": {
+        "name": "v2",
+        "span": {
+          "line": 13,
+          "column": 28,
+          "offset": 201
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#2:v2@32",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 48,
+          "offset": 221
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 23,
+          "offset": 196
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#14",
+      "identifier": {
+        "name": "v3",
+        "span": {
+          "line": 13,
+          "column": 32,
+          "offset": 205
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#3:v3@59",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 48,
+          "offset": 221
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 23,
+          "offset": 196
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#15",
+      "identifier": {
+        "name": "v4",
+        "span": {
+          "line": 13,
+          "column": 36,
+          "offset": 209
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#4:v4@90",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 48,
+          "offset": 221
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 23,
+          "offset": 196
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#16",
+      "identifier": {
+        "name": "v5",
+        "span": {
+          "line": 13,
+          "column": 40,
+          "offset": 213
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#5:v5@125",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "endSpan": {
+          "line": 13,
+          "column": 48,
+          "offset": 221
+        },
+        "headStartSpan": {
+          "line": 13,
+          "column": 12,
+          "offset": 185
+        },
+        "headEndSpan": {
+          "line": 13,
+          "column": 23,
+          "offset": 196
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#17",
+      "identifier": {
+        "name": "v6",
+        "span": {
+          "line": 13,
+          "column": 44,
+          "offset": 217
         }
       },
       "from": "scope#6",
@@ -1100,8 +1345,8 @@
         },
         "endSpan": {
           "line": 13,
-          "column": 28,
-          "offset": 201
+          "column": 48,
+          "offset": 221
         },
         "headStartSpan": {
           "line": 13,

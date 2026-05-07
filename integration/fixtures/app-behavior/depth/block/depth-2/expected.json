@@ -86,6 +86,11 @@
       "from": "n_scope_0_console_185",
       "to": "beyond_depth_s_scope_2",
       "label": "read"
+    },
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

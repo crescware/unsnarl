@@ -167,6 +167,26 @@
       "from": "n_scope_0_console_185",
       "to": "beyond_depth_s_scope_5",
       "label": "read"
+    },
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v2_32",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_v3_59",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_4_v4_90",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],
