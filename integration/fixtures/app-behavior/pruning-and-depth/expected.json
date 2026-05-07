@@ -1,0 +1,228 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/pruning-and-depth/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_flag_6",
+      "name": "flag",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_inner_29",
+      "name": "inner",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_callerOf_132",
+      "name": "callerOf",
+      "line": 12,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_unrelated_168",
+      "name": "unrelated",
+      "line": 16,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_94",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 10,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_inner_29",
+      "ownerName": "inner",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 9,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "if_test_scope_1_41",
+              "kind": "IfTest",
+              "name": "if-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 8,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "if_test_scope_2_57",
+                  "kind": "IfTest",
+                  "name": "if-test",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "n_scope_3_x_81",
+                  "name": "x",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Variable",
+                  "declarationKind": "const",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_94",
+                  "kind": "ExpressionStatement",
+                  "name": "console.log()",
+                  "line": 7,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "if"
+            }
+          ],
+          "kind": "if"
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_4",
+      "kind": "function",
+      "line": 12,
+      "endLine": 14,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_callerOf_132",
+      "ownerName": "callerOf",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_147",
+          "kind": "ExpressionStatement",
+          "name": "inner()",
+          "line": 13,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_5",
+      "kind": "function",
+      "line": 16,
+      "endLine": 18,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_unrelated_168",
+      "ownerName": "unrelated",
+      "elements": []
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_198",
+      "kind": "ExpressionStatement",
+      "name": "callerOf()",
+      "line": 20,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_210",
+      "kind": "ExpressionStatement",
+      "name": "unrelated()",
+      "line": 21,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_flag_6",
+      "to": "if_test_scope_1_41",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_flag_6",
+      "to": "if_test_scope_2_57",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_94",
+      "to": "expr_stmt_94",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_x_81",
+      "to": "expr_stmt_94",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_inner_29",
+      "to": "expr_stmt_147",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_callerOf_132",
+      "to": "expr_stmt_198",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_unrelated_168",
+      "to": "expr_stmt_210",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -43,14 +43,14 @@ export class MarkdownEmitter implements Emitter {
     const pruning = opts.prunedGraph?.pruning ?? null;
     const depthQuery = formatDepthQuery(opts.depths);
     if (pruning !== null || depthQuery !== null) {
-      const queryLines: string[] = [];
+      const parts: string[] = [];
       if (pruning !== null) {
-        queryLines.push(formatPruningQuery(pruning));
+        parts.push(formatPruningQuery(pruning));
       }
       if (depthQuery !== null) {
-        queryLines.push(depthQuery);
+        parts.push(depthQuery);
       }
-      lines.push("## Query", "", "```sh", ...queryLines, "```", "");
+      lines.push("## Query", "", "```sh", parts.join(" "), "```", "");
     }
     lines.push("## Mermaid", "", "```mermaid", mermaid, "```", "");
     return `${lines.join("\n")}`;

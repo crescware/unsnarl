@@ -9,5 +9,12 @@ for (const v of [
   { roots: "c", descendants: 1, ancestors: 0, slug: "c-a1" },
   { roots: "c", descendants: 0, ancestors: 1, slug: "c-b1" },
 ] as const) {
-  fixtureSnapshot(import.meta.url, v);
+  fixtureSnapshot(import.meta.url, {
+    pruning: {
+      roots: v.roots,
+      descendants: v.descendants,
+      ancestors: v.ancestors,
+    },
+    slug: v.slug,
+  });
 }
