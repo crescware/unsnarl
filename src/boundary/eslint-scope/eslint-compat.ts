@@ -53,6 +53,7 @@ export class EslintCompatAnalyzer implements ScopeAnalyzer {
 
     return {
       rootScope: manager.globalScope,
+      annotations: manager.annotations,
       diagnostics: diagnostics.list(),
       raw: parsed.raw,
     };

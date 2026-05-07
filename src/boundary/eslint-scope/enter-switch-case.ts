@@ -32,21 +32,17 @@ export function enterSwitchCase(
   const scope = manager.push("block", node as unknown as AstNode, ctx);
   const consequent = node["consequent"];
   if (Array.isArray(consequent)) {
-    (
-      scope as unknown as {
-        unsnarlFallsThrough: boolean;
-        unsnarlExitsFunction: boolean;
-      }
-    ).unsnarlFallsThrough = caseFallsThrough(consequent);
-    (
-      scope as unknown as {
-        unsnarlFallsThrough: boolean;
-        unsnarlExitsFunction: boolean;
-      }
-    ).unsnarlExitsFunction = caseExitsFunction(consequent);
+    manager.annotations.setScope(scope, {
+      blockContext: ctx,
+      fallsThrough: caseFallsThrough(consequent),
+      exitsFunction: caseExitsFunction(consequent),
+    });
     hoistDeclarations(consequent, scope, raw, diagnostics);
   } else {
-    (scope as unknown as { unsnarlFallsThrough: boolean }).unsnarlFallsThrough =
-      true;
+    manager.annotations.setScope(scope, {
+      blockContext: ctx,
+      fallsThrough: true,
+      exitsFunction: false,
+    });
   }
 }

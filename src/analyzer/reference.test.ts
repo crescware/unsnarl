@@ -8,6 +8,7 @@ import { OxcParser } from "../parser/oxc-parser.js";
 import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
 import { createEslintCompatAnalyzer } from "./create-eslint-compat-analyzer.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
+import { isUnused } from "./is-unused.js";
 import { SCOPE_TYPE } from "./scope-type.js";
 
 const parser = new OxcParser();
@@ -152,7 +153,7 @@ describe("EslintCompatAnalyzer / references", () => {
     // it (the inner `return x;` resolves to the inner shadowing variable).
     expect(outerX.references.length).toBe(1);
     expect(outerX.references[0]?.init).toBe(true);
-    expect(outerX.unsnarlIsUnused?.()).toBe(true);
+    expect(isUnused(outerX)).toBe(true);
     expect(innerX.references.length).toBe(2);
     // [0] is inner x's init Write; [1] is the `return x;` read.
     expect(innerX.references[1]?.isRead()).toBe(true);
@@ -175,7 +176,7 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(rootScope.through[0]?.resolved).toBe(implicit);
   });
 
-  test("unsnarlIsUnused returns true for unused imports and consts", () => {
+  test("isUnused returns true for unused imports and consts", () => {
     const code = `
       import unused from "x";
       import { used } from "y";
@@ -185,9 +186,9 @@ describe("EslintCompatAnalyzer / references", () => {
     const unused = findVariable(rootScope, "unused")!;
     const used = findVariable(rootScope, "used")!;
     const a = findVariable(rootScope, "a")!;
-    expect(unused.unsnarlIsUnused?.()).toBe(true);
-    expect(used.unsnarlIsUnused?.()).toBe(false);
-    expect(a.unsnarlIsUnused?.()).toBe(true);
+    expect(isUnused(unused)).toBe(true);
+    expect(isUnused(used)).toBe(false);
+    expect(isUnused(a)).toBe(true);
   });
 
   test("destructuring assignment to existing names is recorded as write references", () => {

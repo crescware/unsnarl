@@ -24,7 +24,7 @@ describe("enterBlock", () => {
 
     const scope = manager.current();
     expect(scope.type).toBe("block");
-    expect(scope.unsnarlBlockContext).toEqual({
+    expect(manager.annotations.ofScope(scope).blockContext).toEqual({
       parentType: AST_TYPE.IfStatement,
       key: "consequent",
       parentSpanOffset: 5,
@@ -43,7 +43,9 @@ describe("enterBlock", () => {
 
     enterBlock(block, null, null, [], manager, code, diagnostics);
 
-    expect(manager.current().unsnarlBlockContext).toBeNull();
+    expect(
+      manager.annotations.ofScope(manager.current()).blockContext,
+    ).toBeNull();
   });
 
   test("does not hoist when body is missing", () => {

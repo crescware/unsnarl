@@ -23,6 +23,7 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },
@@ -58,6 +59,7 @@ describe("MermaidEmitter", () => {
     const analyzed = analyzer.analyze(parsed);
     const ir = serializer.serialize({
       rootScope: analyzed.rootScope,
+      annotations: analyzed.annotations,
       diagnostics: analyzed.diagnostics,
       raw: analyzed.raw,
       source: { path: "input.ts", language: LANGUAGE.Ts },

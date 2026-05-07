@@ -20,6 +20,7 @@ export function createPipeline(config: PipelineConfig): Pipeline {
     const analyzed = config.analyzer.analyze(parsed);
     const ir = config.serializer.serialize({
       rootScope: analyzed.rootScope,
+      annotations: analyzed.annotations,
       diagnostics: analyzed.diagnostics,
       raw: analyzed.raw,
       source: { path: opts.sourcePath, language: opts.language },

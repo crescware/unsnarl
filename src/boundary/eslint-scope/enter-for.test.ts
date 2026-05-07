@@ -25,7 +25,7 @@ describe("enterFor", () => {
     const scope = manager.current();
     expect(scope.type).toBe("for");
     expect(scope.variables.map((v) => v.name)).toEqual(["i"]);
-    expect(scope.unsnarlBlockContext).toEqual({
+    expect(manager.annotations.ofScope(scope).blockContext).toEqual({
       parentType: AST_TYPE.Program,
       key: "body",
       parentSpanOffset: 0,

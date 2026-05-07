@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { AnnotationsImpl } from "./analyzer/annotations-impl.js";
 import type { Scope } from "./ir/scope/scope.js";
 import type { SerializedIR } from "./ir/serialized/serialized-ir.js";
 import { LANGUAGE } from "./language.js";
@@ -14,6 +15,7 @@ import type { IRSerializer } from "./pipeline/serialize/ir-serializer.js";
 import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
 
 const fakeScope = {} as Scope;
+const fakeAnnotations = new AnnotationsImpl();
 
 const fakeIR = {
   version: SERIALIZED_IR_VERSION,
@@ -39,7 +41,12 @@ const fakeParser = {
 
 const fakeAnalyzer = {
   id: "fake",
-  analyze: () => ({ rootScope: fakeScope, diagnostics: [], raw: "" }),
+  analyze: () => ({
+    rootScope: fakeScope,
+    annotations: fakeAnnotations,
+    diagnostics: [],
+    raw: "",
+  }),
 } as const satisfies ScopeAnalyzer;
 
 const fakeSerializer = {

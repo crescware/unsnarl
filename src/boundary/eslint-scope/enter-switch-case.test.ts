@@ -30,16 +30,15 @@ describe("enterSwitchCase", () => {
       diagnostics,
     );
 
-    const scope = manager.current() as unknown as {
-      type: string;
-      unsnarlBlockContext: { caseTest: string | null } | null;
-      unsnarlFallsThrough: boolean;
-      unsnarlExitsFunction: boolean;
-    };
+    const scope = manager.current();
+    const ann = manager.annotations.ofScope(scope);
     expect(scope.type).toBe("block");
-    expect(scope.unsnarlBlockContext?.caseTest).toBe("1");
-    expect(scope.unsnarlFallsThrough).toBe(false);
-    expect(scope.unsnarlExitsFunction).toBe(false);
+    expect(ann.blockContext?.kind).toBe("case-clause");
+    if (ann.blockContext?.kind === "case-clause") {
+      expect(ann.blockContext.caseTest).toBe("1");
+    }
+    expect(ann.fallsThrough).toBe(false);
+    expect(ann.exitsFunction).toBe(false);
   });
 
   test("marks fallsThrough=true when consequent has no exit statement", () => {
@@ -58,10 +57,9 @@ describe("enterSwitchCase", () => {
       diagnostics,
     );
 
-    expect(
-      (manager.current() as unknown as { unsnarlFallsThrough: boolean })
-        .unsnarlFallsThrough,
-    ).toBe(true);
+    expect(manager.annotations.ofScope(manager.current()).fallsThrough).toBe(
+      true,
+    );
   });
 
   test("marks exitsFunction=true when consequent ends in return", () => {
@@ -81,10 +79,9 @@ describe("enterSwitchCase", () => {
       diagnostics,
     );
 
-    expect(
-      (manager.current() as unknown as { unsnarlExitsFunction: boolean })
-        .unsnarlExitsFunction,
-    ).toBe(true);
+    expect(manager.annotations.ofScope(manager.current()).exitsFunction).toBe(
+      true,
+    );
   });
 
   test("default case (no test) sets caseTest to null", () => {
@@ -103,10 +100,11 @@ describe("enterSwitchCase", () => {
       diagnostics,
     );
 
-    const scope = manager.current() as unknown as {
-      unsnarlBlockContext: { caseTest: string | null } | null;
-    };
-    expect(scope.unsnarlBlockContext?.caseTest).toBeNull();
+    const ann = manager.annotations.ofScope(manager.current());
+    expect(ann.blockContext?.kind).toBe("case-clause");
+    if (ann.blockContext?.kind === "case-clause") {
+      expect(ann.blockContext.caseTest).toBeNull();
+    }
   });
 
   test("blockContext is null when parent or key is missing", () => {
@@ -118,6 +116,8 @@ describe("enterSwitchCase", () => {
 
     enterSwitchCase(caseNode, null, null, manager, code, diagnostics);
 
-    expect(manager.current().unsnarlBlockContext).toBeNull();
+    expect(
+      manager.annotations.ofScope(manager.current()).blockContext,
+    ).toBeNull();
   });
 });

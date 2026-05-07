@@ -19,7 +19,6 @@ const makeScope = (): ScopeImpl =>
     isStrict: true,
     upper: null,
     block: node(AST_TYPE.Program),
-    blockContext: null,
   });
 
 describe("declareVariable", () => {

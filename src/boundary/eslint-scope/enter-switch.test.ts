@@ -22,7 +22,7 @@ describe("enterSwitch", () => {
 
     const scope = manager.current();
     expect(scope.type).toBe("switch");
-    expect(scope.unsnarlBlockContext).toEqual({
+    expect(manager.annotations.ofScope(scope).blockContext).toEqual({
       parentType: AST_TYPE.Program,
       key: "body",
       parentSpanOffset: 0,
@@ -39,6 +39,8 @@ describe("enterSwitch", () => {
 
     enterSwitch(switchNode, null, null, [], manager);
 
-    expect(manager.current().unsnarlBlockContext).toBeNull();
+    expect(
+      manager.annotations.ofScope(manager.current()).blockContext,
+    ).toBeNull();
   });
 });

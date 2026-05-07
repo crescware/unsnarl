@@ -37,10 +37,5 @@ export function handleIdentifierReference(
     path,
     scope: manager.current(),
   });
-  ref.unsnarlOwners = annotation.owners;
-  ref.unsnarlPredicateContainer = annotation.predicateContainer;
-  ref.unsnarlReturnContainer = annotation.returnContainer;
-  ref.unsnarlJsxElement = annotation.jsxElement;
-  ref.unsnarlExpressionStatementContainer =
-    annotation.expressionStatementContainer;
+  manager.annotations.setReference(ref, annotation);
 }

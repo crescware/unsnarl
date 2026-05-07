@@ -28,6 +28,7 @@ function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
   const analyzed = analyzer.analyze(parsed);
   return serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: `input.${language}`, language },

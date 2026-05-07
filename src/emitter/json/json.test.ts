@@ -74,6 +74,7 @@ function emit(code: string, prettyJson = true): string {
   const analyzed = analyzer.analyze(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
     diagnostics: analyzed.diagnostics,
     raw: analyzed.raw,
     source: { path: "input.ts", language: LANGUAGE.Ts },

@@ -20,7 +20,6 @@ const scopeWith = (...names: readonly string[]): ScopeImpl => {
     isStrict: true,
     upper: null,
     block: { type: AST_TYPE.Program } as unknown as AstNode,
-    blockContext: null,
   });
   for (const n of names) {
     declareVariable(
