@@ -1,7 +1,10 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import { CATEGORY, makeDepths } from "../../serializer/category.js";
+import {
+  NESTING_KIND,
+  uniformNestingDepths,
+} from "../../serializer/nesting-kind.js";
 import { isCollapsed } from "./is-collapsed.js";
 import { baseScope } from "./testing/make-scope.js";
 
@@ -10,7 +13,10 @@ describe("isCollapsed", () => {
     const scope = {
       ...baseScope(),
       type: SCOPE_TYPE.Function,
-      categoryDepths: { ...makeDepths(0), [CATEGORY.Function]: 99 },
+      nestingDepths: {
+        ...uniformNestingDepths(0),
+        [NESTING_KIND.Function]: 99,
+      },
     };
     expect(isCollapsed(scope, undefined)).toBe(false);
   });
@@ -19,36 +25,36 @@ describe("isCollapsed", () => {
     const scope = {
       ...baseScope(),
       type: SCOPE_TYPE.Function,
-      categoryDepths: { ...makeDepths(0), [CATEGORY.Function]: 1 },
+      nestingDepths: { ...uniformNestingDepths(0), [NESTING_KIND.Function]: 1 },
     };
-    expect(isCollapsed(scope, makeDepths(1))).toBe(false);
+    expect(isCollapsed(scope, uniformNestingDepths(1))).toBe(false);
   });
 
-  test("returns true when category depth strictly exceeds threshold", () => {
+  test("returns true when nesting kind depth strictly exceeds threshold", () => {
     const scope = {
       ...baseScope(),
       type: SCOPE_TYPE.Function,
-      categoryDepths: { ...makeDepths(0), [CATEGORY.Function]: 2 },
+      nestingDepths: { ...uniformNestingDepths(0), [NESTING_KIND.Function]: 2 },
     };
-    expect(isCollapsed(scope, makeDepths(1))).toBe(true);
+    expect(isCollapsed(scope, uniformNestingDepths(1))).toBe(true);
   });
 
-  test("each category is checked independently", () => {
+  test("each nesting kind is checked independently", () => {
     const scope = {
       ...baseScope(),
       type: SCOPE_TYPE.For,
-      categoryDepths: {
-        ...makeDepths(0),
-        [CATEGORY.Function]: 99,
-        [CATEGORY.For]: 1,
+      nestingDepths: {
+        ...uniformNestingDepths(0),
+        [NESTING_KIND.Function]: 99,
+        [NESTING_KIND.For]: 1,
       },
     };
     // function depth is far over its threshold, but the scope is a `for`
-    // and only its own category counter is consulted.
-    const depths = { ...makeDepths(10), [CATEGORY.For]: 1 };
+    // and only its own nesting kind counter is consulted.
+    const depths = { ...uniformNestingDepths(10), [NESTING_KIND.For]: 1 };
     expect(isCollapsed(scope, depths)).toBe(false);
 
-    const tighter = { ...makeDepths(10), [CATEGORY.For]: 0 };
+    const tighter = { ...uniformNestingDepths(10), [NESTING_KIND.For]: 0 };
     expect(isCollapsed(scope, tighter)).toBe(true);
   });
 
@@ -57,8 +63,8 @@ describe("isCollapsed", () => {
       ...baseScope(),
       type: SCOPE_TYPE.Function,
       functionExpressionScope: true,
-      categoryDepths: makeDepths(99),
+      nestingDepths: uniformNestingDepths(99),
     };
-    expect(isCollapsed(fnExprName, makeDepths(0))).toBe(false);
+    expect(isCollapsed(fnExprName, uniformNestingDepths(0))).toBe(false);
   });
 });

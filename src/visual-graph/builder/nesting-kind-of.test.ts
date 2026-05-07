@@ -2,21 +2,21 @@ import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import { CATEGORY } from "../../serializer/category.js";
-import { categoryOf } from "./category-of.js";
+import { NESTING_KIND } from "../../serializer/nesting-kind.js";
+import { nestingKindOf } from "./nesting-kind-of.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
 
-describe("categoryOf", () => {
+describe("nestingKindOf", () => {
   test("function scope -> function", () => {
-    expect(categoryOf({ ...baseScope(), type: SCOPE_TYPE.Function })).toBe(
-      CATEGORY.Function,
+    expect(nestingKindOf({ ...baseScope(), type: SCOPE_TYPE.Function })).toBe(
+      NESTING_KIND.Function,
     );
   });
 
   test("function-expression-name scope -> null (not a counted scope)", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Function,
         functionExpressionScope: true,
@@ -25,26 +25,26 @@ describe("categoryOf", () => {
   });
 
   test("for scope -> for", () => {
-    expect(categoryOf({ ...baseScope(), type: SCOPE_TYPE.For })).toBe(
-      CATEGORY.For,
+    expect(nestingKindOf({ ...baseScope(), type: SCOPE_TYPE.For })).toBe(
+      NESTING_KIND.For,
     );
   });
 
   test("switch scope -> switch", () => {
-    expect(categoryOf({ ...baseScope(), type: SCOPE_TYPE.Switch })).toBe(
-      CATEGORY.Switch,
+    expect(nestingKindOf({ ...baseScope(), type: SCOPE_TYPE.Switch })).toBe(
+      NESTING_KIND.Switch,
     );
   });
 
   test("catch scope -> try-catch-finally", () => {
-    expect(categoryOf({ ...baseScope(), type: SCOPE_TYPE.Catch })).toBe(
-      CATEGORY.TryCatchFinally,
+    expect(nestingKindOf({ ...baseScope(), type: SCOPE_TYPE.Catch })).toBe(
+      NESTING_KIND.TryCatchFinally,
     );
   });
 
   test("block scope inside IfStatement -> if", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Block,
         blockContext: {
@@ -53,12 +53,12 @@ describe("categoryOf", () => {
           key: "consequent",
         },
       }),
-    ).toBe(CATEGORY.If);
+    ).toBe(NESTING_KIND.If);
   });
 
   test("block scope inside ForStatement body -> for", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Block,
         blockContext: {
@@ -67,12 +67,12 @@ describe("categoryOf", () => {
           key: "body",
         },
       }),
-    ).toBe(CATEGORY.For);
+    ).toBe(NESTING_KIND.For);
   });
 
   test("block scope inside WhileStatement body -> while", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Block,
         blockContext: {
@@ -81,12 +81,12 @@ describe("categoryOf", () => {
           key: "body",
         },
       }),
-    ).toBe(CATEGORY.While);
+    ).toBe(NESTING_KIND.While);
   });
 
   test("block scope inside TryStatement -> try-catch-finally", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Block,
         blockContext: {
@@ -95,20 +95,22 @@ describe("categoryOf", () => {
           key: "block",
         },
       }),
-    ).toBe(CATEGORY.TryCatchFinally);
+    ).toBe(NESTING_KIND.TryCatchFinally);
   });
 
   test("bare block scope -> block", () => {
     expect(
-      categoryOf({
+      nestingKindOf({
         ...baseScope(),
         type: SCOPE_TYPE.Block,
         blockContext: null,
       }),
-    ).toBe(CATEGORY.Block);
+    ).toBe(NESTING_KIND.Block);
   });
 
   test("module scope -> null", () => {
-    expect(categoryOf({ ...baseScope(), type: SCOPE_TYPE.Module })).toBeNull();
+    expect(
+      nestingKindOf({ ...baseScope(), type: SCOPE_TYPE.Module }),
+    ).toBeNull();
   });
 });

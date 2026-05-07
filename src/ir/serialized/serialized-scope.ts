@@ -1,5 +1,5 @@
 import type { ScopeType } from "../../analyzer/scope-type.js";
-import type { CategoryDepths } from "../annotations/scope-annotation.js";
+import type { NestingDepths } from "../annotations/scope-annotation.js";
 import type { Span } from "../primitive/span.js";
 import type { BlockContext } from "../scope/block-context.js";
 import type { ReferenceId, ScopeId, VariableId } from "./ids.js";
@@ -19,5 +19,5 @@ export type SerializedScope = Readonly<{
   blockContext: BlockContext | null;
   fallsThrough: boolean;
   exitsFunction: boolean;
-  categoryDepths: CategoryDepths;
+  nestingDepths: NestingDepths;
 }>;

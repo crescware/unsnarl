@@ -46,6 +46,6 @@ export function serializeScope(
     blockContext: ann.blockContext,
     fallsThrough: ann.fallsThrough,
     exitsFunction: ann.exitsFunction,
-    categoryDepths: ann.categoryDepths,
+    nestingDepths: ann.nestingDepths,
   };
 }

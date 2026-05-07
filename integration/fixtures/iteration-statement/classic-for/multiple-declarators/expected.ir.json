@@ -39,7 +39,7 @@
       "blockContext": null,
       "fallsThrough": false,
       "exitsFunction": false,
-      "categoryDepths": {
+      "nestingDepths": {
         "function": 0,
         "if": 0,
         "for": 0,
@@ -96,7 +96,7 @@
       },
       "fallsThrough": false,
       "exitsFunction": false,
-      "categoryDepths": {
+      "nestingDepths": {
         "function": 0,
         "if": 0,
         "for": 0,
@@ -145,7 +145,7 @@
       },
       "fallsThrough": false,
       "exitsFunction": false,
-      "categoryDepths": {
+      "nestingDepths": {
         "function": 0,
         "if": 0,
         "for": 1,

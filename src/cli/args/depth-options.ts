@@ -1,13 +1,13 @@
 import { InvalidArgumentError, Option } from "commander";
 
-import type { CategoryDepths } from "../../ir/annotations/scope-annotation.js";
-import { makeDepths } from "../../serializer/category.js";
+import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
+import { uniformNestingDepths } from "../../serializer/nesting-kind.js";
 import { parseGenerationCount } from "./parse-generation-count.js";
 
 export const DEFAULT_DEPTH = 10;
 
-export function defaultDepths(): CategoryDepths {
-  return makeDepths(DEFAULT_DEPTH);
+export function defaultDepths(): NestingDepths {
+  return uniformNestingDepths(DEFAULT_DEPTH);
 }
 
 function coerceDepth(flag: string): (value: string) => number {

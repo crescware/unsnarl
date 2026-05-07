@@ -1,52 +1,55 @@
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import { CATEGORY, type Category } from "../../serializer/category.js";
+import {
+  NESTING_KIND,
+  type NestingKind,
+} from "../../serializer/nesting-kind.js";
 
-export function categoryOf(scope: SerializedScope): Category | null {
+export function nestingKindOf(scope: SerializedScope): NestingKind | null {
   if (scope.type === SCOPE_TYPE.Function) {
-    return scope.functionExpressionScope ? null : CATEGORY.Function;
+    return scope.functionExpressionScope ? null : NESTING_KIND.Function;
   }
   if (scope.type === SCOPE_TYPE.For) {
-    return CATEGORY.For;
+    return NESTING_KIND.For;
   }
   if (scope.type === SCOPE_TYPE.Switch) {
-    return CATEGORY.Switch;
+    return NESTING_KIND.Switch;
   }
   if (scope.type === SCOPE_TYPE.Catch) {
-    return CATEGORY.TryCatchFinally;
+    return NESTING_KIND.TryCatchFinally;
   }
   if (scope.type === SCOPE_TYPE.Block) {
     const ctx = scope.blockContext;
     if (!ctx) {
-      return CATEGORY.Block;
+      return NESTING_KIND.Block;
     }
     if (ctx.parentType === AST_TYPE.IfStatement) {
-      return CATEGORY.If;
+      return NESTING_KIND.If;
     }
     if (
       ctx.parentType === AST_TYPE.ForStatement ||
       ctx.parentType === AST_TYPE.ForInStatement ||
       ctx.parentType === AST_TYPE.ForOfStatement
     ) {
-      return CATEGORY.For;
+      return NESTING_KIND.For;
     }
     if (
       ctx.parentType === AST_TYPE.WhileStatement ||
       ctx.parentType === AST_TYPE.DoWhileStatement
     ) {
-      return CATEGORY.While;
+      return NESTING_KIND.While;
     }
     if (
       ctx.parentType === AST_TYPE.TryStatement ||
       ctx.parentType === AST_TYPE.CatchClause
     ) {
-      return CATEGORY.TryCatchFinally;
+      return NESTING_KIND.TryCatchFinally;
     }
     if (ctx.parentType === AST_TYPE.SwitchStatement) {
-      return CATEGORY.Switch;
+      return NESTING_KIND.Switch;
     }
-    return CATEGORY.Block;
+    return NESTING_KIND.Block;
   }
   return null;
 }

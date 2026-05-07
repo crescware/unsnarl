@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { CATEGORY } from "../../serializer/category.js";
+import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 import { DEFAULT_DEPTH } from "../args/depth-options.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { normalizeCliOptions } from "./normalize-cli-options.js";
@@ -24,45 +24,45 @@ const baseParsed = {
 } as const satisfies ParsedCliOptions;
 
 describe("normalizeCliOptions depth resolution", () => {
-  test("no flag -> every category gets DEFAULT_DEPTH", () => {
+  test("no flag -> every nesting kind gets DEFAULT_DEPTH", () => {
     const out = normalizeCliOptions(baseParsed);
-    for (const c of Object.values(CATEGORY)) {
+    for (const c of Object.values(NESTING_KIND)) {
       expect(out.depths[c]).toBe(DEFAULT_DEPTH);
     }
   });
 
-  test("--depth alone applies to every category", () => {
+  test("--depth alone applies to every nesting kind", () => {
     const out = normalizeCliOptions({ ...baseParsed, depth: 3 });
-    for (const c of Object.values(CATEGORY)) {
+    for (const c of Object.values(NESTING_KIND)) {
       expect(out.depths[c]).toBe(3);
     }
   });
 
-  test("--depth-function overrides --depth for the function category only", () => {
+  test("--depth-function overrides --depth for the function nesting kind only", () => {
     const out = normalizeCliOptions({
       ...baseParsed,
       depth: 3,
       depthFunction: 1,
     });
-    expect(out.depths[CATEGORY.Function]).toBe(1);
-    expect(out.depths[CATEGORY.If]).toBe(3);
-    expect(out.depths[CATEGORY.For]).toBe(3);
-    expect(out.depths[CATEGORY.Block]).toBe(3);
+    expect(out.depths[NESTING_KIND.Function]).toBe(1);
+    expect(out.depths[NESTING_KIND.If]).toBe(3);
+    expect(out.depths[NESTING_KIND.For]).toBe(3);
+    expect(out.depths[NESTING_KIND.Block]).toBe(3);
   });
 
-  test("--depth-block overrides --depth for every non-function category", () => {
+  test("--depth-block overrides --depth for every non-function nesting kind", () => {
     const out = normalizeCliOptions({
       ...baseParsed,
       depth: 3,
       depthBlock: 1,
     });
-    expect(out.depths[CATEGORY.Function]).toBe(3);
-    expect(out.depths[CATEGORY.If]).toBe(1);
-    expect(out.depths[CATEGORY.For]).toBe(1);
-    expect(out.depths[CATEGORY.While]).toBe(1);
-    expect(out.depths[CATEGORY.Switch]).toBe(1);
-    expect(out.depths[CATEGORY.TryCatchFinally]).toBe(1);
-    expect(out.depths[CATEGORY.Block]).toBe(1);
+    expect(out.depths[NESTING_KIND.Function]).toBe(3);
+    expect(out.depths[NESTING_KIND.If]).toBe(1);
+    expect(out.depths[NESTING_KIND.For]).toBe(1);
+    expect(out.depths[NESTING_KIND.While]).toBe(1);
+    expect(out.depths[NESTING_KIND.Switch]).toBe(1);
+    expect(out.depths[NESTING_KIND.TryCatchFinally]).toBe(1);
+    expect(out.depths[NESTING_KIND.Block]).toBe(1);
   });
 
   test("--depth-function and --depth-block together (no --depth)", () => {
@@ -71,8 +71,8 @@ describe("normalizeCliOptions depth resolution", () => {
       depthFunction: 2,
       depthBlock: 5,
     });
-    expect(out.depths[CATEGORY.Function]).toBe(2);
-    expect(out.depths[CATEGORY.If]).toBe(5);
-    expect(out.depths[CATEGORY.Block]).toBe(5);
+    expect(out.depths[NESTING_KIND.Function]).toBe(2);
+    expect(out.depths[NESTING_KIND.If]).toBe(5);
+    expect(out.depths[NESTING_KIND.Block]).toBe(5);
   });
 });

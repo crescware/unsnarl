@@ -1,11 +1,11 @@
-import type { Category } from "../../serializer/category.js";
+import type { NestingKind } from "../../serializer/nesting-kind.js";
 import type { BlockContext } from "../scope/block-context.js";
 
-export type CategoryDepths = Readonly<Record<Category, number>>;
+export type NestingDepths = Readonly<Record<NestingKind, number>>;
 
 export type ScopeAnnotation = Readonly<{
   blockContext: BlockContext | null;
   fallsThrough: boolean;
   exitsFunction: boolean;
-  categoryDepths: CategoryDepths;
+  nestingDepths: NestingDepths;
 }>;

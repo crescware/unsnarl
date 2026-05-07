@@ -12,12 +12,12 @@ import { findReturnContainer } from "../../analyzer/return-container.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { AnalysisVisitor } from "../../boundary/eslint-scope/visitor.js";
 import type { Annotations } from "../../ir/annotations/annotations.js";
-import type { CategoryDepths } from "../../ir/annotations/scope-annotation.js";
+import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import { CATEGORY } from "../../serializer/category.js";
+import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 
 type AnalysisCapture = Readonly<{
   annotations: Annotations;
@@ -29,19 +29,19 @@ type CapturingVisitor = Readonly<{
   capture(): AnalysisCapture;
 }>;
 
-const ZERO_DEPTHS: CategoryDepths = {
-  [CATEGORY.Function]: 0,
-  [CATEGORY.If]: 0,
-  [CATEGORY.For]: 0,
-  [CATEGORY.While]: 0,
-  [CATEGORY.Switch]: 0,
-  [CATEGORY.TryCatchFinally]: 0,
-  [CATEGORY.Block]: 0,
+const ZERO_DEPTHS: NestingDepths = {
+  [NESTING_KIND.Function]: 0,
+  [NESTING_KIND.If]: 0,
+  [NESTING_KIND.For]: 0,
+  [NESTING_KIND.While]: 0,
+  [NESTING_KIND.Switch]: 0,
+  [NESTING_KIND.TryCatchFinally]: 0,
+  [NESTING_KIND.Block]: 0,
 };
 
 export function buildAnalysisVisitor(
   raw: string,
-  categoryDepthsByOffset: ReadonlyMap<number, CategoryDepths>,
+  nestingDepthsByOffset: ReadonlyMap<number, NestingDepths>,
 ): CapturingVisitor {
   const annotations = new AnnotationsImpl();
   const diagnostics: /* mutable */ Diagnostic[] = [];
@@ -100,15 +100,15 @@ export function buildAnalysisVisitor(
         );
       }
       const blockStart = input.scope.block.start;
-      const categoryDepths =
+      const nestingDepths =
         blockStart !== undefined
-          ? (categoryDepthsByOffset.get(blockStart) ?? ZERO_DEPTHS)
+          ? (nestingDepthsByOffset.get(blockStart) ?? ZERO_DEPTHS)
           : ZERO_DEPTHS;
       annotations.setScope(input.scope, {
         blockContext,
         fallsThrough,
         exitsFunction,
-        categoryDepths,
+        nestingDepths,
       });
     },
     onDiagnostic(diag) {
