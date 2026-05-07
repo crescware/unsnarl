@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { caseFallsThrough } from "./case-falls-through.js";
 
 describe("caseFallsThrough", () => {
@@ -36,7 +36,7 @@ describe("caseFallsThrough", () => {
       expected: true,
     },
     {
-      name: "last item is not NodeLike (string) -> true",
+      name: "last item is not AstNode (string) -> true",
       consequent: ["not a node"],
       expected: true,
     },

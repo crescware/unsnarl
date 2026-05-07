@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import { createEslintCompatAnalyzer } from "../../analyzer/create-eslint-compat-analyzer.js";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
@@ -15,7 +15,6 @@ import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import { JsonEmitter } from "./json.js";
 
 const parser = new OxcParser();
-const analyzer = createEslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new JsonEmitter();
 
@@ -71,7 +70,7 @@ function emit(code: string, prettyJson = true): string {
     sourcePath: "input.ts",
     sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
     annotations: analyzed.annotations,

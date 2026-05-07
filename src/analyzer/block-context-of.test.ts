@@ -1,10 +1,9 @@
 import { describe, expect, test } from "vitest";
 
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
-import type { AstNode } from "../../ir/primitive/ast-node.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { blockContextOf } from "./block-context-of.js";
-import type { NodeLike } from "./node-like.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 describe("blockContextOf", () => {
   test("returns null when parent is null", () => {
@@ -15,7 +14,7 @@ describe("blockContextOf", () => {
     const parent = {
       type: AST_TYPE.IfStatement,
       start: 5,
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(blockContextOf(parent, null, [])).toBeNull();
   });
 
@@ -23,7 +22,7 @@ describe("blockContextOf", () => {
     const parent = {
       type: AST_TYPE.IfStatement,
       start: 12,
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(blockContextOf(parent, "consequent", [])).toEqual({
       parentType: AST_TYPE.IfStatement,
       key: "consequent",
@@ -34,7 +33,7 @@ describe("blockContextOf", () => {
   });
 
   test("falls back to parentSpanOffset 0 when start is undefined", () => {
-    const parent = { type: AST_TYPE.Program } as const satisfies NodeLike;
+    const parent = { type: AST_TYPE.Program } as const satisfies AstNode;
     expect(blockContextOf(parent, "body", [])).toEqual({
       parentType: AST_TYPE.Program,
       key: "body",
@@ -48,12 +47,12 @@ describe("blockContextOf", () => {
     const outer = {
       type: AST_TYPE.IfStatement,
       start: 5,
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
 
     const inner = {
       type: AST_TYPE.IfStatement,
       start: 40,
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
 
     const path: readonly PathEntry[] = [
       {

@@ -1,8 +1,8 @@
-import { AST_TYPE } from "../../parser/ast-type.js";
-import { isNodeLike } from "./is-node-like.js";
-import type { NodeLike } from "./node-like.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
+import { isAstNode } from "./is-ast-node.js";
 
-export function isControlExit(node: NodeLike): boolean {
+export function isControlExit(node: AstNode): boolean {
   switch (node.type) {
     case AST_TYPE.BreakStatement:
     case AST_TYPE.ContinueStatement:
@@ -13,7 +13,7 @@ export function isControlExit(node: NodeLike): boolean {
       const body = node["body"];
       if (Array.isArray(body) && body.length > 0) {
         const last = body[body.length - 1];
-        if (isNodeLike(last)) {
+        if (isAstNode(last)) {
           return isControlExit(last);
         }
       }
@@ -23,8 +23,8 @@ export function isControlExit(node: NodeLike): boolean {
       const consequent = node["consequent"];
       const alternate = node["alternate"];
       if (
-        isNodeLike(consequent) &&
-        isNodeLike(alternate) &&
+        isAstNode(consequent) &&
+        isAstNode(alternate) &&
         isControlExit(consequent) &&
         isControlExit(alternate)
       ) {

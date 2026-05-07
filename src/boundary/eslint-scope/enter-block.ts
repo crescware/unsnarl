@@ -3,8 +3,8 @@ import type { ScopeManager } from "../../analyzer/manager.js";
 import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { blockContextOf } from "./block-context-of.js";
 import type { NodeLike } from "./node-like.js";
+import type { AnalysisVisitor } from "./visitor.js";
 
 export function enterBlock(
   node: NodeLike,
@@ -14,9 +14,10 @@ export function enterBlock(
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
+  visitor: AnalysisVisitor,
 ): void {
-  const ctx = blockContextOf(parent, key, path);
-  const scope = manager.push("block", node as unknown as AstNode, ctx);
+  const scope = manager.push("block", node as unknown as AstNode);
+  visitor.onScope?.({ scope, parent, key, path });
   const stmts = node["body"];
   if (Array.isArray(stmts)) {
     hoistDeclarations(stmts, scope, raw, diagnostics);

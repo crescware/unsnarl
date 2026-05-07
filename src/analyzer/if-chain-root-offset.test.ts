@@ -1,20 +1,19 @@
 import { describe, expect, test } from "vitest";
 
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
-import type { AstNode } from "../../ir/primitive/ast-node.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { ifChainRootOffset } from "./if-chain-root-offset.js";
-import type { NodeLike } from "./node-like.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
-function ifNode(start: number): NodeLike {
-  return { type: AST_TYPE.IfStatement, start } as const satisfies NodeLike;
+function ifNode(start: number): AstNode {
+  return { type: AST_TYPE.IfStatement, start } as const satisfies AstNode;
 }
 
-function blockNode(start: number): NodeLike {
-  return { type: AST_TYPE.BlockStatement, start } as const satisfies NodeLike;
+function blockNode(start: number): AstNode {
+  return { type: AST_TYPE.BlockStatement, start } as const satisfies AstNode;
 }
 
-function entry(node: NodeLike, key: string | null): PathEntry {
+function entry(node: AstNode, key: string | null): PathEntry {
   return { node: node as unknown as AstNode, key };
 }
 
@@ -36,7 +35,7 @@ describe("ifChainRootOffset", () => {
     const parent = ifNode(10);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(parent, "body"),
     ];
     expect(ifChainRootOffset(parent, "consequent", path)).toBeNull();
@@ -47,7 +46,7 @@ describe("ifChainRootOffset", () => {
     const inner = ifNode(40);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(outer, "body"),
       entry(inner, "alternate"),
     ];
@@ -59,7 +58,7 @@ describe("ifChainRootOffset", () => {
     const inner = ifNode(40);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(outer, "body"),
       entry(inner, "alternate"),
     ];
@@ -72,7 +71,7 @@ describe("ifChainRootOffset", () => {
     const innermost = ifNode(80);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(outermost, "body"),
       entry(middle, "alternate"),
       entry(innermost, "alternate"),
@@ -88,7 +87,7 @@ describe("ifChainRootOffset", () => {
     const inner = ifNode(45);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(outer, "body"),
       entry(innerBlock, "alternate"),
       entry(inner, "body"),
@@ -104,7 +103,7 @@ describe("ifChainRootOffset", () => {
     const inner = ifNode(25);
     const program = { type: AST_TYPE.Program, start: 0 } as const;
     const path: readonly PathEntry[] = [
-      entry(program as unknown as NodeLike, null),
+      entry(program as unknown as AstNode, null),
       entry(outer, "body"),
       entry(consBlock, "consequent"),
       entry(inner, "body"),
@@ -113,7 +112,7 @@ describe("ifChainRootOffset", () => {
   });
 
   test("falls back to 0 when chainTop has no start offset", () => {
-    const outer = { type: AST_TYPE.IfStatement } as const satisfies NodeLike;
+    const outer = { type: AST_TYPE.IfStatement } as const satisfies AstNode;
     const inner = ifNode(40);
     const path: readonly PathEntry[] = [
       entry(outer, "body"),

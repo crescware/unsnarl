@@ -1,4 +1,3 @@
-import { createEslintCompatAnalyzer } from "../analyzer/create-eslint-compat-analyzer.js";
 import { OxcParser } from "../parser/oxc-parser.js";
 import { FlatSerializer } from "../serializer/flat/flat-serializer.js";
 import { createDefaultEmitterRegistry } from "./create-default-emitter-registry.js";
@@ -9,7 +8,6 @@ import type { Pipeline } from "./runner/pipeline.js";
 export function createDefaultPipeline(emitters?: EmitterRegistry): Pipeline {
   return createPipeline({
     parser: new OxcParser(),
-    analyzer: createEslintCompatAnalyzer(),
     serializer: new FlatSerializer(),
     emitters: emitters ?? createDefaultEmitterRegistry(),
   });

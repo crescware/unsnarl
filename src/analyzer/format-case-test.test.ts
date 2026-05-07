@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { formatCaseTest } from "./format-case-test.js";
-import type { NodeLike } from "./node-like.js";
 
 describe("formatCaseTest", () => {
   test("uses raw slice when start/end are valid and within length budget", () => {
@@ -10,7 +10,7 @@ describe("formatCaseTest", () => {
       type: AST_TYPE.BinaryExpression,
       start: 5,
       end: 14,
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     const raw = "case x === 1: break;";
     expect(formatCaseTest(node, raw)).toBe(raw.slice(5, 14));
   });
@@ -18,7 +18,7 @@ describe("formatCaseTest", () => {
   test.each([
     {
       name: "start missing falls back to type-specific format",
-      node: { type: AST_TYPE.Identifier, name: "foo" } as NodeLike,
+      node: { type: AST_TYPE.Identifier, name: "foo" } as AstNode,
       raw: "irrelevant",
       expected: "foo",
     },
@@ -29,7 +29,7 @@ describe("formatCaseTest", () => {
         name: "x",
         start: 10,
         end: 10,
-      } as NodeLike,
+      } as AstNode,
       raw: "irrelevant",
       expected: "x",
     },
@@ -40,7 +40,7 @@ describe("formatCaseTest", () => {
         name: "x",
         start: 0,
         end: 1000,
-      } as NodeLike,
+      } as AstNode,
       raw: "short",
       expected: "x",
     },
@@ -51,7 +51,7 @@ describe("formatCaseTest", () => {
         name: "long",
         start: 0,
         end: 100,
-      } as NodeLike,
+      } as AstNode,
       raw: "x".repeat(200),
       expected: "long",
     },
@@ -67,12 +67,12 @@ describe("formatCaseTest", () => {
     { type: AST_TYPE.ArrayExpression, expected: "<expr>" },
     { type: AST_TYPE.Identifier, expected: "<expr>" },
   ])("type-specific fallback for $type", ({ type, value, expected }) => {
-    const node = { type, value } as NodeLike;
+    const node = { type, value } as AstNode;
     expect(formatCaseTest(node, "")).toBe(expected);
   });
 
   test("Identifier without name returns <expr>", () => {
-    const node = { type: AST_TYPE.Identifier } as const satisfies NodeLike;
+    const node = { type: AST_TYPE.Identifier } as const satisfies AstNode;
     expect(formatCaseTest(node, "")).toBe("<expr>");
   });
 });

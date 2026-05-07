@@ -1,6 +1,6 @@
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
-import type { NodeLike } from "./node-like.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 // `else if` is parsed as a bare IfStatement placed directly in the outer
 // IfStatement's `alternate` slot (no enclosing BlockStatement). When the
@@ -9,7 +9,7 @@ import type { NodeLike } from "./node-like.js";
 // and return the start offset of the outermost IfStatement so all branches
 // in the chain can share a single merge container key.
 export function ifChainRootOffset(
-  parent: NodeLike | null,
+  parent: AstNode | null,
   key: string | null,
   path: readonly PathEntry[],
 ): number | null {
@@ -19,13 +19,13 @@ export function ifChainRootOffset(
   if (key !== "consequent" && key !== "alternate") {
     return null;
   }
-  let chainTop: NodeLike = parent;
+  let chainTop: AstNode = parent;
   for (let i = path.length - 1; i >= 1; i--) {
     const entry = path[i];
     if (!entry) {
       break;
     }
-    const entryNode = entry.node as unknown as NodeLike;
+    const entryNode = entry.node as unknown as AstNode;
     if (entryNode !== chainTop) {
       break;
     }
@@ -36,7 +36,7 @@ export function ifChainRootOffset(
     if (!ancestorEntry) {
       break;
     }
-    const ancestor = ancestorEntry.node as unknown as NodeLike;
+    const ancestor = ancestorEntry.node as unknown as AstNode;
     if (ancestor.type !== AST_TYPE.IfStatement) {
       break;
     }

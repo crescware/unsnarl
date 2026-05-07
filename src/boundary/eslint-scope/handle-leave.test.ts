@@ -26,7 +26,7 @@ describe("handleLeave", () => {
   ])("pops the current scope for type=%s", (type) => {
     const manager = freshManager();
     const block = { type } as const satisfies NodeLike;
-    manager.push("function", block as unknown as AstNode, null);
+    manager.push("function", block as unknown as AstNode);
     const before = manager.current();
 
     handleLeave(block, null, null, manager);
@@ -50,11 +50,9 @@ describe("handleLeave", () => {
 
   test("plain BlockStatement (not under fn/catch) pops the current scope", () => {
     const manager = freshManager();
-    manager.push(
-      "block",
-      { type: AST_TYPE.BlockStatement } as unknown as AstNode,
-      null,
-    );
+    manager.push("block", {
+      type: AST_TYPE.BlockStatement,
+    } as unknown as AstNode);
     const block = { type: AST_TYPE.BlockStatement } as const satisfies NodeLike;
     const parent = { type: AST_TYPE.IfStatement } as const satisfies NodeLike;
 

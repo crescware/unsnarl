@@ -3,11 +3,10 @@ import { describe, expect, test } from "vitest";
 import type { Reference } from "../ir/reference/reference.js";
 import { LANGUAGE } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
+import { runAnalysis } from "../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
-import { createEslintCompatAnalyzer } from "./create-eslint-compat-analyzer.js";
 
 const parser = new OxcParser();
-const analyzer = createEslintCompatAnalyzer();
 
 function analyze(code: string) {
   const parsed = parser.parse(code, {
@@ -15,7 +14,7 @@ function analyze(code: string) {
     sourcePath: "input.tsx",
     sourceType: defaultSourceTypeFor(LANGUAGE.Tsx),
   });
-  return analyzer.analyze(parsed);
+  return runAnalysis(parsed);
 }
 
 function refsThrough(rootScope: {

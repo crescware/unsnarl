@@ -9,7 +9,6 @@ import { handleEnter } from "./handle-enter.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
-import { stubAnnotationBuilder } from "./testing/stub-annotation-builder.js";
 
 function makeManager(program: NodeLike): ScopeManager {
   return new ScopeManager("module", program as unknown as AstNode);
@@ -31,7 +30,7 @@ describe("handleEnter", () => {
       manager,
       code,
       diagnostics,
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(action).toBe("skip");
@@ -50,7 +49,7 @@ describe("handleEnter", () => {
       manager,
       code,
       new DiagnosticCollector(),
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(action).toBe("skip");
@@ -124,7 +123,7 @@ describe("handleEnter", () => {
       manager,
       code,
       new DiagnosticCollector(),
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(manager.current().type).toBe(expectedScopeType);
@@ -147,7 +146,7 @@ describe("handleEnter", () => {
       manager,
       code,
       new DiagnosticCollector(),
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(manager.current().type).toBe("module");
@@ -171,7 +170,7 @@ describe("handleEnter", () => {
       manager,
       code,
       new DiagnosticCollector(),
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(manager.current().type).toBe("block");
@@ -190,7 +189,7 @@ describe("handleEnter", () => {
       manager,
       "",
       new DiagnosticCollector(),
-      stubAnnotationBuilder,
+      {},
     );
 
     expect(manager.current()).toBe(before);

@@ -8,8 +8,10 @@ import { enterFor } from "./enter-for.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
+import type { AnalysisVisitor, ScopeVisitInput } from "./visitor.js";
+
 describe("enterFor", () => {
-  test("pushes a for scope and declares loop bindings", () => {
+  test("pushes a for scope, notifies visitor, and declares loop bindings", () => {
     const code = "for (let i = 0; i < 10; i++) {}";
     const program = parse(code);
     const forNode = findFirst(program, AST_TYPE.ForStatement);
@@ -19,19 +21,21 @@ describe("enterFor", () => {
     } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
+    const captured: ScopeVisitInput[] = [];
+    const visitor: AnalysisVisitor = {
+      onScope(input) {
+        captured.push(input);
+      },
+    };
 
-    enterFor(forNode, parent, "body", [], manager, code, diagnostics);
+    enterFor(forNode, parent, "body", [], manager, code, diagnostics, visitor);
 
     const scope = manager.current();
     expect(scope.type).toBe("for");
     expect(scope.variables.map((v) => v.name)).toEqual(["i"]);
-    expect(manager.annotations.ofScope(scope).blockContext).toEqual({
-      parentType: AST_TYPE.Program,
-      key: "body",
-      parentSpanOffset: 0,
-      kind: "other",
-      ifChainRootOffset: null,
-    });
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.parent).toBe(parent);
+    expect(captured[0]?.key).toBe("body");
   });
 
   test("works for ForOfStatement", () => {
@@ -41,7 +45,7 @@ describe("enterFor", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFor(forNode, null, null, [], manager, code, diagnostics);
+    enterFor(forNode, null, null, [], manager, code, diagnostics, {});
 
     expect(manager.current().variables.map((v) => v.name)).toEqual(["x"]);
   });

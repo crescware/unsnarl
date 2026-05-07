@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { caseExitsFunction } from "./case-exits-function.js";
 
 describe("caseExitsFunction", () => {
@@ -36,7 +36,7 @@ describe("caseExitsFunction", () => {
       expected: false,
     },
     {
-      name: "last item is not NodeLike -> false",
+      name: "last item is not AstNode -> false",
       consequent: [42],
       expected: false,
     },

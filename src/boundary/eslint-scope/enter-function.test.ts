@@ -16,7 +16,7 @@ describe("enterFunction", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFunction(fn, manager, code, diagnostics);
+    enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const fnScope = manager.current();
     expect(fnScope.type).toBe("function");
@@ -35,7 +35,7 @@ describe("enterFunction", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFunction(fn, manager, code, diagnostics);
+    enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const args = manager.current().set.get("arguments");
     expect(args?.name).toBe("arguments");
@@ -50,7 +50,7 @@ describe("enterFunction", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFunction(fn, manager, code, diagnostics);
+    enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const fnScope = manager.current();
     expect(fnScope.type).toBe("function");
@@ -64,7 +64,7 @@ describe("enterFunction", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFunction(fn, manager, code, diagnostics);
+    enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     expect(manager.current().set.has("arguments")).toBe(false);
   });
@@ -76,7 +76,7 @@ describe("enterFunction", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterFunction(fn, manager, code, diagnostics);
+    enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     expect(manager.current().variables).toHaveLength(0);
   });

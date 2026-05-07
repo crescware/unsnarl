@@ -7,9 +7,9 @@ import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { blockContextOf } from "./block-context-of.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
+import type { AnalysisVisitor } from "./visitor.js";
 
 export function enterCatch(
   node: NodeLike,
@@ -19,9 +19,10 @@ export function enterCatch(
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
+  visitor: AnalysisVisitor,
 ): void {
-  const ctx = blockContextOf(parent, key, path);
-  const scope = manager.push("catch", node as unknown as AstNode, ctx);
+  const scope = manager.push("catch", node as unknown as AstNode);
+  visitor.onScope?.({ scope, parent, key, path });
   const param = node["param"];
   if (isNodeLike(param)) {
     const idents = collectBindingIdentifiers(param as unknown as AstNode);

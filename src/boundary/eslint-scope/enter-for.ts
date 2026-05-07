@@ -2,9 +2,9 @@ import type { ScopeManager } from "../../analyzer/manager.js";
 import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { blockContextOf } from "./block-context-of.js";
 import { declareForLeft } from "./declare-for-left.js";
 import type { NodeLike } from "./node-like.js";
+import type { AnalysisVisitor } from "./visitor.js";
 
 export function enterFor(
   node: NodeLike,
@@ -14,8 +14,9 @@ export function enterFor(
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
+  visitor: AnalysisVisitor,
 ): void {
-  const ctx = blockContextOf(parent, key, path);
-  const scope = manager.push("for", node as unknown as AstNode, ctx);
+  const scope = manager.push("for", node as unknown as AstNode);
+  visitor.onScope?.({ scope, parent, key, path });
   declareForLeft(node, scope, raw, diagnostics);
 }

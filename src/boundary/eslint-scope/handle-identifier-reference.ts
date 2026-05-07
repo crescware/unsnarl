@@ -5,8 +5,8 @@ import { bindReference } from "../../analyzer/resolve.js";
 import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
-import type { AnnotationBuilder } from "./annotation-builder.js";
 import type { NodeLike } from "./node-like.js";
+import type { AnalysisVisitor } from "./visitor.js";
 
 export function handleIdentifierReference(
   node: NodeLike,
@@ -14,7 +14,7 @@ export function handleIdentifierReference(
   key: string | null,
   path: readonly PathEntry[],
   manager: ScopeManager,
-  annotationBuilder: AnnotationBuilder,
+  visitor: AnalysisVisitor,
 ): void {
   const result = classifyIdentifier(
     parent as unknown as AstNode | null,
@@ -24,18 +24,13 @@ export function handleIdentifierReference(
   if (result.kind !== "reference") {
     return;
   }
+  const scope = manager.current();
   const ref = new ReferenceImpl({
     identifier: node as unknown as AstIdentifier,
-    from: manager.current(),
+    from: scope,
     flags: result.flags,
     init: result.init,
   });
-  bindReference(manager.current(), ref, manager.globalScope);
-  const annotation = annotationBuilder.buildReferenceAnnotation({
-    parent,
-    key,
-    path,
-    scope: manager.current(),
-  });
-  manager.annotations.setReference(ref, annotation);
+  bindReference(scope, ref, manager.globalScope);
+  visitor.onReference?.({ ref, parent, key, path, scope });
 }

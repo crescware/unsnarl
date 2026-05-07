@@ -1,11 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AnnotationsImpl } from "./analyzer/annotations-impl.js";
-import type { Scope } from "./ir/scope/scope.js";
 import type { SerializedIR } from "./ir/serialized/serialized-ir.js";
 import { LANGUAGE } from "./language.js";
 import { AST_TYPE } from "./parser/ast-type.js";
-import type { ScopeAnalyzer } from "./pipeline/analyze/scope-analyzer.js";
 import type { EmitterRegistry } from "./pipeline/emit/emitter-registry.js";
 import type { Emitter } from "./pipeline/emit/emitter.js";
 import type { Parser } from "./pipeline/parse/parser.js";
@@ -13,9 +10,6 @@ import { SOURCE_TYPE } from "./pipeline/parse/source-type.js";
 import { createPipeline } from "./pipeline/pipeline.js";
 import type { IRSerializer } from "./pipeline/serialize/ir-serializer.js";
 import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
-
-const fakeScope = {} as Scope;
-const fakeAnnotations = new AnnotationsImpl();
 
 const fakeIR = {
   version: SERIALIZED_IR_VERSION,
@@ -38,16 +32,6 @@ const fakeParser = {
     raw: code,
   }),
 } as const satisfies Parser;
-
-const fakeAnalyzer = {
-  id: "fake",
-  analyze: () => ({
-    rootScope: fakeScope,
-    annotations: fakeAnnotations,
-    diagnostics: [],
-    raw: "",
-  }),
-} as const satisfies ScopeAnalyzer;
 
 const fakeSerializer = {
   id: "fake",
@@ -76,10 +60,9 @@ function buildRegistry(emitters: readonly Emitter[]): EmitterRegistry {
 }
 
 describe("createPipeline", () => {
-  test("connects parser, analyzer, serializer, and emitter", () => {
+  test("connects parser, serializer, and emitter", () => {
     const pipeline = createPipeline({
       parser: fakeParser,
-      analyzer: fakeAnalyzer,
       serializer: fakeSerializer,
       emitters: buildRegistry([fakeEmitter]),
     });
@@ -104,7 +87,6 @@ describe("createPipeline", () => {
   test("throws when format is unknown", () => {
     const pipeline = createPipeline({
       parser: fakeParser,
-      analyzer: fakeAnalyzer,
       serializer: fakeSerializer,
       emitters: buildRegistry([]),
     });
@@ -145,7 +127,6 @@ describe("createPipeline", () => {
 
     const pipeline = createPipeline({
       parser: swapped,
-      analyzer: fakeAnalyzer,
       serializer: fakeSerializer,
       emitters: buildRegistry([fakeEmitter]),
     });

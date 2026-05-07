@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { isControlExit } from "./is-control-exit.js";
-import type { NodeLike } from "./node-like.js";
 
 describe("isControlExit", () => {
   test.each([
@@ -13,7 +13,7 @@ describe("isControlExit", () => {
     { type: AST_TYPE.ExpressionStatement, expected: false },
     { type: AST_TYPE.VariableDeclaration, expected: false },
   ])("type=$type -> $expected", ({ type, expected }) => {
-    expect(isControlExit({ type } as NodeLike)).toBe(expected);
+    expect(isControlExit({ type } as AstNode)).toBe(expected);
   });
 
   test("BlockStatement: ends in BreakStatement -> true", () => {
@@ -23,7 +23,7 @@ describe("isControlExit", () => {
         { type: AST_TYPE.ExpressionStatement },
         { type: AST_TYPE.BreakStatement },
       ],
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isControlExit(node)).toBe(true);
   });
 
@@ -38,7 +38,7 @@ describe("isControlExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.BreakStatement },
       alternate: { type: AST_TYPE.ReturnStatement },
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isControlExit(node)).toBe(true);
   });
 
@@ -47,7 +47,7 @@ describe("isControlExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.BreakStatement },
       alternate: { type: AST_TYPE.ExpressionStatement },
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isControlExit(node)).toBe(false);
   });
 });

@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 import { isFunctionExit } from "./is-function-exit.js";
-import type { NodeLike } from "./node-like.js";
 
 describe("isFunctionExit", () => {
   test.each([
@@ -32,7 +32,7 @@ describe("isFunctionExit", () => {
       expected: false,
     },
   ])("$name", ({ node, expected }) => {
-    expect(isFunctionExit(node as NodeLike)).toBe(expected);
+    expect(isFunctionExit(node as AstNode)).toBe(expected);
   });
 
   test("BlockStatement: ends in ReturnStatement -> true", () => {
@@ -42,7 +42,7 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ExpressionStatement },
         { type: AST_TYPE.ReturnStatement },
       ],
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isFunctionExit(node)).toBe(true);
   });
 
@@ -53,7 +53,7 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ReturnStatement },
         { type: AST_TYPE.ExpressionStatement },
       ],
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isFunctionExit(node)).toBe(false);
   });
 
@@ -68,7 +68,7 @@ describe("isFunctionExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ThrowStatement },
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isFunctionExit(node)).toBe(true);
   });
 
@@ -77,7 +77,7 @@ describe("isFunctionExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ExpressionStatement },
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isFunctionExit(node)).toBe(false);
   });
 
@@ -85,7 +85,7 @@ describe("isFunctionExit", () => {
     const node = {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.ReturnStatement },
-    } as const satisfies NodeLike;
+    } as const satisfies AstNode;
     expect(isFunctionExit(node)).toBe(false);
   });
 });

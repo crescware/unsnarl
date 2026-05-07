@@ -1,48 +1,25 @@
 import { hoistDeclarations } from "../../analyzer/hoisting/hoist-declarations.js";
 import type { ScopeManager } from "../../analyzer/manager.js";
+import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
-import type { BlockContext } from "../../ir/scope/block-context.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
-import { caseExitsFunction } from "./case-exits-function.js";
-import { caseFallsThrough } from "./case-falls-through.js";
-import { formatCaseTest } from "./format-case-test.js";
-import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
+import type { AnalysisVisitor } from "./visitor.js";
 
 export function enterSwitchCase(
   node: NodeLike,
   parent: NodeLike | null,
   key: string | null,
+  path: readonly PathEntry[],
   manager: ScopeManager,
   raw: string,
   diagnostics: DiagnosticCollector,
+  visitor: AnalysisVisitor,
 ): void {
-  const test = node["test"];
-  const caseTest = isNodeLike(test) ? formatCaseTest(test, raw) : null;
-  const ctx: BlockContext | null =
-    parent && key !== null
-      ? {
-          kind: "case-clause",
-          parentType: parent.type,
-          key,
-          parentSpanOffset: parent.start ?? 0,
-          caseTest,
-        }
-      : null;
-  const scope = manager.push("block", node as unknown as AstNode, ctx);
+  const scope = manager.push("block", node as unknown as AstNode);
+  visitor.onScope?.({ scope, parent, key, path });
   const consequent = node["consequent"];
   if (Array.isArray(consequent)) {
-    manager.annotations.setScope(scope, {
-      blockContext: ctx,
-      fallsThrough: caseFallsThrough(consequent),
-      exitsFunction: caseExitsFunction(consequent),
-    });
     hoistDeclarations(consequent, scope, raw, diagnostics);
-  } else {
-    manager.annotations.setScope(scope, {
-      blockContext: ctx,
-      fallsThrough: true,
-      exitsFunction: false,
-    });
   }
 }

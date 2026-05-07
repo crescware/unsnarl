@@ -8,8 +8,10 @@ import { enterBlock } from "./enter-block.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
+import type { AnalysisVisitor, ScopeVisitInput } from "./visitor.js";
+
 describe("enterBlock", () => {
-  test("pushes a block scope with the given blockContext and hoists body declarations", () => {
+  test("pushes a block scope, notifies visitor, and hoists body declarations", () => {
     const code = "if (x) { let y = 1; }";
     const program = parse(code);
     const block = findFirst(program, AST_TYPE.BlockStatement);
@@ -19,33 +21,50 @@ describe("enterBlock", () => {
     } as const satisfies NodeLike;
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
+    const captured: ScopeVisitInput[] = [];
+    const visitor: AnalysisVisitor = {
+      onScope(input) {
+        captured.push(input);
+      },
+    };
 
-    enterBlock(block, parent, "consequent", [], manager, code, diagnostics);
+    enterBlock(
+      block,
+      parent,
+      "consequent",
+      [],
+      manager,
+      code,
+      diagnostics,
+      visitor,
+    );
 
     const scope = manager.current();
     expect(scope.type).toBe("block");
-    expect(manager.annotations.ofScope(scope).blockContext).toEqual({
-      parentType: AST_TYPE.IfStatement,
-      key: "consequent",
-      parentSpanOffset: 5,
-      kind: "other",
-      ifChainRootOffset: null,
-    });
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.parent).toBe(parent);
+    expect(captured[0]?.key).toBe("consequent");
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
   });
 
-  test("blockContext is null when parent is null", () => {
+  test("notifies visitor with parent=null when no enclosing context", () => {
     const code = "{ let z = 2; }";
     const program = parse(code);
     const block = findFirst(program, AST_TYPE.BlockStatement);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
+    const captured: ScopeVisitInput[] = [];
+    const visitor: AnalysisVisitor = {
+      onScope(input) {
+        captured.push(input);
+      },
+    };
 
-    enterBlock(block, null, null, [], manager, code, diagnostics);
+    enterBlock(block, null, null, [], manager, code, diagnostics, visitor);
 
-    expect(
-      manager.annotations.ofScope(manager.current()).blockContext,
-    ).toBeNull();
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.parent).toBeNull();
+    expect(captured[0]?.key).toBeNull();
   });
 
   test("does not hoist when body is missing", () => {
@@ -54,7 +73,7 @@ describe("enterBlock", () => {
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
 
-    enterBlock(block, null, null, [], manager, "", diagnostics);
+    enterBlock(block, null, null, [], manager, "", diagnostics, {});
 
     expect(manager.current().variables).toHaveLength(0);
   });

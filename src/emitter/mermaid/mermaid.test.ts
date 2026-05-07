@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
-import { createEslintCompatAnalyzer } from "../../analyzer/create-eslint-compat-analyzer.js";
 import { LANGUAGE, type Language } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
+import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
@@ -10,7 +10,6 @@ import { dagreStrategy } from "./strategy/dagre-strategy.js";
 import { elkStrategy } from "./strategy/elk-strategy.js";
 
 const parser = new OxcParser();
-const analyzer = createEslintCompatAnalyzer();
 const serializer = new FlatSerializer();
 const emitter = new MermaidEmitter({ strategy: elkStrategy });
 
@@ -20,7 +19,7 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
     sourcePath: `input.${language}`,
     sourceType: defaultSourceTypeFor(language),
   });
-  const analyzed = analyzer.analyze(parsed);
+  const analyzed = runAnalysis(parsed);
   const ir = serializer.serialize({
     rootScope: analyzed.rootScope,
     annotations: analyzed.annotations,
@@ -56,7 +55,7 @@ describe("MermaidEmitter", () => {
       sourcePath: "input.ts",
       sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
     });
-    const analyzed = analyzer.analyze(parsed);
+    const analyzed = runAnalysis(parsed);
     const ir = serializer.serialize({
       rootScope: analyzed.rootScope,
       annotations: analyzed.annotations,

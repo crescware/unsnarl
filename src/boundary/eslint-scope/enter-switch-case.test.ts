@@ -8,116 +8,71 @@ import { enterSwitchCase } from "./enter-switch-case.js";
 import type { NodeLike } from "./node-like.js";
 import { findFirst } from "./testing/find-first.js";
 import { parse } from "./testing/parse.js";
+import type { AnalysisVisitor, ScopeVisitInput } from "./visitor.js";
+
 const switchParent = {
   type: AST_TYPE.SwitchStatement,
   start: 0,
 } as const satisfies NodeLike;
 
 describe("enterSwitchCase", () => {
-  test("captures caseTest, marks fallsThrough=false when consequent ends in break", () => {
-    const code = "switch (x) { case 1: y; break; }";
+  test("pushes a block scope, notifies visitor, and hoists consequent declarations", () => {
+    const code = "switch (x) { case 1: var y = 1; break; }";
     const program = parse(code);
     const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
+    const captured: ScopeVisitInput[] = [];
+    const visitor: AnalysisVisitor = {
+      onScope(input) {
+        captured.push(input);
+      },
+    };
 
     enterSwitchCase(
       caseNode,
       switchParent,
       "cases",
+      [],
       manager,
       code,
       diagnostics,
+      visitor,
     );
 
     const scope = manager.current();
-    const ann = manager.annotations.ofScope(scope);
     expect(scope.type).toBe("block");
-    expect(ann.blockContext?.kind).toBe("case-clause");
-    if (ann.blockContext?.kind === "case-clause") {
-      expect(ann.blockContext.caseTest).toBe("1");
-    }
-    expect(ann.fallsThrough).toBe(false);
-    expect(ann.exitsFunction).toBe(false);
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.parent).toBe(switchParent);
+    expect(captured[0]?.key).toBe("cases");
   });
 
-  test("marks fallsThrough=true when consequent has no exit statement", () => {
-    const code = "switch (x) { case 1: y = 1; case 2: break; }";
-    const program = parse(code);
-    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
-    const manager = new ScopeManager("module", program as unknown as AstNode);
-    const diagnostics = new DiagnosticCollector();
-
-    enterSwitchCase(
-      caseNode,
-      switchParent,
-      "cases",
-      manager,
-      code,
-      diagnostics,
-    );
-
-    expect(manager.annotations.ofScope(manager.current()).fallsThrough).toBe(
-      true,
-    );
-  });
-
-  test("marks exitsFunction=true when consequent ends in return", () => {
-    const code =
-      "function f() { switch (x) { case 1: return 1; case 2: break; } }";
-    const program = parse(code);
-    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
-    const manager = new ScopeManager("module", program as unknown as AstNode);
-    const diagnostics = new DiagnosticCollector();
-
-    enterSwitchCase(
-      caseNode,
-      switchParent,
-      "cases",
-      manager,
-      code,
-      diagnostics,
-    );
-
-    expect(manager.annotations.ofScope(manager.current()).exitsFunction).toBe(
-      true,
-    );
-  });
-
-  test("default case (no test) sets caseTest to null", () => {
-    const code = "switch (x) { default: break; }";
-    const program = parse(code);
-    const caseNode = findFirst(program, AST_TYPE.SwitchCase);
-    const manager = new ScopeManager("module", program as unknown as AstNode);
-    const diagnostics = new DiagnosticCollector();
-
-    enterSwitchCase(
-      caseNode,
-      switchParent,
-      "cases",
-      manager,
-      code,
-      diagnostics,
-    );
-
-    const ann = manager.annotations.ofScope(manager.current());
-    expect(ann.blockContext?.kind).toBe("case-clause");
-    if (ann.blockContext?.kind === "case-clause") {
-      expect(ann.blockContext.caseTest).toBeNull();
-    }
-  });
-
-  test("blockContext is null when parent or key is missing", () => {
+  test("notifies visitor with parent=null when no enclosing context", () => {
     const code = "switch (x) { case 1: break; }";
     const program = parse(code);
     const caseNode = findFirst(program, AST_TYPE.SwitchCase);
     const manager = new ScopeManager("module", program as unknown as AstNode);
     const diagnostics = new DiagnosticCollector();
+    const captured: ScopeVisitInput[] = [];
+    const visitor: AnalysisVisitor = {
+      onScope(input) {
+        captured.push(input);
+      },
+    };
 
-    enterSwitchCase(caseNode, null, null, manager, code, diagnostics);
+    enterSwitchCase(
+      caseNode,
+      null,
+      null,
+      [],
+      manager,
+      code,
+      diagnostics,
+      visitor,
+    );
 
-    expect(
-      manager.annotations.ofScope(manager.current()).blockContext,
-    ).toBeNull();
+    expect(captured).toHaveLength(1);
+    expect(captured[0]?.parent).toBeNull();
+    expect(captured[0]?.key).toBeNull();
   });
 });

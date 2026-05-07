@@ -1,9 +1,9 @@
-import { AST_TYPE } from "../../parser/ast-type.js";
-import type { NodeLike } from "./node-like.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../parser/ast-type.js";
 
 const CASE_TEST_MAX_LENGTH = 32;
 
-export function formatCaseTest(node: NodeLike, raw: string): string {
+export function formatCaseTest(node: AstNode, raw: string): string {
   const start = node.start;
   const end = node.end;
   if (

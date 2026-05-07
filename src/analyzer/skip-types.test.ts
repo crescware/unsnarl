@@ -4,12 +4,11 @@ import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
 import { LANGUAGE, type Language } from "../language.js";
 import { OxcParser } from "../parser/oxc-parser.js";
+import { runAnalysis } from "../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../pipeline/parse/default-source-type-for.js";
-import { createEslintCompatAnalyzer } from "./create-eslint-compat-analyzer.js";
 import { DEFINITION_TYPE } from "./definition-type.js";
 
 const parser = new OxcParser();
-const analyzer = createEslintCompatAnalyzer();
 
 function analyze(code: string, language: Language = LANGUAGE.Ts) {
   const parsed = parser.parse(code, {
@@ -17,7 +16,7 @@ function analyze(code: string, language: Language = LANGUAGE.Ts) {
     sourcePath: `input.${language}`,
     sourceType: defaultSourceTypeFor(language),
   });
-  return analyzer.analyze(parsed);
+  return runAnalysis(parsed);
 }
 
 function findVariable(scope: Scope, name: string): Variable | null {
