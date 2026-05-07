@@ -8,7 +8,7 @@ const config = {
     // compile time. Has no runtime importer by design, so list it as an
     // entry so knip walks its imports (the compat-* contract types) and
     // does not report them as unused.
-    "src/eslint-compat/contract/contract-assertion.ts",
+    "src/boundary/eslint-scope/contract/contract-assertion.ts",
     "integration/**/*.test.ts",
     "parity/**/*.test.ts",
   ],

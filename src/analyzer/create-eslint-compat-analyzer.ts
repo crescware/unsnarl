@@ -1,5 +1,5 @@
+import { EslintCompatAnalyzer } from "../boundary/eslint-scope/eslint-compat.js";
 import { DefaultAnnotationBuilder } from "./annotate/default-annotation-builder.js";
-import { EslintCompatAnalyzer } from "./eslint-compat/eslint-compat.js";
 
 // Composition root: wires the eslint-compat algorithm with the
 // unsnarl-specific annotation adapter. Lives outside eslint-compat so

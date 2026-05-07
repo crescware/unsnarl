@@ -2,7 +2,7 @@ import type {
   AnnotationBuilder,
   ReferenceAnnotation,
   ReferenceAnnotationInput,
-} from "../eslint-compat/annotation-builder.js";
+} from "../../boundary/eslint-scope/annotation-builder.js";
 import { findExpressionStatementContainer } from "../expression-statement-container.js";
 import { findJsxElementSpan } from "../jsx-element-span.js";
 import { findReferenceOwners } from "../owner/find-reference-owners.js";
