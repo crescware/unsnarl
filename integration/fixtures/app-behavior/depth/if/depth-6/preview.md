@@ -31,6 +31,12 @@ if (a) {
 }
 ```
 
+## Query
+
+```sh
+--depth 6
+```
+
 ## Mermaid
 
 ```mermaid

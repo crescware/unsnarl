@@ -37,6 +37,12 @@ try {
 }
 ```
 
+## Query
+
+```sh
+--depth 1
+```
+
 ## Mermaid
 
 ```mermaid

@@ -30,6 +30,12 @@ while (n1 > 0) {
 }
 ```
 
+## Query
+
+```sh
+--depth 2
+```
+
 ## Mermaid
 
 ```mermaid

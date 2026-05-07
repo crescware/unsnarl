@@ -6,6 +6,7 @@ import type { Emitter } from "../../pipeline/emit/emitter.js";
 import { formatResolutionNotice } from "../../visual-graph/prune/format-resolution-notice.js";
 import type { MermaidEmitter } from "../mermaid/mermaid.js";
 import { codeFenceLang } from "./code-fence-lang.js";
+import { formatDepthQuery } from "./format-depth-query.js";
 import { formatPruningQuery } from "./format-pruning-query.js";
 
 export class MarkdownEmitter implements Emitter {
@@ -40,15 +41,16 @@ export class MarkdownEmitter implements Emitter {
     }
     lines.push("## Input", "", `\`\`\`${fence}`, raw, "```", "");
     const pruning = opts.prunedGraph?.pruning ?? null;
-    if (pruning !== null) {
-      lines.push(
-        "## Query",
-        "",
-        "```sh",
-        formatPruningQuery(pruning),
-        "```",
-        "",
-      );
+    const depthQuery = formatDepthQuery(opts.depths);
+    if (pruning !== null || depthQuery !== null) {
+      const queryLines: string[] = [];
+      if (pruning !== null) {
+        queryLines.push(formatPruningQuery(pruning));
+      }
+      if (depthQuery !== null) {
+        queryLines.push(depthQuery);
+      }
+      lines.push("## Query", "", "```sh", ...queryLines, "```", "");
     }
     lines.push("## Mermaid", "", "```mermaid", mermaid, "```", "");
     return `${lines.join("\n")}`;

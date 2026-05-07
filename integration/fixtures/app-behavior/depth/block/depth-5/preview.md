@@ -24,6 +24,12 @@
 }
 ```
 
+## Query
+
+```sh
+--depth 5
+```
+
 ## Mermaid
 
 ```mermaid

@@ -32,6 +32,12 @@ switch (x) {
 }
 ```
 
+## Query
+
+```sh
+--depth 6
+```
+
 ## Mermaid
 
 ```mermaid

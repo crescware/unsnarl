@@ -24,6 +24,12 @@ function f1() {
 f1();
 ```
 
+## Query
+
+```sh
+--depth-function 1
+```
+
 ## Mermaid
 
 ```mermaid

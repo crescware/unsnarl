@@ -18,6 +18,12 @@ for (let i1 = 0; i1 < 1; i1++) {
 }
 ```
 
+## Query
+
+```sh
+--depth 5
+```
+
 ## Mermaid
 
 ```mermaid
