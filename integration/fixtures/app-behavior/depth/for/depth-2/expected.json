@@ -176,6 +176,26 @@
       "from": "n_scope_5_i3_81",
       "to": "for_test_scope_4_72",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_240",
+      "to": "s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_8",
+      "to": "s_scope_5",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

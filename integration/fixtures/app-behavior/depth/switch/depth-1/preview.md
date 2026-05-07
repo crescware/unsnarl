@@ -44,7 +44,12 @@ flowchart RL
     switch_discriminant_scope_0_14{"switch ()<br/>L3"}
     subgraph s_scope_2["case 1 L4-26"]
       direction RL
+      elk_empty_s_scope_2[" "]
     end
   end
   n_scope_0_x_6 -->|read| switch_discriminant_scope_0_14
+  n_scope_0_x_6 -->|read| s_scope_2
+  n_scope_0_console_296 -->|read| s_scope_2
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
 ```

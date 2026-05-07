@@ -40,4 +40,7 @@ flowchart RL
   n_scope_3_i2_44 -->|set| wr_ref_5
   n_scope_1_i1_9 -->|read| for_test_scope_0_0
   n_scope_3_i2_44 -->|read| for_test_scope_2_35
+  n_scope_0_console_240 -->|read| s_scope_3
+  wr_ref_2 -->|read| s_scope_3
+  wr_ref_5 -->|read| s_scope_3
 ```

@@ -88,6 +88,7 @@ flowchart RL
     n_scope_12_e1_507["e1<br/>L30"]
     expr_stmt_520["console.log()<br/>L31"]
   end
+  n_scope_0_console_103 -->|read| s_scope_5
   n_scope_0_console_103 -->|read| expr_stmt_180
   n_scope_7_e6_157 -->|read| expr_stmt_180
   n_scope_0_console_103 -->|read| expr_stmt_264

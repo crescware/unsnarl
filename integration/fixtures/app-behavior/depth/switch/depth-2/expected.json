@@ -100,6 +100,16 @@
       "from": "n_scope_0_x_6",
       "to": "switch_discriminant_scope_2_41",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "s_scope_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_296",
+      "to": "s_scope_4",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

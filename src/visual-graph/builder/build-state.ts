@@ -32,9 +32,18 @@ export type BuildState = Readonly<{
   // owns it (e.g. `fnB` for `const fnB = (arr) => ...`). Edges that would
   // cross the collapsed boundary redirect to this anchor; if no anchor is
   // recorded for the collapsed scope (anonymous callbacks, branch bodies,
-  // bare blocks), the edge is dropped instead of rerouted -- nothing
-  // deeper than the queried depth survives the render.
+  // bare blocks), the redirect falls back to the closest visible
+  // ancestor subgraph (see suppressedPredicateRedirect for the
+  // predicate-anchor counterpart) instead of being dropped silently.
   collapsedAnchorByRoot?: Map<string, string>;
+  // Maps a control-statement offset (if / for / while / do-while /
+  // switch) to the subgraph id of its closest visible ancestor. Recorded
+  // when the gated body collapses past the depth threshold, so the test
+  // anchor of that statement cannot be created. Refs whose predicate
+  // pointed at the now-missing anchor (e.g. `f` in `if (f) { ... }`
+  // where the `if (f)` body collapsed) land here instead of dangling
+  // off into module_root.
+  suppressedPredicateRedirect?: Map<number, string>;
   // Maps every emitted node id back to the scope id whose contents
   // produced it. Used during edge post-processing to decide whether an
   // endpoint lives inside a collapsed scope and should be redirected to

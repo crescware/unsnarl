@@ -136,6 +136,11 @@
   "edges": [
     {
       "from": "n_scope_0_console_103",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
       "to": "expr_stmt_408",
       "label": "read"
     },

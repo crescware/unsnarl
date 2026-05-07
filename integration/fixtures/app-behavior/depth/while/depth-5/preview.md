@@ -71,9 +71,11 @@ flowchart RL
   n_scope_0_n3_28 -->|set| wr_ref_11
   n_scope_0_n4_40 -->|set| wr_ref_13
   n_scope_0_n5_52 -->|set| wr_ref_15
+  n_scope_0_n6_64 -->|set| s_scope_5
   n_scope_0_n1_4 -->|read| while_test_scope_0_73
   n_scope_0_n2_16 -->|read| while_test_scope_1_100
   n_scope_0_n3_28 -->|read| while_test_scope_2_131
   n_scope_0_n4_40 -->|read| while_test_scope_3_166
   n_scope_0_n5_52 -->|read| while_test_scope_4_205
+  n_scope_0_n6_64 -->|read| s_scope_5
 ```

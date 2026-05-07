@@ -294,6 +294,21 @@
       "from": "n_scope_4_v4_215",
       "to": "n_scope_5_v5_257",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_f_86",
+      "to": "s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_5_v5_257",
+      "to": "s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_324",
+      "to": "s_scope_5",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

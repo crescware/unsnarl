@@ -123,6 +123,21 @@
       "from": "n_scope_3_i2_44",
       "to": "for_test_scope_2_35",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_240",
+      "to": "s_scope_3",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "s_scope_3",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "s_scope_3",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

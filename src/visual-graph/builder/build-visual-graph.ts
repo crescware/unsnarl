@@ -200,6 +200,7 @@ export function buildVisualGraph(
     edges: graph.edges,
     collapsedRootByScope: new Map(),
     collapsedAnchorByRoot: new Map(),
+    suppressedPredicateRedirect: new Map(),
     nodeIdOriginScope: new Map(),
   } as const satisfies BuildState;
 
@@ -277,13 +278,33 @@ export function buildVisualGraph(
     if (varVarIds.has(r.resolved)) {
       continue;
     }
-    // When the ref's containing scope (or any ancestor) was collapsed
-    // away, the parent-scope variable owner (if any) already stands for
-    // the whole hidden interior; creating extra ret-use / expr-stmt
-    // nodes for refs that live inside would surface fragments of the
-    // hidden body in unrelated outer subgraphs. Skip the ref entirely;
-    // edge post-processing handles cross-boundary redirection.
-    if (state.collapsedRootByScope?.has(r.from)) {
+    // When the ref's containing scope (or any ancestor) was collapsed,
+    // the inner ret-use / expr-stmt / write-op nodes were never built
+    // -- they would have lived inside the now-hidden subtree. Instead
+    // of creating fragments of the hidden body in unrelated outer
+    // subgraphs, route the ref's read directly to the collapsed
+    // anchor (variable owner if any, otherwise the closest visible
+    // ancestor subgraph). The user still sees "this outer variable is
+    // consumed somewhere inside the surviving outer container", just
+    // without a separate node per inner reference.
+    const collapsedRoot = state.collapsedRootByScope?.get(r.from);
+    if (collapsedRoot !== undefined) {
+      if (r.flags.write) {
+        continue;
+      }
+      const target = collapsedTargetFor(collapsedRoot, scopeMap, state);
+      if (target === null) {
+        continue;
+      }
+      const fromIds = readOrigins(
+        r.resolved,
+        r.identifier.span.offset,
+        r.from,
+        ctx,
+      );
+      for (const fromId of fromIds) {
+        pushEdge(state, fromId, edgeLabelOfRef(r), target);
+      }
       continue;
     }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
@@ -300,10 +321,25 @@ export function buildVisualGraph(
       continue;
     }
     // The ref reads a predicate (if/while/for/switch test) whose anchor
-    // was suppressed because the gated scope collapsed. Without an
-    // anchor the read has nowhere meaningful to land in the rendered
-    // graph, so drop it instead of letting it tail off into module_root.
+    // was suppressed because the gated scope collapsed. The redirect
+    // map points to the closest visible ancestor subgraph of that
+    // collapsed body, so the read still lands somewhere meaningful
+    // instead of dangling off into module_root.
     if (predicateTarget === null && r.predicateContainer && !r.flags.write) {
+      const redirect = state.suppressedPredicateRedirect?.get(
+        r.predicateContainer.offset,
+      );
+      if (redirect !== undefined) {
+        const fromIds = readOrigins(
+          r.resolved,
+          r.identifier.span.offset,
+          r.from,
+          ctx,
+        );
+        for (const fromId of fromIds) {
+          pushEdge(state, fromId, edgeLabelOfRef(r), redirect);
+        }
+      }
       continue;
     }
     if (r.flags.write) {
@@ -533,26 +569,57 @@ export function buildVisualGraph(
   }
 
   // Edge redirection for collapsed scopes: an endpoint that originated
-  // inside a collapsed subtree is rewritten to the parent-scope variable
-  // anchor for that subtree; if there's no anchor (anonymous callbacks,
-  // branch / loop / try bodies, bare blocks), the edge drops entirely so
-  // nothing deeper than the queried depth survives the render.
+  // inside a collapsed subtree is rewritten to the variable anchor for
+  // that subtree, falling back to the closest visible ancestor subgraph.
+  // Edges between two endpoints that resolve to the same target collapse
+  // into nothing (self-loops are dropped).
   if ((state.collapsedRootByScope?.size ?? 0) > 0) {
-    redirectEdgesIntoCollapsed(graph.edges, ir, state);
+    redirectEdgesIntoCollapsed(graph.edges, ir, scopeMap, state);
   }
 
   return graph;
 }
 
+// Pick the visible target a collapsed subtree should be represented by:
+// the parent-scope variable that owns the subtree if any, otherwise the
+// closest surviving ancestor subgraph. Returns null only when nothing
+// upward is visible (which forces the caller to drop the edge).
+function collapsedTargetFor(
+  rootScopeId: string,
+  scopeMap: ReadonlyMap<string, SerializedScope>,
+  state: BuildState,
+): string | null {
+  const anchor = state.collapsedAnchorByRoot?.get(rootScopeId);
+  if (anchor !== undefined) {
+    return anchor;
+  }
+  const root = scopeMap.get(rootScopeId);
+  if (!root) {
+    return null;
+  }
+  let parentId = root.upper;
+  while (parentId !== null) {
+    const sg = state.subgraphByScope.get(parentId);
+    if (sg) {
+      return sg.id;
+    }
+    const parent = scopeMap.get(parentId);
+    if (!parent) {
+      return null;
+    }
+    parentId = parent.upper;
+  }
+  return null;
+}
+
 function redirectEdgesIntoCollapsed(
   edges: /* mutable */ VisualEdge[],
   ir: SerializedIR,
+  scopeMap: ReadonlyMap<string, SerializedScope>,
   state: BuildState,
 ): void {
   const collapsedRootByScope =
     state.collapsedRootByScope ?? new Map<string, string>();
-  const collapsedAnchorByRoot =
-    state.collapsedAnchorByRoot ?? new Map<string, string>();
   const originScopeByNodeId = new Map<string, string>(
     state.nodeIdOriginScope ?? new Map(),
   );
@@ -585,7 +652,7 @@ function redirectEdgesIntoCollapsed(
   }
 
   // Returns a redirected node id, or null when the endpoint lives inside
-  // a collapsed subtree with no parent-scope anchor (drop signal).
+  // a collapsed subtree with no surviving ancestor at all (drop signal).
   function redirect(id: string): string | null {
     const scope = originScopeByNodeId.get(id);
     if (scope === undefined) {
@@ -595,7 +662,7 @@ function redirectEdgesIntoCollapsed(
     if (root === undefined) {
       return id;
     }
-    return collapsedAnchorByRoot.get(root) ?? null;
+    return collapsedTargetFor(root, scopeMap, state);
   }
 
   const redirected: VisualEdge[] = [];

@@ -168,6 +168,36 @@
       "from": "n_scope_1_v1_114",
       "to": "n_scope_2_v2_143",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_38",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v2_143",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_d_54",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_e_70",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_f_86",
+      "to": "s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_324",
+      "to": "s_scope_2",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

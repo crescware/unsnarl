@@ -335,6 +335,41 @@
       "from": "n_scope_11_i6_204",
       "to": "for_test_scope_10_195",
       "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_240",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_5",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_8",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_11",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_14",
+      "to": "s_scope_11",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_17",
+      "to": "s_scope_11",
+      "label": "read"
     }
   ],
   "boundaryEdges": [],

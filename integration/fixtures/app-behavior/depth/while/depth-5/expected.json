@@ -261,6 +261,11 @@
       "label": "set"
     },
     {
+      "from": "n_scope_0_n6_64",
+      "to": "s_scope_5",
+      "label": "set"
+    },
+    {
       "from": "n_scope_0_n1_4",
       "to": "while_test_scope_0_73",
       "label": "read"
@@ -283,6 +288,11 @@
     {
       "from": "n_scope_0_n5_52",
       "to": "while_test_scope_4_205",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_n6_64",
+      "to": "s_scope_5",
       "label": "read"
     }
   ],
