@@ -57,5 +57,7 @@ function baseLabel(
       return `do-while ${range}`;
     case "return":
       return `return ${range}`;
+    case "block":
+      return `block ${range}`;
   }
 }

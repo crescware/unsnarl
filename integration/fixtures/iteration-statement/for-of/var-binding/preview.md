@@ -27,7 +27,10 @@ flowchart RL
   subgraph s_scope_1["for L2-4"]
     direction RL
     for_test_scope_0_25["for ()<br/>L2"]
-    expr_stmt_53["console.log()<br/>L3"]
+    subgraph s_scope_2["block L2-4"]
+      direction RL
+      expr_stmt_53["console.log()<br/>L3"]
+    end
   end
   n_scope_0_items_6 -->|read| for_test_scope_0_25
   n_scope_0_console_53 -->|read| expr_stmt_53

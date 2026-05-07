@@ -137,8 +137,14 @@ describe("describeSubgraph", () => {
     expect(sg.caseTest).toBeNull();
   });
 
-  test("throws when scope is neither a function subgraph nor a control kind", () => {
+  test("plain block scope renders as the generic 'block' subgraph", () => {
     const scope = { ...baseScope(), id: "plain", type: SCOPE_TYPE.Block };
+    const sg = describeSubgraph(scope, new Map(), new Map());
+    expect(sg.kind).toBe(SUBGRAPH_KIND.Block);
+  });
+
+  test("throws when scope is neither a function subgraph nor a control kind (e.g. module / global)", () => {
+    const scope = { ...baseScope(), id: "mod", type: SCOPE_TYPE.Module };
     expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
   });
 });

@@ -58,56 +58,76 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_3",
-          "line": 2,
-          "endLine": 6,
+          "id": "s_scope_2",
+          "line": 1,
+          "endLine": 7,
           "direction": "RL",
           "elements": [
             {
-              "type": "node",
-              "id": "for_test_scope_2_44",
-              "kind": "ForTest",
-              "name": "for-test",
+              "type": "subgraph",
+              "id": "s_scope_3",
               "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "n_scope_3_s_53",
-              "name": "s",
-              "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "Variable",
-              "declarationKind": "let",
-              "initIsFunction": false
-            },
-            {
-              "type": "node",
-              "id": "wr_ref_5",
-              "kind": "WriteOp",
-              "name": "s",
-              "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "declarationKind": "let"
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_151",
-              "kind": "ExpressionStatement",
-              "name": "console.log()",
-              "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
+              "endLine": 6,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "for_test_scope_2_44",
+                  "kind": "ForTest",
+                  "name": "for-test",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "n_scope_3_s_53",
+                  "name": "s",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Variable",
+                  "declarationKind": "let",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "node",
+                  "id": "wr_ref_5",
+                  "kind": "WriteOp",
+                  "name": "s",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 2,
+                  "endLine": 6,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "expr_stmt_151",
+                      "kind": "ExpressionStatement",
+                      "name": "console.log()",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ],
+                  "kind": "block"
+                }
+              ],
+              "kind": "for"
             }
           ],
-          "kind": "for"
+          "kind": "block"
         }
       ],
       "kind": "for"

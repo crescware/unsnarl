@@ -29,12 +29,15 @@ flowchart RL
     for_test_scope_0_0["for ()<br/>L1"]
     n_scope_1_i1_9["let i1<br/>L1"]
     wr_ref_2(["let i1<br/>L1"])
-    subgraph s_scope_3["for L2-12"]
+    subgraph s_scope_2["block L1-13"]
       direction RL
-      for_test_scope_2_35["for ()<br/>L2"]
-      n_scope_3_i2_44["let i2<br/>L2"]
-      wr_ref_5(["let i2<br/>L2"])
-      beyond_depth_s_scope_3((...))
+      subgraph s_scope_3["for L2-12"]
+        direction RL
+        for_test_scope_2_35["for ()<br/>L2"]
+        n_scope_3_i2_44["let i2<br/>L2"]
+        wr_ref_5(["let i2<br/>L2"])
+        beyond_depth_s_scope_3((...))
+      end
     end
   end
   n_scope_1_i1_9 -->|set| wr_ref_2

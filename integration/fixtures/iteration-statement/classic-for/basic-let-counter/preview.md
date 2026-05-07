@@ -19,7 +19,10 @@ flowchart RL
     for_test_scope_0_0["for ()<br/>L1"]
     n_scope_1_i_9["let i<br/>L1"]
     wr_ref_2(["let i<br/>L1"])
-    expr_stmt_32["console.log()<br/>L2"]
+    subgraph s_scope_2["block L1-3"]
+      direction RL
+      expr_stmt_32["console.log()<br/>L2"]
+    end
   end
   n_scope_1_i_9 -->|set| wr_ref_2
   n_scope_1_i_9 -->|read| for_test_scope_0_0

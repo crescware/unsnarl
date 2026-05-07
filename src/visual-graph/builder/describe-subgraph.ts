@@ -66,6 +66,7 @@ export function describeSubgraph(
     case SUBGRAPH_KIND.While:
     case SUBGRAPH_KIND.DoWhile:
     case SUBGRAPH_KIND.Return:
+    case SUBGRAPH_KIND.Block:
       return { ...common, kind };
     case SUBGRAPH_KIND.Function:
       throw new Error(

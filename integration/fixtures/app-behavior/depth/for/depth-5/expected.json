@@ -58,66 +58,33 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_3",
-          "line": 2,
-          "endLine": 12,
+          "id": "s_scope_2",
+          "line": 1,
+          "endLine": 13,
           "direction": "RL",
           "elements": [
             {
-              "type": "node",
-              "id": "for_test_scope_2_35",
-              "kind": "ForTest",
-              "name": "for-test",
-              "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "n_scope_3_i2_44",
-              "name": "i2",
-              "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "Variable",
-              "declarationKind": "let",
-              "initIsFunction": false
-            },
-            {
-              "type": "node",
-              "id": "wr_ref_5",
-              "kind": "WriteOp",
-              "name": "i2",
-              "line": 2,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "declarationKind": "let"
-            },
-            {
               "type": "subgraph",
-              "id": "s_scope_5",
-              "line": 3,
-              "endLine": 11,
+              "id": "s_scope_3",
+              "line": 2,
+              "endLine": 12,
               "direction": "RL",
               "elements": [
                 {
                   "type": "node",
-                  "id": "for_test_scope_4_72",
+                  "id": "for_test_scope_2_35",
                   "kind": "ForTest",
                   "name": "for-test",
-                  "line": 3,
+                  "line": 2,
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false
                 },
                 {
                   "type": "node",
-                  "id": "n_scope_5_i3_81",
-                  "name": "i3",
-                  "line": 3,
+                  "id": "n_scope_3_i2_44",
+                  "name": "i2",
+                  "line": 2,
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
@@ -127,10 +94,10 @@
                 },
                 {
                   "type": "node",
-                  "id": "wr_ref_8",
+                  "id": "wr_ref_5",
                   "kind": "WriteOp",
-                  "name": "i3",
-                  "line": 3,
+                  "name": "i2",
+                  "line": 2,
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
@@ -138,66 +105,33 @@
                 },
                 {
                   "type": "subgraph",
-                  "id": "s_scope_7",
-                  "line": 4,
-                  "endLine": 10,
+                  "id": "s_scope_4",
+                  "line": 2,
+                  "endLine": 12,
                   "direction": "RL",
                   "elements": [
                     {
-                      "type": "node",
-                      "id": "for_test_scope_6_111",
-                      "kind": "ForTest",
-                      "name": "for-test",
-                      "line": 4,
-                      "endLine": null,
-                      "isJsxElement": false,
-                      "unused": false
-                    },
-                    {
-                      "type": "node",
-                      "id": "n_scope_7_i4_120",
-                      "name": "i4",
-                      "line": 4,
-                      "endLine": null,
-                      "isJsxElement": false,
-                      "unused": false,
-                      "kind": "Variable",
-                      "declarationKind": "let",
-                      "initIsFunction": false
-                    },
-                    {
-                      "type": "node",
-                      "id": "wr_ref_11",
-                      "kind": "WriteOp",
-                      "name": "i4",
-                      "line": 4,
-                      "endLine": null,
-                      "isJsxElement": false,
-                      "unused": false,
-                      "declarationKind": "let"
-                    },
-                    {
                       "type": "subgraph",
-                      "id": "s_scope_9",
-                      "line": 5,
-                      "endLine": 9,
+                      "id": "s_scope_5",
+                      "line": 3,
+                      "endLine": 11,
                       "direction": "RL",
                       "elements": [
                         {
                           "type": "node",
-                          "id": "for_test_scope_8_152",
+                          "id": "for_test_scope_4_72",
                           "kind": "ForTest",
                           "name": "for-test",
-                          "line": 5,
+                          "line": 3,
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false
                         },
                         {
                           "type": "node",
-                          "id": "n_scope_9_i5_161",
-                          "name": "i5",
-                          "line": 5,
+                          "id": "n_scope_5_i3_81",
+                          "name": "i3",
+                          "line": 3,
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
@@ -207,10 +141,10 @@
                         },
                         {
                           "type": "node",
-                          "id": "wr_ref_14",
+                          "id": "wr_ref_8",
                           "kind": "WriteOp",
-                          "name": "i5",
-                          "line": 5,
+                          "name": "i3",
+                          "line": 3,
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
@@ -218,68 +152,184 @@
                         },
                         {
                           "type": "subgraph",
-                          "id": "s_scope_11",
-                          "line": 6,
-                          "endLine": 8,
+                          "id": "s_scope_6",
+                          "line": 3,
+                          "endLine": 11,
                           "direction": "RL",
                           "elements": [
                             {
-                              "type": "node",
-                              "id": "for_test_scope_10_195",
-                              "kind": "ForTest",
-                              "name": "for-test",
-                              "line": 6,
-                              "endLine": null,
-                              "isJsxElement": false,
-                              "unused": false
-                            },
-                            {
-                              "type": "node",
-                              "id": "n_scope_11_i6_204",
-                              "name": "i6",
-                              "line": 6,
-                              "endLine": null,
-                              "isJsxElement": false,
-                              "unused": false,
-                              "kind": "Variable",
-                              "declarationKind": "let",
-                              "initIsFunction": false
-                            },
-                            {
-                              "type": "node",
-                              "id": "wr_ref_17",
-                              "kind": "WriteOp",
-                              "name": "i6",
-                              "line": 6,
-                              "endLine": null,
-                              "isJsxElement": false,
-                              "unused": false,
-                              "declarationKind": "let"
-                            },
-                            {
-                              "type": "node",
-                              "id": "beyond_depth_s_scope_11",
-                              "kind": "BeyondDepth",
-                              "name": "...",
-                              "line": 6,
-                              "endLine": 8,
-                              "isJsxElement": false,
-                              "unused": false
+                              "type": "subgraph",
+                              "id": "s_scope_7",
+                              "line": 4,
+                              "endLine": 10,
+                              "direction": "RL",
+                              "elements": [
+                                {
+                                  "type": "node",
+                                  "id": "for_test_scope_6_111",
+                                  "kind": "ForTest",
+                                  "name": "for-test",
+                                  "line": 4,
+                                  "endLine": null,
+                                  "isJsxElement": false,
+                                  "unused": false
+                                },
+                                {
+                                  "type": "node",
+                                  "id": "n_scope_7_i4_120",
+                                  "name": "i4",
+                                  "line": 4,
+                                  "endLine": null,
+                                  "isJsxElement": false,
+                                  "unused": false,
+                                  "kind": "Variable",
+                                  "declarationKind": "let",
+                                  "initIsFunction": false
+                                },
+                                {
+                                  "type": "node",
+                                  "id": "wr_ref_11",
+                                  "kind": "WriteOp",
+                                  "name": "i4",
+                                  "line": 4,
+                                  "endLine": null,
+                                  "isJsxElement": false,
+                                  "unused": false,
+                                  "declarationKind": "let"
+                                },
+                                {
+                                  "type": "subgraph",
+                                  "id": "s_scope_8",
+                                  "line": 4,
+                                  "endLine": 10,
+                                  "direction": "RL",
+                                  "elements": [
+                                    {
+                                      "type": "subgraph",
+                                      "id": "s_scope_9",
+                                      "line": 5,
+                                      "endLine": 9,
+                                      "direction": "RL",
+                                      "elements": [
+                                        {
+                                          "type": "node",
+                                          "id": "for_test_scope_8_152",
+                                          "kind": "ForTest",
+                                          "name": "for-test",
+                                          "line": 5,
+                                          "endLine": null,
+                                          "isJsxElement": false,
+                                          "unused": false
+                                        },
+                                        {
+                                          "type": "node",
+                                          "id": "n_scope_9_i5_161",
+                                          "name": "i5",
+                                          "line": 5,
+                                          "endLine": null,
+                                          "isJsxElement": false,
+                                          "unused": false,
+                                          "kind": "Variable",
+                                          "declarationKind": "let",
+                                          "initIsFunction": false
+                                        },
+                                        {
+                                          "type": "node",
+                                          "id": "wr_ref_14",
+                                          "kind": "WriteOp",
+                                          "name": "i5",
+                                          "line": 5,
+                                          "endLine": null,
+                                          "isJsxElement": false,
+                                          "unused": false,
+                                          "declarationKind": "let"
+                                        },
+                                        {
+                                          "type": "subgraph",
+                                          "id": "s_scope_10",
+                                          "line": 5,
+                                          "endLine": 9,
+                                          "direction": "RL",
+                                          "elements": [
+                                            {
+                                              "type": "subgraph",
+                                              "id": "s_scope_11",
+                                              "line": 6,
+                                              "endLine": 8,
+                                              "direction": "RL",
+                                              "elements": [
+                                                {
+                                                  "type": "node",
+                                                  "id": "for_test_scope_10_195",
+                                                  "kind": "ForTest",
+                                                  "name": "for-test",
+                                                  "line": 6,
+                                                  "endLine": null,
+                                                  "isJsxElement": false,
+                                                  "unused": false
+                                                },
+                                                {
+                                                  "type": "node",
+                                                  "id": "n_scope_11_i6_204",
+                                                  "name": "i6",
+                                                  "line": 6,
+                                                  "endLine": null,
+                                                  "isJsxElement": false,
+                                                  "unused": false,
+                                                  "kind": "Variable",
+                                                  "declarationKind": "let",
+                                                  "initIsFunction": false
+                                                },
+                                                {
+                                                  "type": "node",
+                                                  "id": "wr_ref_17",
+                                                  "kind": "WriteOp",
+                                                  "name": "i6",
+                                                  "line": 6,
+                                                  "endLine": null,
+                                                  "isJsxElement": false,
+                                                  "unused": false,
+                                                  "declarationKind": "let"
+                                                },
+                                                {
+                                                  "type": "node",
+                                                  "id": "beyond_depth_s_scope_11",
+                                                  "kind": "BeyondDepth",
+                                                  "name": "...",
+                                                  "line": 6,
+                                                  "endLine": 8,
+                                                  "isJsxElement": false,
+                                                  "unused": false
+                                                }
+                                              ],
+                                              "kind": "for"
+                                            }
+                                          ],
+                                          "kind": "block"
+                                        }
+                                      ],
+                                      "kind": "for"
+                                    }
+                                  ],
+                                  "kind": "block"
+                                }
+                              ],
+                              "kind": "for"
                             }
                           ],
-                          "kind": "for"
+                          "kind": "block"
                         }
                       ],
                       "kind": "for"
                     }
                   ],
-                  "kind": "for"
+                  "kind": "block"
                 }
               ],
               "kind": "for"
             }
           ],
-          "kind": "for"
+          "kind": "block"
         }
       ],
       "kind": "for"

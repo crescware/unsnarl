@@ -72,7 +72,7 @@ function makeCtx(opts: {
 }
 
 describe("buildScope", () => {
-  test("plain block scope appends variable nodes directly to the container (no subgraph)", () => {
+  test("plain block scope wraps its variable nodes in a 'block' subgraph", () => {
     const scope = { ...baseScope(), id: "s", variables: ["v1"] };
     const v = { ...baseVariable(), id: "v1", name: "x", scope: "s" };
     const ctx = makeCtx({ scopes: [scope], variables: [v] });
@@ -81,9 +81,14 @@ describe("buildScope", () => {
     buildScope(scope, container, ctx, emptyState());
 
     expect(container.elements).toHaveLength(1);
-    expect(container.elements[0]).toMatchObject({
-      type: VISUAL_ELEMENT_TYPE.Node,
-      id: "n_v1",
+    const sg = container.elements[0] as VisualSubgraph;
+    expect(sg.type).toBe(VISUAL_ELEMENT_TYPE.Subgraph);
+    expect(sg.kind).toBe("block");
+    expect(
+      sg.elements.find(
+        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_v1",
+      ),
+    ).toMatchObject({
       kind: NODE_KIND.Variable,
       name: "x",
     });
@@ -113,7 +118,8 @@ describe("buildScope", () => {
 
     buildScope(scope, container, ctx, emptyState());
 
-    const writeNode = container.elements.find(
+    const sg = container.elements[0] as VisualSubgraph;
+    const writeNode = sg.elements.find(
       (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
@@ -208,7 +214,16 @@ describe("buildScope", () => {
         parentSpanOffset: 0,
       },
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["inner"] };
+    // Use Module for the outer wrapper so it stays a flat container --
+    // a Block scope at the top level would now itself become a "block"
+    // subgraph and obscure what this test is asserting (recursion into
+    // the inner if).
+    const outer = {
+      ...baseScope(),
+      id: "outer",
+      type: SCOPE_TYPE.Module,
+      childScopes: ["inner"],
+    };
     const vIn = { ...baseVariable(), id: "vIn", name: "y" };
     const ctx = makeCtx({ scopes: [outer, inner], variables: [vIn] });
     const container: { elements: VisualElement[] } = { elements: [] };

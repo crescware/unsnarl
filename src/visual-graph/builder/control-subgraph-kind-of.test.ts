@@ -23,10 +23,10 @@ describe("controlSubgraphKindOf", () => {
     expect(controlSubgraphKindOf({ ...baseScope(), type })).toBe(expected);
   });
 
-  test("returns null for a block scope without blockContext", () => {
+  test("returns 'block' for a block scope without blockContext (bare {})", () => {
     expect(
       controlSubgraphKindOf({ ...baseScope(), type: SCOPE_TYPE.Block }),
-    ).toBeNull();
+    ).toBe("block");
   });
 
   test.each<{ ctx: BlockContext; expected: Kind }>([
@@ -55,7 +55,7 @@ describe("controlSubgraphKindOf", () => {
         key: "handler",
         parentSpanOffset: 0,
       },
-      expected: null,
+      expected: "block",
     },
     {
       ctx: {
@@ -82,7 +82,7 @@ describe("controlSubgraphKindOf", () => {
         key: "test",
         parentSpanOffset: 0,
       },
-      expected: null,
+      expected: "block",
     },
     {
       ctx: {
@@ -100,7 +100,7 @@ describe("controlSubgraphKindOf", () => {
         key: "discriminant",
         parentSpanOffset: 0,
       },
-      expected: null,
+      expected: "block",
     },
     {
       ctx: {

@@ -6,7 +6,10 @@ flowchart RL
     direction RL
     for_test_scope_0_93["for ()<br/>L5"]
     n_scope_1_tag_116["tag<br/>L6"]
-    expr_stmt_153["console.log()<br/>L8"]
+    subgraph s_scope_2["block L7-9"]
+      direction RL
+      expr_stmt_153["console.log()<br/>L8"]
+    end
   end
   n_scope_0_records_6 -->|read| for_test_scope_0_93
   n_scope_0_console_153 -->|read| expr_stmt_153

@@ -38,10 +38,10 @@ describe("shouldSubgraph", () => {
       expected: true,
     },
     {
-      name: "plain block without branch context -> false",
+      name: "bare block -> true (renders as the generic 'block' subgraph)",
       type: SCOPE_TYPE.Block,
       blockContext: null,
-      expected: false,
+      expected: true,
     },
     {
       name: "module -> false",

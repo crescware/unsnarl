@@ -6,32 +6,50 @@ flowchart RL
     for_test_scope_0_0["for ()<br/>L1"]
     n_scope_1_i1_9["let i1<br/>L1"]
     wr_ref_2(["let i1<br/>L1"])
-    subgraph s_scope_3["for L2-12"]
+    subgraph s_scope_2["block L1-13"]
       direction RL
-      for_test_scope_2_35["for ()<br/>L2"]
-      n_scope_3_i2_44["let i2<br/>L2"]
-      wr_ref_5(["let i2<br/>L2"])
-      subgraph s_scope_5["for L3-11"]
+      subgraph s_scope_3["for L2-12"]
         direction RL
-        for_test_scope_4_72["for ()<br/>L3"]
-        n_scope_5_i3_81["let i3<br/>L3"]
-        wr_ref_8(["let i3<br/>L3"])
-        subgraph s_scope_7["for L4-10"]
+        for_test_scope_2_35["for ()<br/>L2"]
+        n_scope_3_i2_44["let i2<br/>L2"]
+        wr_ref_5(["let i2<br/>L2"])
+        subgraph s_scope_4["block L2-12"]
           direction RL
-          for_test_scope_6_111["for ()<br/>L4"]
-          n_scope_7_i4_120["let i4<br/>L4"]
-          wr_ref_11(["let i4<br/>L4"])
-          subgraph s_scope_9["for L5-9"]
+          subgraph s_scope_5["for L3-11"]
             direction RL
-            for_test_scope_8_152["for ()<br/>L5"]
-            n_scope_9_i5_161["let i5<br/>L5"]
-            wr_ref_14(["let i5<br/>L5"])
-            subgraph s_scope_11["for L6-8"]
+            for_test_scope_4_72["for ()<br/>L3"]
+            n_scope_5_i3_81["let i3<br/>L3"]
+            wr_ref_8(["let i3<br/>L3"])
+            subgraph s_scope_6["block L3-11"]
               direction RL
-              for_test_scope_10_195["for ()<br/>L6"]
-              n_scope_11_i6_204["let i6<br/>L6"]
-              wr_ref_17(["let i6<br/>L6"])
-              expr_stmt_240["console.log()<br/>L7"]
+              subgraph s_scope_7["for L4-10"]
+                direction RL
+                for_test_scope_6_111["for ()<br/>L4"]
+                n_scope_7_i4_120["let i4<br/>L4"]
+                wr_ref_11(["let i4<br/>L4"])
+                subgraph s_scope_8["block L4-10"]
+                  direction RL
+                  subgraph s_scope_9["for L5-9"]
+                    direction RL
+                    for_test_scope_8_152["for ()<br/>L5"]
+                    n_scope_9_i5_161["let i5<br/>L5"]
+                    wr_ref_14(["let i5<br/>L5"])
+                    subgraph s_scope_10["block L5-9"]
+                      direction RL
+                      subgraph s_scope_11["for L6-8"]
+                        direction RL
+                        for_test_scope_10_195["for ()<br/>L6"]
+                        n_scope_11_i6_204["let i6<br/>L6"]
+                        wr_ref_17(["let i6<br/>L6"])
+                        subgraph s_scope_12["block L6-8"]
+                          direction RL
+                          expr_stmt_240["console.log()<br/>L7"]
+                        end
+                      end
+                    end
+                  end
+                end
+              end
             end
           end
         end

@@ -23,12 +23,18 @@ flowchart RL
     for_test_scope_0_12["for ()<br/>L1"]
     n_scope_1_r_21["let r<br/>L1"]
     wr_ref_2(["let r<br/>L1"])
-    subgraph s_scope_3["for L2-6"]
+    subgraph s_scope_2["block L1-7"]
       direction RL
-      for_test_scope_2_44["for ()<br/>L2"]
-      n_scope_3_s_53["let s<br/>L2"]
-      wr_ref_5(["let s<br/>L2"])
-      expr_stmt_151["console.log()<br/>L5"]
+      subgraph s_scope_3["for L2-6"]
+        direction RL
+        for_test_scope_2_44["for ()<br/>L2"]
+        n_scope_3_s_53["let s<br/>L2"]
+        wr_ref_5(["let s<br/>L2"])
+        subgraph s_scope_4["block L2-6"]
+          direction RL
+          expr_stmt_151["console.log()<br/>L5"]
+        end
+      end
     end
   end
   n_scope_1_r_21 -->|set| wr_ref_2
