@@ -3,6 +3,7 @@ import type { ReferenceAnnotation } from "../ir/annotations/reference-annotation
 import type { ScopeAnnotation } from "../ir/annotations/scope-annotation.js";
 import type { Reference } from "../ir/reference/reference.js";
 import type { Scope } from "../ir/scope/scope.js";
+import { CATEGORY } from "../serializer/category.js";
 
 const EMPTY_REFERENCE_ANNOTATION: ReferenceAnnotation = {
   owners: [],
@@ -16,6 +17,15 @@ const EMPTY_SCOPE_ANNOTATION: ScopeAnnotation = {
   blockContext: null,
   fallsThrough: false,
   exitsFunction: false,
+  categoryDepths: {
+    [CATEGORY.Function]: 0,
+    [CATEGORY.If]: 0,
+    [CATEGORY.For]: 0,
+    [CATEGORY.While]: 0,
+    [CATEGORY.Switch]: 0,
+    [CATEGORY.TryCatchFinally]: 0,
+    [CATEGORY.Block]: 0,
+  },
 };
 
 export class AnnotationsImpl implements Annotations {
