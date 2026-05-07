@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/block/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_185",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 19,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_v1_10",
+          "name": "v1",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 3,
+          "endLine": 18,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_v2_32",
+              "name": "v2",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 17,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_3_v3_59",
+                  "name": "v3",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Variable",
+                  "declarationKind": "const",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 7,
+                  "endLine": 16,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "n_scope_4_v4_90",
+                      "name": "v4",
+                      "line": 8,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "kind": "Variable",
+                      "declarationKind": "const",
+                      "initIsFunction": false
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_5",
+                      "line": 9,
+                      "endLine": 15,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "n_scope_5_v5_125",
+                          "name": "v5",
+                          "line": 10,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "kind": "Variable",
+                          "declarationKind": "const",
+                          "initIsFunction": false
+                        },
+                        {
+                          "type": "node",
+                          "id": "beyond_depth_s_scope_5",
+                          "kind": "BeyondDepth",
+                          "name": "...",
+                          "line": 9,
+                          "endLine": 15,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ],
+                      "kind": "block"
+                    }
+                  ],
+                  "kind": "block"
+                }
+              ],
+              "kind": "block"
+            }
+          ],
+          "kind": "block"
+        }
+      ],
+      "kind": "block"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "n_scope_2_v2_32",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v2_32",
+      "to": "n_scope_3_v3_59",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_v3_59",
+      "to": "n_scope_4_v4_90",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_4_v4_90",
+      "to": "n_scope_5_v5_125",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_5_v5_125",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_185",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v2_32",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_v3_59",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_4_v4_90",
+      "to": "beyond_depth_s_scope_5",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

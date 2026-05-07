@@ -69,9 +69,14 @@ describe("describeSubgraph", () => {
     expect(sg.line).toBe(7);
   });
 
-  test("function subgraph throws if owner var id is missing from owner map", () => {
+  test("function subgraph without an owner var renders as anonymous (ownerNodeId null, ownerName empty)", () => {
     const scope = { ...baseScope(), id: "fn", type: SCOPE_TYPE.Function };
-    expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
+    const sg = describeSubgraph(scope, new Map(), new Map());
+    expect(sg.kind).toBe("function");
+    if (sg.kind === "function") {
+      expect(sg.ownerNodeId).toBeNull();
+      expect(sg.ownerName).toBe("");
+    }
   });
 
   test.each<{
@@ -132,8 +137,14 @@ describe("describeSubgraph", () => {
     expect(sg.caseTest).toBeNull();
   });
 
-  test("throws when scope is neither a function subgraph nor a control kind", () => {
+  test("plain block scope renders as the generic 'block' subgraph", () => {
     const scope = { ...baseScope(), id: "plain", type: SCOPE_TYPE.Block };
+    const sg = describeSubgraph(scope, new Map(), new Map());
+    expect(sg.kind).toBe(SUBGRAPH_KIND.Block);
+  });
+
+  test("throws when scope is neither a function subgraph nor a control kind (e.g. module / global)", () => {
+    const scope = { ...baseScope(), id: "mod", type: SCOPE_TYPE.Module };
     expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
   });
 });

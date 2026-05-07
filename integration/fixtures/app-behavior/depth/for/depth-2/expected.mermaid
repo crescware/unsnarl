@@ -1,0 +1,40 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_console_240["global console"]
+  subgraph s_scope_1["for L1-13"]
+    direction RL
+    for_test_scope_0_0["for ()<br/>L1"]
+    n_scope_1_i1_9["let i1<br/>L1"]
+    wr_ref_2(["let i1<br/>L1"])
+    subgraph s_scope_2["block L1-13"]
+      direction RL
+      subgraph s_scope_3["for L2-12"]
+        direction RL
+        for_test_scope_2_35["for ()<br/>L2"]
+        n_scope_3_i2_44["let i2<br/>L2"]
+        wr_ref_5(["let i2<br/>L2"])
+        subgraph s_scope_4["block L2-12"]
+          direction RL
+          subgraph s_scope_5["for L3-11"]
+            direction RL
+            for_test_scope_4_72["for ()<br/>L3"]
+            n_scope_5_i3_81["let i3<br/>L3"]
+            wr_ref_8(["let i3<br/>L3"])
+            beyond_depth_s_scope_5((...))
+          end
+        end
+      end
+    end
+  end
+  n_scope_1_i1_9 -->|set| wr_ref_2
+  n_scope_3_i2_44 -->|set| wr_ref_5
+  n_scope_5_i3_81 -->|set| wr_ref_8
+  n_scope_1_i1_9 -->|read| for_test_scope_0_0
+  n_scope_3_i2_44 -->|read| for_test_scope_2_35
+  n_scope_5_i3_81 -->|read| for_test_scope_4_72
+  n_scope_0_console_240 -.->|read| beyond_depth_s_scope_5
+  wr_ref_2 -.->|read| beyond_depth_s_scope_5
+  wr_ref_5 -.->|read| beyond_depth_s_scope_5
+  wr_ref_8 -.->|read| beyond_depth_s_scope_5
+  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_5 boundaryStub;

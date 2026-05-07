@@ -36,7 +36,16 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#1",
@@ -73,7 +82,16 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#2",
@@ -118,7 +136,16 @@
         "ifChainRootOffset": null
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#3",
@@ -152,7 +179,16 @@
         "caseTest": "\"mon\""
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#4",
@@ -186,7 +222,16 @@
         "caseTest": "\"tue\""
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#5",
@@ -220,7 +265,16 @@
         "caseTest": "\"wed\""
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#6",
@@ -254,7 +308,16 @@
         "caseTest": "\"thu\""
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#7",
@@ -290,7 +353,16 @@
         "caseTest": "\"fri\""
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#8",
@@ -324,7 +396,16 @@
         "caseTest": "\"sat\""
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#9",
@@ -360,7 +441,16 @@
         "caseTest": "\"sun\""
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#10",
@@ -396,7 +486,16 @@
         "caseTest": null
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     }
   ],
   "variables": [

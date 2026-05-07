@@ -9,15 +9,35 @@ import { buildChildren } from "./build-children.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { describeSubgraph } from "./describe-subgraph.js";
+import { ensureBeyondDepthStub } from "./ensure-beyond-depth-stub.js";
+import { isCollapsed } from "./is-collapsed.js";
 import { attachLoopTestAnchor } from "./loop-test-anchor.js";
 import { makeVariableNode } from "./make-variable-node.js";
+import { nodeId } from "./node-id.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { attachSwitchDiscriminantAnchor } from "./switch-discriminant-anchor.js";
+import { visibleAncestorSubgraph } from "./visible-ancestor-subgraph.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 
 type Container = Readonly<{
   elements: /* mutable */ VisualElement[];
 }>;
+
+function recordCollapsedDescendants(
+  scope: SerializedScope,
+  rootScopeId: string,
+  ctx: BuilderContext,
+  state: BuildState,
+): void {
+  state.collapsedRootByScope?.set(scope.id, rootScopeId);
+  for (const childId of scope.childScopes) {
+    const child = ctx.scopeMap.get(childId);
+    if (!child) {
+      continue;
+    }
+    recordCollapsedDescendants(child, rootScopeId, ctx, state);
+  }
+}
 
 export function buildScope(
   scope: SerializedScope,
@@ -25,7 +45,43 @@ export function buildScope(
   ctx: BuilderContext,
   state: BuildState,
 ): void {
-  const subgraphHere = shouldSubgraph(scope, ctx.subgraphOwnerVar);
+  if (isCollapsed(scope, ctx.depths)) {
+    // Nothing rendered for the collapsed subtree itself. Anchor for
+    // cross-boundary edges, in priority order:
+    //   1. the owning variable of the collapsed scope (e.g. `fnB` for
+    //      `function fnB() { ... }`) -- already emitted in the parent;
+    //   2. otherwise a single BeyondDepth `((...))` stub placed inside
+    //      the closest visible ancestor subgraph, so anonymous callbacks
+    //      / branch / loop / try bodies / bare blocks announce "the
+    //      read happens somewhere inside the surviving outer container"
+    //      via a circle marker that mirrors the pruning boundary stub.
+    recordCollapsedDescendants(scope, scope.id, ctx, state);
+    const ownerVarId = ctx.subgraphOwnerVar.get(scope.id) ?? null;
+    let anchorId: string | null;
+    if (ownerVarId !== null) {
+      anchorId = nodeId(ownerVarId);
+    } else {
+      const parentSg = visibleAncestorSubgraph(scope, ctx, state);
+      anchorId = parentSg ? ensureBeyondDepthStub(parentSg, state) : null;
+    }
+    if (anchorId !== null) {
+      state.collapsedAnchorByRoot?.set(scope.id, anchorId);
+      // If the collapsed scope is the body of a control statement, its
+      // test anchor (if-test, for-test, while-test, switch discriminant)
+      // could not be created -- route reads of that predicate to the
+      // same stub / variable anchor so they share the boundary marker.
+      const blockCtx = scope.blockContext;
+      if (blockCtx && state.suppressedPredicateRedirect) {
+        state.suppressedPredicateRedirect.set(
+          blockCtx.parentSpanOffset,
+          anchorId,
+        );
+      }
+    }
+    return;
+  }
+
+  const subgraphHere = shouldSubgraph(scope);
   let bodyContainer: Container = container;
   let bodySubgraph: VisualSubgraph | null = null;
   if (subgraphHere) {
@@ -52,7 +108,9 @@ export function buildScope(
     if (v.defs.length === 0 && v.identifiers.length === 0) {
       continue;
     }
-    bodyContainer.elements.push(makeVariableNode(v));
+    const node = makeVariableNode(v);
+    state.nodeIdOriginScope?.set(node.id, scope.id);
+    bodyContainer.elements.push(node);
   }
   const ops = ctx.writeOpsByScope.get(scope.id) ?? [];
   for (const op of ops) {
@@ -73,6 +131,7 @@ export function buildScope(
       unused: false,
       declarationKind,
     } satisfies VisualNode;
+    state.nodeIdOriginScope?.set(node.id, scope.id);
     bodyContainer.elements.push(node);
   }
   buildChildren(scope, bodyContainer, ctx, state);

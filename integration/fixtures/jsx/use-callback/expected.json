@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx/use-callback/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_useCallback_9",
+      "name": "useCallback",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
+      "importKind": "named",
+      "importedName": "useCallback"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_C_44",
+      "name": "C",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 7,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_C_44",
+      "ownerName": "C",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_fnA_64",
+          "name": "fnA",
+          "line": 4,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_fnB_137",
+          "name": "fnB",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": true
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_arr_83",
+              "name": "arr",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Parameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "kind": "function",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_3_n_110",
+                  "name": "n",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Parameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_C_44_116_121",
+                  "kind": "return",
+                  "line": 4,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_4",
+                      "kind": "ReturnUse",
+                      "name": "n",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_0_C_44_101_122",
+              "kind": "return",
+              "line": 4,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_3",
+                  "kind": "ReturnUse",
+                  "name": "arr",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "kind": "function",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "ownerNodeId": "n_scope_1_fnB_137",
+          "ownerName": "fnB",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_4_arr_144",
+              "name": "arr",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Parameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_5",
+              "kind": "function",
+              "line": 5,
+              "endLine": 5,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_5_n_171",
+                  "name": "n",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "Parameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_1_fnB_137_177_182",
+                  "kind": "return",
+                  "line": 5,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_7",
+                      "kind": "ReturnUse",
+                      "name": "n",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_fnB_137_162_183",
+              "kind": "return",
+              "line": 5,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_6",
+                  "kind": "ReturnUse",
+                  "name": "arr",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_react",
+      "kind": "ModuleSource",
+      "name": "react",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_useCallback_9",
+      "to": "n_scope_1_fnA_64",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_2_arr_83",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_n_110",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_4_arr_144",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_5_n_171",
+      "to": "ret_use_ref_7",
+      "label": "read"
+    },
+    {
+      "from": "mod_react",
+      "to": "n_scope_0_useCallback_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

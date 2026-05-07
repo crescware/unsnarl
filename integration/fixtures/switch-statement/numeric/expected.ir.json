@@ -43,7 +43,16 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#1",
@@ -84,7 +93,16 @@
         "ifChainRootOffset": null
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#2",
@@ -120,7 +138,16 @@
         "caseTest": "0"
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#3",
@@ -156,7 +183,16 @@
         "caseTest": "1"
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#4",
@@ -192,7 +228,16 @@
         "caseTest": "2"
       },
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#5",
@@ -228,7 +273,16 @@
         "caseTest": null
       },
       "fallsThrough": true,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 1,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     }
   ],
   "variables": [

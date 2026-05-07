@@ -1,0 +1,1795 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/if/input.ts",
+    "language": "ts"
+  },
+  "raw": "const a = true;\nconst b = true;\nconst c = true;\nconst d = true;\nconst e = true;\nconst f = true;\n\nif (a) {\n  const v1 = 1;\n  if (b) {\n    const v2 = v1;\n    if (c) {\n      const v3 = v2;\n      if (d) {\n        const v4 = v3;\n        if (e) {\n          const v5 = v4;\n          if (f) {\n            const v6 = v5;\n            console.log(v6);\n          }\n        }\n      }\n    }\n  }\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 27,
+          "column": 0,
+          "offset": 383
+        }
+      },
+      "variables": [
+        "scope#0:a@6",
+        "scope#0:b@22",
+        "scope#0:c@38",
+        "scope#0:d@54",
+        "scope#0:e@70",
+        "scope#0:f@86",
+        "scope#0:console@324"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#6"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 8,
+          "column": 7,
+          "offset": 104
+        },
+        "endSpan": {
+          "line": 26,
+          "column": 1,
+          "offset": 382
+        }
+      },
+      "variables": [
+        "scope#1:v1@114"
+      ],
+      "references": [
+        "ref#7",
+        "ref#8"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 97,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 1,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [
+        "scope#3"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 10,
+          "column": 9,
+          "offset": 131
+        },
+        "endSpan": {
+          "line": 25,
+          "column": 3,
+          "offset": 380
+        }
+      },
+      "variables": [
+        "scope#2:v2@143"
+      ],
+      "references": [
+        "ref#9",
+        "ref#10",
+        "ref#11"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 124,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 2,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [
+        "scope#4"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 12,
+          "column": 11,
+          "offset": 163
+        },
+        "endSpan": {
+          "line": 24,
+          "column": 5,
+          "offset": 376
+        }
+      },
+      "variables": [
+        "scope#3:v3@177"
+      ],
+      "references": [
+        "ref#12",
+        "ref#13",
+        "ref#14"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 156,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 3,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#4",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#3",
+      "childScopes": [
+        "scope#5"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 14,
+          "column": 13,
+          "offset": 199
+        },
+        "endSpan": {
+          "line": 23,
+          "column": 7,
+          "offset": 370
+        }
+      },
+      "variables": [
+        "scope#4:v4@215"
+      ],
+      "references": [
+        "ref#15",
+        "ref#16",
+        "ref#17"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 192,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 4,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#5",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#4",
+      "childScopes": [
+        "scope#6"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 16,
+          "column": 15,
+          "offset": 239
+        },
+        "endSpan": {
+          "line": 22,
+          "column": 9,
+          "offset": 362
+        }
+      },
+      "variables": [
+        "scope#5:v5@257"
+      ],
+      "references": [
+        "ref#18",
+        "ref#19",
+        "ref#20"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 232,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 5,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#6",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#5",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 18,
+          "column": 17,
+          "offset": 283
+        },
+        "endSpan": {
+          "line": 21,
+          "column": 11,
+          "offset": 352
+        }
+      },
+      "variables": [
+        "scope#6:v6@303"
+      ],
+      "references": [
+        "ref#21",
+        "ref#22",
+        "ref#23",
+        "ref#24"
+      ],
+      "through": [
+        "ref#23"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "IfStatement",
+        "key": "consequent",
+        "parentSpanOffset": 276,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 6,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:a@6",
+      "name": "a",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#6"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "a",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 10,
+              "offset": 10
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:b@22",
+      "name": "b",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 22
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#8"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "b",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 22
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 22
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 16
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 2,
+              "column": 10,
+              "offset": 26
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:c@38",
+      "name": "c",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 38
+        }
+      ],
+      "references": [
+        "ref#2",
+        "ref#11"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 38
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 38
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 32
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 3,
+              "column": 10,
+              "offset": 42
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:d@54",
+      "name": "d",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 4,
+          "column": 6,
+          "offset": 54
+        }
+      ],
+      "references": [
+        "ref#3",
+        "ref#14"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "d",
+            "span": {
+              "line": 4,
+              "column": 6,
+              "offset": 54
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 4,
+              "column": 6,
+              "offset": 54
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 4,
+              "column": 0,
+              "offset": 48
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 4,
+              "column": 10,
+              "offset": 58
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:e@70",
+      "name": "e",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 70
+        }
+      ],
+      "references": [
+        "ref#4",
+        "ref#17"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "e",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 70
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 70
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 64
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 74
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:f@86",
+      "name": "f",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 6,
+          "column": 6,
+          "offset": 86
+        }
+      ],
+      "references": [
+        "ref#5",
+        "ref#20"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "f",
+            "span": {
+              "line": 6,
+              "column": 6,
+              "offset": 86
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 6,
+              "column": 6,
+              "offset": 86
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 6,
+              "column": 0,
+              "offset": 80
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 6,
+              "column": 10,
+              "offset": 90
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@324",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        }
+      ],
+      "references": [
+        "ref#23"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 20,
+              "column": 12,
+              "offset": 324
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 20,
+              "column": 12,
+              "offset": 324
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:v1@114",
+      "name": "v1",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 8,
+          "offset": 114
+        }
+      ],
+      "references": [
+        "ref#7",
+        "ref#10"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v1",
+            "span": {
+              "line": 9,
+              "column": 8,
+              "offset": 114
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 8,
+              "offset": 114
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 2,
+              "offset": 108
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 9,
+              "column": 13,
+              "offset": 119
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:v2@143",
+      "name": "v2",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 11,
+          "column": 10,
+          "offset": 143
+        }
+      ],
+      "references": [
+        "ref#9",
+        "ref#13"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v2",
+            "span": {
+              "line": 11,
+              "column": 10,
+              "offset": 143
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 11,
+              "column": 10,
+              "offset": 143
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 11,
+              "column": 4,
+              "offset": 137
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 11,
+              "column": 15,
+              "offset": 148
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#3:v3@177",
+      "name": "v3",
+      "scope": "scope#3",
+      "identifiers": [
+        {
+          "line": 13,
+          "column": 12,
+          "offset": 177
+        }
+      ],
+      "references": [
+        "ref#12",
+        "ref#16"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v3",
+            "span": {
+              "line": 13,
+              "column": 12,
+              "offset": 177
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 13,
+              "column": 12,
+              "offset": 177
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 13,
+              "column": 6,
+              "offset": 171
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 13,
+              "column": 17,
+              "offset": 182
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#4:v4@215",
+      "name": "v4",
+      "scope": "scope#4",
+      "identifiers": [
+        {
+          "line": 15,
+          "column": 14,
+          "offset": 215
+        }
+      ],
+      "references": [
+        "ref#15",
+        "ref#19"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v4",
+            "span": {
+              "line": 15,
+              "column": 14,
+              "offset": 215
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 15,
+              "column": 14,
+              "offset": 215
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 15,
+              "column": 8,
+              "offset": 209
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 15,
+              "column": 19,
+              "offset": 220
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#5:v5@257",
+      "name": "v5",
+      "scope": "scope#5",
+      "identifiers": [
+        {
+          "line": 17,
+          "column": 16,
+          "offset": 257
+        }
+      ],
+      "references": [
+        "ref#18",
+        "ref#22"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v5",
+            "span": {
+              "line": 17,
+              "column": 16,
+              "offset": 257
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 17,
+              "column": 16,
+              "offset": 257
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 17,
+              "column": 10,
+              "offset": 251
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 17,
+              "column": 21,
+              "offset": 262
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#6:v6@303",
+      "name": "v6",
+      "scope": "scope#6",
+      "identifiers": [
+        {
+          "line": 19,
+          "column": 18,
+          "offset": 303
+        }
+      ],
+      "references": [
+        "ref#21",
+        "ref#24"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v6",
+            "span": {
+              "line": 19,
+              "column": 18,
+              "offset": 303
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 19,
+              "column": 18,
+              "offset": 303
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 19,
+              "column": 12,
+              "offset": 297
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 19,
+              "column": 23,
+              "offset": 308
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@6",
+      "owners": [
+        "scope#0:a@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 22
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:b@22",
+      "owners": [
+        "scope#0:b@22"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 38
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:c@38",
+      "owners": [
+        "scope#0:c@38"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "d",
+        "span": {
+          "line": 4,
+          "column": 6,
+          "offset": 54
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:d@54",
+      "owners": [
+        "scope#0:d@54"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "e",
+        "span": {
+          "line": 5,
+          "column": 6,
+          "offset": 70
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:e@70",
+      "owners": [
+        "scope#0:e@70"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "f",
+        "span": {
+          "line": 6,
+          "column": 6,
+          "offset": 86
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:f@86",
+      "owners": [
+        "scope#0:f@86"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#6",
+      "identifier": {
+        "name": "a",
+        "span": {
+          "line": 8,
+          "column": 4,
+          "offset": 101
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:a@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 97
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#7",
+      "identifier": {
+        "name": "v1",
+        "span": {
+          "line": 9,
+          "column": 8,
+          "offset": 114
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v1@114",
+      "owners": [
+        "scope#1:v1@114"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#8",
+      "identifier": {
+        "name": "b",
+        "span": {
+          "line": 10,
+          "column": 6,
+          "offset": 128
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:b@22",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 124
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#9",
+      "identifier": {
+        "name": "v2",
+        "span": {
+          "line": 11,
+          "column": 10,
+          "offset": 143
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:v2@143",
+      "owners": [
+        "scope#2:v2@143"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#10",
+      "identifier": {
+        "name": "v1",
+        "span": {
+          "line": 11,
+          "column": 15,
+          "offset": 148
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:v1@114",
+      "owners": [
+        "scope#2:v2@143"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#11",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 12,
+          "column": 8,
+          "offset": 160
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#0:c@38",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 156
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#12",
+      "identifier": {
+        "name": "v3",
+        "span": {
+          "line": 13,
+          "column": 12,
+          "offset": 177
+        }
+      },
+      "from": "scope#3",
+      "resolved": "scope#3:v3@177",
+      "owners": [
+        "scope#3:v3@177"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#13",
+      "identifier": {
+        "name": "v2",
+        "span": {
+          "line": 13,
+          "column": 17,
+          "offset": 182
+        }
+      },
+      "from": "scope#3",
+      "resolved": "scope#2:v2@143",
+      "owners": [
+        "scope#3:v3@177"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#14",
+      "identifier": {
+        "name": "d",
+        "span": {
+          "line": 14,
+          "column": 10,
+          "offset": 196
+        }
+      },
+      "from": "scope#3",
+      "resolved": "scope#0:d@54",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 192
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#15",
+      "identifier": {
+        "name": "v4",
+        "span": {
+          "line": 15,
+          "column": 14,
+          "offset": 215
+        }
+      },
+      "from": "scope#4",
+      "resolved": "scope#4:v4@215",
+      "owners": [
+        "scope#4:v4@215"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#16",
+      "identifier": {
+        "name": "v3",
+        "span": {
+          "line": 15,
+          "column": 19,
+          "offset": 220
+        }
+      },
+      "from": "scope#4",
+      "resolved": "scope#3:v3@177",
+      "owners": [
+        "scope#4:v4@215"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#17",
+      "identifier": {
+        "name": "e",
+        "span": {
+          "line": 16,
+          "column": 12,
+          "offset": 236
+        }
+      },
+      "from": "scope#4",
+      "resolved": "scope#0:e@70",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 232
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#18",
+      "identifier": {
+        "name": "v5",
+        "span": {
+          "line": 17,
+          "column": 16,
+          "offset": 257
+        }
+      },
+      "from": "scope#5",
+      "resolved": "scope#5:v5@257",
+      "owners": [
+        "scope#5:v5@257"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#19",
+      "identifier": {
+        "name": "v4",
+        "span": {
+          "line": 17,
+          "column": 21,
+          "offset": 262
+        }
+      },
+      "from": "scope#5",
+      "resolved": "scope#4:v4@215",
+      "owners": [
+        "scope#5:v5@257"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#20",
+      "identifier": {
+        "name": "f",
+        "span": {
+          "line": 18,
+          "column": 14,
+          "offset": 280
+        }
+      },
+      "from": "scope#5",
+      "resolved": "scope#0:f@86",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "IfStatement",
+        "offset": 276
+      },
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#21",
+      "identifier": {
+        "name": "v6",
+        "span": {
+          "line": 19,
+          "column": 18,
+          "offset": 303
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#6:v6@303",
+      "owners": [
+        "scope#6:v6@303"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#22",
+      "identifier": {
+        "name": "v5",
+        "span": {
+          "line": 19,
+          "column": 23,
+          "offset": 308
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#5:v5@257",
+      "owners": [
+        "scope#6:v6@303"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#23",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#0:console@324",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        },
+        "endSpan": {
+          "line": 20,
+          "column": 28,
+          "offset": 340
+        },
+        "headStartSpan": {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        },
+        "headEndSpan": {
+          "line": 20,
+          "column": 23,
+          "offset": 335
+        },
+        "isCall": true
+      }
+    },
+    {
+      "id": "ref#24",
+      "identifier": {
+        "name": "v6",
+        "span": {
+          "line": 20,
+          "column": 24,
+          "offset": 336
+        }
+      },
+      "from": "scope#6",
+      "resolved": "scope#6:v6@303",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        },
+        "endSpan": {
+          "line": 20,
+          "column": 28,
+          "offset": 340
+        },
+        "headStartSpan": {
+          "line": 20,
+          "column": 12,
+          "offset": 324
+        },
+        "headEndSpan": {
+          "line": 20,
+          "column": 23,
+          "offset": 335
+        },
+        "isCall": true
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

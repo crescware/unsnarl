@@ -34,12 +34,17 @@ export function createPipeline(config: PipelineConfig): Pipeline {
       );
     }
 
-    let emitOpts: EmitOptions = opts.emit;
+    let emitOpts: EmitOptions = opts.depths
+      ? { ...opts.emit, depths: opts.depths }
+      : opts.emit;
     let perQuery: PipelineRunDetails["pruning"] = null;
     let resolutions: PipelineRunDetails["resolutions"] = null;
 
     if (opts.pruning !== null && emitter.format !== "ir") {
-      const built = buildVisualGraph(ir);
+      const built = buildVisualGraph(
+        ir,
+        opts.depths ? { depths: opts.depths } : undefined,
+      );
       const resolution = resolveAmbiguousQueries(built, opts.pruning.roots);
       const pr = pruneVisualGraph(built, {
         ...opts.pruning,
@@ -47,6 +52,7 @@ export function createPipeline(config: PipelineConfig): Pipeline {
       });
       emitOpts = {
         ...opts.emit,
+        ...(opts.depths ? { depths: opts.depths } : {}),
         prunedGraph: pr.graph,
         resolutions: resolution.resolutions,
       };

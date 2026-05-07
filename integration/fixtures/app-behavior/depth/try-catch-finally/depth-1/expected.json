@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/try-catch-finally/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_103",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 29,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "beyond_depth_s_scope_1",
+          "kind": "BeyondDepth",
+          "name": "...",
+          "line": 1,
+          "endLine": 29,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_11",
+          "line": 25,
+          "endLine": 28,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_11_e2_453",
+              "name": "e2",
+              "line": 26,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_468",
+              "kind": "ExpressionStatement",
+              "name": "console.log()",
+              "line": 27,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "catch"
+        }
+      ],
+      "kind": "try"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_12",
+      "line": 29,
+      "endLine": 32,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_12_e1_507",
+          "name": "e1",
+          "line": 30,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_520",
+          "kind": "ExpressionStatement",
+          "name": "console.log()",
+          "line": 31,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "catch"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_103",
+      "to": "beyond_depth_s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_468",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_11_e2_453",
+      "to": "expr_stmt_468",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_103",
+      "to": "expr_stmt_520",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_12_e1_507",
+      "to": "expr_stmt_520",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

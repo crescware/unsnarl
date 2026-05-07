@@ -7,7 +7,10 @@ flowchart RL
     for_test_scope_0_7["for ()<br/>L2"]
     wr_ref_0(["let p<br/>L2"])
     wr_ref_2(["let p<br/>L2"])
-    expr_stmt_35["console.log()<br/>L3"]
+    subgraph s_scope_2["block L2-4"]
+      direction RL
+      expr_stmt_35["console.log()<br/>L3"]
+    end
   end
   n_scope_0_p_4 -->|set| wr_ref_0
   wr_ref_0 -->|set| wr_ref_2

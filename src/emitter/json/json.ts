@@ -9,7 +9,9 @@ export class JsonEmitter implements Emitter {
   readonly extension = "json";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
-    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
+    const graph =
+      opts.prunedGraph ??
+      buildVisualGraph(ir, opts.depths ? { depths: opts.depths } : undefined);
     const text = opts.prettyJson
       ? JSON.stringify(graph, null, 2)
       : JSON.stringify(graph);

@@ -4,6 +4,7 @@ import type { CliLanguage } from "../../language.js";
 import { NAME } from "../../name.js";
 import { VERSION } from "../../version.js";
 import { LANGUAGES } from "./cli-language.js";
+import { depthOptions } from "./depth-options.js";
 import { formatOptions } from "./format-options.js";
 import { scopeOptions } from "./scope-options.js";
 
@@ -31,6 +32,7 @@ export function buildCommand(): Command {
       .argParser(coerceLanguage)
       .default("ts" as CliLanguage),
     ...scopeOptions(),
+    ...depthOptions(),
     new Option(
       "-o, --out-dir <dir>",
       "Write output to <dir>/<auto-name>.<ext>",

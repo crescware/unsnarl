@@ -20,9 +20,13 @@ type CommonSubgraphFields = {
 export type VisualSubgraph =
   | (CommonSubgraphFields & {
       kind: typeof SUBGRAPH_KIND.Function;
-      ownerNodeId: string;
+      // Null when the function is not bound to a variable (e.g., a callback
+      // passed inline as an argument); the subgraph stands alone without a
+      // wrap pairing in that case.
+      ownerNodeId: string | null;
       // Mirrors the owner node's display name so the subgraph label
       // survives pruning even when the owner node itself gets cut out.
+      // Empty when ownerNodeId is null.
       ownerName: string;
     })
   | (CommonSubgraphFields & {
@@ -44,4 +48,5 @@ export type VisualSubgraph =
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.For })
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.While })
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.DoWhile })
-  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Return });
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Return })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Block });

@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/pruning-and-depth/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_inner_29",
+      "name": "inner",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_4",
+      "kind": "function",
+      "line": 12,
+      "endLine": 14,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_callerOf_132",
+      "ownerName": "callerOf",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_147",
+          "kind": "ExpressionStatement",
+          "name": "inner()",
+          "line": 13,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_inner_29",
+      "to": "expr_stmt_147",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": {
+    "roots": [
+      {
+        "query": "inner",
+        "matched": 1
+      }
+    ],
+    "descendants": 2,
+    "ancestors": 1
+  }
+}

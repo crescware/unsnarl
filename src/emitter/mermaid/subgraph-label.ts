@@ -23,6 +23,9 @@ function baseLabel(
       // node may be absent after pruning even when the subgraph survives.
       // ownerName is empty when the owner variable was missing at build
       // time -- fall back to the live nodeMap entry in that case.
+      if (sg.ownerNodeId === null) {
+        return `(anonymous)<br/>${range}`;
+      }
       const ownerNode = nodeMap.get(sg.ownerNodeId);
       const name = sg.ownerName !== "" ? sg.ownerName : (ownerNode?.name ?? "");
       return `${escape(name)}()<br/>${range}`;
@@ -54,5 +57,7 @@ function baseLabel(
       return `do-while ${range}`;
     case "return":
       return `return ${range}`;
+    case "block":
+      return `block ${range}`;
   }
 }

@@ -1,0 +1,81 @@
+# integration/fixtures/app-behavior/pruning-and-depth/input.ts
+
+## Input
+
+```ts
+const flag = true;
+
+function inner() {
+  if (flag) {
+    if (flag) {
+      const x = 1;
+      console.log(x);
+    }
+  }
+}
+
+function callerOf() {
+  inner();
+}
+
+function unrelated() {
+  return 42;
+}
+
+callerOf();
+unrelated();
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_flag_6["flag<br/>L1"]
+  n_scope_0_console_94["global console"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_inner_29["inner()<br/>L3"]
+    subgraph s_scope_1["inner()<br/>L3-10"]
+      direction RL
+      subgraph s_scope_2["if L4-9"]
+        direction RL
+        if_test_scope_1_41{"if ()<br/>L4"}
+        subgraph s_scope_3["if L5-8"]
+          direction RL
+          if_test_scope_2_57{"if ()<br/>L5"}
+          n_scope_3_x_81["x<br/>L6"]
+          expr_stmt_94["console.log()<br/>L7"]
+        end
+      end
+    end
+  end
+  subgraph wrap_s_scope_4[" "]
+    direction TB
+    n_scope_0_callerOf_132["callerOf()<br/>L12"]
+    subgraph s_scope_4["callerOf()<br/>L12-14"]
+      direction RL
+      expr_stmt_147["inner()<br/>L13"]
+    end
+  end
+  subgraph wrap_s_scope_5[" "]
+    direction TB
+    n_scope_0_unrelated_168["unrelated()<br/>L16"]
+    subgraph s_scope_5["unrelated()<br/>L16-18"]
+      direction RL
+    end
+  end
+  n_scope_0_flag_6 -->|read| if_test_scope_1_41
+  n_scope_0_flag_6 -->|read| if_test_scope_2_57
+  n_scope_0_console_94 -->|read| expr_stmt_94
+  n_scope_3_x_81 -->|read| expr_stmt_94
+  n_scope_0_inner_29 -->|read,call| expr_stmt_147
+  n_scope_0_callerOf_132 -->|read,call| expr_stmt_198
+  n_scope_0_unrelated_168 -->|read,call| expr_stmt_210
+  expr_stmt_198["callerOf()<br/>L20"]
+  expr_stmt_210["unrelated()<br/>L21"]
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;
+  class wrap_s_scope_4 fnWrap;
+  class wrap_s_scope_5 fnWrap;
+```

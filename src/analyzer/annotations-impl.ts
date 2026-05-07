@@ -3,6 +3,7 @@ import type { ReferenceAnnotation } from "../ir/annotations/reference-annotation
 import type { ScopeAnnotation } from "../ir/annotations/scope-annotation.js";
 import type { Reference } from "../ir/reference/reference.js";
 import type { Scope } from "../ir/scope/scope.js";
+import { NESTING_KIND } from "../serializer/nesting-kind.js";
 
 const EMPTY_REFERENCE_ANNOTATION: ReferenceAnnotation = {
   owners: [],
@@ -16,6 +17,15 @@ const EMPTY_SCOPE_ANNOTATION: ScopeAnnotation = {
   blockContext: null,
   fallsThrough: false,
   exitsFunction: false,
+  nestingDepths: {
+    [NESTING_KIND.Function]: 0,
+    [NESTING_KIND.If]: 0,
+    [NESTING_KIND.For]: 0,
+    [NESTING_KIND.While]: 0,
+    [NESTING_KIND.Switch]: 0,
+    [NESTING_KIND.TryCatchFinally]: 0,
+    [NESTING_KIND.Block]: 0,
+  },
 };
 
 export class AnnotationsImpl implements Annotations {

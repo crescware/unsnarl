@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, test, vi } from "vitest";
 
 import { SOURCE_TYPE } from "../../pipeline/parse/source-type.js";
 import { DEFAULT_GENERATIONS } from "../args/default-generations.js";
+import { defaultDepths } from "../args/depth-options.js";
 import { readSourceFile } from "../io.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import type { ExecuteSource } from "./execute-source.js";
@@ -21,6 +22,7 @@ const baseOpts = {
   descendants: null,
   ancestors: null,
   context: null,
+  depths: defaultDepths(),
   out: null,
   debug: false,
 } as const satisfies NormalizedCliOptions;
@@ -61,8 +63,10 @@ describe("buildRunOpts", () => {
             prunedGraph: null,
             resolutions: null,
             debug: false,
+            depths: defaultDepths(),
           },
           pruning: null,
+          depths: defaultDepths(),
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
 
@@ -88,8 +92,10 @@ describe("buildRunOpts", () => {
             prunedGraph: null,
             resolutions: null,
             debug: false,
+            depths: defaultDepths(),
           },
           pruning: null,
+          depths: defaultDepths(),
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
 
@@ -125,8 +131,10 @@ describe("buildRunOpts", () => {
             prunedGraph: null,
             resolutions: null,
             debug: false,
+            depths: defaultDepths(),
           },
           pruning: null,
+          depths: defaultDepths(),
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
 
@@ -152,12 +160,14 @@ describe("buildRunOpts", () => {
               prunedGraph: null,
               resolutions: null,
               debug: false,
+              depths: defaultDepths(),
             },
             pruning: {
               roots,
               descendants: 2,
               ancestors: 0,
             },
+            depths: defaultDepths(),
           },
         } as const satisfies ReturnType<typeof buildRunOpts>;
 
@@ -185,12 +195,14 @@ describe("buildRunOpts", () => {
               prunedGraph: null,
               resolutions: null,
               debug: false,
+              depths: defaultDepths(),
             },
             pruning: {
               roots,
               descendants: DEFAULT_GENERATIONS,
               ancestors: DEFAULT_GENERATIONS,
             },
+            depths: defaultDepths(),
           },
         } as const satisfies ReturnType<typeof buildRunOpts>;
 
@@ -220,8 +232,10 @@ describe("buildRunOpts", () => {
             prunedGraph: null,
             resolutions: null,
             debug: false,
+            depths: defaultDepths(),
           },
           pruning: null,
+          depths: defaultDepths(),
         },
       } as const satisfies ReturnType<typeof buildRunOpts>;
 

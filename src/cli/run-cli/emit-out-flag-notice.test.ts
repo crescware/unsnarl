@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { defaultDepths } from "../args/depth-options.js";
 import { emitOutFlagNotice } from "./emit-out-flag-notice.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
 
@@ -13,6 +14,7 @@ const baseOpts = {
   descendants: null,
   ancestors: null,
   context: null,
+  depths: defaultDepths(),
   out: null,
   debug: false,
 } as const satisfies NormalizedCliOptions;

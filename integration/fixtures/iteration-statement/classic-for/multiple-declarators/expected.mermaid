@@ -8,7 +8,10 @@ flowchart RL
     n_scope_1_n_16["let n<br/>L1"]
     wr_ref_4(["let m<br/>L1"])
     wr_ref_5(["let n<br/>L1"])
-    expr_stmt_45["console.log()<br/>L2"]
+    subgraph s_scope_2["block L1-3"]
+      direction RL
+      expr_stmt_45["console.log()<br/>L2"]
+    end
   end
   n_scope_1_m_9 -->|set| wr_ref_4
   n_scope_1_n_16 -->|set| wr_ref_5

@@ -1,0 +1,98 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/block/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_185",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 19,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_v1_10",
+          "name": "v1",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 3,
+          "endLine": 18,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_v2_32",
+              "name": "v2",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "node",
+              "id": "beyond_depth_s_scope_2",
+              "kind": "BeyondDepth",
+              "name": "...",
+              "line": 3,
+              "endLine": 18,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "block"
+        }
+      ],
+      "kind": "block"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "n_scope_2_v2_32",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v2_32",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_185",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v1_10",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

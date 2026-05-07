@@ -1,0 +1,96 @@
+# integration/fixtures/app-behavior/depth/if/input.ts
+
+## Input
+
+```ts
+const a = true;
+const b = true;
+const c = true;
+const d = true;
+const e = true;
+const f = true;
+
+if (a) {
+  const v1 = 1;
+  if (b) {
+    const v2 = v1;
+    if (c) {
+      const v3 = v2;
+      if (d) {
+        const v4 = v3;
+        if (e) {
+          const v5 = v4;
+          if (f) {
+            const v6 = v5;
+            console.log(v6);
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+## Query
+
+```sh
+--depth 6
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_a_6["a<br/>L1"]
+  n_scope_0_b_22["b<br/>L2"]
+  n_scope_0_c_38["c<br/>L3"]
+  n_scope_0_d_54["d<br/>L4"]
+  n_scope_0_e_70["e<br/>L5"]
+  n_scope_0_f_86["f<br/>L6"]
+  n_scope_0_console_324["global console"]
+  subgraph s_scope_1["if L8-26"]
+    direction RL
+    if_test_scope_0_97{"if ()<br/>L8"}
+    n_scope_1_v1_114["v1<br/>L9"]
+    subgraph s_scope_2["if L10-25"]
+      direction RL
+      if_test_scope_1_124{"if ()<br/>L10"}
+      n_scope_2_v2_143["v2<br/>L11"]
+      subgraph s_scope_3["if L12-24"]
+        direction RL
+        if_test_scope_2_156{"if ()<br/>L12"}
+        n_scope_3_v3_177["v3<br/>L13"]
+        subgraph s_scope_4["if L14-23"]
+          direction RL
+          if_test_scope_3_192{"if ()<br/>L14"}
+          n_scope_4_v4_215["v4<br/>L15"]
+          subgraph s_scope_5["if L16-22"]
+            direction RL
+            if_test_scope_4_232{"if ()<br/>L16"}
+            n_scope_5_v5_257["v5<br/>L17"]
+            subgraph s_scope_6["if L18-21"]
+              direction RL
+              if_test_scope_5_276{"if ()<br/>L18"}
+              n_scope_6_v6_303["v6<br/>L19"]
+              expr_stmt_324["console.log()<br/>L20"]
+            end
+          end
+        end
+      end
+    end
+  end
+  n_scope_0_a_6 -->|read| if_test_scope_0_97
+  n_scope_0_b_22 -->|read| if_test_scope_1_124
+  n_scope_1_v1_114 -->|read| n_scope_2_v2_143
+  n_scope_0_c_38 -->|read| if_test_scope_2_156
+  n_scope_2_v2_143 -->|read| n_scope_3_v3_177
+  n_scope_0_d_54 -->|read| if_test_scope_3_192
+  n_scope_3_v3_177 -->|read| n_scope_4_v4_215
+  n_scope_0_e_70 -->|read| if_test_scope_4_232
+  n_scope_4_v4_215 -->|read| n_scope_5_v5_257
+  n_scope_0_f_86 -->|read| if_test_scope_5_276
+  n_scope_5_v5_257 -->|read| n_scope_6_v6_303
+  n_scope_0_console_324 -->|read| expr_stmt_324
+  n_scope_6_v6_303 -->|read| expr_stmt_324
+```

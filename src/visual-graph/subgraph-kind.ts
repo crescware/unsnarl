@@ -12,5 +12,6 @@ export const SUBGRAPH_KIND = {
   While: "while",
   DoWhile: "do-while",
   Return: "return",
+  Block: "block",
 } as const;
 export type SubgraphKind = (typeof SUBGRAPH_KIND)[keyof typeof SUBGRAPH_KIND];

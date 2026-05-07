@@ -14,23 +14,17 @@ for (const [roots, slugBase] of [
   ["24", "r24"],
 ] as const) {
   fixtureSnapshot(import.meta.url, {
-    roots,
-    descendants: 10,
-    ancestors: 10,
+    pruning: { roots, descendants: 10, ancestors: 10 },
     slug: slugBase,
     label: `--roots ${roots}`,
   });
   fixtureSnapshot(import.meta.url, {
-    roots,
-    descendants: 1,
-    ancestors: 0,
+    pruning: { roots, descendants: 1, ancestors: 0 },
     slug: `${slugBase}-a1`,
     label: `--roots ${roots} -A 1`,
   });
   fixtureSnapshot(import.meta.url, {
-    roots,
-    descendants: 0,
-    ancestors: 1,
+    pruning: { roots, descendants: 0, ancestors: 1 },
     slug: `${slugBase}-b1`,
     label: `--roots ${roots} -B 1`,
   });

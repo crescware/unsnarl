@@ -101,9 +101,9 @@ describe("isControlSubgraph", () => {
     ).toBe(expected);
   });
 
-  test("plain block without blockContext -> false", () => {
+  test("plain block without blockContext -> true (renders as the generic 'block' subgraph)", () => {
     expect(isControlSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block })).toBe(
-      false,
+      true,
     );
   });
 });

@@ -70,6 +70,7 @@ export function ensureReturnUseNode(
       unused: false,
     } satisfies VisualNode;
     sg.elements.push(node);
+    state.nodeIdOriginScope?.set(id, ref.from);
   }
   return id;
 }

@@ -1,0 +1,5 @@
+1	0	integration/fixtures/app-behavior/depth/switch/input.ts:0 console
+2	0	integration/fixtures/app-behavior/depth/switch/input.ts:1 x
+0	1	integration/fixtures/app-behavior/depth/switch/input.ts:3 switch-discriminant
+0	2	integration/fixtures/app-behavior/depth/switch/input.ts:4 ...
+3	3	4 total

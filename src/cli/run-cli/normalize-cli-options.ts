@@ -1,3 +1,6 @@
+import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
+import { NESTING_KIND } from "../../serializer/nesting-kind.js";
+import { DEFAULT_DEPTH } from "../args/depth-options.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
@@ -16,8 +19,24 @@ export function normalizeCliOptions(
     descendants: opts.descendants,
     ancestors: opts.ancestors,
     context: opts.context,
+    depths: resolveDepths(opts),
     out: resolveOutTarget(opts),
     debug: opts.debug,
+  };
+}
+
+function resolveDepths(opts: ParsedCliOptions): NestingDepths {
+  const general = opts.depth ?? DEFAULT_DEPTH;
+  const fn = opts.depthFunction ?? general;
+  const block = opts.depthBlock ?? general;
+  return {
+    [NESTING_KIND.Function]: fn,
+    [NESTING_KIND.If]: block,
+    [NESTING_KIND.For]: block,
+    [NESTING_KIND.While]: block,
+    [NESTING_KIND.Switch]: block,
+    [NESTING_KIND.TryCatchFinally]: block,
+    [NESTING_KIND.Block]: block,
   };
 }
 

@@ -30,7 +30,9 @@ export class StatsEmitter implements Emitter {
   readonly extension = "tsv";
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
-    const graph = opts.prunedGraph ?? buildVisualGraph(ir);
+    const graph =
+      opts.prunedGraph ??
+      buildVisualGraph(ir, opts.depths ? { depths: opts.depths } : undefined);
     // Source-order sort so the rows read top-to-bottom like the file
     // itself: editors that pick up `path:line` jump targets land on
     // the right place, and same-line ties keep their original order

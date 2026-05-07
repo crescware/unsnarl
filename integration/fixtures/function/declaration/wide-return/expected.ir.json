@@ -36,7 +36,16 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     },
     {
       "id": "scope#1",
@@ -91,7 +100,16 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "fallsThrough": false,
-      "exitsFunction": false
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
     }
   ],
   "variables": [

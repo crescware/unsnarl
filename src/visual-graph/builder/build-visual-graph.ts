@@ -17,11 +17,12 @@ import type { VisualGraph } from "../visual-graph.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { buildScope } from "./build-scope.js";
 import type { BuildState, PendingLoopTestAnchor } from "./build-state.js";
-import type { BuilderContext } from "./context.js";
+import type { BuilderContext, BuildVisualGraphOptions } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
@@ -33,6 +34,7 @@ import { predicateTargetId } from "./predicate-target-id.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { pushEdge } from "./push-edge.js";
 import { readOrigins } from "./read-origins.js";
+import { retUseNodeId } from "./ret-use-node-id.js";
 import { sanitize } from "./sanitize.js";
 import { setPredecessorOf } from "./set-predecessor-of.js";
 import { stateRefId } from "./state-ref-id.js";
@@ -41,7 +43,10 @@ import type { WriteOp } from "./write-op.js";
 
 const MODULE_ROOT_ID = "module_root";
 
-export function buildVisualGraph(ir: SerializedIR): VisualGraph {
+export function buildVisualGraph(
+  ir: SerializedIR,
+  opts?: BuildVisualGraphOptions,
+): VisualGraph {
   const graph = {
     version: SERIALIZED_IR_VERSION,
     source: { path: ir.source.path, language: ir.source.language },
@@ -177,6 +182,7 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     writeOpsByScope,
     writeOpByRef,
     sortedCasesByContainer,
+    ...(opts?.depths ? { depths: opts.depths } : {}),
   } as const satisfies BuilderContext;
   const state = {
     subgraphByScope: new Map(),
@@ -192,6 +198,11 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     expressionStatementByOffset: new Map(),
     emittedEdges: new Set(),
     edges: graph.edges,
+    collapsedRootByScope: new Map(),
+    collapsedAnchorByRoot: new Map(),
+    suppressedPredicateRedirect: new Map(),
+    beyondDepthStubByParent: new Map(),
+    nodeIdOriginScope: new Map(),
   } as const satisfies BuildState;
 
   const root = ir.scopes.find(
@@ -268,6 +279,35 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     if (varVarIds.has(r.resolved)) {
       continue;
     }
+    // When the ref's containing scope (or any ancestor) was collapsed,
+    // the inner ret-use / expr-stmt / write-op nodes were never built
+    // -- they would have lived inside the now-hidden subtree. Instead
+    // of creating fragments of the hidden body in unrelated outer
+    // subgraphs, route the ref's read directly to the collapsed
+    // anchor (variable owner if any, otherwise the closest visible
+    // ancestor subgraph). The user still sees "this outer variable is
+    // consumed somewhere inside the surviving outer container", just
+    // without a separate node per inner reference.
+    const collapsedRoot = state.collapsedRootByScope?.get(r.from);
+    if (collapsedRoot !== undefined) {
+      if (r.flags.write) {
+        continue;
+      }
+      const target = collapsedTargetFor(collapsedRoot, state);
+      if (target === null) {
+        continue;
+      }
+      const fromIds = readOrigins(
+        r.resolved,
+        r.identifier.span.offset,
+        r.from,
+        ctx,
+      );
+      for (const fromId of fromIds) {
+        pushEdge(state, fromId, edgeLabelOfRef(r), target);
+      }
+      continue;
+    }
     const predicateTarget = predicateTargetId(r, scopeMap, state);
     if (predicateTarget && !r.flags.write) {
       const fromIds = readOrigins(
@@ -278,6 +318,28 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
       );
       for (const fromId of fromIds) {
         pushEdge(state, fromId, edgeLabelOfRef(r), predicateTarget);
+      }
+      continue;
+    }
+    // The ref reads a predicate (if/while/for/switch test) whose anchor
+    // was suppressed because the gated scope collapsed. The redirect
+    // map points to the closest visible ancestor subgraph of that
+    // collapsed body, so the read still lands somewhere meaningful
+    // instead of dangling off into module_root.
+    if (predicateTarget === null && r.predicateContainer && !r.flags.write) {
+      const redirect = state.suppressedPredicateRedirect?.get(
+        r.predicateContainer.offset,
+      );
+      if (redirect !== undefined) {
+        const fromIds = readOrigins(
+          r.resolved,
+          r.identifier.span.offset,
+          r.from,
+          ctx,
+        );
+        for (const fromId of fromIds) {
+          pushEdge(state, fromId, edgeLabelOfRef(r), redirect);
+        }
       }
       continue;
     }
@@ -507,5 +569,101 @@ export function buildVisualGraph(ir: SerializedIR): VisualGraph {
     }
   }
 
+  // Edge redirection for collapsed scopes: an endpoint that originated
+  // inside a collapsed subtree is rewritten to the variable anchor for
+  // that subtree, falling back to the closest visible ancestor subgraph.
+  // Edges between two endpoints that resolve to the same target collapse
+  // into nothing (self-loops are dropped).
+  if ((state.collapsedRootByScope?.size ?? 0) > 0) {
+    redirectEdgesIntoCollapsed(graph.edges, ir, state);
+  }
+
   return graph;
+}
+
+// Pick the visible target a collapsed subtree should be represented
+// by: either the parent-scope variable that owns it (e.g. `fnB`) or a
+// shared BeyondDepth stub placed inside the closest visible ancestor
+// subgraph. The choice is made once during buildScope; this lookup is
+// just the cache hit. Returns null when nothing upward was visible at
+// build time (forces the caller to drop the edge).
+function collapsedTargetFor(
+  rootScopeId: string,
+  state: BuildState,
+): string | null {
+  return state.collapsedAnchorByRoot?.get(rootScopeId) ?? null;
+}
+
+function redirectEdgesIntoCollapsed(
+  edges: /* mutable */ VisualEdge[],
+  ir: SerializedIR,
+  state: BuildState,
+): void {
+  const collapsedRootByScope =
+    state.collapsedRootByScope ?? new Map<string, string>();
+  const originScopeByNodeId = new Map<string, string>(
+    state.nodeIdOriginScope ?? new Map(),
+  );
+  // Variables: include every variable (even those whose nodes were never
+  // emitted because they live inside a collapsed scope).
+  for (const v of ir.variables) {
+    const id = nodeId(v.id);
+    if (!originScopeByNodeId.has(id)) {
+      originScopeByNodeId.set(id, v.scope);
+    }
+  }
+  // References whose nodes (write op / return-use / expression statement)
+  // were never created because their containing scope collapsed.
+  for (const r of ir.references) {
+    const wid = writeOpNodeId(r.id);
+    if (!originScopeByNodeId.has(wid)) {
+      originScopeByNodeId.set(wid, r.from);
+    }
+    const ruid = retUseNodeId(r.id);
+    if (!originScopeByNodeId.has(ruid)) {
+      originScopeByNodeId.set(ruid, r.from);
+    }
+    const c = r.expressionStatementContainer;
+    if (c) {
+      const sid = expressionStatementNodeId(c.startSpan.offset);
+      if (!originScopeByNodeId.has(sid)) {
+        originScopeByNodeId.set(sid, r.from);
+      }
+    }
+  }
+
+  // Returns a redirected node id, or null when the endpoint lives inside
+  // a collapsed subtree with no surviving ancestor at all (drop signal).
+  function redirect(id: string): string | null {
+    const scope = originScopeByNodeId.get(id);
+    if (scope === undefined) {
+      return id;
+    }
+    const root = collapsedRootByScope.get(scope);
+    if (root === undefined) {
+      return id;
+    }
+    return collapsedTargetFor(root, state);
+  }
+
+  const redirected: VisualEdge[] = [];
+  const seen = new Set<string>();
+  for (const e of edges) {
+    const from = redirect(e.from);
+    const to = redirect(e.to);
+    if (from === null || to === null) {
+      continue;
+    }
+    if (from === to) {
+      continue;
+    }
+    const key = `${from}\t${to}\t${e.label}`;
+    if (seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    redirected.push({ ...e, from, to });
+  }
+  edges.length = 0;
+  edges.push(...redirected);
 }

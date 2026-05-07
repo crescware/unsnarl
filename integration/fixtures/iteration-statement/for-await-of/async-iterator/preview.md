@@ -36,7 +36,10 @@ flowchart RL
         direction RL
         for_test_scope_1_87["for ()<br/>L6"]
         n_scope_3_v_104["v<br/>L6"]
-        expr_stmt_122["console.log()<br/>L7"]
+        subgraph s_scope_4["block L6-8"]
+          direction RL
+          expr_stmt_122["console.log()<br/>L7"]
+        end
       end
     end
   end

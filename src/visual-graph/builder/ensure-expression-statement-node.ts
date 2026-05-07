@@ -38,5 +38,6 @@ export function ensureExpressionStatementNode(
   } satisfies VisualNode;
   targetElements.push(node);
   state.expressionStatementByOffset.set(offset, id);
+  state.nodeIdOriginScope?.set(id, ref.from);
   return id;
 }

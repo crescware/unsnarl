@@ -1,0 +1,272 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/switch/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_6",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_296",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 3,
+      "endLine": 27,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "switch_discriminant_scope_0_14",
+          "kind": "SwitchDiscriminant",
+          "name": "switch-discriminant",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 26,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 25,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "switch_discriminant_scope_2_41",
+                  "kind": "SwitchDiscriminant",
+                  "name": "switch-discriminant",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 6,
+                  "endLine": 24,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_5",
+                      "line": 7,
+                      "endLine": 23,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "switch_discriminant_scope_4_76",
+                          "kind": "SwitchDiscriminant",
+                          "name": "switch-discriminant",
+                          "line": 7,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        },
+                        {
+                          "type": "subgraph",
+                          "id": "s_scope_6",
+                          "line": 8,
+                          "endLine": 22,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "subgraph",
+                              "id": "s_scope_7",
+                              "line": 9,
+                              "endLine": 21,
+                              "direction": "RL",
+                              "elements": [
+                                {
+                                  "type": "node",
+                                  "id": "switch_discriminant_scope_6_119",
+                                  "kind": "SwitchDiscriminant",
+                                  "name": "switch-discriminant",
+                                  "line": 9,
+                                  "endLine": null,
+                                  "isJsxElement": false,
+                                  "unused": false
+                                },
+                                {
+                                  "type": "subgraph",
+                                  "id": "s_scope_8",
+                                  "line": 10,
+                                  "endLine": 20,
+                                  "direction": "RL",
+                                  "elements": [
+                                    {
+                                      "type": "subgraph",
+                                      "id": "s_scope_9",
+                                      "line": 11,
+                                      "endLine": 19,
+                                      "direction": "RL",
+                                      "elements": [
+                                        {
+                                          "type": "node",
+                                          "id": "switch_discriminant_scope_8_170",
+                                          "kind": "SwitchDiscriminant",
+                                          "name": "switch-discriminant",
+                                          "line": 11,
+                                          "endLine": null,
+                                          "isJsxElement": false,
+                                          "unused": false
+                                        },
+                                        {
+                                          "type": "subgraph",
+                                          "id": "s_scope_10",
+                                          "line": 12,
+                                          "endLine": 18,
+                                          "direction": "RL",
+                                          "elements": [
+                                            {
+                                              "type": "subgraph",
+                                              "id": "s_scope_11",
+                                              "line": 13,
+                                              "endLine": 17,
+                                              "direction": "RL",
+                                              "elements": [
+                                                {
+                                                  "type": "node",
+                                                  "id": "switch_discriminant_scope_10_229",
+                                                  "kind": "SwitchDiscriminant",
+                                                  "name": "switch-discriminant",
+                                                  "line": 13,
+                                                  "endLine": null,
+                                                  "isJsxElement": false,
+                                                  "unused": false
+                                                },
+                                                {
+                                                  "type": "subgraph",
+                                                  "id": "s_scope_12",
+                                                  "line": 14,
+                                                  "endLine": 16,
+                                                  "direction": "RL",
+                                                  "elements": [
+                                                    {
+                                                      "type": "node",
+                                                      "id": "expr_stmt_296",
+                                                      "kind": "ExpressionStatement",
+                                                      "name": "console.log()",
+                                                      "line": 15,
+                                                      "endLine": null,
+                                                      "isJsxElement": false,
+                                                      "unused": false
+                                                    }
+                                                  ],
+                                                  "kind": "case",
+                                                  "caseTest": "1"
+                                                }
+                                              ],
+                                              "kind": "switch"
+                                            }
+                                          ],
+                                          "kind": "case",
+                                          "caseTest": "1"
+                                        }
+                                      ],
+                                      "kind": "switch"
+                                    }
+                                  ],
+                                  "kind": "case",
+                                  "caseTest": "1"
+                                }
+                              ],
+                              "kind": "switch"
+                            }
+                          ],
+                          "kind": "case",
+                          "caseTest": "1"
+                        }
+                      ],
+                      "kind": "switch"
+                    }
+                  ],
+                  "kind": "case",
+                  "caseTest": "1"
+                }
+              ],
+              "kind": "switch"
+            }
+          ],
+          "kind": "case",
+          "caseTest": "1"
+        }
+      ],
+      "kind": "switch"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_0_14",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_2_41",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_4_76",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_6_119",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_8_170",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_10_229",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_296",
+      "to": "expr_stmt_296",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "expr_stmt_296",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

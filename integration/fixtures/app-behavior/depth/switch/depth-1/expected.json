@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/depth/switch/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_6",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_296",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 3,
+      "endLine": 27,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "switch_discriminant_scope_0_14",
+          "kind": "SwitchDiscriminant",
+          "name": "switch-discriminant",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 26,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "beyond_depth_s_scope_2",
+              "kind": "BeyondDepth",
+              "name": "...",
+              "line": 4,
+              "endLine": 26,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "case",
+          "caseTest": "1"
+        }
+      ],
+      "kind": "switch"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_6",
+      "to": "switch_discriminant_scope_0_14",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_6",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_296",
+      "to": "beyond_depth_s_scope_2",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
