@@ -1,14 +1,14 @@
-import { declareImplicitArguments } from "../../analyzer/declare/declare-implicit-arguments.js";
-import { hoistDeclarations } from "../../analyzer/hoisting/hoist-declarations.js";
-import type { ScopeManager } from "../../analyzer/manager.js";
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { declareFunctionParams } from "./declare-function-params.js";
+import { declareImplicitArguments } from "./declare/declare-implicit-arguments.js";
+import { hoistDeclarations } from "./hoisting/hoist-declarations.js";
 import { isNodeLike } from "./is-node-like.js";
+import type { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import type { AnalysisVisitor } from "./visitor.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 export function enterFunction(
   node: NodeLike,

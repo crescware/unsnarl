@@ -1,5 +1,3 @@
-import { collectBindingIdentifiers } from "../../analyzer/declare/collect-binding-identifiers.js";
-import { declareVariable } from "../../analyzer/declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
@@ -8,6 +6,8 @@ import { AST_TYPE } from "../../parser/ast-type.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { spanFromOffset } from "../../util/span.js";
+import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
+import { declareVariable } from "./declare/declare-variable.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 

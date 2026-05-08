@@ -1,0 +1,68 @@
+import type { AstIdentifier } from "../../../ir/primitive/ast-identifier.js";
+import type { AstNode } from "../../../ir/primitive/ast-node.js";
+import { AST_TYPE } from "../../../parser/ast-type.js";
+import { isAstNode } from "./is-ast-node.js";
+
+export function collectBindingIdentifiers(
+  pattern: AstNode,
+): readonly AstIdentifier[] {
+  const out: /* mutable */ AstIdentifier[] = [];
+  collect(pattern, out);
+  return out;
+}
+
+function collect(node: AstNode, out: /* mutable */ AstIdentifier[]): void {
+  switch (node.type) {
+    case AST_TYPE.Identifier:
+      out.push(node as AstIdentifier);
+      return;
+    case AST_TYPE.ObjectPattern: {
+      const properties = node["properties"];
+      if (!Array.isArray(properties)) {
+        return;
+      }
+      for (const p of properties as readonly AstNode[]) {
+        if (p.type === AST_TYPE.Property) {
+          const value = p["value"];
+          if (isAstNode(value)) {
+            collect(value, out);
+          }
+        } else if (p.type === AST_TYPE.RestElement) {
+          const argument = p["argument"];
+          if (isAstNode(argument)) {
+            collect(argument, out);
+          }
+        }
+      }
+      return;
+    }
+    case AST_TYPE.ArrayPattern: {
+      const elements = node["elements"];
+      if (!Array.isArray(elements)) {
+        return;
+      }
+      for (const el of elements as readonly (AstNode | null)[]) {
+        if (el !== null) {
+          collect(el, out);
+        }
+      }
+      return;
+    }
+    case AST_TYPE.RestElement: {
+      const argument = node["argument"];
+      if (isAstNode(argument)) {
+        collect(argument, out);
+      }
+      return;
+    }
+    case AST_TYPE.AssignmentPattern: {
+      const left = node["left"];
+      if (isAstNode(left)) {
+        collect(left, out);
+      }
+      return;
+    }
+    default:
+      return;
+  }
+}

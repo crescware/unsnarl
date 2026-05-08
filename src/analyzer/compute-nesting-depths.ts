@@ -1,8 +1,8 @@
+import { walk } from "../boundary/eslint-scope/walk/walk.js";
 import type { NestingDepths } from "../ir/annotations/scope-annotation.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { NESTING_KIND, type NestingKind } from "../serializer/nesting-kind.js";
-import { walk } from "./walk/walk.js";
 
 const FUNCTION_TYPES: ReadonlySet<string> = new Set([
   AST_TYPE.FunctionDeclaration,

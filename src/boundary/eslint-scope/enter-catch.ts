@@ -1,15 +1,15 @@
-import { collectBindingIdentifiers } from "../../analyzer/declare/collect-binding-identifiers.js";
-import { declareVariable } from "../../analyzer/declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
-import { hoistDeclarations } from "../../analyzer/hoisting/hoist-declarations.js";
-import type { ScopeManager } from "../../analyzer/manager.js";
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
+import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
+import { declareVariable } from "./declare/declare-variable.js";
+import { hoistDeclarations } from "./hoisting/hoist-declarations.js";
 import { isNodeLike } from "./is-node-like.js";
+import type { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import type { AnalysisVisitor } from "./visitor.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 export function enterCatch(
   node: NodeLike,

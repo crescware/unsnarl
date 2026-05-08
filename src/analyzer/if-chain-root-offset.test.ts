@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
+import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { ifChainRootOffset } from "./if-chain-root-offset.js";
-import type { PathEntry } from "./walk/path-entry.js";
 
 function ifNode(start: number): AstNode {
   return { type: AST_TYPE.IfStatement, start } as const satisfies AstNode;

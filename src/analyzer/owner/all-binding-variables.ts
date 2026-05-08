@@ -1,8 +1,8 @@
+import { collectBindingIdentifiers } from "../../boundary/eslint-scope/declare/collect-binding-identifiers.js";
+import { resolveInScopeChain } from "../../boundary/eslint-scope/resolve.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
-import { collectBindingIdentifiers } from "../declare/collect-binding-identifiers.js";
-import { resolveInScopeChain } from "../resolve.js";
 
 export function allBindingVariables(
   pattern: AstNode,

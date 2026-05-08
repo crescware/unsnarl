@@ -1,9 +1,9 @@
+import { resolveInScopeChain } from "../../boundary/eslint-scope/resolve.js";
+import type { PathEntry } from "../../boundary/eslint-scope/walk/path-entry.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { isAstNode } from "../is-ast-node.js";
-import { resolveInScopeChain } from "../resolve.js";
-import type { PathEntry } from "../walk/path-entry.js";
 import { allBindingVariables } from "./all-binding-variables.js";
 
 export function findReferenceOwners(

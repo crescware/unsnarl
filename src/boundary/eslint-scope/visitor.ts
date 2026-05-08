@@ -1,8 +1,8 @@
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { NodeLike } from "./node-like.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 type ReferenceVisitInput = Readonly<{
   ref: Reference;

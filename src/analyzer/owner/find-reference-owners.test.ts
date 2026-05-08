@@ -1,14 +1,14 @@
 import { parseSync } from "oxc-parser";
 import { describe, expect, test } from "vitest";
 
+import { declareVariable } from "../../boundary/eslint-scope/declare/declare-variable.js";
+import { ScopeImpl } from "../../boundary/eslint-scope/scope-impl.js";
+import type { PathEntry } from "../../boundary/eslint-scope/walk/path-entry.js";
 import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
-import { declareVariable } from "../declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../definition-type.js";
-import { ScopeImpl } from "../scope-impl.js";
 import { SCOPE_TYPE } from "../scope-type.js";
-import type { PathEntry } from "../walk/path-entry.js";
 import { findReferenceOwners } from "./find-reference-owners.js";
 
 const ident = (name: string): AstIdentifier =>

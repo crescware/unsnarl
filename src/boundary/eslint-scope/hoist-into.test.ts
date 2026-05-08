@@ -1,11 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import { DIAGNOSTIC_KIND } from "../../analyzer/diagnostic-kind.js";
-import { ScopeManager } from "../../analyzer/manager.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { hoistInto } from "./hoist-into.js";
+import { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
 

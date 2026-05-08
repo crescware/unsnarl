@@ -1,9 +1,9 @@
 import { describe, expect, test } from "vitest";
 
+import { VariableImpl } from "../boundary/eslint-scope/variable-impl.js";
 import type { Reference } from "../ir/reference/reference.js";
 import type { Scope } from "../ir/scope/scope.js";
 import { isUnused } from "./is-unused.js";
-import { VariableImpl } from "./variable-impl.js";
 
 const fakeScope = {} as Scope;
 
