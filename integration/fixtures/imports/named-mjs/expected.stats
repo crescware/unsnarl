@@ -1,0 +1,4 @@
+1	1	integration/fixtures/imports/named-mjs/input.mjs:1 x
+1	0	integration/fixtures/imports/named-mjs/input.mjs:1 m
+0	1	integration/fixtures/imports/named-mjs/input.mjs:2 x
+2	2	3 total

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/imports/named-mjs/input.mjs",
+    "language": "js"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_9",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImportBinding",
+      "importKind": "named",
+      "importedName": "x"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_23",
+      "kind": "ExpressionStatement",
+      "name": "x",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "mod_m",
+      "kind": "ModuleSource",
+      "name": "m",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_9",
+      "to": "expr_stmt_23",
+      "label": "read"
+    },
+    {
+      "from": "mod_m",
+      "to": "n_scope_0_x_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
