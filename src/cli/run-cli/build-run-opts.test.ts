@@ -118,6 +118,26 @@ describe("buildRunOpts", () => {
       expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Script);
     });
 
+    test("a .mjs source path produces sourceType 'module' (ESM extension)", () => {
+      const mjsSrc = {
+        stdin: false,
+        path: "src/foo.mjs",
+      } as const satisfies ExecuteSource;
+      const actual = buildRunOpts(mjsSrc, baseOpts);
+      expect(actual.runOpts.language).toBe("js");
+      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Module);
+    });
+
+    test("a .cjs source path produces sourceType 'script' (CommonJS extension)", () => {
+      const cjsSrc = {
+        stdin: false,
+        path: "src/foo.cjs",
+      } as const satisfies ExecuteSource;
+      const actual = buildRunOpts(cjsSrc, baseOpts);
+      expect(actual.runOpts.language).toBe("js");
+      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Script);
+    });
+
     test("no roots → pruning is null", () => {
       const expected = {
         text,
