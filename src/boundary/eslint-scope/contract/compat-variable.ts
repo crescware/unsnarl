@@ -11,8 +11,6 @@ import type { CompatScope } from "./compat-scope.js";
 // Deliberately excluded:
 // - `tainted` / `stack` — deprecated in eslint-scope; not part of the
 //   contract surface unsnarl commits to.
-// - `unsnarlIsUnused()` — unsnarl-only extension method; not in
-//   eslint-scope.
 export type CompatVariable = {
   name: string;
   scope: CompatScope;
