@@ -6,8 +6,9 @@ import { fileURLToPath } from "node:url";
 import { describe, expect, test } from "vitest";
 
 import type { NestingDepths } from "../src/ir/annotations/scope-annotation.js";
+import { LANGUAGE, type Language } from "../src/language.js";
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
-import { defaultSourceTypeFor } from "../src/pipeline/parse/default-source-type-for.js";
+import { sourceTypeFromPath } from "../src/pipeline/parse/source-type-from-path.js";
 import type { PruningRunOptions } from "../src/pipeline/prune/pruning-run-options.js";
 import type { PipelineRunOptions } from "../src/pipeline/runner/pipeline-run-options.js";
 import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
@@ -47,15 +48,33 @@ const FORMAT_FILE: Readonly<Record<SnapshotFormat, string>> = {
   stats: "expected.stats",
 };
 
-type FixtureExt = "ts" | "tsx" | "js" | "jsx";
-
 type FixtureContext = Readonly<{
   here: string;
-  ext: FixtureExt;
+  // Resolved IR language. `.mjs` and `.cjs` both map to `js` because
+  // they are JavaScript at the parser level; their distinction lives in
+  // the source path that's handed to `sourceTypeFromPath`.
+  language: Language;
   code: string;
   sourcePath: string;
   name: string;
 }>;
+
+function fixtureLanguageFromExt(ext: string): Language | null {
+  switch (ext) {
+    case "ts":
+      return LANGUAGE.Ts;
+    case "tsx":
+      return LANGUAGE.Tsx;
+    case "jsx":
+      return LANGUAGE.Jsx;
+    case "js":
+    case "mjs":
+    case "cjs":
+      return LANGUAGE.Js;
+    default:
+      return null;
+  }
+}
 
 function loadFixture(metaUrl: string): FixtureContext {
   const here = metaUrlToDir(metaUrl);
@@ -64,13 +83,14 @@ function loadFixture(metaUrl: string): FixtureContext {
     throw new Error(`no input.* file under ${here}`);
   }
   const ext = inputFile.slice("input.".length);
-  if (ext !== "ts" && ext !== "tsx" && ext !== "js" && ext !== "jsx") {
+  const language = fixtureLanguageFromExt(ext);
+  if (language === null) {
     throw new Error(`unsupported input extension: ${inputFile}`);
   }
   const code = readFileSync(join(here, inputFile), "utf8");
   const sourcePath = relative(PROJECT_ROOT, join(here, inputFile));
   const name = relative(FIXTURE_DIR, here);
-  return { here, ext, code, sourcePath, name };
+  return { here, language, code, sourcePath, name };
 }
 
 type FixturePruning = Readonly<{
@@ -145,9 +165,9 @@ function buildBaseOpts(
   ctx: FixtureContext,
 ): Pick<Opts, "language" | "sourcePath" | "sourceType" | "emit"> {
   return {
-    language: ctx.ext,
+    language: ctx.language,
     sourcePath: ctx.sourcePath,
-    sourceType: defaultSourceTypeFor(ctx.ext),
+    sourceType: sourceTypeFromPath(ctx.sourcePath, ctx.language),
     emit: {
       prettyJson: true,
       prunedGraph: null,
@@ -239,9 +259,9 @@ export function fixtureResolutions(
     test("logs the expected resolution entries", () => {
       const result = pipeline.runDetailed(ctx.code, {
         format: "json",
-        language: ctx.ext,
+        language: ctx.language,
         sourcePath: ctx.sourcePath,
-        sourceType: defaultSourceTypeFor(ctx.ext),
+        sourceType: sourceTypeFromPath(ctx.sourcePath, ctx.language),
         emit: {
           prettyJson: true,
           prunedGraph: null,
