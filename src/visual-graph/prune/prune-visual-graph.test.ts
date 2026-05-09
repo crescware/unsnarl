@@ -179,7 +179,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["b"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["b"]);
     expect(r.graph.edges).toEqual([]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
@@ -203,7 +203,7 @@ describe("pruneVisualGraph", () => {
       descendants: 2,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["a", "b", "c"]);
+    expect(r.graph.elements.map((v) => v.id).sort()).toEqual(["a", "b", "c"]);
     expect(r.graph.boundaryEdges).toEqual([
       { inside: "c", direction: BOUNDARY_EDGE_DIRECTION.Out },
     ]);
@@ -228,7 +228,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 2,
     });
-    expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
+    expect(r.graph.elements.map((v) => v.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
       { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
     ]);
@@ -255,7 +255,7 @@ describe("pruneVisualGraph", () => {
       descendants: 1,
       ancestors: 1,
     });
-    expect(r.graph.elements.map((e) => e.id).sort()).toEqual(["b", "c", "d"]);
+    expect(r.graph.elements.map((v) => v.id).sort()).toEqual(["b", "c", "d"]);
     expect(r.graph.boundaryEdges).toEqual([
       { inside: "d", direction: BOUNDARY_EDGE_DIRECTION.Out },
       { inside: "b", direction: BOUNDARY_EDGE_DIRECTION.In, label: "read" },
@@ -324,7 +324,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["a"]);
     expect(r.graph.boundaryEdges).toEqual([]);
   });
 
@@ -338,7 +338,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["sg1"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["sg1"]);
     expect((r.graph.elements[0] as VisualSubgraph).elements).toHaveLength(1);
     expect((r.graph.elements[0] as VisualSubgraph).elements[0]?.id).toBe(
       "inner",
@@ -353,7 +353,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["a"]);
   });
 
   test("subgraph ids serve as BFS endpoints, but the cluster is only kept when something inside survives", () => {
@@ -382,14 +382,14 @@ describe("pruneVisualGraph", () => {
       descendants: 1,
       ancestors: 0,
     });
-    expect(tight.graph.elements.map((e) => e.id)).toEqual(["flag"]);
+    expect(tight.graph.elements.map((v) => v.id)).toEqual(["flag"]);
 
     const wider = pruneVisualGraph(g, {
       roots: [rawLineName(1, "flag")],
       descendants: 2,
       ancestors: 0,
     });
-    const widerIds = new Set(flatten(wider.graph.elements).map((e) => e.id));
+    const widerIds = new Set(flatten(wider.graph.elements).map((v) => v.id));
     expect(widerIds.has("flag")).toBe(true);
     expect(widerIds.has("cont_if")).toBe(true);
     expect(widerIds.has("wr1")).toBe(true);
@@ -438,7 +438,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    const ids = new Set(flatten(r.graph.elements).map((e) => e.id));
+    const ids = new Set(flatten(r.graph.elements).map((v) => v.id));
     expect(ids.has("outer:counter")).toBe(true);
     expect(ids.has("inner:counter")).toBe(true);
     expect(ids.has("fn")).toBe(true);
@@ -460,7 +460,7 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    const ids = r.graph.elements.map((e) => e.id);
+    const ids = r.graph.elements.map((v) => v.id);
     expect(ids).toEqual(["a", "b", "c"]);
   });
 });
@@ -484,7 +484,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     // Only the use is a root; the declaration is reachable via ancestors=N>0.
     expect(
       flatten(r.graph.elements)
-        .map((e) => e.id)
+        .map((v) => v.id)
         .sort(),
     ).toEqual(["ret_use_ref_0", "sg_return"]);
     expect(r.perQuery[0]?.matched).toBe(1);
@@ -505,7 +505,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       descendants: 0,
       ancestors: 1,
     });
-    const ids = flatten(r.graph.elements).map((e) => e.id);
+    const ids = flatten(r.graph.elements).map((v) => v.id);
     expect(ids).toContain("n_scope_0_a_6");
     expect(ids).toContain("ret_use_ref_0");
   });
@@ -521,7 +521,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(flatten(r.graph.elements).map((e) => e.id)).toContain(
+    expect(flatten(r.graph.elements).map((v) => v.id)).toContain(
       "ret_use_ref_0",
     );
     expect(r.perQuery[0]?.matched).toBe(1);
@@ -535,7 +535,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["wr_ref_0"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["wr_ref_0"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 
@@ -552,7 +552,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["n_decl_foo"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["n_decl_foo"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 
@@ -574,7 +574,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["ret_foo"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["ret_foo"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 });
@@ -648,7 +648,7 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["a"]);
   });
 
   test("a line just past endLine does not match", () => {
@@ -670,7 +670,7 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.graph.elements.map((e) => e.id)).toEqual(["a"]);
+    expect(r.graph.elements.map((v) => v.id)).toEqual(["a"]);
     expect(r.perQuery[0]?.matched).toBe(1);
   });
 });

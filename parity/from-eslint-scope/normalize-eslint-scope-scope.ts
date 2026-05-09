@@ -18,7 +18,7 @@ export function normalizeEslintScopeScope(
     .map(normalizeEslintScopeVariable)
     .sort((a, b) => a.name.localeCompare(b.name));
   const references = scope.references
-    .map((r) => normalizeEslintScopeReference(r, paths))
+    .map((v) => normalizeEslintScopeReference(v, paths))
     .sort(
       (a, b) =>
         compareRange(a.identifierRange, b.identifierRange) ||

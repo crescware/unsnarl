@@ -36,7 +36,7 @@ function makeEmitter(format: string, extension: string): Emitter {
 }
 
 function makeEmitters(emitters: readonly Emitter[]): EmitterRegistry {
-  const map = new Map(emitters.map((e) => [e.format, e]));
+  const map = new Map(emitters.map((v) => [v.format, v]));
   return {
     register: () => {
       throw new Error("not implemented in fake");

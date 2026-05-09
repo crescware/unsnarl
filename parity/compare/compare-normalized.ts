@@ -43,7 +43,7 @@ export function compareNormalized(
       result.push({
         kind: "child-scope-count-mismatch",
         scopePath: u.path,
-        message: `unsnarl=${u.childScopes.length} (${u.childScopes.map((c) => c.type).join(",")}) baseline=${b.childScopes.length} (${b.childScopes.map((c) => c.type).join(",")})`,
+        message: `unsnarl=${u.childScopes.length} (${u.childScopes.map((v) => v.type).join(",")}) baseline=${b.childScopes.length} (${b.childScopes.map((v) => v.type).join(",")})`,
       });
     }
     const pairs = Math.min(u.childScopes.length, b.childScopes.length);

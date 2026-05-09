@@ -93,10 +93,10 @@ describe("StatsEmitter", () => {
         return {
           ...graph,
           elements: graph.elements.filter(
-            (e) => e.type === VISUAL_ELEMENT_TYPE.Node && keepIds.has(e.id),
+            (v) => v.type === VISUAL_ELEMENT_TYPE.Node && keepIds.has(v.id),
           ),
           edges: graph.edges.filter(
-            (e) => keepIds.has(e.from) && keepIds.has(e.to),
+            (v) => keepIds.has(v.from) && keepIds.has(v.to),
           ),
           boundaryEdges: [
             {
@@ -128,14 +128,14 @@ describe("StatsEmitter", () => {
     // come out 1 -> 2 -> 3 regardless of what the IR walk yields.
     const out = emit("const a = 1;\nconst c = 2;\nconst b = a + c;\n");
     const lines = out.trimEnd().split("\n").slice(0, -1);
-    const lineNumbers = lines.map((l) => {
-      const m = /:(\d+) /.exec(l);
+    const lineNumbers = lines.map((v) => {
+      const m = /:(\d+) /.exec(v);
       if (m === null) {
-        throw new Error(`no line number in row: ${l}`);
+        throw new Error(`no line number in row: ${v}`);
       }
       return Number.parseInt(m[1] ?? "0", 10);
     });
-    expect(lineNumbers).toEqual([...lineNumbers].sort((x, y) => x - y));
+    expect(lineNumbers).toEqual([...lineNumbers].sort((a, b) => a - b));
   });
 
   test("preserves source order for nodes that share a line (stable sort)", () => {

@@ -51,7 +51,7 @@ describe("iterateVisualSubgraphs", () => {
         sg("sibling", []),
       ]),
     ] satisfies VisualSubgraph[];
-    expect(out.map((s) => s.id)).toEqual(["outer", "inner", "sibling"]);
+    expect(out.map((v) => v.id)).toEqual(["outer", "inner", "sibling"]);
   });
 
   test("empty input → empty output", () => {

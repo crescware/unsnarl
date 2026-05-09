@@ -56,7 +56,7 @@ describe("iterateVisualNodes", () => {
     const out = [
       ...iterateVisualNodes([node("a"), node("b", "PropertyKey" as NodeKind)]),
     ] satisfies VisualNode[];
-    expect(out.map((n) => n.id)).toEqual(["a"]);
+    expect(out.map((v) => v.id)).toEqual(["a"]);
   });
 
   test("recurses into subgraphs", () => {
@@ -66,7 +66,7 @@ describe("iterateVisualNodes", () => {
         node("top"),
       ]),
     ] satisfies VisualNode[];
-    expect(out.map((n) => n.id)).toEqual(["inner", "deep", "top"]);
+    expect(out.map((v) => v.id)).toEqual(["inner", "deep", "top"]);
   });
 
   test("empty input → empty output", () => {

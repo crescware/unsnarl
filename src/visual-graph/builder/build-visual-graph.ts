@@ -80,8 +80,8 @@ export function buildVisualGraph(
   }
 
   const subgraphOwnerVar = new Map<string, string>();
-  for (const v of ir.variables) {
-    const def = v.defs[0];
+  for (const variable of ir.variables) {
+    const def = variable.defs[0];
     if (!def) {
       continue;
     }
@@ -100,10 +100,10 @@ export function buildVisualGraph(
       continue;
     }
     const fnScope = ir.scopes.find(
-      (s) => s.upper === v.scope && s.block.span.offset === blockOffset,
+      (v) => v.upper === variable.scope && v.block.span.offset === blockOffset,
     );
     if (fnScope) {
-      subgraphOwnerVar.set(fnScope.id, v.id);
+      subgraphOwnerVar.set(fnScope.id, variable.id);
     }
   }
 
@@ -206,7 +206,7 @@ export function buildVisualGraph(
   } as const satisfies BuildState;
 
   const root = ir.scopes.find(
-    (s) => s.type === SCOPE_TYPE.Module || s.type === SCOPE_TYPE.Global,
+    (v) => v.type === SCOPE_TYPE.Module || v.type === SCOPE_TYPE.Global,
   );
   if (root) {
     buildScope(root, graph, ctx, state);

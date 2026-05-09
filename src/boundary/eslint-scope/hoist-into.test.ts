@@ -51,7 +51,7 @@ describe("hoistInto", () => {
       "legacy",
     ]);
     expect(
-      diagnostics.list().some((d) => d.kind === DIAGNOSTIC_KIND.VarDetected),
+      diagnostics.list().some((v) => v.kind === DIAGNOSTIC_KIND.VarDetected),
     ).toBe(true);
   });
 

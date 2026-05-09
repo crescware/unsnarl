@@ -23,7 +23,7 @@ export class FlatSerializer implements IRSerializer {
   serialize(ctx: SerializeContext): SerializedIR {
     const scopes = collectScopesInOrder(ctx.rootScope);
     const scopeIds = new Map<Scope, string>();
-    scopes.forEach((s, i) => scopeIds.set(s, makeScopeId(i)));
+    scopes.forEach((v, i) => scopeIds.set(v, makeScopeId(i)));
 
     const variableIds = new Map<Variable, string>();
     const orderedVariables: /* mutable */ Variable[] = [];
@@ -53,11 +53,11 @@ export class FlatSerializer implements IRSerializer {
     allReferences.sort(
       (a, b) => offsetOf(a.identifier) - offsetOf(b.identifier),
     );
-    allReferences.forEach((r, i) => referenceIds.set(r, makeReferenceId(i)));
+    allReferences.forEach((v, i) => referenceIds.set(v, makeReferenceId(i)));
 
-    const serializedScopes: readonly SerializedScope[] = scopes.map((s) =>
+    const serializedScopes: readonly SerializedScope[] = scopes.map((v) =>
       serializeScope(
-        s,
+        v,
         scopeIds,
         variableIds,
         referenceIds,
@@ -72,9 +72,9 @@ export class FlatSerializer implements IRSerializer {
       );
 
     const serializedReferences: readonly SerializedReference[] =
-      allReferences.map((r) =>
+      allReferences.map((v) =>
         serializeReference(
-          r,
+          v,
           scopeIds,
           variableIds,
           referenceIds,

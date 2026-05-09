@@ -1,5 +1,8 @@
 {
   "ignorePatterns": ["integration/fixtures/**"],
+  "jsPlugins": [
+    "./node_modules/@crescware/eslint-plugin-crescware-array-callback-arg-names/dist/index.js"
+  ],
   "rules": {
     "typescript/no-explicit-any": "error",
     "eslint/no-restricted-imports": [
@@ -16,6 +19,7 @@
     ],
     "eslint/eqeqeq": "error",
     "typescript/consistent-type-imports": "error",
-    "eslint/curly": "error"
+    "eslint/curly": "error",
+    "crescware-array-callback-arg-names/array-callback-arg-names": "error"
   }
 }

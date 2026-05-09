@@ -52,7 +52,7 @@ describe("pushEdge", () => {
     pushEdge(state, "a", "read", "b");
     pushEdge(state, "a", "write", "b");
     pushEdge(state, "c", "read", "d");
-    expect(state.edges.map((e) => `${e.from}-${e.label}-${e.to}`)).toEqual([
+    expect(state.edges.map((v) => `${v.from}-${v.label}-${v.to}`)).toEqual([
       "a-read-b",
       "a-write-b",
       "c-read-d",

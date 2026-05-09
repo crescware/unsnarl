@@ -34,7 +34,7 @@ export function diffReference(
       bRes !== null &&
       uRes.varName === bRes.varName &&
       uRes.scopePath.length === bRes.scopePath.length &&
-      uRes.scopePath.every((n, i) => n === bRes.scopePath[i]));
+      uRes.scopePath.every((v, i) => v === bRes.scopePath[i]));
   if (!sameResolution) {
     result.push({
       kind: "reference-resolution-mismatch",

@@ -6,24 +6,24 @@ import { serializeDefinition } from "./serialize-definition.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeVariable(
-  v: Variable,
+  variable: Variable,
   scopeIds: Map<Scope, string>,
   variableIds: Map<Variable, string>,
   referenceIds: Map<Reference, string>,
   raw: string,
 ): SerializedVariable {
-  const id = variableIds.get(v) ?? null;
+  const id = variableIds.get(variable) ?? null;
   if (id === null) {
     throw new Error("Variable id not found");
   }
   return {
     id,
-    name: v.name,
-    scope: scopeIds.get(v.scope) ?? "",
-    identifiers: v.identifiers.map((i) => spanOf(i, raw)),
-    references: v.references
-      .map((r) => referenceIds.get(r) ?? null)
-      .filter((x): x is string => x !== null),
-    defs: v.defs.map((d) => serializeDefinition(d, raw)),
+    name: variable.name,
+    scope: scopeIds.get(variable.scope) ?? "",
+    identifiers: variable.identifiers.map((v) => spanOf(v, raw)),
+    references: variable.references
+      .map((v) => referenceIds.get(v) ?? null)
+      .filter((v): v is string => v !== null),
+    defs: variable.defs.map((v) => serializeDefinition(v, raw)),
   };
 }

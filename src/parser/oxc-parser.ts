@@ -16,14 +16,14 @@ export class OxcParser implements Parser {
       range: true,
     });
 
-    const fatal = result.errors.filter((e) => e.severity === "Error");
+    const fatal = result.errors.filter((v) => v.severity === "Error");
     if (fatal.length > 0) {
       const first = fatal[0];
       const head = first?.message ?? "Unknown parse error";
-      const detail = fatal.map((e) => {
-        const label = e.labels[0];
+      const detail = fatal.map((v) => {
+        const label = v.labels[0];
         return {
-          message: e.message,
+          message: v.message,
           start: label?.start ?? 0,
           end: label?.end ?? 0,
         };

@@ -47,7 +47,7 @@ const root = { ...baseScope(), id: "root" };
 const inner = { ...baseScope(), id: "inner", upper: "root" };
 const leaf = { ...baseScope(), id: "leaf", upper: "inner" };
 const scopeMap = new Map<string, SerializedScope>(
-  [root, inner, leaf].map((s) => [s.id, s]),
+  [root, inner, leaf].map((v) => [v.id, v]),
 );
 
 describe("findHostSubgraph", () => {

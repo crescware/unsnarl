@@ -6,7 +6,7 @@ import { collectImportSources } from "./collect-import-sources.js";
 import { baseNode, baseSimpleNode } from "./testing/make-node.js";
 
 function asMap(...nodes: readonly VisualNode[]): Map<string, VisualNode> {
-  return new Map(nodes.map((n) => [n.id, n]));
+  return new Map(nodes.map((v) => [v.id, v]));
 }
 
 describe("collectImportSources", () => {

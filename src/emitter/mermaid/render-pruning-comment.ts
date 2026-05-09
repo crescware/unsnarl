@@ -10,7 +10,7 @@ export function renderPruningComment(
   }
   // Avoid `[ ]` in the comment payload because some Mermaid versions
   // misread a comment line that contains shape-like brackets.
-  const summary = pruning.roots.map((r) => `${r.query}=${r.matched}`).join(" ");
+  const summary = pruning.roots.map((v) => `${v.query}=${v.matched}`).join(" ");
   lines.push(
     `  %% pruning roots ${summary} ancestors=${pruning.ancestors} descendants=${pruning.descendants}`,
   );

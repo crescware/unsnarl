@@ -25,8 +25,8 @@ export function serializeScope(
     isStrict: scope.isStrict,
     upper: scope.upper ? (scopeIds.get(scope.upper) ?? null) : null,
     childScopes: scope.childScopes
-      .map((c) => scopeIds.get(c) ?? null)
-      .filter((x): x is string => x !== null),
+      .map((v) => scopeIds.get(v) ?? null)
+      .filter((v): v is string => v !== null),
     variableScope: scopeIds.get(scope.variableScope) ?? id,
     block: {
       type: scope.block.type,
@@ -35,13 +35,13 @@ export function serializeScope(
     },
     variables: scope.variables
       .map((v) => variableIds.get(v) ?? null)
-      .filter((x): x is string => x !== null),
+      .filter((v): v is string => v !== null),
     references: scope.references
-      .map((r) => referenceIds.get(r) ?? null)
-      .filter((x): x is string => x !== null),
+      .map((v) => referenceIds.get(v) ?? null)
+      .filter((v): v is string => v !== null),
     through: scope.through
-      .map((r) => referenceIds.get(r) ?? null)
-      .filter((x): x is string => x !== null),
+      .map((v) => referenceIds.get(v) ?? null)
+      .filter((v): v is string => v !== null),
     functionExpressionScope: scope.functionExpressionScope,
     blockContext: ann.blockContext,
     fallsThrough: ann.fallsThrough,

@@ -78,7 +78,7 @@ function fixtureLanguageFromExt(ext: string): Language | null {
 
 function loadFixture(metaUrl: string): FixtureContext {
   const here = metaUrlToDir(metaUrl);
-  const inputFile = readdirSync(here).find((f) => f.startsWith("input."));
+  const inputFile = readdirSync(here).find((v) => v.startsWith("input."));
   if (!inputFile) {
     throw new Error(`no input.* file under ${here}`);
   }

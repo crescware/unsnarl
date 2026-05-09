@@ -171,7 +171,7 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(rootScope.through[0]?.identifier.name).toBe("globalThing");
     const implicit = findVariable(rootScope, "globalThing");
     expect(implicit).toBeDefined();
-    expect(implicit?.defs.map((d) => d.type)).toEqual([
+    expect(implicit?.defs.map((v) => v.type)).toEqual([
       DEFINITION_TYPE.ImplicitGlobalVariable,
     ]);
     expect(rootScope.through[0]?.resolved).toBe(implicit);
@@ -248,8 +248,8 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     const foo = findVariable(rootScope, "foo")!;
     expect(foo.references.length).toBe(2);
-    expect(foo.references.every((r) => r.resolved === foo)).toBe(true);
-    expect(foo.references.every((r) => r.isRead())).toBe(true);
+    expect(foo.references.every((v) => v.resolved === foo)).toBe(true);
+    expect(foo.references.every((v) => v.isRead())).toBe(true);
     expect(isUnused(foo)).toBe(false);
   });
 
@@ -263,7 +263,7 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     const outerC = findVariable(rootScope, "C")!;
     const classScope = rootScope.childScopes.find(
-      (s) => s.type === SCOPE_TYPE.Class,
+      (v) => v.type === SCOPE_TYPE.Class,
     )!;
     const innerC = findVariable(classScope, "C")!;
     expect(outerC.references.length).toBe(0);
@@ -282,7 +282,7 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     const outerC = findVariable(rootScope, "C")!;
     const classScope = rootScope.childScopes.find(
-      (s) => s.type === SCOPE_TYPE.Class,
+      (v) => v.type === SCOPE_TYPE.Class,
     )!;
     const innerC = findVariable(classScope, "C")!;
     expect(outerC.references.length).toBe(1);
@@ -300,7 +300,7 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     const outerC = findVariable(rootScope, "C")!;
     const classScope = rootScope.childScopes.find(
-      (s) => s.type === SCOPE_TYPE.Class,
+      (v) => v.type === SCOPE_TYPE.Class,
     )!;
     const innerC = findVariable(classScope, "C")!;
     expect(isUnused(outerC)).toBe(true);
@@ -332,12 +332,12 @@ describe("EslintCompatAnalyzer / references", () => {
     const a = findVariable(rootScope, "a")!;
     const b = findVariable(rootScope, "b")!;
     // a, b それぞれ: 右辺の読みと、左辺の書き込み
-    const aWrites = a.references.filter((r) => r.isWrite()).length;
-    const aReads = a.references.filter((r) => r.isRead()).length;
+    const aWrites = a.references.filter((v) => v.isWrite()).length;
+    const aReads = a.references.filter((v) => v.isRead()).length;
     expect(aWrites).toBeGreaterThan(0);
     expect(aReads).toBeGreaterThan(0);
-    const bWrites = b.references.filter((r) => r.isWrite()).length;
-    const bReads = b.references.filter((r) => r.isRead()).length;
+    const bWrites = b.references.filter((v) => v.isWrite()).length;
+    const bReads = b.references.filter((v) => v.isRead()).length;
     expect(bWrites).toBeGreaterThan(0);
     expect(bReads).toBeGreaterThan(0);
   });
@@ -368,10 +368,10 @@ describe("EslintCompatAnalyzer / references", () => {
     const { rootScope } = analyze(code);
     const all = collectScopes(rootScope);
     const innerB = all.find(
-      (s) =>
-        s.type === SCOPE_TYPE.Function &&
-        s.upper?.type === SCOPE_TYPE.Function &&
-        s.upper?.upper === rootScope,
+      (v) =>
+        v.type === SCOPE_TYPE.Function &&
+        v.upper?.type === SCOPE_TYPE.Function &&
+        v.upper?.upper === rootScope,
     );
     expect(innerB).toBeDefined();
     expect(innerB?.through.length).toBe(1);

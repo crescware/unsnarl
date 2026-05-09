@@ -48,22 +48,22 @@ function refsToVar(
   ir: SerializedIR,
   id: string,
 ): readonly SerializedReference[] {
-  return ir.references.filter((r) => r.resolved === id);
+  return ir.references.filter((v) => v.resolved === id);
 }
 
 function caseScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
-    (s) =>
-      s.type === SCOPE_TYPE.Block &&
-      s.blockContext?.parentType === AST_TYPE.SwitchStatement,
+    (v) =>
+      v.type === SCOPE_TYPE.Block &&
+      v.blockContext?.parentType === AST_TYPE.SwitchStatement,
   );
 }
 
 function ifBranchScopesOf(ir: SerializedIR): readonly SerializedScope[] {
   return ir.scopes.filter(
-    (s) =>
-      s.type === SCOPE_TYPE.Block &&
-      s.blockContext?.parentType === AST_TYPE.IfStatement,
+    (v) =>
+      v.type === SCOPE_TYPE.Block &&
+      v.blockContext?.parentType === AST_TYPE.IfStatement,
   );
 }
 
@@ -71,7 +71,7 @@ function scopeFromOf(
   ir: SerializedIR,
   ref: SerializedReference,
 ): SerializedScope {
-  const scope = ir.scopes.find((s) => s.id === ref.from);
+  const scope = ir.scopes.find((v) => v.id === ref.from);
   if (!scope) {
     throw new Error(`scope ${ref.from} not found`);
   }
@@ -100,8 +100,8 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
   test("the switch produces three case-block scopes (two cases + default)", () => {
     const cases = caseScopesOf(ir);
     expect(cases).toHaveLength(3);
-    const tests = cases.map((s) => {
-      const ctx = s.blockContext;
+    const tests = cases.map((v) => {
+      const ctx = v.blockContext;
       return ctx?.kind === "case-clause" ? ctx.caseTest : null;
     });
     expect(tests).toEqual(['"a"', '"b"', null]);
@@ -109,16 +109,16 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
 
   test("every case scope has fallsThrough === false", () => {
     const cases = caseScopesOf(ir);
-    expect(cases.map((s) => s.fallsThrough)).toEqual([false, false, false]);
+    expect(cases.map((v) => v.fallsThrough)).toEqual([false, false, false]);
   });
 
   test("label has one write reference per case scope (3 writes, all in distinct scopes)", () => {
     const label = varByName(ir, "label");
     const writes = refsToVar(ir, label.id).filter(
-      (r) => r.flags.write && !r.init,
+      (v) => v.flags.write && !v.init,
     );
     expect(writes).toHaveLength(3);
-    const scopes = new Set(writes.map((r) => r.from));
+    const scopes = new Set(writes.map((v) => v.from));
     expect(scopes.size).toBe(3);
     for (const w of writes) {
       const s = scopeFromOf(ir, w);
@@ -128,7 +128,7 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
 
   test("the discriminant identifier carries a SwitchStatement predicate container", () => {
     const kindRefs = ir.references.filter(
-      (r) => r.identifier.name === "kind" && !r.init,
+      (v) => v.identifier.name === "kind" && !v.init,
     );
     expect(kindRefs).toHaveLength(1);
     expect(kindRefs[0]?.predicateContainer?.type).toBe(
@@ -155,13 +155,13 @@ describe("scenario: switch with implicit fallthrough — every case body falls t
   test("every case scope has fallsThrough === true", () => {
     const cases = caseScopesOf(ir);
     expect(cases).toHaveLength(3);
-    expect(cases.map((s) => s.fallsThrough)).toEqual([true, true, true]);
+    expect(cases.map((v) => v.fallsThrough)).toEqual([true, true, true]);
   });
 
   test("the number of writes to label is unchanged from the break-bearing variant", () => {
     const label = varByName(ir, "label");
     const writes = refsToVar(ir, label.id).filter(
-      (r) => r.flags.write && !r.init,
+      (v) => v.flags.write && !v.init,
     );
     expect(writes).toHaveLength(3);
   });
@@ -181,7 +181,7 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
 
   test("the if-statement produces two block scopes keyed consequent/alternate", () => {
     const arms = ifBranchScopesOf(ir);
-    expect(arms.map((s) => s.blockContext?.key).sort()).toEqual([
+    expect(arms.map((v) => v.blockContext?.key).sort()).toEqual([
       "alternate",
       "consequent",
     ]);
@@ -189,7 +189,7 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
 
   test("the predicate identifier carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter(
-      (r) => r.identifier.name === "flag" && !r.init,
+      (v) => v.identifier.name === "flag" && !v.init,
     );
     expect(flagRefs).toHaveLength(1);
     expect(flagRefs[0]?.predicateContainer?.type).toBe(
@@ -200,10 +200,10 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
   test("counter receives one write per branch, in distinct branch scopes", () => {
     const counter = varByName(ir, "counter");
     const writes = refsToVar(ir, counter.id).filter(
-      (r) => r.flags.write && !r.init,
+      (v) => v.flags.write && !v.init,
     );
     expect(writes).toHaveLength(2);
-    const scopes = new Set(writes.map((r) => r.from));
+    const scopes = new Set(writes.map((v) => v.from));
     expect(scopes.size).toBe(2);
   });
 });
@@ -226,7 +226,7 @@ describe("scenario: if without else — only the consequent scope exists", () =>
 
   test("the predicate identifier still carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter(
-      (r) => r.identifier.name === "flag" && !r.init,
+      (v) => v.identifier.name === "flag" && !v.init,
     );
     expect(flagRefs[0]?.predicateContainer?.type).toBe(
       PREDICATE_CONTAINER_TYPE.IfStatement,
@@ -249,12 +249,12 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the try statement produces a try block, a catch scope, and a finalizer block", () => {
     const tryChildren = ir.scopes.filter(
-      (s) => s.blockContext?.parentType === AST_TYPE.TryStatement,
+      (v) => v.blockContext?.parentType === AST_TYPE.TryStatement,
     );
     expect(tryChildren).toHaveLength(3);
-    const layout = tryChildren.map((s) => ({
-      type: s.type,
-      key: s.blockContext?.key,
+    const layout = tryChildren.map((v) => ({
+      type: v.type,
+      key: v.blockContext?.key,
     }));
     expect(layout).toEqual([
       { type: SCOPE_TYPE.Block, key: "block" },
@@ -265,11 +265,11 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the catch parameter `err` is owned by the catch scope, not the surrounding module", () => {
     const err = varByName(ir, "err");
-    const catchScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Catch);
+    const catchScope = ir.scopes.find((v) => v.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope?.variables).toContain(err.id);
     const moduleScope =
-      ir.scopes.find((s) => s.type === SCOPE_TYPE.Module) ?? null;
+      ir.scopes.find((v) => v.type === SCOPE_TYPE.Module) ?? null;
     expect(moduleScope?.variables ?? []).not.toContain(err.id);
   });
 
@@ -339,7 +339,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
   test("a global accessed only as a member receiver carries flags.receiver=true", () => {
     const ir = pipe("const xs = Object.keys(arg);\n");
     const objectRefs = ir.references.filter(
-      (r) => r.identifier.name === "Object",
+      (v) => v.identifier.name === "Object",
     );
     expect(objectRefs).toHaveLength(1);
     expect(objectRefs[0]?.flags.receiver).toBe(true);
@@ -350,7 +350,7 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
 
   test("a global read directly carries flags.receiver=false", () => {
     const ir = pipe("const xs = Object.keys(arg);\n");
-    const argRefs = ir.references.filter((r) => r.identifier.name === "arg");
+    const argRefs = ir.references.filter((v) => v.identifier.name === "arg");
     expect(argRefs).toHaveLength(1);
     expect(argRefs[0]?.flags.receiver).toBe(false);
     expect(argRefs[0]?.flags.read).toBe(true);
@@ -366,8 +366,8 @@ describe("scenario: function parameter references are not duplicated", () => {
     const b = varByName(ir, "b");
     expect(a.references).toHaveLength(1);
     expect(b.references).toHaveLength(1);
-    const aRef = ir.references.find((r) => r.id === a.references[0]);
-    const bRef = ir.references.find((r) => r.id === b.references[0]);
+    const aRef = ir.references.find((v) => v.id === a.references[0]);
+    const bRef = ir.references.find((v) => v.id === b.references[0]);
     expect(aRef?.flags.read).toBe(true);
     expect(aRef?.flags.write).toBe(false);
     expect(bRef?.flags.read).toBe(true);

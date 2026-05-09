@@ -79,8 +79,8 @@ function collectBodyScopes(variable: Variable): ReadonlySet<Scope> {
 
 function isInnerClassName(variable: Variable): boolean {
   return variable.defs.some(
-    (d) =>
-      d.type === DEFINITION_TYPE.ClassName && d.node === variable.scope.block,
+    (v) =>
+      v.type === DEFINITION_TYPE.ClassName && v.node === variable.scope.block,
   );
 }
 

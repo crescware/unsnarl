@@ -104,7 +104,7 @@ describe("JsonEmitter", () => {
   test("nodes carry semantic kind and raw attributes, never a precomputed label", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     const nodes = flattenNodes(graph.elements);
-    const a = nodes.find((n) => n.name === "a");
+    const a = nodes.find((v) => v.name === "a");
     expect(a?.kind).toBe(DEFINITION_TYPE.Variable);
     expect(a?.declarationKind).toBe("const");
     expect(a?.label).toBeUndefined();
@@ -121,16 +121,16 @@ describe("JsonEmitter", () => {
       ),
     );
     const nodes = flattenNodes(graph.elements);
-    const def = nodes.find((n) => n.name === "def");
+    const def = nodes.find((v) => v.name === "def");
     expect(def?.kind).toBe(DEFINITION_TYPE.ImportBinding);
     expect(def?.importKind).toBe(IMPORT_KIND.Default);
 
-    const renamed = nodes.find((n) => n.name === "renamed");
+    const renamed = nodes.find((v) => v.name === "renamed");
     expect(renamed?.importKind).toBe(IMPORT_KIND.Named);
     expect(renamed?.importedName).toBe("other");
 
     const moduleNode = nodes.find(
-      (n) => n.kind === NODE_KIND.ModuleSource && n.name === "some-default",
+      (v) => v.kind === NODE_KIND.ModuleSource && v.name === "some-default",
     );
     expect(moduleNode).toBeDefined();
   });
@@ -140,7 +140,7 @@ describe("JsonEmitter", () => {
       emit("function f() { let v = 0; v = 1; v = 2; return v; }\n"),
     );
     const writeOps = flattenNodes(graph.elements).filter(
-      (n) => n.kind === NODE_KIND.WriteOp,
+      (v) => v.kind === NODE_KIND.WriteOp,
     );
     expect(writeOps).toHaveLength(2);
     for (const op of writeOps) {
@@ -152,24 +152,24 @@ describe("JsonEmitter", () => {
   test("function bodies become subgraphs of kind 'function' carrying ownerNodeId of the FunctionName", () => {
     const graph = JSON.parse(emit("function add(a, b) { return a + b; }\n"));
     const fnSubgraph = flattenSubgraphs(graph.elements).find(
-      (s) => s.kind === SUBGRAPH_KIND.Function,
+      (v) => v.kind === SUBGRAPH_KIND.Function,
     );
     expect(fnSubgraph).toBeDefined();
     const ownerNode = flattenNodes(graph.elements).find(
-      (n) => n.id === fnSubgraph?.ownerNodeId,
+      (v) => v.id === fnSubgraph?.ownerNodeId,
     );
     expect(ownerNode).toBeDefined();
     expect(ownerNode?.kind).toBe(DEFINITION_TYPE.FunctionName);
     expect(ownerNode?.name).toBe("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
-      (e) =>
-        e.type === VISUAL_ELEMENT_TYPE.Subgraph &&
-        e.kind === SUBGRAPH_KIND.Return,
+      (v) =>
+        v.type === VISUAL_ELEMENT_TYPE.Subgraph &&
+        v.kind === SUBGRAPH_KIND.Return,
     );
     expect(returnSubgraph).toBeDefined();
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
-      (e) =>
-        e.type === VISUAL_ELEMENT_TYPE.Node && e.kind === NODE_KIND.ReturnUse,
+      (v) =>
+        v.type === VISUAL_ELEMENT_TYPE.Node && v.kind === NODE_KIND.ReturnUse,
     );
     expect(returnUseNodes.length).toBeGreaterThan(0);
   });
@@ -188,9 +188,9 @@ describe("JsonEmitter", () => {
       ),
     );
     const cases = flattenSubgraphs(graph.elements).filter(
-      (s) => s.kind === SUBGRAPH_KIND.Case,
+      (v) => v.kind === SUBGRAPH_KIND.Case,
     );
-    const caseTests = cases.map((c) => c.caseTest);
+    const caseTests = cases.map((v) => v.caseTest);
     expect(caseTests).toContain('"a"');
     expect(caseTests).toContain(null);
   });

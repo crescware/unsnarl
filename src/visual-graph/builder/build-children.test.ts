@@ -49,7 +49,7 @@ function makeCtx(scopes: readonly SerializedScope[], raw = ""): BuilderContext {
   return {
     ir,
     variableMap: new Map(),
-    scopeMap: new Map(scopes.map((s) => [s.id, s])),
+    scopeMap: new Map(scopes.map((v) => [v.id, v])),
     subgraphOwnerVar: new Map(),
     writeOpsByVariable: new Map(),
     writeOpsByScope: new Map(),
@@ -99,7 +99,7 @@ describe("buildChildren", () => {
     expect((ifSg as VisualSubgraph).kind).toBe("if");
     expect(
       container.elements.some(
-        (e) => e.type === "subgraph" && e.kind === "if-else-container",
+        (v) => v.type === "subgraph" && v.kind === "if-else-container",
       ),
     ).toBe(false);
     const anchor = (ifSg as VisualSubgraph).elements[0];
@@ -150,8 +150,8 @@ describe("buildChildren", () => {
     // The container holds only the branch subgraphs; the test anchor
     // lives inside the `if` (consequent) branch, and the `else`
     // (alternate) carries no test of its own.
-    expect(sg.elements.map((e) => e.type)).toEqual(["subgraph", "subgraph"]);
-    expect(sg.elements.map((e) => e.kind)).toEqual(["if", "else"]);
+    expect(sg.elements.map((v) => v.type)).toEqual(["subgraph", "subgraph"]);
+    expect(sg.elements.map((v) => v.kind)).toEqual(["if", "else"]);
     const ifSg = sg.elements[0];
     if (ifSg?.type !== "subgraph" || ifSg.kind !== "if") {
       throw new Error("expected if subgraph at index 0");
@@ -166,7 +166,7 @@ describe("buildChildren", () => {
       throw new Error("expected else subgraph at index 1");
     }
     expect(
-      elseSg.elements.every((e) => !(e.type === "node" && e.kind === "IfTest")),
+      elseSg.elements.every((v) => !(v.type === "node" && v.kind === "IfTest")),
     ).toBe(true);
   });
 
@@ -239,11 +239,11 @@ describe("buildChildren", () => {
     // subgraph that hosts its own test anchor inside. No merge
     // container in between.
     expect(container.elements).toHaveLength(2);
-    expect(container.elements.map((e) => e.type)).toEqual([
+    expect(container.elements.map((v) => v.type)).toEqual([
       "subgraph",
       "subgraph",
     ]);
-    expect(container.elements.map((e) => e.kind)).toEqual(["if", "if"]);
+    expect(container.elements.map((v) => v.kind)).toEqual(["if", "if"]);
     for (const sg of container.elements) {
       if (sg.type !== "subgraph") {
         throw new Error("expected subgraph");

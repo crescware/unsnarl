@@ -44,7 +44,7 @@ describe("emitSubgraph", () => {
     };
     emitSubgraph(state, sg, "  ");
     expect(state.wrapperIds).toEqual([]);
-    expect(state.lines.some((l) => l.startsWith('  subgraph s_fn["'))).toBe(
+    expect(state.lines.some((v) => v.startsWith('  subgraph s_fn["'))).toBe(
       true,
     );
   });
@@ -57,7 +57,7 @@ describe("emitSubgraph", () => {
       "  ",
     );
     expect(state.wrapperIds).toEqual([]);
-    expect(state.lines.some((l) => l.startsWith('  subgraph s_if["'))).toBe(
+    expect(state.lines.some((v) => v.startsWith('  subgraph s_if["'))).toBe(
       true,
     );
   });
@@ -80,8 +80,8 @@ describe("emitSubgraph", () => {
       ownerNodeId: "n_owner",
     };
     emitSubgraph(state, sg, "  ");
-    const ownerIdx = state.lines.findIndex((l) => l.includes("n_owner"));
-    const innerIdx = state.lines.findIndex((l) => l.includes("subgraph s_fn"));
+    const ownerIdx = state.lines.findIndex((v) => v.includes("n_owner"));
+    const innerIdx = state.lines.findIndex((v) => v.includes("subgraph s_fn"));
     expect(ownerIdx).toBeGreaterThan(0); // not the wrapper open line
     expect(ownerIdx).toBeLessThan(innerIdx);
   });

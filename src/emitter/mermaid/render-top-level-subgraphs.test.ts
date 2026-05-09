@@ -17,7 +17,7 @@ describe("renderTopLevelSubgraphs", () => {
         { ...baseSubgraph(), id: "s2", kind: SUBGRAPH_KIND.Else },
       ],
     });
-    expect(state.lines.filter((l) => l.startsWith("  subgraph"))).toHaveLength(
+    expect(state.lines.filter((v) => v.startsWith("  subgraph"))).toHaveLength(
       2,
     );
   });

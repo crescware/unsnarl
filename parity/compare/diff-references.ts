@@ -13,8 +13,8 @@ export function diffReferences(
   baseline: readonly NormalizedReference[],
 ): Mismatch[] {
   const result: Mismatch[] = [];
-  const uMap = new Map(unsnarl.map((r) => [keyOf(r), r]));
-  const bMap = new Map(baseline.map((r) => [keyOf(r), r]));
+  const uMap = new Map(unsnarl.map((v) => [keyOf(v), v]));
+  const bMap = new Map(baseline.map((v) => [keyOf(v), v]));
   for (const [k, ur] of uMap) {
     const br = bMap.get(k);
     if (!br) {
