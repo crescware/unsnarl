@@ -1,0 +1,13 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_foo_9["unused foo()<br/>L1"]
+    subgraph s_scope_1["foo()<br/>L1-3"]
+      direction RL
+      expr_stmt_19["foo()<br/>L2"]
+    end
+  end
+  n_scope_0_foo_9 -->|read,call| expr_stmt_19
+  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
+  class wrap_s_scope_1 fnWrap;

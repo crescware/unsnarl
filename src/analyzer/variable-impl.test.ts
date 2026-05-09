@@ -15,6 +15,7 @@ function fakeRef(opts: {
   const { init, read, write } = opts;
   return {
     init,
+    from: fakeScope,
     isRead: () => read,
     isWrite: () => write,
     isWriteOnly: () => write && !read,
@@ -60,15 +61,6 @@ describe("isUnused", () => {
     const v = new VariableImpl("x", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: false, read: true, write: true }));
-    expect(isUnused(v)).toBe(false);
-  });
-
-  // Recursive / self-resolving Read references currently count as a Read and
-  // therefore keep the variable not-unused. Whether to exclude self-resolving
-  // Read refs is tracked by #68.
-  test("returns false when only a self-resolving Read reference exists (recursive call; #68)", () => {
-    const v = new VariableImpl("foo", fakeScope);
-    v.references.push(fakeRef({ init: false, read: true, write: false }));
     expect(isUnused(v)).toBe(false);
   });
 });

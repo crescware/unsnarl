@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/recursive-only/input.ts",
+    "language": "ts"
+  },
+  "raw": "function foo() {\n  foo();\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 28
+        }
+      },
+      "variables": [
+        "scope#0:foo@9"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 27
+        }
+      },
+      "variables": [
+        "scope#1:arguments@0"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:foo@9",
+      "name": "foo",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "foo",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:arguments@0",
+      "name": "arguments",
+      "scope": "scope#1",
+      "identifiers": [],
+      "references": [],
+      "defs": []
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "foo",
+        "span": {
+          "line": 2,
+          "column": 2,
+          "offset": 19
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:foo@9",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 19
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 8,
+          "offset": 25
+        },
+        "headStartSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 19
+        },
+        "headEndSpan": {
+          "line": 2,
+          "column": 5,
+          "offset": 22
+        },
+        "isCall": true
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:foo@9"
+  ],
+  "diagnostics": []
+}
