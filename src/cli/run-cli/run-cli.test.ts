@@ -180,8 +180,8 @@ describe("runCli (integration)", () => {
     expect(graph.pruning.ancestors).toBe(1);
     expect(graph.pruning.roots).toEqual([{ query: "1", matched: 1 }]);
     const names = graph.elements
-      .filter((e: { type: string }) => e.type === VISUAL_ELEMENT_TYPE.Node)
-      .map((e: { name: string }) => e.name);
+      .filter((v: { type: string }) => v.type === VISUAL_ELEMENT_TYPE.Node)
+      .map((v: { name: string }) => v.name);
     // Inner radius keeps a (root) and b (1 hop). c is past the requested
     // radius and is NOT in the kept node list; instead the outgoing edge
     // toward c shows up in boundaryEdges as a "more graph beyond here"

@@ -15,7 +15,7 @@ const ifBranch = {
 const inner = { ...baseScope(), id: "inner", upper: "if" };
 const deeper = { ...baseScope(), id: "deeper", upper: "inner" };
 const map = new Map<string, SerializedScope>(
-  [outer, ifBranch, inner, deeper].map((s) => [s.id, s]),
+  [outer, ifBranch, inner, deeper].map((v) => [v.id, v]),
 );
 
 describe("branchScopeOf", () => {

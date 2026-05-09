@@ -42,8 +42,8 @@ describe("emitPlainSubgraph", () => {
       ],
     };
     emitPlainSubgraph(state, sg, "  ");
-    const nodeIdx = state.lines.findIndex((l) => l.includes("n_a"));
-    const innerIdx = state.lines.findIndex((l) => l.includes("subgraph inner"));
+    const nodeIdx = state.lines.findIndex((v) => v.includes("n_a"));
+    const innerIdx = state.lines.findIndex((v) => v.includes("subgraph inner"));
     expect(nodeIdx).toBeLessThan(innerIdx);
   });
 
@@ -59,8 +59,8 @@ describe("emitPlainSubgraph", () => {
       ],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(state.lines.some((l) => l.includes("n_owner"))).toBe(false);
-    expect(state.lines.some((l) => l.includes("n_keep"))).toBe(true);
+    expect(state.lines.some((v) => v.includes("n_owner"))).toBe(false);
+    expect(state.lines.some((v) => v.includes("n_keep"))).toBe(true);
   });
 
   test("invokes emptySubgraphPlaceholder when there are no emitted children", () => {
@@ -79,7 +79,7 @@ describe("emitPlainSubgraph", () => {
       elements: [],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(state.lines.some((l) => l.includes("__placeholder_empty"))).toBe(
+    expect(state.lines.some((v) => v.includes("__placeholder_empty"))).toBe(
       true,
     );
     expect(state.placeholderIds).toEqual(["ph_empty"]);

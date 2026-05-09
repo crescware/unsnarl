@@ -8,7 +8,7 @@ describe("eslint-scope parity", () => {
     const mismatches = runParity(fixture);
     if (mismatches.length > 0) {
       const lines = mismatches.map(
-        (m) => `  [${m.kind}] ${m.scopePath.join(".") || "root"}: ${m.message}`,
+        (v) => `  [${v.kind}] ${v.scopePath.join(".") || "root"}: ${v.message}`,
       );
       throw new Error(
         `Parity mismatch for ${fixture.fixtureId} (${mismatches.length} entries):\n${lines.join("\n")}`,

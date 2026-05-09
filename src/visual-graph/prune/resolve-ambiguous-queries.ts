@@ -15,7 +15,7 @@ export function resolveAmbiguousQueries(
   resolutions: readonly RootQueryResolution[];
 }> {
   const hasAmbiguous = queries.some(
-    (q) => q.kind === ROOT_QUERY_KIND.LineOrName,
+    (v) => v.kind === ROOT_QUERY_KIND.LineOrName,
   );
   if (!hasAmbiguous) {
     return { resolved: queries, resolutions: [] };

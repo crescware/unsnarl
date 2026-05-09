@@ -13,8 +13,8 @@ describe("splitEdges", () => {
       ],
       importSources,
     );
-    expect(got.imports.map((e) => e.from)).toEqual(["mod_a"]);
-    expect(got.body.map((e) => e.from)).toEqual(["n_x"]);
+    expect(got.imports.map((v) => v.from)).toEqual(["mod_a"]);
+    expect(got.body.map((v) => v.from)).toEqual(["n_x"]);
   });
 
   test("preserves the relative order within each bucket", () => {
@@ -27,11 +27,11 @@ describe("splitEdges", () => {
       ],
       importSources,
     );
-    expect(got.body.map((e) => `${e.from}->${e.to}`)).toEqual([
+    expect(got.body.map((v) => `${v.from}->${v.to}`)).toEqual([
       "n_a->n_b",
       "n_c->n_d",
     ]);
-    expect(got.imports.map((e) => `${e.from}->${e.to}`)).toEqual([
+    expect(got.imports.map((v) => `${v.from}->${v.to}`)).toEqual([
       "mod_a->n_a",
     ]);
   });

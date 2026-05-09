@@ -56,19 +56,19 @@ describe("FlatSerializer", () => {
     const ir = pipe(code);
     // 4 refs in source order: init Write on a, init Write on b, init Read on
     // a (RHS of `const b = a;`), and the trailing `a;` read.
-    expect(ir.references.map((r) => r.id)).toEqual([
+    expect(ir.references.map((v) => v.id)).toEqual([
       "ref#0",
       "ref#1",
       "ref#2",
       "ref#3",
     ]);
-    expect(ir.references.map((r) => r.identifier.name)).toEqual([
+    expect(ir.references.map((v) => v.identifier.name)).toEqual([
       "a",
       "b",
       "a",
       "a",
     ]);
-    const offsets = ir.references.map((r) => r.identifier.span.offset);
+    const offsets = ir.references.map((v) => v.identifier.span.offset);
     expect(offsets[0]).toBeLessThan(offsets[1] ?? Infinity);
     expect(offsets[1]).toBeLessThan(offsets[2] ?? Infinity);
     expect(offsets[2]).toBeLessThan(offsets[3] ?? Infinity);
@@ -81,10 +81,10 @@ describe("FlatSerializer", () => {
     // Variable.scope は string (ScopeId)
     expect(typeof fVar?.scope).toBe("string");
     // Reference.resolved は VariableId 文字列
-    const resolvedRef = ir.references.find((r) => r.identifier.name === "f");
+    const resolvedRef = ir.references.find((v) => v.identifier.name === "f");
     expect(resolvedRef?.resolved).toBe(fVar?.id);
     // Scope.upper も id 参照
-    const fnScope = ir.scopes.find((s) => s.type === SCOPE_TYPE.Function);
+    const fnScope = ir.scopes.find((v) => v.type === SCOPE_TYPE.Function);
     expect(fnScope?.upper).toBe("scope#0");
   });
 
@@ -98,15 +98,15 @@ describe("FlatSerializer", () => {
     const ir = pipe(code);
     const refs = ir.references;
     const xReads = refs.filter(
-      (r) => r.identifier.name === "x" && r.flags.read,
+      (v) => v.identifier.name === "x" && v.flags.read,
     );
     const xWrites = refs.filter(
-      (r) => r.identifier.name === "x" && r.flags.write,
+      (v) => v.identifier.name === "x" && v.flags.write,
     );
     expect(xReads.length).toBeGreaterThan(0);
     // Two writes: the init Write at `let x = 0` and the explicit `x = 1`.
     expect(xWrites.length).toBe(2);
-    const addRef = refs.find((r) => r.identifier.name === "add");
+    const addRef = refs.find((v) => v.identifier.name === "add");
     expect(addRef?.flags.call).toBe(true);
     expect(addRef?.flags.read).toBe(true);
   });

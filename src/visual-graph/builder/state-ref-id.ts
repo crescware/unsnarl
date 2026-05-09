@@ -12,7 +12,7 @@ export function stateRefId(
   if (op) {
     return writeOpNodeId(op.refId);
   }
-  const ref = ctx.ir.references.find((r) => r.id === refId);
+  const ref = ctx.ir.references.find((v) => v.id === refId);
   if (!ref) {
     return nodeId(varId);
   }

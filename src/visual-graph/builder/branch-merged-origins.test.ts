@@ -31,7 +31,7 @@ function makeCtx(opts: {
   return {
     ir,
     variableMap: new Map<string, SerializedVariable>(),
-    scopeMap: new Map(opts.scopes.map((s) => [s.id, s])),
+    scopeMap: new Map(opts.scopes.map((v) => [v.id, v])),
     subgraphOwnerVar: new Map(),
     writeOpsByVariable: new Map(),
     writeOpsByScope: new Map(),

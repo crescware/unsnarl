@@ -62,7 +62,7 @@ function makeCtx(opts: {
   return {
     ir,
     variableMap: new Map(variables.map((v) => [v.id, v])),
-    scopeMap: new Map(opts.scopes.map((s) => [s.id, s])),
+    scopeMap: new Map(opts.scopes.map((v) => [v.id, v])),
     subgraphOwnerVar: opts.subgraphOwnerVar ?? new Map(),
     writeOpsByVariable: new Map(),
     writeOpsByScope: opts.writeOpsByScope ?? new Map(),
@@ -86,7 +86,7 @@ describe("buildScope", () => {
     expect(sg.kind).toBe("block");
     expect(
       sg.elements.find(
-        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_v1",
+        (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
       ),
     ).toMatchObject({
       kind: NODE_KIND.Variable,
@@ -120,7 +120,7 @@ describe("buildScope", () => {
 
     const sg = container.elements[0] as VisualSubgraph;
     const writeNode = sg.elements.find(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "wr_r1",
+      (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
       kind: NODE_KIND.WriteOp,
@@ -166,7 +166,7 @@ describe("buildScope", () => {
     expect(sg.kind).toBe("function");
     expect(
       sg.elements.find(
-        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_param",
+        (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_param",
       ),
     ).toBeDefined();
     expect(state.subgraphByScope.get("fn")).toBe(sg);
@@ -196,7 +196,7 @@ describe("buildScope", () => {
     expect(sg.kind).toBe("for");
     expect(
       sg.elements.find(
-        (e) => e.type === VISUAL_ELEMENT_TYPE.Node && e.id === "n_v",
+        (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v",
       ),
     ).toBeDefined();
   });
@@ -231,7 +231,7 @@ describe("buildScope", () => {
     buildScope(outer, container, ctx, emptyState());
 
     const childSg = container.elements.find(
-      (e) => e.type === VISUAL_ELEMENT_TYPE.Subgraph,
+      (v) => v.type === VISUAL_ELEMENT_TYPE.Subgraph,
     ) as VisualSubgraph;
     expect(childSg).toBeDefined();
     expect(childSg.kind).toBe("if");

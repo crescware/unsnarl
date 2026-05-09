@@ -11,7 +11,7 @@ const child = { ...baseScope(), id: "child", upper: "root" };
 const sibling = { ...baseScope(), id: "sibling", upper: "root" };
 const grandchild = { ...baseScope(), id: "grandchild", upper: "child" };
 const scopeMap = new Map<string, SerializedScope>(
-  [root, child, sibling, grandchild].map((s) => [s.id, s]),
+  [root, child, sibling, grandchild].map((v) => [v.id, v]),
 );
 
 const ops: WriteOp[] = [

@@ -9,7 +9,7 @@ const mid = { ...baseScope(), id: "mid", upper: "root" };
 const leaf = { ...baseScope(), id: "leaf", upper: "mid" };
 const sibling = { ...baseScope(), id: "sibling", upper: "root" };
 const map = new Map<string, SerializedScope>(
-  [root, mid, leaf, sibling].map((s) => [s.id, s]),
+  [root, mid, leaf, sibling].map((v) => [v.id, v]),
 );
 
 describe("isAncestorScope", () => {

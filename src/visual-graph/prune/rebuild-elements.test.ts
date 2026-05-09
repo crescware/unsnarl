@@ -45,7 +45,7 @@ describe("rebuildElements", () => {
       [node("a"), node("b"), node("c")],
       new Set(["a", "c"]),
     );
-    expect(out.map((e) => e.id)).toEqual(["a", "c"]);
+    expect(out.map((v) => v.id)).toEqual(["a", "c"]);
   });
 
   test("subgraph survives only when at least one descendant survives", () => {
@@ -53,9 +53,9 @@ describe("rebuildElements", () => {
       [sg("s", [node("x"), node("y")]), sg("t", [node("z")])],
       new Set(["x"]),
     );
-    expect(out.map((e) => e.id)).toEqual(["s"]);
+    expect(out.map((v) => v.id)).toEqual(["s"]);
     const survivingSubgraph = out[0] as VisualSubgraph;
-    expect(survivingSubgraph.elements.map((e) => e.id)).toEqual(["x"]);
+    expect(survivingSubgraph.elements.map((v) => v.id)).toEqual(["x"]);
   });
 
   test("subgraph with zero surviving descendants is dropped", () => {
@@ -73,7 +73,7 @@ describe("rebuildElements", () => {
     expect(outer.elements).toHaveLength(1);
     const inner = outer.elements[0] as VisualSubgraph;
     expect(inner.id).toBe("inner");
-    expect(inner.elements.map((e) => e.id)).toEqual(["deep"]);
+    expect(inner.elements.map((v) => v.id)).toEqual(["deep"]);
   });
 
   test("returned nodes are clones (immutability)", () => {

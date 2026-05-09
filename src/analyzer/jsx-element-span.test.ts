@@ -34,7 +34,7 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     ].join("\n");
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
-    const aRef = refs.find((r) => r.identifier.name === "A");
+    const aRef = refs.find((v) => v.identifier.name === "A");
     expect(aRef).toBeDefined();
     if (!aRef) {
       return;
@@ -54,7 +54,7 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const code = "const App = () => <A />;\n";
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
-    const aRef = refs.find((r) => r.identifier.name === "A");
+    const aRef = refs.find((v) => v.identifier.name === "A");
     expect(aRef).toBeDefined();
     if (!aRef) {
       return;
@@ -68,7 +68,7 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     );
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
-    const vRef = refs.find((r) => r.identifier.name === "v");
+    const vRef = refs.find((ref) => ref.identifier.name === "v");
     expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toBeNull();
   });
 
@@ -76,7 +76,7 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const code = ["const v = 1;", "const App = () => <A>{v}</A>;"].join("\n");
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
-    const vRef = refs.find((r) => r.identifier.name === "v");
+    const vRef = refs.find((ref) => ref.identifier.name === "v");
     expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toBeNull();
   });
 
@@ -87,7 +87,7 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     ].join("\n");
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
-    const fooRef = refs.find((r) => r.identifier.name === "Foo");
+    const fooRef = refs.find((v) => v.identifier.name === "Foo");
     expect(
       fooRef ? annotations.ofReference(fooRef).jsxElement : undefined,
     ).not.toBeNull();

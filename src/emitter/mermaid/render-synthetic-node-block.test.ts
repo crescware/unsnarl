@@ -18,7 +18,7 @@ describe("renderSyntheticNodeBlock", () => {
         { ...baseNode(), id: "module_root", kind: NODE_KIND.ModuleSink },
       ],
     });
-    expect(state.lines.map((l) => l.trim().split(/[[(]/)[0]).sort()).toEqual([
+    expect(state.lines.map((v) => v.trim().split(/[[(]/)[0]).sort()).toEqual([
       "import_b",
       "mod_a",
       "module_root",
@@ -47,7 +47,7 @@ describe("renderSyntheticNodeBlock", () => {
         },
       ],
     });
-    expect(state.lines.map((l) => l.trim().split(/[[(]/)[0])).toEqual([
+    expect(state.lines.map((v) => v.trim().split(/[[(]/)[0])).toEqual([
       "mod_first",
       "import_second",
     ]);

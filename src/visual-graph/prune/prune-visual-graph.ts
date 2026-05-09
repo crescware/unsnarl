@@ -21,8 +21,8 @@ export function pruneVisualGraph(
     return { graph, perQuery: [] };
   }
 
-  const perQuery = options.roots.map((q) => ({
-    query: q,
+  const perQuery = options.roots.map((v) => ({
+    query: v,
     matched: 0,
   }));
   const rootIds = new Set<string>();
@@ -153,10 +153,10 @@ export function pruneVisualGraph(
   const newElements = rebuildElements(graph.elements, reachable);
   const survivors = collectIds(newElements);
   const newEdges = graph.edges.filter(
-    (e) => survivors.has(e.from) && survivors.has(e.to),
+    (v) => survivors.has(v.from) && survivors.has(v.to),
   );
-  const survivingBoundary = boundaryEdges.filter((b) =>
-    survivors.has(b.inside),
+  const survivingBoundary = boundaryEdges.filter((v) =>
+    survivors.has(v.inside),
   );
 
   const pruned = {

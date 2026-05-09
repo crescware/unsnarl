@@ -54,7 +54,7 @@ describe("hoistDeclarations", () => {
     const raw = "var x = 1; const y = 2;";
     hoistDeclarations(programBody(raw), scope, raw, diags);
     expect(scope.variables.map((v) => v.name)).toEqual(["x", "y"]);
-    expect(diags.list().map((d) => d.kind)).toEqual([
+    expect(diags.list().map((v) => v.kind)).toEqual([
       DIAGNOSTIC_KIND.VarDetected,
     ]);
   });

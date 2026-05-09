@@ -85,9 +85,9 @@ export function branchMergedOrigins(
   // tracked separately as a visualisation tuning concern.
   const lacksFallback =
     (innerKey.startsWith("if:") &&
-      !innerSiblings.some((s) => s.blockContext?.key === "alternate")) ||
+      !innerSiblings.some((v) => v.blockContext?.key === "alternate")) ||
     (innerKey.startsWith("try:") &&
-      !innerSiblings.some((s) => s.blockContext?.key === "handler"));
+      !innerSiblings.some((v) => v.blockContext?.key === "handler"));
   if (lacksFallback) {
     const innerOffset = innerScope.blockContext?.parentSpanOffset ?? 0;
     const beforeInner = insideOps.filter((op) => op.offset < innerOffset);

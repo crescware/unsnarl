@@ -391,7 +391,7 @@ function lines(out: string): readonly string[] {
 }
 
 function edgesFor(out: string): readonly string[] {
-  return lines(out).filter((l) => l.includes(" -->|"));
+  return lines(out).filter((v) => v.includes(" -->|"));
 }
 
 function countMatches(out: string, re: RegExp): number {
@@ -445,7 +445,7 @@ describe("MermaidEmitter rendering: switch with break", () => {
   test("the declaration fans out to every case via one |set| edge each", () => {
     const decl = "n_scope_0_label_4";
     const setEdges = edgesFor(out).filter(
-      (l) => l.startsWith(`  ${decl} -->`) && l.includes("|set|"),
+      (v) => v.startsWith(`  ${decl} -->`) && v.includes("|set|"),
     );
     expect(setEdges).toHaveLength(3);
   });
@@ -453,7 +453,7 @@ describe("MermaidEmitter rendering: switch with break", () => {
   test("each case fans into result via one |read| edge", () => {
     const result = nodeIdOf(out, "result");
     const reads = edgesFor(out).filter(
-      (l) => l.includes("|read|") && l.endsWith(result),
+      (v) => v.includes("|read|") && v.endsWith(result),
     );
     expect(reads).toHaveLength(3);
   });
@@ -487,20 +487,20 @@ describe("MermaidEmitter rendering: switch with fallthrough", () => {
 
   test("the declaration only emits one |set| edge, into the head case", () => {
     const setEdges = edgesFor(out).filter(
-      (l) => l.startsWith(`  n_scope_0_label_4 -->`) && l.includes("|set|"),
+      (v) => v.startsWith(`  n_scope_0_label_4 -->`) && v.includes("|set|"),
     );
     expect(setEdges).toHaveLength(1);
   });
 
   test("non-terminal cases are stitched together with |fallthrough| edges", () => {
-    const ft = edgesFor(out).filter((l) => l.includes("|fallthrough|"));
+    const ft = edgesFor(out).filter((v) => v.includes("|fallthrough|"));
     expect(ft).toHaveLength(2);
   });
 
   test("only the terminal case feeds result", () => {
     const result = nodeIdOf(out, "result");
     const reads = edgesFor(out).filter(
-      (l) => l.includes("|read|") && l.endsWith(result),
+      (v) => v.includes("|read|") && v.endsWith(result),
     );
     expect(reads).toHaveLength(1);
   });
@@ -533,7 +533,7 @@ describe("MermaidEmitter rendering: if/else", () => {
   test("both branches independently feed result; the declaration does NOT bypass", () => {
     const result = nodeIdOf(out, "result");
     const reads = edgesFor(out).filter(
-      (l) => l.includes("|read|") && l.endsWith(result),
+      (v) => v.includes("|read|") && v.endsWith(result),
     );
     expect(reads).toHaveLength(2);
     expect(out).not.toMatch(
@@ -566,7 +566,7 @@ describe("MermaidEmitter rendering: if without else", () => {
   test("result has two origins: the if-write AND the original declaration", () => {
     const result = nodeIdOf(out, "result");
     const reads = edgesFor(out).filter(
-      (l) => l.includes("|read|") && l.endsWith(result),
+      (v) => v.includes("|read|") && v.endsWith(result),
     );
     expect(reads).toHaveLength(2);
     expect(out).toMatch(
@@ -589,13 +589,13 @@ describe("MermaidEmitter rendering: catch parameter placement", () => {
     ].join("\n");
     const out = emit(code);
     const ls = lines(out);
-    const catchStart = ls.findIndex((l) => l.includes('"catch L4-6"'));
+    const catchStart = ls.findIndex((v) => v.includes('"catch L4-6"'));
     expect(catchStart).toBeGreaterThan(-1);
-    const catchEnd = ls.slice(catchStart).findIndex((l) => l.trim() === "end");
+    const catchEnd = ls.slice(catchStart).findIndex((v) => v.trim() === "end");
     expect(catchEnd).toBeGreaterThan(0);
     const inside = ls.slice(catchStart, catchStart + catchEnd);
     // err isn't read inside the catch body, so it carries the unused prefix.
-    expect(inside.some((l) => l.includes('"unused catch err<br/>'))).toBe(true);
+    expect(inside.some((v) => v.includes('"unused catch err<br/>'))).toBe(true);
   });
 });
 

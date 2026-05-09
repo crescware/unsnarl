@@ -21,7 +21,7 @@ describe("parseRootQueries", () => {
     expect(r.ok).toBe(true);
     if (r.ok) {
       expect(r.queries).toHaveLength(3);
-      expect(r.queries.map((q) => q.kind)).toEqual([
+      expect(r.queries.map((v) => v.kind)).toEqual([
         "line-name",
         "line",
         "range-name",

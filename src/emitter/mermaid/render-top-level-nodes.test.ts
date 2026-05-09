@@ -17,7 +17,7 @@ describe("renderTopLevelNodes", () => {
         { ...baseNode(), id: "n_b" },
       ],
     });
-    expect(state.lines.map((l) => l.trim().split(/[[(]/)[0])).toEqual([
+    expect(state.lines.map((v) => v.trim().split(/[[(]/)[0])).toEqual([
       "n_a",
       "n_b",
     ]);

@@ -146,7 +146,7 @@ export function buildChildren(
     }
     const offset = child.blockContext?.parentSpanOffset ?? 0;
     const containerId = ifContainerSubgraphId(child.upper ?? "", offset);
-    const hasElse = group.some((g) => g.blockContext?.key === "alternate");
+    const hasElse = group.some((v) => v.blockContext?.key === "alternate");
     const containerSubgraph = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,
       id: containerId,

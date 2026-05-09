@@ -29,7 +29,7 @@ export function formatDepthQuery(
     return null;
   }
   const fn = depths[NESTING_KIND.Function];
-  const blockValues = NON_FUNCTION_KINDS.map((k) => depths[k]);
+  const blockValues = NON_FUNCTION_KINDS.map((v) => depths[v]);
   const firstBlock = blockValues[0] ?? DEFAULT_DEPTH;
   const blockUniform = blockValues.every((v) => v === firstBlock);
 

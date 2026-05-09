@@ -22,7 +22,7 @@ describe("enterClass", () => {
     expect(classScope.block).toBe(cls);
     expect(classScope.variables.map((v) => v.name)).toEqual(["C"]);
     const inner = classScope.set.get("C");
-    expect(inner?.defs.map((d) => d.type)).toEqual([DEFINITION_TYPE.ClassName]);
+    expect(inner?.defs.map((v) => v.type)).toEqual([DEFINITION_TYPE.ClassName]);
     expect(inner?.scope).toBe(classScope);
   });
 

@@ -55,7 +55,7 @@ function makeCtx(
   return {
     ir,
     variableMap: new Map(variables.map((v) => [v.id, v])),
-    scopeMap: new Map(scopes.map((s) => [s.id, s])),
+    scopeMap: new Map(scopes.map((v) => [v.id, v])),
     subgraphOwnerVar: new Map(),
     writeOpsByVariable: new Map<string, WriteOp[]>(),
     writeOpsByScope: new Map<string, WriteOp[]>(),
@@ -146,7 +146,7 @@ describe("ensureReturnUseNode", () => {
     expect(sg.kind).toBe("return");
     expect(sg.line).toBe(3);
     expect(sg.endLine).toBe(5);
-    const node = sg.elements.find((e) => e.type === VISUAL_ELEMENT_TYPE.Node);
+    const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
     expect(node).toMatchObject({
       kind: NODE_KIND.ReturnUse,
       name: "x",
@@ -183,7 +183,7 @@ describe("ensureReturnUseNode", () => {
 
     expect(host.elements).toHaveLength(1);
     const sg = host.elements[0] as VisualSubgraph;
-    expect(sg.elements.map((e) => (e as { id: string }).id)).toEqual([
+    expect(sg.elements.map((v) => (v as { id: string }).id)).toEqual([
       "ret_use_r1",
       "ret_use_r2",
     ]);

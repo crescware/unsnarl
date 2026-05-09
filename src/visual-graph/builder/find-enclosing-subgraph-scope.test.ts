@@ -8,7 +8,7 @@ const grand = { ...baseScope(), id: "grand" };
 const parent = { ...baseScope(), id: "parent", upper: "grand" };
 const child = { ...baseScope(), id: "child", upper: "parent" };
 const ancestorChain = new Map<string, SerializedScope>(
-  [grand, parent, child].map((s) => [s.id, s]),
+  [grand, parent, child].map((v) => [v.id, v]),
 );
 
 describe("findEnclosingSubgraphScope", () => {

@@ -20,7 +20,7 @@ const innerBranch = {
   blockContext: { ...baseBlockContext(), parentSpanOffset: 99 },
 };
 const map = new Map<string, SerializedScope>(
-  [root, outer, ifBranch, innerBranch].map((s) => [s.id, s]),
+  [root, outer, ifBranch, innerBranch].map((v) => [v.id, v]),
 );
 
 describe("outermostBranchUnder", () => {

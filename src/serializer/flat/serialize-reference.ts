@@ -25,8 +25,8 @@ export function serializeReference(
     from: scopeIds.get(r.from) ?? "",
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
     owners: ann.owners
-      .map((o) => variableIds.get(o) ?? null)
-      .filter((x): x is string => x !== null),
+      .map((v) => variableIds.get(v) ?? null)
+      .filter((v): v is string => v !== null),
     init: r.init,
     flags: {
       read: r.isRead(),

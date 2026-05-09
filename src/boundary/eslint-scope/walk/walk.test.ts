@@ -86,7 +86,7 @@ describe("walk", () => {
       },
     });
     expect(identPath).not.toBeNull();
-    const types = (identPath as unknown as PathEntry[]).map((p) => p.node.type);
+    const types = (identPath as unknown as PathEntry[]).map((v) => v.node.type);
     expect(types[0]).toBe(AST_TYPE.Program);
     expect(types[types.length - 1]).toBe(AST_TYPE.VariableDeclarator);
   });

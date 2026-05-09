@@ -46,7 +46,7 @@ function findVariable(scope: Scope, name: string): Variable | null {
 }
 
 function defTypes(variable: Variable): readonly DefinitionType[] {
-  return variable.defs.map((d) => d.type);
+  return variable.defs.map((v) => v.type);
 }
 
 function collectScopes(root: Scope): readonly Scope[] {
@@ -96,7 +96,9 @@ describe("EslintCompatAnalyzer / declarations", () => {
     `;
     const { rootScope } = analyze(code);
     const declared = rootScope.variables
-      .filter((v) => v.defs.some((d) => d.type === DEFINITION_TYPE.Variable))
+      .filter((variable) =>
+        variable.defs.some((v) => v.type === DEFINITION_TYPE.Variable),
+      )
       .map((v) => v.name)
       .sort();
     expect(declared).toEqual(["a", "c", "deep", "rest", "x", "y"]);
@@ -175,7 +177,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
     // try block (block scope) と catch scope (catch)
     const allScopes = collectScopes(rootScope);
-    const catchScope = allScopes.find((s) => s.type === SCOPE_TYPE.Catch);
+    const catchScope = allScopes.find((v) => v.type === SCOPE_TYPE.Catch);
     expect(catchScope).toBeDefined();
     expect(catchScope && variableNames(catchScope!).sort()).toEqual(["e", "x"]);
     const e = catchScope && findVariable(catchScope!, "e");
@@ -262,7 +264,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     expect(variableNames(rootScope).sort()).toEqual(["X"]);
     const allScopes = collectScopes(rootScope);
-    const classScope = allScopes.find((s) => s.type === SCOPE_TYPE.Class);
+    const classScope = allScopes.find((v) => v.type === SCOPE_TYPE.Class);
     expect(classScope).toBeDefined();
     expect(classScope && variableNames(classScope!)).toEqual(["C"]);
   });
@@ -272,7 +274,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
 
     const allScopes = collectScopes(rootScope);
-    const classScope = allScopes.find((s) => s.type === SCOPE_TYPE.Class);
+    const classScope = allScopes.find((v) => v.type === SCOPE_TYPE.Class);
     expect(classScope).toBeDefined();
     expect(classScope && classScope.variables).toEqual([]);
   });

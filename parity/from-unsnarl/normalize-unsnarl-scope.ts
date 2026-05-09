@@ -17,7 +17,7 @@ export function normalizeUnsnarlScope(
     .map(normalizeUnsnarlVariable)
     .sort((a, b) => a.name.localeCompare(b.name));
   const references = scope.references
-    .map((r) => normalizeUnsnarlReference(r, paths))
+    .map((v) => normalizeUnsnarlReference(v, paths))
     .sort(
       (a, b) =>
         compareRange(a.identifierRange, b.identifierRange) ||

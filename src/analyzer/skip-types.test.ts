@@ -46,13 +46,13 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     expect(
-      rootScope.through.find((r) => r.identifier.name === "I") ?? null,
+      rootScope.through.find((v) => v.identifier.name === "I") ?? null,
     ).toBeNull();
     expect(
-      rootScope.through.find((r) => r.identifier.name === "foo") ?? null,
+      rootScope.through.find((v) => v.identifier.name === "foo") ?? null,
     ).toBeNull();
     expect(
-      rootScope.through.find((r) => r.identifier.name === "bar") ?? null,
+      rootScope.through.find((v) => v.identifier.name === "bar") ?? null,
     ).toBeNull();
     // 唯一の Variable は x
     expect(rootScope.variables.map((v) => v.name)).toEqual(["x"]);
@@ -101,7 +101,7 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code, "tsx");
     expect(
-      rootScope.through.find((r) => r.identifier.name === "className") ?? null,
+      rootScope.through.find((v) => v.identifier.name === "className") ?? null,
     ).toBeNull();
   });
 });
@@ -116,7 +116,7 @@ describe("EslintCompatAnalyzer / ImplicitGlobalVariable", () => {
     const { rootScope } = analyze(code);
     const console_ = findVariable(rootScope, "console");
     expect(console_).toBeDefined();
-    expect(console_?.defs.map((d) => d.type)).toEqual([
+    expect(console_?.defs.map((v) => v.type)).toEqual([
       DEFINITION_TYPE.ImplicitGlobalVariable,
     ]);
     expect(console_?.references.length).toBe(1);
