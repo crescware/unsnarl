@@ -20,12 +20,13 @@ import { isAstNode } from "./is-ast-node.js";
 // `g`'s body, which is outside `f`'s body, so it counts as external. This
 // matches eslint's `no-unused-vars` default.
 //
-// Class self-references are intentionally not handled here: the
-// eslint-scope-compat layer in this repo does not currently push a
-// dedicated `ClassScope` for ClassDeclaration / ClassExpression (#70), so
-// the scope-ancestor check below cannot identify a method's function
-// scope as being inside the class body. Once #70 lands, #71 will add
-// ClassDeclaration / ClassExpression to FUNCTIONLIKE_TYPES.
+// Class self-references are intentionally not handled here: although
+// the eslint-scope-compat layer now pushes a dedicated `ClassScope`
+// for ClassDeclaration / ClassExpression (#70), `FUNCTIONLIKE_TYPES`
+// below still only enumerates function-shaped definitions. #71 will
+// add ClassDeclaration / ClassExpression so the scope-ancestor check
+// can recognise a method's function scope as being inside the class
+// body.
 export function isUnused(variable: Variable): boolean {
   const bodyScopes = collectBodyScopes(variable);
   for (const ref of variable.references) {

@@ -232,6 +232,51 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(rootScope.type).toBe<ScopeType>("global");
   });
 
+  test("creates a class scope under the parent and defines the inner ClassName for ClassDeclaration", () => {
+    const code = "class C { static factory() { return new C(); } }\n";
+    const { rootScope } = analyze(code);
+
+    const outerC = findVariable(rootScope, "C");
+    expect(outerC && defTypes(outerC)).toEqual([DEFINITION_TYPE.ClassName]);
+
+    const classScope = rootScope.childScopes[0];
+    expect(classScope?.type).toBe<ScopeType>("class");
+    expect(classScope && variableNames(classScope)).toEqual(["C"]);
+    const innerC = classScope && findVariable(classScope, "C");
+    expect(innerC && defTypes(innerC)).toEqual([DEFINITION_TYPE.ClassName]);
+    expect(innerC).not.toBe(outerC);
+
+    // The `new C()` inside `factory` resolves to the inner ClassName, not the
+    // outer one. eslint-scope behaves the same way.
+    const factoryScope = classScope?.childScopes[0];
+    expect(factoryScope?.type).toBe<ScopeType>("function");
+    const innerRef = innerC?.references[0];
+    expect(innerRef?.identifier.name).toBe("C");
+    expect(innerRef?.from).toBe(factoryScope);
+    expect(outerC?.references).toEqual([]);
+  });
+
+  test("creates a class scope for ClassExpression and defines its inner name", () => {
+    const code = "const X = class C { static m() { return C; } };\n";
+    const { rootScope } = analyze(code);
+
+    expect(variableNames(rootScope).sort()).toEqual(["X"]);
+    const allScopes = collectScopes(rootScope);
+    const classScope = allScopes.find((s) => s.type === SCOPE_TYPE.Class);
+    expect(classScope).toBeDefined();
+    expect(classScope && variableNames(classScope!)).toEqual(["C"]);
+  });
+
+  test("does not define an inner variable for an anonymous ClassExpression but still nests a class scope", () => {
+    const code = "const X = class { m() {} };\n";
+    const { rootScope } = analyze(code);
+
+    const allScopes = collectScopes(rootScope);
+    const classScope = allScopes.find((s) => s.type === SCOPE_TYPE.Class);
+    expect(classScope).toBeDefined();
+    expect(classScope && classScope.variables).toEqual([]);
+  });
+
   test("creates separate Variables for shadowing inside nested function", () => {
     const code = `
       const x = 1;

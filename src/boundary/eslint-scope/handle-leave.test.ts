@@ -23,6 +23,8 @@ describe("handleLeave", () => {
     AST_TYPE.SwitchStatement,
     AST_TYPE.SwitchCase,
     AST_TYPE.CatchClause,
+    AST_TYPE.ClassDeclaration,
+    AST_TYPE.ClassExpression,
   ])("pops the current scope for type=%s", (type) => {
     const manager = freshManager();
     const block = { type } as const satisfies NodeLike;

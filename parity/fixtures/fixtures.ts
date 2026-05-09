@@ -19,4 +19,22 @@ export const FIXTURES: readonly ParityInput[] = [
     language: "js",
     sourceType: "module",
   },
+  {
+    fixtureId: "class/declaration-with-self-reference",
+    code: "class C { static factory() { return new C(); } }\n",
+    language: "js",
+    sourceType: "script",
+  },
+  {
+    fixtureId: "class/named-expression-with-self-reference",
+    code: "const X = class C { static m() { return C; } };\n",
+    language: "js",
+    sourceType: "script",
+  },
+  {
+    fixtureId: "class/anonymous-expression",
+    code: "const X = class { m() {} };\n",
+    language: "js",
+    sourceType: "script",
+  },
 ];
