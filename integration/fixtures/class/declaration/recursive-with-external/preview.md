@@ -1,0 +1,29 @@
+# integration/fixtures/class/declaration/recursive-with-external/input.ts
+
+## Input
+
+```ts
+class C {
+  m() {
+    new C();
+  }
+}
+
+new C();
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_C_6["class C<br/>L1"]
+  n_scope_1_C_6["unused class C<br/>L1"]
+  subgraph s_scope_2["(anonymous)<br/>L2-4"]
+    direction RL
+    expr_stmt_22["new C()<br/>L3"]
+  end
+  n_scope_1_C_6 -->|read,call| expr_stmt_22
+  n_scope_0_C_6 -->|read,call| expr_stmt_38
+  expr_stmt_38["new C()<br/>L7"]
+```

@@ -253,6 +253,60 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(isUnused(foo)).toBe(false);
   });
 
+  test("isUnused returns true for a class whose only reference is the recursive body (#71)", () => {
+    // The inner `new C()` resolves to the inner ClassName declared in the
+    // class scope itself; with #71 the body lookup includes
+    // `variable.scope` for that case, so the self-reference is treated as
+    // self-internal and the inner C is unused. The outer ClassName has
+    // no references at all.
+    const code = "class C { m() { new C(); } }\n";
+    const { rootScope } = analyze(code);
+    const outerC = findVariable(rootScope, "C")!;
+    const classScope = rootScope.childScopes.find(
+      (s) => s.type === SCOPE_TYPE.Class,
+    )!;
+    const innerC = findVariable(classScope, "C")!;
+    expect(outerC.references.length).toBe(0);
+    expect(innerC.references.length).toBe(1);
+    expect(innerC.references[0]?.resolved).toBe(innerC);
+    expect(isUnused(outerC)).toBe(true);
+    expect(isUnused(innerC)).toBe(true);
+  });
+
+  test("isUnused returns false for a class that is also instantiated externally (#71)", () => {
+    // The trailing `new C()` originates from the module scope, which is
+    // outside the class body, so the outer ClassName stays not-unused.
+    // The inner ClassName still receives only the recursive reference and
+    // is unused.
+    const code = "class C { m() { new C(); } }\nnew C();\n";
+    const { rootScope } = analyze(code);
+    const outerC = findVariable(rootScope, "C")!;
+    const classScope = rootScope.childScopes.find(
+      (s) => s.type === SCOPE_TYPE.Class,
+    )!;
+    const innerC = findVariable(classScope, "C")!;
+    expect(outerC.references.length).toBe(1);
+    expect(outerC.references[0]?.resolved).toBe(outerC);
+    expect(isUnused(outerC)).toBe(false);
+    expect(isUnused(innerC)).toBe(true);
+  });
+
+  test("isUnused returns true for a self-extending class (#71)", () => {
+    // `class C extends C {}` evaluates the extends expression inside the
+    // class scope itself, which the inner ClassName owns, so the
+    // self-reference counts as self-internal. Pinned to current behavior;
+    // matches the issue's intent that self-extends stays unused.
+    const code = "class C extends C {}\n";
+    const { rootScope } = analyze(code);
+    const outerC = findVariable(rootScope, "C")!;
+    const classScope = rootScope.childScopes.find(
+      (s) => s.type === SCOPE_TYPE.Class,
+    )!;
+    const innerC = findVariable(classScope, "C")!;
+    expect(isUnused(outerC)).toBe(true);
+    expect(isUnused(innerC)).toBe(true);
+  });
+
   test("annotations.ofVariable mirrors isUnused for analyzed variables", () => {
     const code = `
       import unused from "x";
