@@ -31,8 +31,8 @@ export function serializeReference(
     flags: {
       read: r.isRead(),
       write: r.isWrite(),
-      call: r.isCall?.() ?? false,
-      receiver: r.isReceiver?.() ?? false,
+      call: ann.flags.call,
+      receiver: ann.flags.receiver,
     },
     predicateContainer: ann.predicateContainer,
     returnContainer: ann.returnContainer

@@ -5,9 +5,11 @@ import { caseFallsThrough } from "../../analyzer/case-falls-through.js";
 import { findExpressionStatementContainer } from "../../analyzer/expression-statement-container.js";
 import { formatCaseTest } from "../../analyzer/format-case-test.js";
 import { isAstNode } from "../../analyzer/is-ast-node.js";
+import { isUnused } from "../../analyzer/is-unused.js";
 import { findJsxElementSpan } from "../../analyzer/jsx-element-span.js";
 import { findReferenceOwners } from "../../analyzer/owner/find-reference-owners.js";
 import { findPredicateContainer } from "../../analyzer/predicate.js";
+import { referenceCallReceiverFlags } from "../../analyzer/reference-call-receiver.js";
 import { findReturnContainer } from "../../analyzer/return-container.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import type { AnalysisVisitor } from "../../boundary/eslint-scope/visitor.js";
@@ -16,6 +18,7 @@ import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
+import type { Scope } from "../../ir/scope/scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 
@@ -26,7 +29,7 @@ type AnalysisCapture = Readonly<{
 
 type CapturingVisitor = Readonly<{
   visitor: AnalysisVisitor;
-  capture(): AnalysisCapture;
+  capture(globalScope: Scope): AnalysisCapture;
 }>;
 
 const ZERO_DEPTHS: NestingDepths = {
@@ -50,6 +53,10 @@ export function buildAnalysisVisitor(
     onReference(input) {
       annotations.setReference(input.ref, {
         owners: findReferenceOwners(input.path, input.scope),
+        flags: referenceCallReceiverFlags(
+          input.parent as AstNode | null,
+          input.key,
+        ),
         predicateContainer: findPredicateContainer(
           input.parent,
           input.key,
@@ -118,6 +125,25 @@ export function buildAnalysisVisitor(
 
   return {
     visitor,
-    capture: () => ({ annotations, diagnostics }),
+    capture: (globalScope) => {
+      populateVariableAnnotations(globalScope, annotations);
+      return { annotations, diagnostics };
+    },
   };
+}
+
+function populateVariableAnnotations(
+  globalScope: Scope,
+  annotations: AnnotationsImpl,
+): void {
+  const stack: /* mutable */ Scope[] = [globalScope];
+  while (stack.length > 0) {
+    const scope = stack.pop() as Scope;
+    for (const variable of scope.variables) {
+      annotations.setVariable(variable, { isUnused: isUnused(variable) });
+    }
+    for (const child of scope.childScopes) {
+      stack.push(child);
+    }
+  }
 }

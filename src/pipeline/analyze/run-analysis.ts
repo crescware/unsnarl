@@ -17,7 +17,7 @@ export function runAnalysis(parsed: ParsedSource): AnalyzedSource {
     { sourceType: parsed.sourceType, raw: parsed.raw },
     visitor,
   );
-  const { annotations, diagnostics } = capture();
+  const { annotations, diagnostics } = capture(globalScope);
   return {
     rootScope: globalScope,
     annotations,

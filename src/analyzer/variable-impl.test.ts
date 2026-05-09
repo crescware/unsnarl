@@ -20,8 +20,6 @@ function fakeRef(opts: {
     isWriteOnly: () => write && !read,
     isReadOnly: () => read && !write,
     isReadWrite: () => read && write,
-    isCall: () => false,
-    isReceiver: () => false,
   } as unknown as Reference;
 }
 
