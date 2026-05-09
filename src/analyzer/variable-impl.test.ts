@@ -49,14 +49,26 @@ describe("isUnused", () => {
     expect(isUnused(v)).toBe(false);
   });
 
-  // NOTE: write-only without any read (e.g. `let x = 1; x = 2;`) is currently
-  // treated as not-unused. See #45 — the predicate intentionally excludes only
-  // init-and-write-only refs, which preserves the pre-#39 semantics but does
-  // not yet surface "written but never read" as unused.
-  test("returns false when a non-init Write-only reference is present (re-assignment)", () => {
+  test("returns true when a non-init Write-only reference is present (re-assignment without any read; #45)", () => {
     const v = new VariableImpl("x", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: false, read: false, write: true }));
+    expect(isUnused(v)).toBe(true);
+  });
+
+  test("returns false when a ReadWrite reference is present (e.g. `x += 1`)", () => {
+    const v = new VariableImpl("x", fakeScope);
+    v.references.push(fakeRef({ init: true, read: false, write: true }));
+    v.references.push(fakeRef({ init: false, read: true, write: true }));
+    expect(isUnused(v)).toBe(false);
+  });
+
+  // Recursive / self-resolving Read references currently count as a Read and
+  // therefore keep the variable not-unused. Whether to exclude self-resolving
+  // Read refs is tracked by #68.
+  test("returns false when only a self-resolving Read reference exists (recursive call; #68)", () => {
+    const v = new VariableImpl("foo", fakeScope);
+    v.references.push(fakeRef({ init: false, read: true, write: false }));
     expect(isUnused(v)).toBe(false);
   });
 });

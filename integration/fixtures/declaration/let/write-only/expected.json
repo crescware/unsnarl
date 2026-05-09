@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/let/write-only/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_4",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "let",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_1",
+      "kind": "WriteOp",
+      "name": "x",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": "let"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_4",
+      "to": "wr_ref_1",
+      "label": "set"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

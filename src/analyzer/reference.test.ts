@@ -192,6 +192,31 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(isUnused(a)).toBe(true);
   });
 
+  test("isUnused returns true for a let that is re-assigned but never read (#45)", () => {
+    const code = "let x = 1;\nx = 2;\n";
+    const { rootScope } = analyze(code);
+    const x = findVariable(rootScope, "x")!;
+    expect(x.references.length).toBe(2);
+    // [0] init Write at the declarator id; [1] non-init Write at `x = 2`.
+    expect(x.references[0]?.init).toBe(true);
+    expect(x.references[0]?.isWriteOnly()).toBe(true);
+    expect(x.references[1]?.init).toBe(false);
+    expect(x.references[1]?.isWriteOnly()).toBe(true);
+    expect(isUnused(x)).toBe(true);
+  });
+
+  test("isUnused returns false for a recursive function with no external caller (#68)", () => {
+    // Pinned to current behavior. `foo` has only the self-call which counts
+    // as Read, so it is not flagged unused. See #68 for the design question.
+    const code = "function foo() { foo(); }\n";
+    const { rootScope } = analyze(code);
+    const foo = findVariable(rootScope, "foo")!;
+    expect(foo.references.length).toBe(1);
+    expect(foo.references[0]?.isRead()).toBe(true);
+    expect(foo.references[0]?.resolved).toBe(foo);
+    expect(isUnused(foo)).toBe(false);
+  });
+
   test("annotations.ofVariable mirrors isUnused for analyzed variables", () => {
     const code = `
       import unused from "x";
