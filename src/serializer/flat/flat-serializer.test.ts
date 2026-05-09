@@ -126,6 +126,17 @@ describe("FlatSerializer", () => {
     expect(unusedNames).not.toContain("console");
   });
 
+  test("includes a let that is re-assigned but never read in unusedVariableIds (#45)", () => {
+    const code =
+      "let writeOnly = 1;\nwriteOnly = 2;\nconst read = 3;\nconsole.log(read);\n";
+    const ir = pipe(code);
+    const unusedNames = ir.unusedVariableIds.map((id) => {
+      const v = ir.variables.find((vv) => vv.id === id);
+      return v?.name;
+    });
+    expect(unusedNames).toEqual(["writeOnly"]);
+  });
+
   test("preserves diagnostics including var-detected entries", () => {
     const code = "var legacy = 1;\nconst x = 2;\n";
     const ir = pipe(code);
