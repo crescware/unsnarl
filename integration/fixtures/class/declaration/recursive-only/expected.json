@@ -1,0 +1,61 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/declaration/recursive-only/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_C_6",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_1_C_6",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassName"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "function",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_22",
+          "kind": "ExpressionStatement",
+          "name": "new C()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_C_6",
+      "to": "expr_stmt_22",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

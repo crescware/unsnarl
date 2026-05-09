@@ -2,6 +2,7 @@ import type { AstNode } from "../ir/primitive/ast-node.js";
 import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
 import { AST_TYPE } from "../parser/ast-type.js";
+import { DEFINITION_TYPE } from "./definition-type.js";
 import { isAstNode } from "./is-ast-node.js";
 
 // Source of truth for `Annotations.ofVariable(v).isUnused`. The analysis
@@ -20,13 +21,12 @@ import { isAstNode } from "./is-ast-node.js";
 // `g`'s body, which is outside `f`'s body, so it counts as external. This
 // matches eslint's `no-unused-vars` default.
 //
-// Class self-references are intentionally not handled here: although
-// the eslint-scope-compat layer now pushes a dedicated `ClassScope`
-// for ClassDeclaration / ClassExpression (#70), `FUNCTIONLIKE_TYPES`
-// below still only enumerates function-shaped definitions. #71 will
-// add ClassDeclaration / ClassExpression so the scope-ancestor check
-// can recognise a method's function scope as being inside the class
-// body.
+// Class self-references are also handled (#71). For ClassDeclaration
+// the outer ClassName lives in the enclosing scope while the body
+// (the class scope) is a child, matching the function pattern. For
+// the inner ClassName declared inside the class scope itself, the
+// body scope IS `variable.scope` rather than one of its children, so
+// `collectBodyScopes` checks both relations.
 export function isUnused(variable: Variable): boolean {
   const bodyScopes = collectBodyScopes(variable);
   for (const ref of variable.references) {
@@ -44,6 +44,8 @@ const FUNCTIONLIKE_TYPES = new Set<string>([
   AST_TYPE.FunctionDeclaration,
   AST_TYPE.FunctionExpression,
   AST_TYPE.ArrowFunctionExpression,
+  AST_TYPE.ClassDeclaration,
+  AST_TYPE.ClassExpression,
 ]);
 
 function collectBodyScopes(variable: Variable): ReadonlySet<Scope> {
@@ -58,12 +60,28 @@ function collectBodyScopes(variable: Variable): ReadonlySet<Scope> {
     return new Set();
   }
   const result = new Set<Scope>();
+  // The inner ClassName for `class C { ... }` is declared inside the
+  // class scope itself, so the defining body is `variable.scope`
+  // rather than a child of it. Restrict this branch to ClassName defs
+  // pointing at the same node as the enclosing scope's block; without
+  // that filter, function parameters (whose def.node is the enclosing
+  // FunctionDeclaration) would falsely look like body owners.
+  if (isInnerClassName(variable)) {
+    result.add(variable.scope);
+  }
   for (const child of variable.scope.childScopes) {
     if (bodyNodes.has(child.block)) {
       result.add(child);
     }
   }
   return result;
+}
+
+function isInnerClassName(variable: Variable): boolean {
+  return variable.defs.some(
+    (d) =>
+      d.type === DEFINITION_TYPE.ClassName && d.node === variable.scope.block,
+  );
 }
 
 function bodyNodeOf(node: AstNode): AstNode | null {
