@@ -1,7 +1,4 @@
-import type { ScopeManager } from "../../analyzer/manager.js";
 import { isTypeOnlySubtree } from "../../analyzer/skip-types.js";
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
-import type { WalkAction } from "../../analyzer/walk/walk-action.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { enterBlock } from "./enter-block.js";
@@ -11,9 +8,12 @@ import { enterFunction } from "./enter-function.js";
 import { enterSwitchCase } from "./enter-switch-case.js";
 import { enterSwitch } from "./enter-switch.js";
 import { handleIdentifierReference } from "./handle-identifier-reference.js";
+import type { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import { skipBlockScope } from "./skip-block-scope.js";
 import type { AnalysisVisitor } from "./visitor.js";
+import type { PathEntry } from "./walk/path-entry.js";
+import type { WalkAction } from "./walk/walk-action.js";
 
 export function handleEnter(
   node: NodeLike,

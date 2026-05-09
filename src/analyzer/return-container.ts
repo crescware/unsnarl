@@ -1,6 +1,6 @@
+import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { ReturnContainer } from "../ir/reference/return-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
-import type { PathEntry } from "./walk/path-entry.js";
 
 export function findReturnContainer(
   path: readonly PathEntry[],

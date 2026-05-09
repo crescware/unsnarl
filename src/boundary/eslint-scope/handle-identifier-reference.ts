@@ -1,12 +1,12 @@
-import { classifyIdentifier } from "../../analyzer/classify/classify-identifier.js";
-import type { ScopeManager } from "../../analyzer/manager.js";
-import { ReferenceImpl } from "../../analyzer/reference-impl.js";
-import { bindReference } from "../../analyzer/resolve.js";
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
 import type { AstIdentifier } from "../../ir/primitive/ast-identifier.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
+import { classifyIdentifier } from "./classify/classify-identifier.js";
+import type { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
+import { ReferenceImpl } from "./reference-impl.js";
+import { bindReference } from "./resolve.js";
 import type { AnalysisVisitor } from "./visitor.js";
+import type { PathEntry } from "./walk/path-entry.js";
 
 export function handleIdentifierReference(
   node: NodeLike,

@@ -1,7 +1,7 @@
+import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import type { BlockContext } from "../ir/scope/block-context.js";
 import { ifChainRootOffset } from "./if-chain-root-offset.js";
-import type { PathEntry } from "./walk/path-entry.js";
 
 export function blockContextOf(
   parent: AstNode | null,

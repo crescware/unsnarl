@@ -1,15 +1,15 @@
 import { describe, expect, test } from "vitest";
 
-import { ScopeManager } from "../../analyzer/manager.js";
-import type { PathEntry } from "../../analyzer/walk/path-entry.js";
-import { walk } from "../../analyzer/walk/walk.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DiagnosticCollector } from "../../util/diagnostic.js";
 import { handleIdentifierReference } from "./handle-identifier-reference.js";
 import { hoistInto } from "./hoist-into.js";
+import { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import { parse } from "./testing/parse.js";
+import type { PathEntry } from "./walk/path-entry.js";
+import { walk } from "./walk/walk.js";
 
 type CapturedIdentifier = {
   node: NodeLike;

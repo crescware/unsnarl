@@ -1,5 +1,3 @@
-import { ScopeManager } from "../../analyzer/manager.js";
-import { walk } from "../../analyzer/walk/walk.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import {
   SOURCE_TYPE,
@@ -10,8 +8,10 @@ import type { EslintScopeAnalysisResult } from "./analysis-result.js";
 import { handleEnter } from "./handle-enter.js";
 import { handleLeave } from "./handle-leave.js";
 import { hoistInto } from "./hoist-into.js";
+import { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import type { AnalysisVisitor } from "./visitor.js";
+import { walk } from "./walk/walk.js";
 
 type AnalyzeOptions = Readonly<{
   sourceType: SourceType;

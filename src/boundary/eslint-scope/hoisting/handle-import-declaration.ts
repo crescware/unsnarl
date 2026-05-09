@@ -1,0 +1,29 @@
+import { DEFINITION_TYPE } from "../../../analyzer/definition-type.js";
+import type { AstNode } from "../../../ir/primitive/ast-node.js";
+import type { Scope } from "../../../ir/scope/scope.js";
+import { declareVariable } from "../declare/declare-variable.js";
+import { isIdentifierNode } from "./is-identifier-node.js";
+import { isNodeLike, type NodeLike } from "./node-like.js";
+
+export function handleImportDeclaration(node: NodeLike, scope: Scope): void {
+  const specifiers = node["specifiers"];
+  if (!Array.isArray(specifiers)) {
+    return;
+  }
+  for (const spec of specifiers) {
+    if (!isNodeLike(spec)) {
+      continue;
+    }
+    const local = spec["local"];
+    if (!isIdentifierNode(local)) {
+      continue;
+    }
+    declareVariable(
+      scope,
+      local,
+      DEFINITION_TYPE.ImportBinding,
+      spec as unknown as AstNode,
+      node as unknown as AstNode,
+    );
+  }
+}

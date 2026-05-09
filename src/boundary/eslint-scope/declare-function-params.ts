@@ -1,9 +1,9 @@
-import { collectBindingIdentifiers } from "../../analyzer/declare/collect-binding-identifiers.js";
-import { declareVariable } from "../../analyzer/declare/declare-variable.js";
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { collectBindingIdentifiers } from "./declare/collect-binding-identifiers.js";
+import { declareVariable } from "./declare/declare-variable.js";
 import { isNodeLike } from "./is-node-like.js";
 import type { NodeLike } from "./node-like.js";
 
