@@ -15,6 +15,9 @@ importers:
         specifier: 0.128.0
         version: 0.128.0
     devDependencies:
+      '@crescware/eslint-plugin-crescware-array-callback-arg-names':
+        specifier: 0.0.1
+        version: 0.0.1
       '@mermaid-js/layout-elk':
         specifier: 0.2.1
         version: 0.2.1(mermaid@11.14.0)
@@ -93,6 +96,9 @@ packages:
 
   '@chevrotain/utils@12.0.0':
     resolution: {integrity: sha512-lB59uJoaGIfOOL9knQqQRfhl9g7x8/wqFkp13zTdkRu1huG9kg6IJs1O8hqj9rs6h7orGxHJUKb+mX3rPbWGhA==}
+
+  '@crescware/eslint-plugin-crescware-array-callback-arg-names@0.0.1':
+    resolution: {integrity: sha512-BiQ8PxwyrHmlqbG1kETkfWJte8iL196tfhqd7kmMHIO4AX6YJnhK7VIzWAtdk2OlF9k7r5QGfZjdziGD1wBzTA==}
 
   '@csstools/color-helpers@6.0.2':
     resolution: {integrity: sha512-LMGQLS9EuADloEFkcTBR3BwV/CGHV7zyDxVRtVDTwdI2Ca4it0CCVTT9wCkxSgokjE5Ho41hEPgb8OEUwoXr6Q==}
@@ -1933,6 +1939,8 @@ snapshots:
   '@chevrotain/types@12.0.0': {}
 
   '@chevrotain/utils@12.0.0': {}
+
+  '@crescware/eslint-plugin-crescware-array-callback-arg-names@0.0.1': {}
 
   '@csstools/color-helpers@6.0.2': {}
 
