@@ -110,6 +110,18 @@ describe("handleEnter", () => {
       type: DEFINITION_TYPE.CatchClause,
       expectedScopeType: "catch",
     },
+    {
+      name: "ClassDeclaration -> pushes class scope",
+      code: "class C {}",
+      type: AST_TYPE.ClassDeclaration,
+      expectedScopeType: "class",
+    },
+    {
+      name: "ClassExpression -> pushes class scope",
+      code: "const X = class {};",
+      type: AST_TYPE.ClassExpression,
+      expectedScopeType: "class",
+    },
   ])("$name", ({ code, type, expectedScopeType }) => {
     const program = parse(code);
     const target = findFirst(program, type);

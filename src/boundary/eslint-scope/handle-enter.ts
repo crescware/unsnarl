@@ -3,6 +3,7 @@ import { AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { enterBlock } from "./enter-block.js";
 import { enterCatch } from "./enter-catch.js";
+import { enterClass } from "./enter-class.js";
 import { enterFor } from "./enter-for.js";
 import { enterFunction } from "./enter-function.js";
 import { enterSwitchCase } from "./enter-switch-case.js";
@@ -78,6 +79,10 @@ export function handleEnter(
       return;
     case AST_TYPE.CatchClause:
       enterCatch(node, parent, key, path, manager, raw, diagnostics, visitor);
+      return;
+    case AST_TYPE.ClassDeclaration:
+    case AST_TYPE.ClassExpression:
+      enterClass(node, parent, key, path, manager, visitor);
       return;
     default:
       return;

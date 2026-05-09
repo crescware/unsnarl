@@ -25,6 +25,7 @@ flowchart RL
   n_scope_0_total_94["total<br/>L9"]
   n_scope_0_c_119["unused c<br/>L10"]
   n_scope_0_result_144["unused result<br/>L11"]
+  n_scope_2_Counter_62["unused class Counter<br/>L5"]
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_add_9["add()<br/>L1"]

@@ -19,6 +19,8 @@ export function handleLeave(
     case AST_TYPE.SwitchStatement:
     case AST_TYPE.SwitchCase:
     case AST_TYPE.CatchClause:
+    case AST_TYPE.ClassDeclaration:
+    case AST_TYPE.ClassExpression:
       manager.pop();
       return;
     case AST_TYPE.BlockStatement:

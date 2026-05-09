@@ -12,7 +12,8 @@
       "isStrict": true,
       "upper": null,
       "childScopes": [
-        "scope#1"
+        "scope#1",
+        "scope#2"
       ],
       "variableScope": "scope#0",
       "block": {
@@ -94,6 +95,51 @@
       "exitsFunction": false,
       "nestingDepths": {
         "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "class",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "ClassDeclaration",
+        "span": {
+          "line": 5,
+          "column": 0,
+          "offset": 56
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 1,
+          "offset": 86
+        }
+      },
+      "variables": [
+        "scope#2:Counter@62"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "Program",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
         "if": 0,
         "for": 0,
         "while": 0,
@@ -419,6 +465,41 @@
           "type": "Parameter"
         }
       ]
+    },
+    {
+      "id": "scope#2:Counter@62",
+      "name": "Counter",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 62
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "Counter",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 62
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 5,
+              "column": 0,
+              "offset": 56
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
     }
   ],
   "references": [
@@ -659,7 +740,8 @@
   ],
   "unusedVariableIds": [
     "scope#0:c@119",
-    "scope#0:result@144"
+    "scope#0:result@144",
+    "scope#2:Counter@62"
   ],
   "diagnostics": []
 }
