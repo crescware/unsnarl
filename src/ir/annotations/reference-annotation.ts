@@ -6,6 +6,7 @@ import type { Variable } from "../scope/variable.js";
 
 export type ReferenceAnnotation = Readonly<{
   owners: /* mutable */ Variable[];
+  flags: Readonly<{ call: boolean; receiver: boolean }>;
   predicateContainer: PredicateContainer | null;
   returnContainer: ReturnContainer | null;
   jsxElement: JsxElementContainer | null;

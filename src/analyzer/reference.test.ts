@@ -45,14 +45,16 @@ function refsOf(scope: Scope, name: string): readonly Reference[] {
 
 describe("EslintCompatAnalyzer / references", () => {
   test("classifies a simple read reference", () => {
-    const { rootScope } = analyze("const a = 1;\nconsole.log(a);\n");
+    const { rootScope, annotations } = analyze(
+      "const a = 1;\nconsole.log(a);\n",
+    );
     const a = findVariable(rootScope, "a")!;
     expect(a.references.length).toBe(2);
     // [0] is the init Write recorded at the declarator id; [1] is the read.
-    const read = a.references[1];
-    expect(read?.isRead()).toBe(true);
-    expect(read?.isWrite()).toBe(false);
-    expect(read?.isCall?.()).toBe(false);
+    const read = a.references[1]!;
+    expect(read.isRead()).toBe(true);
+    expect(read.isWrite()).toBe(false);
+    expect(annotations.ofReference(read).flags.call).toBe(false);
   });
 
   test("classifies init write on declarator, write on `=`, read+write on compound assignment, read+write on update", () => {
@@ -87,15 +89,15 @@ describe("EslintCompatAnalyzer / references", () => {
       foo();
       new Bar();
     `;
-    const { rootScope } = analyze(code);
+    const { rootScope, annotations } = analyze(code);
     const fooRefs = refsOf(rootScope, "foo");
     expect(fooRefs.length).toBe(1);
-    expect(fooRefs[0]?.isCall?.()).toBe(true);
+    expect(annotations.ofReference(fooRefs[0]!).flags.call).toBe(true);
     expect(fooRefs[0]?.isRead()).toBe(true);
 
     const barRefs = refsOf(rootScope, "Bar");
     expect(barRefs.length).toBe(1);
-    expect(barRefs[0]?.isCall?.()).toBe(true);
+    expect(annotations.ofReference(barRefs[0]!).flags.call).toBe(true);
     expect(barRefs[0]?.isRead()).toBe(true);
   });
 
@@ -130,10 +132,10 @@ describe("EslintCompatAnalyzer / references", () => {
       const result = foo();
       function foo() { return 1; }
     `;
-    const { rootScope } = analyze(code);
+    const { rootScope, annotations } = analyze(code);
     const foo = findVariable(rootScope, "foo")!;
     expect(foo.references.length).toBe(1);
-    expect(foo.references[0]?.isCall?.()).toBe(true);
+    expect(annotations.ofReference(foo.references[0]!).flags.call).toBe(true);
   });
 
   test("inner reference resolves to inner shadowing variable, outer remains unused", () => {
@@ -188,6 +190,21 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(isUnused(unused)).toBe(true);
     expect(isUnused(used)).toBe(false);
     expect(isUnused(a)).toBe(true);
+  });
+
+  test("annotations.ofVariable mirrors isUnused for analyzed variables", () => {
+    const code = `
+      import unused from "x";
+      import { used } from "y";
+      const a = used;
+    `;
+    const { rootScope, annotations } = analyze(code);
+    const unused = findVariable(rootScope, "unused")!;
+    const used = findVariable(rootScope, "used")!;
+    const a = findVariable(rootScope, "a")!;
+    expect(annotations.ofVariable(unused).isUnused).toBe(true);
+    expect(annotations.ofVariable(used).isUnused).toBe(false);
+    expect(annotations.ofVariable(a).isUnused).toBe(true);
   });
 
   test("destructuring assignment to existing names is recorded as write references", () => {

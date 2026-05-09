@@ -8,9 +8,6 @@ import type { CompatVariable } from "./compat-variable.js";
 // parity will (or already does) regress.
 //
 // Deliberately excluded:
-// - `isCall()` / `isReceiver()` — unsnarl-only extensions; eslint-scope
-//   has no equivalent (parity stubs them to false on the eslint-scope
-//   side).
 // - `writeExpr` / `tainted` / `partial` / `flag` / `isStatic()` —
 //   deprecated in eslint-scope; not part of the contract surface unsnarl
 //   commits to.

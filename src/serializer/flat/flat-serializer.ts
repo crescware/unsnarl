@@ -1,4 +1,3 @@
-import { isUnused } from "../../analyzer/is-unused.js";
 import { makeReferenceId, makeScopeId, makeVariableId } from "../../ir/id.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
@@ -86,7 +85,7 @@ export class FlatSerializer implements IRSerializer {
 
     const unusedVariableIds: /* mutable */ string[] = [];
     for (const v of orderedVariables) {
-      if (isUnused(v) && hasDeclaringDef(v)) {
+      if (ctx.annotations.ofVariable(v).isUnused && hasDeclaringDef(v)) {
         const id = variableIds.get(v) ?? null;
         if (id !== null) {
           unusedVariableIds.push(id);

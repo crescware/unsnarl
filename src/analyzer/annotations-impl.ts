@@ -1,12 +1,15 @@
 import type { Annotations } from "../ir/annotations/annotations.js";
 import type { ReferenceAnnotation } from "../ir/annotations/reference-annotation.js";
 import type { ScopeAnnotation } from "../ir/annotations/scope-annotation.js";
+import type { VariableAnnotation } from "../ir/annotations/variable-annotation.js";
 import type { Reference } from "../ir/reference/reference.js";
 import type { Scope } from "../ir/scope/scope.js";
+import type { Variable } from "../ir/scope/variable.js";
 import { NESTING_KIND } from "../serializer/nesting-kind.js";
 
 const EMPTY_REFERENCE_ANNOTATION: ReferenceAnnotation = {
   owners: [],
+  flags: { call: false, receiver: false },
   predicateContainer: null,
   returnContainer: null,
   jsxElement: null,
@@ -28,9 +31,14 @@ const EMPTY_SCOPE_ANNOTATION: ScopeAnnotation = {
   },
 };
 
+const EMPTY_VARIABLE_ANNOTATION: VariableAnnotation = {
+  isUnused: false,
+};
+
 export class AnnotationsImpl implements Annotations {
   private readonly references: Map<Reference, ReferenceAnnotation> = new Map();
   private readonly scopes: Map<Scope, ScopeAnnotation> = new Map();
+  private readonly variables: Map<Variable, VariableAnnotation> = new Map();
 
   ofReference(ref: Reference): ReferenceAnnotation {
     return this.references.get(ref) ?? EMPTY_REFERENCE_ANNOTATION;
@@ -40,11 +48,19 @@ export class AnnotationsImpl implements Annotations {
     return this.scopes.get(scope) ?? EMPTY_SCOPE_ANNOTATION;
   }
 
+  ofVariable(variable: Variable): VariableAnnotation {
+    return this.variables.get(variable) ?? EMPTY_VARIABLE_ANNOTATION;
+  }
+
   setReference(ref: Reference, annotation: ReferenceAnnotation): void {
     this.references.set(ref, annotation);
   }
 
   setScope(scope: Scope, annotation: ScopeAnnotation): void {
     this.scopes.set(scope, annotation);
+  }
+
+  setVariable(variable: Variable, annotation: VariableAnnotation): void {
+    this.variables.set(variable, annotation);
   }
 }

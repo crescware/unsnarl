@@ -93,7 +93,7 @@ describe("classifyIdentifier dispatch", () => {
       classifyIdentifier(node({ type: AST_TYPE.CallExpression }), "callee", []),
     ).toMatchObject({
       kind: "reference",
-      flags: ReferenceFlags.Read | ReferenceFlags.Call,
+      flags: ReferenceFlags.Read,
     });
   });
 });

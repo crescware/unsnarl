@@ -20,15 +20,6 @@ export function classifyOrdinaryReference(
   if (t === AST_TYPE.UpdateExpression && key === "argument") {
     return reference(ReferenceFlags.Read | ReferenceFlags.Write, false);
   }
-  if (t === AST_TYPE.CallExpression && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
-  }
-  if (t === AST_TYPE.NewExpression && key === "callee") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Call, false);
-  }
-  if (t === AST_TYPE.MemberExpression && key === "object") {
-    return reference(ReferenceFlags.Read | ReferenceFlags.Receiver, false);
-  }
   let init = false;
   if (t === AST_TYPE.VariableDeclarator && key === "init") {
     init = true;

@@ -16,6 +16,4 @@ export type Reference = {
   isReadOnly(): boolean;
   isWriteOnly(): boolean;
   isReadWrite(): boolean;
-  isCall(): boolean;
-  isReceiver(): boolean;
 };

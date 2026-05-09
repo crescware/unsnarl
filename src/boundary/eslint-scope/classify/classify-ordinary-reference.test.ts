@@ -45,36 +45,36 @@ describe("classifyOrdinaryReference", () => {
     });
   });
 
-  test("CallExpression#callee → Read|Call", () => {
+  test("CallExpression#callee → Read", () => {
     const r = classifyOrdinaryReference(
       AST_TYPE.CallExpression,
       "callee",
       node({ type: AST_TYPE.CallExpression }),
     );
     expect(r).toMatchObject({
-      flags: ReferenceFlags.Read | ReferenceFlags.Call,
+      flags: ReferenceFlags.Read,
     });
   });
 
-  test("NewExpression#callee → Read|Call", () => {
+  test("NewExpression#callee → Read", () => {
     const r = classifyOrdinaryReference(
       AST_TYPE.NewExpression,
       "callee",
       node({ type: AST_TYPE.NewExpression }),
     );
     expect(r).toMatchObject({
-      flags: ReferenceFlags.Read | ReferenceFlags.Call,
+      flags: ReferenceFlags.Read,
     });
   });
 
-  test("MemberExpression#object → Read|Receiver", () => {
+  test("MemberExpression#object → Read", () => {
     const r = classifyOrdinaryReference(
       AST_TYPE.MemberExpression,
       "object",
       node({ type: AST_TYPE.MemberExpression }),
     );
     expect(r).toMatchObject({
-      flags: ReferenceFlags.Read | ReferenceFlags.Receiver,
+      flags: ReferenceFlags.Read,
     });
   });
 

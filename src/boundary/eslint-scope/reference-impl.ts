@@ -43,12 +43,4 @@ export class ReferenceImpl implements Reference {
   isReadWrite(): boolean {
     return this.isRead() && this.isWrite();
   }
-
-  isCall(): boolean {
-    return (this.flags & ReferenceFlags.Call) !== 0;
-  }
-
-  isReceiver(): boolean {
-    return (this.flags & ReferenceFlags.Receiver) !== 0;
-  }
 }
