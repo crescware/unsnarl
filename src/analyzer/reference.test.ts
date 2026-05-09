@@ -205,15 +205,51 @@ describe("EslintCompatAnalyzer / references", () => {
     expect(isUnused(x)).toBe(true);
   });
 
-  test("isUnused returns false for a recursive function with no external caller (#68)", () => {
-    // Pinned to current behavior. `foo` has only the self-call which counts
-    // as Read, so it is not flagged unused. See #68 for the design question.
+  test("isUnused returns true for a recursive function with no external caller (#68)", () => {
     const code = "function foo() { foo(); }\n";
     const { rootScope } = analyze(code);
     const foo = findVariable(rootScope, "foo")!;
     expect(foo.references.length).toBe(1);
     expect(foo.references[0]?.isRead()).toBe(true);
     expect(foo.references[0]?.resolved).toBe(foo);
+    expect(isUnused(foo)).toBe(true);
+  });
+
+  test("isUnused returns true for an arrow function whose only reference is the self-recursive body (#68)", () => {
+    const code = "const a = () => a;\n";
+    const { rootScope } = analyze(code);
+    const a = findVariable(rootScope, "a")!;
+    // [0] init Write at the declarator id; [1] body Read of `a`, resolving
+    // back to the same variable.
+    expect(a.references.length).toBe(2);
+    expect(a.references[0]?.init).toBe(true);
+    expect(a.references[1]?.isRead()).toBe(true);
+    expect(a.references[1]?.resolved).toBe(a);
+    expect(isUnused(a)).toBe(true);
+  });
+
+  test("isUnused returns false for mutual recursion (each reference resolves to the other variable; #68)", () => {
+    // Pinned to current behavior. `f`'s body reads `g` (not `f`), so the
+    // Read does not self-resolve and `f` stays not-unused. eslint's
+    // `no-unused-vars` defaults match this. Lifting this is out of scope.
+    const code = "function f() { g(); }\nfunction g() { f(); }\n";
+    const { rootScope } = analyze(code);
+    const f = findVariable(rootScope, "f")!;
+    const g = findVariable(rootScope, "g")!;
+    expect(isUnused(f)).toBe(false);
+    expect(isUnused(g)).toBe(false);
+  });
+
+  test("isUnused returns false for a recursive function that is also called externally", () => {
+    // The outer `foo();` originates from the module scope, which is outside
+    // `foo`'s body, so it counts as external use even though both refs
+    // self-resolve to `foo`.
+    const code = "function foo() { foo(); }\nfoo();\n";
+    const { rootScope } = analyze(code);
+    const foo = findVariable(rootScope, "foo")!;
+    expect(foo.references.length).toBe(2);
+    expect(foo.references.every((r) => r.resolved === foo)).toBe(true);
+    expect(foo.references.every((r) => r.isRead())).toBe(true);
     expect(isUnused(foo)).toBe(false);
   });
 
