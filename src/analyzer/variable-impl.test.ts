@@ -27,40 +27,40 @@ function fakeRef(opts: {
 describe("isUnused", () => {
   test("returns true when there are no references", () => {
     const v = new VariableImpl("x", fakeScope);
-    expect(isUnused(v)).toBe(true);
+    expect(isUnused(v)).toEqual(true);
   });
 
   test("returns true when only an init Write reference exists (e.g. `const a = 1;` with no reader)", () => {
     const v = new VariableImpl("a", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
-    expect(isUnused(v)).toBe(true);
+    expect(isUnused(v)).toEqual(true);
   });
 
   test("returns false when an init Read reference is present (e.g. `const x = a;` so `a` is read in another initializer)", () => {
     const v = new VariableImpl("a", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: true, read: true, write: false }));
-    expect(isUnused(v)).toBe(false);
+    expect(isUnused(v)).toEqual(false);
   });
 
   test("returns false when a non-init Read reference is present (e.g. `console.log(a)` after declaration)", () => {
     const v = new VariableImpl("a", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: false, read: true, write: false }));
-    expect(isUnused(v)).toBe(false);
+    expect(isUnused(v)).toEqual(false);
   });
 
   test("returns true when a non-init Write-only reference is present (re-assignment without any read; #45)", () => {
     const v = new VariableImpl("x", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: false, read: false, write: true }));
-    expect(isUnused(v)).toBe(true);
+    expect(isUnused(v)).toEqual(true);
   });
 
   test("returns false when a ReadWrite reference is present (e.g. `x += 1`)", () => {
     const v = new VariableImpl("x", fakeScope);
     v.references.push(fakeRef({ init: true, read: false, write: true }));
     v.references.push(fakeRef({ init: false, read: true, write: true }));
-    expect(isUnused(v)).toBe(false);
+    expect(isUnused(v)).toEqual(false);
   });
 });

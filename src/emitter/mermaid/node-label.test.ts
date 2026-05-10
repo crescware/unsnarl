@@ -16,7 +16,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("if ()<br/>L3");
+    ).toEqual("if ()<br/>L3");
   });
 
   test("SwitchDiscriminant emits 'switch ()<br/>L<line>'", () => {
@@ -30,7 +30,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("switch ()<br/>L6");
+    ).toEqual("switch ()<br/>L6");
   });
 
   test("WhileTest emits 'while ()<br/>L<line>'", () => {
@@ -44,7 +44,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("while ()<br/>L5");
+    ).toEqual("while ()<br/>L5");
   });
 
   test("DoWhileTest emits 'do while ()<br/>L<line>'", () => {
@@ -58,7 +58,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("do while ()<br/>L7");
+    ).toEqual("do while ()<br/>L7");
   });
 
   test("ForTest emits 'for ()<br/>L<line>'", () => {
@@ -72,7 +72,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("for ()<br/>L4");
+    ).toEqual("for ()<br/>L4");
   });
 
   test("ModuleSink shortcuts to the literal 'module'", () => {
@@ -81,7 +81,7 @@ describe("nodeLabel", () => {
         { ...baseNode(), kind: NODE_KIND.ModuleSink, name: "ignored" },
         false,
       ),
-    ).toBe("module");
+    ).toEqual("module");
   });
 
   test("ImplicitGlobalVariable renders without a line suffix because it has no source location", () => {
@@ -94,7 +94,7 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("global Math");
+    ).toEqual("global Math");
   });
 
   test("ExpressionStatement renders the head followed by the statement line", () => {
@@ -107,11 +107,11 @@ describe("nodeLabel", () => {
         },
         false,
       ),
-    ).toBe("console.log()<br/>L7");
+    ).toEqual("console.log()<br/>L7");
   });
 
   test("appends the line range as a single line", () => {
-    expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, false)).toBe(
+    expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, false)).toEqual(
       "x<br/>L7",
     );
   });
@@ -119,31 +119,31 @@ describe("nodeLabel", () => {
   test("appends the line range when endLine differs from line", () => {
     expect(
       nodeLabel({ ...baseNode(), name: "x", line: 7, endLine: 9 }, false),
-    ).toBe("x<br/>L7-9");
+    ).toEqual("x<br/>L7-9");
   });
 
   test("collapses to a single line when endLine equals line", () => {
     expect(
       nodeLabel({ ...baseNode(), name: "x", line: 4, endLine: 4 }, false),
-    ).toBe("x<br/>L4");
+    ).toEqual("x<br/>L4");
   });
 
   test("prefixes with 'unused' when node.unused is true", () => {
     expect(
       nodeLabel({ ...baseNode(), name: "x", line: 2, unused: true }, false),
-    ).toBe("unused x<br/>L2");
+    ).toEqual("unused x<br/>L2");
   });
 
   test("'unused' prefix is suppressed when unused is missing or false", () => {
-    expect(nodeLabel({ ...baseNode(), name: "x", unused: false }, false)).toBe(
-      "x<br/>L1",
-    );
-    expect(nodeLabel({ ...baseNode(), name: "x" }, false)).toBe("x<br/>L1");
+    expect(
+      nodeLabel({ ...baseNode(), name: "x", unused: false }, false),
+    ).toEqual("x<br/>L1");
+    expect(nodeLabel({ ...baseNode(), name: "x" }, false)).toEqual("x<br/>L1");
   });
 
   describe("debug=true", () => {
     test("appends NODE_KIND to the standard label", () => {
-      expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, true)).toBe(
+      expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, true)).toEqual(
         "x<br/>L7<br/>Variable",
       );
     });
@@ -159,7 +159,7 @@ describe("nodeLabel", () => {
           },
           true,
         ),
-      ).toBe("if ()<br/>L3<br/>IfTest");
+      ).toEqual("if ()<br/>L3<br/>IfTest");
     });
 
     test("appends NODE_KIND to ModuleSink even when the base label has no line", () => {
@@ -168,7 +168,7 @@ describe("nodeLabel", () => {
           { ...baseNode(), kind: NODE_KIND.ModuleSink, name: "ignored" },
           true,
         ),
-      ).toBe("module<br/>ModuleSink");
+      ).toEqual("module<br/>ModuleSink");
     });
 
     test("appends NODE_KIND to ImplicitGlobalVariable", () => {
@@ -181,7 +181,7 @@ describe("nodeLabel", () => {
           },
           true,
         ),
-      ).toBe("global Math<br/>ImplicitGlobalVariable");
+      ).toEqual("global Math<br/>ImplicitGlobalVariable");
     });
   });
 });

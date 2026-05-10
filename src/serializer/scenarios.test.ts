@@ -119,10 +119,10 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
     );
     expect(writes).toHaveLength(3);
     const scopes = new Set(writes.map((v) => v.from));
-    expect(scopes.size).toBe(3);
+    expect(scopes.size).toEqual(3);
     for (const w of writes) {
       const s = scopeFromOf(ir, w);
-      expect(s.blockContext?.parentType).toBe(AST_TYPE.SwitchStatement);
+      expect(s.blockContext?.parentType).toEqual(AST_TYPE.SwitchStatement);
     }
   });
 
@@ -131,7 +131,7 @@ describe("scenario: switch with break — case scopes are exhaustively non-falli
       (v) => v.identifier.name === "kind" && !v.init,
     );
     expect(kindRefs).toHaveLength(1);
-    expect(kindRefs[0]?.predicateContainer?.type).toBe(
+    expect(kindRefs[0]?.predicateContainer?.type).toEqual(
       PREDICATE_CONTAINER_TYPE.SwitchStatement,
     );
   });
@@ -192,7 +192,7 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
       (v) => v.identifier.name === "flag" && !v.init,
     );
     expect(flagRefs).toHaveLength(1);
-    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+    expect(flagRefs[0]?.predicateContainer?.type).toEqual(
       PREDICATE_CONTAINER_TYPE.IfStatement,
     );
   });
@@ -204,7 +204,7 @@ describe("scenario: if/else exposes a predicate and two branch scopes", () => {
     );
     expect(writes).toHaveLength(2);
     const scopes = new Set(writes.map((v) => v.from));
-    expect(scopes.size).toBe(2);
+    expect(scopes.size).toEqual(2);
   });
 });
 
@@ -221,14 +221,14 @@ describe("scenario: if without else — only the consequent scope exists", () =>
   test("the if-statement produces only a consequent block scope, no alternate", () => {
     const arms = ifBranchScopesOf(ir);
     expect(arms).toHaveLength(1);
-    expect(arms[0]?.blockContext?.key).toBe("consequent");
+    expect(arms[0]?.blockContext?.key).toEqual("consequent");
   });
 
   test("the predicate identifier still carries an IfStatement predicate container", () => {
     const flagRefs = ir.references.filter(
       (v) => v.identifier.name === "flag" && !v.init,
     );
-    expect(flagRefs[0]?.predicateContainer?.type).toBe(
+    expect(flagRefs[0]?.predicateContainer?.type).toEqual(
       PREDICATE_CONTAINER_TYPE.IfStatement,
     );
   });
@@ -266,7 +266,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
   test("the catch parameter `err` is owned by the catch scope, not the surrounding module", () => {
     const err = varByName(ir, "err");
     const catchScope = ir.scopes.find((v) => v.type === SCOPE_TYPE.Catch);
-    expect(catchScope).toBeDefined();
+    expect(catchScope !== null && catchScope !== undefined).toEqual(true);
     expect(catchScope?.variables).toContain(err.id);
     const moduleScope =
       ir.scopes.find((v) => v.type === SCOPE_TYPE.Module) ?? null;
@@ -275,7 +275,7 @@ describe("scenario: try / catch / finally — three child scopes, catch paramete
 
   test("the catch parameter has a CatchClause definition", () => {
     const err = varByName(ir, "err");
-    expect(err.defs[0]?.type).toBe(AST_TYPE.CatchClause);
+    expect(err.defs[0]?.type).toEqual(AST_TYPE.CatchClause);
   });
 });
 
@@ -289,12 +289,12 @@ describe("scenario: import declarations carry kind / source / imported name", ()
 
   test("default imports record the source and no importedName", () => {
     const def = varByName(ir, "def").defs[0];
-    expect(def?.type).toBe(DEFINITION_TYPE.ImportBinding);
+    expect(def?.type).toEqual(DEFINITION_TYPE.ImportBinding);
     if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       throw new Error("expected ImportBinding");
     }
-    expect(def.importKind).toBe(IMPORT_KIND.Default);
-    expect(def.importSource).toBe("some-default");
+    expect(def.importKind).toEqual(IMPORT_KIND.Default);
+    expect(def.importSource).toEqual("some-default");
   });
 
   test("named imports record the imported name as the original symbol", () => {
@@ -302,27 +302,27 @@ describe("scenario: import declarations carry kind / source / imported name", ()
     if (named?.type !== DEFINITION_TYPE.ImportBinding) {
       throw new Error("expected ImportBinding");
     }
-    expect(named.importKind).toBe(IMPORT_KIND.Named);
-    expect(named.importSource).toBe("some-named");
+    expect(named.importKind).toEqual(IMPORT_KIND.Named);
+    expect(named.importSource).toEqual("some-named");
     if (named.importKind !== IMPORT_KIND.Named) {
       throw new Error("expected Named");
     }
-    expect(named.importedName).toBe("named");
+    expect(named.importedName).toEqual("named");
   });
 
   test("renamed imports keep the local name on the variable but the original on importedName", () => {
     const renamed = varByName(ir, "renamed");
-    expect(renamed.name).toBe("renamed");
+    expect(renamed.name).toEqual("renamed");
     const def = renamed.defs[0];
     if (def?.type !== DEFINITION_TYPE.ImportBinding) {
       throw new Error("expected ImportBinding");
     }
-    expect(def.importKind).toBe(IMPORT_KIND.Named);
+    expect(def.importKind).toEqual(IMPORT_KIND.Named);
     if (def.importKind !== IMPORT_KIND.Named) {
       throw new Error("expected Named");
     }
-    expect(def.importedName).toBe("other");
-    expect(def.importSource).toBe("some-named");
+    expect(def.importedName).toEqual("other");
+    expect(def.importSource).toEqual("some-named");
   });
 
   test("namespace imports record kind=namespace", () => {
@@ -330,8 +330,8 @@ describe("scenario: import declarations carry kind / source / imported name", ()
     if (ns?.type !== DEFINITION_TYPE.ImportBinding) {
       throw new Error("expected ImportBinding");
     }
-    expect(ns.importKind).toBe(IMPORT_KIND.Namespace);
-    expect(ns.importSource).toBe("some-namespace");
+    expect(ns.importKind).toEqual(IMPORT_KIND.Namespace);
+    expect(ns.importSource).toEqual("some-namespace");
   });
 });
 
@@ -342,20 +342,20 @@ describe("scenario: ImplicitGlobalVariable — receiver flag distinguishes membe
       (v) => v.identifier.name === "Object",
     );
     expect(objectRefs).toHaveLength(1);
-    expect(objectRefs[0]?.flags.receiver).toBe(true);
-    expect(objectRefs[0]?.flags.read).toBe(true);
+    expect(objectRefs[0]?.flags.receiver).toEqual(true);
+    expect(objectRefs[0]?.flags.read).toEqual(true);
     const objectDef = varByName(ir, "Object").defs[0];
-    expect(objectDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
+    expect(objectDef?.type).toEqual(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 
   test("a global read directly carries flags.receiver=false", () => {
     const ir = pipe("const xs = Object.keys(arg);\n");
     const argRefs = ir.references.filter((v) => v.identifier.name === "arg");
     expect(argRefs).toHaveLength(1);
-    expect(argRefs[0]?.flags.receiver).toBe(false);
-    expect(argRefs[0]?.flags.read).toBe(true);
+    expect(argRefs[0]?.flags.receiver).toEqual(false);
+    expect(argRefs[0]?.flags.read).toEqual(true);
     const argDef = varByName(ir, "arg").defs[0];
-    expect(argDef?.type).toBe(DEFINITION_TYPE.ImplicitGlobalVariable);
+    expect(argDef?.type).toEqual(DEFINITION_TYPE.ImplicitGlobalVariable);
   });
 });
 
@@ -368,15 +368,15 @@ describe("scenario: function parameter references are not duplicated", () => {
     expect(b.references).toHaveLength(1);
     const aRef = ir.references.find((v) => v.id === a.references[0]);
     const bRef = ir.references.find((v) => v.id === b.references[0]);
-    expect(aRef?.flags.read).toBe(true);
-    expect(aRef?.flags.write).toBe(false);
-    expect(bRef?.flags.read).toBe(true);
-    expect(bRef?.flags.write).toBe(false);
+    expect(aRef?.flags.read).toEqual(true);
+    expect(aRef?.flags.write).toEqual(false);
+    expect(bRef?.flags.read).toEqual(true);
+    expect(bRef?.flags.write).toEqual(false);
   });
 
   test("each parameter has a Parameter definition", () => {
     const ir = pipe("function add(a, b) { return a + b; }\n");
-    expect(varByName(ir, "a").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
-    expect(varByName(ir, "b").defs[0]?.type).toBe(DEFINITION_TYPE.Parameter);
+    expect(varByName(ir, "a").defs[0]?.type).toEqual(DEFINITION_TYPE.Parameter);
+    expect(varByName(ir, "b").defs[0]?.type).toEqual(DEFINITION_TYPE.Parameter);
   });
 });

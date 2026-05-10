@@ -28,7 +28,7 @@ function makeState(overrides: Partial<BuildState> = {}): BuildState {
 describe("predicateTargetId", () => {
   test("no predicateContainer -> null", () => {
     const ref = { ...baseRef(), predicateContainer: null };
-    expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
+    expect(predicateTargetId(ref, new Map(), makeState())).toEqual(null);
   });
 
   test("SwitchStatement resolves to the registered switch-discriminant anchor by offset", () => {
@@ -44,7 +44,7 @@ describe("predicateTargetId", () => {
         [100, "switch_discriminant_x"],
       ]),
     });
-    expect(predicateTargetId(ref, new Map(), state)).toBe(
+    expect(predicateTargetId(ref, new Map(), state)).toEqual(
       "switch_discriminant_x",
     );
   });
@@ -57,7 +57,7 @@ describe("predicateTargetId", () => {
         100,
       ),
     };
-    expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
+    expect(predicateTargetId(ref, new Map(), makeState())).toEqual(null);
   });
 
   test("IfStatement with no anchor registered at that offset -> null", () => {
@@ -69,7 +69,7 @@ describe("predicateTargetId", () => {
         50,
       ),
     };
-    expect(predicateTargetId(ref, new Map(), makeState())).toBeNull();
+    expect(predicateTargetId(ref, new Map(), makeState())).toEqual(null);
   });
 
   test("WhileStatement resolves to the registered while-test anchor by offset", () => {
@@ -83,7 +83,7 @@ describe("predicateTargetId", () => {
     const state = makeState({
       whileTestAnchorByOffset: new Map([[33, "while_test_x"]]),
     });
-    expect(predicateTargetId(ref, new Map(), state)).toBe("while_test_x");
+    expect(predicateTargetId(ref, new Map(), state)).toEqual("while_test_x");
   });
 
   test("DoWhileStatement resolves to the registered do-while-test anchor", () => {
@@ -97,7 +97,7 @@ describe("predicateTargetId", () => {
     const state = makeState({
       doWhileTestAnchorByOffset: new Map([[33, "do_while_test_x"]]),
     });
-    expect(predicateTargetId(ref, new Map(), state)).toBe("do_while_test_x");
+    expect(predicateTargetId(ref, new Map(), state)).toEqual("do_while_test_x");
   });
 
   test("ForStatement / ForOfStatement / ForInStatement all resolve through forTestAnchorByOffset", () => {
@@ -113,7 +113,7 @@ describe("predicateTargetId", () => {
         ...baseRef(),
         predicateContainer: predicateContainer(type, 40),
       };
-      expect(predicateTargetId(ref, new Map(), state)).toBe("for_test_x");
+      expect(predicateTargetId(ref, new Map(), state)).toEqual("for_test_x");
     }
   });
 });

@@ -35,18 +35,18 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
     const aRef = refs.find((v) => v.identifier.name === "A");
-    expect(aRef).toBeDefined();
+    expect(aRef !== null && aRef !== undefined).toEqual(true);
     if (!aRef) {
       return;
     }
     const aElement = annotations.ofReference(aRef).jsxElement;
-    expect(aElement).not.toBeNull();
+    expect(aElement).not.toEqual(null);
     // <A>...</A> spans from "<A>" through "</A>": offset of '<' to offset
     // past the final '>'. We do not assert exact byte offsets here; only
     // that the analyzer surfaced the wrapping element rather than just the
     // identifier itself.
     if (aElement) {
-      expect(aElement.endOffset).toBeGreaterThan(aElement.startOffset);
+      expect(aElement.endOffset > aElement.startOffset).toEqual(true);
     }
   });
 
@@ -55,11 +55,11 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
     const aRef = refs.find((v) => v.identifier.name === "A");
-    expect(aRef).toBeDefined();
+    expect(aRef !== null && aRef !== undefined).toEqual(true);
     if (!aRef) {
       return;
     }
-    expect(annotations.ofReference(aRef).jsxElement).not.toBeNull();
+    expect(annotations.ofReference(aRef).jsxElement).not.toEqual(null);
   });
 
   test("does not attach a JSXElement span to plain JS identifiers in attribute values", () => {
@@ -69,7 +69,9 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
     const vRef = refs.find((ref) => ref.identifier.name === "v");
-    expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toBeNull();
+    expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toEqual(
+      null,
+    );
   });
 
   test("does not attach a JSXElement span to expression-container children", () => {
@@ -77,7 +79,9 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const { rootScope, annotations } = analyze(code);
     const refs = refsThrough(rootScope);
     const vRef = refs.find((ref) => ref.identifier.name === "v");
-    expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toBeNull();
+    expect(vRef ? annotations.ofReference(vRef).jsxElement : null).toEqual(
+      null,
+    );
   });
 
   test("walks JSXMemberExpression chains so <Foo.Bar> still surfaces the element span on Foo", () => {
@@ -90,6 +94,6 @@ describe("EslintCompatAnalyzer / JSX element span", () => {
     const fooRef = refs.find((v) => v.identifier.name === "Foo");
     expect(
       fooRef ? annotations.ofReference(fooRef).jsxElement : undefined,
-    ).not.toBeNull();
+    ).not.toEqual(null);
   });
 });

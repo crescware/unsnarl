@@ -5,19 +5,19 @@ import { isNodeLike } from "./node-like.js";
 
 describe("isNodeLike", () => {
   test("typed object → true", () => {
-    expect(isNodeLike({ type: AST_TYPE.Identifier })).toBe(true);
+    expect(isNodeLike({ type: AST_TYPE.Identifier })).toEqual(true);
   });
 
   test("primitives → false", () => {
-    expect(isNodeLike(null)).toBe(false);
-    expect(isNodeLike(undefined)).toBe(false);
-    expect(isNodeLike("Identifier")).toBe(false);
-    expect(isNodeLike(0)).toBe(false);
+    expect(isNodeLike(null)).toEqual(false);
+    expect(isNodeLike(undefined)).toEqual(false);
+    expect(isNodeLike("Identifier")).toEqual(false);
+    expect(isNodeLike(0)).toEqual(false);
   });
 
   test("missing or non-string `type` → false", () => {
-    expect(isNodeLike({})).toBe(false);
-    expect(isNodeLike({ type: 1 })).toBe(false);
-    expect(isNodeLike({ type: null })).toBe(false);
+    expect(isNodeLike({})).toEqual(false);
+    expect(isNodeLike({ type: 1 })).toEqual(false);
+    expect(isNodeLike({ type: null })).toEqual(false);
   });
 });

@@ -65,8 +65,8 @@ function emitWithBoundary(
 
 describe("StatsEmitter", () => {
   test("identifies as 'stats' with TSV content type", () => {
-    expect(emitter.format).toBe("stats");
-    expect(emitter.contentType).toBe("text/tab-separated-values");
+    expect(emitter.format).toEqual("stats");
+    expect(emitter.contentType).toEqual("text/tab-separated-values");
   });
 
   test("emits one TSV row per node followed by a total summary", () => {
@@ -81,7 +81,7 @@ describe("StatsEmitter", () => {
 
   test("zero-edge nodes report 0/0", () => {
     const out = emit("const a = 1;\n");
-    expect(out.trimEnd().split("\n")[0]).toBe("0\t0\tx.ts:1 unused a");
+    expect(out.trimEnd().split("\n")[0]).toEqual("0\t0\tx.ts:1 unused a");
   });
 
   test("renders ? for the direction touched by a boundary edge", () => {
@@ -109,17 +109,17 @@ describe("StatsEmitter", () => {
     );
     const lines = out.trimEnd().split("\n");
     // a still has its full a -> b edge in the kept graph.
-    expect(lines[0]).toBe("1\t0\tx.ts:1 a");
+    expect(lines[0]).toEqual("1\t0\tx.ts:1 a");
     // b's outbound side is cut by the boundary so it's "?", not 0.
     // (b is read by c in the source so it's NOT marked unused.)
-    expect(lines[1]).toBe("?\t1\tx.ts:2 b");
+    expect(lines[1]).toEqual("?\t1\tx.ts:2 b");
     // The unknown propagates into the total's descendants column.
-    expect(lines[2]).toBe("?\t1\t2 total");
+    expect(lines[2]).toEqual("?\t1\t2 total");
   });
 
   test("output is newline-terminated for shell-friendly piping", () => {
     const out = emit("const a = 1;\n");
-    expect(out.endsWith("\n")).toBe(true);
+    expect(out.endsWith("\n")).toEqual(true);
   });
 
   test("rows are sorted by line, ascending", () => {

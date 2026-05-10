@@ -41,19 +41,19 @@ const sg = (
 
 describe("buildParentMap", () => {
   test("top-level elements have no parent entry", () => {
-    expect(buildParentMap([node("a"), node("b")]).size).toBe(0);
+    expect(buildParentMap([node("a"), node("b")]).size).toEqual(0);
   });
 
   test("each child of a subgraph maps to that subgraph id", () => {
     const map = buildParentMap([sg("s", [node("x"), node("y")])]);
-    expect(map.get("x")).toBe("s");
-    expect(map.get("y")).toBe("s");
-    expect(map.has("s")).toBe(false);
+    expect(map.get("x")).toEqual("s");
+    expect(map.get("y")).toEqual("s");
+    expect(map.has("s")).toEqual(false);
   });
 
   test("nested subgraphs chain correctly", () => {
     const map = buildParentMap([sg("outer", [sg("inner", [node("deep")])])]);
-    expect(map.get("inner")).toBe("outer");
-    expect(map.get("deep")).toBe("inner");
+    expect(map.get("inner")).toEqual("outer");
+    expect(map.get("deep")).toEqual("inner");
   });
 });

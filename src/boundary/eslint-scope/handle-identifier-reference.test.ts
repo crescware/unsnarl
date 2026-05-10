@@ -52,7 +52,7 @@ describe("handleIdentifierReference", () => {
 
     // Identifier #1 is the binding `foo`, #2 is the reference use.
     const captured = captureNthIdentifier(program, 2);
-    expect(captured).not.toBeNull();
+    expect(captured).not.toEqual(null);
     if (!captured) {
       return;
     }
@@ -78,7 +78,7 @@ describe("handleIdentifierReference", () => {
 
     // Identifier #1 is `obj`; #2 is `prop` (member property -- not a reference).
     const captured = captureNthIdentifier(program, 2);
-    expect(captured).not.toBeNull();
+    expect(captured).not.toEqual(null);
     if (!captured) {
       return;
     }
@@ -92,6 +92,6 @@ describe("handleIdentifierReference", () => {
       manager,
       {},
     );
-    expect(manager.globalScope.references.length).toBe(refsBefore);
+    expect(manager.globalScope.references.length).toEqual(refsBefore);
   });
 });

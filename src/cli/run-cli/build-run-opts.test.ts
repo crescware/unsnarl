@@ -114,8 +114,8 @@ describe("buildRunOpts", () => {
         path: "src/legacy.js",
       } as const satisfies ExecuteSource;
       const actual = buildRunOpts(jsSrc, baseOpts);
-      expect(actual.runOpts.language).toBe("js");
-      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Script);
+      expect(actual.runOpts.language).toEqual("js");
+      expect(actual.runOpts.sourceType).toEqual(SOURCE_TYPE.Script);
     });
 
     test("a .mjs source path produces sourceType 'module' (ESM extension)", () => {
@@ -124,8 +124,8 @@ describe("buildRunOpts", () => {
         path: "src/foo.mjs",
       } as const satisfies ExecuteSource;
       const actual = buildRunOpts(mjsSrc, baseOpts);
-      expect(actual.runOpts.language).toBe("js");
-      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Module);
+      expect(actual.runOpts.language).toEqual("js");
+      expect(actual.runOpts.sourceType).toEqual(SOURCE_TYPE.Module);
     });
 
     test("a .cjs source path produces sourceType 'script' (CommonJS extension)", () => {
@@ -134,8 +134,8 @@ describe("buildRunOpts", () => {
         path: "src/foo.cjs",
       } as const satisfies ExecuteSource;
       const actual = buildRunOpts(cjsSrc, baseOpts);
-      expect(actual.runOpts.language).toBe("js");
-      expect(actual.runOpts.sourceType).toBe(SOURCE_TYPE.Script);
+      expect(actual.runOpts.language).toEqual("js");
+      expect(actual.runOpts.sourceType).toEqual(SOURCE_TYPE.Script);
     });
 
     test("no roots → pruning is null", () => {

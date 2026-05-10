@@ -15,7 +15,7 @@ describe("returnSubgraphId", () => {
   ])(
     "returnSubgraphId($varId, $containerKey) = $expected",
     ({ varId, containerKey, expected }) => {
-      expect(returnSubgraphId(varId, containerKey)).toBe(expected);
+      expect(returnSubgraphId(varId, containerKey)).toEqual(expected);
     },
   );
 });

@@ -38,10 +38,10 @@ describe("ownerTargetId", () => {
       expected: "wr_r2",
     },
   ])("$name", ({ offset, expected }) => {
-    expect(ownerTargetId("owner", offset, byVar)).toBe(expected);
+    expect(ownerTargetId("owner", offset, byVar)).toEqual(expected);
   });
 
   test("owner without recorded writes falls back to nodeId", () => {
-    expect(ownerTargetId("missing", 100, byVar)).toBe("n_missing");
+    expect(ownerTargetId("missing", 100, byVar)).toEqual("n_missing");
   });
 });

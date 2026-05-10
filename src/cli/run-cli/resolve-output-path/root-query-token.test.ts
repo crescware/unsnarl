@@ -12,7 +12,7 @@ describe("rootQueryToken", () => {
       raw: "value",
     } as const satisfies ParsedRootQuery;
 
-    expect(rootQueryToken(query)).toBe("value");
+    expect(rootQueryToken(query)).toEqual("value");
   });
 
   test("line → l<n>", () => {
@@ -22,7 +22,7 @@ describe("rootQueryToken", () => {
       raw: "42",
     } as const satisfies ParsedRootQuery;
 
-    expect(rootQueryToken(query)).toBe("l42");
+    expect(rootQueryToken(query)).toEqual("l42");
   });
 
   test("line-name → l<n>-<id>", () => {
@@ -33,7 +33,7 @@ describe("rootQueryToken", () => {
       raw: "42:render",
     } as const satisfies ParsedRootQuery;
 
-    expect(rootQueryToken(query)).toBe("l42-render");
+    expect(rootQueryToken(query)).toEqual("l42-render");
   });
 
   test("range → l<start>-<end>", () => {
@@ -44,7 +44,7 @@ describe("rootQueryToken", () => {
       raw: "10-12",
     } as const satisfies ParsedRootQuery;
 
-    expect(rootQueryToken(query)).toBe("l10-12");
+    expect(rootQueryToken(query)).toEqual("l10-12");
   });
 
   test("range-name → l<start>-<end>-<id>", () => {
@@ -56,6 +56,6 @@ describe("rootQueryToken", () => {
       raw: "10-12:render",
     } as const satisfies ParsedRootQuery;
 
-    expect(rootQueryToken(query)).toBe("l10-12-render");
+    expect(rootQueryToken(query)).toEqual("l10-12-render");
   });
 });

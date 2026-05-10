@@ -55,14 +55,14 @@ describe("findHostSubgraph", () => {
     const sg = baseSubgraph("s_leaf");
     const state = emptyState({ subgraphByScope: new Map([["leaf", sg]]) });
     const ref = { ...baseRef(), from: "leaf" };
-    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toBe(sg);
+    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toEqual(sg);
   });
 
   test("walks up via .upper to find the closest enclosing subgraph", () => {
     const sg = baseSubgraph("s_root");
     const state = emptyState({ subgraphByScope: new Map([["root", sg]]) });
     const ref = { ...baseRef(), from: "leaf" };
-    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toBe(sg);
+    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toEqual(sg);
   });
 
   test("falls back to the function subgraph for the enclosing fn variable id", () => {
@@ -71,26 +71,26 @@ describe("findHostSubgraph", () => {
       functionSubgraphByFn: new Map([["fnVar", fnSg]]),
     });
     const ref = { ...baseRef(), from: "leaf" };
-    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toBe(fnSg);
+    expect(findHostSubgraph(ref, "fnVar", scopeMap, state)).toEqual(fnSg);
   });
 
   test("returns null when neither chain nor fn fallback yields a subgraph", () => {
     const ref = { ...baseRef(), from: "leaf" };
-    expect(findHostSubgraph(ref, "nope", scopeMap, emptyState())).toBeNull();
+    expect(findHostSubgraph(ref, "nope", scopeMap, emptyState())).toEqual(null);
   });
 
   test("returns null when ref.from is not in the scope map and the fn fallback is also missing", () => {
     const ref = { ...baseRef(), from: "missing" };
-    expect(
-      findHostSubgraph(ref, "missingFn", scopeMap, emptyState()),
-    ).toBeNull();
+    expect(findHostSubgraph(ref, "missingFn", scopeMap, emptyState())).toEqual(
+      null,
+    );
   });
 
   test("returns the scope-chain subgraph even when enclosingFnVarId is null", () => {
     const sg = baseSubgraph("s_root");
     const state = emptyState({ subgraphByScope: new Map([["root", sg]]) });
     const ref = { ...baseRef(), from: "leaf" };
-    expect(findHostSubgraph(ref, null, scopeMap, state)).toBe(sg);
+    expect(findHostSubgraph(ref, null, scopeMap, state)).toEqual(sg);
   });
 
   test("returns null when enclosingFnVarId is null and the scope chain yields no subgraph", () => {
@@ -100,6 +100,6 @@ describe("findHostSubgraph", () => {
       // A function subgraph exists but it must be ignored when fnVarId is null.
       functionSubgraphByFn: new Map([["fnVar", fnSg]]),
     });
-    expect(findHostSubgraph(ref, null, scopeMap, state)).toBeNull();
+    expect(findHostSubgraph(ref, null, scopeMap, state)).toEqual(null);
   });
 });

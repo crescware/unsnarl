@@ -34,7 +34,7 @@ describe("renderTopLevelNodes", () => {
       ],
     });
     expect(state.lines).toHaveLength(1);
-    expect(state.lines[0]?.trim().startsWith("n_b")).toBe(true);
+    expect(state.lines[0]?.trim().startsWith("n_b")).toEqual(true);
   });
 
   test("skips nodes whose id is in wrappedOwnerIds", () => {
@@ -50,7 +50,7 @@ describe("renderTopLevelNodes", () => {
       ],
     });
     expect(state.lines).toHaveLength(1);
-    expect(state.lines[0]?.trim().startsWith("n_keep")).toBe(true);
+    expect(state.lines[0]?.trim().startsWith("n_keep")).toEqual(true);
   });
 
   test("ignores top-level subgraph elements", () => {
@@ -68,6 +68,6 @@ describe("renderTopLevelNodes", () => {
       ...baseGraph(),
       elements: [{ ...baseNode(), id: "n_a" }],
     });
-    expect(state.lines[0]?.startsWith("  n_a")).toBe(true);
+    expect(state.lines[0]?.startsWith("  n_a")).toEqual(true);
   });
 });

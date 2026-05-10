@@ -74,12 +74,12 @@ describe("lastWriteOpInScopeBefore", () => {
       byVar,
       scopeMap,
     );
-    expect(result?.refId ?? null).toBe(expected);
+    expect(result?.refId ?? null).toEqual(expected);
   });
 
   test("variable with no recorded writes returns null", () => {
     expect(
       lastWriteOpInScopeBefore("missing", "root", 100, byVar, scopeMap),
-    ).toBeNull();
+    ).toEqual(null);
   });
 });

@@ -32,14 +32,14 @@ describe("nodeMatchesQuery", () => {
       line: 5,
       raw: "5",
     } as const satisfies ParsedRootQuery;
-    expect(nodeMatchesQuery(node({ line: 5 }), q)).toBe(true);
-    expect(nodeMatchesQuery(node({ line: 4 }), q)).toBe(false);
+    expect(nodeMatchesQuery(node({ line: 5 }), q)).toEqual(true);
+    expect(nodeMatchesQuery(node({ line: 4 }), q)).toEqual(false);
     expect(
       nodeMatchesQuery(node({ line: 5, endLine: 7 }), { ...q, line: 6 }),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       nodeMatchesQuery(node({ line: 5, endLine: 7 }), { ...q, line: 8 }),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("kind=line-name additionally requires exact name match", () => {
@@ -49,8 +49,8 @@ describe("nodeMatchesQuery", () => {
       name: "x",
       raw: "5:x",
     } as const satisfies ParsedRootQuery;
-    expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toBe(true);
-    expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toBe(false);
+    expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toEqual(true);
+    expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toEqual(false);
   });
 
   test("kind=range overlaps node line range", () => {
@@ -60,9 +60,9 @@ describe("nodeMatchesQuery", () => {
       end: 6,
       raw: "4-6",
     } as const satisfies ParsedRootQuery;
-    expect(nodeMatchesQuery(node({ line: 5 }), q)).toBe(true);
-    expect(nodeMatchesQuery(node({ line: 7 }), q)).toBe(false);
-    expect(nodeMatchesQuery(node({ line: 1, endLine: 4 }), q)).toBe(true);
+    expect(nodeMatchesQuery(node({ line: 5 }), q)).toEqual(true);
+    expect(nodeMatchesQuery(node({ line: 7 }), q)).toEqual(false);
+    expect(nodeMatchesQuery(node({ line: 1, endLine: 4 }), q)).toEqual(true);
   });
 
   test("kind=range-name additionally requires exact name match", () => {
@@ -73,8 +73,8 @@ describe("nodeMatchesQuery", () => {
       name: "x",
       raw: "4-6:x",
     } as const satisfies ParsedRootQuery;
-    expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toBe(true);
-    expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toBe(false);
+    expect(nodeMatchesQuery(node({ line: 5, name: "x" }), q)).toEqual(true);
+    expect(nodeMatchesQuery(node({ line: 5, name: "y" }), q)).toEqual(false);
   });
 
   test("kind=name matches by name except for excluded use-site kinds", () => {
@@ -83,7 +83,7 @@ describe("nodeMatchesQuery", () => {
       name: "x",
       raw: "x",
     } as const satisfies ParsedRootQuery;
-    expect(nodeMatchesQuery(node({ name: "x" }), q)).toBe(true);
+    expect(nodeMatchesQuery(node({ name: "x" }), q)).toEqual(true);
     expect(
       nodeMatchesQuery(
         {
@@ -99,7 +99,7 @@ describe("nodeMatchesQuery", () => {
         },
         q,
       ),
-    ).toBe(false);
+    ).toEqual(false);
     expect(
       nodeMatchesQuery(
         {
@@ -114,6 +114,6 @@ describe("nodeMatchesQuery", () => {
         },
         q,
       ),
-    ).toBe(false);
+    ).toEqual(false);
   });
 });

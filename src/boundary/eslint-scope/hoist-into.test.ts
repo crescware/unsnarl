@@ -52,7 +52,7 @@ describe("hoistInto", () => {
     ]);
     expect(
       diagnostics.list().some((v) => v.kind === DIAGNOSTIC_KIND.VarDetected),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("does nothing when program has no body array", () => {

@@ -37,15 +37,15 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
 
 describe("MermaidEmitter", () => {
   test("identifies as 'mermaid'", () => {
-    expect(emitter.format).toBe("mermaid");
-    expect(emitter.contentType).toBe("text/vnd.mermaid");
+    expect(emitter.format).toEqual("mermaid");
+    expect(emitter.contentType).toEqual("text/vnd.mermaid");
   });
 
   test("renderer defaults to elk and prepends an init directive", () => {
     const out = emit("const a = 1;\n");
     expect(
       out.startsWith('%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%\n'),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
@@ -224,10 +224,10 @@ describe("MermaidEmitter", () => {
     // labels matching their own statement (not a merged span).
     expect(
       countMatches(out, /^\s*subgraph s_return_scope_\w+\["return L5"\]/),
-    ).toBe(1);
+    ).toEqual(1);
     expect(
       countMatches(out, /^\s*subgraph s_return_scope_\w+\["return L7"\]/),
-    ).toBe(1);
+    ).toEqual(1);
     // The merged "L5-7" header that the previous single-subgraph design
     // would have produced must not appear.
     expect(out).not.toMatch(/return L5-7/);
@@ -435,10 +435,10 @@ describe("MermaidEmitter rendering: switch with break", () => {
   test("each case becomes its own labelled subgraph and no fallthrough edges are drawn", () => {
     expect(
       countMatches(out, /^\s*subgraph s_scope_\d+\["case .* L\d+(?:-\d+)?"\]/),
-    ).toBe(2);
+    ).toEqual(2);
     expect(
       countMatches(out, /^\s*subgraph s_scope_\d+\["default L\d+(?:-\d+)?"\]/),
-    ).toBe(1);
+    ).toEqual(1);
     expect(out).not.toContain("|fallthrough|");
   });
 
@@ -590,12 +590,14 @@ describe("MermaidEmitter rendering: catch parameter placement", () => {
     const out = emit(code);
     const ls = lines(out);
     const catchStart = ls.findIndex((v) => v.includes('"catch L4-6"'));
-    expect(catchStart).toBeGreaterThan(-1);
+    expect(catchStart > -1).toEqual(true);
     const catchEnd = ls.slice(catchStart).findIndex((v) => v.trim() === "end");
-    expect(catchEnd).toBeGreaterThan(0);
+    expect(catchEnd > 0).toEqual(true);
     const inside = ls.slice(catchStart, catchStart + catchEnd);
     // err isn't read inside the catch body, so it carries the unused prefix.
-    expect(inside.some((v) => v.includes('"unused catch err<br/>'))).toBe(true);
+    expect(inside.some((v) => v.includes('"unused catch err<br/>'))).toEqual(
+      true,
+    );
   });
 });
 
@@ -709,11 +711,11 @@ describe("MermaidEmitter rendering: import label prefix rule", () => {
 describe("MermaidEmitter rendering: function parameters are not duplicated", () => {
   test("each parameter renders exactly one |read| edge into its return-use node", () => {
     const out = emit("function add(a, b) { return a + b; }\n");
-    expect(countMatches(out, /n_scope_1_a_\d+ -->\|read\| ret_use_\w+/)).toBe(
-      1,
-    );
-    expect(countMatches(out, /n_scope_1_b_\d+ -->\|read\| ret_use_\w+/)).toBe(
-      1,
-    );
+    expect(
+      countMatches(out, /n_scope_1_a_\d+ -->\|read\| ret_use_\w+/),
+    ).toEqual(1);
+    expect(
+      countMatches(out, /n_scope_1_b_\d+ -->\|read\| ret_use_\w+/),
+    ).toEqual(1);
   });
 });

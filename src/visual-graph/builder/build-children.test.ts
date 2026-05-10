@@ -73,7 +73,7 @@ describe("buildChildren", () => {
     buildChildren(outer, container, ctx, emptyState());
 
     expect(container.elements).toHaveLength(1);
-    expect((container.elements[0] as VisualSubgraph).kind).toBe("for");
+    expect((container.elements[0] as VisualSubgraph).kind).toEqual("for");
   });
 
   test("a single if branch is not wrapped in an if-else-container; the if-test anchor lives inside the consequent subgraph", () => {
@@ -96,16 +96,16 @@ describe("buildChildren", () => {
 
     expect(container.elements).toHaveLength(1);
     const ifSg = container.elements[0];
-    expect((ifSg as VisualSubgraph).kind).toBe("if");
+    expect((ifSg as VisualSubgraph).kind).toEqual("if");
     expect(
       container.elements.some(
         (v) => v.type === "subgraph" && v.kind === "if-else-container",
       ),
-    ).toBe(false);
+    ).toEqual(false);
     const anchor = (ifSg as VisualSubgraph).elements[0];
-    expect(anchor?.type).toBe("node");
+    expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toBe("IfTest");
+      expect(anchor.kind).toEqual("IfTest");
     }
   });
 
@@ -142,11 +142,11 @@ describe("buildChildren", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.kind).toBe("if-else-container");
+    expect(sg.kind).toEqual("if-else-container");
     if (sg.kind !== "if-else-container") {
       throw new Error("expected if-else-container");
     }
-    expect(sg.hasElse).toBe(true);
+    expect(sg.hasElse).toEqual(true);
     // The container holds only the branch subgraphs; the test anchor
     // lives inside the `if` (consequent) branch, and the `else`
     // (alternate) carries no test of its own.
@@ -157,9 +157,9 @@ describe("buildChildren", () => {
       throw new Error("expected if subgraph at index 0");
     }
     const anchor = ifSg.elements[0];
-    expect(anchor?.type).toBe("node");
+    expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toBe("IfTest");
+      expect(anchor.kind).toEqual("IfTest");
     }
     const elseSg = sg.elements[1];
     if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
@@ -167,7 +167,7 @@ describe("buildChildren", () => {
     }
     expect(
       elseSg.elements.every((v) => !(v.type === "node" && v.kind === "IfTest")),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("if-else-container endLine is the maximum endLine among grouped branches", () => {
@@ -203,7 +203,7 @@ describe("buildChildren", () => {
     buildChildren(outer, container, ctx, emptyState());
 
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.endLine).toBe(7);
+    expect(sg.endLine).toEqual(7);
   });
 
   test("two adjacent if-statements with different parentSpanOffsets are not merged; each gets its own anchor", () => {
@@ -249,9 +249,9 @@ describe("buildChildren", () => {
         throw new Error("expected subgraph");
       }
       const anchor = sg.elements[0];
-      expect(anchor?.type).toBe("node");
+      expect(anchor?.type).toEqual("node");
       if (anchor?.type === "node") {
-        expect(anchor.kind).toBe("IfTest");
+        expect(anchor.kind).toEqual("IfTest");
       }
     }
   });

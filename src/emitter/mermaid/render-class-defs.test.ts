@@ -22,7 +22,7 @@ describe("renderClassDefs", () => {
   test("emits the boundaryStub classDef and per-id 'class' lines for stub ids", () => {
     const lines: /* mutable */ string[] = [];
     renderClassDefs([], ["stub_1", "stub_2"], [], lines);
-    expect(lines[0]?.startsWith("  classDef boundaryStub ")).toBe(true);
+    expect(lines[0]?.startsWith("  classDef boundaryStub ")).toEqual(true);
     expect(lines).toContain("  class stub_1 boundaryStub;");
     expect(lines).toContain("  class stub_2 boundaryStub;");
   });

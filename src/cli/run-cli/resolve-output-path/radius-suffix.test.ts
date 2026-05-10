@@ -74,6 +74,6 @@ describe("radiusSuffix", () => {
       expected: "-a0-b0",
     },
   ])("$name", ({ descendants, ancestors, context, expected }) => {
-    expect(radiusSuffix({ descendants, ancestors, context })).toBe(expected);
+    expect(radiusSuffix({ descendants, ancestors, context })).toEqual(expected);
   });
 });

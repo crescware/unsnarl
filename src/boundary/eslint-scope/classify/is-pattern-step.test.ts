@@ -15,7 +15,7 @@ describe("isPatternStep", () => {
       AST_TYPE.RestElement,
       AST_TYPE.AssignmentPattern,
     ]) {
-      expect(isPatternStep(node(t), [], 0)).toBe(true);
+      expect(isPatternStep(node(t), [], 0)).toEqual(true);
     }
   });
 
@@ -24,7 +24,7 @@ describe("isPatternStep", () => {
       { node: node(AST_TYPE.ObjectPattern), key: null },
       { node: node(AST_TYPE.Property), key: "properties" },
     ];
-    expect(isPatternStep(node(AST_TYPE.Property), path, 1)).toBe(true);
+    expect(isPatternStep(node(AST_TYPE.Property), path, 1)).toEqual(true);
   });
 
   test("Property under a non-ObjectPattern parent → false", () => {
@@ -32,11 +32,11 @@ describe("isPatternStep", () => {
       { node: node(AST_TYPE.ObjectExpression), key: null },
       { node: node(AST_TYPE.Property), key: "properties" },
     ];
-    expect(isPatternStep(node(AST_TYPE.Property), path, 1)).toBe(false);
+    expect(isPatternStep(node(AST_TYPE.Property), path, 1)).toEqual(false);
   });
 
   test("unrelated node types → false", () => {
-    expect(isPatternStep(node(AST_TYPE.Identifier), [], 0)).toBe(false);
-    expect(isPatternStep(node(AST_TYPE.CallExpression), [], 0)).toBe(false);
+    expect(isPatternStep(node(AST_TYPE.Identifier), [], 0)).toEqual(false);
+    expect(isPatternStep(node(AST_TYPE.CallExpression), [], 0)).toEqual(false);
   });
 });

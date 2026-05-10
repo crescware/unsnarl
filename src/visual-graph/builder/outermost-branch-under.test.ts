@@ -25,22 +25,22 @@ const map = new Map<string, SerializedScope>(
 
 describe("outermostBranchUnder", () => {
   test("returns null when scopeId equals branchId", () => {
-    expect(outermostBranchUnder("outer", "outer", map)).toBeNull();
+    expect(outermostBranchUnder("outer", "outer", map)).toEqual(null);
   });
 
   test("returns the immediate branch child when scopeId is that branch", () => {
-    expect(outermostBranchUnder("outer", "if", map)).toBe("if");
+    expect(outermostBranchUnder("outer", "if", map)).toEqual("if");
   });
 
   test("walks up through nested branches and returns the outermost one under branchId", () => {
-    expect(outermostBranchUnder("outer", "inner", map)).toBe("if");
+    expect(outermostBranchUnder("outer", "inner", map)).toEqual("if");
   });
 
   test("returns null when scopeId is not under branchId", () => {
-    expect(outermostBranchUnder("if", "outer", map)).toBeNull();
+    expect(outermostBranchUnder("if", "outer", map)).toEqual(null);
   });
 
   test("returns null when traversal hits the top without seeing branchId", () => {
-    expect(outermostBranchUnder("missing", "inner", map)).toBeNull();
+    expect(outermostBranchUnder("missing", "inner", map)).toEqual(null);
   });
 });

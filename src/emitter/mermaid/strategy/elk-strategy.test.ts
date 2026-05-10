@@ -9,7 +9,7 @@ describe("elkStrategy.emptySubgraphPlaceholder", () => {
       indent: "    ",
       referencedByEdge: false,
     });
-    expect(result).toBeNull();
+    expect(result).toEqual(null);
   });
 
   test("returns a placeholder line + id when the subgraph is an edge endpoint", () => {
@@ -30,7 +30,7 @@ describe("elkStrategy.emptySubgraphPlaceholder", () => {
       indent: "\t\t",
       referencedByEdge: true,
     });
-    expect(result?.line).toBe('\t\telk_empty_x[" "]');
+    expect(result?.line).toEqual('\t\telk_empty_x[" "]');
   });
 
   test("placeholderId is derived solely from the subgraph id", () => {
@@ -39,6 +39,6 @@ describe("elkStrategy.emptySubgraphPlaceholder", () => {
       indent: "  ",
       referencedByEdge: true,
     });
-    expect(result?.placeholderId).toBe("elk_empty_cont_if_scope_0_99");
+    expect(result?.placeholderId).toEqual("elk_empty_cont_if_scope_0_99");
   });
 });

@@ -8,7 +8,7 @@ describe("isFunctionSubgraph", () => {
   test("function scope -> true", () => {
     expect(
       isFunctionSubgraph({ ...baseScope(), type: SCOPE_TYPE.Function }),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("function-expression-name scope -> false (the named-function-expression name binding never renders as a subgraph)", () => {
@@ -18,12 +18,12 @@ describe("isFunctionSubgraph", () => {
         type: SCOPE_TYPE.Function,
         functionExpressionScope: true,
       }),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("non-function scope -> false", () => {
-    expect(isFunctionSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block })).toBe(
-      false,
-    );
+    expect(
+      isFunctionSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block }),
+    ).toEqual(false);
   });
 });

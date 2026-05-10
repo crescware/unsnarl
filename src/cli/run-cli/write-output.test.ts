@@ -56,7 +56,7 @@ describe("writeOutput", () => {
 
       writeOutput(outputPath, "file body\n");
 
-      expect(readFileSync(outputPath, "utf8")).toBe("file body\n");
+      expect(readFileSync(outputPath, "utf8")).toEqual("file body\n");
       expect(stdoutSpy).not.toHaveBeenCalled();
     });
 
@@ -65,8 +65,8 @@ describe("writeOutput", () => {
 
       writeOutput(outputPath, "nested\n");
 
-      expect(existsSync(join(tmpDir, "deep", "nested"))).toBe(true);
-      expect(readFileSync(outputPath, "utf8")).toBe("nested\n");
+      expect(existsSync(join(tmpDir, "deep", "nested"))).toEqual(true);
+      expect(readFileSync(outputPath, "utf8")).toEqual("nested\n");
     });
 
     test("overwrites an existing file at the path", () => {
@@ -75,7 +75,7 @@ describe("writeOutput", () => {
       writeOutput(outputPath, "first\n");
       writeOutput(outputPath, "second\n");
 
-      expect(readFileSync(outputPath, "utf8")).toBe("second\n");
+      expect(readFileSync(outputPath, "utf8")).toEqual("second\n");
     });
   });
 });

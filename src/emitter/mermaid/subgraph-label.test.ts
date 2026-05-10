@@ -20,7 +20,7 @@ describe("subgraphLabel", () => {
       line: 2,
       endLine: 5,
     };
-    expect(subgraphLabel(sg, emptyMap, false)).toBe("myFn()<br/>L2-5");
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual("myFn()<br/>L2-5");
   });
 
   test("function falls back to ownerNode.name when ownerName is empty", () => {
@@ -33,7 +33,7 @@ describe("subgraphLabel", () => {
     const map = new Map([
       ["n_owner", { ...baseNode(), id: "n_owner", name: "fallback" }],
     ]);
-    expect(subgraphLabel(sg, map, false)).toBe("fallback()<br/>L1");
+    expect(subgraphLabel(sg, map, false)).toEqual("fallback()<br/>L1");
   });
 
   test("function with empty ownerName and unknown ownerNodeId yields an empty name", () => {
@@ -43,17 +43,17 @@ describe("subgraphLabel", () => {
       ownerName: "",
       line: 1,
     };
-    expect(subgraphLabel(sg, emptyMap, false)).toBe("()<br/>L1");
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual("()<br/>L1");
   });
 
   test("case with explicit caseTest gets 'case <test>'", () => {
     const sg = { ...baseCaseSubgraph(), caseTest: "1", line: 4 };
-    expect(subgraphLabel(sg, emptyMap, false)).toBe("case 1 L4");
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual("case 1 L4");
   });
 
   test("case with null caseTest renders as 'default'", () => {
     const sg = { ...baseCaseSubgraph(), caseTest: null, line: 4 };
-    expect(subgraphLabel(sg, emptyMap, false)).toBe("default L4");
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual("default L4");
   });
 
   test("if-else-container with hasElse=true says 'if-else', otherwise 'if'", () => {
@@ -63,14 +63,14 @@ describe("subgraphLabel", () => {
         emptyMap,
         false,
       ),
-    ).toBe("if-else L1");
+    ).toEqual("if-else L1");
     expect(
       subgraphLabel(
         { ...baseIfElseContainerSubgraph(), hasElse: false },
         emptyMap,
         false,
       ),
-    ).toBe("if L1");
+    ).toEqual("if L1");
   });
 
   describe("debug=true", () => {
@@ -82,7 +82,7 @@ describe("subgraphLabel", () => {
         line: 2,
         endLine: 5,
       };
-      expect(subgraphLabel(sg, emptyMap, true)).toBe(
+      expect(subgraphLabel(sg, emptyMap, true)).toEqual(
         "myFn()<br/>L2-5<br/>function",
       );
     });
@@ -94,7 +94,7 @@ describe("subgraphLabel", () => {
           emptyMap,
           true,
         ),
-      ).toBe("if-else L1<br/>if-else-container");
+      ).toEqual("if-else L1<br/>if-else-container");
     });
   });
 });

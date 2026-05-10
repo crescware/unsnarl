@@ -32,7 +32,7 @@ function pipe(code: string, language: Language = LANGUAGE.Ts): SerializedIR {
 describe("FlatSerializer", () => {
   test("emits version 1 IR with the source metadata", () => {
     const ir = pipe("const a = 1;\n");
-    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
+    expect(ir.version).toEqual(SERIALIZED_IR_VERSION);
     expect(ir.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
   });
 
@@ -40,7 +40,7 @@ describe("FlatSerializer", () => {
     const ir1 = pipe("const a = 1;\nconst b = a;\n");
     const ir2 = pipe("const a = 1;\nconst b = a;\n");
     expect(ir1).toEqual(ir2);
-    expect(ir1.scopes[0]?.id).toBe("scope#0");
+    expect(ir1.scopes[0]?.id).toEqual("scope#0");
     expect(ir1.variables.map((v) => v.id)).toEqual([
       "scope#0:a@6",
       "scope#0:b@19",
@@ -69,23 +69,23 @@ describe("FlatSerializer", () => {
       "a",
     ]);
     const offsets = ir.references.map((v) => v.identifier.span.offset);
-    expect(offsets[0]).toBeLessThan(offsets[1] ?? Infinity);
-    expect(offsets[1]).toBeLessThan(offsets[2] ?? Infinity);
-    expect(offsets[2]).toBeLessThan(offsets[3] ?? Infinity);
+    expect((offsets[0] ?? Infinity) < (offsets[1] ?? Infinity)).toEqual(true);
+    expect((offsets[1] ?? Infinity) < (offsets[2] ?? Infinity)).toEqual(true);
+    expect((offsets[2] ?? Infinity) < (offsets[3] ?? Infinity)).toEqual(true);
   });
 
   test("breaks circular references by linking ids only", () => {
     const ir = pipe("function f() { return f; }\n");
     const fVar = ir.variables.find((v) => v.name === "f");
-    expect(fVar).toBeDefined();
+    expect(fVar !== null && fVar !== undefined).toEqual(true);
     // Variable.scope は string (ScopeId)
-    expect(typeof fVar?.scope).toBe("string");
+    expect(typeof fVar?.scope).toEqual("string");
     // Reference.resolved は VariableId 文字列
     const resolvedRef = ir.references.find((v) => v.identifier.name === "f");
-    expect(resolvedRef?.resolved).toBe(fVar?.id);
+    expect(resolvedRef?.resolved).toEqual(fVar?.id);
     // Scope.upper も id 参照
     const fnScope = ir.scopes.find((v) => v.type === SCOPE_TYPE.Function);
-    expect(fnScope?.upper).toBe("scope#0");
+    expect(fnScope?.upper).toEqual("scope#0");
   });
 
   test("populates flags correctly for read/write/call", () => {
@@ -103,12 +103,12 @@ describe("FlatSerializer", () => {
     const xWrites = refs.filter(
       (v) => v.identifier.name === "x" && v.flags.write,
     );
-    expect(xReads.length).toBeGreaterThan(0);
+    expect(xReads.length > 0).toEqual(true);
     // Two writes: the init Write at `let x = 0` and the explicit `x = 1`.
-    expect(xWrites.length).toBe(2);
+    expect(xWrites.length).toEqual(2);
     const addRef = refs.find((v) => v.identifier.name === "add");
-    expect(addRef?.flags.call).toBe(true);
-    expect(addRef?.flags.read).toBe(true);
+    expect(addRef?.flags.call).toEqual(true);
+    expect(addRef?.flags.read).toEqual(true);
   });
 
   test("collects unused variables but excludes ImplicitGlobalVariable", () => {
@@ -140,8 +140,8 @@ describe("FlatSerializer", () => {
   test("preserves diagnostics including var-detected entries", () => {
     const code = "var legacy = 1;\nconst x = 2;\n";
     const ir = pipe(code);
-    expect(ir.diagnostics.length).toBe(1);
-    expect(ir.diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
+    expect(ir.diagnostics.length).toEqual(1);
+    expect(ir.diagnostics[0]?.kind).toEqual(DIAGNOSTIC_KIND.VarDetected);
   });
 
   test("computes line/column for spans", () => {
@@ -149,7 +149,7 @@ describe("FlatSerializer", () => {
     const ir = pipe(code);
     const a = ir.variables.find((v) => v.name === "a");
     const b = ir.variables.find((v) => v.name === "b");
-    expect(a?.identifiers[0]?.line).toBe(1);
-    expect(b?.identifiers[0]?.line).toBe(2);
+    expect(a?.identifiers[0]?.line).toEqual(1);
+    expect(b?.identifiers[0]?.line).toEqual(2);
   });
 });

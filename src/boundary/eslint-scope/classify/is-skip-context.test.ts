@@ -15,14 +15,14 @@ describe("isSkipContext", () => {
         "imported",
         nodeOf({ type: AST_TYPE.ImportSpecifier }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       isSkipContext(
         AST_TYPE.ImportSpecifier,
         "local",
         nodeOf({ type: AST_TYPE.ImportSpecifier }),
       ),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("ExportSpecifier#exported is skipped", () => {
@@ -32,7 +32,7 @@ describe("isSkipContext", () => {
         "exported",
         nodeOf({ type: AST_TYPE.ExportSpecifier }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("MemberExpression#property: skipped only when not computed", () => {
@@ -42,14 +42,14 @@ describe("isSkipContext", () => {
         "property",
         nodeOf({ type: AST_TYPE.MemberExpression, computed: false }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       isSkipContext(
         AST_TYPE.MemberExpression,
         "property",
         nodeOf({ type: AST_TYPE.MemberExpression, computed: true }),
       ),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("Property/MethodDefinition/PropertyDefinition/AccessorProperty key is skipped only when not computed", () => {
@@ -61,10 +61,10 @@ describe("isSkipContext", () => {
     ]) {
       expect(
         isSkipContext(t, "key", nodeOf({ type: t, computed: false })),
-      ).toBe(true);
-      expect(isSkipContext(t, "key", nodeOf({ type: t, computed: true }))).toBe(
-        false,
-      );
+      ).toEqual(true);
+      expect(
+        isSkipContext(t, "key", nodeOf({ type: t, computed: true })),
+      ).toEqual(false);
     }
   });
 
@@ -75,7 +75,7 @@ describe("isSkipContext", () => {
         "name",
         nodeOf({ type: AST_TYPE.JSXAttribute }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("JSXMemberExpression#property is skipped", () => {
@@ -85,7 +85,7 @@ describe("isSkipContext", () => {
         "property",
         nodeOf({ type: AST_TYPE.JSXMemberExpression }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("JSXClosingElement is skipped regardless of key", () => {
@@ -95,14 +95,14 @@ describe("isSkipContext", () => {
         null,
         nodeOf({ type: AST_TYPE.JSXClosingElement }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       isSkipContext(
         AST_TYPE.JSXClosingElement,
         "name",
         nodeOf({ type: AST_TYPE.JSXClosingElement }),
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("LabeledStatement/Continue/Break label is skipped", () => {
@@ -111,8 +111,8 @@ describe("isSkipContext", () => {
       AST_TYPE.ContinueStatement,
       AST_TYPE.BreakStatement,
     ]) {
-      expect(isSkipContext(t, "label", nodeOf({ type: t }))).toBe(true);
-      expect(isSkipContext(t, "body", nodeOf({ type: t }))).toBe(false);
+      expect(isSkipContext(t, "label", nodeOf({ type: t }))).toEqual(true);
+      expect(isSkipContext(t, "body", nodeOf({ type: t }))).toEqual(false);
     }
   });
 
@@ -123,6 +123,6 @@ describe("isSkipContext", () => {
         "callee",
         nodeOf({ type: AST_TYPE.CallExpression }),
       ),
-    ).toBe(false);
+    ).toEqual(false);
   });
 });

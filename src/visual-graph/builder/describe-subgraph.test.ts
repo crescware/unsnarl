@@ -66,16 +66,16 @@ describe("describeSubgraph", () => {
       new Map([["fn", "o"]]),
       new Map([["o", owner]]),
     );
-    expect(sg.line).toBe(7);
+    expect(sg.line).toEqual(7);
   });
 
   test("function subgraph without an owner var renders as anonymous (ownerNodeId null, ownerName empty)", () => {
     const scope = { ...baseScope(), id: "fn", type: SCOPE_TYPE.Function };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    expect(sg.kind).toBe("function");
+    expect(sg.kind).toEqual("function");
     if (sg.kind === "function") {
-      expect(sg.ownerNodeId).toBeNull();
-      expect(sg.ownerName).toBe("");
+      expect(sg.ownerNodeId).toEqual(null);
+      expect(sg.ownerName).toEqual("");
     }
   });
 
@@ -97,10 +97,10 @@ describe("describeSubgraph", () => {
         block: { type: "Block", span: span(0, 1), endSpan: span(10, 3) },
       };
       const sg = describeSubgraph(scope, new Map(), new Map());
-      expect(sg.kind).toBe(expectedKind);
-      expect(sg.id).toBe("s_ctrl");
-      expect(sg.line).toBe(1);
-      expect(sg.endLine).toBe(3);
+      expect(sg.kind).toEqual(expectedKind);
+      expect(sg.id).toEqual("s_ctrl");
+      expect(sg.line).toEqual(1);
+      expect(sg.endLine).toEqual(3);
     },
   );
 
@@ -116,11 +116,11 @@ describe("describeSubgraph", () => {
       },
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    expect(sg.kind).toBe("case");
+    expect(sg.kind).toEqual("case");
     if (sg.kind !== "case") {
       throw new Error("expected case");
     }
-    expect(sg.caseTest).toBe("x === 1");
+    expect(sg.caseTest).toEqual("x === 1");
   });
 
   test("case subgraph keeps caseTest null when the case clause has no test (default)", () => {
@@ -134,13 +134,13 @@ describe("describeSubgraph", () => {
     if (sg.kind !== "case") {
       throw new Error("expected case");
     }
-    expect(sg.caseTest).toBeNull();
+    expect(sg.caseTest).toEqual(null);
   });
 
   test("plain block scope renders as the generic 'block' subgraph", () => {
     const scope = { ...baseScope(), id: "plain", type: SCOPE_TYPE.Block };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    expect(sg.kind).toBe(SUBGRAPH_KIND.Block);
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Block);
   });
 
   test("throws when scope is neither a function subgraph nor a control kind (e.g. module / global)", () => {

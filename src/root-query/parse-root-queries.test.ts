@@ -6,7 +6,7 @@ import { ROOT_QUERY_KIND } from "./root-query-kind.js";
 describe("parseRootQueries", () => {
   test("parses a single token", () => {
     const r = parseRootQueries("10:foo");
-    expect(r.ok).toBe(true);
+    expect(r.ok).toEqual(true);
     if (r.ok) {
       expect(r.queries).toHaveLength(1);
       expect(r.queries[0]).toMatchObject({
@@ -18,7 +18,7 @@ describe("parseRootQueries", () => {
 
   test("parses comma-separated tokens", () => {
     const r = parseRootQueries("10:foo,42,9-13:bar");
-    expect(r.ok).toBe(true);
+    expect(r.ok).toEqual(true);
     if (r.ok) {
       expect(r.queries).toHaveLength(3);
       expect(r.queries.map((v) => v.kind)).toEqual([
@@ -48,7 +48,7 @@ describe("parseRootQueries", () => {
 
   test("propagates the offending token in the error", () => {
     const r = parseRootQueries("10,foo-bar");
-    expect(r.ok).toBe(false);
+    expect(r.ok).toEqual(false);
     if (!r.ok) {
       expect(r.error).toContain("foo-bar");
     }

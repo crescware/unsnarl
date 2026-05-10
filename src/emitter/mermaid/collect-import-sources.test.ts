@@ -27,7 +27,7 @@ describe("collectImportSources", () => {
       ...baseSimpleNode(NODE_KIND.ModuleSink),
       id: "module_root",
     });
-    expect(collectImportSources(map).size).toBe(0);
+    expect(collectImportSources(map).size).toEqual(0);
   });
 
   test("excludes non-synthetic kinds", () => {
@@ -35,10 +35,10 @@ describe("collectImportSources", () => {
       { ...baseNode(), id: "n_x" },
       { ...baseSimpleNode(NODE_KIND.FunctionName), id: "n_f" },
     );
-    expect(collectImportSources(map).size).toBe(0);
+    expect(collectImportSources(map).size).toEqual(0);
   });
 
   test("empty map -> empty set", () => {
-    expect(collectImportSources(asMap()).size).toBe(0);
+    expect(collectImportSources(asMap()).size).toEqual(0);
   });
 });

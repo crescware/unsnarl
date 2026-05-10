@@ -51,7 +51,7 @@ function entry(node: AstNode, key: string | null): PathEntry {
 
 describe("findPredicateContainer", () => {
   test("returns null for empty path and null parent", () => {
-    expect(findPredicateContainer(null, null, [])).toBeNull();
+    expect(findPredicateContainer(null, null, [])).toEqual(null);
   });
 
   test("matches a single if's test reference and returns the if's start offset", () => {
@@ -104,7 +104,7 @@ describe("findPredicateContainer", () => {
       entry(ifStmt, "body"),
       entry(consequent, "consequent"),
     ];
-    expect(findPredicateContainer(consequent, "body", path)).toBeNull();
+    expect(findPredicateContainer(consequent, "body", path)).toEqual(null);
   });
 
   test("falls back to parent's start when path is empty (immediate IfStatement parent)", () => {
@@ -137,7 +137,7 @@ describe("findPredicateContainer", () => {
       entry(whileStmt, "body"),
       entry(inBody, "body"),
     ];
-    expect(findPredicateContainer(inBody, "expression", path)).toBeNull();
+    expect(findPredicateContainer(inBody, "expression", path)).toEqual(null);
   });
 
   test("matches a DoWhileStatement.test reference and returns the do-while's start offset", () => {
@@ -183,7 +183,7 @@ describe("findPredicateContainer", () => {
       entry(forStmt, "body"),
       entry(inBody, "body"),
     ];
-    expect(findPredicateContainer(inBody, "expression", path)).toBeNull();
+    expect(findPredicateContainer(inBody, "expression", path)).toEqual(null);
   });
 
   test.each([{ key: "left" as const }, { key: "right" as const }])(
@@ -228,7 +228,7 @@ describe("findPredicateContainer", () => {
       entry(forOf, "body"),
       entry(inBody, "body"),
     ];
-    expect(findPredicateContainer(inBody, "expression", path)).toBeNull();
+    expect(findPredicateContainer(inBody, "expression", path)).toEqual(null);
   });
 
   test("falls back to parent's start when path is empty for WhileStatement.test", () => {

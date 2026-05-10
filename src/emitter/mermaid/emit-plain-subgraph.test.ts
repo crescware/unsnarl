@@ -23,9 +23,9 @@ describe("emitPlainSubgraph", () => {
       ],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(state.lines[0]).toBe('  subgraph s_x["if L1"]');
-    expect(state.lines[1]).toBe("    direction TB");
-    expect(state.lines.at(-1)).toBe("  end");
+    expect(state.lines[0]).toEqual('  subgraph s_x["if L1"]');
+    expect(state.lines[1]).toEqual("    direction TB");
+    expect(state.lines.at(-1)).toEqual("  end");
     // The two children are emitted between direction and end.
     expect(state.lines).toHaveLength(5);
   });
@@ -44,7 +44,7 @@ describe("emitPlainSubgraph", () => {
     emitPlainSubgraph(state, sg, "  ");
     const nodeIdx = state.lines.findIndex((v) => v.includes("n_a"));
     const innerIdx = state.lines.findIndex((v) => v.includes("subgraph inner"));
-    expect(nodeIdx).toBeLessThan(innerIdx);
+    expect(nodeIdx < innerIdx).toEqual(true);
   });
 
   test("skips child nodes whose id is in wrappedOwnerIds", () => {
@@ -59,8 +59,8 @@ describe("emitPlainSubgraph", () => {
       ],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(state.lines.some((v) => v.includes("n_owner"))).toBe(false);
-    expect(state.lines.some((v) => v.includes("n_keep"))).toBe(true);
+    expect(state.lines.some((v) => v.includes("n_owner"))).toEqual(false);
+    expect(state.lines.some((v) => v.includes("n_keep"))).toEqual(true);
   });
 
   test("invokes emptySubgraphPlaceholder when there are no emitted children", () => {
@@ -79,7 +79,7 @@ describe("emitPlainSubgraph", () => {
       elements: [],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(state.lines.some((v) => v.includes("__placeholder_empty"))).toBe(
+    expect(state.lines.some((v) => v.includes("__placeholder_empty"))).toEqual(
       true,
     );
     expect(state.placeholderIds).toEqual(["ph_empty"]);
@@ -101,7 +101,7 @@ describe("emitPlainSubgraph", () => {
       elements: [{ ...baseNode(), id: "n_a" }],
     };
     emitPlainSubgraph(state, sg, "  ");
-    expect(called).toBe(false);
+    expect(called).toEqual(false);
   });
 
   test("placeholder returning null inserts no line and registers no id", () => {
@@ -119,7 +119,7 @@ describe("emitPlainSubgraph", () => {
     const before = state.lines.length;
     emitPlainSubgraph(state, sg, "  ");
     // open + direction + end = 3 lines, no placeholder
-    expect(state.lines.length - before).toBe(3);
+    expect(state.lines.length - before).toEqual(3);
     expect(state.placeholderIds).toEqual([]);
   });
 
@@ -142,6 +142,6 @@ describe("emitPlainSubgraph", () => {
       { ...baseSubgraph(), id: "empty", kind: SUBGRAPH_KIND.If },
       "  ",
     );
-    expect(observed).toBe(true);
+    expect(observed).toEqual(true);
   });
 });

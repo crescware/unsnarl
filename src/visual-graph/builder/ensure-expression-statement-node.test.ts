@@ -61,7 +61,7 @@ describe("ensureExpressionStatementNode", () => {
     const state = makeState();
     expect(
       ensureExpressionStatementNode(baseRef(), "", elements, state),
-    ).toBeNull();
+    ).toEqual(null);
     expect(elements).toHaveLength(0);
   });
 
@@ -78,7 +78,7 @@ describe("ensureExpressionStatementNode", () => {
     const elements: VisualElement[] = [];
     const state = makeState();
     const id = ensureExpressionStatementNode(ref, raw, elements, state);
-    expect(id).toBe("expr_stmt_0");
+    expect(id).toEqual("expr_stmt_0");
     expect(elements).toHaveLength(1);
     const node = elements[0] as VisualNode;
     expect(node).toMatchObject({
@@ -105,7 +105,7 @@ describe("ensureExpressionStatementNode", () => {
     const elements: VisualElement[] = [];
     const state = makeState();
     ensureExpressionStatementNode(ref, raw, elements, state);
-    expect((elements[0] as VisualNode).name).toBe("a");
+    expect((elements[0] as VisualNode).name).toEqual("a");
   });
 
   test("sets endLine when the statement spans multiple lines so the renderer shows L<start>-<end>", () => {
@@ -123,8 +123,8 @@ describe("ensureExpressionStatementNode", () => {
     const elements: VisualElement[] = [];
     const state = makeState();
     ensureExpressionStatementNode(ref, raw, elements, state);
-    expect((elements[0] as VisualNode).line).toBe(1);
-    expect((elements[0] as VisualNode).endLine).toBe(3);
+    expect((elements[0] as VisualNode).line).toEqual(1);
+    expect((elements[0] as VisualNode).endLine).toEqual(3);
   });
 
   test("returns the cached id and does not re-append when called twice for refs in the same statement", () => {
@@ -149,7 +149,7 @@ describe("ensureExpressionStatementNode", () => {
     const state = makeState();
     const idA = ensureExpressionStatementNode(refA, raw, elements, state);
     const idB = ensureExpressionStatementNode(refB, raw, elements, state);
-    expect(idA).toBe(idB);
+    expect(idA).toEqual(idB);
     expect(elements).toHaveLength(1);
   });
 });

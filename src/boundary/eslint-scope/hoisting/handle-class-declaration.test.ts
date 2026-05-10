@@ -34,7 +34,9 @@ describe("handleClassDeclaration", () => {
     const scope = newScope();
     handleClassDeclaration(firstStmt("class C {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["C"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe(DEFINITION_TYPE.ClassName);
+    expect(scope.variables[0]?.defs[0]?.type).toEqual(
+      DEFINITION_TYPE.ClassName,
+    );
   });
 
   test("anonymous class (no id) declares nothing", () => {

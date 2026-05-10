@@ -57,19 +57,19 @@ describe("findNodeById", () => {
     { id: "c", expected: "c" },
     { id: "d", expected: "d" },
   ])("finds top-level and nested node $id", ({ id, expected }) => {
-    expect(findNodeById(elements, id)?.id).toBe(expected);
+    expect(findNodeById(elements, id)?.id).toEqual(expected);
   });
 
   test("returns null when id is absent", () => {
-    expect(findNodeById(elements, "missing")).toBeNull();
+    expect(findNodeById(elements, "missing")).toEqual(null);
   });
 
   test("returns null on an empty element list", () => {
-    expect(findNodeById([], "a")).toBeNull();
+    expect(findNodeById([], "a")).toEqual(null);
   });
 
   test("ignores subgraph ids (only matches node ids)", () => {
-    expect(findNodeById(elements, "s1")).toBeNull();
-    expect(findNodeById(elements, "s2")).toBeNull();
+    expect(findNodeById(elements, "s1")).toEqual(null);
+    expect(findNodeById(elements, "s2")).toEqual(null);
   });
 });

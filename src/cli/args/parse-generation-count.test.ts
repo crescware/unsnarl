@@ -16,6 +16,6 @@ describe("parseGenerationCount", () => {
     { name: "hex '0x10' → null", input: "0x10", expected: null },
     { name: "scientific '1e3' → null", input: "1e3", expected: null },
   ])("$name", ({ input, expected }) => {
-    expect(parseGenerationCount(input)).toBe(expected);
+    expect(parseGenerationCount(input)).toEqual(expected);
   });
 });

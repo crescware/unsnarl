@@ -19,16 +19,16 @@ function entry(node: AstNode, key: string | null): PathEntry {
 
 describe("ifChainRootOffset", () => {
   test("returns null when parent is null", () => {
-    expect(ifChainRootOffset(null, "consequent", [])).toBeNull();
+    expect(ifChainRootOffset(null, "consequent", [])).toEqual(null);
   });
 
   test("returns null when parent is not an IfStatement", () => {
-    expect(ifChainRootOffset(blockNode(0), "consequent", [])).toBeNull();
+    expect(ifChainRootOffset(blockNode(0), "consequent", [])).toEqual(null);
   });
 
   test("returns null for keys other than consequent / alternate", () => {
     const parent = ifNode(10);
-    expect(ifChainRootOffset(parent, "test", [])).toBeNull();
+    expect(ifChainRootOffset(parent, "test", [])).toEqual(null);
   });
 
   test("returns null for a standalone if (parent at top level)", () => {
@@ -38,7 +38,7 @@ describe("ifChainRootOffset", () => {
       entry(program as unknown as AstNode, null),
       entry(parent, "body"),
     ];
-    expect(ifChainRootOffset(parent, "consequent", path)).toBeNull();
+    expect(ifChainRootOffset(parent, "consequent", path)).toEqual(null);
   });
 
   test("returns outer offset for inner-if consequent in else-if chain (1 step)", () => {
@@ -50,7 +50,7 @@ describe("ifChainRootOffset", () => {
       entry(outer, "body"),
       entry(inner, "alternate"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBe(10);
+    expect(ifChainRootOffset(inner, "consequent", path)).toEqual(10);
   });
 
   test("returns outer offset for inner-if alternate in else-if chain (1 step)", () => {
@@ -62,7 +62,7 @@ describe("ifChainRootOffset", () => {
       entry(outer, "body"),
       entry(inner, "alternate"),
     ];
-    expect(ifChainRootOffset(inner, "alternate", path)).toBe(10);
+    expect(ifChainRootOffset(inner, "alternate", path)).toEqual(10);
   });
 
   test("walks back through multiple chained alternates to the outermost if (2 steps)", () => {
@@ -76,7 +76,7 @@ describe("ifChainRootOffset", () => {
       entry(middle, "alternate"),
       entry(innermost, "alternate"),
     ];
-    expect(ifChainRootOffset(innermost, "consequent", path)).toBe(5);
+    expect(ifChainRootOffset(innermost, "consequent", path)).toEqual(5);
   });
 
   test("does not walk past a non-IfStatement ancestor", () => {
@@ -92,7 +92,7 @@ describe("ifChainRootOffset", () => {
       entry(innerBlock, "alternate"),
       entry(inner, "body"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBeNull();
+    expect(ifChainRootOffset(inner, "consequent", path)).toEqual(null);
   });
 
   test("does not walk when current if sits in the consequent slot of an outer if", () => {
@@ -108,7 +108,7 @@ describe("ifChainRootOffset", () => {
       entry(consBlock, "consequent"),
       entry(inner, "body"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBeNull();
+    expect(ifChainRootOffset(inner, "consequent", path)).toEqual(null);
   });
 
   test("falls back to 0 when chainTop has no start offset", () => {
@@ -118,6 +118,6 @@ describe("ifChainRootOffset", () => {
       entry(outer, "body"),
       entry(inner, "alternate"),
     ];
-    expect(ifChainRootOffset(inner, "consequent", path)).toBe(0);
+    expect(ifChainRootOffset(inner, "consequent", path)).toEqual(0);
   });
 });

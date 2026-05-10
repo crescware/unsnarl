@@ -9,13 +9,13 @@ describe("emitNode", () => {
     const state = baseRenderState();
     emitNode(state, { ...baseNode(), id: "n_x", name: "x", line: 5 }, "  ");
     expect(state.lines).toHaveLength(1);
-    expect(state.lines[0]?.startsWith("  n_x[")).toBe(true);
+    expect(state.lines[0]?.startsWith("  n_x[")).toEqual(true);
   });
 
   test("respects the supplied indent verbatim", () => {
     const state = baseRenderState();
     emitNode(state, { ...baseNode(), id: "n_x" }, "      ");
-    expect(state.lines[0]?.startsWith("      n_x")).toBe(true);
+    expect(state.lines[0]?.startsWith("      n_x")).toEqual(true);
   });
 
   test("does not modify any other RenderState field", () => {

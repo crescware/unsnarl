@@ -21,7 +21,7 @@ function asProgram(ast: unknown): MinimalProgram {
 
 describe("OxcParser", () => {
   test("identifies itself as 'oxc'", () => {
-    expect(parser.id).toBe("oxc");
+    expect(parser.id).toEqual("oxc");
   });
 
   test("parses a simple TS program into an ESTree-compatible Program node", () => {
@@ -33,16 +33,16 @@ describe("OxcParser", () => {
       sourceType: defaultSourceTypeFor(LANGUAGE.Ts),
     });
 
-    expect(parsed.language).toBe("ts");
-    expect(parsed.sourcePath).toBe("input.ts");
-    expect(parsed.sourceType).toBe(SOURCE_TYPE.Module);
-    expect(parsed.raw).toBe(code);
+    expect(parsed.language).toEqual("ts");
+    expect(parsed.sourcePath).toEqual("input.ts");
+    expect(parsed.sourceType).toEqual(SOURCE_TYPE.Module);
+    expect(parsed.raw).toEqual(code);
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe(AST_TYPE.Program);
+    expect(program.type).toEqual(AST_TYPE.Program);
     expect(program.body).toHaveLength(2);
-    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
-    expect(program.body[1]?.type).toBe(AST_TYPE.VariableDeclaration);
+    expect(program.body[0]?.type).toEqual(AST_TYPE.VariableDeclaration);
+    expect(program.body[1]?.type).toEqual(AST_TYPE.VariableDeclaration);
   });
 
   test("parses TSX with JSX elements", () => {
@@ -55,9 +55,9 @@ describe("OxcParser", () => {
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.type).toBe(AST_TYPE.Program);
+    expect(program.type).toEqual(AST_TYPE.Program);
     expect(program.body).toHaveLength(1);
-    expect(program.body[0]?.type).toBe(AST_TYPE.VariableDeclaration);
+    expect(program.body[0]?.type).toEqual(AST_TYPE.VariableDeclaration);
   });
 
   test("parses JS with ESM import", () => {
@@ -70,8 +70,8 @@ describe("OxcParser", () => {
     });
 
     const program = asProgram(parsed.ast);
-    expect(program.body[0]?.type).toBe(AST_TYPE.ImportDeclaration);
-    expect(program.body[1]?.type).toBe(AST_TYPE.ExportNamedDeclaration);
+    expect(program.body[0]?.type).toEqual(AST_TYPE.ImportDeclaration);
+    expect(program.body[1]?.type).toEqual(AST_TYPE.ExportNamedDeclaration);
   });
 
   test("preserves an explicitly requested sourceType regardless of the language extension", () => {
@@ -81,7 +81,7 @@ describe("OxcParser", () => {
       sourcePath: "input.js",
       sourceType: SOURCE_TYPE.Script,
     });
-    expect(parsed.sourceType).toBe(SOURCE_TYPE.Script);
+    expect(parsed.sourceType).toEqual(SOURCE_TYPE.Script);
   });
 
   test("synthesizes a filename with the correct extension when sourcePath has none", () => {
@@ -107,9 +107,9 @@ describe("OxcParser", () => {
     } catch (e) {
       captured = e;
     }
-    expect(captured).toBeInstanceOf(ParseError);
+    expect(captured instanceof ParseError).toEqual(true);
     if (captured instanceof ParseError) {
-      expect(captured.errors.length).toBeGreaterThan(0);
+      expect(captured.errors.length > 0).toEqual(true);
       expect(captured.message).toContain("broken.ts");
     }
   });

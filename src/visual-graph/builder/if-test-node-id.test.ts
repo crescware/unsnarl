@@ -11,7 +11,7 @@ describe("ifTestNodeId", () => {
   ])(
     "ifTestNodeId($parentScopeId, $offset) = $expected",
     ({ parentScopeId, offset, expected }) => {
-      expect(ifTestNodeId(parentScopeId, offset)).toBe(expected);
+      expect(ifTestNodeId(parentScopeId, offset)).toEqual(expected);
     },
   );
 });

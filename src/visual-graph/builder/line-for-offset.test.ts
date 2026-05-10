@@ -37,11 +37,11 @@ describe("lineForOffset", () => {
       expected: 2,
     },
   ])("$name", ({ raw, offset, expected }) => {
-    expect(lineForOffset(raw, offset)).toBe(expected);
+    expect(lineForOffset(raw, offset)).toEqual(expected);
   });
 
   test("clamps offset > raw.length to raw.length", () => {
     const raw = "a\nb\nc";
-    expect(lineForOffset(raw, 999)).toBe(lineForOffset(raw, raw.length));
+    expect(lineForOffset(raw, 999)).toEqual(lineForOffset(raw, raw.length));
   });
 });

@@ -19,7 +19,7 @@ describe("walk", () => {
         types.push(node.type);
       },
     });
-    expect(types[0]).toBe(AST_TYPE.Program);
+    expect(types[0]).toEqual(AST_TYPE.Program);
   });
 
   test("enter visits descendants in source order", () => {
@@ -72,7 +72,7 @@ describe("walk", () => {
         left.push(node.type);
       },
     });
-    expect(left[left.length - 1]).toBe(AST_TYPE.Program);
+    expect(left[left.length - 1]).toEqual(AST_TYPE.Program);
   });
 
   test("path passed to enter ends at the parent of the visited node", () => {
@@ -85,10 +85,10 @@ describe("walk", () => {
         }
       },
     });
-    expect(identPath).not.toBeNull();
+    expect(identPath).not.toEqual(null);
     const types = (identPath as unknown as PathEntry[]).map((v) => v.node.type);
-    expect(types[0]).toBe(AST_TYPE.Program);
-    expect(types[types.length - 1]).toBe(AST_TYPE.VariableDeclarator);
+    expect(types[0]).toEqual(AST_TYPE.Program);
+    expect(types[types.length - 1]).toEqual(AST_TYPE.VariableDeclarator);
   });
 
   test("parent and key are null for the root", () => {
@@ -96,8 +96,8 @@ describe("walk", () => {
     const visitor = {
       enter(node, parent, key) {
         if (node === program) {
-          expect(parent).toBeNull();
-          expect(key).toBeNull();
+          expect(parent).toEqual(null);
+          expect(key).toEqual(null);
         }
       },
     } satisfies WalkVisitor;

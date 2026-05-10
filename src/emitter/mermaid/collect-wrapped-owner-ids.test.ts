@@ -21,7 +21,7 @@ describe("collectWrappedOwnerIds", () => {
   test("non-function subgraphs (e.g. if) carry no ownerNodeId by type, so are skipped", () => {
     const out = new Set<string>();
     collectWrappedOwnerIds([basePlainSubgraph(SUBGRAPH_KIND.If)], out);
-    expect(out.size).toBe(0);
+    expect(out.size).toEqual(0);
   });
 
   test("recurses into nested subgraphs", () => {

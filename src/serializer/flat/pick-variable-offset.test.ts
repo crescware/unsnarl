@@ -25,18 +25,18 @@ const variable = (
 
 describe("pickVariableOffset", () => {
   test("uses first identifier's start when present", () => {
-    expect(pickVariableOffset(variable([ident("x", 7), ident("x", 9)]))).toBe(
-      7,
-    );
+    expect(
+      pickVariableOffset(variable([ident("x", 7), ident("x", 9)])),
+    ).toEqual(7);
   });
 
   test("falls back to defs[0].name.start when identifiers is empty", () => {
-    expect(pickVariableOffset(variable([], [def(15)]))).toBe(15);
+    expect(pickVariableOffset(variable([], [def(15)]))).toEqual(15);
   });
 
   test("returns 0 when both sources are missing or have no start", () => {
-    expect(pickVariableOffset(variable([]))).toBe(0);
-    expect(pickVariableOffset(variable([], [def(undefined)]))).toBe(0);
-    expect(pickVariableOffset(variable([ident("x", undefined)]))).toBe(0);
+    expect(pickVariableOffset(variable([]))).toEqual(0);
+    expect(pickVariableOffset(variable([], [def(undefined)]))).toEqual(0);
+    expect(pickVariableOffset(variable([ident("x", undefined)]))).toEqual(0);
   });
 });

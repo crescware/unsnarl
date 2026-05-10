@@ -21,10 +21,10 @@ describe("escape", () => {
     { name: "no-op for plain ASCII", input: "abc 123", expected: "abc 123" },
     { name: "empty string", input: "", expected: "" },
   ])("$name", ({ input, expected }) => {
-    expect(escape(input)).toBe(expected);
+    expect(escape(input)).toEqual(expected);
   });
 
   test("does NOT escape single quotes", () => {
-    expect(escape("a'b")).toBe("a'b");
+    expect(escape("a'b")).toEqual("a'b");
   });
 });

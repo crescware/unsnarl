@@ -20,13 +20,13 @@ describe("controlSubgraphKindOf", () => {
     { type: SCOPE_TYPE.Global, expected: null },
     { type: SCOPE_TYPE.Class, expected: null },
   ])("scope type $type maps to $expected", ({ type, expected }) => {
-    expect(controlSubgraphKindOf({ ...baseScope(), type })).toBe(expected);
+    expect(controlSubgraphKindOf({ ...baseScope(), type })).toEqual(expected);
   });
 
   test("returns 'block' for a block scope without blockContext (bare {})", () => {
     expect(
       controlSubgraphKindOf({ ...baseScope(), type: SCOPE_TYPE.Block }),
-    ).toBe("block");
+    ).toEqual("block");
   });
 
   test.each<{ ctx: BlockContext; expected: Kind }>([
@@ -129,7 +129,7 @@ describe("controlSubgraphKindOf", () => {
           type: SCOPE_TYPE.Block,
           blockContext: ctx,
         }),
-      ).toBe(expected);
+      ).toEqual(expected);
     },
   );
 });

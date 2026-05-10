@@ -39,10 +39,10 @@ describe("stateAt", () => {
       expected: "r3",
     },
   ])("$name", ({ offset, expected }) => {
-    expect(stateAt("v", offset, byVar)).toBe(expected);
+    expect(stateAt("v", offset, byVar)).toEqual(expected);
   });
 
   test("variable with no recorded writes returns the variable id", () => {
-    expect(stateAt("missing", 100, byVar)).toBe("missing");
+    expect(stateAt("missing", 100, byVar)).toEqual("missing");
   });
 });

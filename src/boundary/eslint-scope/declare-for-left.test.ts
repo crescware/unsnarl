@@ -68,7 +68,7 @@ describe("declareForLeft", () => {
     expect(forScope.variables).toHaveLength(0);
     expect(forScope.variableScope.variables.map((v) => v.name)).toEqual(["i"]);
     const events = diagnostics.list();
-    expect(events.some((v) => v.kind === DIAGNOSTIC_KIND.VarDetected)).toBe(
+    expect(events.some((v) => v.kind === DIAGNOSTIC_KIND.VarDetected)).toEqual(
       true,
     );
   });

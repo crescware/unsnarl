@@ -49,10 +49,10 @@ describe("collectIds", () => {
   });
 
   test("empty input → empty set", () => {
-    expect(collectIds([]).size).toBe(0);
+    expect(collectIds([]).size).toEqual(0);
   });
 
   test("returns a Set (deduped already by Map semantics)", () => {
-    expect(collectIds([node("a")])).toBeInstanceOf(Set);
+    expect(collectIds([node("a")]) instanceof Set).toEqual(true);
   });
 });

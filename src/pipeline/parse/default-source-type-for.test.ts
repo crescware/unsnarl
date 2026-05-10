@@ -6,13 +6,13 @@ import { SOURCE_TYPE } from "./source-type.js";
 
 describe("defaultSourceTypeFor", () => {
   test("maps js to script (Node.js default)", () => {
-    expect(defaultSourceTypeFor(LANGUAGE.Js)).toBe(SOURCE_TYPE.Script);
+    expect(defaultSourceTypeFor(LANGUAGE.Js)).toEqual(SOURCE_TYPE.Script);
   });
 
   test.each([[LANGUAGE.Ts], [LANGUAGE.Tsx], [LANGUAGE.Jsx]] as const)(
     "maps %s to module",
     (language) => {
-      expect(defaultSourceTypeFor(language)).toBe(SOURCE_TYPE.Module);
+      expect(defaultSourceTypeFor(language)).toEqual(SOURCE_TYPE.Module);
     },
   );
 });

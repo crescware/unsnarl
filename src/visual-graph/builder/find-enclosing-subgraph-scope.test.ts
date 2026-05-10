@@ -64,6 +64,6 @@ describe("findEnclosingSubgraphScope", () => {
       expected: null,
     },
   ])("$name", ({ map, owners, start, expected }) => {
-    expect(findEnclosingSubgraphScope(start, map, owners)).toBe(expected);
+    expect(findEnclosingSubgraphScope(start, map, owners)).toEqual(expected);
   });
 });

@@ -72,14 +72,14 @@ describe("rebuildElements", () => {
     const outer = out[0] as VisualSubgraph;
     expect(outer.elements).toHaveLength(1);
     const inner = outer.elements[0] as VisualSubgraph;
-    expect(inner.id).toBe("inner");
+    expect(inner.id).toEqual("inner");
     expect(inner.elements.map((v) => v.id)).toEqual(["deep"]);
   });
 
   test("returned nodes are clones (immutability)", () => {
     const original = node("a");
     const [clone] = rebuildElements([original], new Set(["a"]));
-    expect(clone).not.toBe(original);
+    expect(clone !== original).toEqual(true);
     expect(clone).toEqual(original);
   });
 });

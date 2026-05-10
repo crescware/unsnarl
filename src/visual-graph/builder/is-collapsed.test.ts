@@ -18,7 +18,7 @@ describe("isCollapsed", () => {
         [NESTING_KIND.Function]: 99,
       },
     };
-    expect(isCollapsed(scope, undefined)).toBe(false);
+    expect(isCollapsed(scope, undefined)).toEqual(false);
   });
 
   test("returns false when depth equals threshold", () => {
@@ -27,7 +27,7 @@ describe("isCollapsed", () => {
       type: SCOPE_TYPE.Function,
       nestingDepths: { ...uniformNestingDepths(0), [NESTING_KIND.Function]: 1 },
     };
-    expect(isCollapsed(scope, uniformNestingDepths(1))).toBe(false);
+    expect(isCollapsed(scope, uniformNestingDepths(1))).toEqual(false);
   });
 
   test("returns true when nesting kind depth strictly exceeds threshold", () => {
@@ -36,7 +36,7 @@ describe("isCollapsed", () => {
       type: SCOPE_TYPE.Function,
       nestingDepths: { ...uniformNestingDepths(0), [NESTING_KIND.Function]: 2 },
     };
-    expect(isCollapsed(scope, uniformNestingDepths(1))).toBe(true);
+    expect(isCollapsed(scope, uniformNestingDepths(1))).toEqual(true);
   });
 
   test("each nesting kind is checked independently", () => {
@@ -52,10 +52,10 @@ describe("isCollapsed", () => {
     // function depth is far over its threshold, but the scope is a `for`
     // and only its own nesting kind counter is consulted.
     const depths = { ...uniformNestingDepths(10), [NESTING_KIND.For]: 1 };
-    expect(isCollapsed(scope, depths)).toBe(false);
+    expect(isCollapsed(scope, depths)).toEqual(false);
 
     const tighter = { ...uniformNestingDepths(10), [NESTING_KIND.For]: 0 };
-    expect(isCollapsed(scope, tighter)).toBe(true);
+    expect(isCollapsed(scope, tighter)).toEqual(true);
   });
 
   test("non-counted scopes (module / function-expression-name) never collapse", () => {
@@ -65,6 +65,6 @@ describe("isCollapsed", () => {
       functionExpressionScope: true,
       nestingDepths: uniformNestingDepths(99),
     };
-    expect(isCollapsed(fnExprName, uniformNestingDepths(0))).toBe(false);
+    expect(isCollapsed(fnExprName, uniformNestingDepths(0))).toEqual(false);
   });
 });

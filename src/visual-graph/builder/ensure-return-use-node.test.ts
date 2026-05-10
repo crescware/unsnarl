@@ -111,7 +111,7 @@ describe("ensureReturnUseNode", () => {
         ctx,
         state,
       ),
-    ).toBeNull();
+    ).toEqual(null);
   });
 
   test("returns null when the reference has no returnContainer", () => {
@@ -120,7 +120,7 @@ describe("ensureReturnUseNode", () => {
     const state = makeState(host);
     expect(
       ensureReturnUseNode("fnVar", { ...baseRef(), id: "r1" }, ctx, state),
-    ).toBeNull();
+    ).toEqual(null);
     expect(host.elements).toHaveLength(0);
   });
 
@@ -140,12 +140,12 @@ describe("ensureReturnUseNode", () => {
 
     const id = ensureReturnUseNode("fnVar", ref, ctx, state);
 
-    expect(id).toBe("ret_use_r1");
+    expect(id).toEqual("ret_use_r1");
     expect(host.elements).toHaveLength(1);
     const sg = host.elements[0] as VisualSubgraph;
-    expect(sg.kind).toBe("return");
-    expect(sg.line).toBe(3);
-    expect(sg.endLine).toBe(5);
+    expect(sg.kind).toEqual("return");
+    expect(sg.line).toEqual(3);
+    expect(sg.endLine).toEqual(5);
     const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
     expect(node).toMatchObject({
       kind: NODE_KIND.ReturnUse,
@@ -167,7 +167,7 @@ describe("ensureReturnUseNode", () => {
     };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
-    expect((sg.elements[0] as { name: string }).name).toBe("literal");
+    expect((sg.elements[0] as { name: string }).name).toEqual("literal");
   });
 
   test("groups references that share the same returnContainer offsets into one subgraph", () => {
@@ -239,7 +239,7 @@ describe("ensureReturnUseNode", () => {
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
     const node = sg.elements[0] as { isJsxElement: boolean; endLine?: number };
-    expect(node.isJsxElement).toBe(true);
-    expect(node.endLine).toBe(5);
+    expect(node.isJsxElement).toEqual(true);
+    expect(node.endLine).toEqual(5);
   });
 });

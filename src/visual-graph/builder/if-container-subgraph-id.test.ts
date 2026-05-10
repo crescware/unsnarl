@@ -11,7 +11,7 @@ describe("ifContainerSubgraphId", () => {
   ])(
     "ifContainerSubgraphId($parentScopeId, $offset) = $expected",
     ({ parentScopeId, offset, expected }) => {
-      expect(ifContainerSubgraphId(parentScopeId, offset)).toBe(expected);
+      expect(ifContainerSubgraphId(parentScopeId, offset)).toEqual(expected);
     },
   );
 });

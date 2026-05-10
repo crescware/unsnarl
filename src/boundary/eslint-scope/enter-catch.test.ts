@@ -33,11 +33,11 @@ describe("enterCatch", () => {
     );
 
     const scope = manager.current();
-    expect(scope.type).toBe("catch");
+    expect(scope.type).toEqual("catch");
     expect(scope.variables.map((v) => v.name).sort()).toEqual(["err", "z"]);
-    expect(scope.variables.find((v) => v.name === "err")?.defs[0]?.type).toBe(
-      AST_TYPE.CatchClause,
-    );
+    expect(
+      scope.variables.find((v) => v.name === "err")?.defs[0]?.type,
+    ).toEqual(AST_TYPE.CatchClause);
   });
 
   test("supports a destructured catch parameter", () => {

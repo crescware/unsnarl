@@ -81,7 +81,7 @@ describe("createPipeline", () => {
       pruning: null,
     }).text;
 
-    expect(result).toBe("version=1");
+    expect(result).toEqual("version=1");
   });
 
   test("throws when format is unknown", () => {
@@ -145,6 +145,6 @@ describe("createPipeline", () => {
       pruning: null,
     });
 
-    expect(parserCalled).toBe(true);
+    expect(parserCalled).toEqual(true);
   });
 });

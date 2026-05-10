@@ -123,10 +123,10 @@ function childSubgraphsOf(sg: VisualSubgraph): readonly VisualSubgraph[] {
 describe("buildVisualGraph: top-level structure", () => {
   test("top-level metadata mirrors the IR source path/language and direction is RL", () => {
     const g = build("const a = 1;\n");
-    expect(g.version).toBe(SERIALIZED_IR_VERSION);
-    expect(g.source.path).toBe("input.ts");
-    expect(g.source.language).toBe("ts");
-    expect(g.direction).toBe(DIRECTION.RL);
+    expect(g.version).toEqual(SERIALIZED_IR_VERSION);
+    expect(g.source.path).toEqual("input.ts");
+    expect(g.source.language).toEqual("ts");
+    expect(g.direction).toEqual(DIRECTION.RL);
   });
 
   test("an empty source produces an empty graph", () => {
@@ -139,7 +139,7 @@ describe("buildVisualGraph: top-level structure", () => {
     const g = build("const a = 1;\n");
     const nodes = findNodes(g, NODE_KIND.Variable);
     expect(nodes).toHaveLength(1);
-    expect(nodes[0]?.name).toBe("a");
+    expect(nodes[0]?.name).toEqual("a");
     expect(g.edges).toEqual([]);
   });
 });
@@ -170,19 +170,19 @@ describe("buildVisualGraph: variable nodes", () => {
 
   test("unused declarations carry the unused flag; declarations with readers do not", () => {
     const g = build("const a = 1;\nconst b = a;\n");
-    expect(nodeByName(g, "a")?.unused).toBe(false);
-    expect(nodeByName(g, "b")?.unused).toBe(true);
+    expect(nodeByName(g, "a")?.unused).toEqual(false);
+    expect(nodeByName(g, "b")?.unused).toEqual(true);
   });
 
   test("declarationKind is preserved on Variable nodes for let / const", () => {
     const g = build("let a = 1;\nconst b = 2;\n");
-    expect(variableByName(g, "a")?.declarationKind).toBe("let");
-    expect(variableByName(g, "b")?.declarationKind).toBe("const");
+    expect(variableByName(g, "a")?.declarationKind).toEqual("let");
+    expect(variableByName(g, "b")?.declarationKind).toEqual("const");
   });
 
   test("a const initialised by a function expression is marked initIsFunction", () => {
     const g = build("const fn = function () {};\n");
-    expect(variableByName(g, "fn")?.initIsFunction).toBe(true);
+    expect(variableByName(g, "fn")?.initIsFunction).toEqual(true);
   });
 
   test("ImplicitGlobalVariable is kept as a node regardless of whether refs are receiver-only", () => {
@@ -190,10 +190,10 @@ describe("buildVisualGraph: variable nodes", () => {
     expect(
       nodeByName(directRead, "globalThing")?.kind ===
         NODE_KIND.ImplicitGlobalVariable,
-    ).toBe(true);
+    ).toEqual(true);
 
     const onlyReceiver = build("const x = Object.keys({});\n");
-    expect(nodeByName(onlyReceiver, "Object")?.kind).toBe(
+    expect(nodeByName(onlyReceiver, "Object")?.kind).toEqual(
       NODE_KIND.ImplicitGlobalVariable,
     );
   });
@@ -201,10 +201,10 @@ describe("buildVisualGraph: variable nodes", () => {
   test("named imports renamed at the import site keep the local name on the node", () => {
     const g = build("import { other as renamed } from 'm';\nvoid renamed;\n");
     const node = importBindingByName(g, "renamed");
-    expect(node?.kind).toBe(DEFINITION_TYPE.ImportBinding);
-    expect(node?.importKind).toBe(IMPORT_KIND.Named);
+    expect(node?.kind).toEqual(DEFINITION_TYPE.ImportBinding);
+    expect(node?.importKind).toEqual(IMPORT_KIND.Named);
     if (node?.importKind === IMPORT_KIND.Named) {
-      expect(node.importedName).toBe("other");
+      expect(node.importedName).toEqual("other");
     }
   });
 });
@@ -213,19 +213,21 @@ describe("buildVisualGraph: function subgraphs", () => {
   test("a FunctionDeclaration becomes a function subgraph with ownerNodeId pointing to the FunctionName", () => {
     const g = build("function add(a, b) { return a + b; }\n");
     const fn = findSubgraphs(g, "function")[0];
-    expect(fn).toBeDefined();
-    expect(fn?.ownerNodeId).toBeDefined();
+    expect(fn !== null && fn !== undefined).toEqual(true);
+    expect(fn?.ownerNodeId !== null && fn?.ownerNodeId !== undefined).toEqual(
+      true,
+    );
     const ownerNode = flattenNodes(g.elements).find(
       (v) => v.id === fn?.ownerNodeId,
     );
-    expect(ownerNode?.name).toBe("add");
-    expect(ownerNode?.kind).toBe(DEFINITION_TYPE.FunctionName);
+    expect(ownerNode?.name).toEqual("add");
+    expect(ownerNode?.kind).toEqual(DEFINITION_TYPE.FunctionName);
   });
 
   test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
     const g = build("function add(a, b) { return a + b; }\n");
     const fn = findSubgraphs(g, "function")[0];
-    expect(fn?.ownerName).toBe("add");
+    expect(fn?.ownerName).toEqual("add");
   });
 
   test("an arrow function const, function expression const, and FunctionDeclaration all subgraph alike", () => {
@@ -242,15 +244,15 @@ describe("buildVisualGraph: function subgraphs", () => {
   test("function subgraph line range covers the whole function block", () => {
     const g = build("function f() {\n  return 1;\n}\n");
     const fn = findSubgraphs(g, "function")[0];
-    expect(fn?.line).toBe(1);
-    expect(fn?.endLine).toBe(3);
+    expect(fn?.line).toEqual(1);
+    expect(fn?.endLine).toEqual(3);
   });
 
   test("a single-line function reports endLine equal to line (renderers collapse equal ranges)", () => {
     const g = build("function f() { return 1; }\n");
     const fn = findSubgraphs(g, "function")[0];
-    expect(fn?.line).toBe(1);
-    expect(fn?.endLine).toBe(1);
+    expect(fn?.line).toEqual(1);
+    expect(fn?.endLine).toEqual(1);
   });
 });
 
@@ -302,16 +304,16 @@ describe("buildVisualGraph: control subgraphs", () => {
     );
     expect(findSubgraphs(g, "if-else-container")).toHaveLength(0);
     const ifS = findSubgraphs(g, "if")[0];
-    expect(ifS?.line).toBe(3);
+    expect(ifS?.line).toEqual(3);
     const anchor = findNodes(g, NODE_KIND.IfTest)[0];
-    expect(anchor?.line).toBe(3);
+    expect(anchor?.line).toEqual(3);
     const flag = nodeByName(g, "flag");
-    expect(flag).toBeDefined();
+    expect(flag !== null && flag !== undefined).toEqual(true);
     expect(
       g.edges.some(
         (v) => v.from === flag?.id && v.to === anchor?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("an if/else pair lives inside an if-else container whose range spans both arms", () => {
@@ -327,9 +329,9 @@ describe("buildVisualGraph: control subgraphs", () => {
       ].join("\n"),
     );
     const container = findSubgraphs(g, "if-else-container")[0];
-    expect(container?.line).toBe(3);
-    expect(container?.endLine).toBe(7);
-    expect(container?.hasElse).toBe(true);
+    expect(container?.line).toEqual(3);
+    expect(container?.endLine).toEqual(7);
+    expect(container?.hasElse).toEqual(true);
     const childKinds = childSubgraphsOf(container!).map((v) => v.kind);
     expect(childKinds).toEqual(["if", "else"]);
   });
@@ -349,8 +351,8 @@ describe("buildVisualGraph: control subgraphs", () => {
       ].join("\n"),
     );
     const sw = findSubgraphs(g, "switch")[0];
-    expect(sw?.line).toBe(3);
-    expect(sw?.endLine).toBe(9);
+    expect(sw?.line).toEqual(3);
+    expect(sw?.endLine).toEqual(9);
     const cases = findSubgraphs(g, "case");
     expect(cases).toHaveLength(2);
     const tests = cases.map((v) => v.caseTest);
@@ -379,7 +381,7 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
   test("WriteOp nodes carry the declarationKind of the variable being mutated", () => {
     const g = build("let v = 0;\nv = 1;\n");
     const wr = findNodes(g, NODE_KIND.WriteOp)[0];
-    expect(wr?.declarationKind).toBe("let");
+    expect(wr?.declarationKind).toEqual("let");
   });
 
   test("a switch case that falls through emits a |fallthrough| edge to the next case's WriteOp", () => {
@@ -396,7 +398,7 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
         "}",
       ].join("\n"),
     );
-    expect(g.edges.some((v) => v.label === "fallthrough")).toBe(true);
+    expect(g.edges.some((v) => v.label === "fallthrough")).toEqual(true);
   });
 });
 
@@ -409,7 +411,7 @@ describe("buildVisualGraph: read origin edges", () => {
       g.edges.some(
         (v) => v.from === a?.id && v.to === b?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("call expressions produce read,call edges to the variable that consumes the result", () => {
@@ -420,7 +422,7 @@ describe("buildVisualGraph: read origin edges", () => {
       g.edges.some(
         (v) => v.from === f?.id && v.to === x?.id && v.label === "read,call",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("after if/else both branches' last writes feed a post-merge read of the same variable", () => {
@@ -442,7 +444,7 @@ describe("buildVisualGraph: read origin edges", () => {
     expect(reads).toHaveLength(2);
     const writeOps = findNodes(g, NODE_KIND.WriteOp);
     const writeOpIds = new Set(writeOps.map((v) => v.id));
-    expect(reads.every((v) => writeOpIds.has(v.from))).toBe(true);
+    expect(reads.every((v) => writeOpIds.has(v.from))).toEqual(true);
   });
 
   test("an if without else also keeps an edge from the pre-if state of the variable", () => {
@@ -509,18 +511,20 @@ describe("buildVisualGraph: read origin edges", () => {
     const postSwitchReturnUse = findNodes(g, NODE_KIND.ReturnUse).find(
       (v) => v.line === 13,
     );
-    expect(postSwitchReturnUse).toBeDefined();
+    expect(
+      postSwitchReturnUse !== null && postSwitchReturnUse !== undefined,
+    ).toEqual(true);
     const incoming = edgesTo(g, postSwitchReturnUse!.id);
     // case "a" must not contribute (it exits the function).
     const writeOps = findNodes(g, NODE_KIND.WriteOp);
     const aWrite = writeOps.find((v) => v.line === 5);
-    expect(aWrite).toBeDefined();
-    expect(incoming.some((v) => v.from === aWrite?.id)).toBe(false);
+    expect(aWrite !== null && aWrite !== undefined).toEqual(true);
+    expect(incoming.some((v) => v.from === aWrite?.id)).toEqual(false);
     // case "b" (break) and default (fallthrough end) must contribute.
     const bWrite = writeOps.find((v) => v.line === 8);
     const dWrite = writeOps.find((v) => v.line === 11);
-    expect(incoming.some((v) => v.from === bWrite?.id)).toBe(true);
-    expect(incoming.some((v) => v.from === dWrite?.id)).toBe(true);
+    expect(incoming.some((v) => v.from === bWrite?.id)).toEqual(true);
+    expect(incoming.some((v) => v.from === dWrite?.id)).toEqual(true);
   });
 });
 
@@ -528,7 +532,7 @@ describe("buildVisualGraph: return subgraphs", () => {
   test("a ReturnStatement yields a return subgraph with one ReturnUse per ownerless ref", () => {
     const g = build("function f(a, b) { return a + b; }\n");
     const ret = findSubgraphs(g, "return")[0];
-    expect(ret).toBeDefined();
+    expect(ret !== null && ret !== undefined).toEqual(true);
     const uses = ret!.elements.filter(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node && v.kind === NODE_KIND.ReturnUse,
@@ -575,8 +579,8 @@ describe("buildVisualGraph: return subgraphs", () => {
     );
     expect(fnDirectReturns).toHaveLength(1);
     expect(ifDirectReturns).toHaveLength(1);
-    expect(fnDirectReturns[0]?.line).toBe(6);
-    expect(ifDirectReturns[0]?.line).toBe(4);
+    expect(fnDirectReturns[0]?.line).toEqual(6);
+    expect(ifDirectReturns[0]?.line).toEqual(4);
   });
 
   test("a return inside a switch case nests inside the case subgraph", () => {
@@ -598,22 +602,24 @@ describe("buildVisualGraph: return subgraphs", () => {
     const caseWithReturnUse = cases.find((caseSg) =>
       childSubgraphsOf(caseSg).some((v) => v.kind === SUBGRAPH_KIND.Return),
     );
-    expect(caseWithReturnUse).toBeDefined();
-    expect(caseWithReturnUse?.caseTest).toBe(null);
+    expect(
+      caseWithReturnUse !== null && caseWithReturnUse !== undefined,
+    ).toEqual(true);
+    expect(caseWithReturnUse?.caseTest).toEqual(null);
   });
 
   test("an arrow with an expression body uses the body span as the implicit return container", () => {
     const g = build(["const fn = (x) => (", "  x + 1", ");"].join("\n"));
     const ret = findSubgraphs(g, "return")[0];
-    expect(ret?.line).toBe(1);
-    expect(ret?.endLine).toBe(3);
+    expect(ret?.line).toEqual(1);
+    expect(ret?.endLine).toEqual(3);
   });
 
   test("an arrow with a block body falls through to the inner ReturnStatement's span", () => {
     const g = build(["const fn = (x) => {", "  return x;", "};"].join("\n"));
     const ret = findSubgraphs(g, "return")[0];
-    expect(ret?.line).toBe(2);
-    expect(ret?.endLine).toBeNull();
+    expect(ret?.line).toEqual(2);
+    expect(ret?.endLine).toEqual(null);
   });
 
   test("a function with no ownerless refs in its body produces no return subgraph", () => {
@@ -624,8 +630,8 @@ describe("buildVisualGraph: return subgraphs", () => {
   test("a single-line return subgraph leaves endLine null (rendered as plain L<n>)", () => {
     const g = build("function f(x) { return x; }\n");
     const ret = findSubgraphs(g, "return")[0];
-    expect(ret?.line).toBe(1);
-    expect(ret?.endLine).toBeNull();
+    expect(ret?.line).toEqual(1);
+    expect(ret?.endLine).toEqual(null);
   });
 
   test("ownerless refs flow into ReturnUse nodes via |read| edges", () => {
@@ -641,7 +647,7 @@ describe("buildVisualGraph: return subgraphs", () => {
         (v) =>
           v.from === aParam?.id && v.to === retUse?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("ReturnUse for a multi-line JSX opening tag carries isJsxElement and the closing-tag endLine", () => {
@@ -656,9 +662,9 @@ describe("buildVisualGraph: return subgraphs", () => {
     const g = build(code, "tsx");
     const retUses = findNodes(g, NODE_KIND.ReturnUse);
     const a = retUses.find((v) => v.name === "A");
-    expect(a?.isJsxElement).toBe(true);
-    expect(a?.line).toBe(3);
-    expect(a?.endLine).toBe(5);
+    expect(a?.isJsxElement).toEqual(true);
+    expect(a?.line).toEqual(3);
+    expect(a?.endLine).toEqual(5);
   });
 
   test("a single-line JSX element still flags isJsxElement, and endLine stays null", () => {
@@ -668,8 +674,8 @@ describe("buildVisualGraph: return subgraphs", () => {
     ].join("\n");
     const g = build(code, "tsx");
     const a = findNodes(g, NODE_KIND.ReturnUse).find((v) => v.name === "A");
-    expect(a?.isJsxElement).toBe(true);
-    expect(a?.endLine).toBeNull();
+    expect(a?.isJsxElement).toEqual(true);
+    expect(a?.endLine).toEqual(null);
   });
 
   test("non-JSX ReturnUse stays isJsxElement=false with endLine null", () => {
@@ -680,8 +686,8 @@ describe("buildVisualGraph: return subgraphs", () => {
         (v): v is VisualNode =>
           v.type === VISUAL_ELEMENT_TYPE.Node && v.kind === NODE_KIND.ReturnUse,
       ) ?? null;
-    expect(retUse?.isJsxElement).toBe(false);
-    expect(retUse?.endLine).toBeNull();
+    expect(retUse?.isJsxElement).toEqual(false);
+    expect(retUse?.endLine).toEqual(null);
   });
 });
 
@@ -689,11 +695,11 @@ describe("buildVisualGraph: imports", () => {
   test("default imports get a single ModuleSource and one read edge into the local binding", () => {
     const g = build("import def from 'lib';\nvoid def;\n");
     const moduleSource = findNodes(g, NODE_KIND.ModuleSource)[0];
-    expect(moduleSource?.name).toBe("lib");
+    expect(moduleSource?.name).toEqual("lib");
     const def = nodeByName(g, "def");
     expect(
       g.edges.some((v) => v.from === moduleSource?.id && v.to === def?.id),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("renamed named imports introduce an ImportIntermediate carrying the original name", () => {
@@ -702,7 +708,7 @@ describe("buildVisualGraph: imports", () => {
     );
     const intermediates = findNodes(g, NODE_KIND.ImportIntermediate);
     expect(intermediates).toHaveLength(1);
-    expect(intermediates[0]?.name).toBe("other");
+    expect(intermediates[0]?.name).toEqual("other");
     // ModuleSource -> Intermediate -> local binding
     const moduleSource = findNodes(g, NODE_KIND.ModuleSource)[0];
     const renamed = nodeByName(g, "renamed");
@@ -710,12 +716,12 @@ describe("buildVisualGraph: imports", () => {
       g.edges.some(
         (v) => v.from === moduleSource?.id && v.to === intermediates[0]?.id,
       ),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       g.edges.some(
         (v) => v.from === intermediates[0]?.id && v.to === renamed?.id,
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("namespace imports point directly from the module to the local binding (no intermediate)", () => {
@@ -725,7 +731,7 @@ describe("buildVisualGraph: imports", () => {
     const ns = nodeByName(g, "ns");
     expect(
       g.edges.some((v) => v.from === moduleSource?.id && v.to === ns?.id),
-    ).toBe(true);
+    ).toEqual(true);
   });
 });
 
@@ -740,14 +746,14 @@ describe("buildVisualGraph: predicate references", () => {
     );
     const k = nodeByName(g, "k");
     const anchor = findNodes(g, NODE_KIND.SwitchDiscriminant)[0];
-    expect(anchor).toBeDefined();
+    expect(anchor !== null && anchor !== undefined).toEqual(true);
     const sw = findSubgraphs(g, "switch")[0];
-    expect(sw?.elements[0]).toBe(anchor);
+    expect(sw?.elements[0]).toEqual(anchor);
     expect(
       g.edges.some(
         (v) => v.from === k?.id && v.to === anchor?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("an if/else predicate identifier feeds the if-test anchor inside the consequent (`if`) branch", () => {
@@ -761,7 +767,7 @@ describe("buildVisualGraph: predicate references", () => {
     const flag = nodeByName(g, "flag");
     const container = findSubgraphs(g, "if-else-container")[0];
     const anchor = findNodes(g, NODE_KIND.IfTest)[0];
-    expect(anchor).toBeDefined();
+    expect(anchor !== null && anchor !== undefined).toEqual(true);
     const ifBranch = container?.elements.find(
       (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "if",
     );
@@ -775,12 +781,12 @@ describe("buildVisualGraph: predicate references", () => {
       elseBranch?.elements.every(
         (v) => !(v.type === "node" && v.kind === NODE_KIND.IfTest),
       ),
-    ).toBe(true);
+    ).toEqual(true);
     expect(
       g.edges.some(
         (v) => v.from === flag?.id && v.to === anchor?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("a bare if predicate identifier feeds the if-test anchor (no container)", () => {
@@ -789,12 +795,12 @@ describe("buildVisualGraph: predicate references", () => {
     );
     const flag = nodeByName(g, "flag");
     const anchor = findNodes(g, NODE_KIND.IfTest)[0];
-    expect(anchor).toBeDefined();
+    expect(anchor !== null && anchor !== undefined).toEqual(true);
     expect(
       g.edges.some(
         (v) => v.from === flag?.id && v.to === anchor?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("an else-if chain has one if-test anchor per IfStatement, each inside its corresponding `if` (consequent) branch", () => {
@@ -814,7 +820,7 @@ describe("buildVisualGraph: predicate references", () => {
       ].join("\n"),
     );
     const container = findSubgraphs(g, "if-else-container")[0];
-    expect(container).toBeDefined();
+    expect(container !== null && container !== undefined).toEqual(true);
     const anchors = findNodes(g, NODE_KIND.IfTest);
     expect(anchors).toHaveLength(2);
     const lines = anchors.map((v) => v.line).sort((a, b) => a - b);
@@ -835,7 +841,7 @@ describe("buildVisualGraph: predicate references", () => {
       elseBranch?.elements.every(
         (v) => !(v.type === "node" && v.kind === NODE_KIND.IfTest),
       ),
-    ).toBe(true);
+    ).toEqual(true);
     const n = nodeByName(g, "n");
     const targets = g.edges
       .filter((v) => v.from === n?.id && v.label === "read")
@@ -848,22 +854,24 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
   test("a top-level ExpressionStatement gets its own node carrying the call head and line, and consuming reads route into it", () => {
     const g = build("const a = 1;\nconsole.log(a);\n");
     const exprNode = findNodes(g, NODE_KIND.ExpressionStatement)[0];
-    expect(exprNode).toBeDefined();
-    expect(exprNode?.name).toBe("console.log()");
-    expect(exprNode?.line).toBe(2);
+    expect(exprNode !== null && exprNode !== undefined).toEqual(true);
+    expect(exprNode?.name).toEqual("console.log()");
+    expect(exprNode?.line).toEqual(2);
     const a = nodeByName(g, "a");
-    expect(edgesFrom(g, a!.id).some((v) => v.to === exprNode?.id)).toBe(true);
+    expect(edgesFrom(g, a!.id).some((v) => v.to === exprNode?.id)).toEqual(
+      true,
+    );
     const consoleNode = nodeByName(g, "console");
     expect(
       edgesFrom(g, consoleNode!.id).some((v) => v.to === exprNode?.id),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("a non-call top-level ExpressionStatement uses the bare expression as the head", () => {
     const g = build("const a = 1;\na;\n");
     const exprNode = findNodes(g, NODE_KIND.ExpressionStatement)[0];
-    expect(exprNode?.name).toBe("a");
-    expect(exprNode?.line).toBe(2);
+    expect(exprNode?.name).toEqual("a");
+    expect(exprNode?.line).toEqual(2);
   });
 
   test("a receiver-only ImplicitGlobalVariable in an if-predicate flows into the if-test anchor (issue #20 regression)", () => {
@@ -871,26 +879,26 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
       "function f() { if (Math.random() < 0.5) { return 1; } return 0; }\n",
     );
     const math = nodeByName(g, "Math");
-    expect(math?.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
+    expect(math?.kind).toEqual(NODE_KIND.ImplicitGlobalVariable);
     const anchor = findNodes(g, NODE_KIND.IfTest)[0];
-    expect(anchor).toBeDefined();
+    expect(anchor !== null && anchor !== undefined).toEqual(true);
     expect(
       g.edges.some(
         (v) => v.from === math?.id && v.to === anchor?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("a receiver-only ImplicitGlobalVariable consumed by a Variable emits an outgoing read edge", () => {
     const g = build("const xs = Object.keys({});\n");
     const obj = nodeByName(g, "Object");
     const xs = nodeByName(g, "xs");
-    expect(obj?.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
+    expect(obj?.kind).toEqual(NODE_KIND.ImplicitGlobalVariable);
     expect(
       g.edges.some(
         (v) => v.from === obj?.id && v.to === xs?.id && v.label === "read",
       ),
-    ).toBe(true);
+    ).toEqual(true);
   });
 });
 
@@ -899,8 +907,8 @@ describe("buildVisualGraph: var declarations", () => {
     const varName = freshName();
     const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
     const varNode = nodeByName(graph, varName);
-    expect(varNode).not.toBeNull();
-    expect(varNode?.kind).toBe(NODE_KIND.Variable);
+    expect(varNode).not.toEqual(null);
+    expect(varNode?.kind).toEqual(NODE_KIND.Variable);
     // No edges incident on the var node.
     expect(edgesFrom(graph, varNode!.id)).toHaveLength(0);
     expect(edgesTo(graph, varNode!.id)).toHaveLength(0);
@@ -915,7 +923,7 @@ describe("buildVisualGraph: var declarations", () => {
     const varName = freshName();
     const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
     const varNode = nodeByName(graph, varName);
-    expect(varNode?.kind).toBe(NODE_KIND.Variable);
+    expect(varNode?.kind).toEqual(NODE_KIND.Variable);
     // Implicit global classification would have produced this kind.
     const implicitGlobals = flattenNodes(graph.elements).filter(
       (node) =>
@@ -931,7 +939,7 @@ describe("buildVisualGraph: var declarations", () => {
     const varName = freshName();
     const graph = build(`var ${varName} = 0;\n`);
     const varNode = nodeByName(graph, varName);
-    expect(varNode?.unused).toBe(false);
+    expect(varNode?.unused).toEqual(false);
   });
 });
 
@@ -950,7 +958,7 @@ describe("buildVisualGraph: edge deduplication", () => {
         v.kind === NODE_KIND.ReturnUse &&
         v.name === "a",
     );
-    expect(uses.length).toBeGreaterThanOrEqual(1);
+    expect(uses.length >= 1).toEqual(true);
     // Aggregate: only as many edges as there are ReturnUse nodes for `a`.
     const edges = edgesFrom(g, a!.id).filter((edge) =>
       uses.some((v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === edge.to),

@@ -60,7 +60,7 @@ describe("resolveAmbiguousQueries", () => {
       { kind: ROOT_QUERY_KIND.Name, name: "foo", raw: "foo" },
     ];
     const result = resolveAmbiguousQueries(graph, queries);
-    expect(result.resolved).toBe(queries);
+    expect(result.resolved).toEqual(queries);
     expect(result.resolutions).toEqual([]);
   });
 

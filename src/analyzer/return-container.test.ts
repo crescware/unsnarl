@@ -64,7 +64,7 @@ describe("findReturnContainer", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 30, end: 50 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 30, end: 31 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findReturnContainer(path)).toBeNull();
+    expect(findReturnContainer(path)).toEqual(null);
   });
 
   test("prefers an inner ReturnStatement over the enclosing arrow body", () => {
@@ -98,7 +98,7 @@ describe("findReturnContainer", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 20, end: 35 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 20, end: 21 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findReturnContainer(path)).toBeNull();
+    expect(findReturnContainer(path)).toEqual(null);
   });
 
   test("returns null for a top-level identifier with no return/arrow ancestor", () => {
@@ -107,7 +107,7 @@ describe("findReturnContainer", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 0, end: 10 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 0, end: 5 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findReturnContainer(path)).toBeNull();
+    expect(findReturnContainer(path)).toEqual(null);
   });
 
   test("returns null when ReturnStatement offsets are missing", () => {
@@ -116,6 +116,6 @@ describe("findReturnContainer", () => {
       entry({ type: AST_TYPE.ReturnStatement }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 27, end: 28 }, "argument"),
     ] satisfies PathEntry[];
-    expect(findReturnContainer(path)).toBeNull();
+    expect(findReturnContainer(path)).toEqual(null);
   });
 });

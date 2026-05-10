@@ -51,6 +51,6 @@ describe("caseFallsThrough", () => {
       expected: false,
     },
   ])("$name", ({ consequent, expected }) => {
-    expect(caseFallsThrough(consequent)).toBe(expected);
+    expect(caseFallsThrough(consequent)).toEqual(expected);
   });
 });

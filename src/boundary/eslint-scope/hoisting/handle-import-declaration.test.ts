@@ -34,7 +34,7 @@ describe("handleImportDeclaration", () => {
     const scope = newScope();
     handleImportDeclaration(firstStmt("import a from 'mod';"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["a"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe(
+    expect(scope.variables[0]?.defs[0]?.type).toEqual(
       DEFINITION_TYPE.ImportBinding,
     );
   });

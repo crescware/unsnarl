@@ -71,7 +71,7 @@ describe("edgeLabelOfRef", () => {
           ...baseRef(),
           flags: { read, write, call, receiver },
         }),
-      ).toBe(expected);
+      ).toEqual(expected);
     },
   );
 });

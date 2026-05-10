@@ -31,12 +31,12 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     // SomeType is a type, not a Variable
-    expect(findVariable(rootScope, "SomeType")).toBeNull();
+    expect(findVariable(rootScope, "SomeType")).toEqual(null);
     // No ImplicitGlobalVariable for SomeType either
-    expect(findVariable(rootScope, "SomeType")).toBeNull();
+    expect(findVariable(rootScope, "SomeType")).toEqual(null);
     // take は Variable として登録される
     const take = findVariable(rootScope, "take");
-    expect(take).toBeDefined();
+    expect(take !== null && take !== undefined).toEqual(true);
   });
 
   test("does not enter interface bodies (no spurious references)", () => {
@@ -47,13 +47,13 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     const { rootScope } = analyze(code);
     expect(
       rootScope.through.find((v) => v.identifier.name === "I") ?? null,
-    ).toBeNull();
+    ).toEqual(null);
     expect(
       rootScope.through.find((v) => v.identifier.name === "foo") ?? null,
-    ).toBeNull();
+    ).toEqual(null);
     expect(
       rootScope.through.find((v) => v.identifier.name === "bar") ?? null,
-    ).toBeNull();
+    ).toEqual(null);
     // 唯一の Variable は x
     expect(rootScope.variables.map((v) => v.name)).toEqual(["x"]);
   });
@@ -65,8 +65,8 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     `;
     const { rootScope } = analyze(code);
     // enum 自体も無視
-    expect(findVariable(rootScope, "Color")).toBeNull();
-    expect(findVariable(rootScope, "Red")).toBeNull();
+    expect(findVariable(rootScope, "Color")).toEqual(null);
+    expect(findVariable(rootScope, "Red")).toEqual(null);
     expect(rootScope.variables.map((v) => v.name)).toEqual(["c"]);
   });
 
@@ -79,8 +79,8 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     const value = findVariable(rootScope, "value")!;
     // [0] is the init Write at value's declarator id; [1] is the read in
     // `value as number` whose type annotation is skipped.
-    expect(value.references.length).toBe(2);
-    expect(findVariable(rootScope, "number")).toBeNull();
+    expect(value.references.length).toEqual(2);
+    expect(findVariable(rootScope, "number")).toEqual(null);
   });
 
   test("classifies JSX tag names as read references", () => {
@@ -91,8 +91,8 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     const { rootScope } = analyze(code, "tsx");
     const Comp = findVariable(rootScope, "Comp")!;
     // [0] is the init Write at Comp's declarator id; [1] is the JSX tag read.
-    expect(Comp.references.length).toBe(2);
-    expect(Comp.references[1]?.isRead()).toBe(true);
+    expect(Comp.references.length).toEqual(2);
+    expect(Comp.references[1]?.isRead()).toEqual(true);
   });
 
   test("does not register JSX attribute names as references", () => {
@@ -102,7 +102,7 @@ describe("EslintCompatAnalyzer / type annotation skipping", () => {
     const { rootScope } = analyze(code, "tsx");
     expect(
       rootScope.through.find((v) => v.identifier.name === "className") ?? null,
-    ).toBeNull();
+    ).toEqual(null);
   });
 });
 
@@ -115,11 +115,11 @@ describe("EslintCompatAnalyzer / ImplicitGlobalVariable", () => {
     `;
     const { rootScope } = analyze(code);
     const console_ = findVariable(rootScope, "console");
-    expect(console_).toBeDefined();
+    expect(console_ !== null && console_ !== undefined).toEqual(true);
     expect(console_?.defs.map((v) => v.type)).toEqual([
       DEFINITION_TYPE.ImplicitGlobalVariable,
     ]);
-    expect(console_?.references.length).toBe(1);
+    expect(console_?.references.length).toEqual(1);
   });
 
   test("merges multiple uses of the same global into one Variable", () => {
@@ -129,6 +129,6 @@ describe("EslintCompatAnalyzer / ImplicitGlobalVariable", () => {
     `;
     const { rootScope } = analyze(code);
     const console_ = findVariable(rootScope, "console")!;
-    expect(console_.references.length).toBe(2);
+    expect(console_.references.length).toEqual(2);
   });
 });
