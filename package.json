@@ -38,9 +38,10 @@
   },
   "scripts": {
     "build": "rimraf dist && tsgo -p tsconfig.build.json",
-    "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:knip && pnpm run test && pnpm run check:parity",
+    "check": "pnpm run check:types && pnpm run check:lint && pnpm run check:no-to-be && pnpm run check:knip && pnpm run test && pnpm run check:parity",
     "check:knip": "knip",
     "check:lint": "oxlint && oxfmt --check",
+    "check:no-to-be": "pnpm --filter @unsnarl/no-to-be run exec",
     "check:parity": "vitest run --project parity",
     "check:types": "tsgo -p tsconfig.json --noEmit",
     "exec": "node dist/index.js",

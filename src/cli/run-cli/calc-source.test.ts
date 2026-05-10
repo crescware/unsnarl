@@ -74,6 +74,8 @@ describe("calcSource", () => {
   });
 
   test("stdin: false without file → throws CliUsageError carrying help text", async () => {
+    expect.assertions(3);
+
     await expect(calcSource(fakeCommand, null, baseOpts)).rejects.toMatchObject(
       {
         name: "CliUsageError",
@@ -82,9 +84,11 @@ describe("calcSource", () => {
       },
     );
 
-    await expect(
-      calcSource(fakeCommand, null, baseOpts),
-    ).rejects.toBeInstanceOf(CliUsageError);
+    try {
+      await calcSource(fakeCommand, null, baseOpts);
+    } catch (error) {
+      expect(error instanceof CliUsageError).toEqual(true);
+    }
 
     expect(vi.mocked(readStdin)).not.toHaveBeenCalled();
   });

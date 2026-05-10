@@ -56,7 +56,7 @@ describe("previousFallthroughCase", () => {
       },
     ],
   )("$name", ({ target, expected }) => {
-    expect(previousFallthroughCase(target, sortedCases)?.id ?? null).toBe(
+    expect(previousFallthroughCase(target, sortedCases)?.id ?? null).toEqual(
       expected,
     );
   });
@@ -64,11 +64,11 @@ describe("previousFallthroughCase", () => {
   test("scope without branchContainerKey -> null", () => {
     expect(
       previousFallthroughCase({ ...baseScope(), id: "x" }, sortedCases),
-    ).toBeNull();
+    ).toEqual(null);
   });
 
   test("container key not in map -> null", () => {
     const orphan = caseScope("orphan", 999, true);
-    expect(previousFallthroughCase(orphan, sortedCases)).toBeNull();
+    expect(previousFallthroughCase(orphan, sortedCases)).toEqual(null);
   });
 });

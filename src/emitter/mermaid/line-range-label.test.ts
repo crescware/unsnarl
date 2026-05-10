@@ -36,6 +36,6 @@ describe("lineRangeLabel", () => {
     },
   ])("$name", ({ line, endLine, expected }) => {
     const sg = { ...baseSubgraph(), line, endLine };
-    expect(lineRangeLabel(sg)).toBe(expected);
+    expect(lineRangeLabel(sg)).toEqual(expected);
   });
 });

@@ -56,12 +56,12 @@ describe("isAncestorScope", () => {
       expected: false,
     },
   ])("$name", ({ ancestor, descendant, expected }) => {
-    expect(isAncestorScope(ancestor, descendant, map)).toBe(expected);
+    expect(isAncestorScope(ancestor, descendant, map)).toEqual(expected);
   });
 
   test("broken upper chain returns false at the break", () => {
     const orphan = { ...baseScope(), id: "orphan", upper: "missing" };
     const broken = new Map([[orphan.id, orphan]]);
-    expect(isAncestorScope("any", "orphan", broken)).toBe(false);
+    expect(isAncestorScope("any", "orphan", broken)).toEqual(false);
   });
 });

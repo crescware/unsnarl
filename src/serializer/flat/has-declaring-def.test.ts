@@ -25,7 +25,7 @@ describe("hasDeclaringDef", () => {
         parent: null,
       },
     ]);
-    expect(hasDeclaringDef(v)).toBe(true);
+    expect(hasDeclaringDef(v)).toEqual(true);
   });
 
   test("false when every def is ImplicitGlobalVariable", () => {
@@ -37,7 +37,7 @@ describe("hasDeclaringDef", () => {
         parent: null,
       },
     ]);
-    expect(hasDeclaringDef(v)).toBe(false);
+    expect(hasDeclaringDef(v)).toEqual(false);
   });
 
   test("true when mixed (any single non-implicit def is enough)", () => {
@@ -55,10 +55,10 @@ describe("hasDeclaringDef", () => {
         parent: null,
       },
     ]);
-    expect(hasDeclaringDef(v)).toBe(true);
+    expect(hasDeclaringDef(v)).toEqual(true);
   });
 
   test("false when defs is empty", () => {
-    expect(hasDeclaringDef(variableWith([]))).toBe(false);
+    expect(hasDeclaringDef(variableWith([]))).toEqual(false);
   });
 });

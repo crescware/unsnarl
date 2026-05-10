@@ -33,8 +33,8 @@ describe("handleLeave", () => {
 
     handleLeave(block, null, null, manager);
 
-    expect(manager.current()).not.toBe(before);
-    expect(manager.current().type).toBe("module");
+    expect(manager.current()).not.toEqual(before);
+    expect(manager.current().type).toEqual("module");
   });
 
   test("BlockStatement under FunctionDeclaration does NOT pop", () => {
@@ -47,7 +47,7 @@ describe("handleLeave", () => {
 
     handleLeave(block, parent, "body", manager);
 
-    expect(manager.current()).toBe(before);
+    expect(manager.current()).toEqual(before);
   });
 
   test("plain BlockStatement (not under fn/catch) pops the current scope", () => {
@@ -60,7 +60,7 @@ describe("handleLeave", () => {
 
     handleLeave(block, parent, "consequent", manager);
 
-    expect(manager.current().type).toBe("module");
+    expect(manager.current().type).toEqual("module");
   });
 
   test("unknown node types do nothing", () => {
@@ -69,6 +69,6 @@ describe("handleLeave", () => {
 
     handleLeave({ type: AST_TYPE.ExpressionStatement }, null, null, manager);
 
-    expect(manager.current()).toBe(before);
+    expect(manager.current()).toEqual(before);
   });
 });

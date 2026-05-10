@@ -37,6 +37,6 @@ describe("renderTopLevelSubgraphs", () => {
       ...baseGraph(),
       elements: [{ ...baseSubgraph(), id: "s1", kind: SUBGRAPH_KIND.If }],
     });
-    expect(state.lines[0]?.startsWith("  subgraph s1")).toBe(true);
+    expect(state.lines[0]?.startsWith("  subgraph s1")).toEqual(true);
   });
 });

@@ -40,10 +40,10 @@ describe("enterBlock", () => {
     );
 
     const scope = manager.current();
-    expect(scope.type).toBe("block");
+    expect(scope.type).toEqual("block");
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBe(parent);
-    expect(captured[0]?.key).toBe("consequent");
+    expect(captured[0]?.parent).toEqual(parent);
+    expect(captured[0]?.key).toEqual("consequent");
     expect(scope.variables.map((v) => v.name)).toEqual(["y"]);
   });
 
@@ -63,8 +63,8 @@ describe("enterBlock", () => {
     enterBlock(block, null, null, [], manager, code, diagnostics, visitor);
 
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBeNull();
-    expect(captured[0]?.key).toBeNull();
+    expect(captured[0]?.parent).toEqual(null);
+    expect(captured[0]?.key).toEqual(null);
   });
 
   test("does not hoist when body is missing", () => {

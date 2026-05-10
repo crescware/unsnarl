@@ -18,12 +18,12 @@ describe("enterClass", () => {
     enterClass(cls, null, null, [], manager, {});
 
     const classScope = manager.current();
-    expect(classScope.type).toBe("class");
-    expect(classScope.block).toBe(cls);
+    expect(classScope.type).toEqual("class");
+    expect(classScope.block).toEqual(cls);
     expect(classScope.variables.map((v) => v.name)).toEqual(["C"]);
     const inner = classScope.set.get("C");
     expect(inner?.defs.map((v) => v.type)).toEqual([DEFINITION_TYPE.ClassName]);
-    expect(inner?.scope).toBe(classScope);
+    expect(inner?.scope).toEqual(classScope);
   });
 
   test("defines the inner ClassName for ClassExpression with id", () => {
@@ -35,7 +35,7 @@ describe("enterClass", () => {
     enterClass(cls, null, null, [], manager, {});
 
     const classScope = manager.current();
-    expect(classScope.type).toBe("class");
+    expect(classScope.type).toEqual("class");
     expect(classScope.variables.map((v) => v.name)).toEqual(["C"]);
   });
 
@@ -48,7 +48,7 @@ describe("enterClass", () => {
     enterClass(cls, null, null, [], manager, {});
 
     const classScope = manager.current();
-    expect(classScope.type).toBe("class");
+    expect(classScope.type).toEqual("class");
     expect(classScope.variables).toHaveLength(0);
   });
 

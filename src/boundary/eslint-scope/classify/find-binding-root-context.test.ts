@@ -11,44 +11,44 @@ describe("findBindingRootContext", () => {
   test("non-pattern parent VariableDeclarator#id → 'var'", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.VariableDeclarator), "id", []),
-    ).toBe("var");
+    ).toEqual("var");
   });
 
   test("non-pattern parent VariableDeclarator#init → null", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.VariableDeclarator), "init", []),
-    ).toBe(null);
+    ).toEqual(null);
   });
 
   test("CatchClause#param → 'catch'", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.CatchClause), "param", []),
-    ).toBe("catch");
+    ).toEqual("catch");
   });
 
   test("Function/Arrow #params → 'param'", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.FunctionDeclaration), "params", []),
-    ).toBe("param");
+    ).toEqual("param");
     expect(
       findBindingRootContext(
         node(AST_TYPE.ArrowFunctionExpression),
         "params",
         [],
       ),
-    ).toBe("param");
+    ).toEqual("param");
   });
 
   test("AssignmentExpression#left → 'assign'", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.AssignmentExpression), "left", []),
-    ).toBe("assign");
+    ).toEqual("assign");
   });
 
   test("AssignmentExpression#right → null", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.AssignmentExpression), "right", []),
-    ).toBe(null);
+    ).toEqual(null);
   });
 
   test("walks up through ObjectPattern to reach VariableDeclarator#id", () => {
@@ -63,7 +63,7 @@ describe("findBindingRootContext", () => {
     ];
     expect(
       findBindingRootContext(node(AST_TYPE.ObjectPattern), "id", path),
-    ).toBe("var");
+    ).toEqual("var");
   });
 
   test("walks up through nested patterns and stops at AssignmentExpression#left", () => {
@@ -74,18 +74,18 @@ describe("findBindingRootContext", () => {
     ];
     expect(
       findBindingRootContext(node(AST_TYPE.ArrayPattern), "left", path),
-    ).toBe("assign");
+    ).toEqual("assign");
   });
 
   test("path exhausted while still inside patterns → null", () => {
-    expect(findBindingRootContext(node(AST_TYPE.ObjectPattern), "id", [])).toBe(
-      null,
-    );
+    expect(
+      findBindingRootContext(node(AST_TYPE.ObjectPattern), "id", []),
+    ).toEqual(null);
   });
 
   test("non-binding parent like CallExpression → null", () => {
     expect(
       findBindingRootContext(node(AST_TYPE.CallExpression), "callee", []),
-    ).toBe(null);
+    ).toEqual(null);
   });
 });

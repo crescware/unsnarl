@@ -27,14 +27,14 @@ describe("normalizeCliOptions depth resolution", () => {
   test("no flag -> every nesting kind gets DEFAULT_DEPTH", () => {
     const out = normalizeCliOptions(baseParsed);
     for (const c of Object.values(NESTING_KIND)) {
-      expect(out.depths[c]).toBe(DEFAULT_DEPTH);
+      expect(out.depths[c]).toEqual(DEFAULT_DEPTH);
     }
   });
 
   test("--depth alone applies to every nesting kind", () => {
     const out = normalizeCliOptions({ ...baseParsed, depth: 3 });
     for (const c of Object.values(NESTING_KIND)) {
-      expect(out.depths[c]).toBe(3);
+      expect(out.depths[c]).toEqual(3);
     }
   });
 
@@ -44,10 +44,10 @@ describe("normalizeCliOptions depth resolution", () => {
       depth: 3,
       depthFunction: 1,
     });
-    expect(out.depths[NESTING_KIND.Function]).toBe(1);
-    expect(out.depths[NESTING_KIND.If]).toBe(3);
-    expect(out.depths[NESTING_KIND.For]).toBe(3);
-    expect(out.depths[NESTING_KIND.Block]).toBe(3);
+    expect(out.depths[NESTING_KIND.Function]).toEqual(1);
+    expect(out.depths[NESTING_KIND.If]).toEqual(3);
+    expect(out.depths[NESTING_KIND.For]).toEqual(3);
+    expect(out.depths[NESTING_KIND.Block]).toEqual(3);
   });
 
   test("--depth-block overrides --depth for every non-function nesting kind", () => {
@@ -56,13 +56,13 @@ describe("normalizeCliOptions depth resolution", () => {
       depth: 3,
       depthBlock: 1,
     });
-    expect(out.depths[NESTING_KIND.Function]).toBe(3);
-    expect(out.depths[NESTING_KIND.If]).toBe(1);
-    expect(out.depths[NESTING_KIND.For]).toBe(1);
-    expect(out.depths[NESTING_KIND.While]).toBe(1);
-    expect(out.depths[NESTING_KIND.Switch]).toBe(1);
-    expect(out.depths[NESTING_KIND.TryCatchFinally]).toBe(1);
-    expect(out.depths[NESTING_KIND.Block]).toBe(1);
+    expect(out.depths[NESTING_KIND.Function]).toEqual(3);
+    expect(out.depths[NESTING_KIND.If]).toEqual(1);
+    expect(out.depths[NESTING_KIND.For]).toEqual(1);
+    expect(out.depths[NESTING_KIND.While]).toEqual(1);
+    expect(out.depths[NESTING_KIND.Switch]).toEqual(1);
+    expect(out.depths[NESTING_KIND.TryCatchFinally]).toEqual(1);
+    expect(out.depths[NESTING_KIND.Block]).toEqual(1);
   });
 
   test("--depth-function and --depth-block together (no --depth)", () => {
@@ -71,8 +71,8 @@ describe("normalizeCliOptions depth resolution", () => {
       depthFunction: 2,
       depthBlock: 5,
     });
-    expect(out.depths[NESTING_KIND.Function]).toBe(2);
-    expect(out.depths[NESTING_KIND.If]).toBe(5);
-    expect(out.depths[NESTING_KIND.Block]).toBe(5);
+    expect(out.depths[NESTING_KIND.Function]).toEqual(2);
+    expect(out.depths[NESTING_KIND.If]).toEqual(5);
+    expect(out.depths[NESTING_KIND.Block]).toEqual(5);
   });
 });

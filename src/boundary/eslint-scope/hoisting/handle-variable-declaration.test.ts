@@ -63,7 +63,7 @@ describe("handleVariableDeclaration", () => {
     expect(scope.variables.map((v) => v.name)).toEqual(["x"]);
     const items = diags.list();
     expect(items).toHaveLength(1);
-    expect(items[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
+    expect(items[0]?.kind).toEqual(DIAGNOSTIC_KIND.VarDetected);
   });
 
   test("non-var/const/let kind is silently ignored", () => {

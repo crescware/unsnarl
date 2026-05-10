@@ -39,6 +39,6 @@ describe("isSyntheticNode", () => {
     { kind: NODE_KIND.WriteOp, expected: false },
     { kind: NODE_KIND.ReturnUse, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
-    expect(isSyntheticNode(nodeOfKind(kind))).toBe(expected);
+    expect(isSyntheticNode(nodeOfKind(kind))).toEqual(expected);
   });
 });

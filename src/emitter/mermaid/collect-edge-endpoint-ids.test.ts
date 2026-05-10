@@ -21,7 +21,7 @@ describe("collectEdgeEndpointIds", () => {
   });
 
   test("empty edge list -> empty set", () => {
-    expect(collectEdgeEndpointIds([]).size).toBe(0);
+    expect(collectEdgeEndpointIds([]).size).toEqual(0);
   });
 
   test("self-loop counts the id once", () => {

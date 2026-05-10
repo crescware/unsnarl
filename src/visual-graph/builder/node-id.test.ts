@@ -8,6 +8,6 @@ describe("nodeId", () => {
     { input: "a.b-c", expected: "n_a_b_c" },
     { input: "", expected: "n_" },
   ])("nodeId($input) = $expected", ({ input, expected }) => {
-    expect(nodeId(input)).toBe(expected);
+    expect(nodeId(input)).toEqual(expected);
   });
 });

@@ -33,7 +33,7 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(action).toBe("skip");
+    expect(action).toEqual("skip");
   });
 
   test('returns "skip" when key is a TS type-only key', () => {
@@ -52,7 +52,7 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(action).toBe("skip");
+    expect(action).toEqual("skip");
   });
 
   test.each([
@@ -138,7 +138,7 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(manager.current().type).toBe(expectedScopeType);
+    expect(manager.current().type).toEqual(expectedScopeType);
   });
 
   test("BlockStatement under FunctionDeclaration is NOT pushed (function body is part of fn scope)", () => {
@@ -161,7 +161,7 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(manager.current().type).toBe("module");
+    expect(manager.current().type).toEqual("module");
   });
 
   test("plain BlockStatement (not under fn/catch) is pushed as block scope", () => {
@@ -185,7 +185,7 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(manager.current().type).toBe("block");
+    expect(manager.current().type).toEqual("block");
   });
 
   test("unknown node types do nothing", () => {
@@ -204,6 +204,6 @@ describe("handleEnter", () => {
       {},
     );
 
-    expect(manager.current()).toBe(before);
+    expect(manager.current()).toEqual(before);
   });
 });

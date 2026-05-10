@@ -104,7 +104,7 @@ describe("findExpressionStatementContainer", () => {
       entry({ type: AST_TYPE.VariableDeclaration, start: 0, end: 10 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 6, end: 7 }, "id"),
     ] satisfies PathEntry[];
-    expect(findExpressionStatementContainer(path)).toBeNull();
+    expect(findExpressionStatementContainer(path)).toEqual(null);
   });
 
   test("returns null when the ExpressionStatement is missing offsets", () => {
@@ -113,6 +113,6 @@ describe("findExpressionStatementContainer", () => {
       entry({ type: AST_TYPE.ExpressionStatement }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 0, end: 1 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findExpressionStatementContainer(path)).toBeNull();
+    expect(findExpressionStatementContainer(path)).toEqual(null);
   });
 });

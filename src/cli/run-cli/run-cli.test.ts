@@ -51,7 +51,7 @@ describe("runCli (integration)", () => {
 
   test("--help prints usage and exits 0", async () => {
     const r = await captureRun(["--help"]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stdout).toMatch(/Usage:/);
     expect(r.stdout).toMatch(/--format/);
   });
@@ -68,24 +68,24 @@ describe("runCli (integration)", () => {
       inputPath,
       "--no-pretty-json",
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     const ir = JSON.parse(r.stdout);
-    expect(ir.version).toBe(SERIALIZED_IR_VERSION);
-    expect(ir.source.path).toBe(inputPath);
+    expect(ir.version).toEqual(SERIALIZED_IR_VERSION);
+    expect(ir.source.path).toEqual(inputPath);
     expect(ir.variables.map((v: { name: string }) => v.name).sort()).toEqual([
       "answer",
       "ignored",
       "used",
     ]);
-    expect(ir.unusedVariableIds.length).toBe(2);
+    expect(ir.unusedVariableIds.length).toEqual(2);
   });
 
   test("happy path: emits stats TSV", async () => {
     const inputPath = join(tmpDir, "stats.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
     const r = await captureRun(["--format", "stats", inputPath]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stderr).toBe("");
+    expect(r.exitCode).toEqual(0);
+    expect(r.stderr).toEqual("");
     const lines = r.stdout.trimEnd().split("\n");
     expect(lines).toEqual([
       `1\t0\t${inputPath}:1 a`,
@@ -98,7 +98,7 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "small.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
     const r = await captureRun(["--format", "mermaid", inputPath]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
     expect(r.stdout).toContain('"a<br/>');
   });
@@ -107,7 +107,7 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "default-format.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
     const r = await captureRun([inputPath]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
@@ -121,8 +121,8 @@ describe("runCli (integration)", () => {
       "--debug",
       inputPath,
     ]);
-    expect(noDebug.exitCode).toBe(0);
-    expect(debug.exitCode).toBe(0);
+    expect(noDebug.exitCode).toEqual(0);
+    expect(debug.exitCode).toEqual(0);
     expect(noDebug.stdout).not.toContain("<br/>Variable");
     expect(debug.stdout).toContain('"a<br/>L1<br/>Variable"');
     expect(debug.stdout).toContain('"b<br/>L2<br/>Variable"');
@@ -130,14 +130,14 @@ describe("runCli (integration)", () => {
 
   test("missing input returns exit 2 with usage", async () => {
     const r = await captureRun([]);
-    expect(r.exitCode).toBe(2);
+    expect(r.exitCode).toEqual(2);
     expect(r.stderr).toMatch(/no input file/);
     expect(r.stderr).toMatch(/Usage:/);
   });
 
   test("unknown option returns exit 2", async () => {
     const r = await captureRun(["--whatever"]);
-    expect(r.exitCode).toBe(2);
+    expect(r.exitCode).toEqual(2);
     expect(r.stderr).toMatch(/unknown option/i);
   });
 
@@ -145,7 +145,7 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "broken.ts");
     writeFileSync(inputPath, "const = 1;\n");
     const r = await captureRun([inputPath]);
-    expect(r.exitCode).toBe(1);
+    expect(r.exitCode).toEqual(1);
     expect(r.stderr).toMatch(/parse error/);
   });
 
@@ -153,7 +153,7 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "ok.ts");
     writeFileSync(inputPath, "const a = 1;\n");
     const r = await captureRun(["--format", "yaml", inputPath]);
-    expect(r.exitCode).toBe(1);
+    expect(r.exitCode).toEqual(1);
     expect(r.stderr).toMatch(/Unknown emitter format/);
   });
 
@@ -172,12 +172,12 @@ describe("runCli (integration)", () => {
       "1",
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stderr).toBe("");
+    expect(r.exitCode).toEqual(0);
+    expect(r.stderr).toEqual("");
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning).toBeDefined();
-    expect(graph.pruning.descendants).toBe(1);
-    expect(graph.pruning.ancestors).toBe(1);
+    expect(graph.pruning !== null && graph.pruning !== undefined).toEqual(true);
+    expect(graph.pruning.descendants).toEqual(1);
+    expect(graph.pruning.ancestors).toEqual(1);
     expect(graph.pruning.roots).toEqual([{ query: "1", matched: 1 }]);
     const names = graph.elements
       .filter((v: { type: string }) => v.type === VISUAL_ELEMENT_TYPE.Node)
@@ -202,7 +202,7 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "tiny.ts");
     writeFileSync(inputPath, "const a = 1;\n");
     const r = await captureRun(["--format", "mermaid", "-r", "999", inputPath]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stderr).toMatch(/uns: warning: query '999' matched 0 roots/);
     // Mermaid comment uses bracket-free, quote-free wording so older
     // Mermaid versions don't get tripped by `[` / `'` inside `%% ...`.
@@ -220,8 +220,8 @@ describe("runCli (integration)", () => {
       inputPath,
       "--no-pretty-json",
     ]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stderr).toBe("");
+    expect(r.exitCode).toEqual(0);
+    expect(r.stderr).toEqual("");
     const ir = JSON.parse(r.stdout);
     expect(ir.variables.map((v: { name: string }) => v.name)).toEqual(["a"]);
   });
@@ -230,10 +230,10 @@ describe("runCli (integration)", () => {
     const inputPath = join(tmpDir, "default.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
     const r = await captureRun(["--format", "json", "-r", "1", inputPath]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning.descendants).toBe(DEFAULT_GENERATIONS);
-    expect(graph.pruning.ancestors).toBe(DEFAULT_GENERATIONS);
+    expect(graph.pruning.descendants).toEqual(DEFAULT_GENERATIONS);
+    expect(graph.pruning.ancestors).toEqual(DEFAULT_GENERATIONS);
   });
 
   test("--roots with only -A gives -B 0 (asymmetric, like grep)", async () => {
@@ -248,10 +248,10 @@ describe("runCli (integration)", () => {
       "6",
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning.descendants).toBe(6);
-    expect(graph.pruning.ancestors).toBe(0);
+    expect(graph.pruning.descendants).toEqual(6);
+    expect(graph.pruning.ancestors).toEqual(0);
   });
 
   test("--roots with only -B gives -A 0 (asymmetric, like grep)", async () => {
@@ -266,10 +266,10 @@ describe("runCli (integration)", () => {
       "5",
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning.descendants).toBe(0);
-    expect(graph.pruning.ancestors).toBe(5);
+    expect(graph.pruning.descendants).toEqual(0);
+    expect(graph.pruning.ancestors).toEqual(5);
   });
 
   test("--roots with -C and -A: -A overrides one side, -C fills the other", async () => {
@@ -286,10 +286,10 @@ describe("runCli (integration)", () => {
       "7",
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     const graph = JSON.parse(r.stdout);
-    expect(graph.pruning.descendants).toBe(7);
-    expect(graph.pruning.ancestors).toBe(3);
+    expect(graph.pruning.descendants).toEqual(7);
+    expect(graph.pruning.ancestors).toEqual(3);
   });
 
   // One full-dressing happy path: nested out-dir + -A -B -C all set +
@@ -316,12 +316,12 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stdout).toBe("");
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toEqual("");
     // -C is dropped because -A and -B are both explicit; -C has no effect
     // once both sides are pinned.
     const expected = join(outDir, "value-a1-b2.md");
-    expect(existsSync(expected)).toBe(true);
+    expect(existsSync(expected)).toEqual(true);
     expect(readFileSync(expected, "utf8")).toMatch(/```mermaid/);
   });
 
@@ -336,8 +336,8 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
-    expect(existsSync(join(outDir, "fooBar.mmd"))).toBe(true);
+    expect(r.exitCode).toEqual(0);
+    expect(existsSync(join(outDir, "fooBar.mmd"))).toEqual(true);
   });
 
   test("--out-dir overwrites an existing file", async () => {
@@ -351,7 +351,7 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(first.exitCode).toBe(0);
+    expect(first.exitCode).toEqual(0);
     const target = join(outDir, "overwrite.mmd");
     const before = readFileSync(target, "utf8");
 
@@ -363,9 +363,9 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(second.exitCode).toBe(0);
+    expect(second.exitCode).toEqual(0);
     const after = readFileSync(target, "utf8");
-    expect(after).not.toBe(before);
+    expect(after).not.toEqual(before);
   });
 
   test("--out-dir with --stdin and no -r exits with 2 (no naming basis)", async () => {
@@ -389,9 +389,9 @@ describe("runCli (integration)", () => {
         "-o",
         outDir,
       ]);
-      expect(r.exitCode).toBe(2);
+      expect(r.exitCode).toEqual(2);
       expect(r.stderr).toMatch(/-r\/--roots|input file/);
-      expect(existsSync(outDir)).toBe(false);
+      expect(existsSync(outDir)).toEqual(false);
     } finally {
       stdinSpy.mockRestore();
     }
@@ -408,9 +408,9 @@ describe("runCli (integration)", () => {
       outFile,
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
-    expect(r.stdout).toBe("");
-    expect(existsSync(outFile)).toBe(true);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toEqual("");
+    expect(existsSync(outFile)).toEqual(true);
     expect(readFileSync(outFile, "utf8")).toMatch(/```mermaid|flowchart/);
   });
 
@@ -425,10 +425,10 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stderr).toMatch(/uns: notice: -o/);
     expect(r.stderr).toMatch(/--out-file/);
-    expect(existsSync(join(outDir, "withdot.mmd"))).toBe(true);
+    expect(existsSync(join(outDir, "withdot.mmd"))).toEqual(true);
   });
 
   test("-o without a dot does not emit the --out-file notice", async () => {
@@ -442,7 +442,7 @@ describe("runCli (integration)", () => {
       outDir,
       inputPath,
     ]);
-    expect(r.exitCode).toBe(0);
+    expect(r.exitCode).toEqual(0);
     expect(r.stderr).not.toMatch(/uns: notice: -o/);
   });
 
@@ -458,7 +458,7 @@ describe("runCli (integration)", () => {
       join(tmpDir, "out.mmd"),
       inputPath,
     ]);
-    expect(r.exitCode).toBe(2);
+    expect(r.exitCode).toEqual(2);
     expect(r.stderr).toMatch(/mutually exclusive/);
   });
 });

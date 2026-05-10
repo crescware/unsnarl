@@ -32,8 +32,8 @@ describe("makeVariableNode", () => {
     if (node.kind !== NODE_KIND.Variable) {
       throw new Error("expected Variable kind");
     }
-    expect(node.initIsFunction).toBe(false);
-    expect(node.declarationKind).toBe("let");
+    expect(node.initIsFunction).toEqual(false);
+    expect(node.declarationKind).toEqual("let");
   });
 
   test("falls back to def.name.span.line when identifiers is empty", () => {
@@ -48,12 +48,12 @@ describe("makeVariableNode", () => {
         },
       ],
     };
-    expect(makeVariableNode(v).line).toBe(7);
+    expect(makeVariableNode(v).line).toEqual(7);
   });
 
   test("falls back to 0 when both identifiers and def are absent", () => {
     const v = { ...baseVariable(), id: "v", identifiers: [], defs: [] };
-    expect(makeVariableNode(v).line).toBe(0);
+    expect(makeVariableNode(v).line).toEqual(0);
   });
 
   test("ImplicitGlobalVariable forces line=0 because the def is synthetic, not a real source location", () => {
@@ -65,8 +65,8 @@ describe("makeVariableNode", () => {
       defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)],
     };
     const node = makeVariableNode(v);
-    expect(node.kind).toBe(NODE_KIND.ImplicitGlobalVariable);
-    expect(node.line).toBe(0);
+    expect(node.kind).toEqual(NODE_KIND.ImplicitGlobalVariable);
+    expect(node.line).toEqual(0);
   });
 
   test.each<{ initType: string; expected: boolean }>([
@@ -89,7 +89,7 @@ describe("makeVariableNode", () => {
       if (node.kind !== NODE_KIND.Variable) {
         throw new Error("expected Variable kind");
       }
-      expect(node.initIsFunction).toBe(expected);
+      expect(node.initIsFunction).toEqual(expected);
     },
   );
 
@@ -106,7 +106,7 @@ describe("makeVariableNode", () => {
     if (node.kind !== NODE_KIND.Variable) {
       throw new Error("expected Variable kind");
     }
-    expect(node.declarationKind).toBe(kind);
+    expect(node.declarationKind).toEqual(kind);
   });
 
   test("Named ImportBinding propagates importKind and importedName", () => {
@@ -145,15 +145,15 @@ describe("makeVariableNode", () => {
       ],
     };
     const node = makeVariableNode(v);
-    expect(node.kind).toBe(NODE_KIND.ImportBinding);
+    expect(node.kind).toEqual(NODE_KIND.ImportBinding);
     if (node.kind === NODE_KIND.ImportBinding) {
-      expect(node.importKind).toBe(IMPORT_KIND.Default);
+      expect(node.importKind).toEqual(IMPORT_KIND.Default);
     }
   });
 
   test("falls back to kind=Variable when defs is empty", () => {
     const v = { ...baseVariable(), id: "v", defs: [] };
-    expect(makeVariableNode(v).kind).toBe(DEFINITION_TYPE.Variable);
+    expect(makeVariableNode(v).kind).toEqual(DEFINITION_TYPE.Variable);
   });
 
   test.each([
@@ -163,6 +163,6 @@ describe("makeVariableNode", () => {
     { defType: DEFINITION_TYPE.CatchClause },
   ] as const)("kind reflects definition type $defType", ({ defType }) => {
     const v = { ...baseVariable(), defs: [baseSimpleDef(defType)] };
-    expect(makeVariableNode(v).kind).toBe(defType);
+    expect(makeVariableNode(v).kind).toEqual(defType);
   });
 });

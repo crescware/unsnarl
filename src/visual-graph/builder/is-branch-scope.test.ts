@@ -76,10 +76,10 @@ describe("isBranchScope", () => {
   ])("$name", ({ ctx, expected }) => {
     const scope = { ...baseScope(), id: "s", blockContext: ctx };
     const map = new Map([[scope.id, scope]]);
-    expect(isBranchScope("s", map)).toBe(expected);
+    expect(isBranchScope("s", map)).toEqual(expected);
   });
 
   test("scope id missing from the map -> false", () => {
-    expect(isBranchScope("missing", new Map())).toBe(false);
+    expect(isBranchScope("missing", new Map())).toEqual(false);
   });
 });

@@ -27,11 +27,11 @@ describe("emitSubgraph", () => {
       ownerName: "f",
     };
     emitSubgraph(state, sg, "  ");
-    expect(state.lines[0]).toBe('  subgraph wrap_s_fn[" "]');
-    expect(state.lines[1]).toBe("    direction TB");
+    expect(state.lines[0]).toEqual('  subgraph wrap_s_fn[" "]');
+    expect(state.lines[1]).toEqual("    direction TB");
     expect(state.wrapperIds).toEqual(["wrap_s_fn"]);
     // Wrapper closes after the inner subgraph closes.
-    expect(state.lines.at(-1)).toBe("  end");
+    expect(state.lines.at(-1)).toEqual("  end");
   });
 
   test("function without an ownerNode in the map falls back to plain emission", () => {
@@ -44,7 +44,7 @@ describe("emitSubgraph", () => {
     };
     emitSubgraph(state, sg, "  ");
     expect(state.wrapperIds).toEqual([]);
-    expect(state.lines.some((v) => v.startsWith('  subgraph s_fn["'))).toBe(
+    expect(state.lines.some((v) => v.startsWith('  subgraph s_fn["'))).toEqual(
       true,
     );
   });
@@ -57,7 +57,7 @@ describe("emitSubgraph", () => {
       "  ",
     );
     expect(state.wrapperIds).toEqual([]);
-    expect(state.lines.some((v) => v.startsWith('  subgraph s_if["'))).toBe(
+    expect(state.lines.some((v) => v.startsWith('  subgraph s_if["'))).toEqual(
       true,
     );
   });
@@ -82,7 +82,7 @@ describe("emitSubgraph", () => {
     emitSubgraph(state, sg, "  ");
     const ownerIdx = state.lines.findIndex((v) => v.includes("n_owner"));
     const innerIdx = state.lines.findIndex((v) => v.includes("subgraph s_fn"));
-    expect(ownerIdx).toBeGreaterThan(0); // not the wrapper open line
-    expect(ownerIdx).toBeLessThan(innerIdx);
+    expect(ownerIdx > 0).toEqual(true); // not the wrapper open line
+    expect(ownerIdx < innerIdx).toEqual(true);
   });
 });

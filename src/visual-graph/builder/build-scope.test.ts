@@ -82,8 +82,8 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.type).toBe(VISUAL_ELEMENT_TYPE.Subgraph);
-    expect(sg.kind).toBe("block");
+    expect(sg.type).toEqual(VISUAL_ELEMENT_TYPE.Subgraph);
+    expect(sg.kind).toEqual("block");
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
@@ -162,15 +162,18 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.type).toBe("subgraph");
-    expect(sg.kind).toBe("function");
+    expect(sg.type).toEqual("subgraph");
+    expect(sg.kind).toEqual("function");
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_param",
-      ),
-    ).toBeDefined();
-    expect(state.subgraphByScope.get("fn")).toBe(sg);
-    expect(state.functionSubgraphByFn.get("ownerVar")).toBe(sg);
+      ) !== null &&
+        sg.elements.find(
+          (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_param",
+        ) !== undefined,
+    ).toEqual(true);
+    expect(state.subgraphByScope.get("fn")).toEqual(sg);
+    expect(state.functionSubgraphByFn.get("ownerVar")).toEqual(sg);
   });
 
   test("control-kind scope (for) wraps body in a control subgraph", () => {
@@ -193,12 +196,15 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.kind).toBe("for");
+    expect(sg.kind).toEqual("for");
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v",
-      ),
-    ).toBeDefined();
+      ) !== null &&
+        sg.elements.find(
+          (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v",
+        ) !== undefined,
+    ).toEqual(true);
   });
 
   test("recurses into childScopes", () => {
@@ -233,7 +239,7 @@ describe("buildScope", () => {
     const childSg = container.elements.find(
       (v) => v.type === VISUAL_ELEMENT_TYPE.Subgraph,
     ) as VisualSubgraph;
-    expect(childSg).toBeDefined();
-    expect(childSg.kind).toBe("if");
+    expect(childSg !== null && childSg !== undefined).toEqual(true);
+    expect(childSg.kind).toEqual("if");
   });
 });

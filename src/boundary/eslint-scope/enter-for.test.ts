@@ -31,11 +31,11 @@ describe("enterFor", () => {
     enterFor(forNode, parent, "body", [], manager, code, diagnostics, visitor);
 
     const scope = manager.current();
-    expect(scope.type).toBe("for");
+    expect(scope.type).toEqual("for");
     expect(scope.variables.map((v) => v.name)).toEqual(["i"]);
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBe(parent);
-    expect(captured[0]?.key).toBe("body");
+    expect(captured[0]?.parent).toEqual(parent);
+    expect(captured[0]?.key).toEqual("body");
   });
 
   test("works for ForOfStatement", () => {

@@ -7,7 +7,7 @@ import { blockContextOf } from "./block-context-of.js";
 
 describe("blockContextOf", () => {
   test("returns null when parent is null", () => {
-    expect(blockContextOf(null, "body", [])).toBeNull();
+    expect(blockContextOf(null, "body", [])).toEqual(null);
   });
 
   test("returns null when key is null", () => {
@@ -15,7 +15,7 @@ describe("blockContextOf", () => {
       type: AST_TYPE.IfStatement,
       start: 5,
     } as const satisfies AstNode;
-    expect(blockContextOf(parent, null, [])).toBeNull();
+    expect(blockContextOf(parent, null, [])).toEqual(null);
   });
 
   test("returns parent type, key, and start as parentSpanOffset", () => {

@@ -17,7 +17,7 @@ describe("isControlSubgraph", () => {
     { type: SCOPE_TYPE.Global, expected: false },
     { type: SCOPE_TYPE.Class, expected: false },
   ])("scope type $type -> $expected", ({ type, expected }) => {
-    expect(isControlSubgraph({ ...baseScope(), type })).toBe(expected);
+    expect(isControlSubgraph({ ...baseScope(), type })).toEqual(expected);
   });
 
   test.each<{ name: string; ctx: BlockContext; expected: boolean }>([
@@ -98,12 +98,12 @@ describe("isControlSubgraph", () => {
         type: SCOPE_TYPE.Block,
         blockContext: ctx,
       }),
-    ).toBe(expected);
+    ).toEqual(expected);
   });
 
   test("plain block without blockContext -> true (renders as the generic 'block' subgraph)", () => {
-    expect(isControlSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block })).toBe(
-      true,
-    );
+    expect(
+      isControlSubgraph({ ...baseScope(), type: SCOPE_TYPE.Block }),
+    ).toEqual(true);
   });
 });

@@ -71,7 +71,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBeNull();
+    expect(actual).toEqual(null);
   });
 
   test("file input + dir mode → joins path/<basename>.<ext>", () => {
@@ -81,7 +81,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBe("out/foo.json");
+    expect(actual).toEqual("out/foo.json");
   });
 
   test("roots take precedence over input filename", () => {
@@ -95,7 +95,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBe("out/render.json");
+    expect(actual).toEqual("out/render.json");
   });
 
   test("stdin without roots in dir mode throws CliUsageError (no usable filename)", () => {
@@ -119,7 +119,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBe("out/render.json");
+    expect(actual).toEqual("out/render.json");
   });
 
   test("uses the emitter's extension, not the format name", () => {
@@ -133,7 +133,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("mermaid", "mmd")]),
     );
 
-    expect(actual).toBe("out/foo.mmd");
+    expect(actual).toEqual("out/foo.mmd");
   });
 
   test("unknown format throws Error listing available formats", () => {
@@ -160,7 +160,7 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBe("build/graph.mmd");
+    expect(actual).toEqual("build/graph.mmd");
   });
 
   test("file mode bypasses the stdin+roots requirement", () => {
@@ -170,6 +170,6 @@ describe("resolveOutputPath", () => {
       makeEmitters([makeEmitter("json", "json")]),
     );
 
-    expect(actual).toBe("out.json");
+    expect(actual).toEqual("out.json");
   });
 });

@@ -34,7 +34,7 @@ describe("handleFunctionDeclaration", () => {
     const scope = newScope();
     handleFunctionDeclaration(firstStmt("function f() {}"), scope);
     expect(scope.variables.map((v) => v.name)).toEqual(["f"]);
-    expect(scope.variables[0]?.defs[0]?.type).toBe(
+    expect(scope.variables[0]?.defs[0]?.type).toEqual(
       DEFINITION_TYPE.FunctionName,
     );
   });

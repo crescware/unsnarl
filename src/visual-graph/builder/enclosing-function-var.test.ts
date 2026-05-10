@@ -43,6 +43,6 @@ describe("enclosingFunctionVar", () => {
       expected: null,
     },
   ])("$name", ({ owners, start, expected }) => {
-    expect(enclosingFunctionVar(start, map, owners)).toBe(expected);
+    expect(enclosingFunctionVar(start, map, owners)).toEqual(expected);
   });
 });

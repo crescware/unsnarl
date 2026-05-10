@@ -22,7 +22,7 @@ describe("dagreStrategy.emptySubgraphPlaceholder", () => {
       indent: "    ",
       referencedByEdge: false,
     });
-    expect(result).toBeNull();
+    expect(result).toEqual(null);
   });
 
   test("returns null even when the subgraph is referenced by an edge (dagre needs no workaround)", () => {
@@ -31,6 +31,6 @@ describe("dagreStrategy.emptySubgraphPlaceholder", () => {
       indent: "    ",
       referencedByEdge: true,
     });
-    expect(result).toBeNull();
+    expect(result).toEqual(null);
   });
 });

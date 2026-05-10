@@ -24,7 +24,7 @@ describe("IrEmitter", () => {
       resolutions: null,
       debug: false,
     });
-    expect(out.endsWith("\n")).toBe(true);
+    expect(out.endsWith("\n")).toEqual(true);
     expect(out).toContain('"version": 1');
     expect(JSON.parse(out)).toEqual(ir);
   });
@@ -42,7 +42,7 @@ describe("IrEmitter", () => {
 
   test("identifies as 'ir' with the application/json content type", () => {
     const e = new IrEmitter();
-    expect(e.format).toBe("ir");
-    expect(e.contentType).toBe("application/json");
+    expect(e.format).toEqual("ir");
+    expect(e.contentType).toEqual("application/json");
   });
 });

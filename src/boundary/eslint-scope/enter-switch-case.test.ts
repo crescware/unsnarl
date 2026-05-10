@@ -41,10 +41,10 @@ describe("enterSwitchCase", () => {
     );
 
     const scope = manager.current();
-    expect(scope.type).toBe("block");
+    expect(scope.type).toEqual("block");
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBe(switchParent);
-    expect(captured[0]?.key).toBe("cases");
+    expect(captured[0]?.parent).toEqual(switchParent);
+    expect(captured[0]?.key).toEqual("cases");
   });
 
   test("notifies visitor with parent=null when no enclosing context", () => {
@@ -72,7 +72,7 @@ describe("enterSwitchCase", () => {
     );
 
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBeNull();
-    expect(captured[0]?.key).toBeNull();
+    expect(captured[0]?.parent).toEqual(null);
+    expect(captured[0]?.key).toEqual(null);
   });
 });

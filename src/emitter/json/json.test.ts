@@ -88,26 +88,26 @@ function emit(code: string, prettyJson = true): string {
 
 describe("JsonEmitter", () => {
   test("identifies as 'json' with the application/json content type", () => {
-    expect(emitter.format).toBe("json");
-    expect(emitter.contentType).toBe("application/json");
+    expect(emitter.format).toEqual("json");
+    expect(emitter.contentType).toEqual("application/json");
   });
 
   test("emits a versioned VisualGraph with elements/edges arrays", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
-    expect(graph.version).toBe(SERIALIZED_IR_VERSION);
+    expect(graph.version).toEqual(SERIALIZED_IR_VERSION);
     expect(graph.source).toEqual({ path: "input.ts", language: LANGUAGE.Ts });
-    expect(graph.direction).toBe(DIRECTION.RL);
-    expect(Array.isArray(graph.elements)).toBe(true);
-    expect(Array.isArray(graph.edges)).toBe(true);
+    expect(graph.direction).toEqual(DIRECTION.RL);
+    expect(Array.isArray(graph.elements)).toEqual(true);
+    expect(Array.isArray(graph.edges)).toEqual(true);
   });
 
   test("nodes carry semantic kind and raw attributes, never a precomputed label", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     const nodes = flattenNodes(graph.elements);
     const a = nodes.find((v) => v.name === "a");
-    expect(a?.kind).toBe(DEFINITION_TYPE.Variable);
-    expect(a?.declarationKind).toBe("const");
-    expect(a?.label).toBeUndefined();
+    expect(a?.kind).toEqual(DEFINITION_TYPE.Variable);
+    expect(a?.declarationKind).toEqual("const");
+    expect(a?.label).toEqual(undefined);
   });
 
   test("import nodes record kind / imported name; module source surfaces as a ModuleSource node", () => {
@@ -122,17 +122,17 @@ describe("JsonEmitter", () => {
     );
     const nodes = flattenNodes(graph.elements);
     const def = nodes.find((v) => v.name === "def");
-    expect(def?.kind).toBe(DEFINITION_TYPE.ImportBinding);
-    expect(def?.importKind).toBe(IMPORT_KIND.Default);
+    expect(def?.kind).toEqual(DEFINITION_TYPE.ImportBinding);
+    expect(def?.importKind).toEqual(IMPORT_KIND.Default);
 
     const renamed = nodes.find((v) => v.name === "renamed");
-    expect(renamed?.importKind).toBe(IMPORT_KIND.Named);
-    expect(renamed?.importedName).toBe("other");
+    expect(renamed?.importKind).toEqual(IMPORT_KIND.Named);
+    expect(renamed?.importedName).toEqual("other");
 
     const moduleNode = nodes.find(
       (v) => v.kind === NODE_KIND.ModuleSource && v.name === "some-default",
     );
-    expect(moduleNode).toBeDefined();
+    expect(moduleNode !== null && moduleNode !== undefined).toEqual(true);
   });
 
   test("write ops appear as WriteOp nodes carrying the underlying declaration kind", () => {
@@ -144,8 +144,8 @@ describe("JsonEmitter", () => {
     );
     expect(writeOps).toHaveLength(2);
     for (const op of writeOps) {
-      expect(op.declarationKind).toBe("let");
-      expect(op.name).toBe("v");
+      expect(op.declarationKind).toEqual("let");
+      expect(op.name).toEqual("v");
     }
   });
 
@@ -154,24 +154,26 @@ describe("JsonEmitter", () => {
     const fnSubgraph = flattenSubgraphs(graph.elements).find(
       (v) => v.kind === SUBGRAPH_KIND.Function,
     );
-    expect(fnSubgraph).toBeDefined();
+    expect(fnSubgraph !== null && fnSubgraph !== undefined).toEqual(true);
     const ownerNode = flattenNodes(graph.elements).find(
       (v) => v.id === fnSubgraph?.ownerNodeId,
     );
-    expect(ownerNode).toBeDefined();
-    expect(ownerNode?.kind).toBe(DEFINITION_TYPE.FunctionName);
-    expect(ownerNode?.name).toBe("add");
+    expect(ownerNode !== null && ownerNode !== undefined).toEqual(true);
+    expect(ownerNode?.kind).toEqual(DEFINITION_TYPE.FunctionName);
+    expect(ownerNode?.name).toEqual("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Subgraph &&
         v.kind === SUBGRAPH_KIND.Return,
     );
-    expect(returnSubgraph).toBeDefined();
+    expect(returnSubgraph !== null && returnSubgraph !== undefined).toEqual(
+      true,
+    );
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node && v.kind === NODE_KIND.ReturnUse,
     );
-    expect(returnUseNodes.length).toBeGreaterThan(0);
+    expect(returnUseNodes.length > 0).toEqual(true);
   });
 
   test("switch cases become subgraphs of kind 'case' with caseTest preserved as raw text", () => {

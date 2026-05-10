@@ -32,7 +32,7 @@ describe("isFunctionExit", () => {
       expected: false,
     },
   ])("$name", ({ node, expected }) => {
-    expect(isFunctionExit(node as AstNode)).toBe(expected);
+    expect(isFunctionExit(node as AstNode)).toEqual(expected);
   });
 
   test("BlockStatement: ends in ReturnStatement -> true", () => {
@@ -43,7 +43,7 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ReturnStatement },
       ],
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toBe(true);
+    expect(isFunctionExit(node)).toEqual(true);
   });
 
   test("BlockStatement: ends in non-exit -> false", () => {
@@ -54,11 +54,11 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ExpressionStatement },
       ],
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toBe(false);
+    expect(isFunctionExit(node)).toEqual(false);
   });
 
   test("BlockStatement: empty body -> false", () => {
-    expect(isFunctionExit({ type: AST_TYPE.BlockStatement, body: [] })).toBe(
+    expect(isFunctionExit({ type: AST_TYPE.BlockStatement, body: [] })).toEqual(
       false,
     );
   });
@@ -69,7 +69,7 @@ describe("isFunctionExit", () => {
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ThrowStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toBe(true);
+    expect(isFunctionExit(node)).toEqual(true);
   });
 
   test("IfStatement: only consequent exits -> false", () => {
@@ -78,7 +78,7 @@ describe("isFunctionExit", () => {
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ExpressionStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toBe(false);
+    expect(isFunctionExit(node)).toEqual(false);
   });
 
   test("IfStatement: missing alternate -> false", () => {
@@ -86,6 +86,6 @@ describe("isFunctionExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.ReturnStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toBe(false);
+    expect(isFunctionExit(node)).toEqual(false);
   });
 });

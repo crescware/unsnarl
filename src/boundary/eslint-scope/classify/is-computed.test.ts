@@ -11,7 +11,7 @@ describe("isComputed", () => {
         type: AST_TYPE.MemberExpression,
         computed: true,
       } as unknown as AstNode),
-    ).toBe(true);
+    ).toEqual(true);
   });
 
   test("returns false when computed === false", () => {
@@ -20,18 +20,18 @@ describe("isComputed", () => {
         type: AST_TYPE.MemberExpression,
         computed: false,
       } as unknown as AstNode),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("returns false when computed is missing", () => {
     expect(
       isComputed({ type: AST_TYPE.MemberExpression } as unknown as AstNode),
-    ).toBe(false);
+    ).toEqual(false);
   });
 
   test("returns false when computed is truthy but not strictly true", () => {
-    expect(isComputed({ type: "X", computed: 1 } as unknown as AstNode)).toBe(
-      false,
-    );
+    expect(
+      isComputed({ type: "X", computed: 1 } as unknown as AstNode),
+    ).toEqual(false);
   });
 });

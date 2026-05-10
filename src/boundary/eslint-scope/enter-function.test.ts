@@ -19,7 +19,7 @@ describe("enterFunction", () => {
     enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const fnScope = manager.current();
-    expect(fnScope.type).toBe("function");
+    expect(fnScope.type).toEqual("function");
     expect(fnScope.variables.map((v) => v.name).sort()).toEqual([
       "a",
       "arguments",
@@ -38,7 +38,7 @@ describe("enterFunction", () => {
     enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const args = manager.current().set.get("arguments");
-    expect(args?.name).toBe("arguments");
+    expect(args?.name).toEqual("arguments");
     expect(args?.identifiers).toEqual([]);
     expect(args?.defs).toEqual([]);
   });
@@ -53,7 +53,7 @@ describe("enterFunction", () => {
     enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
     const fnScope = manager.current();
-    expect(fnScope.type).toBe("function");
+    expect(fnScope.type).toEqual("function");
     expect(fnScope.variables.map((v) => v.name)).toEqual(["a"]);
   });
 
@@ -66,7 +66,7 @@ describe("enterFunction", () => {
 
     enterFunction(fn, null, null, [], manager, code, diagnostics, {});
 
-    expect(manager.current().set.has("arguments")).toBe(false);
+    expect(manager.current().set.has("arguments")).toEqual(false);
   });
 
   test("does not hoist when body is missing or not a BlockStatement", () => {

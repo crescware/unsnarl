@@ -52,9 +52,9 @@ describe("renderPruningComment", () => {
     expect(lines).toContain(
       "  %% pruning warning query missing matched 0 roots",
     );
-    expect(lines.some((v) => v.includes("warning") && v.includes("L9"))).toBe(
-      false,
-    );
+    expect(
+      lines.some((v) => v.includes("warning") && v.includes("L9")),
+    ).toEqual(false);
   });
 
   test("empty roots list still emits the summary line", () => {

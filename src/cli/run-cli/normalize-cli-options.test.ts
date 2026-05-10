@@ -24,7 +24,7 @@ const baseParsed = {
 
 describe("normalizeCliOptions", () => {
   test("out is null when neither -o nor --out-file is set", () => {
-    expect(normalizeCliOptions(baseParsed).out).toBeNull();
+    expect(normalizeCliOptions(baseParsed).out).toEqual(null);
   });
 
   test("outDir maps to { mode: 'dir', path }", () => {

@@ -15,6 +15,6 @@ describe("skipBlockScope", () => {
     { parentType: AST_TYPE.Program, expected: false },
     { parentType: "", expected: false },
   ])("parentType=$parentType -> $expected", ({ parentType, expected }) => {
-    expect(skipBlockScope(parentType)).toBe(expected);
+    expect(skipBlockScope(parentType)).toEqual(expected);
   });
 });

@@ -10,7 +10,7 @@ describe("freshName", () => {
 
   test("returns a different name on each call", () => {
     const names = new Set(Array.from({ length: 8 }, () => freshName()));
-    expect(names.size).toBe(8);
+    expect(names.size).toEqual(8);
   });
 
   test("starts with the fixed `v` prefix followed by hex characters", () => {

@@ -21,7 +21,7 @@ describe("nodeHead", () => {
         name: "Foo",
         isJsxElement: true,
       }),
-    ).toBe("&lt;Foo&gt;");
+    ).toEqual("&lt;Foo&gt;");
   });
 
   test.each([
@@ -45,7 +45,7 @@ describe("nodeHead", () => {
       expected: "console.log()",
     },
   ] as const)("kind $kind formats as $expected", ({ kind, name, expected }) => {
-    expect(nodeHead({ ...baseSimpleNode(kind), name })).toBe(expected);
+    expect(nodeHead({ ...baseSimpleNode(kind), name })).toEqual(expected);
   });
 
   test.each([
@@ -70,7 +70,7 @@ describe("nodeHead", () => {
       expected: "import ns",
     },
   ])("$name", ({ node, expected }) => {
-    expect(nodeHead(node)).toBe(expected);
+    expect(nodeHead(node)).toEqual(expected);
   });
 
   test.each([
@@ -98,7 +98,7 @@ describe("nodeHead", () => {
       expected: "x",
     },
   ])("$name", ({ node, expected }) => {
-    expect(nodeHead(node)).toBe(expected);
+    expect(nodeHead(node)).toEqual(expected);
   });
 
   test.each([
@@ -150,12 +150,12 @@ describe("nodeHead", () => {
       expected: "f()",
     },
   ])("$name", ({ node, expected }) => {
-    expect(nodeHead(node)).toBe(expected);
+    expect(nodeHead(node)).toEqual(expected);
   });
 
   test("ReturnUse falls through to the default formatting (uses name only)", () => {
     expect(
       nodeHead({ ...baseNode(), kind: NODE_KIND.ReturnUse, name: "x" }),
-    ).toBe("x");
+    ).toEqual("x");
   });
 });

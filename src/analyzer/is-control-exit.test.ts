@@ -13,7 +13,7 @@ describe("isControlExit", () => {
     { type: AST_TYPE.ExpressionStatement, expected: false },
     { type: AST_TYPE.VariableDeclaration, expected: false },
   ])("type=$type -> $expected", ({ type, expected }) => {
-    expect(isControlExit({ type } as AstNode)).toBe(expected);
+    expect(isControlExit({ type } as AstNode)).toEqual(expected);
   });
 
   test("BlockStatement: ends in BreakStatement -> true", () => {
@@ -24,11 +24,11 @@ describe("isControlExit", () => {
         { type: AST_TYPE.BreakStatement },
       ],
     } as const satisfies AstNode;
-    expect(isControlExit(node)).toBe(true);
+    expect(isControlExit(node)).toEqual(true);
   });
 
   test("BlockStatement: empty body -> false", () => {
-    expect(isControlExit({ type: AST_TYPE.BlockStatement, body: [] })).toBe(
+    expect(isControlExit({ type: AST_TYPE.BlockStatement, body: [] })).toEqual(
       false,
     );
   });
@@ -39,7 +39,7 @@ describe("isControlExit", () => {
       consequent: { type: AST_TYPE.BreakStatement },
       alternate: { type: AST_TYPE.ReturnStatement },
     } as const satisfies AstNode;
-    expect(isControlExit(node)).toBe(true);
+    expect(isControlExit(node)).toEqual(true);
   });
 
   test("IfStatement: only one branch exits -> false", () => {
@@ -48,6 +48,6 @@ describe("isControlExit", () => {
       consequent: { type: AST_TYPE.BreakStatement },
       alternate: { type: AST_TYPE.ExpressionStatement },
     } as const satisfies AstNode;
-    expect(isControlExit(node)).toBe(false);
+    expect(isControlExit(node)).toEqual(false);
   });
 });

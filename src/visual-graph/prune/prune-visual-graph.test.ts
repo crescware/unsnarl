@@ -162,7 +162,7 @@ describe("pruneVisualGraph", () => {
       descendants: 5,
       ancestors: 5,
     });
-    expect(r.graph).toBe(g);
+    expect(r.graph).toEqual(g);
     expect(r.perQuery).toEqual([]);
   });
 
@@ -181,7 +181,7 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["b"]);
     expect(r.graph.edges).toEqual([]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("expands descendants by N hops; the outbound boundary hint carries no label", () => {
@@ -340,7 +340,7 @@ describe("pruneVisualGraph", () => {
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["sg1"]);
     expect((r.graph.elements[0] as VisualSubgraph).elements).toHaveLength(1);
-    expect((r.graph.elements[0] as VisualSubgraph).elements[0]?.id).toBe(
+    expect((r.graph.elements[0] as VisualSubgraph).elements[0]?.id).toEqual(
       "inner",
     );
   });
@@ -390,9 +390,9 @@ describe("pruneVisualGraph", () => {
       ancestors: 0,
     });
     const widerIds = new Set(flatten(wider.graph.elements).map((v) => v.id));
-    expect(widerIds.has("flag")).toBe(true);
-    expect(widerIds.has("cont_if")).toBe(true);
-    expect(widerIds.has("wr1")).toBe(true);
+    expect(widerIds.has("flag")).toEqual(true);
+    expect(widerIds.has("cont_if")).toEqual(true);
+    expect(widerIds.has("wr1")).toEqual(true);
   });
 
   test("counts per-query matches and reports zero when nothing matches", () => {
@@ -402,8 +402,8 @@ describe("pruneVisualGraph", () => {
       descendants: 0,
       ancestors: 0,
     });
-    expect(r.perQuery[0]?.matched).toBe(1);
-    expect(r.perQuery[1]?.matched).toBe(0);
+    expect(r.perQuery[0]?.matched).toEqual(1);
+    expect(r.perQuery[1]?.matched).toEqual(0);
     expect(r.graph.pruning?.roots).toEqual([
       { query: "foo", matched: 1 },
       { query: "nope", matched: 0 },
@@ -439,10 +439,10 @@ describe("pruneVisualGraph", () => {
       ancestors: 0,
     });
     const ids = new Set(flatten(r.graph.elements).map((v) => v.id));
-    expect(ids.has("outer:counter")).toBe(true);
-    expect(ids.has("inner:counter")).toBe(true);
-    expect(ids.has("fn")).toBe(true);
-    expect(r.perQuery[0]?.matched).toBe(2);
+    expect(ids.has("outer:counter")).toEqual(true);
+    expect(ids.has("inner:counter")).toEqual(true);
+    expect(ids.has("fn")).toEqual(true);
+    expect(r.perQuery[0]?.matched).toEqual(2);
   });
 
   test("range query covers all lines in the inclusive range", () => {
@@ -487,7 +487,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
         .map((v) => v.id)
         .sort(),
     ).toEqual(["ret_use_ref_0", "sg_return"]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("ancestors=1 reaches the declaration from a ReturnUse root", () => {
@@ -524,7 +524,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
     expect(flatten(r.graph.elements).map((v) => v.id)).toContain(
       "ret_use_ref_0",
     );
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("a WriteOp is also a root candidate", () => {
@@ -536,7 +536,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["wr_ref_0"]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("name queries skip WriteOp / ReturnUse — `-r foo` stays declaration-scoped", () => {
@@ -553,7 +553,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["n_decl_foo"]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("line-name still matches WriteOp / ReturnUse at the requested line", () => {
@@ -575,7 +575,7 @@ describe("pruneVisualGraph: ReturnUse / WriteOp as direct roots", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["ret_foo"]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 });
 
@@ -596,7 +596,7 @@ describe("pruneVisualGraph: subgraph line matching", () => {
     const flat = collectIds(r.graph.elements);
     expect(flat).toContain("inner_a");
     expect(flat).not.toContain("outside");
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("a range query never auto-pulls a subgraph's body, even if its start line falls inside the range", () => {
@@ -615,7 +615,7 @@ describe("pruneVisualGraph: subgraph line matching", () => {
     });
     const flat = collectIds(r.graph.elements);
     expect(flat).toContain("inner_a");
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 
   test("a line query that is not a subgraph's start line falls back to per-node matching", () => {
@@ -635,7 +635,7 @@ describe("pruneVisualGraph: subgraph line matching", () => {
     const flat = collectIds(r.graph.elements);
     expect(flat).toContain("inner_a");
     expect(flat).toContain("sg_return");
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 });
 
@@ -671,7 +671,7 @@ describe("pruneVisualGraph: VisualNode endLine matching", () => {
       ancestors: 0,
     });
     expect(r.graph.elements.map((v) => v.id)).toEqual(["a"]);
-    expect(r.perQuery[0]?.matched).toBe(1);
+    expect(r.perQuery[0]?.matched).toEqual(1);
   });
 });
 

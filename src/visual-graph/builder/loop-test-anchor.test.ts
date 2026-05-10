@@ -71,8 +71,8 @@ describe("attachLoopTestAnchor", () => {
 
     expect(state.pendingLoopTestAnchors).toHaveLength(1);
     const pending = state.pendingLoopTestAnchors[0];
-    expect(pending?.subgraph).toBe(sg);
-    expect(pending?.position).toBe("first");
+    expect(pending?.subgraph).toEqual(sg);
+    expect(pending?.position).toEqual("first");
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "for_test_scope_0_34",
@@ -83,7 +83,7 @@ describe("attachLoopTestAnchor", () => {
       isJsxElement: false,
       unused: false,
     });
-    expect(state.forTestAnchorByOffset.get(34)).toBe("for_test_scope_0_34");
+    expect(state.forTestAnchorByOffset.get(34)).toEqual("for_test_scope_0_34");
   });
 
   test("For scope: re-entering the same offset does not push a duplicate", () => {
@@ -122,7 +122,7 @@ describe("attachLoopTestAnchor", () => {
 
     attachLoopTestAnchor(scope, sg, state);
 
-    expect(state.pendingLoopTestAnchors[0]?.node.id).toBe("for_test__10");
+    expect(state.pendingLoopTestAnchors[0]?.node.id).toEqual("for_test__10");
   });
 
   test("Block + WhileStatement.body: pushes a WhileTest anchor at 'first' and uses parentSpanOffset as the key", () => {
@@ -149,8 +149,8 @@ describe("attachLoopTestAnchor", () => {
 
     expect(state.pendingLoopTestAnchors).toHaveLength(1);
     const pending = state.pendingLoopTestAnchors[0];
-    expect(pending?.subgraph).toBe(sg);
-    expect(pending?.position).toBe("first");
+    expect(pending?.subgraph).toEqual(sg);
+    expect(pending?.position).toEqual("first");
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "while_test_scope_0_27",
@@ -158,7 +158,9 @@ describe("attachLoopTestAnchor", () => {
       name: "while-test",
       line: 3,
     });
-    expect(state.whileTestAnchorByOffset.get(27)).toBe("while_test_scope_0_27");
+    expect(state.whileTestAnchorByOffset.get(27)).toEqual(
+      "while_test_scope_0_27",
+    );
   });
 
   test("Block + WhileStatement.body: same parentSpanOffset is not duplicated", () => {
@@ -205,14 +207,14 @@ describe("attachLoopTestAnchor", () => {
 
     expect(state.pendingLoopTestAnchors).toHaveLength(1);
     const pending = state.pendingLoopTestAnchors[0];
-    expect(pending?.position).toBe("last");
+    expect(pending?.position).toEqual("last");
     expect(pending?.node).toMatchObject({
       id: "do_while_test_scope_0_33",
       kind: NODE_KIND.DoWhileTest,
       name: "do-while-test",
       line: 6,
     });
-    expect(state.doWhileTestAnchorByOffset.get(33)).toBe(
+    expect(state.doWhileTestAnchorByOffset.get(33)).toEqual(
       "do_while_test_scope_0_33",
     );
   });
@@ -254,9 +256,9 @@ describe("attachLoopTestAnchor", () => {
     attachLoopTestAnchor(scope, sg, state);
 
     expect(state.pendingLoopTestAnchors).toHaveLength(0);
-    expect(state.whileTestAnchorByOffset.size).toBe(0);
-    expect(state.doWhileTestAnchorByOffset.size).toBe(0);
-    expect(state.forTestAnchorByOffset.size).toBe(0);
+    expect(state.whileTestAnchorByOffset.size).toEqual(0);
+    expect(state.doWhileTestAnchorByOffset.size).toEqual(0);
+    expect(state.forTestAnchorByOffset.size).toEqual(0);
   });
 
   test("Block with WhileStatement parent but key !== 'body' is a no-op", () => {
@@ -276,7 +278,7 @@ describe("attachLoopTestAnchor", () => {
     attachLoopTestAnchor(scope, sg, state);
 
     expect(state.pendingLoopTestAnchors).toHaveLength(0);
-    expect(state.whileTestAnchorByOffset.size).toBe(0);
+    expect(state.whileTestAnchorByOffset.size).toEqual(0);
   });
 
   test("Block with blockContext === null is a no-op", () => {

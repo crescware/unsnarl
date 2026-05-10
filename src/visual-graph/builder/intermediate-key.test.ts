@@ -15,7 +15,7 @@ describe("intermediateKey", () => {
   ])(
     "intermediateKey($source, $originalName) = $expected",
     ({ source, originalName, expected }) => {
-      expect(intermediateKey(source, originalName)).toBe(expected);
+      expect(intermediateKey(source, originalName)).toEqual(expected);
     },
   );
 });

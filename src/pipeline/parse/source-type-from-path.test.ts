@@ -6,30 +6,36 @@ import { SOURCE_TYPE } from "./source-type.js";
 
 describe("sourceTypeFromPath", () => {
   test(".mjs → module regardless of language tag", () => {
-    expect(sourceTypeFromPath("foo.mjs", LANGUAGE.Js)).toBe(SOURCE_TYPE.Module);
+    expect(sourceTypeFromPath("foo.mjs", LANGUAGE.Js)).toEqual(
+      SOURCE_TYPE.Module,
+    );
   });
 
   test(".cjs → script regardless of language tag", () => {
-    expect(sourceTypeFromPath("foo.cjs", LANGUAGE.Js)).toBe(SOURCE_TYPE.Script);
+    expect(sourceTypeFromPath("foo.cjs", LANGUAGE.Js)).toEqual(
+      SOURCE_TYPE.Script,
+    );
   });
 
   test("nested paths still inspect the trailing suffix", () => {
-    expect(sourceTypeFromPath("src/deep/foo.mjs", LANGUAGE.Js)).toBe(
+    expect(sourceTypeFromPath("src/deep/foo.mjs", LANGUAGE.Js)).toEqual(
       SOURCE_TYPE.Module,
     );
-    expect(sourceTypeFromPath("src/deep/foo.cjs", LANGUAGE.Js)).toBe(
+    expect(sourceTypeFromPath("src/deep/foo.cjs", LANGUAGE.Js)).toEqual(
       SOURCE_TYPE.Script,
     );
   });
 
   test(".js → script (falls back to defaultSourceTypeFor)", () => {
-    expect(sourceTypeFromPath("foo.js", LANGUAGE.Js)).toBe(SOURCE_TYPE.Script);
+    expect(sourceTypeFromPath("foo.js", LANGUAGE.Js)).toEqual(
+      SOURCE_TYPE.Script,
+    );
   });
 
   test.each([[LANGUAGE.Ts], [LANGUAGE.Tsx], [LANGUAGE.Jsx]] as const)(
     "non-js languages fall back to module via defaultSourceTypeFor (%s)",
     (language) => {
-      expect(sourceTypeFromPath(`foo.${language}`, language)).toBe(
+      expect(sourceTypeFromPath(`foo.${language}`, language)).toEqual(
         SOURCE_TYPE.Module,
       );
     },

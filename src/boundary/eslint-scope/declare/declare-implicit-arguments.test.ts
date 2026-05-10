@@ -22,12 +22,12 @@ describe("declareImplicitArguments", () => {
     declareImplicitArguments(scope);
     expect(scope.variables).toHaveLength(1);
     const v = scope.variables[0];
-    expect(v?.name).toBe("arguments");
+    expect(v?.name).toEqual("arguments");
     expect(v?.identifiers).toEqual([]);
     expect(v?.defs).toEqual([]);
     expect(v?.references).toEqual([]);
-    expect(scope.set.get("arguments")).toBe(v);
-    expect(v?.scope).toBe(scope);
+    expect(scope.set.get("arguments")).toEqual(v);
+    expect(v?.scope).toEqual(scope);
   });
 
   test("does nothing when 'arguments' is already declared", () => {
@@ -36,6 +36,6 @@ describe("declareImplicitArguments", () => {
     const first = scope.set.get("arguments");
     declareImplicitArguments(scope);
     expect(scope.variables).toHaveLength(1);
-    expect(scope.set.get("arguments")).toBe(first);
+    expect(scope.set.get("arguments")).toEqual(first);
   });
 });

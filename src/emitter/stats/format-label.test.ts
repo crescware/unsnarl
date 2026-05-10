@@ -25,7 +25,7 @@ const node = (
 
 describe("formatLabel", () => {
   test("path:line name when not unused", () => {
-    expect(formatLabel("foo.ts", node({ name: "value", line: 10 }))).toBe(
+    expect(formatLabel("foo.ts", node({ name: "value", line: 10 }))).toEqual(
       "foo.ts:10 value",
     );
   });
@@ -33,17 +33,17 @@ describe("formatLabel", () => {
   test('"unused " prefix when node.unused is true', () => {
     expect(
       formatLabel("foo.ts", node({ name: "value", line: 10, unused: true })),
-    ).toBe("foo.ts:10 unused value");
+    ).toEqual("foo.ts:10 unused value");
   });
 
   test("unused=false is treated as not-unused (no prefix)", () => {
     expect(
       formatLabel("foo.ts", node({ name: "value", line: 10, unused: false })),
-    ).toBe("foo.ts:10 value");
+    ).toEqual("foo.ts:10 value");
   });
 
   test("default unused (false) → no prefix", () => {
-    expect(formatLabel("a/b.ts", node({ name: "y", line: 1 }))).toBe(
+    expect(formatLabel("a/b.ts", node({ name: "y", line: 1 }))).toEqual(
       "a/b.ts:1 y",
     );
   });

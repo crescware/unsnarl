@@ -41,6 +41,6 @@ describe("caseExitsFunction", () => {
       expected: false,
     },
   ])("$name", ({ consequent, expected }) => {
-    expect(caseExitsFunction(consequent)).toBe(expected);
+    expect(caseExitsFunction(consequent)).toEqual(expected);
   });
 });

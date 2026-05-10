@@ -36,14 +36,14 @@ describe("DefaultEmitterRegistry", () => {
     const reg = new DefaultEmitterRegistry();
     reg.register(fakeEmitter);
     reg.register(otherEmitter);
-    expect(reg.get("fake")).toBe(fakeEmitter);
-    expect(reg.get("other")).toBe(otherEmitter);
+    expect(reg.get("fake")).toEqual(fakeEmitter);
+    expect(reg.get("other")).toEqual(otherEmitter);
     expect(reg.list()).toEqual(["fake", "other"]);
   });
 
   test("returns null for unknown formats", () => {
     const reg = new DefaultEmitterRegistry();
-    expect(reg.get("missing")).toBeNull();
+    expect(reg.get("missing")).toEqual(null);
   });
 
   test("rejects duplicate formats", () => {
@@ -69,6 +69,6 @@ describe("DefaultEmitterRegistry", () => {
         resolutions: null,
         debug: false,
       }),
-    ).toBe("version=1");
+    ).toEqual("version=1");
   });
 });

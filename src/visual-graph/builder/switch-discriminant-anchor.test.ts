@@ -63,8 +63,8 @@ describe("attachSwitchDiscriminantAnchor", () => {
 
     expect(state.pendingLoopTestAnchors).toHaveLength(1);
     const pending = state.pendingLoopTestAnchors[0];
-    expect(pending?.subgraph).toBe(sg);
-    expect(pending?.position).toBe("first");
+    expect(pending?.subgraph).toEqual(sg);
+    expect(pending?.position).toEqual("first");
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "switch_discriminant_scope_0_34",
@@ -75,7 +75,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
       isJsxElement: false,
       unused: false,
     });
-    expect(state.switchDiscriminantAnchorByOffset.get(34)).toBe(
+    expect(state.switchDiscriminantAnchorByOffset.get(34)).toEqual(
       "switch_discriminant_scope_0_34",
     );
   });
@@ -116,7 +116,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
 
     attachSwitchDiscriminantAnchor(scope, sg, state);
 
-    expect(state.pendingLoopTestAnchors[0]?.node.id).toBe(
+    expect(state.pendingLoopTestAnchors[0]?.node.id).toEqual(
       "switch_discriminant__10",
     );
   });
@@ -132,7 +132,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
     attachSwitchDiscriminantAnchor(scope, sg, state);
 
     expect(state.pendingLoopTestAnchors).toHaveLength(0);
-    expect(state.switchDiscriminantAnchorByOffset.size).toBe(0);
+    expect(state.switchDiscriminantAnchorByOffset.size).toEqual(0);
   });
 
   test("Non-Switch scope (For) is a no-op", () => {

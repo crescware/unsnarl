@@ -7,7 +7,7 @@ import { baseScope } from "./testing/make-scope.js";
 
 describe("branchContainerKey", () => {
   test("returns null when blockContext is missing", () => {
-    expect(branchContainerKey(baseScope())).toBeNull();
+    expect(branchContainerKey(baseScope())).toEqual(null);
   });
 
   test.each([
@@ -147,6 +147,6 @@ describe("branchContainerKey", () => {
     },
   ])("$name", ({ upper, ctx, expected }) => {
     const scope = { ...baseScope(), upper, blockContext: ctx };
-    expect(branchContainerKey(scope)).toBe(expected);
+    expect(branchContainerKey(scope)).toEqual(expected);
   });
 });

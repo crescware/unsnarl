@@ -10,7 +10,7 @@ describe("setPredecessorOf", () => {
     const scope = { ...baseScope(), id: "s" };
     const map = new Map<string, SerializedScope>([[scope.id, scope]]);
     const op = { ...baseWriteOp(), refId: "r1", scopeId: "s" };
-    expect(setPredecessorOf(op, [op], map)).toBe("n_v");
+    expect(setPredecessorOf(op, [op], map)).toEqual("n_v");
   });
 
   test("returns prior op's writeOp node id when prior op is in the same scope", () => {
@@ -18,7 +18,7 @@ describe("setPredecessorOf", () => {
     const map = new Map<string, SerializedScope>([[scope.id, scope]]);
     const prev = { ...baseWriteOp(), refId: "rPrev", scopeId: "s" };
     const op = { ...baseWriteOp(), refId: "rCur", scopeId: "s" };
-    expect(setPredecessorOf(op, [prev, op], map)).toBe("wr_rPrev");
+    expect(setPredecessorOf(op, [prev, op], map)).toEqual("wr_rPrev");
   });
 
   test("returns prior op's writeOp node id when prior op is in an ancestor scope", () => {
@@ -30,7 +30,7 @@ describe("setPredecessorOf", () => {
     ]);
     const prev = { ...baseWriteOp(), refId: "rPrev", scopeId: "root" };
     const op = { ...baseWriteOp(), refId: "rCur", scopeId: "child" };
-    expect(setPredecessorOf(op, [prev, op], map)).toBe("wr_rPrev");
+    expect(setPredecessorOf(op, [prev, op], map)).toEqual("wr_rPrev");
   });
 
   test("returns variable node id when prior op is in a sibling scope", () => {
@@ -44,13 +44,13 @@ describe("setPredecessorOf", () => {
     ]);
     const prev = { ...baseWriteOp(), refId: "rPrev", scopeId: "a" };
     const op = { ...baseWriteOp(), refId: "rCur", scopeId: "b" };
-    expect(setPredecessorOf(op, [prev, op], map)).toBe("n_v");
+    expect(setPredecessorOf(op, [prev, op], map)).toEqual("n_v");
   });
 
   test("returns variable node id when op is missing from ops list", () => {
     const scope = { ...baseScope(), id: "s" };
     const map = new Map<string, SerializedScope>([[scope.id, scope]]);
     const op = { ...baseWriteOp(), refId: "rCur", scopeId: "s" };
-    expect(setPredecessorOf(op, [], map)).toBe("n_v");
+    expect(setPredecessorOf(op, [], map)).toEqual("n_v");
   });
 });

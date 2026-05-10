@@ -15,8 +15,8 @@ describe("nodeSyntax", () => {
       },
       false,
     );
-    expect(got.startsWith('(["')).toBe(true);
-    expect(got.endsWith('"])')).toBe(true);
+    expect(got.startsWith('(["')).toEqual(true);
+    expect(got.endsWith('"])')).toEqual(true);
   });
 
   test("ModuleSink uses double-circle brackets ((...))", () => {
@@ -28,7 +28,7 @@ describe("nodeSyntax", () => {
       },
       false,
     );
-    expect(got).toBe("((module))");
+    expect(got).toEqual("((module))");
   });
 
   test('IfTest uses diamond brackets {"..."}', () => {
@@ -41,7 +41,7 @@ describe("nodeSyntax", () => {
       },
       false,
     );
-    expect(got).toBe('{"if ()<br/>L5"}');
+    expect(got).toEqual('{"if ()<br/>L5"}');
   });
 
   test('SwitchDiscriminant uses diamond brackets {"..."}', () => {
@@ -54,7 +54,7 @@ describe("nodeSyntax", () => {
       },
       false,
     );
-    expect(got).toBe('{"switch ()<br/>L7"}');
+    expect(got).toEqual('{"switch ()<br/>L7"}');
   });
 
   test('default kind uses square brackets ["..."]', () => {
@@ -67,8 +67,8 @@ describe("nodeSyntax", () => {
       },
       false,
     );
-    expect(got.startsWith('["')).toBe(true);
-    expect(got.endsWith('"]')).toBe(true);
+    expect(got.startsWith('["')).toEqual(true);
+    expect(got.endsWith('"]')).toEqual(true);
   });
 
   test("debug=true threads NODE_KIND into the inner label", () => {
@@ -81,6 +81,6 @@ describe("nodeSyntax", () => {
       },
       true,
     );
-    expect(got).toBe('{"if ()<br/>L5<br/>IfTest"}');
+    expect(got).toEqual('{"if ()<br/>L5<br/>IfTest"}');
   });
 });

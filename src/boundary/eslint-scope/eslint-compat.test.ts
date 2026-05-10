@@ -67,7 +67,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const { rootScope } = analyze(code);
 
     expect(rootScope.type).toBe<ScopeType>("module");
-    expect(rootScope.isStrict).toBe(true);
+    expect(rootScope.isStrict).toEqual(true);
     expect(variableNames(rootScope).sort()).toEqual(["a", "b"]);
 
     const a = findVariable(rootScope, "a");
@@ -124,7 +124,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(variableNames(rootScope)).toEqual(["foo"]);
 
     const fnScope = rootScope.childScopes[0];
-    expect(fnScope?.type).toBe("function");
+    expect(fnScope?.type).toEqual("function");
     expect(fnScope && variableNames(fnScope).sort()).toEqual([
       "a",
       "arguments",
@@ -150,11 +150,11 @@ describe("EslintCompatAnalyzer / declarations", () => {
     `;
     const { rootScope } = analyze(code);
     const fn = rootScope.childScopes[0];
-    expect(fn?.type).toBe("function");
+    expect(fn?.type).toEqual("function");
     // function scope の直下に block scope (内側 {}) のみ
-    expect(fn?.childScopes.length).toBe(1);
+    expect(fn?.childScopes.length).toEqual(1);
     const inner = fn?.childScopes[0];
-    expect(inner?.type).toBe("block");
+    expect(inner?.type).toEqual("block");
     expect(inner && variableNames(inner)).toEqual(["b"]);
     // a は function scope に。`arguments` は FunctionDeclarationInstantiation
     // による暗黙束縛として function scope に並ぶ。
@@ -165,10 +165,10 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const code = "for (let i = 0; i < 10; i++) { const x = i; }\n";
     const { rootScope } = analyze(code);
     const forScope = rootScope.childScopes[0];
-    expect(forScope?.type).toBe("for");
+    expect(forScope?.type).toEqual("for");
     expect(forScope && variableNames(forScope)).toEqual(["i"]);
     const block = forScope?.childScopes[0];
-    expect(block?.type).toBe("block");
+    expect(block?.type).toEqual("block");
     expect(block && variableNames(block)).toEqual(["x"]);
   });
 
@@ -178,7 +178,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     // try block (block scope) と catch scope (catch)
     const allScopes = collectScopes(rootScope);
     const catchScope = allScopes.find((v) => v.type === SCOPE_TYPE.Catch);
-    expect(catchScope).toBeDefined();
+    expect(catchScope !== null && catchScope !== undefined).toEqual(true);
     expect(catchScope && variableNames(catchScope!).sort()).toEqual(["e", "x"]);
     const e = catchScope && findVariable(catchScope!, "e");
     expect(e && defTypes(e)).toEqual([DEFINITION_TYPE.CatchClause]);
@@ -188,9 +188,9 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const code = "var legacy = 1;\nconst modern = 2;\n";
     const { rootScope, diagnostics } = analyze(code);
     expect(variableNames(rootScope).sort()).toEqual(["legacy", "modern"]);
-    expect(diagnostics.length).toBe(1);
-    expect(diagnostics[0]?.kind).toBe(DIAGNOSTIC_KIND.VarDetected);
-    expect(diagnostics[0]?.span?.line).toBe(1);
+    expect(diagnostics.length).toEqual(1);
+    expect(diagnostics[0]?.kind).toEqual(DIAGNOSTIC_KIND.VarDetected);
+    expect(diagnostics[0]?.span?.line).toEqual(1);
   });
 
   test("ignores TS interface / type / enum at the top level", () => {
@@ -208,8 +208,8 @@ describe("EslintCompatAnalyzer / declarations", () => {
   test("treats top-level body as the analyzer's primary scope (module for ts)", () => {
     const code = "const x = 1;\n";
     const { rootScope } = analyze(code, "ts");
-    expect(rootScope.type).toBe("module");
-    expect(rootScope.isStrict).toBe(true);
+    expect(rootScope.type).toEqual("module");
+    expect(rootScope.isStrict).toEqual(true);
   });
 
   test("hoists function declarations across the module scope", () => {
@@ -225,7 +225,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     const code = "const x = 1;\n";
     const { rootScope } = analyzeAs(code, LANGUAGE.Js, SOURCE_TYPE.Module);
     expect(rootScope.type).toBe<ScopeType>("module");
-    expect(rootScope.isStrict).toBe(true);
+    expect(rootScope.isStrict).toEqual(true);
   });
 
   test("treats a TS source parsed as script as a global scope", () => {
@@ -246,15 +246,15 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(classScope && variableNames(classScope)).toEqual(["C"]);
     const innerC = classScope && findVariable(classScope, "C");
     expect(innerC && defTypes(innerC)).toEqual([DEFINITION_TYPE.ClassName]);
-    expect(innerC).not.toBe(outerC);
+    expect(innerC !== outerC).toEqual(true);
 
     // The `new C()` inside `factory` resolves to the inner ClassName, not the
     // outer one. eslint-scope behaves the same way.
     const factoryScope = classScope?.childScopes[0];
     expect(factoryScope?.type).toBe<ScopeType>("function");
     const innerRef = innerC?.references[0];
-    expect(innerRef?.identifier.name).toBe("C");
-    expect(innerRef?.from).toBe(factoryScope);
+    expect(innerRef?.identifier.name).toEqual("C");
+    expect(innerRef?.from).toEqual(factoryScope);
     expect(outerC?.references).toEqual([]);
   });
 
@@ -265,7 +265,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(variableNames(rootScope).sort()).toEqual(["X"]);
     const allScopes = collectScopes(rootScope);
     const classScope = allScopes.find((v) => v.type === SCOPE_TYPE.Class);
-    expect(classScope).toBeDefined();
+    expect(classScope !== null && classScope !== undefined).toEqual(true);
     expect(classScope && variableNames(classScope!)).toEqual(["C"]);
   });
 
@@ -275,7 +275,7 @@ describe("EslintCompatAnalyzer / declarations", () => {
 
     const allScopes = collectScopes(rootScope);
     const classScope = allScopes.find((v) => v.type === SCOPE_TYPE.Class);
-    expect(classScope).toBeDefined();
+    expect(classScope !== null && classScope !== undefined).toEqual(true);
     expect(classScope && classScope.variables).toEqual([]);
   });
 
@@ -292,6 +292,6 @@ describe("EslintCompatAnalyzer / declarations", () => {
     expect(inner && variableNames(inner).sort()).toEqual(["arguments", "x"]);
     const outerX = findVariable(rootScope, "x");
     const innerX = inner && findVariable(inner, "x");
-    expect(outerX).not.toBe(innerX);
+    expect(outerX !== innerX).toEqual(true);
   });
 });

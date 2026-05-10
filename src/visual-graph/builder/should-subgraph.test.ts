@@ -57,6 +57,6 @@ describe("shouldSubgraph", () => {
     },
   ])("$name", ({ type, blockContext, expected }) => {
     const scope = { ...baseScope(), id: "s", type, blockContext };
-    expect(shouldSubgraph(scope)).toBe(expected);
+    expect(shouldSubgraph(scope)).toEqual(expected);
   });
 });

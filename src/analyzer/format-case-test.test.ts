@@ -12,7 +12,7 @@ describe("formatCaseTest", () => {
       end: 14,
     } as const satisfies AstNode;
     const raw = "case x === 1: break;";
-    expect(formatCaseTest(node, raw)).toBe(raw.slice(5, 14));
+    expect(formatCaseTest(node, raw)).toEqual(raw.slice(5, 14));
   });
 
   test.each([
@@ -56,7 +56,7 @@ describe("formatCaseTest", () => {
       expected: "long",
     },
   ])("$name", ({ node, raw, expected }) => {
-    expect(formatCaseTest(node, raw)).toBe(expected);
+    expect(formatCaseTest(node, raw)).toEqual(expected);
   });
 
   test.each([
@@ -68,11 +68,11 @@ describe("formatCaseTest", () => {
     { type: AST_TYPE.Identifier, expected: "<expr>" },
   ])("type-specific fallback for $type", ({ type, value, expected }) => {
     const node = { type, value } as AstNode;
-    expect(formatCaseTest(node, "")).toBe(expected);
+    expect(formatCaseTest(node, "")).toEqual(expected);
   });
 
   test("Identifier without name returns <expr>", () => {
     const node = { type: AST_TYPE.Identifier } as const satisfies AstNode;
-    expect(formatCaseTest(node, "")).toBe("<expr>");
+    expect(formatCaseTest(node, "")).toEqual("<expr>");
   });
 });

@@ -8,6 +8,6 @@ describe("retUseNodeId", () => {
     { input: "r-1.2", expected: "ret_use_r_1_2" },
     { input: "", expected: "ret_use_" },
   ])("retUseNodeId($input) = $expected", ({ input, expected }) => {
-    expect(retUseNodeId(input)).toBe(expected);
+    expect(retUseNodeId(input)).toEqual(expected);
   });
 });

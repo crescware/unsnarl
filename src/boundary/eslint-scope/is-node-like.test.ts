@@ -31,6 +31,6 @@ describe("isNodeLike", () => {
       expected: false,
     },
   ])("$name", ({ value, expected }) => {
-    expect(isNodeLike(value)).toBe(expected);
+    expect(isNodeLike(value)).toEqual(expected);
   });
 });

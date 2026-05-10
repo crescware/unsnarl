@@ -12,8 +12,8 @@ const edge = (from: string, to: string, label = "read"): VisualEdge => ({
 describe("buildAdjacency", () => {
   test("empty edges produce empty maps", () => {
     const { outEdges, inEdges } = buildAdjacency([]);
-    expect(outEdges.size).toBe(0);
-    expect(inEdges.size).toBe(0);
+    expect(outEdges.size).toEqual(0);
+    expect(inEdges.size).toEqual(0);
   });
 
   test("each edge contributes to both outEdges[from] and inEdges[to]", () => {

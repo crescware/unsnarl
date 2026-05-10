@@ -24,6 +24,6 @@ describe("detectLanguage", () => {
       expected: "tsx",
     },
   ] as const)("$name", ({ path, expected }) => {
-    expect(detectLanguage(path)).toBe(expected);
+    expect(detectLanguage(path)).toEqual(expected);
   });
 });

@@ -42,6 +42,6 @@ describe("branchScopeOf", () => {
     },
     { name: "missing scope returns null", start: "missing", expected: null },
   ])("$name", ({ start, expected }) => {
-    expect(branchScopeOf(start, map)).toBe(expected);
+    expect(branchScopeOf(start, map)).toEqual(expected);
   });
 });

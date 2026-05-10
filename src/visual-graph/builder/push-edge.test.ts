@@ -26,7 +26,7 @@ describe("pushEdge", () => {
     const state = emptyState();
     pushEdge(state, "a", "read", "b");
     expect(state.edges).toEqual([{ from: "a", to: "b", label: "read" }]);
-    expect(state.emittedEdges.has("a -->|read| b")).toBe(true);
+    expect(state.emittedEdges.has("a -->|read| b")).toEqual(true);
   });
 
   test("ignores a second call that exactly matches a prior (from, label, to)", () => {

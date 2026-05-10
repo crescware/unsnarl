@@ -32,8 +32,8 @@ describe("declareVariable", () => {
       null,
     );
     expect(scope.variables).toHaveLength(1);
-    expect(scope.set.get("x")).toBe(v);
-    expect(v.name).toBe("x");
+    expect(scope.set.get("x")).toEqual(v);
+    expect(v.name).toEqual("x");
   });
 
   test("appends to identifiers and defs each call", () => {
@@ -78,7 +78,7 @@ describe("declareVariable", () => {
       node(AST_TYPE.VariableDeclarator),
       null,
     );
-    expect(second).toBe(first);
+    expect(second).toEqual(first);
     expect(scope.variables).toHaveLength(1);
   });
 
@@ -98,7 +98,7 @@ describe("declareVariable", () => {
       node(AST_TYPE.VariableDeclarator),
       null,
     );
-    expect(a).not.toBe(b);
+    expect(a !== b).toEqual(true);
     expect(scope.variables).toEqual([a, b]);
   });
 
@@ -112,6 +112,6 @@ describe("declareVariable", () => {
       node(AST_TYPE.VariableDeclarator),
       parent,
     );
-    expect(v.defs[0]?.parent).toBe(parent);
+    expect(v.defs[0]?.parent).toEqual(parent);
   });
 });

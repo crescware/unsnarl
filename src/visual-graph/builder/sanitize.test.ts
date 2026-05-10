@@ -31,6 +31,6 @@ describe("sanitize", () => {
     },
     { name: "empty string returns empty", input: "", expected: "" },
   ])("$name", ({ input, expected }) => {
-    expect(sanitize(input)).toBe(expected);
+    expect(sanitize(input)).toEqual(expected);
   });
 });

@@ -50,7 +50,7 @@ describe("stateRefId", () => {
     const ctx = makeCtx({
       writeOpByRef: new Map([["wRef", writeOp]]),
     });
-    expect(stateRefId("wRef", "v", ctx)).toBe("wr_wRef");
+    expect(stateRefId("wRef", "v", ctx)).toEqual("wr_wRef");
   });
 
   test.each<{
@@ -111,6 +111,6 @@ describe("stateRefId", () => {
       },
       writeOpsByVariable: new Map([["v", ops]]),
     });
-    expect(stateRefId(refId, varId, ctx)).toBe(expected);
+    expect(stateRefId(refId, varId, ctx)).toEqual(expected);
   });
 });

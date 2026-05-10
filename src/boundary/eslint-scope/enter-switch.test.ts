@@ -29,10 +29,10 @@ describe("enterSwitch", () => {
     enterSwitch(switchNode, parent, "body", [], manager, visitor);
 
     const scope = manager.current();
-    expect(scope.type).toBe("switch");
+    expect(scope.type).toEqual("switch");
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBe(parent);
-    expect(captured[0]?.key).toBe("body");
+    expect(captured[0]?.parent).toEqual(parent);
+    expect(captured[0]?.key).toEqual("body");
   });
 
   test("notifies visitor with null parent / key when missing", () => {
@@ -50,7 +50,7 @@ describe("enterSwitch", () => {
     enterSwitch(switchNode, null, null, [], manager, visitor);
 
     expect(captured).toHaveLength(1);
-    expect(captured[0]?.parent).toBeNull();
-    expect(captured[0]?.key).toBeNull();
+    expect(captured[0]?.parent).toEqual(null);
+    expect(captured[0]?.key).toEqual(null);
   });
 });

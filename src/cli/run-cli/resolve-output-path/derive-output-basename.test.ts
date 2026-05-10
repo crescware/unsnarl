@@ -52,7 +52,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("value");
+    expect(actual).toEqual("value");
   });
 
   test("kind=line is l<n>", () => {
@@ -62,7 +62,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l42");
+    expect(actual).toEqual("l42");
   });
 
   test("kind=line-name is l<n>-<id> with single hyphen", () => {
@@ -72,7 +72,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l42-render");
+    expect(actual).toEqual("l42-render");
   });
 
   test("kind=range is l<n>-<m>", () => {
@@ -82,7 +82,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l10-12");
+    expect(actual).toEqual("l10-12");
   });
 
   test("kind=range-name is l<n>-<m>-<id>", () => {
@@ -92,7 +92,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l10-12-render");
+    expect(actual).toEqual("l10-12-render");
   });
 
   test("multiple roots are joined with +", () => {
@@ -102,7 +102,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("value+foo");
+    expect(actual).toEqual("value+foo");
   });
 
   test("multiple roots mixing kinds", () => {
@@ -112,7 +112,7 @@ describe("deriveOutputBasename: root tokenization", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l42-render+foo");
+    expect(actual).toEqual("l42-render+foo");
   });
 });
 
@@ -124,7 +124,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("value");
+    expect(actual).toEqual("value");
   });
 
   test("-A only → -a<N>", () => {
@@ -136,7 +136,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("value-a1");
+    expect(actual).toEqual("value-a1");
   });
 
   test("-B only → -b<N>", () => {
@@ -148,7 +148,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("param-b2");
+    expect(actual).toEqual("param-b2");
   });
 
   test("-C only → -c<N>", () => {
@@ -160,7 +160,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("l10-12-c2");
+    expect(actual).toEqual("l10-12-c2");
   });
 
   test("-A and -B → -a<N>-b<M>", () => {
@@ -172,7 +172,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("v-a1-b2");
+    expect(actual).toEqual("v-a1-b2");
   });
 
   test("-B and -C → alphabetical -b<N>-c<M>", () => {
@@ -184,7 +184,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("v-b2-c3");
+    expect(actual).toEqual("v-b2-c3");
   });
 
   test("-C and -A → alphabetical -a<N>-c<M>", () => {
@@ -196,7 +196,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("v-a7-c3");
+    expect(actual).toEqual("v-a7-c3");
   });
 
   test("-A and -B together drop -C from the filename (C is then redundant)", () => {
@@ -208,7 +208,7 @@ describe("deriveOutputBasename: radius suffix", () => {
       inputPath: "",
     });
 
-    expect(actual).toBe("v-a1-b2");
+    expect(actual).toEqual("v-a1-b2");
   });
 });
 
@@ -220,7 +220,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "foo.ts",
     });
 
-    expect(actual).toBe("foo");
+    expect(actual).toEqual("foo");
   });
 
   test("preserves camelCase basename", () => {
@@ -230,7 +230,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "fooBar.ts",
     });
 
-    expect(actual).toBe("fooBar");
+    expect(actual).toEqual("fooBar");
   });
 
   test("preserves kebab-case basename", () => {
@@ -240,7 +240,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "foo-bar.ts",
     });
 
-    expect(actual).toBe("foo-bar");
+    expect(actual).toEqual("foo-bar");
   });
 
   test("strips .tsx", () => {
@@ -250,7 +250,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "Component.tsx",
     });
 
-    expect(actual).toBe("Component");
+    expect(actual).toEqual("Component");
   });
 
   test("strips only the last extension", () => {
@@ -260,7 +260,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "foo.test.ts",
     });
 
-    expect(actual).toBe("foo.test");
+    expect(actual).toEqual("foo.test");
   });
 
   test("no extension → keeps full basename", () => {
@@ -270,7 +270,7 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "Makefile",
     });
 
-    expect(actual).toBe("Makefile");
+    expect(actual).toEqual("Makefile");
   });
 
   test("strips path components", () => {
@@ -280,6 +280,6 @@ describe("deriveOutputBasename: input file fallback", () => {
       inputPath: "src/deep/foo.ts",
     });
 
-    expect(actual).toBe("foo");
+    expect(actual).toEqual("foo");
   });
 });

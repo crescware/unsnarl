@@ -56,12 +56,12 @@ describe("collectNodesInto", () => {
       ],
       out,
     );
-    expect(out.get("a")?.name).toBe("second");
+    expect(out.get("a")?.name).toEqual("second");
   });
 
   test("empty input list -> empty out", () => {
     const out = new Map<string, VisualNode>();
     collectNodesInto([], out);
-    expect(out.size).toBe(0);
+    expect(out.size).toEqual(0);
   });
 });
