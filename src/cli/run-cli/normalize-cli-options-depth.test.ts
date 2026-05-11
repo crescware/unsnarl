@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 import { DEFAULT_DEPTH } from "../args/depth-options.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
@@ -11,6 +12,7 @@ const baseParsed = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

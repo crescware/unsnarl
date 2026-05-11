@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../../cli-color-theme.js";
 import type { SerializedIR } from "../../../ir/serialized/serialized-ir.js";
 import type { EmitterRegistry } from "../../../pipeline/emit/emitter-registry.js";
 import type { Emitter } from "../../../pipeline/emit/emitter.js";
@@ -17,6 +18,7 @@ const baseOpts = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

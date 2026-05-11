@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import { normalizeCliOptions } from "./normalize-cli-options.js";
@@ -10,6 +11,7 @@ const baseParsed = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

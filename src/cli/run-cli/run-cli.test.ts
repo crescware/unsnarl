@@ -132,6 +132,61 @@ describe("runCli (integration)", () => {
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
+  test("--color-theme dark uses the dark palette literals (default)", async () => {
+    const inputPath = join(tmpDir, "theme-dark.ts");
+    writeFileSync(inputPath, "function f() { return 1; }\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "dark",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(0);
+    // The dark theme's fnWrap fill is #1a2030; without --color-theme the
+    // same literal must appear because dark is the default.
+    expect(r.stdout).toMatch(/classDef fnWrap fill:#1a2030,stroke:#5a7d99;/);
+  });
+
+  test("--color-theme light switches every classDef to the light palette", async () => {
+    const inputPath = join(tmpDir, "theme-light.ts");
+    writeFileSync(inputPath, "function f() { return 1; }\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "light",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(0);
+    // Dark literal must NOT appear under the light theme.
+    expect(r.stdout).not.toMatch(/fill:#1a2030/);
+    // Light theme fnWrap fill (#e0e8f0) must appear instead.
+    expect(r.stdout).toMatch(/classDef fnWrap fill:#e0e8f0/);
+  });
+
+  test("--color-theme omitted defaults to dark", async () => {
+    const inputPath = join(tmpDir, "theme-default.ts");
+    writeFileSync(inputPath, "function f() { return 1; }\n");
+    const r = await captureRun(["--format", "mermaid", inputPath]);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toMatch(/classDef fnWrap fill:#1a2030,stroke:#5a7d99;/);
+  });
+
+  test("--color-theme with an unknown value exits with 2", async () => {
+    const inputPath = join(tmpDir, "theme-invalid.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "neon",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(2);
+    expect(r.stderr).toMatch(/Invalid color theme: neon/);
+  });
+
   test("--mermaid-renderer omitted falls back to elk", async () => {
     const inputPath = join(tmpDir, "renderer-default.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");

@@ -15,6 +15,7 @@ export function normalizeCliOptions(
     stdinLang: opts.stdinLang,
     prettyJson: opts.prettyJson,
     mermaidRenderer: opts.mermaidRenderer,
+    colorTheme: opts.colorTheme,
     roots: opts.roots,
     descendants: opts.descendants,
     ancestors: opts.ancestors,

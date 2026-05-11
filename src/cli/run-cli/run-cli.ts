@@ -1,6 +1,5 @@
 import { CommanderError } from "commander";
 
-import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import { CLI_MERMAID_RENDERER } from "../../cli-mermaid-renderer.js";
 import { ParseError } from "../../parser/parse-error.js";
 import { createConfiguredEmitterRegistry } from "../../pipeline/create-configured-emitter-registry.js";
@@ -33,7 +32,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
 
     const emitters = createConfiguredEmitterRegistry({
       mermaidRenderer: normalized.mermaidRenderer ?? CLI_MERMAID_RENDERER.Elk,
-      colorTheme: CLI_COLOR_THEME.Dark,
+      colorTheme: normalized.colorTheme,
     });
     const outputPath = resolveOutputPath(src, normalized, emitters);
     const { text, runOpts } = buildRunOpts(src, normalized);
