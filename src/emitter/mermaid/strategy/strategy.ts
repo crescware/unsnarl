@@ -1,3 +1,5 @@
+import type { ColorTheme } from "../theme/color-theme.js";
+
 type EmptySubgraphContext = Readonly<{
   /** Subgraph id about to close with no body content. */
   subgraphId: string;
@@ -23,7 +25,11 @@ export type MermaidStrategy = Readonly<{
   /**
    * Lines appended at the end of the diagram, after every node, edge and
    * other classDef. Receives every placeholder id produced during the run
-   * so the strategy can attach a `classDef` / `class` styling block.
+   * plus the active color theme so the strategy can attach a `classDef` /
+   * `class` styling block whose colors match the rest of the diagram.
    */
-  trailerLines(placeholderIds: readonly string[]): readonly string[];
+  trailerLines(
+    placeholderIds: readonly string[],
+    theme: ColorTheme,
+  ): readonly string[];
 }>;

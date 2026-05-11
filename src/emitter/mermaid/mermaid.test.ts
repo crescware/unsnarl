@@ -8,10 +8,11 @@ import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
 import { dagreStrategy } from "./strategy/dagre-strategy.js";
 import { elkStrategy } from "./strategy/elk-strategy.js";
+import { darkTheme } from "./theme/dark-theme.js";
 
 const parser = new OxcParser();
 const serializer = new FlatSerializer();
-const emitter = new MermaidEmitter({ strategy: elkStrategy });
+const emitter = new MermaidEmitter({ strategy: elkStrategy, theme: darkTheme });
 
 function emit(code: string, language: Language = LANGUAGE.Ts): string {
   const parsed = parser.parse(code, {
@@ -49,7 +50,10 @@ describe("MermaidEmitter", () => {
   });
 
   test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
-    const dagre = new MermaidEmitter({ strategy: dagreStrategy });
+    const dagre = new MermaidEmitter({
+      strategy: dagreStrategy,
+      theme: darkTheme,
+    });
     const parsed = parser.parse("const a = 1;\n", {
       language: LANGUAGE.Ts,
       sourcePath: "input.ts",

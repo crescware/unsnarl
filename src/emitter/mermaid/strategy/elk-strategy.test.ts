@@ -1,6 +1,33 @@
 import { describe, expect, test } from "vitest";
 
+import { darkTheme } from "../theme/dark-theme.js";
+import { lightTheme } from "../theme/light-theme.js";
 import { elkStrategy } from "./elk-strategy.js";
+
+describe("elkStrategy.trailerLines", () => {
+  test("returns an empty list when there are no placeholder ids", () => {
+    expect(elkStrategy.trailerLines([], darkTheme)).toEqual([]);
+  });
+
+  test("emits the elkEmptyPlaceholder classDef from the dark theme and one class line per id", () => {
+    const out = elkStrategy.trailerLines(
+      ["elk_empty_a", "elk_empty_b"],
+      darkTheme,
+    );
+    expect(out[0]).toEqual(
+      "  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;",
+    );
+    expect(out).toContain("  class elk_empty_a elkEmptyPlaceholder;");
+    expect(out).toContain("  class elk_empty_b elkEmptyPlaceholder;");
+  });
+
+  test("routes through the supplied theme so the placeholder picks up theme literals", () => {
+    const out = elkStrategy.trailerLines(["elk_empty_x"], lightTheme);
+    expect(out[0]).toEqual(
+      `  classDef elkEmptyPlaceholder fill:${lightTheme.elkEmptyPlaceholder.fill},stroke:${lightTheme.elkEmptyPlaceholder.stroke},color:${lightTheme.elkEmptyPlaceholder.color};`,
+    );
+  });
+});
 
 describe("elkStrategy.emptySubgraphPlaceholder", () => {
   test("returns null when the subgraph is not referenced by any edge", () => {
