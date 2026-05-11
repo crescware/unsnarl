@@ -741,10 +741,15 @@ describe("MermaidEmitter rendering: import label prefix rule", () => {
 });
 
 describe("MermaidEmitter rendering: per-depth subgraph coloring", () => {
-  test("a flat top-level subgraph picks up the nestL1 class", () => {
+  test("a top-level function wraps in nestL1 and its body subgraph picks up nestL2", () => {
+    // The wrapper consumes depth 1 (nestL1); its body subgraph sits one
+    // slot above at depth 2 (nestL2) so the wrapper and body render as
+    // distinct brightness levels.
     const out = emit("function f() { return 1; }\n");
     expect(out).toMatch(/^\s*classDef nestL1 /m);
-    expect(out).toMatch(/^\s*class s_scope_\d+ nestL1;/m);
+    expect(out).toMatch(/^\s*class wrap_s_scope_\d+ nestL1;/m);
+    expect(out).toMatch(/^\s*classDef nestL2 /m);
+    expect(out).toMatch(/^\s*class s_scope_\d+ nestL2;/m);
   });
 
   test("three levels of nested if subgraphs emit nestL1, nestL2, nestL3 rows", () => {
@@ -768,36 +773,6 @@ describe("MermaidEmitter rendering: per-depth subgraph coloring", () => {
     expect(out).toMatch(/^\s*classDef nestL1 /m);
     expect(out).toMatch(/^\s*classDef nestL2 /m);
     expect(out).toMatch(/^\s*classDef nestL3 /m);
-  });
-
-  test("when depth exceeds the palette length the next subgraph cycles back to nestL1", () => {
-    // The dark palette has 4 entries, so 5 nested levels are needed to force
-    // the wrap. The function body counts as level 1, then four nested ifs
-    // make the innermost subgraph sit at depth 5 -> nestL1.
-    const code = [
-      "function f() {",
-      "  let v = 0;",
-      "  const a = 1;",
-      "  if (a) {",
-      "    if (a) {",
-      "      if (a) {",
-      "        if (a) {",
-      "          v = 1;",
-      "        }",
-      "      }",
-      "    }",
-      "  }",
-      "  return v;",
-      "}",
-    ].join("\n");
-    const out = emit(code);
-    const nestL1Assignments = out
-      .split("\n")
-      .filter((line) => /^\s*class s_scope_\d+ nestL1;/.test(line));
-    // The function body (depth 1) plus the depth-5 inner if both land in
-    // palette slot 0, so the nestL1 class has TWO assignments instead of one.
-    expect(nestL1Assignments.length >= 2).toEqual(true);
-    expect(out).toMatch(/^\s*classDef nestL4 /m);
   });
 
   test("light theme produces its own nest palette colors", () => {

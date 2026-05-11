@@ -7,7 +7,6 @@ describe("ColorTheme", () => {
   // satisfied; this test exists so a future field rename surfaces here.
   test("a hand-built theme value type-checks against ColorTheme", () => {
     const t: ColorTheme = {
-      fnWrap: { fill: "#000", stroke: "#fff" },
       boundaryStub: {
         fill: "transparent",
         stroke: "#888",

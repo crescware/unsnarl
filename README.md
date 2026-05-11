@@ -63,9 +63,9 @@ preview).
 ### Color theme
 
 The Mermaid output is colored for a dark background by default. Pass
-`--color-theme light` to switch every `classDef` (function wrapper,
-boundary stub, var node, per-depth subgraph palette, and the elk
-empty-placeholder workaround) to a palette tuned for light
+`--color-theme light` to switch every `classDef` (boundary stub,
+var node, per-depth subgraph palette covering function wrappers, and
+the elk empty-placeholder workaround) to a palette tuned for light
 backgrounds. The two built-in themes are `dark` and `light`; the
 background cannot be auto-detected, so the choice is always explicit.
 

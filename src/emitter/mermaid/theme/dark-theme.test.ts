@@ -3,15 +3,6 @@ import { describe, expect, test } from "vitest";
 import { darkTheme } from "./dark-theme.js";
 
 describe("darkTheme", () => {
-  // The dark theme carries the values that were hard-coded before the
-  // theme abstraction landed. These literals are pinned so the existing
-  // fixtures and snapshot-style tests keep matching when the default
-  // theme is dark.
-  test("fnWrap keeps the original dark-mode literals", () => {
-    expect(darkTheme.fnWrap.fill).toEqual("#1a2030");
-    expect(darkTheme.fnWrap.stroke).toEqual("#5a7d99");
-  });
-
   test("boundaryStub keeps the original dark-mode literals", () => {
     expect(darkTheme.boundaryStub.fill).toEqual("transparent");
     expect(darkTheme.boundaryStub.stroke).toEqual("#888");
@@ -29,7 +20,11 @@ describe("darkTheme", () => {
     expect(darkTheme.elkEmptyPlaceholder.color).toEqual("transparent");
   });
 
-  test("nestPalette is non-empty so the cycle has a target", () => {
-    expect(darkTheme.nestPalette.length >= 1).toEqual(true);
+  // Each function consumes two adjacent slots (wrapper at N, body at
+  // N+1) so the wrapper and body read as distinct brightness levels.
+  // Six entries trade cycle-distance for per-step contrast; this test
+  // guards against accidental shrinkage that would lose contrast.
+  test("nestPalette has at least six entries to keep wrap / body brightness distinct", () => {
+    expect(darkTheme.nestPalette.length >= 6).toEqual(true);
   });
 });

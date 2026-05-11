@@ -9,37 +9,13 @@ const emptyNestMap: ReadonlyMap<number, readonly string[]> = new Map();
 describe("renderClassDefs", () => {
   test("emits nothing when all id lists and the nest map are empty", () => {
     const lines: /* mutable */ string[] = [];
-    renderClassDefs([], [], [], emptyNestMap, darkTheme, lines);
+    renderClassDefs([], [], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([]);
-  });
-
-  test("emits the fnWrap classDef from the dark theme with the original literals (contract)", () => {
-    const lines: /* mutable */ string[] = [];
-    renderClassDefs(
-      ["wrap_a", "wrap_b"],
-      [],
-      [],
-      emptyNestMap,
-      darkTheme,
-      lines,
-    );
-    expect(lines).toEqual([
-      "  classDef fnWrap fill:#1a2030,stroke:#5a7d99;",
-      "  class wrap_a fnWrap;",
-      "  class wrap_b fnWrap;",
-    ]);
   });
 
   test("emits the boundaryStub classDef from the dark theme with the original literals (contract)", () => {
     const lines: /* mutable */ string[] = [];
-    renderClassDefs(
-      [],
-      ["stub_1", "stub_2"],
-      [],
-      emptyNestMap,
-      darkTheme,
-      lines,
-    );
+    renderClassDefs(["stub_1", "stub_2"], [], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([
       "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
       "  class stub_1 boundaryStub;",
@@ -49,7 +25,7 @@ describe("renderClassDefs", () => {
 
   test("emits the varNode classDef from the dark theme with the original dash pattern (contract)", () => {
     const lines: /* mutable */ string[] = [];
-    renderClassDefs([], [], ["v_one", "v_two"], emptyNestMap, darkTheme, lines);
+    renderClassDefs([], ["v_one", "v_two"], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([
       "  classDef varNode stroke-dasharray:5 5;",
       "  class v_one varNode;",
@@ -57,19 +33,10 @@ describe("renderClassDefs", () => {
     ]);
   });
 
-  test("emits all base classDefs when every list is non-empty (dark theme)", () => {
+  test("emits boundaryStub and varNode together when both lists are non-empty (dark theme)", () => {
     const lines: /* mutable */ string[] = [];
-    renderClassDefs(
-      ["wrap_a"],
-      ["stub_1"],
-      ["v_one"],
-      emptyNestMap,
-      darkTheme,
-      lines,
-    );
+    renderClassDefs(["stub_1"], ["v_one"], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([
-      "  classDef fnWrap fill:#1a2030,stroke:#5a7d99;",
-      "  class wrap_a fnWrap;",
       "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
       "  class stub_1 boundaryStub;",
       "  classDef varNode stroke-dasharray:5 5;",
@@ -79,17 +46,7 @@ describe("renderClassDefs", () => {
 
   test("routes through the supplied theme so a light theme produces its own literals", () => {
     const lines: /* mutable */ string[] = [];
-    renderClassDefs(
-      ["wrap_a"],
-      ["stub_1"],
-      [],
-      emptyNestMap,
-      lightTheme,
-      lines,
-    );
-    expect(lines).toContain(
-      `  classDef fnWrap fill:${lightTheme.fnWrap.fill},stroke:${lightTheme.fnWrap.stroke};`,
-    );
+    renderClassDefs(["stub_1"], [], emptyNestMap, lightTheme, lines);
     expect(lines).toContain(
       `  classDef boundaryStub fill:${lightTheme.boundaryStub.fill},stroke:${lightTheme.boundaryStub.stroke},stroke-dasharray:${lightTheme.boundaryStub.strokeDasharray},color:${lightTheme.boundaryStub.color};`,
     );
@@ -102,7 +59,7 @@ describe("renderClassDefs", () => {
       [1, ["s_mid"]],
       [2, ["s_inner"]],
     ]);
-    renderClassDefs([], [], [], nestMap, darkTheme, lines);
+    renderClassDefs([], [], nestMap, darkTheme, lines);
     const expected = [
       `  classDef nestL1 fill:${darkTheme.nestPalette[0]?.fill},stroke:${darkTheme.nestPalette[0]?.stroke};`,
       "  class s_outer nestL1;",
@@ -121,7 +78,7 @@ describe("renderClassDefs", () => {
       [0, ["s_outer"]],
       [1, ["s_mid"]],
     ]);
-    renderClassDefs([], [], [], nestMap, darkTheme, lines);
+    renderClassDefs([], [], nestMap, darkTheme, lines);
     const headers = lines.filter((v) => v.includes("classDef nestL"));
     expect(headers).toEqual([
       `  classDef nestL1 fill:${darkTheme.nestPalette[0]?.fill},stroke:${darkTheme.nestPalette[0]?.stroke};`,
@@ -136,9 +93,19 @@ describe("renderClassDefs", () => {
       [0, ["s_outer"]],
       [2, ["s_far"]],
     ]);
-    renderClassDefs([], [], [], nestMap, darkTheme, lines);
+    renderClassDefs([], [], nestMap, darkTheme, lines);
     expect(lines.some((v) => v.includes("nestL2"))).toEqual(false);
     expect(lines.some((v) => v.includes("nestL1"))).toEqual(true);
     expect(lines.some((v) => v.includes("nestL3"))).toEqual(true);
+  });
+
+  test("places a function wrapper id alongside other subgraphs in the same palette slot", () => {
+    const lines: /* mutable */ string[] = [];
+    const nestMap = new Map<number, readonly string[]>([
+      [0, ["wrap_s_fn", "s_fn"]],
+    ]);
+    renderClassDefs([], [], nestMap, darkTheme, lines);
+    expect(lines).toContain("  class wrap_s_fn nestL1;");
+    expect(lines).toContain("  class s_fn nestL1;");
   });
 });

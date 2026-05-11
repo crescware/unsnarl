@@ -4,10 +4,6 @@ type NestPaletteEntry = Readonly<{
 }>;
 
 export type ColorTheme = Readonly<{
-  fnWrap: Readonly<{
-    fill: string;
-    stroke: string;
-  }>;
   boundaryStub: Readonly<{
     fill: string;
     stroke: string;
@@ -24,5 +20,8 @@ export type ColorTheme = Readonly<{
   }>;
   // Cycled per subgraph depth (1-based). Empty is invalid: every theme
   // must provide at least one palette entry so cycling has a target.
+  // Function wrappers (`wrap_*`) and their body subgraphs share the
+  // same depth slot, so each function reads as a single solid color
+  // rather than two stacked colors.
   nestPalette: readonly NestPaletteEntry[];
 }>;

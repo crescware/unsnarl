@@ -4,8 +4,6 @@ import { lightTheme } from "./light-theme.js";
 
 describe("lightTheme", () => {
   test("every classDef slot is populated", () => {
-    expect(lightTheme.fnWrap.fill).not.toEqual("");
-    expect(lightTheme.fnWrap.stroke).not.toEqual("");
     expect(lightTheme.boundaryStub.fill).not.toEqual("");
     expect(lightTheme.boundaryStub.stroke).not.toEqual("");
     expect(lightTheme.boundaryStub.strokeDasharray).not.toEqual("");
@@ -16,8 +14,8 @@ describe("lightTheme", () => {
     expect(lightTheme.elkEmptyPlaceholder.color).not.toEqual("");
   });
 
-  test("nestPalette is non-empty so the cycle has a target", () => {
-    expect(lightTheme.nestPalette.length >= 1).toEqual(true);
+  test("nestPalette has at least six entries to keep wrap / body brightness distinct", () => {
+    expect(lightTheme.nestPalette.length >= 6).toEqual(true);
   });
 
   test("elkEmptyPlaceholder is invisible (same workaround as the dark theme)", () => {

@@ -1,10 +1,6 @@
 import type { ColorTheme } from "./color-theme.js";
 
 export const lightTheme: ColorTheme = {
-  fnWrap: {
-    fill: "#e0e8f0",
-    stroke: "#5a7d99",
-  },
   boundaryStub: {
     fill: "transparent",
     stroke: "#555",
@@ -19,10 +15,16 @@ export const lightTheme: ColorTheme = {
     stroke: "transparent",
     color: "transparent",
   },
+  // Six-entry gradient mirroring the dark theme's compression: kept
+  // in the light half of the spectrum so dark label text retains a
+  // strong contrast ratio against every fill. Stroke is transparent
+  // in the built-in themes.
   nestPalette: [
-    { fill: "#f5f7fa", stroke: "#c8d2e0" },
-    { fill: "#edf2f8", stroke: "#b8c5d6" },
-    { fill: "#e5edf6", stroke: "#a8b8cc" },
-    { fill: "#dde8f4", stroke: "#98abc2" },
+    { fill: "#f4f7fb", stroke: "transparent" },
+    { fill: "#e8eff7", stroke: "transparent" },
+    { fill: "#dce6f3", stroke: "transparent" },
+    { fill: "#d1ddef", stroke: "transparent" },
+    { fill: "#c5d4eb", stroke: "transparent" },
+    { fill: "#b9cbe7", stroke: "transparent" },
   ],
 };

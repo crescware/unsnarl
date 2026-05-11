@@ -3,23 +3,12 @@ import type { ColorTheme } from "./theme/color-theme.js";
 type NestClassMap = ReadonlyMap<number, readonly string[]>;
 
 export function renderClassDefs(
-  wrapperIds: readonly string[],
   stubIds: readonly string[],
   varIds: readonly string[],
   nestClassMap: NestClassMap,
   theme: ColorTheme,
   lines: /* mutable */ string[],
 ): void {
-  if (wrapperIds.length > 0) {
-    // Distinct background so the function wrapper is visually separable
-    // from the inner function body subgraph (otherwise both inherit the
-    // same Mermaid cluster fill and the nesting becomes invisible).
-    const c = theme.fnWrap;
-    lines.push(`  classDef fnWrap fill:${c.fill},stroke:${c.stroke};`);
-    for (const id of wrapperIds) {
-      lines.push(`  class ${id} fnWrap;`);
-    }
-  }
   if (stubIds.length > 0) {
     const c = theme.boundaryStub;
     lines.push(

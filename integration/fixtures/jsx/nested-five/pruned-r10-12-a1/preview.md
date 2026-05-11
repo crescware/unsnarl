@@ -50,8 +50,8 @@ flowchart RL
       ret_use_ref_6["v<br/>L12"]
     end
   end
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_return_scope_0_Main_54_151_331 nestL2;
 ```

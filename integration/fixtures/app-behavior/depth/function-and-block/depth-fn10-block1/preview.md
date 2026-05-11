@@ -57,12 +57,12 @@ flowchart RL
   n_scope_0_console_161 -.->|read| beyond_depth_s_scope_2
   n_scope_0_f1_58 -->|read,call| expr_stmt_220
   expr_stmt_220["f1()<br/>L19"]
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
   classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
   class beyond_depth_s_scope_2 boundaryStub;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
-  class s_scope_2 nestL2;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
 ```

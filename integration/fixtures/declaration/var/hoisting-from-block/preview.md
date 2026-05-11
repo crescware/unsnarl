@@ -33,6 +33,6 @@ flowchart RL
   expr_stmt_46["console.log()<br/>L5"]
   classDef varNode stroke-dasharray:5 5;
   class n_scope_0_y_37 varNode;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
 ```

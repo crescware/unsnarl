@@ -2,9 +2,9 @@ import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { emitNode } from "./emit-node.js";
 import { emitSubgraph } from "./emit-subgraph.js";
+import { recordNestSlot } from "./record-nest-slot.js";
 import type { RenderState } from "./render-state.js";
 import { subgraphLabel } from "./subgraph-label.js";
-import { nestPaletteIndex } from "./theme/nest-palette-index.js";
 
 export function emitPlainSubgraph(
   state: RenderState,
@@ -46,22 +46,4 @@ export function emitPlainSubgraph(
     }
   }
   state.lines.push(`${indent}end`);
-}
-
-function recordNestSlot(
-  state: RenderState,
-  subgraphId: string,
-  depth: number,
-): void {
-  const paletteLength = state.theme.nestPalette.length;
-  if (paletteLength === 0) {
-    return;
-  }
-  const slot = nestPaletteIndex(depth, paletteLength);
-  const existing = state.nestClassMap.get(slot);
-  if (existing === undefined) {
-    state.nestClassMap.set(slot, [subgraphId]);
-    return;
-  }
-  existing.push(subgraphId);
 }

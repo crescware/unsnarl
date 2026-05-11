@@ -8,10 +8,10 @@ export type RenderState = Readonly<{
   wrappedOwnerIds: ReadonlySet<string>;
   edgeEndpointIds: ReadonlySet<string>;
   placeholderIds: /* mutable */ string[];
-  wrapperIds: /* mutable */ string[];
-  // Subgraph ids grouped by 0-based palette slot. Filled as plain
-  // subgraphs are emitted with their depth; consumed by renderClassDefs
-  // to emit the per-level `classDef nestL<n>` / `class ... nestL<n>` rows.
+  // Subgraph ids grouped by 0-based palette slot. Filled as subgraphs
+  // (including function wrappers) are emitted with their depth; consumed
+  // by renderClassDefs to emit the per-level `classDef nestL<n>` /
+  // `class ... nestL<n>` rows.
   nestClassMap: /* mutable */ Map<number, /* mutable */ string[]>;
   strategy: MermaidStrategy;
   theme: ColorTheme;

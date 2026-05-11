@@ -47,9 +47,9 @@ flowchart RL
   wr_ref_4 -->|fallthrough| wr_ref_5
   n_scope_0_kind_22 -->|read| switch_discriminant_scope_0_35
   wr_ref_5 -->|read| n_scope_0_result_157
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_2 nestL2;
   class s_scope_3 nestL2;
   class s_scope_4 nestL2;

@@ -29,7 +29,6 @@ describe("emitSubgraph", () => {
     emitSubgraph(state, sg, "  ", 1);
     expect(state.lines[0]).toEqual('  subgraph wrap_s_fn[" "]');
     expect(state.lines[1]).toEqual("    direction TB");
-    expect(state.wrapperIds).toEqual(["wrap_s_fn"]);
     // Wrapper closes after the inner subgraph closes.
     expect(state.lines.at(-1)).toEqual("  end");
   });
@@ -43,7 +42,6 @@ describe("emitSubgraph", () => {
       ownerNodeId: "n_missing",
     };
     emitSubgraph(state, sg, "  ", 1);
-    expect(state.wrapperIds).toEqual([]);
     expect(state.lines.some((v) => v.startsWith('  subgraph s_fn["'))).toEqual(
       true,
     );
@@ -57,13 +55,12 @@ describe("emitSubgraph", () => {
       "  ",
       1,
     );
-    expect(state.wrapperIds).toEqual([]);
     expect(state.lines.some((v) => v.startsWith('  subgraph s_if["'))).toEqual(
       true,
     );
   });
 
-  test("the function wrapper does NOT increment depth for its body subgraph", () => {
+  test("function wrapper sits one palette slot above its body subgraph", () => {
     const owner = {
       ...baseNode(),
       id: "n_owner",
@@ -81,10 +78,11 @@ describe("emitSubgraph", () => {
       ownerNodeId: "n_owner",
     };
     emitSubgraph(state, sg, "  ", 2);
-    // The wrapper is fnWrap-classed, not nest-classed, so it does not
-    // occupy a palette slot; the body subgraph inherits depth 2.
-    expect(state.nestClassMap.get(0)).toEqual(undefined);
-    expect(state.nestClassMap.get(1)).toEqual(["s_fn"]);
+    // Slot 1 corresponds to depth 2 (wrap), slot 2 to depth 3 (body).
+    // The wrapper and body must land on different slots so they render
+    // as distinct brightness levels.
+    expect(state.nestClassMap.get(1)).toEqual(["wrap_s_fn"]);
+    expect(state.nestClassMap.get(2)).toEqual(["s_fn"]);
   });
 
   test("the owner node line appears INSIDE the wrapper, before the function body subgraph", () => {

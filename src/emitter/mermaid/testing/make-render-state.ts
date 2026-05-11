@@ -10,7 +10,6 @@ export function baseRenderState(): RenderState {
     wrappedOwnerIds: new Set<string>(),
     edgeEndpointIds: new Set<string>(),
     placeholderIds: [],
-    wrapperIds: [],
     nestClassMap: new Map<number, string[]>(),
     strategy: baseStrategy(),
     theme: darkTheme,

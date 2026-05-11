@@ -39,7 +39,7 @@ function baseLabel(n: VisualNode): string {
   }
   // Unused declarations are surfaced via a textual prefix instead of a
   // dashed border. This keeps the visual cue legible even when the node
-  // already has another classDef applied (boundary stub, fnWrap, ...).
+  // already has another classDef applied (boundary stub, nest level, ...).
   const prefixed = n.unused ? `unused ${head}` : head;
   const range =
     n.endLine !== null && n.endLine !== n.line

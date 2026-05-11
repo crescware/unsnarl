@@ -22,8 +22,8 @@ flowchart RL
     end
   end
   n_scope_0_foo_9 -->|read,call| expr_stmt_19
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
 ```

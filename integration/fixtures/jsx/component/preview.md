@@ -60,13 +60,13 @@ flowchart RL
   n_scope_0_App_196 -->|read| n_scope_0_root_237
   mod_react["module react<br/>L1"]
   mod_react -->|read| n_scope_0_Fragment_9
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  class wrap_s_scope_2 fnWrap;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
-  class s_scope_2 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
-  class s_return_scope_0_Hello_79_105_187 nestL2;
-  class s_return_scope_0_App_196_208_228 nestL2;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  class wrap_s_scope_2 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_2 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_0_Hello_79_105_187 nestL3;
+  class s_return_scope_0_App_196_208_228 nestL3;
 ```

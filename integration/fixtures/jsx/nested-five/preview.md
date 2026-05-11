@@ -81,10 +81,10 @@ flowchart RL
   mod_components -->|read| n_scope_0_C_15
   mod_components -->|read| n_scope_0_D_18
   mod_components -->|read| n_scope_0_E_21
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
-  class s_return_scope_0_Main_54_151_331 nestL2;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_0_Main_54_151_331 nestL3;
 ```

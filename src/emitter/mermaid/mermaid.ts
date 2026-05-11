@@ -34,10 +34,11 @@ type MermaidEmitterOptions = Readonly<{
    */
   strategy: MermaidStrategy;
   /**
-   * Color theme for every `classDef` emitted by the diagram (fnWrap,
-   * boundaryStub, varNode, the strategy's elkEmptyPlaceholder, and the
-   * per-depth nest palette). Required so callers must make this choice
-   * explicitly — the default lives at the CLI / pipeline-default boundary.
+   * Color theme for every `classDef` emitted by the diagram (boundaryStub,
+   * varNode, the strategy's elkEmptyPlaceholder, and the per-depth nest
+   * palette that also covers function wrappers). Required so callers
+   * must make this choice explicitly — the default lives at the CLI /
+   * pipeline-default boundary.
    */
   theme: ColorTheme;
 }>;
@@ -107,7 +108,6 @@ function renderMermaid(
     wrappedOwnerIds,
     edgeEndpointIds,
     placeholderIds: [],
-    wrapperIds: [],
     nestClassMap: new Map<number, string[]>(),
     strategy,
     theme,
@@ -142,14 +142,7 @@ function renderMermaid(
   collectBeyondDepthStubIds(nodeMap, stubIds);
 
   const varIds = collectVarNodeIds(nodeMap);
-  renderClassDefs(
-    state.wrapperIds,
-    stubIds,
-    varIds,
-    state.nestClassMap,
-    theme,
-    lines,
-  );
+  renderClassDefs(stubIds, varIds, state.nestClassMap, theme, lines);
 
   for (const l of strategy.trailerLines(state.placeholderIds, theme)) {
     lines.push(l);

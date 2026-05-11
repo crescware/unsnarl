@@ -42,13 +42,13 @@ flowchart RL
   n_scope_0_Error_46 -->|read,call| module_root
   wr_ref_1 -->|read| ret_use_ref_2
   module_root((module))
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
-  class s_scope_2 nestL2;
-  class s_scope_3 nestL2;
-  classDef nestL3 fill:#283952,stroke:#51637d;
-  class s_return_scope_0_g_9_102_111 nestL3;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+  class s_scope_3 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_return_scope_0_g_9_102_111 nestL4;
 ```

@@ -94,8 +94,8 @@ flowchart RL
   class boundary_stub_3 boundaryStub;
   class boundary_stub_4 boundaryStub;
   class boundary_stub_5 boundaryStub;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_return_scope_0_Main_54_151_331 nestL2;
 ```

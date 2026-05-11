@@ -81,20 +81,20 @@ flowchart RL
   wr_ref_2 -->|read| ret_use_ref_5
   wr_ref_3 -->|read| ret_use_ref_5
   wr_ref_4 -->|read| ret_use_ref_5
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
-  class s_scope_1 nestL1;
-  classDef nestL2 fill:#233045,stroke:#475670;
-  class s_scope_2 nestL2;
-  class s_return_scope_0_getDayType_9_308_319 nestL2;
-  classDef nestL3 fill:#283952,stroke:#51637d;
-  class s_scope_3 nestL3;
-  class s_scope_4 nestL3;
-  class s_scope_5 nestL3;
-  class s_scope_6 nestL3;
-  class s_scope_7 nestL3;
-  class s_scope_8 nestL3;
-  class s_scope_9 nestL3;
-  class s_scope_10 nestL3;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+  class s_return_scope_0_getDayType_9_308_319 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_3 nestL4;
+  class s_scope_4 nestL4;
+  class s_scope_5 nestL4;
+  class s_scope_6 nestL4;
+  class s_scope_7 nestL4;
+  class s_scope_8 nestL4;
+  class s_scope_9 nestL4;
+  class s_scope_10 nestL4;
 ```
