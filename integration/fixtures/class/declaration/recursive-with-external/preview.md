@@ -26,4 +26,6 @@ flowchart RL
   n_scope_1_C_6 -->|read,call| expr_stmt_22
   n_scope_0_C_6 -->|read,call| expr_stmt_38
   expr_stmt_38["new C()<br/>L7"]
+  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  class s_scope_2 nestL1;
 ```

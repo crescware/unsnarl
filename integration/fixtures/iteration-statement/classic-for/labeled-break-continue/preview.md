@@ -44,4 +44,12 @@ flowchart RL
   n_scope_0_console_151 -->|read| expr_stmt_151
   wr_ref_2 -->|read| expr_stmt_151
   wr_ref_5 -->|read| expr_stmt_151
+  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#233045,stroke:#475670;
+  class s_scope_2 nestL2;
+  classDef nestL3 fill:#283952,stroke:#51637d;
+  class s_scope_3 nestL3;
+  classDef nestL4 fill:#2d425f,stroke:#5b708a;
+  class s_scope_4 nestL4;
 ```

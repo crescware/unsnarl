@@ -90,4 +90,20 @@ flowchart RL
   n_scope_0_x_6 -->|read| switch_discriminant_scope_10_229
   n_scope_0_console_296 -->|read| expr_stmt_296
   n_scope_0_x_6 -->|read| expr_stmt_296
+  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  class s_scope_1 nestL1;
+  class s_scope_5 nestL1;
+  class s_scope_9 nestL1;
+  classDef nestL2 fill:#233045,stroke:#475670;
+  class s_scope_2 nestL2;
+  class s_scope_6 nestL2;
+  class s_scope_10 nestL2;
+  classDef nestL3 fill:#283952,stroke:#51637d;
+  class s_scope_3 nestL3;
+  class s_scope_7 nestL3;
+  class s_scope_11 nestL3;
+  classDef nestL4 fill:#2d425f,stroke:#5b708a;
+  class s_scope_4 nestL4;
+  class s_scope_8 nestL4;
+  class s_scope_12 nestL4;
 ```

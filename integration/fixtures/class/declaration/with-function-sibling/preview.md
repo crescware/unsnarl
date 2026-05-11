@@ -47,4 +47,8 @@ flowchart RL
   n_scope_0_total_94 -->|read| n_scope_0_result_144
   classDef fnWrap fill:#1a2030,stroke:#5a7d99;
   class wrap_s_scope_1 fnWrap;
+  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#233045,stroke:#475670;
+  class s_return_scope_0_add_9_39_52 nestL2;
 ```

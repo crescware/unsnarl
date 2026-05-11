@@ -113,4 +113,20 @@ flowchart RL
   class wrap_s_scope_4 fnWrap;
   class wrap_s_scope_5 fnWrap;
   class wrap_s_scope_6 fnWrap;
+  classDef nestL1 fill:#1e2738,stroke:#3d4a63;
+  class s_scope_1 nestL1;
+  class s_scope_5 nestL1;
+  class s_return_scope_3_f4_69_226_238 nestL1;
+  classDef nestL2 fill:#233045,stroke:#475670;
+  class s_scope_2 nestL2;
+  class s_scope_6 nestL2;
+  class s_return_scope_4_f5_93_195_207 nestL2;
+  class s_return_scope_0_f1_9_295_307 nestL2;
+  classDef nestL3 fill:#283952,stroke:#51637d;
+  class s_scope_3 nestL3;
+  class s_return_scope_5_f6_119_163_172 nestL3;
+  class s_return_scope_1_f2_27_276_288 nestL3;
+  classDef nestL4 fill:#2d425f,stroke:#5b708a;
+  class s_scope_4 nestL4;
+  class s_return_scope_2_f3_47_253_265 nestL4;
 ```

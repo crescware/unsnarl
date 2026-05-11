@@ -8,6 +8,7 @@ export function emitSubgraph(
   state: RenderState,
   sg: VisualSubgraph,
   indent: string,
+  depth: number,
 ): void {
   if (sg.kind === SUBGRAPH_KIND.Function && sg.ownerNodeId !== null) {
     const ownerNode = state.nodeMap.get(sg.ownerNodeId) ?? null;
@@ -25,10 +26,13 @@ export function emitSubgraph(
       const wrapIndent = `${indent}  `;
       state.lines.push(`${wrapIndent}direction TB`);
       emitNode(state, ownerNode, wrapIndent);
-      emitPlainSubgraph(state, sg, wrapIndent);
+      // The wrapper itself takes the fnWrap class (not a depth color), so
+      // the body subgraph inside inherits the SAME depth slot that the
+      // wrapper would have occupied -- it does not increment.
+      emitPlainSubgraph(state, sg, wrapIndent, depth);
       state.lines.push(`${indent}end`);
       return;
     }
   }
-  emitPlainSubgraph(state, sg, indent);
+  emitPlainSubgraph(state, sg, indent, depth);
 }

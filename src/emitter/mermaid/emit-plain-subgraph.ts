@@ -4,15 +4,18 @@ import { emitNode } from "./emit-node.js";
 import { emitSubgraph } from "./emit-subgraph.js";
 import type { RenderState } from "./render-state.js";
 import { subgraphLabel } from "./subgraph-label.js";
+import { nestPaletteIndex } from "./theme/nest-palette-index.js";
 
 export function emitPlainSubgraph(
   state: RenderState,
   sg: VisualSubgraph,
   indent: string,
+  depth: number,
 ): void {
   state.lines.push(
     `${indent}subgraph ${sg.id}["${subgraphLabel(sg, state.nodeMap, state.debug)}"]`,
   );
+  recordNestSlot(state, sg.id, depth);
   const childIndent = `${indent}  `;
   state.lines.push(`${childIndent}direction ${sg.direction}`);
   let emittedChildren = 0;
@@ -27,7 +30,7 @@ export function emitPlainSubgraph(
   }
   for (const e of sg.elements) {
     if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
-      emitSubgraph(state, e, childIndent);
+      emitSubgraph(state, e, childIndent, depth + 1);
       emittedChildren++;
     }
   }
@@ -43,4 +46,22 @@ export function emitPlainSubgraph(
     }
   }
   state.lines.push(`${indent}end`);
+}
+
+function recordNestSlot(
+  state: RenderState,
+  subgraphId: string,
+  depth: number,
+): void {
+  const paletteLength = state.theme.nestPalette.length;
+  if (paletteLength === 0) {
+    return;
+  }
+  const slot = nestPaletteIndex(depth, paletteLength);
+  const existing = state.nestClassMap.get(slot);
+  if (existing === undefined) {
+    state.nestClassMap.set(slot, [subgraphId]);
+    return;
+  }
+  existing.push(subgraphId);
 }
