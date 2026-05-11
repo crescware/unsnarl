@@ -44,4 +44,9 @@ flowchart RL
   n_scope_0_counter_4 -->|set| wr_ref_4
   wr_ref_3 -->|read| n_scope_0_result_97
   wr_ref_4 -->|read| n_scope_0_result_97
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_if_scope_0_37 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_2 nestL2;
 ```

@@ -132,6 +132,63 @@ describe("runCli (integration)", () => {
     expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
   });
 
+  test("--color-theme omitted matches --color-theme dark (dark is the default)", async () => {
+    const inputPath = join(tmpDir, "theme-default.ts");
+    writeFileSync(inputPath, "function f() { return 1; }\n");
+    const dark = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "dark",
+      inputPath,
+    ]);
+    const omitted = await captureRun(["--format", "mermaid", inputPath]);
+    expect(dark.exitCode).toEqual(0);
+    expect(omitted.exitCode).toEqual(0);
+    expect(omitted.stdout).toEqual(dark.stdout);
+    // Sanity check: the nest palette actually fires for this input.
+    expect(dark.stdout).toMatch(/classDef nestL1 /);
+  });
+
+  test("--color-theme light produces a different nest palette than --color-theme dark", async () => {
+    const inputPath = join(tmpDir, "theme-switch.ts");
+    writeFileSync(inputPath, "function f() { return 1; }\n");
+    const dark = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "dark",
+      inputPath,
+    ]);
+    const light = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "light",
+      inputPath,
+    ]);
+    expect(dark.exitCode).toEqual(0);
+    expect(light.exitCode).toEqual(0);
+    // Both themes emit nestL1, but the body of that classDef differs.
+    expect(dark.stdout).toMatch(/classDef nestL1 /);
+    expect(light.stdout).toMatch(/classDef nestL1 /);
+    expect(light.stdout).not.toEqual(dark.stdout);
+  });
+
+  test("--color-theme with an unknown value exits with 2", async () => {
+    const inputPath = join(tmpDir, "theme-invalid.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--color-theme",
+      "neon",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(2);
+    expect(r.stderr).toMatch(/Invalid color theme: neon/);
+  });
+
   test("--mermaid-renderer omitted falls back to elk", async () => {
     const inputPath = join(tmpDir, "renderer-default.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");

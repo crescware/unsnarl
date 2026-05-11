@@ -40,6 +40,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-f`  | `--format <id>`          | Emitter: `mermaid` default, `ir`, `json`, `markdown`, `stats` |
 |       | `--no-pretty-json`       | Disable pretty-printed JSON output                            |
 |       | `--mermaid-renderer <r>` | Mermaid layout engine: `elk` default, `dagre`                 |
+|       | `--color-theme <t>`      | Mermaid color theme: `dark` default, `light`                  |
 |       | `--stdin`                | Read source from stdin                                        |
 |       | `--stdin-lang <lang>`    | Language for stdin: `ts` default, `tsx`, `js`, `jsx`          |
 | `-r`  | `--roots <queries>`      | Comma-separated root queries (repeatable) — see Pruning       |
@@ -58,6 +59,19 @@ The `mermaid` and `markdown` emitters use `elk` for layout by default.
 Pass `--mermaid-renderer dagre` to fall back to dagre — required in
 environments that can't register the elk loader (e.g. GitHub's markdown
 preview).
+
+### Color theme
+
+The Mermaid output is colored for a dark background by default. Pass
+`--color-theme light` to switch every `classDef` (boundary stub,
+var node, per-depth subgraph palette covering function wrappers, and
+the elk empty-placeholder workaround) to a palette tuned for light
+backgrounds. The two built-in themes are `dark` and `light`; the
+background cannot be auto-detected, so the choice is always explicit.
+
+```sh
+uns -f mermaid --color-theme light file.ts
+```
 
 ### Pruning the visual graph
 

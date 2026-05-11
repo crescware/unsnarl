@@ -32,6 +32,7 @@ export async function runCli(argv: readonly string[]): Promise<number> {
 
     const emitters = createConfiguredEmitterRegistry({
       mermaidRenderer: normalized.mermaidRenderer ?? CLI_MERMAID_RENDERER.Elk,
+      colorTheme: normalized.colorTheme,
     });
     const outputPath = resolveOutputPath(src, normalized, emitters);
     const { text, runOpts } = buildRunOpts(src, normalized);

@@ -60,4 +60,11 @@ flowchart RL
   wr_ref_4 -->|read| n_scope_0_result_210
   wr_ref_5 -->|read| n_scope_0_result_210
   wr_ref_6 -->|read| n_scope_0_result_210
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
+  class s_scope_3 nestL2;
+  class s_scope_4 nestL2;
+  class s_scope_5 nestL2;
 ```

@@ -2,12 +2,14 @@ import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { emitNode } from "./emit-node.js";
 import { emitPlainSubgraph } from "./emit-plain-subgraph.js";
+import { recordNestSlot } from "./record-nest-slot.js";
 import type { RenderState } from "./render-state.js";
 
 export function emitSubgraph(
   state: RenderState,
   sg: VisualSubgraph,
   indent: string,
+  depth: number,
 ): void {
   if (sg.kind === SUBGRAPH_KIND.Function && sg.ownerNodeId !== null) {
     const ownerNode = state.nodeMap.get(sg.ownerNodeId) ?? null;
@@ -20,15 +22,20 @@ export function emitSubgraph(
       // The wrapper exists purely to keep these two siblings adjacent in
       // the rendered diagram.
       const wrapId = `wrap_${sg.id}`;
-      state.wrapperIds.push(wrapId);
+      // The wrapper sits one palette slot ABOVE the body so the two
+      // nested rectangles read as different brightness levels. Without
+      // that contrast the wrapper visually merges with its body and
+      // the function-vs-body boundary disappears. body depth = wrap
+      // depth + 1 keeps the gradient monotonic.
+      recordNestSlot(state, wrapId, depth);
       state.lines.push(`${indent}subgraph ${wrapId}[" "]`);
       const wrapIndent = `${indent}  `;
       state.lines.push(`${wrapIndent}direction TB`);
       emitNode(state, ownerNode, wrapIndent);
-      emitPlainSubgraph(state, sg, wrapIndent);
+      emitPlainSubgraph(state, sg, wrapIndent, depth + 1);
       state.lines.push(`${indent}end`);
       return;
     }
   }
-  emitPlainSubgraph(state, sg, indent);
+  emitPlainSubgraph(state, sg, indent, depth);
 }

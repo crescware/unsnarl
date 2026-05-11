@@ -20,6 +20,7 @@ import { renderTopLevelNodes } from "./render-top-level-nodes.js";
 import { renderTopLevelSubgraphs } from "./render-top-level-subgraphs.js";
 import { splitEdges } from "./split-edges.js";
 import type { MermaidStrategy } from "./strategy/strategy.js";
+import type { ColorTheme } from "./theme/color-theme.js";
 
 type MermaidEmitterOptions = Readonly<{
   /**
@@ -32,6 +33,14 @@ type MermaidEmitterOptions = Readonly<{
    * See `dagreStrategy` / `elkStrategy` in `./mermaid-strategy.js`.
    */
   strategy: MermaidStrategy;
+  /**
+   * Color theme for every `classDef` emitted by the diagram (boundaryStub,
+   * varNode, the strategy's elkEmptyPlaceholder, and the per-depth nest
+   * palette that also covers function wrappers). Required so callers
+   * must make this choice explicitly — the default lives at the CLI /
+   * pipeline-default boundary.
+   */
+  theme: ColorTheme;
 }>;
 
 export class MermaidEmitter implements Emitter {
@@ -40,22 +49,25 @@ export class MermaidEmitter implements Emitter {
   readonly extension = "mmd";
 
   private readonly strategy: MermaidStrategy;
+  private readonly theme: ColorTheme;
 
   constructor(options: MermaidEmitterOptions) {
     this.strategy = options.strategy;
+    this.theme = options.theme;
   }
 
   emit(ir: SerializedIR, opts: EmitOptions): string {
     const graph =
       opts.prunedGraph ??
       buildVisualGraph(ir, opts.depths ? { depths: opts.depths } : undefined);
-    return renderMermaid(graph, this.strategy, opts.debug);
+    return renderMermaid(graph, this.strategy, this.theme, opts.debug);
   }
 }
 
 function renderMermaid(
   graph: VisualGraph,
   strategy: MermaidStrategy,
+  theme: ColorTheme,
   debug: boolean,
 ): string {
   // The strategy decides which renderer-specific lines (e.g. the elk init
@@ -96,8 +108,9 @@ function renderMermaid(
     wrappedOwnerIds,
     edgeEndpointIds,
     placeholderIds: [],
-    wrapperIds: [],
+    nestClassMap: new Map<number, string[]>(),
     strategy,
+    theme,
     debug,
   } as const satisfies RenderState;
 
@@ -129,9 +142,9 @@ function renderMermaid(
   collectBeyondDepthStubIds(nodeMap, stubIds);
 
   const varIds = collectVarNodeIds(nodeMap);
-  renderClassDefs(state.wrapperIds, stubIds, varIds, lines);
+  renderClassDefs(stubIds, varIds, state.nestClassMap, theme, lines);
 
-  for (const l of strategy.trailerLines(state.placeholderIds)) {
+  for (const l of strategy.trailerLines(state.placeholderIds, theme)) {
     lines.push(l);
   }
 

@@ -69,7 +69,21 @@ flowchart RL
   n_scope_5_n_171 -->|read| ret_use_ref_7
   mod_react["module react<br/>L1"]
   mod_react -->|read| n_scope_0_useCallback_9
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
-  class wrap_s_scope_4 fnWrap;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+  class wrap_s_scope_4 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_3 nestL4;
+  class s_return_scope_0_C_44_101_122 nestL4;
+  class s_scope_4 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_0_C_44_116_121 nestL5;
+  class s_scope_5 nestL5;
+  class s_return_scope_1_fnB_137_162_183 nestL5;
+  classDef nestL6 fill:#3f5175,stroke:transparent;
+  class s_return_scope_1_fnB_137_177_182 nestL6;
 ```

@@ -5,6 +5,7 @@ import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
 import { MermaidEmitter } from "../emitter/mermaid/mermaid.js";
 import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
+import { darkTheme } from "../emitter/mermaid/theme/dark-theme.js";
 import { createDefaultEmitterRegistry } from "./create-default-emitter-registry.js";
 
 vi.mock("../emitter/ir/ir.js", () => ({
@@ -75,8 +76,11 @@ describe("createDefaultEmitterRegistry", () => {
     expect(markdownConstructor).toHaveBeenCalledWith(mermaidInstance);
   });
 
-  test("defaults to the elk strategy", () => {
+  test("defaults to the elk strategy and the dark color theme", () => {
     createDefaultEmitterRegistry();
-    expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: elkStrategy });
+    expect(MermaidEmitter).toHaveBeenCalledWith({
+      strategy: elkStrategy,
+      theme: darkTheme,
+    });
   });
 });

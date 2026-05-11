@@ -30,4 +30,6 @@ flowchart RL
   n_scope_0_flag_23 -->|read| if_test_scope_0_37
   wr_ref_3 -->|read| n_scope_0_result_73
   n_scope_0_counter_4 -->|read| n_scope_0_result_73
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
 ```

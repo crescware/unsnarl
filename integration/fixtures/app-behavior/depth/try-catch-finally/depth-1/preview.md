@@ -68,6 +68,11 @@ flowchart RL
   n_scope_11_e2_453 -->|read| expr_stmt_468
   n_scope_0_console_103 -->|read| expr_stmt_520
   n_scope_12_e1_507 -->|read| expr_stmt_520
-  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
   class beyond_depth_s_scope_1 boundaryStub;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  class s_scope_12 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_11 nestL2;
 ```

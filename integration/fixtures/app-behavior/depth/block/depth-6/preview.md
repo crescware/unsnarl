@@ -73,4 +73,16 @@ flowchart RL
   n_scope_4_v4_90 -->|read| expr_stmt_185
   n_scope_5_v5_125 -->|read| expr_stmt_185
   n_scope_6_v6_164 -->|read| expr_stmt_185
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_3 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_4 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_scope_5 nestL5;
+  classDef nestL6 fill:#3f5175,stroke:transparent;
+  class s_scope_6 nestL6;
 ```

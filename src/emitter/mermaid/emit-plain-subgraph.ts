@@ -2,6 +2,7 @@ import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { emitNode } from "./emit-node.js";
 import { emitSubgraph } from "./emit-subgraph.js";
+import { recordNestSlot } from "./record-nest-slot.js";
 import type { RenderState } from "./render-state.js";
 import { subgraphLabel } from "./subgraph-label.js";
 
@@ -9,10 +10,12 @@ export function emitPlainSubgraph(
   state: RenderState,
   sg: VisualSubgraph,
   indent: string,
+  depth: number,
 ): void {
   state.lines.push(
     `${indent}subgraph ${sg.id}["${subgraphLabel(sg, state.nodeMap, state.debug)}"]`,
   );
+  recordNestSlot(state, sg.id, depth);
   const childIndent = `${indent}  `;
   state.lines.push(`${childIndent}direction ${sg.direction}`);
   let emittedChildren = 0;
@@ -27,7 +30,7 @@ export function emitPlainSubgraph(
   }
   for (const e of sg.elements) {
     if (e.type === VISUAL_ELEMENT_TYPE.Subgraph) {
-      emitSubgraph(state, e, childIndent);
+      emitSubgraph(state, e, childIndent, depth + 1);
       emittedChildren++;
     }
   }

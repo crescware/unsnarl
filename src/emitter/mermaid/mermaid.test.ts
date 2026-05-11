@@ -8,10 +8,39 @@ import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
 import { MermaidEmitter } from "./mermaid.js";
 import { dagreStrategy } from "./strategy/dagre-strategy.js";
 import { elkStrategy } from "./strategy/elk-strategy.js";
+import { darkTheme } from "./theme/dark-theme.js";
+import { lightTheme } from "./theme/light-theme.js";
 
 const parser = new OxcParser();
 const serializer = new FlatSerializer();
-const emitter = new MermaidEmitter({ strategy: elkStrategy });
+const emitter = new MermaidEmitter({ strategy: elkStrategy, theme: darkTheme });
+
+function emitWith(
+  code: string,
+  theme: typeof darkTheme,
+  language: Language = LANGUAGE.Ts,
+): string {
+  const parsed = parser.parse(code, {
+    language,
+    sourcePath: `input.${language}`,
+    sourceType: defaultSourceTypeFor(language),
+  });
+  const analyzed = runAnalysis(parsed);
+  const ir = serializer.serialize({
+    rootScope: analyzed.rootScope,
+    annotations: analyzed.annotations,
+    diagnostics: analyzed.diagnostics,
+    raw: analyzed.raw,
+    source: { path: `input.${language}`, language },
+  });
+  const e = new MermaidEmitter({ strategy: elkStrategy, theme });
+  return e.emit(ir, {
+    prettyJson: true,
+    prunedGraph: null,
+    resolutions: null,
+    debug: false,
+  });
+}
 
 function emit(code: string, language: Language = LANGUAGE.Ts): string {
   const parsed = parser.parse(code, {
@@ -49,7 +78,10 @@ describe("MermaidEmitter", () => {
   });
 
   test("renderer 'dagre' omits the init directive entirely (Mermaid's default)", () => {
-    const dagre = new MermaidEmitter({ strategy: dagreStrategy });
+    const dagre = new MermaidEmitter({
+      strategy: dagreStrategy,
+      theme: darkTheme,
+    });
     const parsed = parser.parse("const a = 1;\n", {
       language: LANGUAGE.Ts,
       sourcePath: "input.ts",
@@ -705,6 +737,49 @@ describe("MermaidEmitter rendering: import label prefix rule", () => {
 
   test("namespace imports get an 'import ' prefix on the local node", () => {
     expect(out).toMatch(/n_scope_0_ns_\d+\["import ns<br\/>L3"\]/);
+  });
+});
+
+describe("MermaidEmitter rendering: per-depth subgraph coloring", () => {
+  test("a top-level function wraps in nestL1 and its body subgraph picks up nestL2", () => {
+    // The wrapper consumes depth 1 (nestL1); its body subgraph sits one
+    // slot above at depth 2 (nestL2) so the wrapper and body render as
+    // distinct brightness levels.
+    const out = emit("function f() { return 1; }\n");
+    expect(out).toMatch(/^\s*classDef nestL1 /m);
+    expect(out).toMatch(/^\s*class wrap_s_scope_\d+ nestL1;/m);
+    expect(out).toMatch(/^\s*classDef nestL2 /m);
+    expect(out).toMatch(/^\s*class s_scope_\d+ nestL2;/m);
+  });
+
+  test("three levels of nested if subgraphs emit nestL1, nestL2, nestL3 rows", () => {
+    const code = [
+      "function f() {",
+      "  let v = 0;",
+      "  const a = 1;",
+      "  const b = 2;",
+      "  const c = 3;",
+      "  if (a) {",
+      "    if (b) {",
+      "      if (c) {",
+      "        v = 1;",
+      "      }",
+      "    }",
+      "  }",
+      "  return v;",
+      "}",
+    ].join("\n");
+    const out = emit(code);
+    expect(out).toMatch(/^\s*classDef nestL1 /m);
+    expect(out).toMatch(/^\s*classDef nestL2 /m);
+    expect(out).toMatch(/^\s*classDef nestL3 /m);
+  });
+
+  test("light theme produces its own nest palette colors", () => {
+    const out = emitWith("function f() { return 1; }\n", lightTheme);
+    expect(out).toContain(
+      `  classDef nestL1 fill:${lightTheme.nestPalette[0]?.fill},stroke:${lightTheme.nestPalette[0]?.stroke};`,
+    );
   });
 });
 

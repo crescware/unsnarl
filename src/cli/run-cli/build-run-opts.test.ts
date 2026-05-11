@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import { SOURCE_TYPE } from "../../pipeline/parse/source-type.js";
 import { DEFAULT_GENERATIONS } from "../args/default-generations.js";
 import { defaultDepths } from "../args/depth-options.js";
@@ -18,6 +19,7 @@ const baseOpts = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

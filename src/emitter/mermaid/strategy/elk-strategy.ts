@@ -23,12 +23,13 @@ export const elkStrategy = {
     };
   },
 
-  trailerLines: (placeholderIds) => {
+  trailerLines: (placeholderIds, theme) => {
     if (placeholderIds.length === 0) {
       return [];
     }
+    const c = theme.elkEmptyPlaceholder;
     const out: /* mutable */ string[] = [
-      "  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent,color:transparent;",
+      `  classDef elkEmptyPlaceholder fill:${c.fill},stroke:${c.stroke},color:${c.color};`,
     ];
     for (const id of placeholderIds) {
       out.push(`  class ${id} elkEmptyPlaceholder;`);

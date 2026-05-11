@@ -20,4 +20,8 @@ flowchart RL
       direction RL
     end
   end
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
 ```

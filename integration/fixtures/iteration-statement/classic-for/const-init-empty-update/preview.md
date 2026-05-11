@@ -28,4 +28,8 @@ flowchart RL
   end
   n_scope_0_console_128 -->|read| expr_stmt_128
   n_scope_1_j_113 -->|read| expr_stmt_128
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
 ```

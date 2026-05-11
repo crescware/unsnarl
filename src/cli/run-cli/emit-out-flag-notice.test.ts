@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, test, vi } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import { defaultDepths } from "../args/depth-options.js";
 import { emitOutFlagNotice } from "./emit-out-flag-notice.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
@@ -10,6 +11,7 @@ const baseOpts = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

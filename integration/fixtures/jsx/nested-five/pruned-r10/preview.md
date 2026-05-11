@@ -84,4 +84,8 @@ flowchart RL
   mod_components -->|read| n_scope_0_C_15
   mod_components -->|read| n_scope_0_D_18
   mod_components -->|read| n_scope_0_E_21
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_return_scope_0_Main_54_151_331 nestL2;
 ```

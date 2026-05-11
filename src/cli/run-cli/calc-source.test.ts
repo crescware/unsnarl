@@ -1,6 +1,7 @@
 import type { Command } from "commander";
 import { beforeEach, describe, expect, test, vi } from "vitest";
 
+import { CLI_COLOR_THEME } from "../../cli-color-theme.js";
 import { defaultDepths } from "../args/depth-options.js";
 import { readStdin } from "../io.js";
 import { calcSource } from "./calc-source.js";
@@ -18,6 +19,7 @@ const baseOpts = {
   stdinLang: "ts",
   prettyJson: true,
   mermaidRenderer: null,
+  colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
   descendants: null,
   ancestors: null,

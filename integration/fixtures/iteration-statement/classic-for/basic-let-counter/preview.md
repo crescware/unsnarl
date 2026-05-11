@@ -28,4 +28,8 @@ flowchart RL
   n_scope_1_i_9 -->|read| for_test_scope_0_0
   n_scope_0_console_32 -->|read| expr_stmt_32
   wr_ref_2 -->|read| expr_stmt_32
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
 ```

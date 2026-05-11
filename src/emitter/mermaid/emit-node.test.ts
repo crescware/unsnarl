@@ -22,6 +22,6 @@ describe("emitNode", () => {
     const state = baseRenderState();
     emitNode(state, baseNode(), "  ");
     expect(state.placeholderIds).toEqual([]);
-    expect(state.wrapperIds).toEqual([]);
+    expect(state.nestClassMap.size).toEqual(0);
   });
 });

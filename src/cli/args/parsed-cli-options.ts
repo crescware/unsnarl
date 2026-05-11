@@ -1,3 +1,4 @@
+import type { CliColorTheme } from "../../cli-color-theme.js";
 import type { CliMermaidRenderer } from "../../cli-mermaid-renderer.js";
 import type { CliLanguage } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
@@ -8,6 +9,7 @@ export type ParsedCliOptions = Readonly<{
   stdinLang: CliLanguage;
   prettyJson: boolean;
   mermaidRenderer: CliMermaidRenderer | null;
+  colorTheme: CliColorTheme;
   roots: readonly ParsedRootQuery[];
   descendants: number | null;
   ancestors: number | null;

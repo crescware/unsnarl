@@ -33,6 +33,10 @@ flowchart RL
   n_scope_1_v_21 -->|set| wr_ref_1
   wr_ref_1 -->|set| wr_ref_2
   wr_ref_2 -->|read| ret_use_ref_3
-  classDef fnWrap fill:#1a2030,stroke:#5a7d99;
-  class wrap_s_scope_1 fnWrap;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_0_f_9_48_57 nestL3;
 ```

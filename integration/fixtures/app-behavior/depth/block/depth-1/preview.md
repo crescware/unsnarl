@@ -43,6 +43,8 @@ flowchart RL
   end
   n_scope_1_v1_10 -.->|read| beyond_depth_s_scope_1
   n_scope_0_console_185 -.->|read| beyond_depth_s_scope_1
-  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
   class beyond_depth_s_scope_1 boundaryStub;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
 ```
