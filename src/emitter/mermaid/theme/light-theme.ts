@@ -2,7 +2,6 @@ import type { ColorTheme } from "./color-theme.js";
 
 export const lightTheme: ColorTheme = {
   boundaryStub: {
-    fill: "transparent",
     stroke: "#555",
     strokeDasharray: "3 3",
     color: "#555",

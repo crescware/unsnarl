@@ -4,7 +4,6 @@ import { darkTheme } from "./dark-theme.js";
 
 describe("darkTheme", () => {
   test("boundaryStub keeps the original dark-mode literals", () => {
-    expect(darkTheme.boundaryStub.fill).toEqual("transparent");
     expect(darkTheme.boundaryStub.stroke).toEqual("#888");
     expect(darkTheme.boundaryStub.strokeDasharray).toEqual("3 3");
     expect(darkTheme.boundaryStub.color).toEqual("#888");

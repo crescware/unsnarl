@@ -11,8 +11,11 @@ export function renderClassDefs(
 ): void {
   if (stubIds.length > 0) {
     const c = theme.boundaryStub;
+    // No fill: stubs inherit the default Mermaid node background so
+    // they share a backdrop with regular nodes rather than letting
+    // the parent subgraph fill bleed through.
     lines.push(
-      `  classDef boundaryStub fill:${c.fill},stroke:${c.stroke},stroke-dasharray:${c.strokeDasharray},color:${c.color};`,
+      `  classDef boundaryStub stroke:${c.stroke},stroke-dasharray:${c.strokeDasharray},color:${c.color};`,
     );
     for (const id of stubIds) {
       lines.push(`  class ${id} boundaryStub;`);

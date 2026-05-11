@@ -33,6 +33,6 @@ flowchart RL
   n_scope_0_L12_6 -->|read| n_scope_0_beta_21
   boundary_stub_1((...))
   n_scope_0_beta_21 -.-> boundary_stub_1
-  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
   class boundary_stub_1 boundaryStub;
 ```

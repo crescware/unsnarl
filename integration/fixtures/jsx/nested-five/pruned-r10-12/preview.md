@@ -58,7 +58,7 @@ flowchart RL
   mod_components -->|read| n_scope_0_A_9
   boundary_stub_1((...))
   mod_components -.-> boundary_stub_1
-  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
   class boundary_stub_1 boundaryStub;
   classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;

@@ -64,7 +64,7 @@ flowchart RL
   n_scope_0_x_6 -->|read| switch_discriminant_scope_2_41
   n_scope_0_x_6 -.->|read| beyond_depth_s_scope_4
   n_scope_0_console_296 -.->|read| beyond_depth_s_scope_4
-  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
   class beyond_depth_s_scope_4 boundaryStub;
   classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;

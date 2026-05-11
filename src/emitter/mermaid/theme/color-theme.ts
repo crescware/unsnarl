@@ -4,8 +4,10 @@ type NestPaletteEntry = Readonly<{
 }>;
 
 export type ColorTheme = Readonly<{
+  // BoundaryStub deliberately omits `fill`: the stub should pick up
+  // the same background that regular Mermaid nodes use so the dashed
+  // circle does not "float" against its parent subgraph fill.
   boundaryStub: Readonly<{
-    fill: string;
     stroke: string;
     strokeDasharray: string;
     color: string;

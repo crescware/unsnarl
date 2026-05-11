@@ -13,11 +13,11 @@ describe("renderClassDefs", () => {
     expect(lines).toEqual([]);
   });
 
-  test("emits the boundaryStub classDef from the dark theme with the original literals (contract)", () => {
+  test("emits the boundaryStub classDef without a fill so stubs share the regular node background", () => {
     const lines: /* mutable */ string[] = [];
     renderClassDefs(["stub_1", "stub_2"], [], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([
-      "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
+      "  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;",
       "  class stub_1 boundaryStub;",
       "  class stub_2 boundaryStub;",
     ]);
@@ -37,7 +37,7 @@ describe("renderClassDefs", () => {
     const lines: /* mutable */ string[] = [];
     renderClassDefs(["stub_1"], ["v_one"], emptyNestMap, darkTheme, lines);
     expect(lines).toEqual([
-      "  classDef boundaryStub fill:transparent,stroke:#888,stroke-dasharray:3 3,color:#888;",
+      "  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;",
       "  class stub_1 boundaryStub;",
       "  classDef varNode stroke-dasharray:5 5;",
       "  class v_one varNode;",
@@ -48,7 +48,7 @@ describe("renderClassDefs", () => {
     const lines: /* mutable */ string[] = [];
     renderClassDefs(["stub_1"], [], emptyNestMap, lightTheme, lines);
     expect(lines).toContain(
-      `  classDef boundaryStub fill:${lightTheme.boundaryStub.fill},stroke:${lightTheme.boundaryStub.stroke},stroke-dasharray:${lightTheme.boundaryStub.strokeDasharray},color:${lightTheme.boundaryStub.color};`,
+      `  classDef boundaryStub stroke:${lightTheme.boundaryStub.stroke},stroke-dasharray:${lightTheme.boundaryStub.strokeDasharray},color:${lightTheme.boundaryStub.color};`,
     );
   });
 

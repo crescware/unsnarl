@@ -4,7 +4,6 @@ import { lightTheme } from "./light-theme.js";
 
 describe("lightTheme", () => {
   test("every classDef slot is populated", () => {
-    expect(lightTheme.boundaryStub.fill).not.toEqual("");
     expect(lightTheme.boundaryStub.stroke).not.toEqual("");
     expect(lightTheme.boundaryStub.strokeDasharray).not.toEqual("");
     expect(lightTheme.boundaryStub.color).not.toEqual("");

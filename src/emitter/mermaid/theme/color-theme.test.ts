@@ -8,7 +8,6 @@ describe("ColorTheme", () => {
   test("a hand-built theme value type-checks against ColorTheme", () => {
     const t: ColorTheme = {
       boundaryStub: {
-        fill: "transparent",
         stroke: "#888",
         strokeDasharray: "3 3",
         color: "#888",
