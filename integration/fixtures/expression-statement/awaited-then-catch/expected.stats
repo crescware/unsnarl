@@ -1,0 +1,19 @@
+1	0	integration/fixtures/expression-statement/awaited-then-catch/input.ts:0 Promise
+4	0	integration/fixtures/expression-statement/awaited-then-catch/input.ts:0 console
+0	0	integration/fixtures/expression-statement/awaited-then-catch/input.ts:1 unused run
+0	1	integration/fixtures/expression-statement/awaited-then-catch/input.ts:2 await Promise.resolve()
+    .then((value) => {
+      console.log("then handler", value);
+      console.log("then handler second line");
+    })
+    .catch((error) => {
+      console.error("catch handler", error);
+      console.error("catch handler second line");
+    })
+1	0	integration/fixtures/expression-statement/awaited-then-catch/input.ts:3 value
+0	2	integration/fixtures/expression-statement/awaited-then-catch/input.ts:4 console.log()
+0	1	integration/fixtures/expression-statement/awaited-then-catch/input.ts:5 console.log()
+1	0	integration/fixtures/expression-statement/awaited-then-catch/input.ts:7 error
+0	2	integration/fixtures/expression-statement/awaited-then-catch/input.ts:8 console.error()
+0	1	integration/fixtures/expression-statement/awaited-then-catch/input.ts:9 console.error()
+7	7	10 total
