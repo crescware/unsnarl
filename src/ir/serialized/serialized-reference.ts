@@ -1,6 +1,7 @@
 import type { Span } from "../primitive/span.js";
 import type { PredicateContainer } from "../reference/predicate-container.js";
 import type { ReferenceId, ScopeId, VariableId } from "./ids.js";
+import type { SerializedHeadExpression } from "./serialized-expression-statement-head.js";
 
 export type SerializedReference = Readonly<{
   id: ReferenceId;
@@ -21,8 +22,6 @@ export type SerializedReference = Readonly<{
   expressionStatementContainer: Readonly<{
     startSpan: Span;
     endSpan: Span;
-    headStartSpan: Span;
-    headEndSpan: Span;
-    isCall: boolean;
+    head: SerializedHeadExpression;
   }> | null;
 }>;

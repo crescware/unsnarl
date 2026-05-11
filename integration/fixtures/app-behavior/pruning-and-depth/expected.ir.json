@@ -713,17 +713,17 @@
           "column": 21,
           "offset": 109
         },
-        "headStartSpan": {
-          "line": 7,
-          "column": 6,
-          "offset": 94
-        },
-        "headEndSpan": {
-          "line": 7,
-          "column": 17,
-          "offset": 105
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -760,17 +760,17 @@
           "column": 21,
           "offset": 109
         },
-        "headStartSpan": {
-          "line": 7,
-          "column": 6,
-          "offset": 94
-        },
-        "headEndSpan": {
-          "line": 7,
-          "column": 17,
-          "offset": 105
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -807,17 +807,13 @@
           "column": 10,
           "offset": 155
         },
-        "headStartSpan": {
-          "line": 13,
-          "column": 2,
-          "offset": 147
-        },
-        "headEndSpan": {
-          "line": 13,
-          "column": 7,
-          "offset": 152
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "inner"
+          }
+        }
       }
     },
     {
@@ -854,17 +850,13 @@
           "column": 11,
           "offset": 209
         },
-        "headStartSpan": {
-          "line": 20,
-          "column": 0,
-          "offset": 198
-        },
-        "headEndSpan": {
-          "line": 20,
-          "column": 8,
-          "offset": 206
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "callerOf"
+          }
+        }
       }
     },
     {
@@ -901,17 +893,13 @@
           "column": 12,
           "offset": 222
         },
-        "headStartSpan": {
-          "line": 21,
-          "column": 0,
-          "offset": 210
-        },
-        "headEndSpan": {
-          "line": 21,
-          "column": 9,
-          "offset": 219
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "unrelated"
+          }
+        }
       }
     }
   ],

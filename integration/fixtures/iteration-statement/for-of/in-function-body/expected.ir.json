@@ -468,17 +468,17 @@
           "column": 19,
           "offset": 76
         },
-        "headStartSpan": {
-          "line": 4,
-          "column": 4,
-          "offset": 61
-        },
-        "headEndSpan": {
-          "line": 4,
-          "column": 15,
-          "offset": 72
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -515,17 +515,17 @@
           "column": 19,
           "offset": 76
         },
-        "headStartSpan": {
-          "line": 4,
-          "column": 4,
-          "offset": 61
-        },
-        "headEndSpan": {
-          "line": 4,
-          "column": 15,
-          "offset": 72
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     }
   ],

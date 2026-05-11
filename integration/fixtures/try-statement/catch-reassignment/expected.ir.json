@@ -372,17 +372,19 @@
           "column": 20,
           "offset": 97
         },
-        "headStartSpan": {
-          "line": 5,
-          "column": 4,
-          "offset": 81
-        },
-        "headEndSpan": {
-          "line": 5,
-          "column": 19,
-          "offset": 96
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 81
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 19,
+            "offset": 96
+          }
+        }
       }
     },
     {

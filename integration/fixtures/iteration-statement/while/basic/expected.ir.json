@@ -400,17 +400,17 @@
           "column": 21,
           "offset": 78
         },
-        "headStartSpan": {
-          "line": 4,
-          "column": 2,
-          "offset": 59
-        },
-        "headEndSpan": {
-          "line": 4,
-          "column": 13,
-          "offset": 70
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -447,17 +447,17 @@
           "column": 21,
           "offset": 78
         },
-        "headStartSpan": {
-          "line": 4,
-          "column": 2,
-          "offset": 59
-        },
-        "headEndSpan": {
-          "line": 4,
-          "column": 13,
-          "offset": 70
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -494,17 +494,19 @@
           "column": 10,
           "offset": 89
         },
-        "headStartSpan": {
-          "line": 5,
-          "column": 2,
-          "offset": 81
-        },
-        "headEndSpan": {
-          "line": 5,
-          "column": 9,
-          "offset": 88
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 5,
+            "column": 2,
+            "offset": 81
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 9,
+            "offset": 88
+          }
+        }
       }
     }
   ],

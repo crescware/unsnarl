@@ -490,17 +490,17 @@
           "column": 20,
           "offset": 84
         },
-        "headStartSpan": {
-          "line": 3,
-          "column": 2,
-          "offset": 66
-        },
-        "headEndSpan": {
-          "line": 3,
-          "column": 10,
-          "offset": 74
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "fns"
+            },
+            "property": "push"
+          }
+        }
       }
     },
     {
@@ -548,17 +548,17 @@
           "column": 20,
           "offset": 84
         },
-        "headStartSpan": {
-          "line": 3,
-          "column": 2,
-          "offset": 66
-        },
-        "headEndSpan": {
-          "line": 3,
-          "column": 10,
-          "offset": 74
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "fns"
+            },
+            "property": "push"
+          }
+        }
       }
     },
     {
@@ -595,17 +595,17 @@
           "column": 24,
           "offset": 111
         },
-        "headStartSpan": {
-          "line": 5,
-          "column": 0,
-          "offset": 87
-        },
-        "headEndSpan": {
-          "line": 5,
-          "column": 11,
-          "offset": 98
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -642,17 +642,17 @@
           "column": 24,
           "offset": 111
         },
-        "headStartSpan": {
-          "line": 5,
-          "column": 0,
-          "offset": 87
-        },
-        "headEndSpan": {
-          "line": 5,
-          "column": 11,
-          "offset": 98
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     }
   ],

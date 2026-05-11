@@ -872,17 +872,17 @@
           "column": 25,
           "offset": 176
         },
-        "headStartSpan": {
-          "line": 11,
-          "column": 10,
-          "offset": 161
-        },
-        "headEndSpan": {
-          "line": 11,
-          "column": 21,
-          "offset": 172
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -919,17 +919,17 @@
           "column": 25,
           "offset": 176
         },
-        "headStartSpan": {
-          "line": 11,
-          "column": 10,
-          "offset": 161
-        },
-        "headEndSpan": {
-          "line": 11,
-          "column": 21,
-          "offset": 172
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          }
+        }
       }
     },
     {
@@ -966,17 +966,13 @@
           "column": 11,
           "offset": 206
         },
-        "headStartSpan": {
-          "line": 14,
-          "column": 6,
-          "offset": 201
-        },
-        "headEndSpan": {
-          "line": 14,
-          "column": 8,
-          "offset": 203
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "f2"
+          }
+        }
       }
     },
     {
@@ -1013,17 +1009,13 @@
           "column": 5,
           "offset": 225
         },
-        "headStartSpan": {
-          "line": 19,
-          "column": 0,
-          "offset": 220
-        },
-        "headEndSpan": {
-          "line": 19,
-          "column": 2,
-          "offset": 222
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "f1"
+          }
+        }
       }
     }
   ],

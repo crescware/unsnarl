@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/awaited-then-catch/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_run_22",
+      "name": "run",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Promise_53",
+      "name": "Promise",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_100",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 11,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_run_22",
+      "ownerName": "run",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 3,
+          "endLine": 6,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_value_82",
+              "name": "value",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Parameter"
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_100",
+              "kind": "ExpressionStatement",
+              "name": "console.log()",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_142",
+              "kind": "ExpressionStatement",
+              "name": "console.log()",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "kind": "function",
+          "line": 7,
+          "endLine": 10,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_3_error_202",
+              "name": "error",
+              "line": 7,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Parameter"
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_220",
+              "kind": "ExpressionStatement",
+              "name": "console.error()",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "expr_stmt_265",
+              "kind": "ExpressionStatement",
+              "name": "console.error()",
+              "line": 9,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_47",
+          "kind": "ExpressionStatement",
+          "name": "await Promise.resolve().then().catch()",
+          "line": 2,
+          "endLine": 10,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Promise_53",
+      "to": "expr_stmt_47",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_100",
+      "to": "expr_stmt_100",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_value_82",
+      "to": "expr_stmt_100",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_100",
+      "to": "expr_stmt_142",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_100",
+      "to": "expr_stmt_220",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_error_202",
+      "to": "expr_stmt_220",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_100",
+      "to": "expr_stmt_265",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

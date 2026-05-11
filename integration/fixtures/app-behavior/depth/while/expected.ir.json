@@ -903,17 +903,19 @@
           "column": 7,
           "offset": 97
         },
-        "headStartSpan": {
-          "line": 9,
-          "column": 2,
-          "offset": 92
-        },
-        "headEndSpan": {
-          "line": 9,
-          "column": 6,
-          "offset": 96
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 9,
+            "column": 2,
+            "offset": 92
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 6,
+            "offset": 96
+          }
+        }
       }
     },
     {
@@ -978,17 +980,19 @@
           "column": 9,
           "offset": 126
         },
-        "headStartSpan": {
-          "line": 11,
-          "column": 4,
-          "offset": 121
-        },
-        "headEndSpan": {
-          "line": 11,
-          "column": 8,
-          "offset": 125
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 11,
+            "column": 4,
+            "offset": 121
+          },
+          "endSpan": {
+            "line": 11,
+            "column": 8,
+            "offset": 125
+          }
+        }
       }
     },
     {
@@ -1053,17 +1057,19 @@
           "column": 11,
           "offset": 159
         },
-        "headStartSpan": {
-          "line": 13,
-          "column": 6,
-          "offset": 154
-        },
-        "headEndSpan": {
-          "line": 13,
-          "column": 10,
-          "offset": 158
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 13,
+            "column": 6,
+            "offset": 154
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 10,
+            "offset": 158
+          }
+        }
       }
     },
     {
@@ -1128,17 +1134,19 @@
           "column": 13,
           "offset": 196
         },
-        "headStartSpan": {
-          "line": 15,
-          "column": 8,
-          "offset": 191
-        },
-        "headEndSpan": {
-          "line": 15,
-          "column": 12,
-          "offset": 195
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 15,
+            "column": 8,
+            "offset": 191
+          },
+          "endSpan": {
+            "line": 15,
+            "column": 12,
+            "offset": 195
+          }
+        }
       }
     },
     {
@@ -1203,17 +1211,19 @@
           "column": 15,
           "offset": 237
         },
-        "headStartSpan": {
-          "line": 17,
-          "column": 10,
-          "offset": 232
-        },
-        "headEndSpan": {
-          "line": 17,
-          "column": 14,
-          "offset": 236
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 17,
+            "column": 10,
+            "offset": 232
+          },
+          "endSpan": {
+            "line": 17,
+            "column": 14,
+            "offset": 236
+          }
+        }
       }
     },
     {
@@ -1278,17 +1288,19 @@
           "column": 17,
           "offset": 282
         },
-        "headStartSpan": {
-          "line": 19,
-          "column": 12,
-          "offset": 277
-        },
-        "headEndSpan": {
-          "line": 19,
-          "column": 16,
-          "offset": 281
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 19,
+            "column": 12,
+            "offset": 277
+          },
+          "endSpan": {
+            "line": 19,
+            "column": 16,
+            "offset": 281
+          }
+        }
       }
     }
   ],

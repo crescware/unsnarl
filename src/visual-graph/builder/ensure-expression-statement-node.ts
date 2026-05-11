@@ -5,6 +5,7 @@ import type { VisualElement } from "../visual-element.js";
 import type { VisualNode } from "../visual-node.js";
 import type { BuildState } from "./build-state.js";
 import { expressionStatementNodeId } from "./expression-statement-node-id.js";
+import { renderHeadExpression } from "./render-head-expression.js";
 
 export function ensureExpressionStatementNode(
   ref: SerializedReference,
@@ -22,8 +23,7 @@ export function ensureExpressionStatementNode(
     return existing;
   }
   const id = expressionStatementNodeId(offset);
-  const head = raw.slice(c.headStartSpan.offset, c.headEndSpan.offset);
-  const name = c.isCall ? `${head}()` : head;
+  const name = renderHeadExpression(c.head, raw);
   const startLine = c.startSpan.line;
   const endLine = c.endSpan.line !== startLine ? c.endSpan.line : null;
   const node = {
