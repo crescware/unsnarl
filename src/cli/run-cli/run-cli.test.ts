@@ -103,6 +103,43 @@ describe("runCli (integration)", () => {
     expect(r.stdout).toContain('"a<br/>');
   });
 
+  test("--mermaid-renderer dagre selects the dagre strategy (no elk init directive)", async () => {
+    const inputPath = join(tmpDir, "dagre.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--mermaid-renderer",
+      "dagre",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout.startsWith("flowchart ")).toEqual(true);
+    expect(r.stdout).not.toMatch(/^%%\{init:/);
+  });
+
+  test("--mermaid-renderer elk selects the elk strategy", async () => {
+    const inputPath = join(tmpDir, "elk-explicit.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const r = await captureRun([
+      "--format",
+      "mermaid",
+      "--mermaid-renderer",
+      "elk",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
+  });
+
+  test("--mermaid-renderer omitted falls back to elk", async () => {
+    const inputPath = join(tmpDir, "renderer-default.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const r = await captureRun(["--format", "mermaid", inputPath]);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toMatch(/^%%\{init:.*"elk".*\}%%\nflowchart RL\n/);
+  });
+
   test("default format is mermaid (no --format flag)", async () => {
     const inputPath = join(tmpDir, "default-format.ts");
     writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");

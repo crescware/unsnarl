@@ -4,6 +4,7 @@ import { IrEmitter } from "../emitter/ir/ir.js";
 import { JsonEmitter } from "../emitter/json/json.js";
 import { MarkdownEmitter } from "../emitter/markdown/markdown.js";
 import { MermaidEmitter } from "../emitter/mermaid/mermaid.js";
+import { elkStrategy } from "../emitter/mermaid/strategy/elk-strategy.js";
 import { createDefaultEmitterRegistry } from "./create-default-emitter-registry.js";
 
 vi.mock("../emitter/ir/ir.js", () => ({
@@ -72,5 +73,10 @@ describe("createDefaultEmitterRegistry", () => {
 
     expect(mermaidConstructor.mock.results).toHaveLength(1);
     expect(markdownConstructor).toHaveBeenCalledWith(mermaidInstance);
+  });
+
+  test("defaults to the elk strategy", () => {
+    createDefaultEmitterRegistry();
+    expect(MermaidEmitter).toHaveBeenCalledWith({ strategy: elkStrategy });
   });
 });

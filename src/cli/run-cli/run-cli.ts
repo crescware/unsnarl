@@ -1,7 +1,8 @@
 import { CommanderError } from "commander";
 
+import { CLI_MERMAID_RENDERER } from "../../cli-mermaid-renderer.js";
 import { ParseError } from "../../parser/parse-error.js";
-import { createDefaultEmitterRegistry } from "../../pipeline/create-default-emitter-registry.js";
+import { createConfiguredEmitterRegistry } from "../../pipeline/create-configured-emitter-registry.js";
 import { createDefaultPipeline } from "../../pipeline/create-default-pipeline.js";
 import { buildCommand } from "../args/build-command.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
@@ -29,7 +30,9 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     emitOutFlagNotice(normalized);
     const src = await calcSource(command, file, normalized);
 
-    const emitters = createDefaultEmitterRegistry();
+    const emitters = createConfiguredEmitterRegistry({
+      mermaidRenderer: normalized.mermaidRenderer ?? CLI_MERMAID_RENDERER.Elk,
+    });
     const outputPath = resolveOutputPath(src, normalized, emitters);
     const { text, runOpts } = buildRunOpts(src, normalized);
 
