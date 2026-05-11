@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
+import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -33,27 +34,34 @@ function makeState(): BuildState {
   };
 }
 
-function callRef(opts: {
+function refWithHead(opts: {
   refId: string;
   startOffset: number;
   endOffset: number;
-  headStartOffset: number;
-  headEndOffset: number;
-  line: number;
+  startLine: number;
+  endLine?: number;
+  head: SerializedHeadExpression;
 }): SerializedReference {
   return {
     ...baseRef(),
     id: opts.refId,
     identifier: { name: "x", span: span() },
     expressionStatementContainer: {
-      startSpan: spanAt(opts.startOffset, opts.line),
-      endSpan: spanAt(opts.endOffset, opts.line),
-      headStartSpan: spanAt(opts.headStartOffset, opts.line),
-      headEndSpan: spanAt(opts.headEndOffset, opts.line),
-      isCall: true,
+      startSpan: spanAt(opts.startOffset, opts.startLine),
+      endSpan: spanAt(opts.endOffset, opts.endLine ?? opts.startLine),
+      head: opts.head,
     },
   };
 }
+
+const CONSOLE_LOG_HEAD: SerializedHeadExpression = {
+  kind: "call",
+  callee: {
+    kind: "member",
+    object: { kind: "identifier", name: "console" },
+    property: "log",
+  },
+};
 
 describe("ensureExpressionStatementNode", () => {
   test("returns null when the ref carries no ExpressionStatement container", () => {
@@ -65,19 +73,22 @@ describe("ensureExpressionStatementNode", () => {
     expect(elements).toHaveLength(0);
   });
 
-  test("appends an ExpressionStatement node with name `<callee>()` and the statement's start line", () => {
-    const raw = "console.log(a);";
-    const ref = callRef({
+  test("renders a call/member/identifier mini-AST to `<receiver>.<property>()`", () => {
+    const ref = refWithHead({
       refId: "r1",
       startOffset: 0,
       endOffset: 15,
-      headStartOffset: 0,
-      headEndOffset: 11,
-      line: 7,
+      startLine: 7,
+      head: CONSOLE_LOG_HEAD,
     });
     const elements: VisualElement[] = [];
     const state = makeState();
-    const id = ensureExpressionStatementNode(ref, raw, elements, state);
+    const id = ensureExpressionStatementNode(
+      ref,
+      "console.log(a);",
+      elements,
+      state,
+    );
     expect(id).toEqual("expr_stmt_0");
     expect(elements).toHaveLength(1);
     const node = elements[0] as VisualNode;
@@ -90,63 +101,107 @@ describe("ensureExpressionStatementNode", () => {
     });
   });
 
-  test("appends `<expr>` without parens when the expression is not a call", () => {
-    const raw = "a;";
-    const ref: SerializedReference = {
-      ...baseRef(),
-      expressionStatementContainer: {
-        startSpan: spanAt(0, 2),
-        endSpan: spanAt(2, 2),
-        headStartSpan: spanAt(0, 2),
-        headEndSpan: spanAt(1, 2),
-        isCall: false,
-      },
-    };
+  test("renders a bare identifier head with no parens", () => {
+    const ref = refWithHead({
+      refId: "r1",
+      startOffset: 0,
+      endOffset: 2,
+      startLine: 2,
+      head: { kind: "identifier", name: "a" },
+    });
     const elements: VisualElement[] = [];
     const state = makeState();
-    ensureExpressionStatementNode(ref, raw, elements, state);
+    ensureExpressionStatementNode(ref, "a;", elements, state);
     expect((elements[0] as VisualNode).name).toEqual("a");
   });
 
-  test("sets endLine when the statement spans multiple lines so the renderer shows L<start>-<end>", () => {
-    const raw = "console.log(\n  a,\n);";
-    const ref: SerializedReference = {
-      ...baseRef(),
-      expressionStatementContainer: {
-        startSpan: spanAt(0, 1),
-        endSpan: spanAt(20, 3),
-        headStartSpan: spanAt(0, 1),
-        headEndSpan: spanAt(11, 1),
-        isCall: true,
+  test("renders an awaited chain to `await <chain>()`", () => {
+    const ref = refWithHead({
+      refId: "r1",
+      startOffset: 0,
+      endOffset: 50,
+      startLine: 1,
+      endLine: 5,
+      head: {
+        kind: "await",
+        argument: {
+          kind: "call",
+          callee: {
+            kind: "member",
+            object: {
+              kind: "call",
+              callee: {
+                kind: "member",
+                object: { kind: "identifier", name: "Promise" },
+                property: "resolve",
+              },
+            },
+            property: "then",
+          },
+        },
       },
-    };
+    });
     const elements: VisualElement[] = [];
     const state = makeState();
-    ensureExpressionStatementNode(ref, raw, elements, state);
+    ensureExpressionStatementNode(ref, "", elements, state);
+    expect((elements[0] as VisualNode).name).toEqual(
+      "await Promise.resolve().then()",
+    );
+  });
+
+  test("slices the original source for a `raw` head", () => {
+    const ref = refWithHead({
+      refId: "r1",
+      startOffset: 0,
+      endOffset: 6,
+      startLine: 3,
+      head: { kind: "raw", startSpan: spanAt(0, 3), endSpan: spanAt(5, 3) },
+    });
+    const elements: VisualElement[] = [];
+    const state = makeState();
+    ensureExpressionStatementNode(ref, "x = 1;", elements, state);
+    expect((elements[0] as VisualNode).name).toEqual("x = 1");
+  });
+
+  test("sets endLine when the statement spans multiple lines so the renderer shows L<start>-<end>", () => {
+    const ref = refWithHead({
+      refId: "r1",
+      startOffset: 0,
+      endOffset: 20,
+      startLine: 1,
+      endLine: 3,
+      head: CONSOLE_LOG_HEAD,
+    });
+    const elements: VisualElement[] = [];
+    const state = makeState();
+    ensureExpressionStatementNode(
+      ref,
+      "console.log(\n  a,\n);",
+      elements,
+      state,
+    );
     expect((elements[0] as VisualNode).line).toEqual(1);
     expect((elements[0] as VisualNode).endLine).toEqual(3);
   });
 
   test("returns the cached id and does not re-append when called twice for refs in the same statement", () => {
-    const raw = "console.log(a);";
-    const refA = callRef({
+    const refA = refWithHead({
       refId: "r1",
       startOffset: 0,
       endOffset: 15,
-      headStartOffset: 0,
-      headEndOffset: 11,
-      line: 7,
+      startLine: 7,
+      head: CONSOLE_LOG_HEAD,
     });
-    const refB = callRef({
+    const refB = refWithHead({
       refId: "r2",
       startOffset: 0,
       endOffset: 15,
-      headStartOffset: 0,
-      headEndOffset: 11,
-      line: 7,
+      startLine: 7,
+      head: CONSOLE_LOG_HEAD,
     });
     const elements: VisualElement[] = [];
     const state = makeState();
+    const raw = "console.log(a);";
     const idA = ensureExpressionStatementNode(refA, raw, elements, state);
     const idB = ensureExpressionStatementNode(refB, raw, elements, state);
     expect(idA).toEqual(idB);

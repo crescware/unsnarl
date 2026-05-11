@@ -257,17 +257,13 @@
           "column": 12,
           "offset": 30
         },
-        "headStartSpan": {
-          "line": 3,
-          "column": 4,
-          "offset": 22
-        },
-        "headEndSpan": {
-          "line": 3,
-          "column": 11,
-          "offset": 29
-        },
-        "isCall": false
+        "head": {
+          "kind": "new",
+          "callee": {
+            "kind": "identifier",
+            "name": "C"
+          }
+        }
       }
     },
     {
@@ -304,17 +300,13 @@
           "column": 8,
           "offset": 46
         },
-        "headStartSpan": {
-          "line": 7,
-          "column": 0,
-          "offset": 38
-        },
-        "headEndSpan": {
-          "line": 7,
-          "column": 7,
-          "offset": 45
-        },
-        "isCall": false
+        "head": {
+          "kind": "new",
+          "callee": {
+            "kind": "identifier",
+            "name": "C"
+          }
+        }
       }
     }
   ],

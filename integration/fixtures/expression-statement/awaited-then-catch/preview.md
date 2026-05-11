@@ -28,15 +28,7 @@ flowchart RL
     n_scope_0_run_22["unused run()<br/>L1"]
     subgraph s_scope_1["run()<br/>L1-11"]
       direction RL
-      expr_stmt_47["await Promise.resolve()
-    .then((value) =&gt; {
-      console.log(&quot;then handler&quot;, value);
-      console.log(&quot;then handler second line&quot;);
-    })
-    .catch((error) =&gt; {
-      console.error(&quot;catch handler&quot;, error);
-      console.error(&quot;catch handler second line&quot;);
-    })<br/>L2-10"]
+      expr_stmt_47["await Promise.resolve().then().catch()<br/>L2-10"]
       subgraph s_scope_2["(anonymous)<br/>L3-6"]
         direction RL
         n_scope_2_value_82["value<br/>L3"]

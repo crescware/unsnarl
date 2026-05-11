@@ -208,17 +208,19 @@
           "column": 11,
           "offset": 22
         },
-        "headStartSpan": {
-          "line": 2,
-          "column": 0,
-          "offset": 11
-        },
-        "headEndSpan": {
-          "line": 2,
-          "column": 10,
-          "offset": 21
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 11
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 10,
+            "offset": 21
+          }
+        }
       }
     }
   ],

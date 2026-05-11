@@ -917,17 +917,13 @@
           "column": 5,
           "offset": 316
         },
-        "headStartSpan": {
-          "line": 21,
-          "column": 0,
-          "offset": 311
-        },
-        "headEndSpan": {
-          "line": 21,
-          "column": 2,
-          "offset": 313
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "f1"
+          }
+        }
       }
     }
   ],

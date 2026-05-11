@@ -4,6 +4,7 @@ import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { spanFromOffset } from "../../util/span.js";
+import { serializeHeadExpression } from "./serialize-expression-statement-head.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeReference(
@@ -57,15 +58,10 @@ export function serializeReference(
             raw,
             ann.expressionStatementContainer.endOffset,
           ),
-          headStartSpan: spanFromOffset(
+          head: serializeHeadExpression(
+            ann.expressionStatementContainer.head,
             raw,
-            ann.expressionStatementContainer.headStartOffset,
           ),
-          headEndSpan: spanFromOffset(
-            raw,
-            ann.expressionStatementContainer.headEndOffset,
-          ),
-          isCall: ann.expressionStatementContainer.isCall,
         }
       : null,
   };

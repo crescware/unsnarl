@@ -10,11 +10,14 @@ function entry(node: AstNode, key: string | null = null): PathEntry {
 }
 
 describe("findExpressionStatementContainer", () => {
-  test("returns the statement span and callee head when the expression is a CallExpression", () => {
+  test("returns a structured `call` head when the expression is a CallExpression with a MemberExpression callee", () => {
     const callee = {
       type: AST_TYPE.MemberExpression,
       start: 0,
       end: 11,
+      object: { type: AST_TYPE.Identifier, name: "console", start: 0, end: 7 },
+      property: { type: AST_TYPE.Identifier, name: "log", start: 8, end: 11 },
+      computed: false,
     } as const satisfies AstNode;
     const callExpr = {
       type: AST_TYPE.CallExpression,
@@ -38,22 +41,28 @@ describe("findExpressionStatementContainer", () => {
     expect(findExpressionStatementContainer(path)).toEqual({
       startOffset: 0,
       endOffset: 15,
-      headStartOffset: 0,
-      headEndOffset: 11,
-      isCall: true,
+      head: {
+        kind: "call",
+        callee: {
+          kind: "member",
+          object: { kind: "identifier", name: "console" },
+          property: "log",
+        },
+      },
     });
   });
 
-  test("returns the whole expression as the head when the expression is not a call", () => {
+  test("returns an `identifier` head when the expression is a bare identifier", () => {
     const expr = {
       type: AST_TYPE.Identifier,
-      start: 5,
-      end: 6,
+      name: "a",
+      start: 2,
+      end: 3,
     } as const satisfies AstNode;
     const stmt = {
       type: AST_TYPE.ExpressionStatement,
-      start: 5,
-      end: 7,
+      start: 2,
+      end: 4,
       expression: expr,
     } as const satisfies AstNode;
     const path = [
@@ -62,39 +71,234 @@ describe("findExpressionStatementContainer", () => {
       entry(expr, "expression"),
     ] satisfies PathEntry[];
     expect(findExpressionStatementContainer(path)).toEqual({
-      startOffset: 5,
-      endOffset: 7,
-      headStartOffset: 5,
-      headEndOffset: 6,
-      isCall: false,
+      startOffset: 2,
+      endOffset: 4,
+      head: { kind: "identifier", name: "a" },
     });
   });
 
-  test("returns the container even when an ExpressionStatement sits inside a function body", () => {
-    const expr = {
+  test("collapses an awaited Promise chain to an `await`/`call`/`member` mini-AST", () => {
+    const promiseId = {
       type: AST_TYPE.Identifier,
-      start: 30,
+      name: "Promise",
+      start: 6,
+      end: 13,
+    } as const satisfies AstNode;
+    const resolveId = {
+      type: AST_TYPE.Identifier,
+      name: "resolve",
+      start: 14,
+      end: 21,
+    } as const satisfies AstNode;
+    const promiseResolveCallee = {
+      type: AST_TYPE.MemberExpression,
+      start: 6,
+      end: 21,
+      object: promiseId,
+      property: resolveId,
+      computed: false,
+    } as const satisfies AstNode;
+    const promiseResolveCall = {
+      type: AST_TYPE.CallExpression,
+      start: 6,
+      end: 23,
+      callee: promiseResolveCallee,
+    } as const satisfies AstNode;
+    const thenId = {
+      type: AST_TYPE.Identifier,
+      name: "then",
+      start: 27,
       end: 31,
+    } as const satisfies AstNode;
+    const thenCallee = {
+      type: AST_TYPE.MemberExpression,
+      start: 6,
+      end: 31,
+      object: promiseResolveCall,
+      property: thenId,
+      computed: false,
+    } as const satisfies AstNode;
+    const thenCall = {
+      type: AST_TYPE.CallExpression,
+      start: 6,
+      end: 70,
+      callee: thenCallee,
+    } as const satisfies AstNode;
+    const catchId = {
+      type: AST_TYPE.Identifier,
+      name: "catch",
+      start: 74,
+      end: 79,
+    } as const satisfies AstNode;
+    const catchCallee = {
+      type: AST_TYPE.MemberExpression,
+      start: 6,
+      end: 79,
+      object: thenCall,
+      property: catchId,
+      computed: false,
+    } as const satisfies AstNode;
+    const catchCall = {
+      type: AST_TYPE.CallExpression,
+      start: 6,
+      end: 120,
+      callee: catchCallee,
+    } as const satisfies AstNode;
+    const awaitExpr = {
+      type: AST_TYPE.AwaitExpression,
+      start: 0,
+      end: 120,
+      argument: catchCall,
     } as const satisfies AstNode;
     const stmt = {
       type: AST_TYPE.ExpressionStatement,
-      start: 30,
-      end: 32,
-      expression: expr,
+      start: 0,
+      end: 121,
+      expression: awaitExpr,
     } as const satisfies AstNode;
     const path = [
-      entry({ type: AST_TYPE.Program, start: 0, end: 100 }),
-      entry({ type: AST_TYPE.FunctionDeclaration, start: 0, end: 100 }),
-      entry({ type: AST_TYPE.BlockStatement, start: 15, end: 100 }, "body"),
+      entry({ type: AST_TYPE.Program, start: 0, end: 121 }),
       entry(stmt, "body"),
-      entry(expr, "expression"),
+      entry(awaitExpr, "expression"),
     ] satisfies PathEntry[];
     expect(findExpressionStatementContainer(path)).toEqual({
-      startOffset: 30,
-      endOffset: 32,
-      headStartOffset: 30,
-      headEndOffset: 31,
-      isCall: false,
+      startOffset: 0,
+      endOffset: 121,
+      head: {
+        kind: "await",
+        argument: {
+          kind: "call",
+          callee: {
+            kind: "member",
+            object: {
+              kind: "call",
+              callee: {
+                kind: "member",
+                object: {
+                  kind: "call",
+                  callee: {
+                    kind: "member",
+                    object: { kind: "identifier", name: "Promise" },
+                    property: "resolve",
+                  },
+                },
+                property: "then",
+              },
+            },
+            property: "catch",
+          },
+        },
+      },
+    });
+  });
+
+  test("returns a `new` head with the constructor identifier when the expression is a NewExpression", () => {
+    const ctor = {
+      type: AST_TYPE.Identifier,
+      name: "C",
+      start: 4,
+      end: 5,
+    } as const satisfies AstNode;
+    const newExpr = {
+      type: AST_TYPE.NewExpression,
+      start: 0,
+      end: 7,
+      callee: ctor,
+    } as const satisfies AstNode;
+    const stmt = {
+      type: AST_TYPE.ExpressionStatement,
+      start: 0,
+      end: 8,
+      expression: newExpr,
+    } as const satisfies AstNode;
+    const path = [
+      entry({ type: AST_TYPE.Program, start: 0, end: 8 }),
+      entry(stmt, "body"),
+      entry(newExpr, "expression"),
+    ] satisfies PathEntry[];
+    expect(findExpressionStatementContainer(path)).toEqual({
+      startOffset: 0,
+      endOffset: 8,
+      head: {
+        kind: "new",
+        callee: { kind: "identifier", name: "C" },
+      },
+    });
+  });
+
+  test("falls back to a `raw` head for computed MemberExpression because the property is not a static name", () => {
+    const obj = {
+      type: AST_TYPE.Identifier,
+      name: "a",
+      start: 0,
+      end: 1,
+    } as const satisfies AstNode;
+    const key = {
+      type: AST_TYPE.Literal,
+      start: 2,
+      end: 3,
+    } as const satisfies AstNode;
+    const member = {
+      type: AST_TYPE.MemberExpression,
+      start: 0,
+      end: 4,
+      object: obj,
+      property: key,
+      computed: true,
+    } as const satisfies AstNode;
+    const stmt = {
+      type: AST_TYPE.ExpressionStatement,
+      start: 0,
+      end: 5,
+      expression: member,
+    } as const satisfies AstNode;
+    const path = [
+      entry({ type: AST_TYPE.Program, start: 0, end: 5 }),
+      entry(stmt, "body"),
+      entry(member, "expression"),
+    ] satisfies PathEntry[];
+    expect(findExpressionStatementContainer(path)).toEqual({
+      startOffset: 0,
+      endOffset: 5,
+      head: { kind: "raw", startOffset: 0, endOffset: 4 },
+    });
+  });
+
+  test("falls back to a `raw` head with the expression's span when the shape is not in the recognised vocabulary", () => {
+    const left = {
+      type: AST_TYPE.Identifier,
+      name: "x",
+      start: 0,
+      end: 1,
+    } as const satisfies AstNode;
+    const right = {
+      type: AST_TYPE.Literal,
+      start: 4,
+      end: 5,
+    } as const satisfies AstNode;
+    const assign = {
+      type: AST_TYPE.AssignmentExpression,
+      start: 0,
+      end: 5,
+      left,
+      right,
+      operator: "=",
+    } as const satisfies AstNode;
+    const stmt = {
+      type: AST_TYPE.ExpressionStatement,
+      start: 0,
+      end: 6,
+      expression: assign,
+    } as const satisfies AstNode;
+    const path = [
+      entry({ type: AST_TYPE.Program, start: 0, end: 6 }),
+      entry(stmt, "body"),
+      entry(assign, "expression"),
+    ] satisfies PathEntry[];
+    expect(findExpressionStatementContainer(path)).toEqual({
+      startOffset: 0,
+      endOffset: 6,
+      head: { kind: "raw", startOffset: 0, endOffset: 5 },
     });
   });
 

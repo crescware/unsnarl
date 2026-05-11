@@ -7,6 +7,7 @@ export const AST_TYPE = {
   ArrowFunctionExpression: "ArrowFunctionExpression",
   AssignmentExpression: "AssignmentExpression",
   AssignmentPattern: "AssignmentPattern",
+  AwaitExpression: "AwaitExpression",
   BinaryExpression: "BinaryExpression",
   BlockStatement: "BlockStatement",
   BooleanLiteral: "BooleanLiteral",

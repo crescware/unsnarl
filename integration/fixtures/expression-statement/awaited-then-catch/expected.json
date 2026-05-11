@@ -134,7 +134,7 @@
           "type": "node",
           "id": "expr_stmt_47",
           "kind": "ExpressionStatement",
-          "name": "await Promise.resolve()\n    .then((value) => {\n      console.log(\"then handler\", value);\n      console.log(\"then handler second line\");\n    })\n    .catch((error) => {\n      console.error(\"catch handler\", error);\n      console.error(\"catch handler second line\");\n    })",
+          "name": "await Promise.resolve().then().catch()",
           "line": 2,
           "endLine": 10,
           "isJsxElement": false,

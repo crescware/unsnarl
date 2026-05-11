@@ -1,10 +1,13 @@
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
 import type { ExpressionStatementContainer } from "../ir/reference/expression-statement-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
+import { buildHeadExpression } from "./expression-statement-head.js";
 
-type Spanned = { start?: number; end?: number };
-type ExpressionStatementNode = Spanned & {
-  expression?: (Spanned & { type?: string; callee?: Spanned }) | null;
+type ExpressionStatementNode = {
+  start?: number;
+  end?: number;
+  expression?: AstNode | null;
 };
 
 export function findExpressionStatementContainer(
@@ -33,19 +36,12 @@ function containerFromExpressionStatement(
     return null;
   }
   const expression = node.expression ?? null;
-  const isCall = expression?.type === AST_TYPE.CallExpression;
-  const headSource =
-    isCall && expression?.callee ? expression.callee : (expression ?? node);
-  const headStart = headSource.start;
-  const headEnd = headSource.end;
-  if (typeof headStart !== "number" || typeof headEnd !== "number") {
-    return null;
-  }
   return {
     startOffset: start,
     endOffset: end,
-    headStartOffset: headStart,
-    headEndOffset: headEnd,
-    isCall,
+    head: buildHeadExpression(expression, {
+      startOffset: start,
+      endOffset: end,
+    }),
   };
 }

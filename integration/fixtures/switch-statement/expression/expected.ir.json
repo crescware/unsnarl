@@ -838,17 +838,19 @@
           "column": 18,
           "offset": 111
         },
-        "headStartSpan": {
-          "line": 8,
-          "column": 4,
-          "offset": 97
-        },
-        "headEndSpan": {
-          "line": 8,
-          "column": 17,
-          "offset": 110
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 8,
+            "column": 4,
+            "offset": 97
+          },
+          "endSpan": {
+            "line": 8,
+            "column": 17,
+            "offset": 110
+          }
+        }
       }
     },
     {
@@ -937,17 +939,19 @@
           "column": 22,
           "offset": 159
         },
-        "headStartSpan": {
-          "line": 11,
-          "column": 4,
-          "offset": 141
-        },
-        "headEndSpan": {
-          "line": 11,
-          "column": 21,
-          "offset": 158
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 11,
+            "column": 4,
+            "offset": 141
+          },
+          "endSpan": {
+            "line": 11,
+            "column": 21,
+            "offset": 158
+          }
+        }
       }
     },
     {
@@ -1011,17 +1015,19 @@
           "column": 48,
           "offset": 251
         },
-        "headStartSpan": {
-          "line": 14,
-          "column": 4,
-          "offset": 207
-        },
-        "headEndSpan": {
-          "line": 14,
-          "column": 47,
-          "offset": 250
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 14,
+            "column": 4,
+            "offset": 207
+          },
+          "endSpan": {
+            "line": 14,
+            "column": 47,
+            "offset": 250
+          }
+        }
       }
     },
     {
@@ -1060,17 +1066,19 @@
           "column": 20,
           "offset": 294
         },
-        "headStartSpan": {
-          "line": 17,
-          "column": 4,
-          "offset": 278
-        },
-        "headEndSpan": {
-          "line": 17,
-          "column": 19,
-          "offset": 293
-        },
-        "isCall": false
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 17,
+            "column": 4,
+            "offset": 278
+          },
+          "endSpan": {
+            "line": 17,
+            "column": 19,
+            "offset": 293
+          }
+        }
       }
     },
     {

@@ -171,17 +171,13 @@
           "column": 8,
           "offset": 25
         },
-        "headStartSpan": {
-          "line": 2,
-          "column": 2,
-          "offset": 19
-        },
-        "headEndSpan": {
-          "line": 2,
-          "column": 5,
-          "offset": 22
-        },
-        "isCall": true
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "foo"
+          }
+        }
       }
     }
   ],
