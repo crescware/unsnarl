@@ -1,0 +1,11 @@
+1	0	integration/fixtures/jsx/arrow-fn-chain/input.tsx:0 button
+0	0	integration/fixtures/jsx/arrow-fn-chain/input.tsx:1 unused Comp
+1	0	integration/fixtures/jsx/arrow-fn-chain/input.tsx:2 a
+1	0	integration/fixtures/jsx/arrow-fn-chain/input.tsx:3 b
+0	1	integration/fixtures/jsx/arrow-fn-chain/input.tsx:3 a
+2	0	integration/fixtures/jsx/arrow-fn-chain/input.tsx:4 c
+0	1	integration/fixtures/jsx/arrow-fn-chain/input.tsx:4 b
+0	1	integration/fixtures/jsx/arrow-fn-chain/input.tsx:5 button
+0	1	integration/fixtures/jsx/arrow-fn-chain/input.tsx:5 c
+0	1	integration/fixtures/jsx/arrow-fn-chain/input.tsx:5 c
+5	5	10 total

@@ -20,4 +20,11 @@ export type ParsedCliOptions = Readonly<{
   outDir: string | null;
   outFile: string | null;
   debug: boolean;
+  plugins: readonly string[];
 }>;
+
+// What commander hands to the action callback. The CLI flag is named
+// `--plugin` (singular), so commander derives the attribute as `plugin`.
+// We rename it to `plugins` at the action boundary before propagating.
+export type RawCliOptions = Omit<ParsedCliOptions, "plugins"> &
+  Readonly<{ plugin: readonly string[] }>;

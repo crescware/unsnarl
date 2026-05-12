@@ -1,0 +1,13 @@
+1	0	integration/fixtures/jsx/use-callback-chain/input.tsx:0 button
+3	1	integration/fixtures/jsx/use-callback-chain/input.tsx:1 useCallback
+1	0	integration/fixtures/jsx/use-callback-chain/input.tsx:1 react
+0	0	integration/fixtures/jsx/use-callback-chain/input.tsx:3 unused Comp
+2	1	integration/fixtures/jsx/use-callback-chain/input.tsx:4 a
+2	2	integration/fixtures/jsx/use-callback-chain/input.tsx:5 b
+0	1	integration/fixtures/jsx/use-callback-chain/input.tsx:5 a
+2	2	integration/fixtures/jsx/use-callback-chain/input.tsx:6 c
+0	1	integration/fixtures/jsx/use-callback-chain/input.tsx:6 b
+0	1	integration/fixtures/jsx/use-callback-chain/input.tsx:7 button
+0	1	integration/fixtures/jsx/use-callback-chain/input.tsx:7 c
+0	1	integration/fixtures/jsx/use-callback-chain/input.tsx:7 c
+11	11	12 total

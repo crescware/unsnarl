@@ -1,0 +1,9 @@
+1	0	integration/fixtures/jsx/iife/input.tsx:0 button
+0	0	integration/fixtures/jsx/iife/input.tsx:1 unused Counter
+1	0	integration/fixtures/jsx/iife/input.tsx:1 start
+1	0	integration/fixtures/jsx/iife/input.tsx:2 value
+1	1	integration/fixtures/jsx/iife/input.tsx:3 doubled
+0	1	integration/fixtures/jsx/iife/input.tsx:4 doubled
+0	1	integration/fixtures/jsx/iife/input.tsx:6 button
+0	1	integration/fixtures/jsx/iife/input.tsx:6 value
+4	4	8 total

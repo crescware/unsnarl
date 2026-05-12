@@ -23,6 +23,7 @@ export function normalizeCliOptions(
     depths: resolveDepths(opts),
     out: resolveOutTarget(opts),
     debug: opts.debug,
+    plugins: opts.plugins,
   };
 }
 

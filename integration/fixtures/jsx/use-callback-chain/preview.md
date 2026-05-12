@@ -1,0 +1,80 @@
+# integration/fixtures/jsx/use-callback-chain/input.tsx
+
+## Input
+
+```tsx
+import { useCallback } from "react";
+
+const Comp = () => {
+  const a = useCallback(() => 1, []);
+  const b = useCallback(() => a() + 1, [a]);
+  const c = useCallback(() => b() + 1, [b]);
+  return <button onClick={c}>{c()}</button>;
+};
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_useCallback_9["import useCallback<br/>L1"]
+  n_scope_0_button_197["global button"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_Comp_44["unused Comp()<br/>L3"]
+    subgraph s_scope_1["Comp()<br/>L3-8"]
+      direction RL
+      n_scope_1_a_67["a<br/>L4"]
+      n_scope_1_b_105["b<br/>L5"]
+      n_scope_1_c_150["c<br/>L6"]
+      subgraph s_scope_2["(anonymous)<br/>L4"]
+        direction RL
+      end
+      subgraph s_scope_3["(anonymous)<br/>L5"]
+        direction RL
+        subgraph s_return_scope_0_Comp_44_127_134["return L5"]
+          direction RL
+          ret_use_ref_5["a<br/>L5"]
+        end
+      end
+      subgraph s_scope_4["(anonymous)<br/>L6"]
+        direction RL
+        subgraph s_return_scope_0_Comp_44_172_179["return L6"]
+          direction RL
+          ret_use_ref_9["b<br/>L6"]
+        end
+      end
+      subgraph s_return_scope_0_Comp_44_189_231["return L7"]
+        direction RL
+        ret_use_ref_11["&lt;button&gt;<br/>L7"]
+        ret_use_ref_12["c<br/>L7"]
+        ret_use_ref_13["c<br/>L7"]
+      end
+    end
+  end
+  n_scope_0_useCallback_9 -->|read,call| n_scope_1_a_67
+  n_scope_0_useCallback_9 -->|read,call| n_scope_1_b_105
+  n_scope_1_a_67 -->|read,call| ret_use_ref_5
+  n_scope_1_a_67 -->|read| n_scope_1_b_105
+  n_scope_0_useCallback_9 -->|read,call| n_scope_1_c_150
+  n_scope_1_b_105 -->|read,call| ret_use_ref_9
+  n_scope_1_b_105 -->|read| n_scope_1_c_150
+  n_scope_0_button_197 -->|read| ret_use_ref_11
+  n_scope_1_c_150 -->|read| ret_use_ref_12
+  n_scope_1_c_150 -->|read,call| ret_use_ref_13
+  mod_react["module react<br/>L1"]
+  mod_react -->|read| n_scope_0_useCallback_9
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+  class s_scope_3 nestL3;
+  class s_scope_4 nestL3;
+  class s_return_scope_0_Comp_44_189_231 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_return_scope_0_Comp_44_127_134 nestL4;
+  class s_return_scope_0_Comp_44_172_179 nestL4;
+```

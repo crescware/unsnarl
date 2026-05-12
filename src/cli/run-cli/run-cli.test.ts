@@ -555,4 +555,54 @@ describe("runCli (integration)", () => {
     expect(r.exitCode).toEqual(2);
     expect(r.stderr).toMatch(/mutually exclusive/);
   });
+
+  test("--plugin react applies the React plugin so the useCallback import is dropped", async () => {
+    const inputPath = join(tmpDir, "with-callback.tsx");
+    writeFileSync(
+      inputPath,
+      [
+        'import { useCallback } from "react";',
+        "",
+        "const Comp = () => {",
+        "  const a = useCallback(() => 1, []);",
+        "  return <button>{a()}</button>;",
+        "};",
+        "",
+      ].join("\n"),
+    );
+    const r = await captureRun([
+      "--plugin",
+      "react",
+      "--format",
+      "ir",
+      "--no-pretty-json",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(0);
+    const ir = JSON.parse(r.stdout);
+    const names = ir.variables.map((v: { name: string }) => v.name);
+    expect(names).not.toContain("useCallback");
+    for (const ref of ir.references) {
+      expect(ref.identifier.name).not.toEqual("useCallback");
+    }
+  });
+
+  test("--plugin with an unknown name exits with 2 and a helpful stderr message", async () => {
+    const inputPath = join(tmpDir, "any.ts");
+    writeFileSync(inputPath, "const a = 1;\n");
+    const r = await captureRun([
+      "--plugin",
+      "nonexistent-xyz",
+      "--format",
+      "ir",
+      inputPath,
+    ]);
+    expect(r.exitCode).toEqual(2);
+    expect(r.stderr).toContain(
+      "Plugin 'unsnarl-plugin-nonexistent-xyz' is not bundled with this unsnarl build.",
+    );
+    expect(r.stderr).toContain(
+      "Only built-in plugins are currently supported.",
+    );
+  });
 });

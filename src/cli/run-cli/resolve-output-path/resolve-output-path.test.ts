@@ -26,6 +26,7 @@ const baseOpts = {
   depths: defaultDepths(),
   out: null,
   debug: false,
+  plugins: [],
 } as const satisfies NormalizedCliOptions;
 
 function makeEmitter(format: string, extension: string): Emitter {

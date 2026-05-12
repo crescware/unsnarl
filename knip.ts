@@ -14,6 +14,14 @@ const config = {
         "integration/**/*.test.ts",
         "parity/**/*.test.ts",
       ],
+      ignore: [
+        // Test fixture: a module shaped to lack a `default` export, used by
+        // validate-plugin-module.test.ts via `await import(...)` to exercise
+        // the "no default export" branch. Dynamic import is invisible to
+        // knip's static scan, so the named export reads as unused. The file
+        // exists only as a runtime artifact for that test.
+        "src/cli/run-cli/testing/no-default-plugin.ts",
+      ],
       project: [
         "src/**/*.{ts,tsx}",
         "integration/**/*.{ts,tsx}",
