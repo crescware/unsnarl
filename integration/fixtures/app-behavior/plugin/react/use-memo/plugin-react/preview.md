@@ -19,7 +19,6 @@ const Counter = ({ start }: { start: number }) => {
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_useMemo_9["import useMemo<br/>L1"]
   n_scope_0_button_194["global button"]
   subgraph wrap_s_scope_1[" "]
     direction TB
@@ -43,14 +42,10 @@ flowchart RL
       end
     end
   end
-  n_scope_0_useMemo_9 -->|read,call| n_scope_1_value_94
   n_scope_1_start_53 -->|read| n_scope_2_doubled_128
   n_scope_2_doubled_128 -->|read| ret_use_ref_5
-  n_scope_1_start_53 -->|read| n_scope_1_value_94
   n_scope_0_button_194 -->|read| ret_use_ref_7
   n_scope_1_value_94 -->|read| ret_use_ref_8
-  mod_react["module react<br/>L1"]
-  mod_react -->|read| n_scope_0_useMemo_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;

@@ -29,7 +29,6 @@
         }
       },
       "variables": [
-        "scope#0:useMemo@9",
         "scope#0:Counter@40",
         "scope#0:button@194"
       ],
@@ -81,8 +80,6 @@
       ],
       "references": [
         "ref#1",
-        "ref#2",
-        "ref#6",
         "ref#7",
         "ref#8"
       ],
@@ -148,53 +145,6 @@
     }
   ],
   "variables": [
-    {
-      "id": "scope#0:useMemo@9",
-      "name": "useMemo",
-      "scope": "scope#0",
-      "identifiers": [
-        {
-          "line": 1,
-          "column": 9,
-          "offset": 9
-        }
-      ],
-      "references": [
-        "ref#2"
-      ],
-      "defs": [
-        {
-          "name": {
-            "name": "useMemo",
-            "span": {
-              "line": 1,
-              "column": 9,
-              "offset": 9
-            }
-          },
-          "node": {
-            "type": "ImportSpecifier",
-            "span": {
-              "line": 1,
-              "column": 9,
-              "offset": 9
-            }
-          },
-          "parent": {
-            "type": "ImportDeclaration",
-            "span": {
-              "line": 1,
-              "column": 0,
-              "offset": 0
-            }
-          },
-          "type": "ImportBinding",
-          "importKind": "named",
-          "importedName": "useMemo",
-          "importSource": "react"
-        }
-      ]
-    },
     {
       "id": "scope#0:Counter@40",
       "name": "Counter",
@@ -297,8 +247,7 @@
         }
       ],
       "references": [
-        "ref#4",
-        "ref#6"
+        "ref#4"
       ],
       "defs": [
         {
@@ -488,33 +437,6 @@
       "expressionStatementContainer": null
     },
     {
-      "id": "ref#2",
-      "identifier": {
-        "name": "useMemo",
-        "span": {
-          "line": 4,
-          "column": 16,
-          "offset": 102
-        }
-      },
-      "from": "scope#1",
-      "resolved": "scope#0:useMemo@9",
-      "owners": [
-        "scope#1:value@94"
-      ],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": true,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
       "id": "ref#3",
       "identifier": {
         "name": "doubled",
@@ -601,33 +523,6 @@
           "offset": 168
         }
       },
-      "jsxElement": null,
-      "expressionStatementContainer": null
-    },
-    {
-      "id": "ref#6",
-      "identifier": {
-        "name": "start",
-        "span": {
-          "line": 7,
-          "column": 6,
-          "offset": 175
-        }
-      },
-      "from": "scope#1",
-      "resolved": "scope#1:start@53",
-      "owners": [
-        "scope#1:value@94"
-      ],
-      "init": false,
-      "flags": {
-        "read": true,
-        "write": false,
-        "call": false,
-        "receiver": false
-      },
-      "predicateContainer": null,
-      "returnContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },

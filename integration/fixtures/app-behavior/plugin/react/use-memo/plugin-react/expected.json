@@ -8,18 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_useMemo_9",
-      "name": "useMemo",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "ImportBinding",
-      "importKind": "named",
-      "importedName": "useMemo"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Counter_40",
       "name": "Counter",
       "line": 3,
@@ -147,24 +135,9 @@
           ]
         }
       ]
-    },
-    {
-      "type": "node",
-      "id": "mod_react",
-      "kind": "ModuleSource",
-      "name": "react",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
-    {
-      "from": "n_scope_0_useMemo_9",
-      "to": "n_scope_1_value_94",
-      "label": "read,call"
-    },
     {
       "from": "n_scope_1_start_53",
       "to": "n_scope_2_doubled_128",
@@ -176,11 +149,6 @@
       "label": "read"
     },
     {
-      "from": "n_scope_1_start_53",
-      "to": "n_scope_1_value_94",
-      "label": "read"
-    },
-    {
       "from": "n_scope_0_button_194",
       "to": "ret_use_ref_7",
       "label": "read"
@@ -188,11 +156,6 @@
     {
       "from": "n_scope_1_value_94",
       "to": "ret_use_ref_8",
-      "label": "read"
-    },
-    {
-      "from": "mod_react",
-      "to": "n_scope_0_useMemo_9",
       "label": "read"
     }
   ],

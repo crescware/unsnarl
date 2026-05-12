@@ -9,31 +9,40 @@ import type { UnsnarlPlugin } from "../../pipeline/plugin/unsnarl-plugin.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 
 const REACT_MODULE = "react";
-const USE_CALLBACK = "useCallback";
+const HOOK_USE_CALLBACK = "useCallback";
+const HOOK_USE_MEMO = "useMemo";
+
+type HookKind = typeof HOOK_USE_CALLBACK | typeof HOOK_USE_MEMO;
+
+const HOOK_NAMES = new Set<string>([HOOK_USE_CALLBACK, HOOK_USE_MEMO]);
+
+function asHookKind(name: string): HookKind | null {
+  return HOOK_NAMES.has(name) ? (name as HookKind) : null;
+}
 
 type InitReplacement = Readonly<{ type: string; span: Span }>;
 
 const plugin: UnsnarlPlugin = {
   meta: { name: "unsnarl-plugin-react" },
   transform(ir: SerializedIR): SerializedIR {
-    const hookVarIds = collectUseCallbackImports(ir);
-    if (hookVarIds.size === 0) {
+    const hookImports = collectHookImports(ir);
+    if (hookImports.size === 0) {
       return ir;
     }
 
     const childScopesByUpper = groupChildScopes(ir);
-    const { initReplacements, callbackVarIds } = collectInitTargets(
+    const { initReplacements, wrappedVarIds } = collectInitTargets(
       ir,
-      hookVarIds,
+      hookImports,
       childScopesByUpper,
     );
-    if (callbackVarIds.size === 0) {
+    if (wrappedVarIds.size === 0) {
       return ir;
     }
 
-    const refsToRemove = collectRefsToRemove(ir, callbackVarIds);
+    const refsToRemove = collectRefsToRemove(ir, wrappedVarIds);
     const refsRetainedByVar = countRetainedRefsByResolved(ir, refsToRemove);
-    const varsToRemove = collectVarsToRemove(hookVarIds, refsRetainedByVar);
+    const varsToRemove = collectVarsToRemove(hookImports, refsRetainedByVar);
 
     return rebuildIr(ir, {
       refsToRemove,
@@ -45,8 +54,8 @@ const plugin: UnsnarlPlugin = {
 
 export default plugin;
 
-function collectUseCallbackImports(ir: SerializedIR): Set<VariableId> {
-  const out = new Set<VariableId>();
+function collectHookImports(ir: SerializedIR): Map<VariableId, HookKind> {
+  const out = new Map<VariableId, HookKind>();
   for (const v of ir.variables) {
     const def = v.defs[0];
     if (!def || def.type !== DEFINITION_TYPE.ImportBinding) {
@@ -58,10 +67,11 @@ function collectUseCallbackImports(ir: SerializedIR): Set<VariableId> {
     if (def.importSource !== REACT_MODULE) {
       continue;
     }
-    if (def.importedName !== USE_CALLBACK) {
+    const kind = asHookKind(def.importedName);
+    if (kind === null) {
       continue;
     }
-    out.add(v.id);
+    out.set(v.id, kind);
   }
   return out;
 }
@@ -83,14 +93,14 @@ function groupChildScopes(
 
 function collectInitTargets(
   ir: SerializedIR,
-  hookVarIds: ReadonlySet<VariableId>,
+  hookImports: ReadonlyMap<VariableId, HookKind>,
   childScopesByUpper: ReadonlyMap<string, readonly SerializedScope[]>,
 ): Readonly<{
   initReplacements: ReadonlyMap<VariableId, InitReplacement>;
-  callbackVarIds: ReadonlySet<VariableId>;
+  wrappedVarIds: ReadonlySet<VariableId>;
 }> {
   const initReplacements = new Map<VariableId, InitReplacement>();
-  const callbackVarIds = new Set<VariableId>();
+  const wrappedVarIds = new Set<VariableId>();
 
   for (const v of ir.variables) {
     const def = v.defs[0];
@@ -100,8 +110,8 @@ function collectInitTargets(
     if (def.init === null || def.init.type !== AST_TYPE.CallExpression) {
       continue;
     }
-    const calleeRef = findHookCalleeRef(ir, hookVarIds, v.id, def.init.span);
-    if (calleeRef === null) {
+    const kind = findHookCalleeKind(ir, hookImports, v.id, def.init.span);
+    if (kind === null) {
       continue;
     }
     const inner = findInnerFunctionScope(
@@ -111,21 +121,27 @@ function collectInitTargets(
     if (inner === null) {
       continue;
     }
-    callbackVarIds.add(v.id);
-    initReplacements.set(v.id, {
-      type: inner.block.type,
-      span: inner.block.span,
-    });
+    wrappedVarIds.add(v.id);
+    // useCallback: peel the wrapper so the variable's init points at the
+    // inner function, matching how a plain `const x = () => ...` reads.
+    // useMemo: keep the init as the original CallExpression so the IR
+    // reads as an IIFE-style invocation of the inner function.
+    if (kind === HOOK_USE_CALLBACK) {
+      initReplacements.set(v.id, {
+        type: inner.block.type,
+        span: inner.block.span,
+      });
+    }
   }
-  return { initReplacements, callbackVarIds };
+  return { initReplacements, wrappedVarIds };
 }
 
-function findHookCalleeRef(
+function findHookCalleeKind(
   ir: SerializedIR,
-  hookVarIds: ReadonlySet<VariableId>,
+  hookImports: ReadonlyMap<VariableId, HookKind>,
   ownerVarId: VariableId,
   initSpan: Span,
-): ReferenceId | null {
+): HookKind | null {
   for (const r of ir.references) {
     if (r.init) {
       continue;
@@ -133,7 +149,11 @@ function findHookCalleeRef(
     if (!r.flags.call) {
       continue;
     }
-    if (r.resolved === null || !hookVarIds.has(r.resolved)) {
+    if (r.resolved === null) {
+      continue;
+    }
+    const kind = hookImports.get(r.resolved);
+    if (kind === undefined) {
       continue;
     }
     if (!r.owners.includes(ownerVarId)) {
@@ -142,7 +162,7 @@ function findHookCalleeRef(
     if (r.identifier.span.offset !== initSpan.offset) {
       continue;
     }
-    return r.id;
+    return kind;
   }
   return null;
 }
@@ -171,7 +191,7 @@ function findInnerFunctionScope(
 
 function collectRefsToRemove(
   ir: SerializedIR,
-  callbackVarIds: ReadonlySet<VariableId>,
+  wrappedVarIds: ReadonlySet<VariableId>,
 ): Set<ReferenceId> {
   const out = new Set<ReferenceId>();
   for (const r of ir.references) {
@@ -179,7 +199,7 @@ function collectRefsToRemove(
       continue;
     }
     for (const o of r.owners) {
-      if (callbackVarIds.has(o)) {
+      if (wrappedVarIds.has(o)) {
         out.add(r.id);
         break;
       }
@@ -206,11 +226,11 @@ function countRetainedRefsByResolved(
 }
 
 function collectVarsToRemove(
-  hookVarIds: ReadonlySet<VariableId>,
+  hookImports: ReadonlyMap<VariableId, HookKind>,
   refsRetainedByVar: ReadonlyMap<VariableId, number>,
 ): Set<VariableId> {
   const out = new Set<VariableId>();
-  for (const id of hookVarIds) {
+  for (const id of hookImports.keys()) {
     if (!refsRetainedByVar.has(id)) {
       out.add(id);
     }

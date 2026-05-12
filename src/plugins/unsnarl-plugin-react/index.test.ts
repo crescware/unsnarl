@@ -149,4 +149,115 @@ describe("unsnarl-plugin-react", () => {
     const useCallbackVar = out.variables.find((v) => v.name === "useCallback");
     expect(useCallbackVar !== undefined).toEqual(true);
   });
+
+  test("keeps a useMemo-bound variable's init as a CallExpression so it reads as an IIFE", () => {
+    const code = [
+      'import { useMemo } from "react";',
+      "",
+      "const Comp = () => {",
+      "  const v = useMemo(() => {",
+      "    const x = 1;",
+      "    return x;",
+      "  }, []);",
+      "  return <button>{v}</button>;",
+      "};",
+      "",
+    ].join("\n");
+    const ir = buildIr(code);
+    const out = unsnarlPluginReact.transform(ir);
+
+    const variable = out.variables.find((v) => v.name === "v");
+    if (variable === undefined) {
+      throw new Error("variable v should exist after the transform");
+    }
+    const def = variable.defs[0];
+    if (def?.type !== DEFINITION_TYPE.Variable) {
+      throw new Error("v's first def should be a Variable");
+    }
+    expect(def.init?.type).toEqual("CallExpression");
+    const innerScope = out.scopes.find(
+      (scope) =>
+        scope.upper === variable.scope &&
+        (scope.block.type === "ArrowFunctionExpression" ||
+          scope.block.type === "FunctionExpression"),
+    );
+    expect(innerScope !== undefined).toEqual(true);
+  });
+
+  test("removes useMemo callee and dep-array references introduced by the hook call", () => {
+    const code = [
+      'import { useMemo } from "react";',
+      "",
+      "const Comp = ({ start }: { start: number }) => {",
+      "  const v = useMemo(() => start * 2, [start]);",
+      "  return <button>{v}</button>;",
+      "};",
+      "",
+    ].join("\n");
+    const ir = buildIr(code);
+    const out = unsnarlPluginReact.transform(ir);
+
+    for (const ref of out.references) {
+      expect(ref.identifier.name).not.toEqual("useMemo");
+    }
+    const vVar = out.variables.find((v) => v.name === "v");
+    if (vVar === undefined) {
+      throw new Error("variable v should exist after the transform");
+    }
+    const refsOwnedByV = out.references.filter((v) =>
+      v.owners.includes(vVar.id),
+    );
+    for (const ref of refsOwnedByV) {
+      expect(ref.init).toEqual(true);
+    }
+  });
+
+  test("drops the useMemo import entirely once it has no remaining references", () => {
+    const code = [
+      'import { useMemo } from "react";',
+      "",
+      "const Comp = () => {",
+      "  const v = useMemo(() => 1, []);",
+      "  return <button>{v}</button>;",
+      "};",
+      "",
+    ].join("\n");
+    const ir = buildIr(code);
+    const out = unsnarlPluginReact.transform(ir);
+
+    const useMemoVar = out.variables.find((v) => v.name === "useMemo");
+    expect(useMemoVar).toEqual(undefined);
+  });
+
+  test("rewrites both useCallback and useMemo within the same module", () => {
+    const code = [
+      'import { useCallback, useMemo } from "react";',
+      "",
+      "const Comp = ({ start }: { start: number }) => {",
+      "  const inc = useCallback((n: number) => n + start, [start]);",
+      "  const v = useMemo(() => start * 2, [start]);",
+      "  return <button onClick={inc as never}>{v}</button>;",
+      "};",
+      "",
+    ].join("\n");
+    const ir = buildIr(code);
+    const out = unsnarlPluginReact.transform(ir);
+
+    expect(out.variables.find((v) => v.name === "useCallback")).toEqual(
+      undefined,
+    );
+    expect(out.variables.find((v) => v.name === "useMemo")).toEqual(undefined);
+
+    const incDef = out.variables.find((v) => v.name === "inc")?.defs[0];
+    if (incDef?.type !== DEFINITION_TYPE.Variable) {
+      throw new Error("inc's first def should be a Variable");
+    }
+    expect(incDef.init?.type).toEqual("ArrowFunctionExpression");
+
+    const vDef = out.variables.find((v) => v.name === "v")?.defs[0];
+    if (vDef?.type !== DEFINITION_TYPE.Variable) {
+      throw new Error("v's first def should be a Variable");
+    }
+    expect(vDef.init?.type).toEqual("CallExpression");
+  });
 });
