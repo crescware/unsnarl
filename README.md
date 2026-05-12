@@ -49,6 +49,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
 | `-o`  | `--out-dir <dir>`        | Write to directory with auto-named file — see Writing output  |
 |       | `--out-file <path>`      | Write to that exact file path — see Writing output            |
+|       | `--plugin <names>`       | Enable bundled plugin(s) (repeatable) — see Plugins           |
 |       | `--debug`                | Annotate Mermaid labels with `NODE_KIND` / `SUBGRAPH_KIND`    |
 | `-v`  | `--version`              | Show version                                                  |
 | `-h`  | `--help`                 | Show help                                                     |
@@ -164,6 +165,38 @@ cat foo.ts | uns --stdin --out-file out.json -f json
 Parent directories are created if missing, and the file is overwritten if
 it exists. Unlike `-o`, `--out-file` does not require `-r/--roots` when
 reading from stdin, because it does not derive a basename.
+
+### Plugins
+
+A plugin transforms the serialized IR between analysis and emission — after
+the scope tree has been built but before any output format is rendered. Pass
+`--plugin <name>` to enable one; the flag is repeatable and accepts
+comma-separated values:
+
+```sh
+uns --plugin react file.tsx
+uns --plugin react,other file.tsx
+uns --plugin react --plugin other file.tsx
+```
+
+Names may include or omit the `unsnarl-plugin-` prefix (`react` and
+`unsnarl-plugin-react` resolve to the same plugin). Only the plugins bundled
+with the unsnarl build are available; passing an unknown name exits with `2`.
+
+#### `unsnarl-plugin-react`
+
+Elides the React hooks `useCallback` and `useMemo` so the IR reads as if the
+hook wrappers were not present:
+
+- `const x = useCallback(fn, deps)` — the variable's init is rewritten to
+  point at the inner function, so `x` reads as a plain arrow assignment.
+- `const x = useMemo(fn, deps)` — the variable's init stays as a call, but
+  the `useMemo` callee and the dep-array references are dropped so it reads
+  as an IIFE invocation of the inner function.
+
+The `useCallback` / `useMemo` imports are removed when no other references
+point at them. A hook referenced for non-call use (e.g. passed as a value)
+is left in place.
 
 ## Setup
 
