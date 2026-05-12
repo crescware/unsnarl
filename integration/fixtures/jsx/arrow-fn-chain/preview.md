@@ -1,0 +1,83 @@
+# integration/fixtures/jsx/arrow-fn-chain/input.tsx
+
+## Input
+
+```tsx
+const Comp = () => {
+  const a = () => 1;
+  const b = () => a() + 1;
+  const c = () => b() + 1;
+  return <button onClick={c}>{c()}</button>;
+};
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_button_106["global button"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_Comp_6["unused Comp()<br/>L1"]
+    subgraph s_scope_1["Comp()<br/>L1-6"]
+      direction RL
+      subgraph wrap_s_scope_2[" "]
+        direction TB
+        n_scope_1_a_29["a()<br/>L2"]
+        subgraph s_scope_2["a()<br/>L2"]
+          direction RL
+        end
+      end
+      subgraph wrap_s_scope_3[" "]
+        direction TB
+        n_scope_1_b_50["b()<br/>L3"]
+        subgraph s_scope_3["b()<br/>L3"]
+          direction RL
+          subgraph s_return_scope_1_b_50_60_67["return L3"]
+            direction RL
+            ret_use_ref_3["a<br/>L3"]
+          end
+        end
+      end
+      subgraph wrap_s_scope_4[" "]
+        direction TB
+        n_scope_1_c_77["c()<br/>L4"]
+        subgraph s_scope_4["c()<br/>L4"]
+          direction RL
+          subgraph s_return_scope_1_c_77_87_94["return L4"]
+            direction RL
+            ret_use_ref_5["b<br/>L4"]
+          end
+        end
+      end
+      subgraph s_return_scope_0_Comp_6_98_140["return L5"]
+        direction RL
+        ret_use_ref_6["&lt;button&gt;<br/>L5"]
+        ret_use_ref_7["c<br/>L5"]
+        ret_use_ref_8["c<br/>L5"]
+      end
+    end
+  end
+  n_scope_1_a_29 -->|read,call| ret_use_ref_3
+  n_scope_1_b_50 -->|read,call| ret_use_ref_5
+  n_scope_0_button_106 -->|read| ret_use_ref_6
+  n_scope_1_c_77 -->|read| ret_use_ref_7
+  n_scope_1_c_77 -->|read,call| ret_use_ref_8
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class wrap_s_scope_2 nestL3;
+  class wrap_s_scope_3 nestL3;
+  class wrap_s_scope_4 nestL3;
+  class s_return_scope_0_Comp_6_98_140 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  class s_scope_4 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_1_b_50_60_67 nestL5;
+  class s_return_scope_1_c_77_87_94 nestL5;
+```
