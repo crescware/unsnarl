@@ -27,6 +27,7 @@ const baseOpts = {
   depths: defaultDepths(),
   out: null,
   debug: false,
+  plugins: [],
 } as const satisfies NormalizedCliOptions;
 
 const fakeCommand = {

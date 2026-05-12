@@ -6,6 +6,7 @@ import { VERSION } from "../../version.js";
 import { LANGUAGES } from "./cli-language.js";
 import { depthOptions } from "./depth-options.js";
 import { formatOptions } from "./format-options.js";
+import { pluginOptions } from "./plugin-options.js";
 import { scopeOptions } from "./scope-options.js";
 
 function coerceLanguage(value: string): CliLanguage {
@@ -33,6 +34,7 @@ export function buildCommand(): Command {
       .default("ts" as CliLanguage),
     ...scopeOptions(),
     ...depthOptions(),
+    ...pluginOptions(),
     new Option(
       "-o, --out-dir <dir>",
       "Write output to <dir>/<auto-name>.<ext>",

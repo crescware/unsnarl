@@ -8,6 +8,7 @@ import type { Emitter } from "./pipeline/emit/emitter.js";
 import type { Parser } from "./pipeline/parse/parser.js";
 import { SOURCE_TYPE } from "./pipeline/parse/source-type.js";
 import { createPipeline } from "./pipeline/pipeline.js";
+import type { UnsnarlPlugin } from "./pipeline/plugin/unsnarl-plugin.js";
 import type { IRSerializer } from "./pipeline/serialize/ir-serializer.js";
 import { SERIALIZED_IR_VERSION } from "./serializer/serialized-ir-version.js";
 
@@ -65,6 +66,7 @@ describe("createPipeline", () => {
       parser: fakeParser,
       serializer: fakeSerializer,
       emitters: buildRegistry([fakeEmitter]),
+      plugins: [],
     });
 
     const result = pipeline.runDetailed("const x = 1;", {
@@ -89,6 +91,7 @@ describe("createPipeline", () => {
       parser: fakeParser,
       serializer: fakeSerializer,
       emitters: buildRegistry([]),
+      plugins: [],
     });
 
     expect(
@@ -129,6 +132,7 @@ describe("createPipeline", () => {
       parser: swapped,
       serializer: fakeSerializer,
       emitters: buildRegistry([fakeEmitter]),
+      plugins: [],
     });
 
     pipeline.runDetailed("", {
@@ -146,5 +150,53 @@ describe("createPipeline", () => {
     });
 
     expect(parserCalled).toEqual(true);
+  });
+
+  test("applies plugins in declared order between serialization and emission", () => {
+    const calls: /* mutable */ string[] = [];
+    const pluginA: UnsnarlPlugin = {
+      meta: { name: "test-a" },
+      transform: (ir) => {
+        calls.push("a");
+        return { ...ir, raw: `${ir.raw}:a` };
+      },
+    };
+    const pluginB: UnsnarlPlugin = {
+      meta: { name: "test-b" },
+      transform: (ir) => {
+        calls.push("b");
+        return { ...ir, raw: `${ir.raw}:b` };
+      },
+    };
+    const observingEmitter = {
+      format: "observing",
+      contentType: "text/plain",
+      extension: "txt",
+      emit: (ir: SerializedIR) => ir.raw,
+    } as const satisfies Emitter;
+
+    const pipeline = createPipeline({
+      parser: fakeParser,
+      serializer: fakeSerializer,
+      emitters: buildRegistry([observingEmitter]),
+      plugins: [pluginA, pluginB],
+    });
+
+    const result = pipeline.runDetailed("ignored", {
+      format: "observing",
+      language: LANGUAGE.Ts,
+      sourcePath: "x.ts",
+      sourceType: SOURCE_TYPE.Module,
+      emit: {
+        prettyJson: true,
+        prunedGraph: null,
+        resolutions: null,
+        debug: false,
+      },
+      pruning: null,
+    });
+
+    expect(calls).toEqual(["a", "b"]);
+    expect(result.text).toEqual(":a:b");
   });
 });

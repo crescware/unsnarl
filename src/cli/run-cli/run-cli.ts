@@ -5,7 +5,10 @@ import { ParseError } from "../../parser/parse-error.js";
 import { createConfiguredEmitterRegistry } from "../../pipeline/create-configured-emitter-registry.js";
 import { createDefaultPipeline } from "../../pipeline/create-default-pipeline.js";
 import { buildCommand } from "../args/build-command.js";
-import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
+import type {
+  ParsedCliOptions,
+  RawCliOptions,
+} from "../args/parsed-cli-options.js";
 import { buildRunOpts } from "./build-run-opts.js";
 import { calcSource } from "./calc-source.js";
 import { CliUsageError } from "./cli-usage-error.js";
@@ -19,13 +22,16 @@ import { handleError } from "./handle-error.js";
 import { handleParseError } from "./handle-parse-error.js";
 import { normalizeCliOptions } from "./normalize-cli-options.js";
 import { resolveOutputPath } from "./resolve-output-path/resolve-output-path.js";
+import { resolvePlugin } from "./resolve-plugin.js";
 import { writeOutput } from "./write-output.js";
 
 export async function runCli(argv: readonly string[]): Promise<number> {
   const command = buildCommand();
 
-  command.action(async (fileArg: unknown, opts: ParsedCliOptions) => {
+  command.action(async (fileArg: unknown, rawOpts: RawCliOptions) => {
     const file = typeof fileArg === "string" ? fileArg : null;
+    const { plugin, ...rest } = rawOpts;
+    const opts: ParsedCliOptions = { ...rest, plugins: plugin };
     const normalized = normalizeCliOptions(opts);
     emitOutFlagNotice(normalized);
     const src = await calcSource(command, file, normalized);
@@ -37,7 +43,8 @@ export async function runCli(argv: readonly string[]): Promise<number> {
     const outputPath = resolveOutputPath(src, normalized, emitters);
     const { text, runOpts } = buildRunOpts(src, normalized);
 
-    const pipeline = createDefaultPipeline(emitters);
+    const plugins = await Promise.all(normalized.plugins.map(resolvePlugin));
+    const pipeline = createDefaultPipeline(emitters, plugins);
     const result = pipeline.runDetailed(text, runOpts);
 
     emitResolutionNotices(result.resolutions);

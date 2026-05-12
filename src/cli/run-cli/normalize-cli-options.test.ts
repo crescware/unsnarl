@@ -22,6 +22,7 @@ const baseParsed = {
   outDir: null,
   outFile: null,
   debug: false,
+  plugins: [],
 } as const satisfies ParsedCliOptions;
 
 describe("normalizeCliOptions", () => {

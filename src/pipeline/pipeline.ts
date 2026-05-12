@@ -19,13 +19,18 @@ export function createPipeline(config: PipelineConfig): Pipeline {
       sourceType: opts.sourceType,
     });
     const analyzed = runAnalysis(parsed);
-    const ir = config.serializer.serialize({
-      rootScope: analyzed.rootScope,
-      annotations: analyzed.annotations,
-      diagnostics: analyzed.diagnostics,
-      raw: analyzed.raw,
-      source: { path: opts.sourcePath, language: opts.language },
-    });
+
+    const ir = config.plugins.reduce(
+      (acc, plugin) => plugin.transform(acc),
+      config.serializer.serialize({
+        rootScope: analyzed.rootScope,
+        annotations: analyzed.annotations,
+        diagnostics: analyzed.diagnostics,
+        raw: analyzed.raw,
+        source: { path: opts.sourcePath, language: opts.language },
+      }),
+    );
+
     const emitter = config.emitters.get(opts.format);
     if (!emitter) {
       const available = config.emitters.list().join(", ");

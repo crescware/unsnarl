@@ -19,4 +19,5 @@ export type NormalizedCliOptions = Readonly<{
   depths: NestingDepths;
   out: OutTarget | null;
   debug: boolean;
+  plugins: readonly string[];
 }>;
