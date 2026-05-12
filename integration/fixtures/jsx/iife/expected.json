@@ -1,0 +1,164 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx/iife/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_Counter_6",
+      "name": "Counter",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_button_146",
+      "name": "button",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ImplicitGlobalVariable"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 7,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Counter_6",
+      "ownerName": "Counter",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_start_19",
+          "name": "start",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_value_60",
+          "name": "value",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Variable",
+          "declarationKind": "const",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 2,
+          "endLine": 5,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_doubled_87",
+              "name": "doubled",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "Variable",
+              "declarationKind": "const",
+              "initIsFunction": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_0_Counter_6_112_127",
+              "kind": "return",
+              "line": 4,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_4",
+                  "kind": "ReturnUse",
+                  "name": "doubled",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Counter_6_138_170",
+          "kind": "return",
+          "line": 6,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnUse",
+              "name": "button",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnUse",
+              "name": "value",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_start_19",
+      "to": "n_scope_2_doubled_87",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_doubled_87",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_button_146",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_value_60",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

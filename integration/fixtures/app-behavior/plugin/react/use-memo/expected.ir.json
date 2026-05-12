@@ -1,0 +1,722 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx",
+    "language": "tsx"
+  },
+  "raw": "import { useMemo } from \"react\";\n\nconst Counter = ({ start }: { start: number }) => {\n  const value = useMemo(() => {\n    const doubled = start * 2;\n    return doubled;\n  }, [start]);\n  return <button>{value}</button>;\n};\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 0,
+          "offset": 222
+        }
+      },
+      "variables": [
+        "scope#0:useMemo@9",
+        "scope#0:Counter@40",
+        "scope#0:button@194"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 3,
+          "column": 16,
+          "offset": 50
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 1,
+          "offset": 220
+        }
+      },
+      "variables": [
+        "scope#1:start@53",
+        "scope#1:value@94"
+      ],
+      "references": [
+        "ref#1",
+        "ref#2",
+        "ref#6",
+        "ref#7",
+        "ref#8"
+      ],
+      "through": [
+        "ref#7"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 4,
+          "column": 24,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 3,
+          "offset": 172
+        }
+      },
+      "variables": [
+        "scope#2:doubled@128"
+      ],
+      "references": [
+        "ref#3",
+        "ref#4",
+        "ref#5"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 2,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:useMemo@9",
+      "name": "useMemo",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "useMemo",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "ImportBinding",
+          "importKind": "named",
+          "importedName": "useMemo",
+          "importSource": "react"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:Counter@40",
+      "name": "Counter",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 40
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "Counter",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 40
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 40
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 34
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 50
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:button@194",
+      "name": "button",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 8,
+          "column": 10,
+          "offset": 194
+        }
+      ],
+      "references": [
+        "ref#7"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "button",
+            "span": {
+              "line": 8,
+              "column": 10,
+              "offset": 194
+            }
+          },
+          "node": {
+            "type": "JSXIdentifier",
+            "span": {
+              "line": 8,
+              "column": 10,
+              "offset": 194
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:start@53",
+      "name": "start",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 19,
+          "offset": 53
+        }
+      ],
+      "references": [
+        "ref#4",
+        "ref#6"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "start",
+            "span": {
+              "line": 3,
+              "column": 19,
+              "offset": 53
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 50
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:value@94",
+      "name": "value",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 4,
+          "column": 8,
+          "offset": 94
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#8"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "value",
+            "span": {
+              "line": 4,
+              "column": 8,
+              "offset": 94
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 4,
+              "column": 8,
+              "offset": 94
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 4,
+              "column": 2,
+              "offset": 88
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "CallExpression",
+            "span": {
+              "line": 4,
+              "column": 16,
+              "offset": 102
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:doubled@128",
+      "name": "doubled",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 10,
+          "offset": 128
+        }
+      ],
+      "references": [
+        "ref#3",
+        "ref#5"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "doubled",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 128
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 128
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 4,
+              "offset": 122
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 5,
+              "column": 20,
+              "offset": 138
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "Counter",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 40
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:Counter@40",
+      "owners": [
+        "scope#0:Counter@40"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "value",
+        "span": {
+          "line": 4,
+          "column": 8,
+          "offset": 94
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:value@94",
+      "owners": [
+        "scope#1:value@94"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "useMemo",
+        "span": {
+          "line": 4,
+          "column": 16,
+          "offset": 102
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:useMemo@9",
+      "owners": [
+        "scope#1:value@94"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "doubled",
+        "span": {
+          "line": 5,
+          "column": 10,
+          "offset": 128
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:doubled@128",
+      "owners": [
+        "scope#2:doubled@128"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "start",
+        "span": {
+          "line": 5,
+          "column": 20,
+          "offset": 138
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:start@53",
+      "owners": [
+        "scope#2:doubled@128"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "doubled",
+        "span": {
+          "line": 6,
+          "column": 11,
+          "offset": 160
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:doubled@128",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 153
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 19,
+          "offset": 168
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#6",
+      "identifier": {
+        "name": "start",
+        "span": {
+          "line": 7,
+          "column": 6,
+          "offset": 175
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:start@53",
+      "owners": [
+        "scope#1:value@94"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#7",
+      "identifier": {
+        "name": "button",
+        "span": {
+          "line": 8,
+          "column": 10,
+          "offset": 194
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:button@194",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 8,
+          "column": 2,
+          "offset": 186
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 34,
+          "offset": 218
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 8,
+          "column": 9,
+          "offset": 193
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 33,
+          "offset": 217
+        }
+      },
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#8",
+      "identifier": {
+        "name": "value",
+        "span": {
+          "line": 8,
+          "column": 18,
+          "offset": 202
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:value@94",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 8,
+          "column": 2,
+          "offset": 186
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 34,
+          "offset": 218
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:Counter@40"
+  ],
+  "diagnostics": []
+}
