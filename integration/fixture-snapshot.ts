@@ -9,6 +9,7 @@ import type { NestingDepths } from "../src/ir/annotations/scope-annotation.js";
 import { LANGUAGE, type Language } from "../src/language.js";
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
 import { sourceTypeFromPath } from "../src/pipeline/parse/source-type-from-path.js";
+import type { UnsnarlPlugin } from "../src/pipeline/plugin/unsnarl-plugin.js";
 import type { PruningRunOptions } from "../src/pipeline/prune/pruning-run-options.js";
 import type { PipelineRunOptions } from "../src/pipeline/runner/pipeline-run-options.js";
 import { parseRootQueries } from "../src/root-query/parse-root-queries.js";
@@ -102,26 +103,39 @@ type FixturePruning = Readonly<{
 
 type FixtureVariantBase = Readonly<{
   // Filename slug; output goes under `<mode>-<slug>/`, where <mode>
-  // tracks which restrictions are active (`pruned`, `depth`,
-  // `pruned-depth`). Slugs are not auto-derived because existing
-  // fixtures use ad-hoc conventions (`r10-c1`, `counter-a2`, etc.)
-  // that diverge per fixture.
+  // tracks which dimension distinguishes the variant from the baseline
+  // (`pruned`, `depth`, `pruned-depth`, `plugin`). Slugs are not
+  // auto-derived because existing fixtures use ad-hoc conventions
+  // (`r10-c1`, `counter-a2`, etc.) that diverge per fixture.
   slug: string;
   // describe label; defaults to `<mode>: ${slug}`.
   label?: string;
 }>;
 
-// At least one of `pruning` / `depths` must be set; otherwise the run
-// would produce the same output as the baseline call. The union of
-// "pruning required (depths optional)" with "depths required (pruning
-// optional)" enforces that at the type level.
-type FixtureVariant =
-  | (FixtureVariantBase &
-      Readonly<{ pruning: FixturePruning; depths?: NestingDepths }>)
-  | (FixtureVariantBase &
-      Readonly<{ pruning?: FixturePruning; depths: NestingDepths }>);
+// At least one of `pruning` / `depths` / `plugins` must be set;
+// otherwise the run would produce the same output as the baseline
+// call. The three-arm union enforces that at the type level by making
+// one field required per arm.
+type FixtureVariant = FixtureVariantBase &
+  (
+    | Readonly<{
+        pruning: FixturePruning;
+        depths?: NestingDepths;
+        plugins?: readonly UnsnarlPlugin[];
+      }>
+    | Readonly<{
+        pruning?: FixturePruning;
+        depths: NestingDepths;
+        plugins?: readonly UnsnarlPlugin[];
+      }>
+    | Readonly<{
+        pruning?: FixturePruning;
+        depths?: NestingDepths;
+        plugins: readonly UnsnarlPlugin[];
+      }>
+  );
 
-type VariantMode = "pruned" | "depth" | "pruned-depth";
+type VariantMode = "pruned" | "depth" | "pruned-depth" | "plugin";
 
 function variantMode(variant: FixtureVariant): VariantMode {
   if (variant.pruning && variant.depths) {
@@ -130,19 +144,24 @@ function variantMode(variant: FixtureVariant): VariantMode {
   if (variant.pruning) {
     return "pruned";
   }
-  return "depth";
+  if (variant.depths) {
+    return "depth";
+  }
+  return "plugin";
 }
 
 const VARIANT_LABEL: Readonly<Record<VariantMode, string>> = {
   pruned: "pruned",
   depth: "depth",
   "pruned-depth": "pruned+depth",
+  plugin: "plugin",
 };
 
 const VARIANT_ADJECTIVE: Readonly<Record<VariantMode, string>> = {
   pruned: "pruned",
   depth: "depth-bounded",
   "pruned-depth": "pruned + depth-bounded",
+  plugin: "plugin-applied",
 };
 
 function buildPruning(p: FixturePruning): PruningRunOptions {
@@ -182,7 +201,8 @@ export function fixtureSnapshot(
   variant?: FixtureVariant,
 ): void {
   const ctx = loadFixture(metaUrl);
-  const pipeline = createDefaultPipeline();
+  const plugins = variant?.plugins ?? [];
+  const pipeline = createDefaultPipeline(undefined, plugins);
   ensureMermaid();
   const baseOpts = buildBaseOpts(ctx);
 
@@ -225,8 +245,16 @@ export function fixtureSnapshot(
   const adjective = VARIANT_ADJECTIVE[mode];
   const label = variant.label ?? `${VARIANT_LABEL[mode]}: ${variant.slug}`;
   const variantDir = join(ctx.here, `${mode}-${variant.slug}`);
+  // Plugin variants reshape the IR itself, so IR snapshots have
+  // distinct content per variant; pruning / depth variants only
+  // narrow the downstream VisualGraph, so their IR matches the
+  // baseline and there is no value in re-snapshotting it.
+  const snapIr = mode === "plugin";
   describe(`${ctx.name} (${label})`, () => {
     const snap = snapWith(variantDir, opts);
+    if (snapIr) {
+      snap(`emits the ${adjective} IR JSON`, "ir");
+    }
     snap(`emits the ${adjective} VisualGraph JSON`, "json");
     snap(`emits the ${adjective} Mermaid flowchart`, "mermaid");
     snap(`renders the ${adjective} Markdown preview`, "markdown");
