@@ -1,4 +1,5 @@
 import { buildVisualGraph } from "../visual-graph/builder/build-visual-graph.js";
+import { collectHighlightIds } from "../visual-graph/highlight/collect-highlight-ids.js";
 import { pruneVisualGraph } from "../visual-graph/prune/prune-visual-graph.js";
 import { resolveAmbiguousQueries } from "../visual-graph/prune/resolve-ambiguous-queries.js";
 import { runAnalysis } from "./analyze/run-analysis.js";
@@ -45,27 +46,61 @@ export function createPipeline(config: PipelineConfig): Pipeline {
     let perQuery: PipelineRunDetails["pruning"] = null;
     let resolutions: PipelineRunDetails["resolutions"] = null;
 
-    if (opts.pruning !== null && emitter.format !== "ir") {
+    if (
+      (opts.pruning !== null || opts.highlight !== null) &&
+      emitter.format !== "ir"
+    ) {
       const built = buildVisualGraph(
         ir,
         opts.depths ? { depths: opts.depths } : undefined,
       );
-      const resolution = resolveAmbiguousQueries(built, opts.pruning.roots);
-      const pr = pruneVisualGraph(built, {
-        ...opts.pruning,
-        roots: resolution.resolved,
-      });
-      emitOpts = {
-        ...opts.emit,
-        ...(opts.depths ? { depths: opts.depths } : {}),
-        prunedGraph: pr.graph,
-        resolutions: resolution.resolutions,
-      };
-      perQuery = pr.perQuery.map(({ query, matched }) => ({
-        query: query.raw,
-        matched,
-      }));
-      resolutions = resolution.resolutions;
+      let workingGraph = built;
+      // Captured from the prune walk so `-H` in roots mode can paint
+      // the exact same id set that pruning treated as roots, instead
+      // of re-matching with the looser highlight matcher.
+      let pruneRootIds: ReadonlySet<string> | null = null;
+      if (opts.pruning !== null) {
+        const resolution = resolveAmbiguousQueries(built, opts.pruning.roots);
+        const pr = pruneVisualGraph(built, {
+          ...opts.pruning,
+          roots: resolution.resolved,
+        });
+        workingGraph = pr.graph;
+        pruneRootIds = pr.rootIds;
+        emitOpts = {
+          ...opts.emit,
+          ...(opts.depths ? { depths: opts.depths } : {}),
+          prunedGraph: pr.graph,
+          resolutions: resolution.resolutions,
+        };
+        perQuery = pr.perQuery.map(({ query, matched }) => ({
+          query: query.raw,
+          matched,
+        }));
+        resolutions = resolution.resolutions;
+      }
+      if (opts.highlight !== null) {
+        // Roots mode mirrors `-r`'s match set verbatim, so it
+        // inherits `NAME_QUERY_EXCLUDED` (a bare name query like
+        // `-r counter` excludes `WriteOp` / `ReturnUse`, and so does
+        // `-r counter -H`). Queries mode (`-H <raw>`) uses the looser
+        // highlight matcher so explicit highlight queries paint every
+        // occurrence of the identifier.
+        let highlightIds: ReadonlySet<string>;
+        if (opts.highlight.kind === "roots") {
+          highlightIds = pruneRootIds ?? new Set<string>();
+        } else {
+          const highlightResolution = resolveAmbiguousQueries(
+            workingGraph,
+            opts.highlight.queries,
+          );
+          highlightIds = collectHighlightIds(
+            workingGraph,
+            highlightResolution.resolved,
+          );
+        }
+        emitOpts = { ...emitOpts, highlightIds, highlight: opts.highlight };
+      }
     }
 
     const text = emitter.emit(ir, emitOpts);

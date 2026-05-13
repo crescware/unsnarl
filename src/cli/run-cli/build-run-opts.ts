@@ -1,3 +1,4 @@
+import type { HighlightRunOptions } from "../../pipeline/highlight/highlight-run-options.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { sourceTypeFromPath } from "../../pipeline/parse/source-type-from-path.js";
 import type { PruningRunOptions } from "../../pipeline/prune/pruning-run-options.js";
@@ -36,6 +37,13 @@ export function buildRunOpts(
         } satisfies PruningRunOptions)
       : null;
 
+  const highlight: HighlightRunOptions | null =
+    opts.highlight.mode === "off"
+      ? null
+      : opts.highlight.mode === "roots"
+        ? { kind: "roots" }
+        : { kind: "queries", queries: opts.highlight.queries };
+
   const runOpts = {
     format: opts.format,
     language,
@@ -45,10 +53,13 @@ export function buildRunOpts(
       prettyJson: opts.prettyJson,
       prunedGraph: null,
       resolutions: null,
+      highlightIds: null,
+      highlight: null,
       debug: opts.debug,
       depths: opts.depths,
     },
     pruning,
+    highlight,
     depths: opts.depths,
   } satisfies PipelineRunOptions;
 

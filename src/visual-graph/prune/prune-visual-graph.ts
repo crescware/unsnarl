@@ -18,7 +18,7 @@ export function pruneVisualGraph(
   options: PruneOptions,
 ): PruneResult {
   if (options.roots.length === 0) {
-    return { graph, perQuery: [] };
+    return { graph, perQuery: [], rootIds: new Set<string>() };
   }
 
   const perQuery = options.roots.map((v) => ({
@@ -176,5 +176,5 @@ export function pruneVisualGraph(
     },
   } as const satisfies VisualGraph;
 
-  return { graph: pruned, perQuery };
+  return { graph: pruned, perQuery, rootIds };
 }

@@ -78,9 +78,12 @@ describe("createPipeline", () => {
         prettyJson: true,
         prunedGraph: null,
         resolutions: null,
+        highlightIds: null,
+        highlight: null,
         debug: false,
       },
       pruning: null,
+      highlight: null,
     }).text;
 
     expect(result).toEqual("version=1");
@@ -105,9 +108,12 @@ describe("createPipeline", () => {
             prettyJson: true,
             prunedGraph: null,
             resolutions: null,
+            highlightIds: null,
+            highlight: null,
             debug: false,
           },
           pruning: null,
+          highlight: null,
         }).text,
     ).toThrow(/Unknown emitter format/);
   });
@@ -144,9 +150,12 @@ describe("createPipeline", () => {
         prettyJson: true,
         prunedGraph: null,
         resolutions: null,
+        highlightIds: null,
+        highlight: null,
         debug: false,
       },
       pruning: null,
+      highlight: null,
     });
 
     expect(parserCalled).toEqual(true);
@@ -191,9 +200,12 @@ describe("createPipeline", () => {
         prettyJson: true,
         prunedGraph: null,
         resolutions: null,
+        highlightIds: null,
+        highlight: null,
         debug: false,
       },
       pruning: null,
+      highlight: null,
     });
 
     expect(calls).toEqual(["a", "b"]);

@@ -1,0 +1,4 @@
+1	?	integration/fixtures/app-behavior/highlight/input.ts:3 a
+1	1	integration/fixtures/app-behavior/highlight/input.ts:4 b
+?	1	integration/fixtures/app-behavior/highlight/input.ts:5 c
+?	?	3 total

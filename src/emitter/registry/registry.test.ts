@@ -67,6 +67,8 @@ describe("DefaultEmitterRegistry", () => {
         prettyJson: true,
         prunedGraph: null,
         resolutions: null,
+        highlightIds: null,
+        highlight: null,
         debug: false,
       }),
     ).toEqual("version=1");

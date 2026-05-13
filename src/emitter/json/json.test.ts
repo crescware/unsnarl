@@ -82,6 +82,8 @@ function emit(code: string, prettyJson = true): string {
     prettyJson,
     prunedGraph: null,
     resolutions: null,
+    highlightIds: null,
+    highlight: null,
     debug: false,
   });
 }

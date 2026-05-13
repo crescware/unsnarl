@@ -21,6 +21,7 @@ const baseOpts = {
   mermaidRenderer: null,
   colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
+  highlight: { mode: "off" },
   descendants: null,
   ancestors: null,
   context: null,

@@ -1,0 +1,10 @@
+2	0	integration/fixtures/app-behavior/highlight/input.ts:1 seed
+1	1	integration/fixtures/app-behavior/highlight/input.ts:3 a
+1	1	integration/fixtures/app-behavior/highlight/input.ts:4 b
+1	1	integration/fixtures/app-behavior/highlight/input.ts:5 c
+1	0	integration/fixtures/app-behavior/highlight/input.ts:7 compute
+1	0	integration/fixtures/app-behavior/highlight/input.ts:7 x
+0	1	integration/fixtures/app-behavior/highlight/input.ts:8 x
+0	1	integration/fixtures/app-behavior/highlight/input.ts:8 seed
+0	2	integration/fixtures/app-behavior/highlight/input.ts:11 unused d
+7	7	9 total

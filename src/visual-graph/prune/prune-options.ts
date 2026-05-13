@@ -13,4 +13,12 @@ export type PruneResult = Readonly<{
     query: ParsedRootQuery;
     matched: number;
   }>[];
+  // The exact id set the prune walk treated as "roots" -- i.e. the
+  // nodes the queries matched directly (and any nodes swept in by a
+  // bare line query that lands on a subgraph's start line). The BFS
+  // descendants/ancestors are NOT included. Exposed so `-H` in
+  // roots mode can paint the same id set the user pinpointed via
+  // `-r`, inheriting the same use-site exclusions that pruning
+  // applies on a bare name query.
+  rootIds: ReadonlySet<string>;
 }>;

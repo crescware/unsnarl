@@ -1,0 +1,41 @@
+# integration/fixtures/app-behavior/highlight-shorthand/input.ts
+
+## Input
+
+```ts
+function build() {
+  const a = "a";
+  const b = "b";
+  return { a, b };
+}
+```
+
+## Query
+
+```sh
+-r a -C 1 -H a
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  %% pruning roots a=1 ancestors=1 descendants=1
+  subgraph s_scope_1["build()<br/>L1-5"]
+    direction RL
+    n_scope_1_a_27["a<br/>L2"]
+    subgraph s_return_scope_0_build_9_55_71["return L4"]
+      direction RL
+      ret_use_ref_2["a<br/>L4"]
+    end
+  end
+  n_scope_1_a_27 -->|read| ret_use_ref_2
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_return_scope_0_build_9_55_71 nestL2;
+  style n_scope_1_a_27 fill:#facc15,stroke:#facc15,color:#0a0a0a;
+  style ret_use_ref_2 fill:#facc15,stroke:#facc15,color:#0a0a0a;
+  linkStyle 0 stroke:#facc15,stroke-width:2px;
+```

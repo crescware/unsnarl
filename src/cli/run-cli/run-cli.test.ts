@@ -605,4 +605,89 @@ describe("runCli (integration)", () => {
       "Only built-in plugins are currently supported.",
     );
   });
+
+  test("-H alone highlights the -r/--roots match (node + adjacent edges)", async () => {
+    const inputPath = join(tmpDir, "highlight-roots.ts");
+    writeFileSync(
+      inputPath,
+      "const a = 1;\nconst b = a;\nconst c = b;\nconst d = c;\n",
+    );
+    const r = await captureRun([
+      inputPath,
+      "--format",
+      "mermaid",
+      "-r",
+      "b",
+      "-C",
+      "1",
+      "-H",
+    ]);
+    expect(r.exitCode).toEqual(0);
+    // `b` appears twice (var decl at L2 + read at L3); both nodes get
+    // a `style ... fill:#facc15` directive.
+    expect(r.stdout).toMatch(/style n_[A-Za-z0-9_]+ fill:#facc15/);
+    // Edges that touch a highlighted node get a `linkStyle` directive.
+    expect(r.stdout).toMatch(/linkStyle [0-9,]+ stroke:#facc15/);
+  });
+
+  test("-H <queries> highlights the supplied queries instead of -r/--roots", async () => {
+    const inputPath = join(tmpDir, "highlight-explicit.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\nconst c = b;\n");
+    const r = await captureRun([
+      inputPath,
+      "--format",
+      "mermaid",
+      "-r",
+      "b",
+      "-C",
+      "1",
+      "-H",
+      "a",
+    ]);
+    expect(r.exitCode).toEqual(0);
+    // The `style` block targets `a`-named nodes, not the `-r` root `b`.
+    const styleLines = r.stdout
+      .split("\n")
+      .filter((v) => v.includes("style ") && v.includes("fill:#facc15"));
+    expect(styleLines.length >= 1).toEqual(true);
+    for (const v of styleLines) {
+      // The visual node id encodes the source name: `n_scope_0_a_*`.
+      expect(/n_[A-Za-z0-9_]*_a_[0-9]+/.test(v)).toEqual(true);
+    }
+  });
+
+  test("--highlight is the long form of -H and behaves identically", async () => {
+    const inputPath = join(tmpDir, "highlight-long.ts");
+    writeFileSync(inputPath, "const a = 1;\nconst b = a;\n");
+    const short = await captureRun([
+      inputPath,
+      "--format",
+      "mermaid",
+      "-r",
+      "a",
+      "-C",
+      "1",
+      "-H",
+    ]);
+    const long = await captureRun([
+      inputPath,
+      "--format",
+      "mermaid",
+      "-r",
+      "a",
+      "-C",
+      "1",
+      "--highlight",
+    ]);
+    expect(short.exitCode).toEqual(0);
+    expect(long.exitCode).toEqual(0);
+    expect(short.stdout).toEqual(long.stdout);
+  });
+
+  test("-h still prints usage (commander's built-in help short flag is intact)", async () => {
+    const r = await captureRun(["-h"]);
+    expect(r.exitCode).toEqual(0);
+    expect(r.stdout).toMatch(/Usage:/);
+    expect(r.stdout).toMatch(/--highlight/);
+  });
 });

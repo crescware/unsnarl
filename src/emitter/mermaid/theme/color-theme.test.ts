@@ -19,6 +19,13 @@ describe("ColorTheme", () => {
         color: "transparent",
       },
       nestPalette: [{ fill: "#111", stroke: "#222" }],
+      highlight: {
+        fill: "#ff0",
+        stroke: "#cc0",
+        color: "#000",
+        edgeStroke: "#cc0",
+        edgeStrokeWidth: "2px",
+      },
     };
     expect(t.nestPalette.length).toEqual(1);
   });

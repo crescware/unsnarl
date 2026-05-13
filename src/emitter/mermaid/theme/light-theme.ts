@@ -26,4 +26,14 @@ export const lightTheme: ColorTheme = {
     { fill: "#c5d4eb", stroke: "transparent" },
     { fill: "#b9cbe7", stroke: "transparent" },
   ],
+  // Slightly deeper yellow on the light theme so the highlight still
+  // pops against the lightest nest palette entries; black text keeps
+  // contrast strong.
+  highlight: {
+    fill: "#fde047",
+    stroke: "#ca8a04",
+    color: "#0a0a0a",
+    edgeStroke: "#ca8a04",
+    edgeStrokeWidth: "2px",
+  },
 };

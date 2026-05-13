@@ -1,0 +1,45 @@
+# integration/fixtures/app-behavior/highlight/input.ts
+
+## Input
+
+```ts
+const seed = 1;
+
+const a = seed + 1;
+const b = a + 1;
+const c = b + 1;
+
+function compute(x) {
+  return x + seed;
+}
+
+const d = compute(c);
+```
+
+## Query
+
+```sh
+-r b -C 1 -H c
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  %% pruning roots b=1 ancestors=1 descendants=1
+  n_scope_0_a_23["a<br/>L3"]
+  n_scope_0_b_43["b<br/>L4"]
+  n_scope_0_c_60["c<br/>L5"]
+  n_scope_0_a_23 -->|read| n_scope_0_b_43
+  n_scope_0_b_43 -->|read| n_scope_0_c_60
+  boundary_stub_1((...))
+  n_scope_0_c_60 -.-> boundary_stub_1
+  boundary_stub_2((...))
+  boundary_stub_2 -.->|read| n_scope_0_a_23
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
+  class boundary_stub_1 boundaryStub;
+  class boundary_stub_2 boundaryStub;
+  style n_scope_0_c_60 fill:#facc15,stroke:#facc15,color:#0a0a0a;
+  linkStyle 1,2 stroke:#facc15,stroke-width:2px;
+```

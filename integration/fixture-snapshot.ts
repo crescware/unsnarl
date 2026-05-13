@@ -8,6 +8,7 @@ import { describe, expect, test } from "vitest";
 import type { NestingDepths } from "../src/ir/annotations/scope-annotation.js";
 import { LANGUAGE, type Language } from "../src/language.js";
 import { createDefaultPipeline } from "../src/pipeline/create-default-pipeline.js";
+import type { HighlightRunOptions } from "../src/pipeline/highlight/highlight-run-options.js";
 import { sourceTypeFromPath } from "../src/pipeline/parse/source-type-from-path.js";
 import type { UnsnarlPlugin } from "../src/pipeline/plugin/unsnarl-plugin.js";
 import type { PruningRunOptions } from "../src/pipeline/prune/pruning-run-options.js";
@@ -101,53 +102,90 @@ type FixturePruning = Readonly<{
   ancestors: number;
 }>;
 
+// Mirrors the CLI's two highlight modes:
+// - `roots`   -> `-H/--highlight` with no inline value (the highlight
+//                follows whatever queries `pruning.roots` selected, so
+//                this is only meaningful alongside a `pruning` entry).
+// - `queries` -> `-H <raw>` / `--highlight <raw>`. The raw string is
+//                handed verbatim to `parseRootQueries`, matching the
+//                grammar the CLI itself accepts.
+type FixtureHighlight =
+  | Readonly<{ mode: "roots" }>
+  | Readonly<{ mode: "queries"; raw: string }>;
+
 type FixtureVariantBase = Readonly<{
   // Filename slug; output goes under `<mode>-<slug>/`, where <mode>
   // tracks which dimension distinguishes the variant from the baseline
-  // (`pruned`, `depth`, `pruned-depth`, `plugin`). Slugs are not
-  // auto-derived because existing fixtures use ad-hoc conventions
-  // (`r10-c1`, `counter-a2`, etc.) that diverge per fixture.
+  // (`pruned`, `depth`, `pruned-depth`, `plugin`, `highlight`,
+  // `pruned-highlight`). Slugs are not auto-derived because existing
+  // fixtures use ad-hoc conventions (`r10-c1`, `counter-a2`, etc.) that
+  // diverge per fixture.
   slug: string;
   // describe label; defaults to `<mode>: ${slug}`.
   label?: string;
 }>;
 
-// At least one of `pruning` / `depths` / `plugins` must be set;
-// otherwise the run would produce the same output as the baseline
-// call. The three-arm union enforces that at the type level by making
-// one field required per arm.
+// At least one of `pruning` / `depths` / `plugins` / `highlight` must
+// be set; otherwise the run would produce the same output as the
+// baseline call. The four-arm union enforces that at the type level by
+// making one field required per arm.
 type FixtureVariant = FixtureVariantBase &
   (
     | Readonly<{
         pruning: FixturePruning;
         depths?: NestingDepths;
         plugins?: readonly UnsnarlPlugin[];
+        highlight?: FixtureHighlight;
       }>
     | Readonly<{
         pruning?: FixturePruning;
         depths: NestingDepths;
         plugins?: readonly UnsnarlPlugin[];
+        highlight?: FixtureHighlight;
       }>
     | Readonly<{
         pruning?: FixturePruning;
         depths?: NestingDepths;
         plugins: readonly UnsnarlPlugin[];
+        highlight?: FixtureHighlight;
+      }>
+    | Readonly<{
+        pruning?: FixturePruning;
+        depths?: NestingDepths;
+        plugins?: readonly UnsnarlPlugin[];
+        highlight: FixtureHighlight;
       }>
   );
 
-type VariantMode = "pruned" | "depth" | "pruned-depth" | "plugin";
+type VariantMode =
+  | "pruned"
+  | "depth"
+  | "pruned-depth"
+  | "plugin"
+  | "highlight"
+  | "pruned-highlight";
 
 function variantMode(variant: FixtureVariant): VariantMode {
-  if (variant.pruning && variant.depths) {
+  const hasPruning = variant.pruning !== undefined;
+  const hasDepths = variant.depths !== undefined;
+  const hasPlugins = variant.plugins !== undefined;
+  const hasHighlight = variant.highlight !== undefined;
+  if (hasPlugins) {
+    return "plugin";
+  }
+  if (hasPruning && hasDepths) {
     return "pruned-depth";
   }
-  if (variant.pruning) {
+  if (hasPruning && hasHighlight) {
+    return "pruned-highlight";
+  }
+  if (hasPruning) {
     return "pruned";
   }
-  if (variant.depths) {
+  if (hasDepths) {
     return "depth";
   }
-  return "plugin";
+  return "highlight";
 }
 
 const VARIANT_LABEL: Readonly<Record<VariantMode, string>> = {
@@ -155,6 +193,8 @@ const VARIANT_LABEL: Readonly<Record<VariantMode, string>> = {
   depth: "depth",
   "pruned-depth": "pruned+depth",
   plugin: "plugin",
+  highlight: "highlight",
+  "pruned-highlight": "pruned+highlight",
 };
 
 const VARIANT_ADJECTIVE: Readonly<Record<VariantMode, string>> = {
@@ -162,6 +202,8 @@ const VARIANT_ADJECTIVE: Readonly<Record<VariantMode, string>> = {
   depth: "depth-bounded",
   "pruned-depth": "pruned + depth-bounded",
   plugin: "plugin-applied",
+  highlight: "highlighted",
+  "pruned-highlight": "pruned + highlighted",
 };
 
 function buildPruning(p: FixturePruning): PruningRunOptions {
@@ -178,6 +220,19 @@ function buildPruning(p: FixturePruning): PruningRunOptions {
   };
 }
 
+function buildHighlight(h: FixtureHighlight): HighlightRunOptions {
+  if (h.mode === "roots") {
+    return { kind: "roots" };
+  }
+  const queries = parseRootQueries(h.raw);
+  if (!queries.ok) {
+    throw new Error(
+      `unexpected --highlight parse failure for "${h.raw}": ${queries.error}`,
+    );
+  }
+  return { kind: "queries", queries: queries.queries };
+}
+
 type Opts = Omit<PipelineRunOptions, "format">;
 
 function buildBaseOpts(
@@ -191,6 +246,8 @@ function buildBaseOpts(
       prettyJson: true,
       prunedGraph: null,
       resolutions: null,
+      highlightIds: null,
+      highlight: null,
       debug: false,
     },
   };
@@ -216,7 +273,7 @@ export function fixtureSnapshot(
   }
 
   if (variant === undefined) {
-    const opts: Opts = { ...baseOpts, pruning: null };
+    const opts: Opts = { ...baseOpts, pruning: null, highlight: null };
     describe(ctx.name, () => {
       const snap = snapWith(ctx.here, opts);
       snap("emits the expected IR JSON", "ir");
@@ -240,6 +297,7 @@ export function fixtureSnapshot(
   const opts: Opts = {
     ...baseOpts,
     pruning: variant.pruning ? buildPruning(variant.pruning) : null,
+    highlight: variant.highlight ? buildHighlight(variant.highlight) : null,
     ...(variant.depths !== undefined ? { depths: variant.depths } : {}),
   };
   const adjective = VARIANT_ADJECTIVE[mode];
@@ -294,6 +352,8 @@ export function fixtureResolutions(
           prettyJson: true,
           prunedGraph: null,
           resolutions: null,
+          highlightIds: null,
+          highlight: null,
           debug: false,
         },
         pruning: {
@@ -301,6 +361,7 @@ export function fixtureResolutions(
           descendants: v.descendants,
           ancestors: v.ancestors,
         },
+        highlight: null,
       });
       expect(result.resolutions).toEqual(v.expected);
     });

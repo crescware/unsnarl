@@ -6,6 +6,7 @@ import { VERSION } from "../../version.js";
 import { LANGUAGES } from "./cli-language.js";
 import { depthOptions } from "./depth-options.js";
 import { formatOptions } from "./format-options.js";
+import { highlightOptions } from "./highlight-options.js";
 import { pluginOptions } from "./plugin-options.js";
 import { scopeOptions } from "./scope-options.js";
 
@@ -33,6 +34,7 @@ export function buildCommand(): Command {
       .argParser(coerceLanguage)
       .default("ts" as CliLanguage),
     ...scopeOptions(),
+    ...highlightOptions(),
     ...depthOptions(),
     ...pluginOptions(),
     new Option(
