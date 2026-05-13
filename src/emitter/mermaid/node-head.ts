@@ -13,28 +13,28 @@ export function nodeHead(n: VisualNode): string {
     return `&lt;${name}&gt;`;
   }
   switch (n.kind) {
-    case NODE_KIND.FunctionName:
+    case NODE_KIND.LegacyFunctionName:
       return `${name}()`;
-    case NODE_KIND.ClassName:
+    case NODE_KIND.LegacyClassName:
       return `class ${name}`;
-    case NODE_KIND.ImportBinding: {
+    case NODE_KIND.LegacyImportBinding: {
       const isRenamedNamed =
         n.importKind === IMPORT_KIND.Named && n.importedName !== n.name;
       return isRenamedNamed ? name : `import ${name}`;
     }
-    case NODE_KIND.CatchClause:
+    case NODE_KIND.LegacyCatchClause:
       return `catch ${name}`;
-    case NODE_KIND.ImplicitGlobalVariable:
+    case NODE_KIND.LegacyImplicitGlobalVariable:
       return `global ${name}`;
-    case NODE_KIND.WriteOp:
+    case NODE_KIND.LegacyWriteOp:
       return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
         ? `let ${name}`
         : name;
-    case NODE_KIND.ModuleSource:
+    case NODE_KIND.LegacyModuleSource:
       return `module ${name}`;
-    case NODE_KIND.ImportIntermediate:
+    case NODE_KIND.LegacyImportIntermediate:
       return `import ${name}`;
-    case NODE_KIND.Variable:
+    case NODE_KIND.LegacyVariable:
       if (n.initIsFunction) {
         return `${name}()`;
       }
@@ -45,17 +45,17 @@ export function nodeHead(n: VisualNode): string {
         return `var ${name}`;
       }
       return name;
-    case NODE_KIND.Parameter:
-    case NODE_KIND.ReturnUse:
-    case NODE_KIND.IfTest:
-    case NODE_KIND.SwitchDiscriminant:
-    case NODE_KIND.WhileTest:
-    case NODE_KIND.DoWhileTest:
-    case NODE_KIND.ForTest:
-    case NODE_KIND.ModuleSink:
-    case NODE_KIND.ExpressionStatement:
+    case NODE_KIND.LegacyParameter:
+    case NODE_KIND.LegacyReturnUse:
+    case NODE_KIND.LegacyIfTest:
+    case NODE_KIND.LegacySwitchDiscriminant:
+    case NODE_KIND.LegacyWhileTest:
+    case NODE_KIND.LegacyDoWhileTest:
+    case NODE_KIND.LegacyForTest:
+    case NODE_KIND.LegacyModuleSink:
+    case NODE_KIND.LegacyExpressionStatement:
       return name;
-    case NODE_KIND.BeyondDepth:
+    case NODE_KIND.LegacyBeyondDepth:
       // ASCII "..." rather than U+2026; some Mermaid renderers stumble on
       // multibyte glyphs inside a node-shape label.
       return "...";

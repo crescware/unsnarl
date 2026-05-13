@@ -13,7 +13,7 @@ import { collectHighlightIds } from "./collect-highlight-ids.js";
 function variableNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.LegacyVariable,
     id,
     name,
     line,
@@ -28,7 +28,7 @@ function variableNode(id: string, name: string, line: number): VisualNode {
 function returnUseNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.ReturnUse,
+    kind: NODE_KIND.LegacyReturnUse,
     id,
     name,
     line,
@@ -41,7 +41,7 @@ function returnUseNode(id: string, name: string, line: number): VisualNode {
 function writeOpNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.WriteOp,
+    kind: NODE_KIND.LegacyWriteOp,
     id,
     name,
     line,

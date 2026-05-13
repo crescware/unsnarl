@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -52,7 +52,7 @@
         {
           "type": "node",
           "id": "if_test_scope_0_37",
-          "kind": "IfTest",
+          "kind": "LegacyIfTest",
           "name": "if-test",
           "line": 4,
           "endLine": null,
@@ -62,7 +62,7 @@
         {
           "type": "node",
           "id": "wr_ref_3",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "counter",
           "line": 5,
           "endLine": null,

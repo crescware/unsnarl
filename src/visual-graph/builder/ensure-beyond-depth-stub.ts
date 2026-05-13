@@ -22,7 +22,7 @@ export function ensureBeyondDepthStub(
   const node = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: stubId,
-    kind: NODE_KIND.BeyondDepth,
+    kind: NODE_KIND.LegacyBeyondDepth,
     name: "...",
     line: parentSubgraph.line,
     endLine: parentSubgraph.endLine,

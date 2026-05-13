@@ -25,7 +25,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: forTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.ForTest,
+      kind: NODE_KIND.LegacyForTest,
       name: "for-test",
       line: scope.block.span.line,
       endLine: null,
@@ -55,7 +55,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: whileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.WhileTest,
+      kind: NODE_KIND.LegacyWhileTest,
       name: "while-test",
       line: scope.block.span.line,
       endLine: null,
@@ -78,7 +78,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: doWhileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.DoWhileTest,
+      kind: NODE_KIND.LegacyDoWhileTest,
       name: "do-while-test",
       line: scope.block.endSpan.line,
       endLine: null,

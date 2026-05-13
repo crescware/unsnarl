@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "var",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "node",
@@ -36,12 +36,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "node",
       "id": "wr_ref_1",
-      "kind": "WriteOp",
+      "kind": "LegacyWriteOp",
       "name": "global",
       "line": 2,
       "endLine": null,
@@ -52,7 +52,7 @@
     {
       "type": "node",
       "id": "expr_stmt_23",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "console.log()",
       "line": 3,
       "endLine": null,

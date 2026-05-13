@@ -5,16 +5,16 @@ import { nodeLabel } from "./node-label.js";
 export function nodeSyntax(n: VisualNode, debug: boolean): string {
   const label = nodeLabel(n, debug);
   switch (n.kind) {
-    case NODE_KIND.WriteOp:
+    case NODE_KIND.LegacyWriteOp:
       return `(["${label}"])`;
-    case NODE_KIND.ModuleSink:
+    case NODE_KIND.LegacyModuleSink:
       return `((${label}))`;
-    case NODE_KIND.BeyondDepth:
+    case NODE_KIND.LegacyBeyondDepth:
       // Circle shape mirrors the pruning boundary stub; both stand in for
       // "more graph keeps going past this rendered boundary".
       return `((${label}))`;
-    case NODE_KIND.IfTest:
-    case NODE_KIND.SwitchDiscriminant:
+    case NODE_KIND.LegacyIfTest:
+    case NODE_KIND.LegacySwitchDiscriminant:
       return `{"${label}"}`;
     default:
       return `["${label}"]`;

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -26,7 +26,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_0",
-          "kind": "ForTest",
+          "kind": "LegacyForTest",
           "name": "for-test",
           "line": 1,
           "endLine": null,
@@ -41,14 +41,14 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "let",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "wr_ref_2",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "i1",
           "line": 1,
           "endLine": null,
@@ -73,7 +73,7 @@
                 {
                   "type": "node",
                   "id": "for_test_scope_2_35",
-                  "kind": "ForTest",
+                  "kind": "LegacyForTest",
                   "name": "for-test",
                   "line": 2,
                   "endLine": null,
@@ -88,14 +88,14 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "let",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "wr_ref_5",
-                  "kind": "WriteOp",
+                  "kind": "LegacyWriteOp",
                   "name": "i2",
                   "line": 2,
                   "endLine": null,
@@ -120,7 +120,7 @@
                         {
                           "type": "node",
                           "id": "for_test_scope_4_72",
-                          "kind": "ForTest",
+                          "kind": "LegacyForTest",
                           "name": "for-test",
                           "line": 3,
                           "endLine": null,
@@ -135,14 +135,14 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
+                          "kind": "LegacyVariable",
                           "declarationKind": "let",
                           "initIsFunction": false
                         },
                         {
                           "type": "node",
                           "id": "wr_ref_8",
-                          "kind": "WriteOp",
+                          "kind": "LegacyWriteOp",
                           "name": "i3",
                           "line": 3,
                           "endLine": null,
@@ -167,7 +167,7 @@
                                 {
                                   "type": "node",
                                   "id": "for_test_scope_6_111",
-                                  "kind": "ForTest",
+                                  "kind": "LegacyForTest",
                                   "name": "for-test",
                                   "line": 4,
                                   "endLine": null,
@@ -182,14 +182,14 @@
                                   "endLine": null,
                                   "isJsxElement": false,
                                   "unused": false,
-                                  "kind": "Variable",
+                                  "kind": "LegacyVariable",
                                   "declarationKind": "let",
                                   "initIsFunction": false
                                 },
                                 {
                                   "type": "node",
                                   "id": "wr_ref_11",
-                                  "kind": "WriteOp",
+                                  "kind": "LegacyWriteOp",
                                   "name": "i4",
                                   "line": 4,
                                   "endLine": null,
@@ -214,7 +214,7 @@
                                         {
                                           "type": "node",
                                           "id": "for_test_scope_8_152",
-                                          "kind": "ForTest",
+                                          "kind": "LegacyForTest",
                                           "name": "for-test",
                                           "line": 5,
                                           "endLine": null,
@@ -229,14 +229,14 @@
                                           "endLine": null,
                                           "isJsxElement": false,
                                           "unused": false,
-                                          "kind": "Variable",
+                                          "kind": "LegacyVariable",
                                           "declarationKind": "let",
                                           "initIsFunction": false
                                         },
                                         {
                                           "type": "node",
                                           "id": "wr_ref_14",
-                                          "kind": "WriteOp",
+                                          "kind": "LegacyWriteOp",
                                           "name": "i5",
                                           "line": 5,
                                           "endLine": null,
@@ -261,7 +261,7 @@
                                                 {
                                                   "type": "node",
                                                   "id": "for_test_scope_10_195",
-                                                  "kind": "ForTest",
+                                                  "kind": "LegacyForTest",
                                                   "name": "for-test",
                                                   "line": 6,
                                                   "endLine": null,
@@ -276,14 +276,14 @@
                                                   "endLine": null,
                                                   "isJsxElement": false,
                                                   "unused": false,
-                                                  "kind": "Variable",
+                                                  "kind": "LegacyVariable",
                                                   "declarationKind": "let",
                                                   "initIsFunction": false
                                                 },
                                                 {
                                                   "type": "node",
                                                   "id": "wr_ref_17",
-                                                  "kind": "WriteOp",
+                                                  "kind": "LegacyWriteOp",
                                                   "name": "i6",
                                                   "line": 6,
                                                   "endLine": null,
@@ -301,7 +301,7 @@
                                                     {
                                                       "type": "node",
                                                       "id": "expr_stmt_240",
-                                                      "kind": "ExpressionStatement",
+                                                      "kind": "LegacyExpressionStatement",
                                                       "name": "console.log()",
                                                       "line": 7,
                                                       "endLine": null,

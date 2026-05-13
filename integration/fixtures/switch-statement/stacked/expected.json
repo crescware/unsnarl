@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -52,7 +52,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_35",
-          "kind": "SwitchDiscriminant",
+          "kind": "LegacySwitchDiscriminant",
           "name": "switch-discriminant",
           "line": 4,
           "endLine": null,
@@ -79,7 +79,7 @@
             {
               "type": "node",
               "id": "wr_ref_3",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 7,
               "endLine": null,
@@ -101,7 +101,7 @@
             {
               "type": "node",
               "id": "wr_ref_4",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 10,
               "endLine": null,

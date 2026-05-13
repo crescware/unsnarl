@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -62,7 +62,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -74,7 +74,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -88,7 +88,7 @@
         {
           "type": "node",
           "id": "while_test_scope_0_73",
-          "kind": "WhileTest",
+          "kind": "LegacyWhileTest",
           "name": "while-test",
           "line": 8,
           "endLine": null,
@@ -98,7 +98,7 @@
         {
           "type": "node",
           "id": "wr_ref_7",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "n1",
           "line": 9,
           "endLine": null,
@@ -116,7 +116,7 @@
             {
               "type": "node",
               "id": "while_test_scope_1_100",
-              "kind": "WhileTest",
+              "kind": "LegacyWhileTest",
               "name": "while-test",
               "line": 10,
               "endLine": null,
@@ -126,7 +126,7 @@
             {
               "type": "node",
               "id": "wr_ref_9",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "n2",
               "line": 11,
               "endLine": null,
@@ -137,7 +137,7 @@
             {
               "type": "node",
               "id": "beyond_depth_s_scope_2",
-              "kind": "BeyondDepth",
+              "kind": "LegacyBeyondDepth",
               "name": "...",
               "line": 10,
               "endLine": 24,

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -62,7 +62,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -74,7 +74,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -86,7 +86,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_61",
-          "kind": "SwitchDiscriminant",
+          "kind": "LegacySwitchDiscriminant",
           "name": "switch-discriminant",
           "line": 6,
           "endLine": null,
@@ -103,7 +103,7 @@
             {
               "type": "node",
               "id": "wr_ref_7",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 8,
               "endLine": null,
@@ -125,7 +125,7 @@
             {
               "type": "node",
               "id": "wr_ref_10",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 11,
               "endLine": null,
@@ -147,7 +147,7 @@
             {
               "type": "node",
               "id": "wr_ref_12",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 14,
               "endLine": null,
@@ -169,7 +169,7 @@
             {
               "type": "node",
               "id": "wr_ref_13",
-              "kind": "WriteOp",
+              "kind": "LegacyWriteOp",
               "name": "label",
               "line": 17,
               "endLine": null,
@@ -187,7 +187,7 @@
     {
       "type": "node",
       "id": "module_root",
-      "kind": "ModuleSink",
+      "kind": "LegacyModuleSink",
       "name": "module",
       "line": 0,
       "endLine": null,

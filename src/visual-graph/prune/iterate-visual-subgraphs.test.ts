@@ -13,7 +13,7 @@ import { iterateVisualSubgraphs } from "./iterate-visual-subgraphs.js";
 const node = (id: string): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id,
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.LegacyVariable,
   name: id,
   line: 1,
   isJsxElement: false,

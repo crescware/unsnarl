@@ -3,9 +3,9 @@ import type { VisualNode } from "../../visual-graph/visual-node.js";
 
 export function isSyntheticNode(n: VisualNode): boolean {
   return (
-    n.kind === NODE_KIND.ModuleSink ||
-    n.kind === NODE_KIND.ModuleSource ||
-    n.kind === NODE_KIND.ImportIntermediate ||
-    n.kind === NODE_KIND.ExpressionStatement
+    n.kind === NODE_KIND.LegacyModuleSink ||
+    n.kind === NODE_KIND.LegacyModuleSource ||
+    n.kind === NODE_KIND.LegacyImportIntermediate ||
+    n.kind === NODE_KIND.LegacyExpressionStatement
   );
 }

@@ -148,7 +148,7 @@ describe("ensureReturnUseNode", () => {
     expect(sg.endLine).toEqual(5);
     const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
     expect(node).toMatchObject({
-      kind: NODE_KIND.ReturnUse,
+      kind: NODE_KIND.LegacyReturnUse,
       name: "x",
       line: 3,
     });

@@ -12,10 +12,14 @@ describe("renderSyntheticNodeBlock", () => {
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_a", kind: NODE_KIND.ModuleSource },
-        { ...baseNode(), id: "n_a", kind: NODE_KIND.Variable },
-        { ...baseNode(), id: "import_b", kind: NODE_KIND.ImportIntermediate },
-        { ...baseNode(), id: "module_root", kind: NODE_KIND.ModuleSink },
+        { ...baseNode(), id: "mod_a", kind: NODE_KIND.LegacyModuleSource },
+        { ...baseNode(), id: "n_a", kind: NODE_KIND.LegacyVariable },
+        {
+          ...baseNode(),
+          id: "import_b",
+          kind: NODE_KIND.LegacyImportIntermediate,
+        },
+        { ...baseNode(), id: "module_root", kind: NODE_KIND.LegacyModuleSink },
       ],
     });
     expect(state.lines.map((v) => v.trim().split(/[[(]/)[0]).sort()).toEqual([
@@ -29,7 +33,7 @@ describe("renderSyntheticNodeBlock", () => {
     const state = baseRenderState();
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
-      elements: [{ ...baseNode(), id: "n_x", kind: NODE_KIND.Variable }],
+      elements: [{ ...baseNode(), id: "n_x", kind: NODE_KIND.LegacyVariable }],
     });
     expect(state.lines).toEqual([]);
   });
@@ -39,11 +43,11 @@ describe("renderSyntheticNodeBlock", () => {
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_first", kind: NODE_KIND.ModuleSource },
+        { ...baseNode(), id: "mod_first", kind: NODE_KIND.LegacyModuleSource },
         {
           ...baseNode(),
           id: "import_second",
-          kind: NODE_KIND.ImportIntermediate,
+          kind: NODE_KIND.LegacyImportIntermediate,
         },
       ],
     });

@@ -9,7 +9,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.WriteOp,
+        kind: NODE_KIND.LegacyWriteOp,
         name: "x",
         line: 3,
       },
@@ -23,7 +23,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.ModuleSink,
+        kind: NODE_KIND.LegacyModuleSink,
         name: "module",
       },
       false,
@@ -35,7 +35,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.IfTest,
+        kind: NODE_KIND.LegacyIfTest,
         name: "if-test",
         line: 5,
       },
@@ -48,7 +48,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.SwitchDiscriminant,
+        kind: NODE_KIND.LegacySwitchDiscriminant,
         name: "switch-discriminant",
         line: 7,
       },
@@ -61,7 +61,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.Variable,
+        kind: NODE_KIND.LegacyVariable,
         name: "x",
         line: 4,
       },
@@ -75,12 +75,12 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.IfTest,
+        kind: NODE_KIND.LegacyIfTest,
         name: "if-test",
         line: 5,
       },
       true,
     );
-    expect(got).toEqual('{"if ()<br/>L5<br/>IfTest"}');
+    expect(got).toEqual('{"if ()<br/>L5<br/>LegacyIfTest"}');
   });
 });

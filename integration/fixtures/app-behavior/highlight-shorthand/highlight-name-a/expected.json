@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "subgraph",
@@ -34,7 +34,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -46,7 +46,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -61,7 +61,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "a",
               "line": 4,
               "endLine": null,
@@ -71,7 +71,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "b",
               "line": 4,
               "endLine": null,

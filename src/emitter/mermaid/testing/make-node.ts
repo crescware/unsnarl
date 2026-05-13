@@ -4,22 +4,22 @@ import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.j
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
 
 type SimpleKind =
-  | typeof NODE_KIND.FunctionName
-  | typeof NODE_KIND.ClassName
-  | typeof NODE_KIND.Parameter
-  | typeof NODE_KIND.CatchClause
-  | typeof NODE_KIND.ImplicitGlobalVariable
-  | typeof NODE_KIND.ReturnUse
-  | typeof NODE_KIND.IfTest
-  | typeof NODE_KIND.SwitchDiscriminant
-  | typeof NODE_KIND.WhileTest
-  | typeof NODE_KIND.DoWhileTest
-  | typeof NODE_KIND.ForTest
-  | typeof NODE_KIND.ModuleSink
-  | typeof NODE_KIND.ModuleSource
-  | typeof NODE_KIND.ImportIntermediate
-  | typeof NODE_KIND.ExpressionStatement
-  | typeof NODE_KIND.BeyondDepth;
+  | typeof NODE_KIND.LegacyFunctionName
+  | typeof NODE_KIND.LegacyClassName
+  | typeof NODE_KIND.LegacyParameter
+  | typeof NODE_KIND.LegacyCatchClause
+  | typeof NODE_KIND.LegacyImplicitGlobalVariable
+  | typeof NODE_KIND.LegacyReturnUse
+  | typeof NODE_KIND.LegacyIfTest
+  | typeof NODE_KIND.LegacySwitchDiscriminant
+  | typeof NODE_KIND.LegacyWhileTest
+  | typeof NODE_KIND.LegacyDoWhileTest
+  | typeof NODE_KIND.LegacyForTest
+  | typeof NODE_KIND.LegacyModuleSink
+  | typeof NODE_KIND.LegacyModuleSource
+  | typeof NODE_KIND.LegacyImportIntermediate
+  | typeof NODE_KIND.LegacyExpressionStatement
+  | typeof NODE_KIND.LegacyBeyondDepth;
 
 const COMMON = {
   type: VISUAL_ELEMENT_TYPE.Node,
@@ -33,11 +33,11 @@ const COMMON = {
 
 export function baseNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.Variable }
+  { kind: typeof NODE_KIND.LegacyVariable }
 > {
   return {
     ...COMMON,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.LegacyVariable,
     declarationKind: null,
     initIsFunction: false,
   };
@@ -45,9 +45,9 @@ export function baseNode(): Extract<
 
 export function baseWriteOpNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.WriteOp }
+  { kind: typeof NODE_KIND.LegacyWriteOp }
 > {
-  return { ...COMMON, kind: NODE_KIND.WriteOp, declarationKind: null };
+  return { ...COMMON, kind: NODE_KIND.LegacyWriteOp, declarationKind: null };
 }
 
 export function baseSimpleNode(
@@ -56,15 +56,16 @@ export function baseSimpleNode(
   return { ...COMMON, kind };
 }
 
-export function baseImportBindingNamed(
-  importedName: string,
-): Extract<
+export function baseImportBindingNamed(importedName: string): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.ImportBinding; importKind: typeof IMPORT_KIND.Named }
+  {
+    kind: typeof NODE_KIND.LegacyImportBinding;
+    importKind: typeof IMPORT_KIND.Named;
+  }
 > {
   return {
     ...COMMON,
-    kind: NODE_KIND.ImportBinding,
+    kind: NODE_KIND.LegacyImportBinding,
     importKind: IMPORT_KIND.Named,
     importedName,
   };
@@ -73,13 +74,13 @@ export function baseImportBindingNamed(
 export function baseImportBindingDefault(): Extract<
   VisualNode,
   {
-    kind: typeof NODE_KIND.ImportBinding;
+    kind: typeof NODE_KIND.LegacyImportBinding;
     importKind: typeof IMPORT_KIND.Default;
   }
 > {
   return {
     ...COMMON,
-    kind: NODE_KIND.ImportBinding,
+    kind: NODE_KIND.LegacyImportBinding,
     importKind: IMPORT_KIND.Default,
   };
 }
@@ -87,13 +88,13 @@ export function baseImportBindingDefault(): Extract<
 export function baseImportBindingNamespace(): Extract<
   VisualNode,
   {
-    kind: typeof NODE_KIND.ImportBinding;
+    kind: typeof NODE_KIND.LegacyImportBinding;
     importKind: typeof IMPORT_KIND.Namespace;
   }
 > {
   return {
     ...COMMON,
-    kind: NODE_KIND.ImportBinding,
+    kind: NODE_KIND.LegacyImportBinding,
     importKind: IMPORT_KIND.Namespace,
   };
 }

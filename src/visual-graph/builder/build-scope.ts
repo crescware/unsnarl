@@ -123,7 +123,7 @@ export function buildScope(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
-      kind: NODE_KIND.WriteOp,
+      kind: NODE_KIND.LegacyWriteOp,
       name: op.varName,
       line: op.line,
       endLine: null,

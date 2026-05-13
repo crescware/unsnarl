@@ -14,14 +14,14 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
     {
       "type": "node",
       "id": "wr_ref_1",
-      "kind": "WriteOp",
+      "kind": "LegacyWriteOp",
       "name": "x",
       "line": 2,
       "endLine": null,

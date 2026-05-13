@@ -176,7 +176,7 @@ function collectVarNodeIds(
   const ids: /* mutable */ string[] = [];
   for (const node of nodeMap.values()) {
     if (
-      node.kind === NODE_KIND.Variable &&
+      node.kind === NODE_KIND.LegacyVariable &&
       node.declarationKind === VARIABLE_DECLARATION_KIND.Var
     ) {
       ids.push(node.id);
@@ -190,7 +190,7 @@ function collectBeyondDepthStubIds(
   out: /* mutable */ string[],
 ): void {
   for (const node of nodeMap.values()) {
-    if (node.kind === NODE_KIND.BeyondDepth) {
+    if (node.kind === NODE_KIND.LegacyBeyondDepth) {
       out.push(node.id);
     }
   }

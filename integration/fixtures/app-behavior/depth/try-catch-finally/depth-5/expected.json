@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -54,7 +54,7 @@
                         {
                           "type": "node",
                           "id": "beyond_depth_s_scope_5",
-                          "kind": "BeyondDepth",
+                          "kind": "LegacyBeyondDepth",
                           "name": "...",
                           "line": 5,
                           "endLine": 13,
@@ -76,14 +76,14 @@
                               "endLine": null,
                               "isJsxElement": false,
                               "unused": false,
-                              "kind": "Variable",
+                              "kind": "LegacyVariable",
                               "declarationKind": "const",
                               "initIsFunction": false
                             },
                             {
                               "type": "node",
                               "id": "expr_stmt_180",
-                              "kind": "ExpressionStatement",
+                              "kind": "LegacyExpressionStatement",
                               "name": "console.log()",
                               "line": 11,
                               "endLine": null,
@@ -111,14 +111,14 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
+                          "kind": "LegacyVariable",
                           "declarationKind": "const",
                           "initIsFunction": false
                         },
                         {
                           "type": "node",
                           "id": "expr_stmt_264",
-                          "kind": "ExpressionStatement",
+                          "kind": "LegacyExpressionStatement",
                           "name": "console.log()",
                           "line": 15,
                           "endLine": null,
@@ -146,14 +146,14 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "Variable",
+                      "kind": "LegacyVariable",
                       "declarationKind": "const",
                       "initIsFunction": false
                     },
                     {
                       "type": "node",
                       "id": "expr_stmt_340",
-                      "kind": "ExpressionStatement",
+                      "kind": "LegacyExpressionStatement",
                       "name": "console.log()",
                       "line": 19,
                       "endLine": null,
@@ -181,14 +181,14 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "const",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "expr_stmt_408",
-                  "kind": "ExpressionStatement",
+                  "kind": "LegacyExpressionStatement",
                   "name": "console.log()",
                   "line": 23,
                   "endLine": null,
@@ -216,14 +216,14 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
+              "kind": "LegacyVariable",
               "declarationKind": "const",
               "initIsFunction": false
             },
             {
               "type": "node",
               "id": "expr_stmt_468",
-              "kind": "ExpressionStatement",
+              "kind": "LegacyExpressionStatement",
               "name": "console.log()",
               "line": 27,
               "endLine": null,
@@ -251,14 +251,14 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "expr_stmt_520",
-          "kind": "ExpressionStatement",
+          "kind": "LegacyExpressionStatement",
           "name": "console.log()",
           "line": 31,
           "endLine": null,

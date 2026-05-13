@@ -105,7 +105,7 @@ describe("buildChildren", () => {
     const anchor = (ifSg as VisualSubgraph).elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("IfTest");
+      expect(anchor.kind).toEqual("LegacyIfTest");
     }
   });
 
@@ -159,14 +159,16 @@ describe("buildChildren", () => {
     const anchor = ifSg.elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("IfTest");
+      expect(anchor.kind).toEqual("LegacyIfTest");
     }
     const elseSg = sg.elements[1];
     if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
       throw new Error("expected else subgraph at index 1");
     }
     expect(
-      elseSg.elements.every((v) => !(v.type === "node" && v.kind === "IfTest")),
+      elseSg.elements.every(
+        (v) => !(v.type === "node" && v.kind === "LegacyIfTest"),
+      ),
     ).toEqual(true);
   });
 
@@ -251,7 +253,7 @@ describe("buildChildren", () => {
       const anchor = sg.elements[0];
       expect(anchor?.type).toEqual("node");
       if (anchor?.type === "node") {
-        expect(anchor.kind).toEqual("IfTest");
+        expect(anchor.kind).toEqual("LegacyIfTest");
       }
     }
   });

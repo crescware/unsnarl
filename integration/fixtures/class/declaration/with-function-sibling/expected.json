@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -24,7 +24,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ClassName"
+      "kind": "LegacyClassName"
     },
     {
       "type": "node",
@@ -34,7 +34,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -46,7 +46,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -58,7 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -80,7 +80,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "LegacyParameter"
         },
         {
           "type": "node",
@@ -90,7 +90,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "LegacyParameter"
         },
         {
           "type": "subgraph",
@@ -103,7 +103,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_0",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "a",
               "line": 2,
               "endLine": null,
@@ -113,7 +113,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "b",
               "line": 2,
               "endLine": null,
@@ -132,7 +132,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "ClassName"
+      "kind": "LegacyClassName"
     }
   ],
   "edges": [

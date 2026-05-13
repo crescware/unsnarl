@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -24,7 +24,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -44,7 +44,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -56,7 +56,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -70,7 +70,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_38",
-              "kind": "IfTest",
+              "kind": "LegacyIfTest",
               "name": "if-test",
               "line": 4,
               "endLine": null,
@@ -85,7 +85,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
+              "kind": "LegacyVariable",
               "declarationKind": "const",
               "initIsFunction": false
             },
@@ -100,7 +100,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_3",
-                  "kind": "ReturnUse",
+                  "kind": "LegacyReturnUse",
                   "name": "a",
                   "line": 6,
                   "endLine": null,
@@ -110,7 +110,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_4",
-                  "kind": "ReturnUse",
+                  "kind": "LegacyReturnUse",
                   "name": "b",
                   "line": 6,
                   "endLine": null,
@@ -133,7 +133,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "a",
               "line": 10,
               "endLine": null,
@@ -143,7 +143,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_7",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "b",
               "line": 10,
               "endLine": null,

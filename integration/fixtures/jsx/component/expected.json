@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "Fragment"
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": true
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": true
     },
@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -62,7 +62,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -82,7 +82,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "LegacyParameter"
         },
         {
           "type": "subgraph",
@@ -95,7 +95,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "Fragment",
               "line": 8,
               "endLine": 10,
@@ -105,7 +105,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "span",
               "line": 9,
               "endLine": null,
@@ -115,7 +115,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "props",
               "line": 9,
               "endLine": null,
@@ -147,7 +147,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "Hello",
               "line": 13,
               "endLine": null,
@@ -161,7 +161,7 @@
     {
       "type": "node",
       "id": "mod_react",
-      "kind": "ModuleSource",
+      "kind": "LegacyModuleSource",
       "name": "react",
       "line": 1,
       "endLine": null,

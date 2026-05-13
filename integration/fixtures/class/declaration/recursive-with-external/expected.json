@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ClassName"
+      "kind": "LegacyClassName"
     },
     {
       "type": "node",
@@ -24,7 +24,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "ClassName"
+      "kind": "LegacyClassName"
     },
     {
       "type": "subgraph",
@@ -39,7 +39,7 @@
         {
           "type": "node",
           "id": "expr_stmt_22",
-          "kind": "ExpressionStatement",
+          "kind": "LegacyExpressionStatement",
           "name": "new C()",
           "line": 3,
           "endLine": null,
@@ -51,7 +51,7 @@
     {
       "type": "node",
       "id": "expr_stmt_38",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "new C()",
       "line": 7,
       "endLine": null,

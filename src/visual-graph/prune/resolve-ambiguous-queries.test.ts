@@ -13,7 +13,7 @@ import { resolveAmbiguousQueries } from "./resolve-ambiguous-queries.js";
 const variableNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `n-${name}-${String(line)}`,
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.LegacyVariable,
   name,
   line,
   endLine: null,
@@ -26,7 +26,7 @@ const variableNode = (name: string, line = 1): VisualNode => ({
 const writeOpNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `w-${name}-${String(line)}`,
-  kind: NODE_KIND.WriteOp,
+  kind: NODE_KIND.LegacyWriteOp,
   name,
   line,
   endLine: null,

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "var",
       "initIsFunction": false
     },
@@ -26,12 +26,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "node",
       "id": "wr_ref_1",
-      "kind": "WriteOp",
+      "kind": "LegacyWriteOp",
       "name": "global",
       "line": 2,
       "endLine": null,

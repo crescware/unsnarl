@@ -12,7 +12,7 @@ function leafNode(id: string, name = id): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.LegacyVariable,
     name,
     line: 1,
     endLine: null,

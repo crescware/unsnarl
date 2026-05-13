@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "subgraph",
@@ -34,14 +34,14 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "let",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "wr_ref_1",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "v",
           "line": 3,
           "endLine": null,
@@ -52,7 +52,7 @@
         {
           "type": "node",
           "id": "wr_ref_2",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "v",
           "line": 4,
           "endLine": null,
@@ -71,7 +71,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "v",
               "line": 5,
               "endLine": null,

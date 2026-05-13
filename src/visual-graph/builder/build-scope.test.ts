@@ -89,7 +89,7 @@ describe("buildScope", () => {
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
       ),
     ).toMatchObject({
-      kind: NODE_KIND.Variable,
+      kind: NODE_KIND.LegacyVariable,
       name: "x",
     });
   });
@@ -123,7 +123,7 @@ describe("buildScope", () => {
       (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
-      kind: NODE_KIND.WriteOp,
+      kind: NODE_KIND.LegacyWriteOp,
       name: "x",
       line: 4,
       declarationKind: VARIABLE_DECLARATION_KIND.Let,

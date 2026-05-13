@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -38,7 +38,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_19",
-          "kind": "ForTest",
+          "kind": "LegacyForTest",
           "name": "for-test",
           "line": 2,
           "endLine": null,
@@ -55,7 +55,7 @@
             {
               "type": "node",
               "id": "expr_stmt_48",
-              "kind": "ExpressionStatement",
+              "kind": "LegacyExpressionStatement",
               "name": "console.log()",
               "line": 3,
               "endLine": null,

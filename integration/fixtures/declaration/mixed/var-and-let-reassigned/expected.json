@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "var",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "let",
       "initIsFunction": false
     },
@@ -38,12 +38,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "node",
       "id": "wr_ref_3",
-      "kind": "WriteOp",
+      "kind": "LegacyWriteOp",
       "name": "b",
       "line": 4,
       "endLine": null,
@@ -54,7 +54,7 @@
     {
       "type": "node",
       "id": "expr_stmt_36",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "console.log()",
       "line": 5,
       "endLine": null,

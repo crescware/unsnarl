@@ -25,41 +25,41 @@ type CommonNodeFields = {
 };
 
 export type VisualNode =
-  | (CommonNodeFields & { kind: typeof NODE_KIND.FunctionName })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ClassName })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.Parameter })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.CatchClause })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ImplicitGlobalVariable })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnUse })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.IfTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.SwitchDiscriminant })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.WhileTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.DoWhileTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ForTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSink })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSource })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ImportIntermediate })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ExpressionStatement })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.BeyondDepth })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyFunctionName })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyClassName })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyParameter })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyCatchClause })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyImplicitGlobalVariable })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyReturnUse })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyIfTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacySwitchDiscriminant })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyWhileTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyDoWhileTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyForTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyModuleSink })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyModuleSource })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyImportIntermediate })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyExpressionStatement })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyBeyondDepth })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.Variable;
+      kind: typeof NODE_KIND.LegacyVariable;
       declarationKind: VariableDeclarationKind | null;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.WriteOp;
+      kind: typeof NODE_KIND.LegacyWriteOp;
       declarationKind: VariableDeclarationKind | null;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
+      kind: typeof NODE_KIND.LegacyImportBinding;
       importKind: typeof IMPORT_KIND.Named;
       importedName: string;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
+      kind: typeof NODE_KIND.LegacyImportBinding;
       importKind: typeof IMPORT_KIND.Default;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
+      kind: typeof NODE_KIND.LegacyImportBinding;
       importKind: typeof IMPORT_KIND.Namespace;
     });

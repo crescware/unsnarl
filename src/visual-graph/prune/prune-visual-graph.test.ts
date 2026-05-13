@@ -21,12 +21,14 @@ function node(
   id: string,
   name: string,
   line: number,
-  extra: Partial<Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>> = {},
+  extra: Partial<
+    Extract<VisualNode, { kind: typeof NODE_KIND.LegacyVariable }>
+  > = {},
 ): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.LegacyVariable,
     name,
     line,
     endLine: null,
@@ -42,7 +44,7 @@ function writeOpNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.WriteOp,
+    kind: NODE_KIND.LegacyWriteOp,
     name,
     line,
     endLine: null,
@@ -61,7 +63,7 @@ function returnUseNode(
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.ReturnUse,
+    kind: NODE_KIND.LegacyReturnUse,
     name,
     line,
     endLine,

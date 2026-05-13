@@ -28,9 +28,9 @@ describe("renderTopLevelNodes", () => {
     renderTopLevelNodes(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_a", kind: NODE_KIND.ModuleSource },
+        { ...baseNode(), id: "mod_a", kind: NODE_KIND.LegacyModuleSource },
         { ...baseNode(), id: "n_b" },
-        { ...baseNode(), id: "module_root", kind: NODE_KIND.ModuleSink },
+        { ...baseNode(), id: "module_root", kind: NODE_KIND.LegacyModuleSink },
       ],
     });
     expect(state.lines).toHaveLength(1);

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -60,7 +60,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -82,7 +82,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_67",
-              "kind": "IfTest",
+              "kind": "LegacyIfTest",
               "name": "if-test",
               "line": 6,
               "endLine": null,
@@ -99,7 +99,7 @@
                 {
                   "type": "node",
                   "id": "if_test_scope_2_80",
-                  "kind": "IfTest",
+                  "kind": "LegacyIfTest",
                   "name": "if-test",
                   "line": 7,
                   "endLine": null,
@@ -114,12 +114,12 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "FunctionName"
+                  "kind": "LegacyFunctionName"
                 },
                 {
                   "type": "node",
                   "id": "expr_stmt_201",
-                  "kind": "ExpressionStatement",
+                  "kind": "LegacyExpressionStatement",
                   "name": "f2()",
                   "line": 14,
                   "endLine": null,
@@ -137,7 +137,7 @@
     {
       "type": "node",
       "id": "expr_stmt_220",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "f1()",
       "line": 19,
       "endLine": null,

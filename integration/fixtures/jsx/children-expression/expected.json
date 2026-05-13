@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "Sub"
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "subgraph",
@@ -46,7 +46,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -61,7 +61,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "Sub",
               "line": 5,
               "endLine": null,
@@ -71,7 +71,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "message",
               "line": 5,
               "endLine": null,
@@ -85,7 +85,7 @@
     {
       "type": "node",
       "id": "mod___sub",
-      "kind": "ModuleSource",
+      "kind": "LegacyModuleSource",
       "name": "./sub",
       "line": 1,
       "endLine": null,

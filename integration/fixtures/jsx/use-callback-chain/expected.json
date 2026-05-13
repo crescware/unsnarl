@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "useCallback"
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": true
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -58,7 +58,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -70,7 +70,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -82,7 +82,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -118,7 +118,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_5",
-                  "kind": "ReturnUse",
+                  "kind": "LegacyReturnUse",
                   "name": "a",
                   "line": 5,
                   "endLine": null,
@@ -150,7 +150,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_9",
-                  "kind": "ReturnUse",
+                  "kind": "LegacyReturnUse",
                   "name": "b",
                   "line": 6,
                   "endLine": null,
@@ -172,7 +172,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_11",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "button",
               "line": 7,
               "endLine": null,
@@ -182,7 +182,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_12",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "c",
               "line": 7,
               "endLine": null,
@@ -192,7 +192,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_13",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "c",
               "line": 7,
               "endLine": null,
@@ -206,7 +206,7 @@
     {
       "type": "node",
       "id": "mod_react",
-      "kind": "ModuleSource",
+      "kind": "LegacyModuleSource",
       "name": "react",
       "line": 1,
       "endLine": null,

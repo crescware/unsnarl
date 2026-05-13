@@ -436,7 +436,7 @@ export function buildVisualGraph(
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: MODULE_ROOT_ID,
-      kind: NODE_KIND.ModuleSink,
+      kind: NODE_KIND.LegacyModuleSink,
       name: "module",
       line: 0,
       endLine: null,
@@ -495,7 +495,7 @@ export function buildVisualGraph(
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: mod.id,
-      kind: NODE_KIND.ModuleSource,
+      kind: NODE_KIND.LegacyModuleSource,
       name: mod.source,
       line: mod.line,
       endLine: null,
@@ -507,7 +507,7 @@ export function buildVisualGraph(
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: inter.id,
-      kind: NODE_KIND.ImportIntermediate,
+      kind: NODE_KIND.LegacyImportIntermediate,
       name: inter.name,
       line: inter.line,
       endLine: null,

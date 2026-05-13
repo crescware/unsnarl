@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -26,7 +26,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_12",
-          "kind": "ForTest",
+          "kind": "LegacyForTest",
           "name": "for-test",
           "line": 1,
           "endLine": null,
@@ -41,14 +41,14 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "let",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "wr_ref_2",
-          "kind": "WriteOp",
+          "kind": "LegacyWriteOp",
           "name": "r",
           "line": 1,
           "endLine": null,
@@ -73,7 +73,7 @@
                 {
                   "type": "node",
                   "id": "for_test_scope_2_44",
-                  "kind": "ForTest",
+                  "kind": "LegacyForTest",
                   "name": "for-test",
                   "line": 2,
                   "endLine": null,
@@ -88,14 +88,14 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "let",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "wr_ref_5",
-                  "kind": "WriteOp",
+                  "kind": "LegacyWriteOp",
                   "name": "s",
                   "line": 2,
                   "endLine": null,
@@ -113,7 +113,7 @@
                     {
                       "type": "node",
                       "id": "expr_stmt_151",
-                      "kind": "ExpressionStatement",
+                      "kind": "LegacyExpressionStatement",
                       "name": "console.log()",
                       "line": 5,
                       "endLine": null,

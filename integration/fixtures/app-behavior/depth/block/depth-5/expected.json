@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -31,7 +31,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -50,7 +50,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
+              "kind": "LegacyVariable",
               "declarationKind": "const",
               "initIsFunction": false
             },
@@ -69,7 +69,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "const",
                   "initIsFunction": false
                 },
@@ -88,7 +88,7 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "Variable",
+                      "kind": "LegacyVariable",
                       "declarationKind": "const",
                       "initIsFunction": false
                     },
@@ -107,14 +107,14 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
+                          "kind": "LegacyVariable",
                           "declarationKind": "const",
                           "initIsFunction": false
                         },
                         {
                           "type": "node",
                           "id": "beyond_depth_s_scope_5",
-                          "kind": "BeyondDepth",
+                          "kind": "LegacyBeyondDepth",
                           "name": "...",
                           "line": 9,
                           "endLine": 15,

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "subgraph",
@@ -34,7 +34,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "LegacyParameter"
         },
         {
           "type": "node",
@@ -44,7 +44,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "let",
           "initIsFunction": false
         },
@@ -58,7 +58,7 @@
             {
               "type": "node",
               "id": "switch_discriminant_scope_1_45",
-              "kind": "SwitchDiscriminant",
+              "kind": "LegacySwitchDiscriminant",
               "name": "switch-discriminant",
               "line": 3,
               "endLine": null,
@@ -115,7 +115,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_2",
-                  "kind": "WriteOp",
+                  "kind": "LegacyWriteOp",
                   "name": "ret",
                   "line": 9,
                   "endLine": null,
@@ -147,7 +147,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_3",
-                  "kind": "WriteOp",
+                  "kind": "LegacyWriteOp",
                   "name": "ret",
                   "line": 13,
                   "endLine": null,
@@ -169,7 +169,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_4",
-                  "kind": "WriteOp",
+                  "kind": "LegacyWriteOp",
                   "name": "ret",
                   "line": 16,
                   "endLine": null,
@@ -195,7 +195,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "ret",
               "line": 19,
               "endLine": null,

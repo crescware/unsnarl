@@ -17,7 +17,7 @@ describe("nodeHead", () => {
     expect(
       nodeHead({
         ...baseNode(),
-        kind: NODE_KIND.FunctionName,
+        kind: NODE_KIND.LegacyFunctionName,
         name: "Foo",
         isJsxElement: true,
       }),
@@ -25,22 +25,26 @@ describe("nodeHead", () => {
   });
 
   test.each([
-    { kind: NODE_KIND.FunctionName, name: "foo", expected: "foo()" },
-    { kind: NODE_KIND.ClassName, name: "Foo", expected: "class Foo" },
-    { kind: NODE_KIND.CatchClause, name: "err", expected: "catch err" },
+    { kind: NODE_KIND.LegacyFunctionName, name: "foo", expected: "foo()" },
+    { kind: NODE_KIND.LegacyClassName, name: "Foo", expected: "class Foo" },
+    { kind: NODE_KIND.LegacyCatchClause, name: "err", expected: "catch err" },
     {
-      kind: NODE_KIND.ImplicitGlobalVariable,
+      kind: NODE_KIND.LegacyImplicitGlobalVariable,
       name: "global1",
       expected: "global global1",
     },
-    { kind: NODE_KIND.ModuleSource, name: "./mod", expected: "module ./mod" },
     {
-      kind: NODE_KIND.ImportIntermediate,
+      kind: NODE_KIND.LegacyModuleSource,
+      name: "./mod",
+      expected: "module ./mod",
+    },
+    {
+      kind: NODE_KIND.LegacyImportIntermediate,
       name: "named",
       expected: "import named",
     },
     {
-      kind: NODE_KIND.ExpressionStatement,
+      kind: NODE_KIND.LegacyExpressionStatement,
       name: "console.log()",
       expected: "console.log()",
     },
@@ -155,7 +159,7 @@ describe("nodeHead", () => {
 
   test("ReturnUse falls through to the default formatting (uses name only)", () => {
     expect(
-      nodeHead({ ...baseNode(), kind: NODE_KIND.ReturnUse, name: "x" }),
+      nodeHead({ ...baseNode(), kind: NODE_KIND.LegacyReturnUse, name: "x" }),
     ).toEqual("x");
   });
 });

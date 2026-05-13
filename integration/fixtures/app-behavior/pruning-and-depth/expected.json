@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
+      "kind": "LegacyVariable",
       "declarationKind": "const",
       "initIsFunction": false
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -36,7 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -46,7 +46,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "LegacyFunctionName"
     },
     {
       "type": "node",
@@ -56,7 +56,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -78,7 +78,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_41",
-              "kind": "IfTest",
+              "kind": "LegacyIfTest",
               "name": "if-test",
               "line": 4,
               "endLine": null,
@@ -95,7 +95,7 @@
                 {
                   "type": "node",
                   "id": "if_test_scope_2_57",
-                  "kind": "IfTest",
+                  "kind": "LegacyIfTest",
                   "name": "if-test",
                   "line": 5,
                   "endLine": null,
@@ -110,14 +110,14 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "const",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "expr_stmt_94",
-                  "kind": "ExpressionStatement",
+                  "kind": "LegacyExpressionStatement",
                   "name": "console.log()",
                   "line": 7,
                   "endLine": null,
@@ -145,7 +145,7 @@
         {
           "type": "node",
           "id": "expr_stmt_147",
-          "kind": "ExpressionStatement",
+          "kind": "LegacyExpressionStatement",
           "name": "inner()",
           "line": 13,
           "endLine": null,
@@ -168,7 +168,7 @@
     {
       "type": "node",
       "id": "expr_stmt_198",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "callerOf()",
       "line": 20,
       "endLine": null,
@@ -178,7 +178,7 @@
     {
       "type": "node",
       "id": "expr_stmt_210",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "unrelated()",
       "line": 21,
       "endLine": null,

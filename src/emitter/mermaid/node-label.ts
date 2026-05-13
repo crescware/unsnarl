@@ -8,22 +8,22 @@ export function nodeLabel(n: VisualNode, debug: boolean): string {
 }
 
 function baseLabel(n: VisualNode): string {
-  if (n.kind === NODE_KIND.IfTest) {
+  if (n.kind === NODE_KIND.LegacyIfTest) {
     return `if ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.SwitchDiscriminant) {
+  if (n.kind === NODE_KIND.LegacySwitchDiscriminant) {
     return `switch ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.WhileTest) {
+  if (n.kind === NODE_KIND.LegacyWhileTest) {
     return `while ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.DoWhileTest) {
+  if (n.kind === NODE_KIND.LegacyDoWhileTest) {
     return `do while ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.ForTest) {
+  if (n.kind === NODE_KIND.LegacyForTest) {
     return `for ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.BeyondDepth) {
+  if (n.kind === NODE_KIND.LegacyBeyondDepth) {
     // The stub stands in for an arbitrary range of source lines that
     // collapsed past the queried depth; printing a single line number
     // here would be misleading, and printing the full range would
@@ -31,10 +31,10 @@ function baseLabel(n: VisualNode): string {
     return nodeHead(n);
   }
   const head = nodeHead(n);
-  if (n.kind === NODE_KIND.ModuleSink) {
+  if (n.kind === NODE_KIND.LegacyModuleSink) {
     return "module";
   }
-  if (n.kind === NODE_KIND.ImplicitGlobalVariable) {
+  if (n.kind === NODE_KIND.LegacyImplicitGlobalVariable) {
     return head;
   }
   // Unused declarations are surfaced via a textual prefix instead of a

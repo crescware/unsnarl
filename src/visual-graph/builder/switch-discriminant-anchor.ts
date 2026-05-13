@@ -29,7 +29,7 @@ export function attachSwitchDiscriminantAnchor(
   const node = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: switchDiscriminantNodeId(scope.upper ?? "", offset),
-    kind: NODE_KIND.SwitchDiscriminant,
+    kind: NODE_KIND.LegacySwitchDiscriminant,
     name: "switch-discriminant",
     line: scope.block.span.line,
     endLine: null,

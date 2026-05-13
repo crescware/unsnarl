@@ -14,14 +14,14 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "x"
     },
     {
       "type": "node",
       "id": "expr_stmt_23",
-      "kind": "ExpressionStatement",
+      "kind": "LegacyExpressionStatement",
       "name": "x",
       "line": 2,
       "endLine": null,
@@ -31,7 +31,7 @@
     {
       "type": "node",
       "id": "mod_m",
-      "kind": "ModuleSource",
+      "kind": "LegacyModuleSource",
       "name": "m",
       "line": 1,
       "endLine": null,

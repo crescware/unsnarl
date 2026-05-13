@@ -9,12 +9,12 @@ import { nodeMatchesQuery } from "./node-matches-query.js";
 
 const node = (
   overrides: Partial<
-    Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>
+    Extract<VisualNode, { kind: typeof NODE_KIND.LegacyVariable }>
   > = {},
 ): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.LegacyVariable,
   name: "x",
   line: 5,
   endLine: null,
@@ -89,7 +89,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.WriteOp,
+          kind: NODE_KIND.LegacyWriteOp,
           name: "x",
           line: 5,
           endLine: null,
@@ -105,7 +105,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.ReturnUse,
+          kind: NODE_KIND.LegacyReturnUse,
           name: "x",
           line: 5,
           endLine: null,

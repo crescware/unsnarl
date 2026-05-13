@@ -62,7 +62,7 @@ export function ensureReturnUseNode(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id,
-      kind: NODE_KIND.ReturnUse,
+      kind: NODE_KIND.LegacyReturnUse,
       name,
       line: startLine,
       endLine,

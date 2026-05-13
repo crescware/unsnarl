@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -26,7 +26,7 @@
         {
           "type": "node",
           "id": "beyond_depth_s_scope_1",
-          "kind": "BeyondDepth",
+          "kind": "LegacyBeyondDepth",
           "name": "...",
           "line": 1,
           "endLine": 29,
@@ -48,14 +48,14 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
+              "kind": "LegacyVariable",
               "declarationKind": "const",
               "initIsFunction": false
             },
             {
               "type": "node",
               "id": "expr_stmt_468",
-              "kind": "ExpressionStatement",
+              "kind": "LegacyExpressionStatement",
               "name": "console.log()",
               "line": 27,
               "endLine": null,
@@ -83,14 +83,14 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "expr_stmt_520",
-          "kind": "ExpressionStatement",
+          "kind": "LegacyExpressionStatement",
           "name": "console.log()",
           "line": 31,
           "endLine": null,

@@ -36,7 +36,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       }
       return {
         ...common,
-        kind: NODE_KIND.ImportBinding,
+        kind: NODE_KIND.LegacyImportBinding,
         importKind: IMPORT_KIND.Named,
         importedName: def.importedName,
       };
@@ -44,14 +44,14 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     if (def.importKind === IMPORT_KIND.Default) {
       return {
         ...common,
-        kind: NODE_KIND.ImportBinding,
+        kind: NODE_KIND.LegacyImportBinding,
         importKind: IMPORT_KIND.Default,
       };
     }
     if (def.importKind === IMPORT_KIND.Namespace) {
       return {
         ...common,
-        kind: NODE_KIND.ImportBinding,
+        kind: NODE_KIND.LegacyImportBinding,
         importKind: IMPORT_KIND.Namespace,
       };
     }
@@ -61,7 +61,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   if (def === null) {
     return {
       ...common,
-      kind: NODE_KIND.Variable,
+      kind: NODE_KIND.LegacyVariable,
       declarationKind: null,
       initIsFunction: false,
     };
@@ -74,11 +74,22 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       initType === AST_TYPE.FunctionExpression;
     return {
       ...common,
-      kind: NODE_KIND.Variable,
+      kind: NODE_KIND.LegacyVariable,
       declarationKind: def.declarationKind,
       initIsFunction,
     };
   }
 
-  return { ...common, kind: def.type };
+  switch (def.type) {
+    case DEFINITION_TYPE.FunctionName:
+      return { ...common, kind: NODE_KIND.LegacyFunctionName };
+    case DEFINITION_TYPE.ClassName:
+      return { ...common, kind: NODE_KIND.LegacyClassName };
+    case DEFINITION_TYPE.Parameter:
+      return { ...common, kind: NODE_KIND.LegacyParameter };
+    case DEFINITION_TYPE.CatchClause:
+      return { ...common, kind: NODE_KIND.LegacyCatchClause };
+    case DEFINITION_TYPE.ImplicitGlobalVariable:
+      return { ...common, kind: NODE_KIND.LegacyImplicitGlobalVariable };
+  }
 }

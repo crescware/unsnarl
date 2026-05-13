@@ -76,7 +76,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "for_test_scope_0_34",
-      kind: NODE_KIND.ForTest,
+      kind: NODE_KIND.LegacyForTest,
       name: "for-test",
       line: 3,
       endLine: null,
@@ -154,7 +154,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "while_test_scope_0_27",
-      kind: NODE_KIND.WhileTest,
+      kind: NODE_KIND.LegacyWhileTest,
       name: "while-test",
       line: 3,
     });
@@ -210,7 +210,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.position).toEqual("last");
     expect(pending?.node).toMatchObject({
       id: "do_while_test_scope_0_33",
-      kind: NODE_KIND.DoWhileTest,
+      kind: NODE_KIND.LegacyDoWhileTest,
       name: "do-while-test",
       line: 6,
     });

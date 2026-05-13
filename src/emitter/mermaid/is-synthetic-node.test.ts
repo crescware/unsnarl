@@ -12,11 +12,11 @@ import {
 
 function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
   switch (kind) {
-    case NODE_KIND.Variable:
+    case NODE_KIND.LegacyVariable:
       return baseNode();
-    case NODE_KIND.WriteOp:
+    case NODE_KIND.LegacyWriteOp:
       return baseWriteOpNode();
-    case NODE_KIND.ImportBinding:
+    case NODE_KIND.LegacyImportBinding:
       return baseImportBindingDefault();
     default:
       return baseSimpleNode(kind);
@@ -25,19 +25,19 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
 
 describe("isSyntheticNode", () => {
   test.each<{ kind: VisualNode["kind"]; expected: boolean }>([
-    { kind: NODE_KIND.ModuleSink, expected: true },
-    { kind: NODE_KIND.ModuleSource, expected: true },
-    { kind: NODE_KIND.ImportIntermediate, expected: true },
-    { kind: NODE_KIND.ExpressionStatement, expected: true },
-    { kind: NODE_KIND.Variable, expected: false },
-    { kind: NODE_KIND.FunctionName, expected: false },
-    { kind: NODE_KIND.ClassName, expected: false },
-    { kind: NODE_KIND.Parameter, expected: false },
-    { kind: NODE_KIND.CatchClause, expected: false },
-    { kind: NODE_KIND.ImportBinding, expected: false },
-    { kind: NODE_KIND.ImplicitGlobalVariable, expected: false },
-    { kind: NODE_KIND.WriteOp, expected: false },
-    { kind: NODE_KIND.ReturnUse, expected: false },
+    { kind: NODE_KIND.LegacyModuleSink, expected: true },
+    { kind: NODE_KIND.LegacyModuleSource, expected: true },
+    { kind: NODE_KIND.LegacyImportIntermediate, expected: true },
+    { kind: NODE_KIND.LegacyExpressionStatement, expected: true },
+    { kind: NODE_KIND.LegacyVariable, expected: false },
+    { kind: NODE_KIND.LegacyFunctionName, expected: false },
+    { kind: NODE_KIND.LegacyClassName, expected: false },
+    { kind: NODE_KIND.LegacyParameter, expected: false },
+    { kind: NODE_KIND.LegacyCatchClause, expected: false },
+    { kind: NODE_KIND.LegacyImportBinding, expected: false },
+    { kind: NODE_KIND.LegacyImplicitGlobalVariable, expected: false },
+    { kind: NODE_KIND.LegacyWriteOp, expected: false },
+    { kind: NODE_KIND.LegacyReturnUse, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
     expect(isSyntheticNode(nodeOfKind(kind))).toEqual(expected);
   });

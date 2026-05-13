@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "A"
     },
@@ -26,7 +26,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "B"
     },
@@ -38,7 +38,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "C"
     },
@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "D"
     },
@@ -62,7 +62,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "E"
     },
@@ -84,7 +84,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -96,7 +96,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -108,7 +108,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -120,7 +120,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -132,7 +132,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -147,7 +147,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "A",
               "line": 11,
               "endLine": 23,
@@ -157,7 +157,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "v",
               "line": 12,
               "endLine": null,
@@ -167,7 +167,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_7",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "B",
               "line": 13,
               "endLine": 22,
@@ -177,7 +177,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_8",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "w",
               "line": 14,
               "endLine": null,
@@ -187,7 +187,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_9",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "C",
               "line": 15,
               "endLine": 21,
@@ -197,7 +197,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_10",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "x",
               "line": 16,
               "endLine": null,
@@ -207,7 +207,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_11",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "D",
               "line": 17,
               "endLine": 20,
@@ -217,7 +217,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_12",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "y",
               "line": 18,
               "endLine": null,
@@ -227,7 +227,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_13",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "E",
               "line": 19,
               "endLine": null,
@@ -237,7 +237,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_14",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "z",
               "line": 19,
               "endLine": null,

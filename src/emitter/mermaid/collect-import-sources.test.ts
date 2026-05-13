@@ -12,8 +12,8 @@ function asMap(...nodes: readonly VisualNode[]): Map<string, VisualNode> {
 describe("collectImportSources", () => {
   test("collects ids of ModuleSource and ImportIntermediate nodes", () => {
     const map = asMap(
-      { ...baseSimpleNode(NODE_KIND.ModuleSource), id: "mod_a" },
-      { ...baseSimpleNode(NODE_KIND.ImportIntermediate), id: "import_b" },
+      { ...baseSimpleNode(NODE_KIND.LegacyModuleSource), id: "mod_a" },
+      { ...baseSimpleNode(NODE_KIND.LegacyImportIntermediate), id: "import_b" },
       { ...baseNode(), id: "n_x" },
     );
     expect([...collectImportSources(map)].sort()).toEqual([
@@ -24,7 +24,7 @@ describe("collectImportSources", () => {
 
   test("excludes other synthetic kinds (e.g. ModuleSink)", () => {
     const map = asMap({
-      ...baseSimpleNode(NODE_KIND.ModuleSink),
+      ...baseSimpleNode(NODE_KIND.LegacyModuleSink),
       id: "module_root",
     });
     expect(collectImportSources(map).size).toEqual(0);
@@ -33,7 +33,7 @@ describe("collectImportSources", () => {
   test("excludes non-synthetic kinds", () => {
     const map = asMap(
       { ...baseNode(), id: "n_x" },
-      { ...baseSimpleNode(NODE_KIND.FunctionName), id: "n_f" },
+      { ...baseSimpleNode(NODE_KIND.LegacyFunctionName), id: "n_f" },
     );
     expect(collectImportSources(map).size).toEqual(0);
   });

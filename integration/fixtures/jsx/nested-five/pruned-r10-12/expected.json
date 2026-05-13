@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
+      "kind": "LegacyImportBinding",
       "importKind": "named",
       "importedName": "A"
     },
@@ -36,7 +36,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -51,7 +51,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "A",
               "line": 11,
               "endLine": 23,
@@ -61,7 +61,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "LegacyReturnUse",
               "name": "v",
               "line": 12,
               "endLine": null,
@@ -75,7 +75,7 @@
     {
       "type": "node",
       "id": "mod_components",
-      "kind": "ModuleSource",
+      "kind": "LegacyModuleSource",
       "name": "components",
       "line": 1,
       "endLine": null,

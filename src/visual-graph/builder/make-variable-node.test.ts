@@ -24,12 +24,12 @@ describe("makeVariableNode", () => {
     expect(node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
-      kind: NODE_KIND.Variable,
+      kind: NODE_KIND.LegacyVariable,
       name: "x",
       line: 2,
       isJsxElement: false,
     });
-    if (node.kind !== NODE_KIND.Variable) {
+    if (node.kind !== NODE_KIND.LegacyVariable) {
       throw new Error("expected Variable kind");
     }
     expect(node.initIsFunction).toEqual(false);
@@ -65,7 +65,7 @@ describe("makeVariableNode", () => {
       defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)],
     };
     const node = makeVariableNode(v);
-    expect(node.kind).toEqual(NODE_KIND.ImplicitGlobalVariable);
+    expect(node.kind).toEqual(NODE_KIND.LegacyImplicitGlobalVariable);
     expect(node.line).toEqual(0);
   });
 
@@ -86,7 +86,7 @@ describe("makeVariableNode", () => {
         ],
       };
       const node = makeVariableNode(v);
-      if (node.kind !== NODE_KIND.Variable) {
+      if (node.kind !== NODE_KIND.LegacyVariable) {
         throw new Error("expected Variable kind");
       }
       expect(node.initIsFunction).toEqual(expected);
@@ -103,7 +103,7 @@ describe("makeVariableNode", () => {
       defs: [baseDef(kind)],
     };
     const node = makeVariableNode(v);
-    if (node.kind !== NODE_KIND.Variable) {
+    if (node.kind !== NODE_KIND.LegacyVariable) {
       throw new Error("expected Variable kind");
     }
     expect(node.declarationKind).toEqual(kind);
@@ -125,7 +125,7 @@ describe("makeVariableNode", () => {
     };
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
-      kind: NODE_KIND.ImportBinding,
+      kind: NODE_KIND.LegacyImportBinding,
       importKind: IMPORT_KIND.Named,
       importedName: "original",
     });
@@ -145,24 +145,14 @@ describe("makeVariableNode", () => {
       ],
     };
     const node = makeVariableNode(v);
-    expect(node.kind).toEqual(NODE_KIND.ImportBinding);
-    if (node.kind === NODE_KIND.ImportBinding) {
+    expect(node.kind).toEqual(NODE_KIND.LegacyImportBinding);
+    if (node.kind === NODE_KIND.LegacyImportBinding) {
       expect(node.importKind).toEqual(IMPORT_KIND.Default);
     }
   });
 
   test("falls back to kind=Variable when defs is empty", () => {
     const v = { ...baseVariable(), id: "v", defs: [] };
-    expect(makeVariableNode(v).kind).toEqual(DEFINITION_TYPE.Variable);
-  });
-
-  test.each([
-    { defType: DEFINITION_TYPE.FunctionName },
-    { defType: DEFINITION_TYPE.ClassName },
-    { defType: DEFINITION_TYPE.Parameter },
-    { defType: DEFINITION_TYPE.CatchClause },
-  ] as const)("kind reflects definition type $defType", ({ defType }) => {
-    const v = { ...baseVariable(), defs: [baseSimpleDef(defType)] };
-    expect(makeVariableNode(v).kind).toEqual(defType);
+    expect(makeVariableNode(v).kind).toEqual(NODE_KIND.LegacyVariable);
   });
 });

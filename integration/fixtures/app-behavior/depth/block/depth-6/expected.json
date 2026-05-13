@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "LegacyImplicitGlobalVariable"
     },
     {
       "type": "subgraph",
@@ -31,7 +31,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
+          "kind": "LegacyVariable",
           "declarationKind": "const",
           "initIsFunction": false
         },
@@ -50,7 +50,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
+              "kind": "LegacyVariable",
               "declarationKind": "const",
               "initIsFunction": false
             },
@@ -69,7 +69,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
+                  "kind": "LegacyVariable",
                   "declarationKind": "const",
                   "initIsFunction": false
                 },
@@ -88,7 +88,7 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "Variable",
+                      "kind": "LegacyVariable",
                       "declarationKind": "const",
                       "initIsFunction": false
                     },
@@ -107,7 +107,7 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
+                          "kind": "LegacyVariable",
                           "declarationKind": "const",
                           "initIsFunction": false
                         },
@@ -126,14 +126,14 @@
                               "endLine": null,
                               "isJsxElement": false,
                               "unused": false,
-                              "kind": "Variable",
+                              "kind": "LegacyVariable",
                               "declarationKind": "const",
                               "initIsFunction": false
                             },
                             {
                               "type": "node",
                               "id": "expr_stmt_185",
-                              "kind": "ExpressionStatement",
+                              "kind": "LegacyExpressionStatement",
                               "name": "console.log()",
                               "line": 13,
                               "endLine": null,
