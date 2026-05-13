@@ -1,3 +1,5 @@
+import { picklist, type InferOutput } from "valibot";
+
 import type { NestingDepths } from "../ir/annotations/scope-annotation.js";
 
 export const NESTING_KIND = {
@@ -9,7 +11,18 @@ export const NESTING_KIND = {
   TryCatchFinally: "try-catch-finally",
   Block: "block",
 } as const;
-export type NestingKind = (typeof NESTING_KIND)[keyof typeof NESTING_KIND];
+
+const nestingKind$ = picklist([
+  NESTING_KIND.Function,
+  NESTING_KIND.If,
+  NESTING_KIND.For,
+  NESTING_KIND.While,
+  NESTING_KIND.Switch,
+  NESTING_KIND.TryCatchFinally,
+  NESTING_KIND.Block,
+]);
+
+export type NestingKind = InferOutput<typeof nestingKind$>;
 
 export function uniformNestingDepths(value: number): NestingDepths {
   return {

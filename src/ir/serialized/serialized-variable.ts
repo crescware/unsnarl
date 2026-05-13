@@ -1,6 +1,5 @@
 import {
   array,
-  custom,
   object,
   pipe,
   readonly,
@@ -9,14 +8,11 @@ import {
   type InferOutput,
 } from "valibot";
 
-import type { Span } from "../primitive/span.js";
+import { span$ } from "../primitive/span.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
-import type { SerializedDefinition } from "./serialized-definition.js";
+import { serializedDefinition$ } from "./serialized-definition.js";
 import { variableId$ } from "./variable-id.js";
-
-const span$ = custom<Span>(() => true);
-const serializedDefinition$ = custom<SerializedDefinition>(() => true);
 
 // SerializedVariable carries at least one def by construction: the serializer
 // filters implicit-arguments bindings (the only producer of empty defs) at

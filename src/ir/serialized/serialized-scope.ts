@@ -1,37 +1,36 @@
 import {
   array,
   boolean,
-  custom,
   nullable,
   object,
+  pipe,
+  readonly,
   string,
   type InferOutput,
 } from "valibot";
 
-import type { ScopeType } from "../../analyzer/scope-type.js";
-import type { NestingDepths } from "../annotations/scope-annotation.js";
-import type { Span } from "../primitive/span.js";
-import type { BlockContext } from "../scope/block-context.js";
+import { scopeType$ } from "../../analyzer/scope-type.js";
+import { nestingDepths$ } from "../annotations/scope-annotation.js";
+import { span$ } from "../primitive/span.js";
+import { blockContext$ } from "../scope/block-context.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
 import { variableId$ } from "./variable-id.js";
-
-const scopeType$ = custom<ScopeType>(() => true);
-const span$ = custom<Span>(() => true);
-const blockContext$ = custom<BlockContext>(() => true);
-const nestingDepths$ = custom<NestingDepths>(() => true);
 
 export const serializedScope$ = object({
   id: scopeId$,
   type: scopeType$,
   isStrict: boolean(),
   upper: nullable(scopeId$),
-  childScopes: array(scopeId$),
+  childScopes: pipe(array(scopeId$), readonly()),
   variableScope: scopeId$,
-  block: object({ type: string(), span: span$, endSpan: span$ }),
-  variables: array(variableId$),
-  references: array(referenceId$),
-  through: array(referenceId$),
+  block: pipe(
+    object({ type: string(), span: span$, endSpan: span$ }),
+    readonly(),
+  ),
+  variables: pipe(array(variableId$), readonly()),
+  references: pipe(array(referenceId$), readonly()),
+  through: pipe(array(referenceId$), readonly()),
   functionExpressionScope: boolean(),
   blockContext: nullable(blockContext$),
   fallsThrough: boolean(),
