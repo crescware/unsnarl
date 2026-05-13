@@ -1,5 +1,18 @@
+import { parse } from "valibot";
+
 import type { AstNode } from "../ir/primitive/ast-node.js";
-import type { HeadExpression } from "../ir/reference/expression-statement-head.js";
+import {
+  identifier$,
+  member$,
+  call$,
+  new$,
+  await$,
+  raw$,
+} from "../ir/reference/expression-statement-head-kind.js";
+import {
+  headExpression$,
+  type HeadExpression,
+} from "../ir/reference/expression-statement-head.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
 type MaybeAstNode = AstNode | null | undefined;
@@ -19,7 +32,10 @@ export function buildHeadExpression(
   expression: MaybeAstNode,
   fallback: { startOffset: number; endOffset: number },
 ): HeadExpression {
-  return tryBuild(expression) ?? rawFromNode(expression, fallback);
+  return parse(
+    headExpression$,
+    tryBuild(expression) ?? rawFromNode(expression, fallback),
+  );
 }
 
 function tryBuild(node: MaybeAstNode): HeadExpression | null {
@@ -32,7 +48,7 @@ function tryBuild(node: MaybeAstNode): HeadExpression | null {
       if (typeof name !== "string") {
         return null;
       }
-      return { kind: "identifier", name };
+      return { kind: identifier$.literal, name };
     }
     case AST_TYPE.MemberExpression: {
       const object = (node as { object?: unknown }).object as MaybeAstNode;
@@ -50,7 +66,11 @@ function tryBuild(node: MaybeAstNode): HeadExpression | null {
       if (typeof propertyName !== "string") {
         return null;
       }
-      return { kind: "member", object: objectHead, property: propertyName };
+      return {
+        kind: member$.literal,
+        object: objectHead,
+        property: propertyName,
+      };
     }
     case AST_TYPE.CallExpression: {
       const callee = (node as { callee?: unknown }).callee as MaybeAstNode;
@@ -58,7 +78,7 @@ function tryBuild(node: MaybeAstNode): HeadExpression | null {
       if (calleeHead === null) {
         return null;
       }
-      return { kind: "call", callee: calleeHead };
+      return { kind: call$.literal, callee: calleeHead };
     }
     case AST_TYPE.NewExpression: {
       const callee = (node as { callee?: unknown }).callee as MaybeAstNode;
@@ -66,7 +86,7 @@ function tryBuild(node: MaybeAstNode): HeadExpression | null {
       if (calleeHead === null) {
         return null;
       }
-      return { kind: "new", callee: calleeHead };
+      return { kind: new$.literal, callee: calleeHead };
     }
     case AST_TYPE.AwaitExpression: {
       const argument = (node as { argument?: unknown })
@@ -75,7 +95,7 @@ function tryBuild(node: MaybeAstNode): HeadExpression | null {
       if (argHead === null) {
         return null;
       }
-      return { kind: "await", argument: argHead };
+      return { kind: await$.literal, argument: argHead };
     }
     default:
       return null;
@@ -90,11 +110,15 @@ function rawFromNode(
     const start = node.start;
     const end = node.end;
     if (typeof start === "number" && typeof end === "number") {
-      return { kind: "raw", startOffset: start, endOffset: end };
+      return {
+        kind: raw$.literal,
+        startOffset: start,
+        endOffset: end,
+      };
     }
   }
   return {
-    kind: "raw",
+    kind: raw$.literal,
     startOffset: fallback.startOffset,
     endOffset: fallback.endOffset,
   };

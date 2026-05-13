@@ -19,6 +19,7 @@ import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
+import { caseClause$ } from "../../ir/scope/block-context-kind.js";
 import {
   blockContext$,
   type BlockContext,
@@ -88,7 +89,7 @@ export function buildAnalysisVisitor(
         blockContext =
           input.parent && input.key !== null
             ? parse(blockContext$, {
-                kind: "case-clause",
+                kind: caseClause$.literal,
                 parentType: input.parent.type,
                 key: input.key,
                 parentSpanOffset: input.parent.start ?? 0,

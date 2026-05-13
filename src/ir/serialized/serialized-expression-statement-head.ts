@@ -1,15 +1,23 @@
 import {
   lazy,
-  literal,
   object,
   pipe,
   readonly,
   variant,
   type GenericSchema,
+  type InferOutput,
 } from "valibot";
 
 import { filledString$, type FilledString } from "../../util/filled-string.js";
 import { span$, type Span } from "../primitive/span.js";
+import {
+  identifier$,
+  member$,
+  call$,
+  new$,
+  await$,
+  raw$,
+} from "../reference/expression-statement-head-kind.js";
 
 // Serialized counterpart of `src/ir/reference/expression-statement-head.ts`.
 // Identical shape except the `raw` leaf carries `Span` (line/column/offset)
@@ -25,12 +33,15 @@ export const serializedHeadExpression$: GenericSchema<
 > = lazy(() =>
   variant("kind", [
     pipe(
-      object({ kind: literal("identifier"), name: filledString$ }),
+      object({
+        kind: identifier$,
+        name: filledString$,
+      }),
       readonly(),
     ),
     pipe(
       object({
-        kind: literal("member"),
+        kind: member$,
         object: serializedHeadExpression$,
         property: filledString$,
       }),
@@ -38,28 +49,28 @@ export const serializedHeadExpression$: GenericSchema<
     ),
     pipe(
       object({
-        kind: literal("call"),
+        kind: call$,
         callee: serializedHeadExpression$,
       }),
       readonly(),
     ),
     pipe(
       object({
-        kind: literal("new"),
+        kind: new$,
         callee: serializedHeadExpression$,
       }),
       readonly(),
     ),
     pipe(
       object({
-        kind: literal("await"),
+        kind: await$,
         argument: serializedHeadExpression$,
       }),
       readonly(),
     ),
     pipe(
       object({
-        kind: literal("raw"),
+        kind: raw$,
         startSpan: span$,
         endSpan: span$,
       }),
@@ -69,17 +80,29 @@ export const serializedHeadExpression$: GenericSchema<
 );
 
 export type SerializedHeadExpression =
-  | Readonly<{ kind: "identifier"; name: FilledString }>
   | Readonly<{
-      kind: "member";
+      kind: InferOutput<typeof identifier$>;
+      name: FilledString;
+    }>
+  | Readonly<{
+      kind: InferOutput<typeof member$>;
       object: SerializedHeadExpression;
       property: FilledString;
     }>
-  | Readonly<{ kind: "call"; callee: SerializedHeadExpression }>
-  | Readonly<{ kind: "new"; callee: SerializedHeadExpression }>
-  | Readonly<{ kind: "await"; argument: SerializedHeadExpression }>
   | Readonly<{
-      kind: "raw";
+      kind: InferOutput<typeof call$>;
+      callee: SerializedHeadExpression;
+    }>
+  | Readonly<{
+      kind: InferOutput<typeof new$>;
+      callee: SerializedHeadExpression;
+    }>
+  | Readonly<{
+      kind: InferOutput<typeof await$>;
+      argument: SerializedHeadExpression;
+    }>
+  | Readonly<{
+      kind: InferOutput<typeof raw$>;
       startSpan: Span;
       endSpan: Span;
     }>;

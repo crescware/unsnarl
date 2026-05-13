@@ -1,6 +1,13 @@
 import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
+import {
+  identifier$,
+  member$,
+  call$,
+  await$,
+  raw$,
+} from "../../ir/reference/expression-statement-head-kind.js";
 import { asReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
@@ -57,10 +64,13 @@ function refWithHead(opts: {
 }
 
 const CONSOLE_LOG_HEAD: SerializedHeadExpression = {
-  kind: "call",
+  kind: call$.literal,
   callee: {
-    kind: "member",
-    object: { kind: "identifier", name: asFilledString("console") },
+    kind: member$.literal,
+    object: {
+      kind: identifier$.literal,
+      name: asFilledString("console"),
+    },
     property: asFilledString("log"),
   },
 };
@@ -109,7 +119,10 @@ describe("ensureExpressionStatementNode", () => {
       startOffset: 0,
       endOffset: 2,
       startLine: 2,
-      head: { kind: "identifier", name: asFilledString("a") },
+      head: {
+        kind: identifier$.literal,
+        name: asFilledString("a"),
+      },
     });
     const elements: VisualElement[] = [];
     const state = makeState();
@@ -125,16 +138,19 @@ describe("ensureExpressionStatementNode", () => {
       startLine: 1,
       endLine: 5,
       head: {
-        kind: "await",
+        kind: await$.literal,
         argument: {
-          kind: "call",
+          kind: call$.literal,
           callee: {
-            kind: "member",
+            kind: member$.literal,
             object: {
-              kind: "call",
+              kind: call$.literal,
               callee: {
-                kind: "member",
-                object: { kind: "identifier", name: asFilledString("Promise") },
+                kind: member$.literal,
+                object: {
+                  kind: identifier$.literal,
+                  name: asFilledString("Promise"),
+                },
                 property: asFilledString("resolve"),
               },
             },
@@ -157,7 +173,11 @@ describe("ensureExpressionStatementNode", () => {
       startOffset: 0,
       endOffset: 6,
       startLine: 3,
-      head: { kind: "raw", startSpan: spanAt(0, 3), endSpan: spanAt(5, 3) },
+      head: {
+        kind: raw$.literal,
+        startSpan: spanAt(0, 3),
+        endSpan: spanAt(5, 3),
+      },
     });
     const elements: VisualElement[] = [];
     const state = makeState();

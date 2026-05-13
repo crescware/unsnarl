@@ -2,6 +2,14 @@ import { describe, expect, test } from "vitest";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
+import {
+  identifier$,
+  member$,
+  call$,
+  new$,
+  await$,
+  raw$,
+} from "../ir/reference/expression-statement-head-kind.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { findExpressionStatementContainer } from "./expression-statement-container.js";
 
@@ -42,10 +50,10 @@ describe("findExpressionStatementContainer", () => {
       startOffset: 0,
       endOffset: 15,
       head: {
-        kind: "call",
+        kind: call$.literal,
         callee: {
-          kind: "member",
-          object: { kind: "identifier", name: "console" },
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "console" },
           property: "log",
         },
       },
@@ -73,7 +81,7 @@ describe("findExpressionStatementContainer", () => {
     expect(findExpressionStatementContainer(path)).toEqual({
       startOffset: 2,
       endOffset: 4,
-      head: { kind: "identifier", name: "a" },
+      head: { kind: identifier$.literal, name: "a" },
     });
   });
 
@@ -165,20 +173,23 @@ describe("findExpressionStatementContainer", () => {
       startOffset: 0,
       endOffset: 121,
       head: {
-        kind: "await",
+        kind: await$.literal,
         argument: {
-          kind: "call",
+          kind: call$.literal,
           callee: {
-            kind: "member",
+            kind: member$.literal,
             object: {
-              kind: "call",
+              kind: call$.literal,
               callee: {
-                kind: "member",
+                kind: member$.literal,
                 object: {
-                  kind: "call",
+                  kind: call$.literal,
                   callee: {
-                    kind: "member",
-                    object: { kind: "identifier", name: "Promise" },
+                    kind: member$.literal,
+                    object: {
+                      kind: identifier$.literal,
+                      name: "Promise",
+                    },
                     property: "resolve",
                   },
                 },
@@ -220,8 +231,8 @@ describe("findExpressionStatementContainer", () => {
       startOffset: 0,
       endOffset: 8,
       head: {
-        kind: "new",
-        callee: { kind: "identifier", name: "C" },
+        kind: new$.literal,
+        callee: { kind: identifier$.literal, name: "C" },
       },
     });
   });
@@ -260,7 +271,7 @@ describe("findExpressionStatementContainer", () => {
     expect(findExpressionStatementContainer(path)).toEqual({
       startOffset: 0,
       endOffset: 5,
-      head: { kind: "raw", startOffset: 0, endOffset: 4 },
+      head: { kind: raw$.literal, startOffset: 0, endOffset: 4 },
     });
   });
 
@@ -298,7 +309,7 @@ describe("findExpressionStatementContainer", () => {
     expect(findExpressionStatementContainer(path)).toEqual({
       startOffset: 0,
       endOffset: 6,
-      head: { kind: "raw", startOffset: 0, endOffset: 5 },
+      head: { kind: raw$.literal, startOffset: 0, endOffset: 5 },
     });
   });
 

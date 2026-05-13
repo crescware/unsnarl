@@ -1,5 +1,13 @@
 import { parse } from "valibot";
 
+import {
+  identifier$,
+  member$,
+  call$,
+  new$,
+  await$,
+  raw$,
+} from "../../ir/reference/expression-statement-head-kind.js";
 import type { HeadExpression } from "../../ir/reference/expression-statement-head.js";
 import {
   serializedHeadExpression$,
@@ -12,35 +20,40 @@ export function serializeHeadExpression(
   raw: string,
 ): SerializedHeadExpression {
   switch (head.kind) {
-    case "identifier":
+    case identifier$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "identifier",
+        kind: identifier$.literal,
         name: head.name,
       });
-    case "member":
+
+    case member$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "member",
+        kind: member$.literal,
         object: serializeHeadExpression(head.object, raw),
         property: head.property,
       });
-    case "call":
+
+    case call$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "call",
+        kind: call$.literal,
         callee: serializeHeadExpression(head.callee, raw),
       });
-    case "new":
+
+    case new$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "new",
+        kind: new$.literal,
         callee: serializeHeadExpression(head.callee, raw),
       });
-    case "await":
+
+    case await$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "await",
+        kind: await$.literal,
         argument: serializeHeadExpression(head.argument, raw),
       });
-    case "raw":
+
+    case raw$.literal:
       return parse(serializedHeadExpression$, {
-        kind: "raw",
+        kind: raw$.literal,
         startSpan: spanFromOffset(raw, head.startOffset),
         endSpan: spanFromOffset(raw, head.endOffset),
       });

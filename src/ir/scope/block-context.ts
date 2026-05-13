@@ -1,5 +1,4 @@
 import {
-  literal,
   nullable,
   number,
   object,
@@ -11,6 +10,7 @@ import {
 
 import { astType$ } from "../../parser/ast-type.js";
 import { filledString$ } from "../../util/filled-string.js";
+import { caseClause$, other$ } from "./block-context-kind.js";
 
 // caseTest is only meaningful when this block is a switch-case clause.
 // Other contexts (if/else, try/catch/finally, for body, etc.) carry no
@@ -21,7 +21,7 @@ import { filledString$ } from "../../util/filled-string.js";
 export const blockContext$ = variant("kind", [
   pipe(
     object({
-      kind: literal("case-clause"),
+      kind: caseClause$,
       parentType: astType$,
       key: filledString$,
       parentSpanOffset: number(),
@@ -31,7 +31,7 @@ export const blockContext$ = variant("kind", [
   ),
   pipe(
     object({
-      kind: literal("other"),
+      kind: other$,
       parentType: astType$,
       key: filledString$,
       parentSpanOffset: number(),
