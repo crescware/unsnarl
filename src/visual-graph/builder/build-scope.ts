@@ -1,4 +1,5 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { hasDef } from "../../ir/serialized/has-def.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -104,8 +105,10 @@ export function buildScope(
     // ES spec 9.2.13) carry no source-level identifier or definition; they
     // exist only to satisfy resolution for in-source references. Surfacing
     // them as data-flow nodes would add line-0 phantoms with no incident
-    // edges, so skip them here while keeping them in the IR for parity.
-    if (v.defs.length === 0 && v.identifiers.length === 0) {
+    // edges, so skip them here -- the hasDef narrowing rejects exactly the
+    // implicit-arguments case (the only producer of empty defs) and lets
+    // makeVariableNode see a Variable that is guaranteed to carry a def.
+    if (!hasDef(v)) {
       continue;
     }
     const node = makeVariableNode(v);

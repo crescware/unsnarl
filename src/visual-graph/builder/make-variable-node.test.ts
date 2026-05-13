@@ -51,11 +51,6 @@ describe("makeVariableNode", () => {
     expect(makeVariableNode(v).line).toEqual(7);
   });
 
-  test("falls back to 0 when both identifiers and def are absent", () => {
-    const v = { ...baseVariable(), id: "v", identifiers: [], defs: [] };
-    expect(makeVariableNode(v).line).toEqual(0);
-  });
-
   test("ImplicitGlobalVariable forces line=0 because the def is synthetic, not a real source location", () => {
     const v = {
       ...baseVariable(),
@@ -149,10 +144,5 @@ describe("makeVariableNode", () => {
     if (node.kind === NODE_KIND.LegacyImportBinding) {
       expect(node.importKind).toEqual(IMPORT_KIND.Default);
     }
-  });
-
-  test("falls back to kind=Variable when defs is empty", () => {
-    const v = { ...baseVariable(), id: "v", defs: [] };
-    expect(makeVariableNode(v).kind).toEqual(NODE_KIND.LegacyVariable);
   });
 });

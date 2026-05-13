@@ -1,4 +1,5 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { assertHasDef } from "../../ir/serialized/has-def.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
@@ -8,15 +9,16 @@ import type { VisualNode } from "../visual-node.js";
 import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {
-  const def = v.defs[0] ?? null;
+  assertHasDef(v);
+  const def = v.defs[0];
   // ImplicitGlobalVariable has no source-level definition; the analyzer
   // pins its synthetic def to the first reference, so any line we read
   // from it would lie about where the global "lives". Treat it as
   // location-less (line 0), mirroring ModuleSink.
   const line =
-    def?.type === DEFINITION_TYPE.ImplicitGlobalVariable
+    def.type === DEFINITION_TYPE.ImplicitGlobalVariable
       ? 0
-      : (v.identifiers[0]?.line ?? def?.name.span.line ?? 0);
+      : (v.identifiers[0]?.line ?? def.name.span.line);
   const common = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: nodeId(v.id),
@@ -27,7 +29,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     unused: false,
   } as const;
 
-  if (def?.type === DEFINITION_TYPE.ImportBinding) {
+  if (def.type === DEFINITION_TYPE.ImportBinding) {
     if (def.importKind === IMPORT_KIND.Named) {
       if (def.importedName === null) {
         throw new Error(
@@ -56,15 +58,6 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       };
     }
     throw new Error(`expected importKind for ImportBinding ${nodeId(v.id)}`);
-  }
-
-  if (def === null) {
-    return {
-      ...common,
-      kind: NODE_KIND.LegacyVariable,
-      declarationKind: null,
-      initIsFunction: false,
-    };
   }
 
   if (def.type === DEFINITION_TYPE.Variable) {
