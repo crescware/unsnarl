@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { DIRECTION } from "../direction.js";
@@ -47,9 +48,9 @@ describe("attachSwitchDiscriminantAnchor", () => {
   test("Switch scope: pushes a SwitchDiscriminant anchor at 'first' and registers the offset", () => {
     const scope: SerializedScope = {
       ...baseScope(),
-      id: "switch_body",
+      id: asScopeId("switch_body"),
       type: SCOPE_TYPE.Switch,
-      upper: "scope_0",
+      upper: asScopeId("scope_0"),
       block: {
         type: AST_TYPE.SwitchStatement,
         span: span(34, 3, 0),
@@ -84,7 +85,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
     const scope: SerializedScope = {
       ...baseScope(),
       type: SCOPE_TYPE.Switch,
-      upper: "scope_0",
+      upper: asScopeId("scope_0"),
       block: {
         type: AST_TYPE.SwitchStatement,
         span: span(34, 3, 0),

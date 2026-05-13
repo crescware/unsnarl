@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
@@ -42,33 +43,45 @@ function makeCtx(opts: {
 
 describe("branchMergedOrigins", () => {
   test("returns empty when the branch has no writes", () => {
-    const root = { ...baseScope(), id: "root" };
-    const branch = { ...baseScope(), id: "br", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const branch = {
+      ...baseScope(),
+      id: asScopeId("br"),
+      upper: asScopeId("root"),
+    };
     const ctx = makeCtx({ scopes: [root, branch] });
     expect(branchMergedOrigins("br", [], ctx)).toEqual([]);
   });
 
   test("returns the linearly last write when it sits directly in the branch scope", () => {
-    const root = { ...baseScope(), id: "root" };
-    const branch = { ...baseScope(), id: "br", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const branch = {
+      ...baseScope(),
+      id: asScopeId("br"),
+      upper: asScopeId("root"),
+    };
     const op = { ...baseWriteOp(), refId: "rA", offset: 10, scopeId: "br" };
     const ctx = makeCtx({ scopes: [root, branch] });
     expect(branchMergedOrigins("br", [op], ctx)).toEqual(["wr_rA"]);
   });
 
   test("recurses into nested if/else under the outer branch and collects both arms", () => {
-    const root = { ...baseScope(), id: "root" };
-    const outer = { ...baseScope(), id: "outer", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      upper: asScopeId("root"),
+    };
     const cons = {
       ...baseScope(),
-      id: "cons",
-      upper: "outer",
+      id: asScopeId("cons"),
+      upper: asScopeId("outer"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const alt = {
       ...baseScope(),
-      id: "alt",
-      upper: "outer",
+      id: asScopeId("alt"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         key: "alternate",
@@ -94,18 +107,22 @@ describe("branchMergedOrigins", () => {
   });
 
   test("recurses into a nested switch and collects all reachable cases", () => {
-    const root = { ...baseScope(), id: "root" };
-    const outer = { ...baseScope(), id: "outer", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      upper: asScopeId("root"),
+    };
     const switchScope = {
       ...baseScope(),
-      id: "switch",
+      id: asScopeId("switch"),
       type: SCOPE_TYPE.Switch,
-      upper: "outer",
+      upper: asScopeId("outer"),
     };
     const c1 = {
       ...baseScope(),
-      id: "c1",
-      upper: "switch",
+      id: asScopeId("c1"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -115,8 +132,8 @@ describe("branchMergedOrigins", () => {
     };
     const c2 = {
       ...baseScope(),
-      id: "c2",
-      upper: "switch",
+      id: asScopeId("c2"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -137,18 +154,22 @@ describe("branchMergedOrigins", () => {
   });
 
   test("excludes a switch case that exits the function", () => {
-    const root = { ...baseScope(), id: "root" };
-    const outer = { ...baseScope(), id: "outer", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      upper: asScopeId("root"),
+    };
     const switchScope = {
       ...baseScope(),
-      id: "switch",
+      id: asScopeId("switch"),
       type: SCOPE_TYPE.Switch,
-      upper: "outer",
+      upper: asScopeId("outer"),
     };
     const c1 = {
       ...baseScope(),
-      id: "c1",
-      upper: "switch",
+      id: asScopeId("c1"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -159,8 +180,8 @@ describe("branchMergedOrigins", () => {
     };
     const c2 = {
       ...baseScope(),
-      id: "c2",
-      upper: "switch",
+      id: asScopeId("c2"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -191,18 +212,22 @@ describe("branchMergedOrigins", () => {
     // - midAlt path: leafCons OR leafAlt (inner if has alternate, so always
     //   one of them runs; midAlt itself never writes the variable directly)
     // -> merged origins: {opMid, opLeafC, opLeafA}.
-    const root = { ...baseScope(), id: "root" };
-    const outer = { ...baseScope(), id: "outer", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      upper: asScopeId("root"),
+    };
     const middleCons = {
       ...baseScope(),
-      id: "midCons",
-      upper: "outer",
+      id: asScopeId("midCons"),
+      upper: asScopeId("outer"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const middleAlt = {
       ...baseScope(),
-      id: "midAlt",
-      upper: "outer",
+      id: asScopeId("midAlt"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         key: "alternate",
@@ -211,14 +236,14 @@ describe("branchMergedOrigins", () => {
     };
     const leafCons = {
       ...baseScope(),
-      id: "leafCons",
-      upper: "midAlt",
+      id: asScopeId("leafCons"),
+      upper: asScopeId("midAlt"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 70 },
     };
     const leafAlt = {
       ...baseScope(),
-      id: "leafAlt",
-      upper: "midAlt",
+      id: asScopeId("leafAlt"),
+      upper: asScopeId("midAlt"),
       blockContext: {
         ...baseBlockContext(),
         key: "alternate",
@@ -265,12 +290,16 @@ describe("branchMergedOrigins", () => {
     // Without the fallback, only opInner would be returned, but since the
     // inner-if can be skipped at runtime, opPre is still a possible last
     // writer and must remain in the merged origins.
-    const root = { ...baseScope(), id: "root" };
-    const outer = { ...baseScope(), id: "outer", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      upper: asScopeId("root"),
+    };
     const innerCons = {
       ...baseScope(),
-      id: "innerCons",
-      upper: "outer",
+      id: asScopeId("innerCons"),
+      upper: asScopeId("outer"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 100 },
     };
     const opPre = {

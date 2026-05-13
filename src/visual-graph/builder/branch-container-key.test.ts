@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asScopeId, type ScopeId } from "../../ir/serialized/scope-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { branchContainerKey } from "./branch-container-key.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -13,7 +14,7 @@ describe("branchContainerKey", () => {
   test.each([
     {
       name: "switch cases -> switch:<upper>:<offset>",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -24,7 +25,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "if consequent -> if:<upper>:<offset>",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
@@ -35,7 +36,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "if alternate -> if:<upper>:<offset>",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
@@ -46,7 +47,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "switch with non-cases key -> null",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -57,7 +58,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "if with key other than consequent/alternate -> null",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
@@ -68,7 +69,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "try block -> try:<upper>:<offset>",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -79,7 +80,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "try handler -> try:<upper>:<offset>",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -90,7 +91,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "try finalizer -> null (post-merge node, not a sibling branch)",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -101,7 +102,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "if branch with ifChainRootOffset -> uses chain root for the key",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
@@ -113,7 +114,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "if branch alternate with ifChainRootOffset -> shares the same chain key",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
@@ -125,7 +126,7 @@ describe("branchContainerKey", () => {
     },
     {
       name: "unrelated parent type -> null",
-      upper: "outer" as string | null,
+      upper: asScopeId("outer") as ScopeId | null,
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.ForStatement,

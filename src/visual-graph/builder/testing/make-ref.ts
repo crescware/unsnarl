@@ -1,8 +1,13 @@
-import type { SerializedReference } from "../../../ir/serialized/serialized-reference.js";
+import { parse } from "valibot";
+
+import {
+  serializedReference$,
+  type SerializedReference,
+} from "../../../ir/serialized/serialized-reference.js";
 import { span } from "./span.js";
 
 export function baseRef(): SerializedReference {
-  return {
+  return parse(serializedReference$, {
     id: "r",
     identifier: { name: "x", span: span() },
     from: "s",
@@ -14,5 +19,5 @@ export function baseRef(): SerializedReference {
     returnContainer: null,
     jsxElement: null,
     expressionStatementContainer: null,
-  };
+  });
 }

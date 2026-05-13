@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
+import { asReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -44,7 +45,7 @@ function refWithHead(opts: {
 }): SerializedReference {
   return {
     ...baseRef(),
-    id: opts.refId,
+    id: asReferenceId(opts.refId),
     identifier: { name: "x", span: span() },
     expressionStatementContainer: {
       startSpan: spanAt(opts.startOffset, opts.startLine),

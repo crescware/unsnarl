@@ -1,8 +1,11 @@
 import { describe, expect, test } from "vitest";
 
+import { asReferenceId } from "../../ir/serialized/reference-id.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { LANGUAGE } from "../../language.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { DIRECTION } from "../direction.js";
@@ -105,7 +108,7 @@ describe("ensureReturnUseNode", () => {
         "fnVar",
         {
           ...baseRef(),
-          from: "scope",
+          from: asScopeId("scope"),
           returnContainer: returnContainer(0, 10),
         },
         ctx,
@@ -119,7 +122,12 @@ describe("ensureReturnUseNode", () => {
     const ctx = makeCtx();
     const state = makeState(host);
     expect(
-      ensureReturnUseNode("fnVar", { ...baseRef(), id: "r1" }, ctx, state),
+      ensureReturnUseNode(
+        "fnVar",
+        { ...baseRef(), id: asReferenceId("r1") },
+        ctx,
+        state,
+      ),
     ).toEqual(null);
     expect(host.elements).toHaveLength(0);
   });
@@ -127,14 +135,20 @@ describe("ensureReturnUseNode", () => {
   test("creates a return subgraph and a ReturnUse node, returning the node id", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx({
-      variables: [{ ...baseVariable(), id: "v", name: "x" }],
+      variables: [
+        {
+          ...baseVariable(),
+          id: asVariableId(asVariableId("v")),
+          name: asVariableId("x"),
+        },
+      ],
     });
     const state = makeState(host);
     const ref = {
       ...baseRef(),
-      id: "r1",
+      id: asReferenceId("r1"),
       identifier: { name: "x", span: span(0, 3) },
-      resolved: "v",
+      resolved: asVariableId("v"),
       returnContainer: returnContainer(0, 50, 3, 5),
     };
 
@@ -160,7 +174,7 @@ describe("ensureReturnUseNode", () => {
     const state = makeState(host);
     const ref = {
       ...baseRef(),
-      id: "r1",
+      id: asReferenceId("r1"),
       identifier: { name: "literal", span: span(0, 1) },
       resolved: null,
       returnContainer: returnContainer(0, 10),
@@ -175,8 +189,8 @@ describe("ensureReturnUseNode", () => {
     const ctx = makeCtx();
     const state = makeState(host);
     const rc = returnContainer(0, 50, 3, 5);
-    const ref1 = { ...baseRef(), id: "r1", returnContainer: rc };
-    const ref2 = { ...baseRef(), id: "r2", returnContainer: rc };
+    const ref1 = { ...baseRef(), id: asReferenceId("r1"), returnContainer: rc };
+    const ref2 = { ...baseRef(), id: asReferenceId("r2"), returnContainer: rc };
 
     ensureReturnUseNode("fnVar", ref1, ctx, state);
     ensureReturnUseNode("fnVar", ref2, ctx, state);
@@ -195,12 +209,12 @@ describe("ensureReturnUseNode", () => {
     const state = makeState(host);
     const ref1 = {
       ...baseRef(),
-      id: "r1",
+      id: asReferenceId("r1"),
       returnContainer: returnContainer(0, 10),
     };
     const ref2 = {
       ...baseRef(),
-      id: "r2",
+      id: asReferenceId("r2"),
       returnContainer: returnContainer(20, 30),
     };
 
@@ -216,7 +230,7 @@ describe("ensureReturnUseNode", () => {
     const state = makeState(host);
     const ref = {
       ...baseRef(),
-      id: "r1",
+      id: asReferenceId("r1"),
       returnContainer: returnContainer(0, 10),
     };
     ensureReturnUseNode("fnVar", ref, ctx, state);
@@ -231,7 +245,7 @@ describe("ensureReturnUseNode", () => {
     const state = makeState(host);
     const ref = {
       ...baseRef(),
-      id: "r1",
+      id: asReferenceId("r1"),
       identifier: { name: "Foo", span: span(0, 2) },
       jsxElement: jsxContainer(0, 30, 2, 5),
       returnContainer: returnContainer(0, 30, 2, 5),

@@ -75,9 +75,7 @@
           "offset": 82
         }
       },
-      "variables": [
-        "scope#1:arguments@0"
-      ],
+      "variables": [],
       "references": [],
       "through": [
         "ref#2"
@@ -322,14 +320,6 @@
           "type": "ImplicitGlobalVariable"
         }
       ]
-    },
-    {
-      "id": "scope#1:arguments@0",
-      "name": "arguments",
-      "scope": "scope#1",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#2:x@45",

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
@@ -43,13 +44,17 @@ function makeCtx(opts: {
 
 describe("readOrigins", () => {
   test("no prior writes returns nodeId of the variable", () => {
-    const ctx = makeCtx({ scopes: [{ ...baseScope(), id: "s" }] });
+    const ctx = makeCtx({ scopes: [{ ...baseScope(), id: asScopeId("s") }] });
     expect(readOrigins("v", 100, "s", ctx)).toEqual(["n_v"]);
   });
 
   test("prior write in ancestor scope returns its writeOpNodeId", () => {
-    const root = { ...baseScope(), id: "root" };
-    const child = { ...baseScope(), id: "child", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const child = {
+      ...baseScope(),
+      id: asScopeId("child"),
+      upper: asScopeId("root"),
+    };
     const op = { ...baseWriteOp(), refId: "rRoot", offset: 5, scopeId: "root" };
     const ctx = makeCtx({
       scopes: [root, child],
@@ -59,9 +64,17 @@ describe("readOrigins", () => {
   });
 
   test("prior write in non-ancestor non-branch scope returns its writeOpNodeId", () => {
-    const root = { ...baseScope(), id: "root" };
-    const sibA = { ...baseScope(), id: "a", upper: "root" };
-    const sibB = { ...baseScope(), id: "b", upper: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
+    const sibA = {
+      ...baseScope(),
+      id: asScopeId("a"),
+      upper: asScopeId("root"),
+    };
+    const sibB = {
+      ...baseScope(),
+      id: asScopeId("b"),
+      upper: asScopeId("root"),
+    };
     const op = { ...baseWriteOp(), refId: "rA", offset: 5, scopeId: "a" };
     const ctx = makeCtx({
       scopes: [root, sibA, sibB],
@@ -71,11 +84,11 @@ describe("readOrigins", () => {
   });
 
   test("if without alternate adds the pre-if origin (variable id when no prior write)", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const cons = {
       ...baseScope(),
-      id: "cons",
-      upper: "root",
+      id: asScopeId("cons"),
+      upper: asScopeId("root"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const op = {
@@ -93,11 +106,11 @@ describe("readOrigins", () => {
   });
 
   test("if without alternate uses the last pre-if write as the second origin", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const cons = {
       ...baseScope(),
-      id: "cons",
-      upper: "root",
+      id: asScopeId("cons"),
+      upper: asScopeId("root"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const preIf = {
@@ -121,17 +134,17 @@ describe("readOrigins", () => {
   });
 
   test("if-else with writes in both branches yields one origin per branch", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const cons = {
       ...baseScope(),
-      id: "cons",
-      upper: "root",
+      id: asScopeId("cons"),
+      upper: asScopeId("root"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const alt = {
       ...baseScope(),
-      id: "alt",
-      upper: "root",
+      id: asScopeId("alt"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         key: "alternate",
@@ -160,17 +173,17 @@ describe("readOrigins", () => {
   });
 
   test("switch case with exitsFunction is excluded", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const switchScope = {
       ...baseScope(),
-      id: "switch",
+      id: asScopeId("switch"),
       type: SCOPE_TYPE.Switch,
-      upper: "root",
+      upper: asScopeId("root"),
     };
     const c1 = {
       ...baseScope(),
-      id: "c1",
-      upper: "switch",
+      id: asScopeId("c1"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -181,8 +194,8 @@ describe("readOrigins", () => {
     };
     const c2 = {
       ...baseScope(),
-      id: "c2",
-      upper: "switch",
+      id: asScopeId("c2"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -202,17 +215,17 @@ describe("readOrigins", () => {
   });
 
   test("switch case that falls through to a later case is excluded (only its non-fallthrough successor counts)", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const switchScope = {
       ...baseScope(),
-      id: "switch",
+      id: asScopeId("switch"),
       type: SCOPE_TYPE.Switch,
-      upper: "root",
+      upper: asScopeId("root"),
     };
     const c1 = {
       ...baseScope(),
-      id: "c1",
-      upper: "switch",
+      id: asScopeId("c1"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -223,8 +236,8 @@ describe("readOrigins", () => {
     };
     const c2 = {
       ...baseScope(),
-      id: "c2",
-      upper: "switch",
+      id: asScopeId("c2"),
+      upper: asScopeId("switch"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
@@ -244,11 +257,11 @@ describe("readOrigins", () => {
   });
 
   test("try/catch with writes in both branches yields one origin per branch", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const tryBlock = {
       ...baseScope(),
-      id: "tryBlock",
-      upper: "root",
+      id: asScopeId("tryBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -258,8 +271,8 @@ describe("readOrigins", () => {
     };
     const catchBlock = {
       ...baseScope(),
-      id: "catchBlock",
-      upper: "root",
+      id: asScopeId("catchBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -289,11 +302,11 @@ describe("readOrigins", () => {
   });
 
   test("try without catch handler adds the pre-try origin (variable id when no prior write)", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const tryBlock = {
       ...baseScope(),
-      id: "tryBlock",
-      upper: "root",
+      id: asScopeId("tryBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -317,11 +330,11 @@ describe("readOrigins", () => {
   });
 
   test("read inside finally sees writes from try and catch siblings", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const tryBlock = {
       ...baseScope(),
-      id: "tryBlock",
-      upper: "root",
+      id: asScopeId("tryBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -331,8 +344,8 @@ describe("readOrigins", () => {
     };
     const catchBlock = {
       ...baseScope(),
-      id: "catchBlock",
-      upper: "root",
+      id: asScopeId("catchBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -342,8 +355,8 @@ describe("readOrigins", () => {
     };
     const finallyBlock = {
       ...baseScope(),
-      id: "finallyBlock",
-      upper: "root",
+      id: asScopeId("finallyBlock"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
@@ -373,17 +386,17 @@ describe("readOrigins", () => {
   });
 
   test("duplicate origins are deduplicated", () => {
-    const root = { ...baseScope(), id: "root" };
+    const root = { ...baseScope(), id: asScopeId("root") };
     const cons = {
       ...baseScope(),
-      id: "cons",
-      upper: "root",
+      id: asScopeId("cons"),
+      upper: asScopeId("root"),
       blockContext: { ...baseBlockContext(), parentSpanOffset: 50 },
     };
     const alt = {
       ...baseScope(),
-      id: "alt",
-      upper: "root",
+      id: asScopeId("alt"),
+      upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
         key: "alternate",

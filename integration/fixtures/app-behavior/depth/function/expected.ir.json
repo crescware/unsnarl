@@ -72,7 +72,6 @@
         }
       },
       "variables": [
-        "scope#1:arguments@0",
         "scope#1:f2@27"
       ],
       "references": [
@@ -116,7 +115,6 @@
         }
       },
       "variables": [
-        "scope#2:arguments@0",
         "scope#2:f3@47"
       ],
       "references": [
@@ -160,7 +158,6 @@
         }
       },
       "variables": [
-        "scope#3:arguments@0",
         "scope#3:f4@69"
       ],
       "references": [
@@ -204,7 +201,6 @@
         }
       },
       "variables": [
-        "scope#4:arguments@0",
         "scope#4:f5@93"
       ],
       "references": [
@@ -248,7 +244,6 @@
         }
       },
       "variables": [
-        "scope#5:arguments@0",
         "scope#5:f6@119"
       ],
       "references": [
@@ -290,7 +285,6 @@
         }
       },
       "variables": [
-        "scope#6:arguments@0",
         "scope#6:x@144"
       ],
       "references": [
@@ -352,14 +346,6 @@
       ]
     },
     {
-      "id": "scope#1:arguments@0",
-      "name": "arguments",
-      "scope": "scope#1",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#1:f2@27",
       "name": "f2",
       "scope": "scope#1",
@@ -395,14 +381,6 @@
           "type": "FunctionName"
         }
       ]
-    },
-    {
-      "id": "scope#2:arguments@0",
-      "name": "arguments",
-      "scope": "scope#2",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#2:f3@47",
@@ -442,14 +420,6 @@
       ]
     },
     {
-      "id": "scope#3:arguments@0",
-      "name": "arguments",
-      "scope": "scope#3",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#3:f4@69",
       "name": "f4",
       "scope": "scope#3",
@@ -485,14 +455,6 @@
           "type": "FunctionName"
         }
       ]
-    },
-    {
-      "id": "scope#4:arguments@0",
-      "name": "arguments",
-      "scope": "scope#4",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#4:f5@93",
@@ -532,14 +494,6 @@
       ]
     },
     {
-      "id": "scope#5:arguments@0",
-      "name": "arguments",
-      "scope": "scope#5",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#5:f6@119",
       "name": "f6",
       "scope": "scope#5",
@@ -575,14 +529,6 @@
           "type": "FunctionName"
         }
       ]
-    },
-    {
-      "id": "scope#6:arguments@0",
-      "name": "arguments",
-      "scope": "scope#6",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#6:x@144",

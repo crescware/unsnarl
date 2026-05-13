@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
@@ -13,8 +14,8 @@ function caseScope(
 ): SerializedScope {
   return {
     ...baseScope(),
-    id,
-    upper: "switch",
+    id: asScopeId(id),
+    upper: asScopeId("switch"),
     fallsThrough,
     blockContext: {
       ...baseBlockContext(),
@@ -63,7 +64,10 @@ describe("previousFallthroughCase", () => {
 
   test("scope without branchContainerKey -> null", () => {
     expect(
-      previousFallthroughCase({ ...baseScope(), id: "x" }, sortedCases),
+      previousFallthroughCase(
+        { ...baseScope(), id: asScopeId("x") },
+        sortedCases,
+      ),
     ).toEqual(null);
   });
 

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { PREDICATE_CONTAINER_TYPE } from "../../analyzer/predicate-container-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { BuildState } from "./build-state.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { baseRef } from "./testing/make-ref.js";
@@ -63,7 +64,7 @@ describe("predicateTargetId", () => {
   test("IfStatement with no anchor registered at that offset -> null", () => {
     const ref = {
       ...baseRef(),
-      from: "outer",
+      from: asScopeId("outer"),
       predicateContainer: predicateContainer(
         PREDICATE_CONTAINER_TYPE.IfStatement,
         50,

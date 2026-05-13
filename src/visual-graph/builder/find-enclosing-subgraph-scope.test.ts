@@ -1,12 +1,21 @@
 import { describe, expect, test } from "vitest";
 
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { findEnclosingSubgraphScope } from "./find-enclosing-subgraph-scope.js";
 import { baseScope } from "./testing/make-scope.js";
 
-const grand = { ...baseScope(), id: "grand" };
-const parent = { ...baseScope(), id: "parent", upper: "grand" };
-const child = { ...baseScope(), id: "child", upper: "parent" };
+const grand = { ...baseScope(), id: asScopeId("grand") };
+const parent = {
+  ...baseScope(),
+  id: asScopeId("parent"),
+  upper: asScopeId("grand"),
+};
+const child = {
+  ...baseScope(),
+  id: asScopeId("child"),
+  upper: asScopeId("parent"),
+};
 const ancestorChain = new Map<string, SerializedScope>(
   [grand, parent, child].map((v) => [v.id, v]),
 );
@@ -57,7 +66,14 @@ describe("findEnclosingSubgraphScope", () => {
     {
       name: "broken upper chain (referenced scope missing) -> null",
       map: new Map([
-        ["child", { ...baseScope(), id: "child", upper: "missing" }],
+        [
+          "child",
+          {
+            ...baseScope(),
+            id: asScopeId("child"),
+            upper: asScopeId("missing"),
+          },
+        ],
       ]),
       owners: new Map(),
       start: "child",

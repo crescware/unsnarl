@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import type { BlockContext } from "../../ir/scope/block-context.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { isBranchScope } from "./is-branch-scope.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -74,7 +75,7 @@ describe("isBranchScope", () => {
       expected: false,
     },
   ])("$name", ({ ctx, expected }) => {
-    const scope = { ...baseScope(), id: "s", blockContext: ctx };
+    const scope = { ...baseScope(), id: asScopeId("s"), blockContext: ctx };
     const map = new Map([[scope.id, scope]]);
     expect(isBranchScope("s", map)).toEqual(expected);
   });

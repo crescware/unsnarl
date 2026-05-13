@@ -1,15 +1,28 @@
 import { describe, expect, test } from "vitest";
 
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { lastWriteOpInScopeBefore } from "./last-write-op-in-scope-before.js";
 import { baseScope } from "./testing/make-scope.js";
 import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
-const root = { ...baseScope(), id: "root" };
-const child = { ...baseScope(), id: "child", upper: "root" };
-const sibling = { ...baseScope(), id: "sibling", upper: "root" };
-const grandchild = { ...baseScope(), id: "grandchild", upper: "child" };
+const root = { ...baseScope(), id: asScopeId("root") };
+const child = {
+  ...baseScope(),
+  id: asScopeId("child"),
+  upper: asScopeId("root"),
+};
+const sibling = {
+  ...baseScope(),
+  id: asScopeId("sibling"),
+  upper: asScopeId("root"),
+};
+const grandchild = {
+  ...baseScope(),
+  id: asScopeId("grandchild"),
+  upper: asScopeId("child"),
+};
 const scopeMap = new Map<string, SerializedScope>(
   [root, child, sibling, grandchild].map((v) => [v.id, v]),
 );

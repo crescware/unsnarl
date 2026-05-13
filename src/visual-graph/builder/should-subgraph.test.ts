@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -56,7 +57,7 @@ describe("shouldSubgraph", () => {
       expected: false,
     },
   ])("$name", ({ type, blockContext, expected }) => {
-    const scope = { ...baseScope(), id: "s", type, blockContext };
+    const scope = { ...baseScope(), id: asScopeId("s"), type, blockContext };
     expect(shouldSubgraph(scope)).toEqual(expected);
   });
 });

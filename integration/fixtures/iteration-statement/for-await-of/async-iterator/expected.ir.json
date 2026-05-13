@@ -74,7 +74,6 @@
         }
       },
       "variables": [
-        "scope#1:arguments@0",
         "scope#1:gen@47"
       ],
       "references": [],
@@ -115,9 +114,7 @@
           "offset": 84
         }
       },
-      "variables": [
-        "scope#2:arguments@0"
-      ],
+      "variables": [],
       "references": [],
       "through": [],
       "functionExpressionScope": false,
@@ -308,14 +305,6 @@
       ]
     },
     {
-      "id": "scope#1:arguments@0",
-      "name": "arguments",
-      "scope": "scope#1",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#1:gen@47",
       "name": "gen",
       "scope": "scope#1",
@@ -351,14 +340,6 @@
           "type": "FunctionName"
         }
       ]
-    },
-    {
-      "id": "scope#2:arguments@0",
-      "name": "arguments",
-      "scope": "scope#2",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#3:v@104",

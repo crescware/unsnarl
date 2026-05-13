@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
@@ -74,7 +75,7 @@ describe("stateRefId", () => {
       refs: [
         {
           ...baseRef(),
-          id: "readRef",
+          id: asReferenceId("readRef"),
           identifier: { name: "x", span: span(20) },
         },
       ],
@@ -88,7 +89,7 @@ describe("stateRefId", () => {
       refs: [
         {
           ...baseRef(),
-          id: "readRef",
+          id: asReferenceId("readRef"),
           identifier: { name: "x", span: span(20) },
         },
       ],

@@ -1,6 +1,7 @@
 import { describe, expect, test } from "vitest";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
@@ -15,10 +16,10 @@ describe("makeVariableNode", () => {
   test("plain Variable definition produces a Variable kind node", () => {
     const v = {
       ...baseVariable(),
-      id: "v1",
+      id: asVariableId("v1"),
       name: "x",
       identifiers: [span(0, 2)],
-      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)],
+      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)] as const,
     };
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
@@ -39,14 +40,14 @@ describe("makeVariableNode", () => {
   test("falls back to def.name.span.line when identifiers is empty", () => {
     const v = {
       ...baseVariable(),
-      id: "v",
+      id: asVariableId("v"),
       identifiers: [],
       defs: [
         {
           ...baseDef(VARIABLE_DECLARATION_KIND.Let),
           name: { name: "x", span: span(0, 7) },
         },
-      ],
+      ] as const,
     };
     expect(makeVariableNode(v).line).toEqual(7);
   });
@@ -54,10 +55,10 @@ describe("makeVariableNode", () => {
   test("ImplicitGlobalVariable forces line=0 because the def is synthetic, not a real source location", () => {
     const v = {
       ...baseVariable(),
-      id: "v",
+      id: asVariableId("v"),
       name: "Math",
       identifiers: [span(0, 4)],
-      defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)],
+      defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)] as const,
     };
     const node = makeVariableNode(v);
     expect(node.kind).toEqual(NODE_KIND.LegacyImplicitGlobalVariable);
@@ -78,7 +79,7 @@ describe("makeVariableNode", () => {
             ...baseDef(VARIABLE_DECLARATION_KIND.Let),
             init: { type: initType, span: span() },
           },
-        ],
+        ] as const,
       };
       const node = makeVariableNode(v);
       if (node.kind !== NODE_KIND.LegacyVariable) {
@@ -95,7 +96,7 @@ describe("makeVariableNode", () => {
   ])("preserves declarationKind=$kind", ({ kind }) => {
     const v = {
       ...baseVariable(),
-      defs: [baseDef(kind)],
+      defs: [baseDef(kind)] as const,
     };
     const node = makeVariableNode(v);
     if (node.kind !== NODE_KIND.LegacyVariable) {
@@ -116,7 +117,7 @@ describe("makeVariableNode", () => {
           importedName: "original",
           importSource: "./mod.js",
         },
-      ],
+      ] as const,
     };
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
@@ -137,7 +138,7 @@ describe("makeVariableNode", () => {
           importedName: null,
           importSource: "./mod.js",
         },
-      ],
+      ] as const,
     };
     const node = makeVariableNode(v);
     expect(node.kind).toEqual(NODE_KIND.LegacyImportBinding);

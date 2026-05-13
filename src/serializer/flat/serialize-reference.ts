@@ -1,17 +1,25 @@
+import { parse } from "valibot";
+
 import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
-import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
+import type { ReferenceId } from "../../ir/serialized/reference-id.js";
+import type { ScopeId } from "../../ir/serialized/scope-id.js";
+import {
+  serializedReference$,
+  type SerializedReference,
+} from "../../ir/serialized/serialized-reference.js";
+import type { VariableId } from "../../ir/serialized/variable-id.js";
 import { spanFromOffset } from "../../util/span.js";
 import { serializeHeadExpression } from "./serialize-expression-statement-head.js";
 import { spanOf } from "./span-of.js";
 
 export function serializeReference(
   r: Reference,
-  scopeIds: Map<Scope, string>,
-  variableIds: Map<Variable, string>,
-  referenceIds: Map<Reference, string>,
+  scopeIds: Map<Scope, ScopeId>,
+  variableIds: Map<Variable, VariableId>,
+  referenceIds: Map<Reference, ReferenceId>,
   annotations: Annotations,
   raw: string,
 ): SerializedReference {
@@ -20,14 +28,14 @@ export function serializeReference(
     throw new Error("Reference id not found");
   }
   const ann = annotations.ofReference(r);
-  return {
+  return parse(serializedReference$, {
     id,
     identifier: { name: r.identifier.name, span: spanOf(r.identifier, raw) },
     from: scopeIds.get(r.from) ?? "",
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
     owners: ann.owners
       .map((v) => variableIds.get(v) ?? null)
-      .filter((v): v is string => v !== null),
+      .filter((v): v is VariableId => v !== null),
     init: r.init,
     flags: {
       read: r.isRead(),
@@ -64,5 +72,5 @@ export function serializeReference(
           ),
         }
       : null,
-  };
+  });
 }

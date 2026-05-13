@@ -80,9 +80,7 @@
           "offset": 218
         }
       },
-      "variables": [
-        "scope#1:arguments@0"
-      ],
+      "variables": [],
       "references": [
         "ref#3"
       ],
@@ -225,9 +223,7 @@
           "offset": 194
         }
       },
-      "variables": [
-        "scope#4:arguments@0"
-      ],
+      "variables": [],
       "references": [
         "ref#5"
       ],
@@ -538,14 +534,6 @@
       ]
     },
     {
-      "id": "scope#1:arguments@0",
-      "name": "arguments",
-      "scope": "scope#1",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#3:f2@104",
       "name": "f2",
       "scope": "scope#3",
@@ -581,14 +569,6 @@
           "type": "FunctionName"
         }
       ]
-    },
-    {
-      "id": "scope#4:arguments@0",
-      "name": "arguments",
-      "scope": "scope#4",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     },
     {
       "id": "scope#5:x@144",

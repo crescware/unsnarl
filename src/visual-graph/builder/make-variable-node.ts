@@ -1,5 +1,4 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
-import { assertHasDef } from "../../ir/serialized/has-def.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
@@ -9,7 +8,6 @@ import type { VisualNode } from "../visual-node.js";
 import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {
-  assertHasDef(v);
   const def = v.defs[0];
   // ImplicitGlobalVariable has no source-level definition; the analyzer
   // pins its synthetic def to the first reference, so any line we read

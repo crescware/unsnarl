@@ -1,9 +1,10 @@
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { Span } from "../../ir/primitive/span.js";
-import type { ReferenceId, VariableId } from "../../ir/serialized/ids.js";
+import type { ReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import type { VariableId } from "../../ir/serialized/variable-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import type { UnsnarlPlugin } from "../../pipeline/plugin/unsnarl-plugin.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";

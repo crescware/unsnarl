@@ -1,11 +1,16 @@
+import { parse } from "valibot";
+
 import { SCOPE_TYPE } from "../../../analyzer/scope-type.js";
-import type { SerializedScope } from "../../../ir/serialized/serialized-scope.js";
+import {
+  serializedScope$,
+  type SerializedScope,
+} from "../../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 import { NESTING_KIND } from "../../../serializer/nesting-kind.js";
 import { span } from "./span.js";
 
 export function baseScope(): SerializedScope {
-  return {
+  return parse(serializedScope$, {
     id: "s",
     type: SCOPE_TYPE.Block,
     isStrict: false,
@@ -33,5 +38,5 @@ export function baseScope(): SerializedScope {
       [NESTING_KIND.TryCatchFinally]: 0,
       [NESTING_KIND.Block]: 0,
     },
-  };
+  });
 }
