@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/highlight/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_seed_6",
+      "name": "seed",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_23",
+      "name": "a",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_43",
+      "name": "b",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_60",
+      "name": "c",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_compute_81",
+      "name": "compute",
+      "line": 7,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_d_122",
+      "name": "d",
+      "line": 11,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "Variable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 7,
+      "endLine": 9,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_compute_81",
+      "ownerName": "compute",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_x_89",
+          "name": "x",
+          "line": 7,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "Parameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_compute_81_96_112",
+          "kind": "return",
+          "line": 8,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_7",
+              "kind": "ReturnUse",
+              "name": "x",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_8",
+              "kind": "ReturnUse",
+              "name": "seed",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_seed_6",
+      "to": "n_scope_0_a_23",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_23",
+      "to": "n_scope_0_b_43",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_43",
+      "to": "n_scope_0_c_60",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_x_89",
+      "to": "ret_use_ref_7",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_seed_6",
+      "to": "ret_use_ref_8",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_compute_81",
+      "to": "n_scope_0_d_122",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_c_60",
+      "to": "n_scope_0_d_122",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

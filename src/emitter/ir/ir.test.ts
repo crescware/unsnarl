@@ -22,6 +22,8 @@ describe("IrEmitter", () => {
       prettyJson: true,
       prunedGraph: null,
       resolutions: null,
+      highlightIds: null,
+      highlight: null,
       debug: false,
     });
     expect(out.endsWith("\n")).toEqual(true);
@@ -34,6 +36,8 @@ describe("IrEmitter", () => {
       prettyJson: false,
       prunedGraph: null,
       resolutions: null,
+      highlightIds: null,
+      highlight: null,
       debug: false,
     });
     expect(out).not.toContain("\n  ");

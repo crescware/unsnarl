@@ -33,6 +33,8 @@ function emit(code: string): string {
     prettyJson: true,
     prunedGraph: null,
     resolutions: null,
+    highlightIds: null,
+    highlight: null,
     debug: false,
   });
 }
@@ -59,6 +61,8 @@ function emitWithBoundary(
     prettyJson: true,
     prunedGraph,
     resolutions: null,
+    highlightIds: null,
+    highlight: null,
     debug: false,
   });
 }

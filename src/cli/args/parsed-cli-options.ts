@@ -2,6 +2,7 @@ import type { CliColorTheme } from "../../cli-color-theme.js";
 import type { CliMermaidRenderer } from "../../cli-mermaid-renderer.js";
 import type { CliLanguage } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
+import type { RawHighlight } from "./highlight-options.js";
 
 export type ParsedCliOptions = Readonly<{
   format: string;
@@ -11,6 +12,7 @@ export type ParsedCliOptions = Readonly<{
   mermaidRenderer: CliMermaidRenderer | null;
   colorTheme: CliColorTheme;
   roots: readonly ParsedRootQuery[];
+  highlight: RawHighlight;
   descendants: number | null;
   ancestors: number | null;
   context: number | null;

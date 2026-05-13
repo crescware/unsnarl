@@ -38,6 +38,8 @@ function emitWith(
     prettyJson: true,
     prunedGraph: null,
     resolutions: null,
+    highlightIds: null,
+    highlight: null,
     debug: false,
   });
 }
@@ -60,6 +62,8 @@ function emit(code: string, language: Language = LANGUAGE.Ts): string {
     prettyJson: true,
     prunedGraph: null,
     resolutions: null,
+    highlightIds: null,
+    highlight: null,
     debug: false,
   });
 }
@@ -99,6 +103,8 @@ describe("MermaidEmitter", () => {
       prettyJson: true,
       prunedGraph: null,
       resolutions: null,
+      highlightIds: null,
+      highlight: null,
       debug: false,
     });
     expect(out).not.toContain("%%{init");

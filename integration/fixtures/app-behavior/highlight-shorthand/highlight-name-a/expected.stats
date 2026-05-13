@@ -1,0 +1,6 @@
+0	0	integration/fixtures/app-behavior/highlight-shorthand/input.ts:1 unused build
+1	0	integration/fixtures/app-behavior/highlight-shorthand/input.ts:2 a
+1	0	integration/fixtures/app-behavior/highlight-shorthand/input.ts:3 b
+0	1	integration/fixtures/app-behavior/highlight-shorthand/input.ts:4 a
+0	1	integration/fixtures/app-behavior/highlight-shorthand/input.ts:4 b
+2	2	5 total

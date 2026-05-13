@@ -29,4 +29,14 @@ export const darkTheme: ColorTheme = {
     { fill: "#364666", stroke: "transparent" },
     { fill: "#3f5175", stroke: "transparent" },
   ],
+  // Pure yellow fill keeps the highlight unmistakable on a dark page;
+  // black text re-establishes contrast against that fill. Matching
+  // edgeStroke keeps the connecting arrows visually tied to the node.
+  highlight: {
+    fill: "#facc15",
+    stroke: "#facc15",
+    color: "#0a0a0a",
+    edgeStroke: "#facc15",
+    edgeStrokeWidth: "2px",
+  },
 };

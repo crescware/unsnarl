@@ -14,6 +14,7 @@ const baseParsed = {
   mermaidRenderer: null,
   colorTheme: CLI_COLOR_THEME.Dark,
   roots: [],
+  highlight: false,
   descendants: null,
   ancestors: null,
   context: null,

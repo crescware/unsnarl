@@ -3,6 +3,7 @@ import type { CliMermaidRenderer } from "../../cli-mermaid-renderer.js";
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import type { CliLanguage } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
+import type { HighlightSpec } from "../args/highlight-spec.js";
 import type { OutTarget } from "./out-target.js";
 
 export type NormalizedCliOptions = Readonly<{
@@ -13,6 +14,7 @@ export type NormalizedCliOptions = Readonly<{
   mermaidRenderer: CliMermaidRenderer | null;
   colorTheme: CliColorTheme;
   roots: readonly ParsedRootQuery[];
+  highlight: HighlightSpec;
   descendants: number | null;
   ancestors: number | null;
   context: number | null;

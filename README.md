@@ -47,6 +47,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-A`  | `--descendants <N>`      | Descendants generations — see Pruning                         |
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
+| `-H`  | `--highlight [queries]`  | Highlight matching nodes + adjacent edges — see Highlighting  |
 | `-o`  | `--out-dir <dir>`        | Write to directory with auto-named file — see Writing output  |
 |       | `--out-file <path>`      | Write to that exact file path — see Writing output            |
 |       | `--plugin <names>`       | Enable bundled plugin(s) (repeatable) — see Plugins           |
@@ -100,6 +101,31 @@ When `-r` is given but no generation flag is, the default is `-C 10`. Pruning
 applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
 `ir` output is always emitted in full. If a query matches nothing, a warning
 is written to stderr but the command still exits with `0`.
+
+### Highlighting the visual graph
+
+Once the graph is pruned (or even without `-r`), `-H` / `--highlight` paints
+the matched nodes and every edge with at least one endpoint in that match
+set yellow. Highlighting is purely visual and only takes effect on the
+`mermaid` and `markdown` emitters.
+
+```sh
+uns -r b -C 1 -H file.ts                 # highlight whatever -r selected
+uns -r b -C 1 -H a file.tsx              # highlight 'a' only (b stays uncolored)
+uns -r 42:render -C 2 --highlight render file.tsx
+```
+
+Two modes:
+
+- `-H` / `--highlight` with no value: the highlight set follows `-r/--roots`,
+  i.e. every node that drove the pruning is painted yellow.
+- `-H <queries>` / `--highlight <queries>`: the highlight uses its own
+  query list (same grammar as `-r`); the `-r` matches stay uncolored.
+
+Because `-H` accepts an optional value, write `--highlight=foo` (or place
+the file before the flag) when the next argument would otherwise be parsed
+as the value, e.g. `uns -H foo.ts` interprets `foo.ts` as the highlight
+query, not as the input file.
 
 ### Writing output
 

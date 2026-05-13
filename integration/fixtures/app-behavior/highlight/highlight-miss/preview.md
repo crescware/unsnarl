@@ -1,0 +1,61 @@
+# integration/fixtures/app-behavior/highlight/input.ts
+
+## Input
+
+```ts
+const seed = 1;
+
+const a = seed + 1;
+const b = a + 1;
+const c = b + 1;
+
+function compute(x) {
+  return x + seed;
+}
+
+const d = compute(c);
+```
+
+## Query
+
+```sh
+-H zzz
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_seed_6["seed<br/>L1"]
+  n_scope_0_a_23["a<br/>L3"]
+  n_scope_0_b_43["b<br/>L4"]
+  n_scope_0_c_60["c<br/>L5"]
+  n_scope_0_d_122["unused d<br/>L11"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_compute_81["compute()<br/>L7"]
+    subgraph s_scope_1["compute()<br/>L7-9"]
+      direction RL
+      n_scope_1_x_89["x<br/>L7"]
+      subgraph s_return_scope_0_compute_81_96_112["return L8"]
+        direction RL
+        ret_use_ref_7["x<br/>L8"]
+        ret_use_ref_8["seed<br/>L8"]
+      end
+    end
+  end
+  n_scope_0_seed_6 -->|read| n_scope_0_a_23
+  n_scope_0_a_23 -->|read| n_scope_0_b_43
+  n_scope_0_b_43 -->|read| n_scope_0_c_60
+  n_scope_1_x_89 -->|read| ret_use_ref_7
+  n_scope_0_seed_6 -->|read| ret_use_ref_8
+  n_scope_0_compute_81 -->|read,call| n_scope_0_d_122
+  n_scope_0_c_60 -->|read| n_scope_0_d_122
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_0_compute_81_96_112 nestL3;
+```

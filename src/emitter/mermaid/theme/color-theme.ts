@@ -26,4 +26,14 @@ export type ColorTheme = Readonly<{
   // same depth slot, so each function reads as a single solid color
   // rather than two stacked colors.
   nestPalette: readonly NestPaletteEntry[];
+  // Applied via `style <id>` (which wins against existing classes) on
+  // nodes matched by `-h/--highlight`, and via `linkStyle <i>` on every
+  // edge that touches at least one such node (one generation each way).
+  highlight: Readonly<{
+    fill: string;
+    stroke: string;
+    color: string;
+    edgeStroke: string;
+    edgeStrokeWidth: string;
+  }>;
 }>;

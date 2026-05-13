@@ -1,6 +1,7 @@
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 import { DEFAULT_DEPTH } from "../args/depth-options.js";
+import type { HighlightSpec } from "../args/highlight-spec.js";
 import type { ParsedCliOptions } from "../args/parsed-cli-options.js";
 import { CliUsageError } from "./cli-usage-error.js";
 import type { NormalizedCliOptions } from "./normalized-cli-options.js";
@@ -17,6 +18,7 @@ export function normalizeCliOptions(
     mermaidRenderer: opts.mermaidRenderer,
     colorTheme: opts.colorTheme,
     roots: opts.roots,
+    highlight: resolveHighlight(opts),
     descendants: opts.descendants,
     ancestors: opts.ancestors,
     context: opts.context,
@@ -25,6 +27,17 @@ export function normalizeCliOptions(
     debug: opts.debug,
     plugins: opts.plugins,
   };
+}
+
+function resolveHighlight(opts: ParsedCliOptions): HighlightSpec {
+  const raw = opts.highlight;
+  if (raw === false) {
+    return { mode: "off" };
+  }
+  if (raw === true) {
+    return { mode: "roots" };
+  }
+  return { mode: "queries", queries: raw };
 }
 
 function resolveDepths(opts: ParsedCliOptions): NestingDepths {

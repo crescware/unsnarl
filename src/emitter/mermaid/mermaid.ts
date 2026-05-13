@@ -7,12 +7,14 @@ import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { collectEdgeEndpointIds } from "./collect-edge-endpoint-ids.js";
+import { collectHighlightEdgeIndices } from "./collect-highlight-edge-indices.js";
 import { collectImportSources } from "./collect-import-sources.js";
 import { collectNodesInto } from "./collect-nodes-into.js";
 import { collectWrappedOwnerIds } from "./collect-wrapped-owner-ids.js";
 import { pushEdgeLines } from "./push-edge-lines.js";
 import { renderBoundaryEdges } from "./render-boundary-edges.js";
 import { renderClassDefs } from "./render-class-defs.js";
+import { renderHighlight } from "./render-highlight.js";
 import { renderPruningComment } from "./render-pruning-comment.js";
 import type { RenderState } from "./render-state.js";
 import { renderSyntheticNodeBlock } from "./render-synthetic-node-block.js";
@@ -60,7 +62,13 @@ export class MermaidEmitter implements Emitter {
     const graph =
       opts.prunedGraph ??
       buildVisualGraph(ir, opts.depths ? { depths: opts.depths } : undefined);
-    return renderMermaid(graph, this.strategy, this.theme, opts.debug);
+    return renderMermaid(
+      graph,
+      this.strategy,
+      this.theme,
+      opts.debug,
+      opts.highlightIds,
+    );
   }
 }
 
@@ -69,6 +77,7 @@ function renderMermaid(
   strategy: MermaidStrategy,
   theme: ColorTheme,
   debug: boolean,
+  highlightIds: ReadonlySet<string> | null,
 ): string {
   // The strategy decides which renderer-specific lines (e.g. the elk init
   // directive) and which empty-subgraph patches are needed. dagre struggles
@@ -143,6 +152,16 @@ function renderMermaid(
 
   const varIds = collectVarNodeIds(nodeMap);
   renderClassDefs(stubIds, varIds, state.nestClassMap, theme, lines);
+
+  if (highlightIds !== null) {
+    const edgeIndices = collectHighlightEdgeIndices(
+      bodyEdges,
+      importEdges,
+      graph.boundaryEdges,
+      highlightIds,
+    );
+    renderHighlight(highlightIds, edgeIndices, theme, lines);
+  }
 
   for (const l of strategy.trailerLines(state.placeholderIds, theme)) {
     lines.push(l);
