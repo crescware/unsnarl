@@ -48,6 +48,9 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
 | `-H`  | `--highlight [queries]`  | Highlight matching nodes + adjacent edges — see Highlighting  |
+|       | `--depth <N>`            | Set both `--depth-function` and `--depth-block` — see Depth   |
+|       | `--depth-function <N>`   | Max function-scope nesting depth — see Depth                  |
+|       | `--depth-block <N>`      | Max block-scope nesting depth — see Depth                     |
 | `-o`  | `--out-dir <dir>`        | Write to directory with auto-named file — see Writing output  |
 |       | `--out-file <path>`      | Write to that exact file path — see Writing output            |
 |       | `--plugin <names>`       | Enable bundled plugin(s) (repeatable) — see Plugins           |
@@ -98,9 +101,38 @@ Each query token is one of:
 | `id`     | every node named `id`, regardless of scope |
 
 When `-r` is given but no generation flag is, the default is `-C 10`. Pruning
-applies to the visual-graph emitters (`json`, `mermaid`, `markdown`) only;
-`ir` output is always emitted in full. If a query matches nothing, a warning
-is written to stderr but the command still exits with `0`.
+applies to every visual-graph emitter (`json`, `mermaid`, `markdown`,
+`stats`); `ir` output is always emitted in full. If a query matches nothing,
+a warning is written to stderr but the command still exits with `0`.
+
+### Limiting nesting depth
+
+Function and block scopes nest visually for every layer of source-level
+scope, and past some depth the diagram becomes harder to read than the code
+it was meant to clarify. Pass `--depth N` to collapse every scope deeper
+than `N` into a single `((...))` placeholder so the outer shape stays
+readable:
+
+```sh
+uns --depth 2 file.ts            # collapse anything past depth 2
+uns --depth-function 1 file.ts   # function scopes only
+uns --depth-block 0 file.ts      # block scopes only, very aggressive
+```
+
+Splits per scope kind:
+
+- `--depth-function N` — function / arrow / method bodies.
+- `--depth-block N` — `if` / `for` / `while` / `switch` /
+  `try` / `catch` / `finally` / plain `{ ... }` blocks.
+- `--depth N` is shorthand: it seeds both of the above, and either split
+  flag overrides it for its kind.
+
+Default for every kind is `10`. The placeholder node uses the same
+dashed-circle treatment as the pruning boundary stubs, so "more graph
+beyond this point" reads the same whether the cause is `-r/-A/-B/-C`
+distance or `--depth` collapse. Depth applies to every visual-graph
+emitter (`json`, `mermaid`, `markdown`, `stats`); `ir` output is always
+emitted in full.
 
 ### Highlighting the visual graph
 
