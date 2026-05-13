@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { nestingKindOf } from "./nesting-kind-of.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
@@ -50,7 +51,7 @@ describe("nestingKindOf", () => {
         blockContext: {
           ...baseBlockContext(),
           parentType: AST_TYPE.IfStatement,
-          key: "consequent",
+          key: asFilledString("consequent"),
         },
       }),
     ).toEqual(NESTING_KIND.If);
@@ -64,7 +65,7 @@ describe("nestingKindOf", () => {
         blockContext: {
           ...baseBlockContext(),
           parentType: AST_TYPE.ForStatement,
-          key: "body",
+          key: asFilledString("body"),
         },
       }),
     ).toEqual(NESTING_KIND.For);
@@ -78,7 +79,7 @@ describe("nestingKindOf", () => {
         blockContext: {
           ...baseBlockContext(),
           parentType: AST_TYPE.WhileStatement,
-          key: "body",
+          key: asFilledString("body"),
         },
       }),
     ).toEqual(NESTING_KIND.While);
@@ -92,7 +93,7 @@ describe("nestingKindOf", () => {
         blockContext: {
           ...baseBlockContext(),
           parentType: AST_TYPE.TryStatement,
-          key: "block",
+          key: asFilledString("block"),
         },
       }),
     ).toEqual(NESTING_KIND.TryCatchFinally);

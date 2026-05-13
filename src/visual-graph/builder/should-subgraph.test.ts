@@ -4,6 +4,7 @@ import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { shouldSubgraph } from "./should-subgraph.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
@@ -16,42 +17,44 @@ describe("shouldSubgraph", () => {
     expected: boolean;
   }>([
     {
-      name: "function scope -> true",
+      name: asFilledString("function scope -> true"),
       type: SCOPE_TYPE.Function,
       blockContext: null,
       expected: true,
     },
     {
-      name: "control kind (for) -> true",
+      name: asFilledString("control kind (for) -> true"),
       type: SCOPE_TYPE.For,
       blockContext: null,
       expected: true,
     },
     {
-      name: "branch block (if consequent) -> true",
+      name: asFilledString("branch block (if consequent) -> true"),
       type: SCOPE_TYPE.Block,
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "bare block -> true (renders as the generic 'block' subgraph)",
+      name: asFilledString(
+        "bare block -> true (renders as the generic 'block' subgraph)",
+      ),
       type: SCOPE_TYPE.Block,
       blockContext: null,
       expected: true,
     },
     {
-      name: "module -> false",
+      name: asFilledString("module -> false"),
       type: SCOPE_TYPE.Module,
       blockContext: null,
       expected: false,
     },
     {
-      name: "global -> false",
+      name: asFilledString("global -> false"),
       type: SCOPE_TYPE.Global,
       blockContext: null,
       expected: false,

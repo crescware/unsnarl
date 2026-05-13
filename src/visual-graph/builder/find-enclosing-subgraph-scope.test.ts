@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { findEnclosingSubgraphScope } from "./find-enclosing-subgraph-scope.js";
 import { baseScope } from "./testing/make-scope.js";
 
@@ -29,42 +30,44 @@ describe("findEnclosingSubgraphScope", () => {
     expected: string | null;
   }>([
     {
-      name: "starting scope itself is owner -> returns start",
+      name: asFilledString("starting scope itself is owner -> returns start"),
       map: ancestorChain,
       owners: new Map([["child", "v"]]),
       start: "child",
       expected: "child",
     },
     {
-      name: "walks up multiple levels to find owner",
+      name: asFilledString("walks up multiple levels to find owner"),
       map: ancestorChain,
       owners: new Map([["grand", "v"]]),
       start: "child",
       expected: "grand",
     },
     {
-      name: "finds owner one level up",
+      name: asFilledString("finds owner one level up"),
       map: ancestorChain,
       owners: new Map([["parent", "v"]]),
       start: "child",
       expected: "parent",
     },
     {
-      name: "no owner anywhere -> null",
+      name: asFilledString("no owner anywhere -> null"),
       map: ancestorChain,
       owners: new Map(),
       start: "child",
       expected: null,
     },
     {
-      name: "starting scope id not in map -> null",
+      name: asFilledString("starting scope id not in map -> null"),
       map: new Map(),
       owners: new Map([["x", "v"]]),
       start: "missing",
       expected: null,
     },
     {
-      name: "broken upper chain (referenced scope missing) -> null",
+      name: asFilledString(
+        "broken upper chain (referenced scope missing) -> null",
+      ),
       map: new Map([
         [
           "child",

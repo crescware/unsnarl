@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
@@ -20,7 +21,7 @@ function caseScope(
     blockContext: {
       ...baseBlockContext(),
       parentType: AST_TYPE.SwitchStatement,
-      key: "cases",
+      key: asFilledString("cases"),
       parentSpanOffset,
     },
   };
@@ -39,19 +40,23 @@ const sortedCases = new Map<string, readonly SerializedScope[]>([
 describe("previousFallthroughCase", () => {
   test.each<{ name: string; target: SerializedScope; expected: string | null }>(
     [
-      { name: "first case has no previous", target: c0, expected: null },
       {
-        name: "previous fallsThrough -> returns previous",
+        name: asFilledString("first case has no previous"),
+        target: c0,
+        expected: null,
+      },
+      {
+        name: asFilledString("previous fallsThrough -> returns previous"),
         target: c1,
         expected: "c0",
       },
       {
-        name: "previous does not fall through -> null",
+        name: asFilledString("previous does not fall through -> null"),
         target: c2,
         expected: null,
       },
       {
-        name: "fallsThrough chain works at later positions",
+        name: asFilledString("fallsThrough chain works at later positions"),
         target: c3,
         expected: "c2",
       },

@@ -4,18 +4,19 @@ import {
   object,
   pipe,
   readonly,
-  string,
   union,
   type InferOutput,
 } from "valibot";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { astType$ } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { variableDeclarationKind$ } from "../../serializer/variable-declaration-kind.js";
+import { filledString$ } from "../../util/filled-string.js";
 import { span$ } from "../primitive/span.js";
 
-const definitionName$ = object({ name: string(), span: span$ });
-const definitionNode$ = object({ type: string(), span: span$ });
+const definitionName$ = object({ name: filledString$, span: span$ });
+const definitionNode$ = object({ type: astType$, span: span$ });
 const definitionParent$ = nullable(definitionNode$);
 
 const commonDefFields = {
@@ -34,7 +35,7 @@ export const serializedDefinition$ = union([
     object({
       ...commonDefFields,
       type: literal(DEFINITION_TYPE.Variable),
-      init: nullable(object({ type: string(), span: span$ })),
+      init: nullable(object({ type: astType$, span: span$ })),
       declarationKind: variableDeclarationKind$,
     }),
     readonly(),
@@ -44,8 +45,8 @@ export const serializedDefinition$ = union([
       ...commonDefFields,
       type: literal(DEFINITION_TYPE.ImportBinding),
       importKind: literal(IMPORT_KIND.Named),
-      importedName: string(),
-      importSource: string(),
+      importedName: filledString$,
+      importSource: filledString$,
     }),
     readonly(),
   ),
@@ -54,7 +55,7 @@ export const serializedDefinition$ = union([
       ...commonDefFields,
       type: literal(DEFINITION_TYPE.ImportBinding),
       importKind: literal(IMPORT_KIND.Default),
-      importSource: string(),
+      importSource: filledString$,
     }),
     readonly(),
   ),
@@ -63,7 +64,7 @@ export const serializedDefinition$ = union([
       ...commonDefFields,
       type: literal(DEFINITION_TYPE.ImportBinding),
       importKind: literal(IMPORT_KIND.Namespace),
-      importSource: string(),
+      importSource: filledString$,
     }),
     readonly(),
   ),

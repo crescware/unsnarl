@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
 import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { renderHeadExpression } from "./render-head-expression.js";
 
 function spanAt(offset: number): Span {
@@ -10,16 +11,19 @@ function spanAt(offset: number): Span {
 
 describe("renderHeadExpression", () => {
   test("renders an identifier head as the bare name", () => {
-    expect(renderHeadExpression({ kind: "identifier", name: "x" }, "")).toEqual(
-      "x",
-    );
+    expect(
+      renderHeadExpression(
+        { kind: "identifier", name: asFilledString("x") },
+        "",
+      ),
+    ).toEqual("x");
   });
 
   test("renders a member access head as `<object>.<property>`", () => {
     const head: SerializedHeadExpression = {
       kind: "member",
-      object: { kind: "identifier", name: "fns" },
-      property: "push",
+      object: { kind: "identifier", name: asFilledString("fns") },
+      property: asFilledString("push"),
     };
     expect(renderHeadExpression(head, "")).toEqual("fns.push");
   });
@@ -29,8 +33,8 @@ describe("renderHeadExpression", () => {
       kind: "call",
       callee: {
         kind: "member",
-        object: { kind: "identifier", name: "console" },
-        property: "log",
+        object: { kind: "identifier", name: asFilledString("console") },
+        property: asFilledString("log"),
       },
     };
     expect(renderHeadExpression(head, "")).toEqual("console.log()");
@@ -39,7 +43,7 @@ describe("renderHeadExpression", () => {
   test("renders a new head as `new <callee>()`", () => {
     const head: SerializedHeadExpression = {
       kind: "new",
-      callee: { kind: "identifier", name: "C" },
+      callee: { kind: "identifier", name: asFilledString("C") },
     };
     expect(renderHeadExpression(head, "")).toEqual("new C()");
   });
@@ -59,14 +63,17 @@ describe("renderHeadExpression", () => {
                 kind: "call",
                 callee: {
                   kind: "member",
-                  object: { kind: "identifier", name: "Promise" },
-                  property: "resolve",
+                  object: {
+                    kind: "identifier",
+                    name: asFilledString("Promise"),
+                  },
+                  property: asFilledString("resolve"),
                 },
               },
-              property: "then",
+              property: asFilledString("then"),
             },
           },
-          property: "catch",
+          property: asFilledString("catch"),
         },
       },
     };

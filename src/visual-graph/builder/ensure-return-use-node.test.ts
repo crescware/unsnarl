@@ -8,6 +8,7 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { LANGUAGE } from "../../language.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
@@ -147,7 +148,7 @@ describe("ensureReturnUseNode", () => {
     const ref = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      identifier: { name: "x", span: span(0, 3) },
+      identifier: { name: asFilledString("x"), span: span(0, 3) },
       resolved: asVariableId("v"),
       returnContainer: returnContainer(0, 50, 3, 5),
     };
@@ -163,7 +164,7 @@ describe("ensureReturnUseNode", () => {
     const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
     expect(node).toMatchObject({
       kind: NODE_KIND.LegacyReturnUse,
-      name: "x",
+      name: asFilledString("x"),
       line: 3,
     });
   });
@@ -175,7 +176,7 @@ describe("ensureReturnUseNode", () => {
     const ref = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      identifier: { name: "literal", span: span(0, 1) },
+      identifier: { name: asFilledString("literal"), span: span(0, 1) },
       resolved: null,
       returnContainer: returnContainer(0, 10),
     };
@@ -246,7 +247,7 @@ describe("ensureReturnUseNode", () => {
     const ref = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      identifier: { name: "Foo", span: span(0, 2) },
+      identifier: { name: asFilledString("Foo"), span: span(0, 2) },
       jsxElement: jsxContainer(0, 30, 2, 5),
       returnContainer: returnContainer(0, 30, 2, 5),
     };

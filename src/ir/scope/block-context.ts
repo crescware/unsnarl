@@ -5,10 +5,12 @@ import {
   object,
   pipe,
   readonly,
-  string,
   variant,
   type InferOutput,
 } from "valibot";
+
+import { astType$ } from "../../parser/ast-type.js";
+import { filledString$ } from "../../util/filled-string.js";
 
 // caseTest is only meaningful when this block is a switch-case clause.
 // Other contexts (if/else, try/catch/finally, for body, etc.) carry no
@@ -20,18 +22,18 @@ export const blockContext$ = variant("kind", [
   pipe(
     object({
       kind: literal("case-clause"),
-      parentType: string(),
-      key: string(),
+      parentType: astType$,
+      key: filledString$,
       parentSpanOffset: number(),
-      caseTest: nullable(string()),
+      caseTest: nullable(filledString$),
     }),
     readonly(),
   ),
   pipe(
     object({
       kind: literal("other"),
-      parentType: string(),
-      key: string(),
+      parentType: astType$,
+      key: filledString$,
       parentSpanOffset: number(),
       ifChainRootOffset: nullable(number()),
     }),

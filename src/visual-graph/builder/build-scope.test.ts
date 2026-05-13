@@ -11,6 +11,7 @@ import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
@@ -83,7 +84,7 @@ describe("buildScope", () => {
     const v = {
       ...baseVariable(),
       id: asVariableId("v1"),
-      name: "x",
+      name: asFilledString("x"),
       scope: asScopeId("s"),
     };
     const ctx = makeCtx({ scopes: [scope], variables: [v] });
@@ -101,7 +102,7 @@ describe("buildScope", () => {
       ),
     ).toMatchObject({
       kind: NODE_KIND.LegacyVariable,
-      name: "x",
+      name: asFilledString("x"),
     });
   });
 
@@ -114,7 +115,7 @@ describe("buildScope", () => {
     const v = {
       ...baseVariable(),
       id: asVariableId("v1"),
-      name: "x",
+      name: asFilledString("x"),
       defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)] as const,
     };
     const op = {
@@ -139,7 +140,7 @@ describe("buildScope", () => {
     );
     expect(writeNode).toMatchObject({
       kind: NODE_KIND.LegacyWriteOp,
-      name: "x",
+      name: asFilledString("x"),
       line: 4,
       declarationKind: VARIABLE_DECLARATION_KIND.Let,
     });
@@ -151,12 +152,16 @@ describe("buildScope", () => {
       id: asScopeId("fn"),
       type: SCOPE_TYPE.Function,
       variables: [asVariableId("param")],
-      block: { type: "Function", span: span(0, 1), endSpan: span(10, 5) },
+      block: {
+        type: AST_TYPE.FunctionDeclaration,
+        span: span(0, 1),
+        endSpan: span(10, 5),
+      },
     };
     const param = {
       ...baseVariable(),
       id: asVariableId("param"),
-      name: "p",
+      name: asFilledString("p"),
       defs: [
         {
           ...baseDef(VARIABLE_DECLARATION_KIND.Let),
@@ -167,7 +172,7 @@ describe("buildScope", () => {
     const owner = {
       ...baseVariable(),
       id: asVariableId("ownerVar"),
-      name: "myFn",
+      name: asFilledString("myFn"),
     };
     const ctx = makeCtx({
       scopes: [fnScope],
@@ -207,7 +212,11 @@ describe("buildScope", () => {
         endSpan: span(10, 3),
       },
     };
-    const v = { ...baseVariable(), id: asVariableId("v"), name: "i" };
+    const v = {
+      ...baseVariable(),
+      id: asVariableId("v"),
+      name: asFilledString("i"),
+    };
     const ctx = makeCtx({ scopes: [forScope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -235,7 +244,7 @@ describe("buildScope", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
     };
@@ -249,7 +258,11 @@ describe("buildScope", () => {
       type: SCOPE_TYPE.Module,
       childScopes: [asScopeId("inner")],
     };
-    const vIn = { ...baseVariable(), id: asVariableId("vIn"), name: "y" };
+    const vIn = {
+      ...baseVariable(),
+      id: asVariableId("vIn"),
+      name: asFilledString("y"),
+    };
     const ctx = makeCtx({ scopes: [outer, inner], variables: [vIn] });
     const container: { elements: VisualElement[] } = { elements: [] };
 

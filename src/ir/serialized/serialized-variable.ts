@@ -3,11 +3,11 @@ import {
   object,
   pipe,
   readonly,
-  string,
   tupleWithRest,
   type InferOutput,
 } from "valibot";
 
+import { filledString$ } from "../../util/filled-string.js";
 import { span$ } from "../primitive/span.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
@@ -22,7 +22,7 @@ import { variableId$ } from "./variable-id.js";
 // noUncheckedIndexedAccess).
 export const serializedVariable$ = object({
   id: variableId$,
-  name: string(),
+  name: filledString$,
   scope: scopeId$,
   identifiers: array(span$),
   references: array(referenceId$),

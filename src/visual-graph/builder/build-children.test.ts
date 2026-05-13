@@ -8,6 +8,7 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildChildren } from "./build-children.js";
@@ -89,7 +90,7 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
     };
@@ -126,10 +127,14 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(5, 1),
+        endSpan: span(10, 2),
+      },
     };
     const alt = {
       ...baseScope(),
@@ -138,10 +143,14 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(11, 3), endSpan: span(20, 5) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(11, 3),
+        endSpan: span(20, 5),
+      },
     };
     const outer = {
       ...baseScope(),
@@ -193,10 +202,14 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(5, 1),
+        endSpan: span(10, 2),
+      },
     };
     const alt = {
       ...baseScope(),
@@ -205,10 +218,14 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(11, 3), endSpan: span(20, 7) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(11, 3),
+        endSpan: span(20, 7),
+      },
     };
     const outer = {
       ...baseScope(),
@@ -233,7 +250,7 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
     };
@@ -244,7 +261,7 @@ describe("buildChildren", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 30,
       },
     };

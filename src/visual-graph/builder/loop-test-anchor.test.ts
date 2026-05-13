@@ -4,6 +4,7 @@ import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
@@ -78,7 +79,7 @@ describe("attachLoopTestAnchor", () => {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "for_test_scope_0_34",
       kind: NODE_KIND.LegacyForTest,
-      name: "for-test",
+      name: asFilledString("for-test"),
       line: 3,
       endLine: null,
       isJsxElement: false,
@@ -139,7 +140,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.WhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 27,
       },
     };
@@ -156,7 +157,7 @@ describe("attachLoopTestAnchor", () => {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "while_test_scope_0_27",
       kind: NODE_KIND.LegacyWhileTest,
-      name: "while-test",
+      name: asFilledString("while-test"),
       line: 3,
     });
     expect(state.whileTestAnchorByOffset.get(27)).toEqual(
@@ -171,7 +172,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.WhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 27,
       },
     };
@@ -197,7 +198,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.DoWhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 33,
       },
     };
@@ -212,7 +213,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.node).toMatchObject({
       id: "do_while_test_scope_0_33",
       kind: NODE_KIND.LegacyDoWhileTest,
-      name: "do-while-test",
+      name: asFilledString("do-while-test"),
       line: 6,
     });
     expect(state.doWhileTestAnchorByOffset.get(33)).toEqual(
@@ -227,7 +228,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.DoWhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 33,
       },
     };
@@ -247,7 +248,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 10,
       },
     };
@@ -269,7 +270,7 @@ describe("attachLoopTestAnchor", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.WhileStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 27,
       },
     };

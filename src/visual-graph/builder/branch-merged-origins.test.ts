@@ -8,6 +8,7 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { branchMergedOrigins } from "./branch-merged-origins.js";
 import type { BuilderContext } from "./context.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -84,7 +85,7 @@ describe("branchMergedOrigins", () => {
       upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 50,
       },
     };
@@ -126,7 +127,7 @@ describe("branchMergedOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
     };
@@ -137,7 +138,7 @@ describe("branchMergedOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
     };
@@ -173,7 +174,7 @@ describe("branchMergedOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
       exitsFunction: true,
@@ -185,7 +186,7 @@ describe("branchMergedOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
     };
@@ -230,7 +231,7 @@ describe("branchMergedOrigins", () => {
       upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 50,
       },
     };
@@ -246,7 +247,7 @@ describe("branchMergedOrigins", () => {
       upper: asScopeId("midAlt"),
       blockContext: {
         ...baseBlockContext(),
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 70,
       },
     };

@@ -5,11 +5,11 @@ import {
   object,
   pipe,
   readonly,
-  string,
   type InferOutput,
 } from "valibot";
 
 import { scopeType$ } from "../../analyzer/scope-type.js";
+import { astType$ } from "../../parser/ast-type.js";
 import { nestingDepths$ } from "../annotations/scope-annotation.js";
 import { span$ } from "../primitive/span.js";
 import { blockContext$ } from "../scope/block-context.js";
@@ -25,7 +25,7 @@ export const serializedScope$ = object({
   childScopes: pipe(array(scopeId$), readonly()),
   variableScope: scopeId$,
   block: pipe(
-    object({ type: string(), span: span$, endSpan: span$ }),
+    object({ type: astType$, span: span$, endSpan: span$ }),
     readonly(),
   ),
   variables: pipe(array(variableId$), readonly()),

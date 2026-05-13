@@ -7,6 +7,7 @@ import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { LANGUAGE } from "../../language.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import type { BuilderContext } from "./context.js";
 import { stateRefId } from "./state-ref-id.js";
 import { baseRef } from "./testing/make-ref.js";
@@ -63,7 +64,9 @@ describe("stateRefId", () => {
     expected: string;
   }>([
     {
-      name: "reference not found in ir.references -> nodeId(varId)",
+      name: asFilledString(
+        "reference not found in ir.references -> nodeId(varId)",
+      ),
       refs: [],
       ops: [],
       refId: "missing",
@@ -71,12 +74,14 @@ describe("stateRefId", () => {
       expected: "n_v",
     },
     {
-      name: "reference exists but no prior writes -> nodeId(varId)",
+      name: asFilledString(
+        "reference exists but no prior writes -> nodeId(varId)",
+      ),
       refs: [
         {
           ...baseRef(),
           id: asReferenceId("readRef"),
-          identifier: { name: "x", span: span(20) },
+          identifier: { name: asFilledString("x"), span: span(20) },
         },
       ],
       ops: [],
@@ -85,12 +90,14 @@ describe("stateRefId", () => {
       expected: "n_v",
     },
     {
-      name: "reference exists with prior write -> writeOpNodeId of the prior write",
+      name: asFilledString(
+        "reference exists with prior write -> writeOpNodeId of the prior write",
+      ),
       refs: [
         {
           ...baseRef(),
           id: asReferenceId("readRef"),
-          identifier: { name: "x", span: span(20) },
+          identifier: { name: asFilledString("x"), span: span(20) },
         },
       ],
       ops: [earlierOp],

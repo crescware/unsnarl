@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asFilledString } from "../../util/filled-string.js";
 import { ownerTargetId } from "./owner-target-id.js";
 import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
@@ -13,27 +14,29 @@ const byVar = new Map<string, WriteOp[]>([["owner", ops]]);
 describe("ownerTargetId", () => {
   test.each<{ name: string; offset: number; expected: string }>([
     {
-      name: "before any write returns the owner node id",
+      name: asFilledString("before any write returns the owner node id"),
       offset: 5,
       expected: "n_owner",
     },
     {
-      name: "at first write offset (inclusive) returns its writeOp node",
+      name: asFilledString(
+        "at first write offset (inclusive) returns its writeOp node",
+      ),
       offset: 10,
       expected: "wr_r1",
     },
     {
-      name: "between writes returns first writeOp node",
+      name: asFilledString("between writes returns first writeOp node"),
       offset: 15,
       expected: "wr_r1",
     },
     {
-      name: "at second write offset returns its writeOp node",
+      name: asFilledString("at second write offset returns its writeOp node"),
       offset: 20,
       expected: "wr_r2",
     },
     {
-      name: "after last write returns last writeOp node",
+      name: asFilledString("after last write returns last writeOp node"),
       offset: 999,
       expected: "wr_r2",
     },

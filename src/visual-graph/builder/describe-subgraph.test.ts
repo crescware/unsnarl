@@ -5,6 +5,7 @@ import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { DIRECTION } from "../direction.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -30,7 +31,7 @@ describe("describeSubgraph", () => {
     const owner: SerializedVariable = {
       ...baseVariable(),
       id: asVariableId("ownerVar"),
-      name: "myFn",
+      name: asFilledString("myFn"),
       identifiers: [span(0, 5)],
     };
     const owners = new Map([["fnScope", "ownerVar"]]);
@@ -65,7 +66,7 @@ describe("describeSubgraph", () => {
     const owner = {
       ...baseVariable(),
       id: asVariableId("o"),
-      name: "f",
+      name: asFilledString("f"),
       identifiers: [],
     };
     const sg = describeSubgraph(
@@ -95,9 +96,17 @@ describe("describeSubgraph", () => {
     type: ScopeType;
     expectedKind: VisualSubgraph["kind"];
   }>([
-    { name: "for", type: SCOPE_TYPE.For, expectedKind: "for" },
-    { name: "catch", type: SCOPE_TYPE.Catch, expectedKind: "catch" },
-    { name: "switch", type: SCOPE_TYPE.Switch, expectedKind: "switch" },
+    { name: asFilledString("for"), type: SCOPE_TYPE.For, expectedKind: "for" },
+    {
+      name: asFilledString("catch"),
+      type: SCOPE_TYPE.Catch,
+      expectedKind: "catch",
+    },
+    {
+      name: asFilledString("switch"),
+      type: SCOPE_TYPE.Switch,
+      expectedKind: "switch",
+    },
   ])(
     "control subgraph for scope type $name -> kind=$expectedKind",
     ({ type, expectedKind }) => {
@@ -105,7 +114,11 @@ describe("describeSubgraph", () => {
         ...baseScope(),
         id: asScopeId("ctrl"),
         type,
-        block: { type: "Block", span: span(0, 1), endSpan: span(10, 3) },
+        block: {
+          type: AST_TYPE.BlockStatement,
+          span: span(0, 1),
+          endSpan: span(10, 3),
+        },
       };
       const sg = describeSubgraph(scope, new Map(), new Map());
       expect(sg.kind).toEqual(expectedKind);
@@ -120,10 +133,14 @@ describe("describeSubgraph", () => {
       ...baseScope(),
       id: asScopeId("case1"),
       type: SCOPE_TYPE.Block,
-      block: { type: "Block", span: span(0, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(0, 1),
+        endSpan: span(10, 2),
+      },
       blockContext: {
         ...baseCaseClauseBlockContext(),
-        caseTest: "x === 1",
+        caseTest: asFilledString("x === 1"),
       },
     };
     const sg = describeSubgraph(scope, new Map(), new Map());

@@ -5,7 +5,7 @@ import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import type { VariableId } from "../../ir/serialized/variable-id.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { AST_TYPE, type AstType } from "../../parser/ast-type.js";
 import type { UnsnarlPlugin } from "../../pipeline/plugin/unsnarl-plugin.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 
@@ -21,7 +21,7 @@ function asHookKind(name: string): HookKind | null {
   return HOOK_NAMES.has(name) ? (name as HookKind) : null;
 }
 
-type InitReplacement = Readonly<{ type: string; span: Span }>;
+type InitReplacement = Readonly<{ type: AstType; span: Span }>;
 
 const plugin: UnsnarlPlugin = {
   meta: { name: "unsnarl-plugin-react" },

@@ -4,6 +4,7 @@ import type { Span } from "../../ir/primitive/span.js";
 import { asReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
@@ -46,7 +47,7 @@ function refWithHead(opts: {
   return {
     ...baseRef(),
     id: asReferenceId(opts.refId),
-    identifier: { name: "x", span: span() },
+    identifier: { name: asFilledString("x"), span: span() },
     expressionStatementContainer: {
       startSpan: spanAt(opts.startOffset, opts.startLine),
       endSpan: spanAt(opts.endOffset, opts.endLine ?? opts.startLine),
@@ -59,8 +60,8 @@ const CONSOLE_LOG_HEAD: SerializedHeadExpression = {
   kind: "call",
   callee: {
     kind: "member",
-    object: { kind: "identifier", name: "console" },
-    property: "log",
+    object: { kind: "identifier", name: asFilledString("console") },
+    property: asFilledString("log"),
   },
 };
 
@@ -97,7 +98,7 @@ describe("ensureExpressionStatementNode", () => {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "expr_stmt_0",
       kind: NODE_KIND.LegacyExpressionStatement,
-      name: "console.log()",
+      name: asFilledString("console.log()"),
       line: 7,
     });
   });
@@ -108,7 +109,7 @@ describe("ensureExpressionStatementNode", () => {
       startOffset: 0,
       endOffset: 2,
       startLine: 2,
-      head: { kind: "identifier", name: "a" },
+      head: { kind: "identifier", name: asFilledString("a") },
     });
     const elements: VisualElement[] = [];
     const state = makeState();
@@ -133,11 +134,11 @@ describe("ensureExpressionStatementNode", () => {
               kind: "call",
               callee: {
                 kind: "member",
-                object: { kind: "identifier", name: "Promise" },
-                property: "resolve",
+                object: { kind: "identifier", name: asFilledString("Promise") },
+                property: asFilledString("resolve"),
               },
             },
-            property: "then",
+            property: asFilledString("then"),
           },
         },
       },

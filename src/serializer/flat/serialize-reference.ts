@@ -27,11 +27,15 @@ export function serializeReference(
   if (id === null) {
     throw new Error("Reference id not found");
   }
+  const from = scopeIds.get(r.from) ?? null;
+  if (from === null) {
+    throw new Error(`Scope id not found for reference ${r.identifier.name}`);
+  }
   const ann = annotations.ofReference(r);
   return parse(serializedReference$, {
     id,
     identifier: { name: r.identifier.name, span: spanOf(r.identifier, raw) },
-    from: scopeIds.get(r.from) ?? "",
+    from,
     resolved: r.resolved ? (variableIds.get(r.resolved) ?? null) : null,
     owners: ann.owners
       .map((v) => variableIds.get(v) ?? null)

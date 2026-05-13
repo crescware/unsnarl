@@ -8,6 +8,7 @@ import type { SerializedVariable } from "../../ir/serialized/serialized-variable
 import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import type { BuilderContext } from "./context.js";
 import { readOrigins } from "./read-origins.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -147,7 +148,7 @@ describe("readOrigins", () => {
       upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 50,
       },
     };
@@ -187,7 +188,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
       exitsFunction: true,
@@ -199,7 +200,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
     };
@@ -229,7 +230,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
       fallsThrough: true,
@@ -241,7 +242,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 100,
       },
     };
@@ -265,7 +266,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "block",
+        key: asFilledString("block"),
         parentSpanOffset: 50,
       },
     };
@@ -276,7 +277,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "handler",
+        key: asFilledString("handler"),
         parentSpanOffset: 50,
       },
     };
@@ -310,7 +311,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "block",
+        key: asFilledString("block"),
         parentSpanOffset: 50,
       },
     };
@@ -338,7 +339,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "block",
+        key: asFilledString("block"),
         parentSpanOffset: 50,
       },
     };
@@ -349,7 +350,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "handler",
+        key: asFilledString("handler"),
         parentSpanOffset: 50,
       },
     };
@@ -360,7 +361,7 @@ describe("readOrigins", () => {
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "finalizer",
+        key: asFilledString("finalizer"),
         parentSpanOffset: 50,
       },
     };
@@ -399,7 +400,7 @@ describe("readOrigins", () => {
       upper: asScopeId("root"),
       blockContext: {
         ...baseBlockContext(),
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 50,
       },
     };

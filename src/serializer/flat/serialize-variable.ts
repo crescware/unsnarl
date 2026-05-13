@@ -24,10 +24,14 @@ export function serializeVariable(
   if (id === null) {
     throw new Error("Variable id not found");
   }
+  const scope = scopeIds.get(variable.scope) ?? null;
+  if (scope === null) {
+    throw new Error(`Scope id not found for variable ${variable.name}`);
+  }
   return parse(serializedVariable$, {
     id,
     name: variable.name,
-    scope: scopeIds.get(variable.scope) ?? "",
+    scope,
     identifiers: variable.identifiers.map((v) => spanOf(v, raw)),
     references: variable.references
       .map((v) => referenceIds.get(v) ?? null)

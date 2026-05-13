@@ -1,5 +1,7 @@
 // AST layer (oxc-parser node `type` discriminator strings).
 
+import { picklist, type InferOutput } from "valibot";
+
 export const AST_TYPE = {
   AccessorProperty: "AccessorProperty",
   ArrayExpression: "ArrayExpression",
@@ -65,3 +67,11 @@ export const AST_TYPE = {
   VariableDeclarator: "VariableDeclarator",
   WhileStatement: "WhileStatement",
 } as const;
+
+export const astType$ = picklist(
+  Object.values(
+    AST_TYPE,
+  ) as readonly (typeof AST_TYPE)[keyof typeof AST_TYPE][],
+);
+
+export type AstType = InferOutput<typeof astType$>;

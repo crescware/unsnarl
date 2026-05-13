@@ -4,6 +4,7 @@ import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
@@ -70,7 +71,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "switch_discriminant_scope_0_34",
       kind: NODE_KIND.LegacySwitchDiscriminant,
-      name: "switch-discriminant",
+      name: asFilledString("switch-discriminant"),
       line: 3,
       endLine: null,
       isJsxElement: false,

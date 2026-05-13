@@ -5,10 +5,10 @@ import {
   object,
   pipe,
   readonly,
-  string,
   type InferOutput,
 } from "valibot";
 
+import { filledString$ } from "../../util/filled-string.js";
 import { span$ } from "../primitive/span.js";
 import { predicateContainer$ } from "../reference/predicate-container.js";
 import { referenceId$ } from "./reference-id.js";
@@ -18,7 +18,7 @@ import { variableId$ } from "./variable-id.js";
 
 export const serializedReference$ = object({
   id: referenceId$,
-  identifier: pipe(object({ name: string(), span: span$ }), readonly()),
+  identifier: pipe(object({ name: filledString$, span: span$ }), readonly()),
   from: scopeId$,
   resolved: nullable(variableId$),
   owners: pipe(array(variableId$), readonly()),

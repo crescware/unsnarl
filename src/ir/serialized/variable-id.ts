@@ -1,6 +1,8 @@
-import { brand, parse, pipe, string, type InferOutput } from "valibot";
+import { brand, parse, pipe, type InferOutput } from "valibot";
 
-export const variableId$ = pipe(string(), brand("VariableId"));
+import { filledString$ } from "../../util/filled-string.js";
+
+export const variableId$ = pipe(filledString$, brand("VariableId"));
 export type VariableId = InferOutput<typeof variableId$>;
 
 export function asVariableId(value: string): VariableId {

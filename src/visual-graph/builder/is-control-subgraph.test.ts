@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { isControlSubgraph } from "./is-control-subgraph.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
 import { baseScope } from "./testing/make-scope.js";
@@ -22,71 +23,71 @@ describe("isControlSubgraph", () => {
 
   test.each<{ name: string; ctx: BlockContext; expected: boolean }>([
     {
-      name: "block + IfStatement.consequent",
+      name: asFilledString("block + IfStatement.consequent"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + IfStatement.alternate",
+      name: asFilledString("block + IfStatement.alternate"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + TryStatement.block",
+      name: asFilledString("block + TryStatement.block"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "block",
+        key: asFilledString("block"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + TryStatement.finalizer",
+      name: asFilledString("block + TryStatement.finalizer"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "finalizer",
+        key: asFilledString("finalizer"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + SwitchStatement.cases",
+      name: asFilledString("block + SwitchStatement.cases"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + WhileStatement.body",
+      name: asFilledString("block + WhileStatement.body"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.WhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 0,
       },
       expected: true,
     },
     {
-      name: "block + DoWhileStatement.body",
+      name: asFilledString("block + DoWhileStatement.body"),
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.DoWhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 0,
       },
       expected: true,

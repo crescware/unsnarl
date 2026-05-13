@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { baseScope } from "./testing/make-scope.js";
 
@@ -28,25 +29,29 @@ describe("enclosingFunctionVar", () => {
     expected: string | null;
   }>([
     {
-      name: "owner found at start scope returns its variable id",
+      name: asFilledString(
+        "owner found at start scope returns its variable id",
+      ),
       owners: new Map([["child", "varChild"]]),
       start: "child",
       expected: "varChild",
     },
     {
-      name: "owner found higher up returns that ancestor's variable id",
+      name: asFilledString(
+        "owner found higher up returns that ancestor's variable id",
+      ),
       owners: new Map([["grand", "varGrand"]]),
       start: "child",
       expected: "varGrand",
     },
     {
-      name: "no owner anywhere -> null",
+      name: asFilledString("no owner anywhere -> null"),
       owners: new Map(),
       start: "child",
       expected: null,
     },
     {
-      name: "starting scope missing from map -> null",
+      name: asFilledString("starting scope missing from map -> null"),
       owners: new Map([["x", "v"]]),
       start: "missing",
       expected: null,

@@ -1,10 +1,13 @@
+import { parse } from "valibot";
 import { describe, expect, test } from "vitest";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
+import { serializedVariable$ } from "../../ir/serialized/serialized-variable.js";
 import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import { makeVariableNode } from "./make-variable-node.js";
@@ -17,7 +20,7 @@ describe("makeVariableNode", () => {
     const v = {
       ...baseVariable(),
       id: asVariableId("v1"),
-      name: "x",
+      name: asFilledString("x"),
       identifiers: [span(0, 2)],
       defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)] as const,
     };
@@ -26,7 +29,7 @@ describe("makeVariableNode", () => {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
       kind: NODE_KIND.LegacyVariable,
-      name: "x",
+      name: asFilledString("x"),
       line: 2,
       isJsxElement: false,
     });
@@ -45,7 +48,7 @@ describe("makeVariableNode", () => {
       defs: [
         {
           ...baseDef(VARIABLE_DECLARATION_KIND.Let),
-          name: { name: "x", span: span(0, 7) },
+          name: { name: asFilledString("x"), span: span(0, 7) },
         },
       ] as const,
     };
@@ -56,7 +59,7 @@ describe("makeVariableNode", () => {
     const v = {
       ...baseVariable(),
       id: asVariableId("v"),
-      name: "Math",
+      name: asFilledString("Math"),
       identifiers: [span(0, 4)],
       defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)] as const,
     };
@@ -72,15 +75,15 @@ describe("makeVariableNode", () => {
   ])(
     "init.type=$initType yields initIsFunction=$expected",
     ({ initType, expected }) => {
-      const v = {
+      const v = parse(serializedVariable$, {
         ...baseVariable(),
         defs: [
           {
             ...baseDef(VARIABLE_DECLARATION_KIND.Let),
             init: { type: initType, span: span() },
           },
-        ] as const,
-      };
+        ],
+      });
       const node = makeVariableNode(v);
       if (node.kind !== NODE_KIND.LegacyVariable) {
         throw new Error("expected Variable kind");
@@ -94,10 +97,10 @@ describe("makeVariableNode", () => {
     { kind: "let" },
     { kind: "const" },
   ])("preserves declarationKind=$kind", ({ kind }) => {
-    const v = {
+    const v = parse(serializedVariable$, {
       ...baseVariable(),
-      defs: [baseDef(kind)] as const,
-    };
+      defs: [baseDef(kind)],
+    });
     const node = makeVariableNode(v);
     if (node.kind !== NODE_KIND.LegacyVariable) {
       throw new Error("expected Variable kind");
@@ -106,7 +109,7 @@ describe("makeVariableNode", () => {
   });
 
   test("Named ImportBinding propagates importKind and importedName", () => {
-    const v = {
+    const v = parse(serializedVariable$, {
       ...baseVariable(),
       name: "renamed",
       defs: [
@@ -117,8 +120,8 @@ describe("makeVariableNode", () => {
           importedName: "original",
           importSource: "./mod.js",
         },
-      ] as const,
-    };
+      ],
+    });
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
       kind: NODE_KIND.LegacyImportBinding,
@@ -128,7 +131,7 @@ describe("makeVariableNode", () => {
   });
 
   test("Default ImportBinding has no importedName field", () => {
-    const v = {
+    const v = parse(serializedVariable$, {
       ...baseVariable(),
       defs: [
         {
@@ -138,8 +141,8 @@ describe("makeVariableNode", () => {
           importedName: null,
           importSource: "./mod.js",
         },
-      ] as const,
-    };
+      ],
+    });
     const node = makeVariableNode(v);
     expect(node.kind).toEqual(NODE_KIND.LegacyImportBinding);
     if (node.kind === NODE_KIND.LegacyImportBinding) {

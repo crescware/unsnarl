@@ -1,5 +1,10 @@
+import { parse } from "valibot";
+
 import type { HeadExpression } from "../../ir/reference/expression-statement-head.js";
-import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
+import {
+  serializedHeadExpression$,
+  type SerializedHeadExpression,
+} from "../../ir/serialized/serialized-expression-statement-head.js";
 import { spanFromOffset } from "../../util/span.js";
 
 export function serializeHeadExpression(
@@ -8,33 +13,36 @@ export function serializeHeadExpression(
 ): SerializedHeadExpression {
   switch (head.kind) {
     case "identifier":
-      return { kind: "identifier", name: head.name };
+      return parse(serializedHeadExpression$, {
+        kind: "identifier",
+        name: head.name,
+      });
     case "member":
-      return {
+      return parse(serializedHeadExpression$, {
         kind: "member",
         object: serializeHeadExpression(head.object, raw),
         property: head.property,
-      };
+      });
     case "call":
-      return {
+      return parse(serializedHeadExpression$, {
         kind: "call",
         callee: serializeHeadExpression(head.callee, raw),
-      };
+      });
     case "new":
-      return {
+      return parse(serializedHeadExpression$, {
         kind: "new",
         callee: serializeHeadExpression(head.callee, raw),
-      };
+      });
     case "await":
-      return {
+      return parse(serializedHeadExpression$, {
         kind: "await",
         argument: serializeHeadExpression(head.argument, raw),
-      };
+      });
     case "raw":
-      return {
+      return parse(serializedHeadExpression$, {
         kind: "raw",
         startSpan: spanFromOffset(raw, head.startOffset),
         endSpan: spanFromOffset(raw, head.endOffset),
-      };
+      });
   }
 }
