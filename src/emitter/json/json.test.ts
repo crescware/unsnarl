@@ -5,7 +5,6 @@ import { OxcParser } from "../../parser/oxc-parser.js";
 import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { DIRECTION } from "../../visual-graph/direction.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
@@ -122,8 +121,7 @@ describe("JsonEmitter", () => {
     );
     const nodes = flattenNodes(graph.elements);
     const def = nodes.find((v) => v.name === "def");
-    expect(def?.kind).toEqual(NODE_KIND.LegacyImportBinding);
-    expect(def?.importKind).toEqual(IMPORT_KIND.Default);
+    expect(def?.kind).toEqual(NODE_KIND.DefaultImportBinding);
 
     const renamed = nodes.find((v) => v.name === "renamed");
     expect(renamed?.kind).toEqual(NODE_KIND.NamedImportBinding);

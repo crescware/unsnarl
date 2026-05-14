@@ -24,6 +24,7 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
     case NODE_KIND.WriteReference:
       return baseWriteOpNode();
     case NODE_KIND.LegacyImportBinding:
+    case NODE_KIND.DefaultImportBinding:
       return baseImportBindingDefault();
     case NODE_KIND.NamedImportBinding:
       return baseImportBindingNamed("imported");
@@ -47,6 +48,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.CatchParameter, expected: false },
     { kind: NODE_KIND.LegacyImportBinding, expected: false },
     { kind: NODE_KIND.NamedImportBinding, expected: false },
+    { kind: NODE_KIND.DefaultImportBinding, expected: false },
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
     { kind: NODE_KIND.WriteReference, expected: false },
     { kind: NODE_KIND.ReturnArgumentReference, expected: false },

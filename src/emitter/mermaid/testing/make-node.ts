@@ -77,16 +77,9 @@ export function baseImportBindingNamed(
 
 export function baseImportBindingDefault(): Extract<
   VisualNode,
-  {
-    kind: typeof NODE_KIND.LegacyImportBinding;
-    importKind: typeof IMPORT_KIND.Default;
-  }
+  { kind: typeof NODE_KIND.DefaultImportBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.LegacyImportBinding,
-    importKind: IMPORT_KIND.Default,
-  };
+  return { ...COMMON, kind: NODE_KIND.DefaultImportBinding };
 }
 
 export function baseImportBindingNamespace(): Extract<

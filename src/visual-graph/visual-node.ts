@@ -66,8 +66,7 @@ export type VisualNode =
       importedName: string;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.LegacyImportBinding;
-      importKind: typeof IMPORT_KIND.Default;
+      kind: typeof NODE_KIND.DefaultImportBinding;
     })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.LegacyImportBinding;

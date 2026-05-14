@@ -42,11 +42,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       };
     }
     if (def.importKind === IMPORT_KIND.Default) {
-      return {
-        ...common,
-        kind: NODE_KIND.LegacyImportBinding,
-        importKind: IMPORT_KIND.Default,
-      };
+      return { ...common, kind: NODE_KIND.DefaultImportBinding };
     }
     if (def.importKind === IMPORT_KIND.Namespace) {
       return {

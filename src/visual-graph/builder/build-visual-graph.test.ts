@@ -181,7 +181,7 @@ describe("buildVisualGraph: variable nodes", () => {
       ].join("\n"),
     );
     expect(
-      findNodes(g, NODE_KIND.LegacyImportBinding).map((v) => v.name),
+      findNodes(g, NODE_KIND.DefaultImportBinding).map((v) => v.name),
     ).toContain("imp");
     expect(
       findNodes(g, NODE_KIND.FunctionDeclaration).map((v) => v.name),

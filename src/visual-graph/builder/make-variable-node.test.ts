@@ -153,9 +153,6 @@ describe("makeVariableNode", () => {
       ],
     });
     const node = makeVariableNode(v);
-    expect(node.kind).toEqual(NODE_KIND.LegacyImportBinding);
-    if (node.kind === NODE_KIND.LegacyImportBinding) {
-      expect(node.importKind).toEqual(IMPORT_KIND.Default);
-    }
+    expect(node.kind).toEqual(NODE_KIND.DefaultImportBinding);
   });
 });
