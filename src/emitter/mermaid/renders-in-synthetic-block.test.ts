@@ -33,7 +33,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.LegacyFunctionName, expected: false },
     { kind: NODE_KIND.ClassDeclaration, expected: false },
     { kind: NODE_KIND.LegacyParameter, expected: false },
-    { kind: NODE_KIND.LegacyCatchClause, expected: false },
+    { kind: NODE_KIND.CatchParameter, expected: false },
     { kind: NODE_KIND.LegacyImportBinding, expected: false },
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
     { kind: NODE_KIND.LegacyWriteOp, expected: false },

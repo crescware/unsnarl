@@ -3,7 +3,7 @@ export const NODE_KIND = {
   LegacyFunctionName: "LegacyFunctionName",
   ClassDeclaration: "ClassDeclaration",
   LegacyParameter: "LegacyParameter",
-  LegacyCatchClause: "LegacyCatchClause",
+  CatchParameter: "CatchParameter",
   LegacyImportBinding: "LegacyImportBinding",
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   LegacyWriteOp: "LegacyWriteOp",

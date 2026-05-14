@@ -27,7 +27,7 @@ describe("nodeHead", () => {
   test.each([
     { kind: NODE_KIND.LegacyFunctionName, name: "foo", expected: "foo()" },
     { kind: NODE_KIND.ClassDeclaration, name: "Foo", expected: "class Foo" },
-    { kind: NODE_KIND.LegacyCatchClause, name: "err", expected: "catch err" },
+    { kind: NODE_KIND.CatchParameter, name: "err", expected: "catch err" },
     {
       kind: NODE_KIND.SyntheticImplicitGlobal,
       name: "global1",

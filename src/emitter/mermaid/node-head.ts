@@ -22,7 +22,7 @@ export function nodeHead(n: VisualNode): string {
         n.importKind === IMPORT_KIND.Named && n.importedName !== n.name;
       return isRenamedNamed ? name : `import ${name}`;
     }
-    case NODE_KIND.LegacyCatchClause:
+    case NODE_KIND.CatchParameter:
       return `catch ${name}`;
     case NODE_KIND.SyntheticImplicitGlobal:
       return `global ${name}`;

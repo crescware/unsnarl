@@ -79,7 +79,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     case DEFINITION_TYPE.Parameter:
       return { ...common, kind: NODE_KIND.LegacyParameter };
     case DEFINITION_TYPE.CatchClause:
-      return { ...common, kind: NODE_KIND.LegacyCatchClause };
+      return { ...common, kind: NODE_KIND.CatchParameter };
     case DEFINITION_TYPE.ImplicitGlobalVariable:
       return { ...common, kind: NODE_KIND.SyntheticImplicitGlobal };
   }
