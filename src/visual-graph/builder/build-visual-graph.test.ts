@@ -161,7 +161,7 @@ describe("buildVisualGraph: variable nodes", () => {
       findNodes(g, NODE_KIND.LegacyFunctionName).map((v) => v.name),
     ).toContain("foo");
     expect(
-      findNodes(g, NODE_KIND.LegacyParameter).map((v) => v.name),
+      findNodes(g, NODE_KIND.FormalParameter).map((v) => v.name),
     ).toContain("p");
     expect(findNodes(g, NODE_KIND.CatchParameter).map((v) => v.name)).toContain(
       "e",

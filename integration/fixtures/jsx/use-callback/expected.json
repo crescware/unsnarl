@@ -82,7 +82,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "LegacyParameter"
+              "kind": "FormalParameter"
             },
             {
               "type": "subgraph",
@@ -102,7 +102,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "LegacyParameter"
+                  "kind": "FormalParameter"
                 },
                 {
                   "type": "subgraph",
@@ -166,7 +166,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "LegacyParameter"
+              "kind": "FormalParameter"
             },
             {
               "type": "subgraph",
@@ -186,7 +186,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "LegacyParameter"
+                  "kind": "FormalParameter"
                 },
                 {
                   "type": "subgraph",

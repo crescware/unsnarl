@@ -2,7 +2,7 @@ export const NODE_KIND = {
   LegacyVariable: "LegacyVariable",
   LegacyFunctionName: "LegacyFunctionName",
   ClassDeclaration: "ClassDeclaration",
-  LegacyParameter: "LegacyParameter",
+  FormalParameter: "FormalParameter",
   CatchParameter: "CatchParameter",
   LegacyImportBinding: "LegacyImportBinding",
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",

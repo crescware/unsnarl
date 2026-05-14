@@ -46,7 +46,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "LegacyParameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
@@ -56,7 +56,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "LegacyParameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
