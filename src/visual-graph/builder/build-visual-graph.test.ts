@@ -5,7 +5,6 @@ import { OxcParser } from "../../parser/oxc-parser.js";
 import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { freshName } from "../../testing/fresh-name.js";
 import { DIRECTION } from "../direction.js";
@@ -114,12 +113,24 @@ function variableByName(
 function importBindingByName(
   graph: VisualGraph,
   name: string,
-): Extract<VisualNode, { kind: typeof NODE_KIND.LegacyImportBinding }> | null {
-  return (
-    findNodes(graph, NODE_KIND.LegacyImportBinding).find(
-      (v) => v.name === name,
-    ) ?? null
-  );
+): Extract<
+  VisualNode,
+  {
+    kind:
+      | typeof NODE_KIND.LegacyImportBinding
+      | typeof NODE_KIND.NamedImportBinding;
+  }
+> | null {
+  for (const v of flattenNodes(graph.elements)) {
+    if (
+      v.name === name &&
+      (v.kind === NODE_KIND.LegacyImportBinding ||
+        v.kind === NODE_KIND.NamedImportBinding)
+    ) {
+      return v;
+    }
+  }
+  return null;
 }
 
 function edgesFrom(graph: VisualGraph, fromId: string): readonly VisualEdge[] {
@@ -225,9 +236,8 @@ describe("buildVisualGraph: variable nodes", () => {
   test("named imports renamed at the import site keep the local name on the node", () => {
     const g = build("import { other as renamed } from 'm';\nvoid renamed;\n");
     const node = importBindingByName(g, "renamed");
-    expect(node?.kind).toEqual(NODE_KIND.LegacyImportBinding);
-    expect(node?.importKind).toEqual(IMPORT_KIND.Named);
-    if (node?.importKind === IMPORT_KIND.Named) {
+    expect(node?.kind).toEqual(NODE_KIND.NamedImportBinding);
+    if (node?.kind === NODE_KIND.NamedImportBinding) {
       expect(node.importedName).toEqual("other");
     }
   });

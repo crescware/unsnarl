@@ -34,7 +34,10 @@ const node = (
   if (kind === NODE_KIND.WriteReference) {
     return { ...common, kind, declarationKind: null };
   }
-  if (kind === NODE_KIND.LegacyImportBinding) {
+  if (
+    kind === NODE_KIND.LegacyImportBinding ||
+    kind === NODE_KIND.NamedImportBinding
+  ) {
     throw new Error(
       "ImportBinding fixture not supported by iterate-visual-nodes test",
     );

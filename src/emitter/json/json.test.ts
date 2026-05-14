@@ -126,7 +126,7 @@ describe("JsonEmitter", () => {
     expect(def?.importKind).toEqual(IMPORT_KIND.Default);
 
     const renamed = nodes.find((v) => v.name === "renamed");
-    expect(renamed?.importKind).toEqual(IMPORT_KIND.Named);
+    expect(renamed?.kind).toEqual(NODE_KIND.NamedImportBinding);
     expect(renamed?.importedName).toEqual("other");
 
     const moduleNode = nodes.find(

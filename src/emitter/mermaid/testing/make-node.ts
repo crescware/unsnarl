@@ -65,17 +65,12 @@ export function baseSimpleNode(
   return { ...COMMON, kind };
 }
 
-export function baseImportBindingNamed(importedName: string): Extract<
-  VisualNode,
-  {
-    kind: typeof NODE_KIND.LegacyImportBinding;
-    importKind: typeof IMPORT_KIND.Named;
-  }
-> {
+export function baseImportBindingNamed(
+  importedName: string,
+): Extract<VisualNode, { kind: typeof NODE_KIND.NamedImportBinding }> {
   return {
     ...COMMON,
-    kind: NODE_KIND.LegacyImportBinding,
-    importKind: IMPORT_KIND.Named,
+    kind: NODE_KIND.NamedImportBinding,
     importedName,
   };
 }

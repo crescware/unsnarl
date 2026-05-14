@@ -62,8 +62,7 @@ export type VisualNode =
       declarationKind: VariableDeclarationKind | null;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.LegacyImportBinding;
-      importKind: typeof IMPORT_KIND.Named;
+      kind: typeof NODE_KIND.NamedImportBinding;
       importedName: string;
     })
   | (CommonNodeFields & {

@@ -7,6 +7,7 @@ export const NODE_KIND = {
   FormalParameter: "FormalParameter",
   CatchParameter: "CatchParameter",
   LegacyImportBinding: "LegacyImportBinding",
+  NamedImportBinding: "NamedImportBinding",
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   WriteReference: "WriteReference",
   ReturnArgumentReference: "ReturnArgumentReference",

@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "LegacyImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "used"
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "LegacyImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "neverCalled"
     },
     {

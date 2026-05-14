@@ -1,4 +1,3 @@
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
@@ -17,11 +16,10 @@ export function nodeHead(n: VisualNode): string {
       return `${name}()`;
     case NODE_KIND.ClassDeclaration:
       return `class ${name}`;
-    case NODE_KIND.LegacyImportBinding: {
-      const isRenamedNamed =
-        n.importKind === IMPORT_KIND.Named && n.importedName !== n.name;
-      return isRenamedNamed ? name : `import ${name}`;
-    }
+    case NODE_KIND.NamedImportBinding:
+      return n.importedName !== n.name ? name : `import ${name}`;
+    case NODE_KIND.LegacyImportBinding:
+      return `import ${name}`;
     case NODE_KIND.CatchParameter:
       return `catch ${name}`;
     case NODE_KIND.SyntheticImplicitGlobal:

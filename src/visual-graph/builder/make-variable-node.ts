@@ -37,8 +37,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       }
       return {
         ...common,
-        kind: NODE_KIND.LegacyImportBinding,
-        importKind: IMPORT_KIND.Named,
+        kind: NODE_KIND.NamedImportBinding,
         importedName: def.importedName,
       };
     }

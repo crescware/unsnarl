@@ -134,8 +134,7 @@ describe("makeVariableNode", () => {
     });
     const node = makeVariableNode(v);
     expect(node).toMatchObject({
-      kind: NODE_KIND.LegacyImportBinding,
-      importKind: IMPORT_KIND.Named,
+      kind: NODE_KIND.NamedImportBinding,
       importedName: "original",
     });
   });
