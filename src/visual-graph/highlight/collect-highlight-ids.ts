@@ -7,7 +7,7 @@ import { nodeMatchesHighlightQuery } from "./node-matches-highlight-query.js";
 // the supplied queries. The query grammar matches `-r/--roots`, but
 // the matching predicate is the highlight-specific
 // `nodeMatchesHighlightQuery`, which deliberately includes use-site
-// nodes (WriteOp, ReturnUse) on bare name queries so `-H counter`
+// nodes (WriteReference, ReturnArgumentReference) on bare name queries so `-H counter`
 // paints every place `counter` appears. The caller is responsible for
 // already having resolved any LineOrName ambiguity (commonly via
 // `resolveAmbiguousQueries`).

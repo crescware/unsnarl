@@ -1,7 +1,7 @@
 import type { NodeKind } from "../node-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 
-// Use-site nodes (WriteOp, ReturnUse) are positional: they make sense as
+// Use-site nodes (WriteReference, ReturnArgumentReference) are positional: they make sense as
 // roots when the user pinpoints a line, but a bare `-r counter` should
 // stay declaration-scoped so it does not light up every assignment and
 // every JSX usage of `counter`.
