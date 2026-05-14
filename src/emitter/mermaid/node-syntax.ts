@@ -14,7 +14,7 @@ export function nodeSyntax(n: VisualNode, debug: boolean): string {
       // "more graph keeps going past this rendered boundary".
       return `((${label}))`;
     case NODE_KIND.SyntheticIfStatementTest:
-    case NODE_KIND.LegacySwitchDiscriminant:
+    case NODE_KIND.SyntheticSwitchStatementDiscriminant:
       return `{"${label}"}`;
     default:
       return `["${label}"]`;

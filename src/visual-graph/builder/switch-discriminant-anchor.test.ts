@@ -70,7 +70,7 @@ describe("attachSwitchDiscriminantAnchor", () => {
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "switch_discriminant_scope_0_34",
-      kind: NODE_KIND.LegacySwitchDiscriminant,
+      kind: NODE_KIND.SyntheticSwitchStatementDiscriminant,
       name: asFilledString("switch-discriminant"),
       line: 3,
       endLine: null,

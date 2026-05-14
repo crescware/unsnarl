@@ -86,7 +86,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_61",
-          "kind": "LegacySwitchDiscriminant",
+          "kind": "SyntheticSwitchStatementDiscriminant",
           "name": "switch-discriminant",
           "line": 6,
           "endLine": null,

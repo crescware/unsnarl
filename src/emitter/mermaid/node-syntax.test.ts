@@ -48,7 +48,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.LegacySwitchDiscriminant,
+        kind: NODE_KIND.SyntheticSwitchStatementDiscriminant,
         name: "switch-discriminant",
         line: 7,
       },

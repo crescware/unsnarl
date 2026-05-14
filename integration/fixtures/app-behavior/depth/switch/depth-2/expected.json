@@ -38,7 +38,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_14",
-          "kind": "LegacySwitchDiscriminant",
+          "kind": "SyntheticSwitchStatementDiscriminant",
           "name": "switch-discriminant",
           "line": 3,
           "endLine": null,
@@ -62,7 +62,7 @@
                 {
                   "type": "node",
                   "id": "switch_discriminant_scope_2_41",
-                  "kind": "LegacySwitchDiscriminant",
+                  "kind": "SyntheticSwitchStatementDiscriminant",
                   "name": "switch-discriminant",
                   "line": 5,
                   "endLine": null,

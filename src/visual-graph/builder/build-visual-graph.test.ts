@@ -753,7 +753,10 @@ describe("buildVisualGraph: predicate references", () => {
       ].join("\n"),
     );
     const k = nodeByName(g, "k");
-    const anchor = findNodes(g, NODE_KIND.LegacySwitchDiscriminant)[0];
+    const anchor = findNodes(
+      g,
+      NODE_KIND.SyntheticSwitchStatementDiscriminant,
+    )[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     const sw = findSubgraphs(g, "switch")[0];
     expect(sw?.elements[0]).toEqual(anchor);

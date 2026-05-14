@@ -11,7 +11,7 @@ type SimpleKind =
   | typeof NODE_KIND.SyntheticImplicitGlobal
   | typeof NODE_KIND.LegacyReturnUse
   | typeof NODE_KIND.SyntheticIfStatementTest
-  | typeof NODE_KIND.LegacySwitchDiscriminant
+  | typeof NODE_KIND.SyntheticSwitchStatementDiscriminant
   | typeof NODE_KIND.SyntheticWhileStatementTest
   | typeof NODE_KIND.SyntheticDoWhileStatementTest
   | typeof NODE_KIND.LegacyForTest

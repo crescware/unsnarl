@@ -11,7 +11,7 @@ function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.SyntheticIfStatementTest) {
     return `if ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.LegacySwitchDiscriminant) {
+  if (n.kind === NODE_KIND.SyntheticSwitchStatementDiscriminant) {
     return `switch ()<br/>L${n.line}`;
   }
   if (n.kind === NODE_KIND.SyntheticWhileStatementTest) {
