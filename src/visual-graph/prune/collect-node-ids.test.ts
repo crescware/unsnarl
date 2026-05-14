@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import type { Direction } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -19,7 +20,7 @@ const node = (id: string): VisualNode => ({
   isJsxElement: false,
   endLine: null,
   unused: false,
-  declarationKind: null,
+  declarationKind: VARIABLE_DECLARATION_KIND.Const,
   initIsFunction: false,
 });
 

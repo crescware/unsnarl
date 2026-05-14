@@ -47,7 +47,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticBeyondDepth })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.LegacyVariable;
-      declarationKind: VariableDeclarationKind | null;
+      declarationKind: VariableDeclarationKind;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {

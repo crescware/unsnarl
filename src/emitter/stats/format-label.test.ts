@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
@@ -18,7 +19,7 @@ const node = (
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: null,
+  declarationKind: VARIABLE_DECLARATION_KIND.Const,
   initIsFunction: false,
   ...overrides,
 });

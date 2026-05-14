@@ -1,4 +1,5 @@
 import { IMPORT_KIND } from "../../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
@@ -38,7 +39,7 @@ export function baseNode(): Extract<
   return {
     ...COMMON,
     kind: NODE_KIND.LegacyVariable,
-    declarationKind: null,
+    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
   };
 }

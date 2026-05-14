@@ -4,6 +4,7 @@ import { LANGUAGE } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import type { SubgraphKind } from "../subgraph-kind.js";
@@ -34,7 +35,7 @@ function node(
     endLine: null,
     isJsxElement: false,
     unused: false,
-    declarationKind: null,
+    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
     ...extra,
   };
