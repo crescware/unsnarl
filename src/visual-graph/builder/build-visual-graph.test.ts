@@ -714,7 +714,7 @@ describe("buildVisualGraph: imports", () => {
     const g = build(
       ["import { other as renamed } from 'lib';", "void renamed;"].join("\n"),
     );
-    const intermediates = findNodes(g, NODE_KIND.LegacyImportIntermediate);
+    const intermediates = findNodes(g, NODE_KIND.SyntheticImportIntermediate);
     expect(intermediates).toHaveLength(1);
     expect(intermediates[0]?.name).toEqual("other");
     // ModuleSource -> Intermediate -> local binding
@@ -734,7 +734,7 @@ describe("buildVisualGraph: imports", () => {
 
   test("namespace imports point directly from the module to the local binding (no intermediate)", () => {
     const g = build("import * as ns from 'lib';\nvoid ns;\n");
-    expect(findNodes(g, NODE_KIND.LegacyImportIntermediate)).toHaveLength(0);
+    expect(findNodes(g, NODE_KIND.SyntheticImportIntermediate)).toHaveLength(0);
     const moduleSource = findNodes(g, NODE_KIND.SyntheticModuleSource)[0];
     const ns = nodeByName(g, "ns");
     expect(

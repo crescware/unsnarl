@@ -5,7 +5,7 @@ export function isSyntheticNode(n: VisualNode): boolean {
   return (
     n.kind === NODE_KIND.SyntheticModuleSink ||
     n.kind === NODE_KIND.SyntheticModuleSource ||
-    n.kind === NODE_KIND.LegacyImportIntermediate ||
+    n.kind === NODE_KIND.SyntheticImportIntermediate ||
     n.kind === NODE_KIND.LegacyExpressionStatement
   );
 }

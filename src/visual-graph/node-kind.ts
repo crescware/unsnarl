@@ -15,7 +15,7 @@ export const NODE_KIND = {
   LegacyForTest: "LegacyForTest",
   SyntheticModuleSink: "SyntheticModuleSink",
   SyntheticModuleSource: "SyntheticModuleSource",
-  LegacyImportIntermediate: "LegacyImportIntermediate",
+  SyntheticImportIntermediate: "SyntheticImportIntermediate",
   LegacyExpressionStatement: "LegacyExpressionStatement",
   SyntheticBeyondDepth: "SyntheticBeyondDepth",
 } as const;

@@ -133,7 +133,7 @@
     {
       "type": "node",
       "id": "import_some_named__other",
-      "kind": "LegacyImportIntermediate",
+      "kind": "SyntheticImportIntermediate",
       "name": "other",
       "line": 2,
       "endLine": null,

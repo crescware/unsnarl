@@ -8,7 +8,7 @@ export function collectImportSources(
   for (const n of nodeMap.values()) {
     if (
       n.kind === NODE_KIND.SyntheticModuleSource ||
-      n.kind === NODE_KIND.LegacyImportIntermediate
+      n.kind === NODE_KIND.SyntheticImportIntermediate
     ) {
       ids.add(n.id);
     }

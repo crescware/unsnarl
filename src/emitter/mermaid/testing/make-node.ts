@@ -17,7 +17,7 @@ type SimpleKind =
   | typeof NODE_KIND.LegacyForTest
   | typeof NODE_KIND.SyntheticModuleSink
   | typeof NODE_KIND.SyntheticModuleSource
-  | typeof NODE_KIND.LegacyImportIntermediate
+  | typeof NODE_KIND.SyntheticImportIntermediate
   | typeof NODE_KIND.LegacyExpressionStatement
   | typeof NODE_KIND.SyntheticBeyondDepth;
 

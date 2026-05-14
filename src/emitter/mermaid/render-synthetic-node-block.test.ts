@@ -17,7 +17,7 @@ describe("renderSyntheticNodeBlock", () => {
         {
           ...baseNode(),
           id: "import_b",
-          kind: NODE_KIND.LegacyImportIntermediate,
+          kind: NODE_KIND.SyntheticImportIntermediate,
         },
         {
           ...baseNode(),
@@ -55,7 +55,7 @@ describe("renderSyntheticNodeBlock", () => {
         {
           ...baseNode(),
           id: "import_second",
-          kind: NODE_KIND.LegacyImportIntermediate,
+          kind: NODE_KIND.SyntheticImportIntermediate,
         },
       ],
     });

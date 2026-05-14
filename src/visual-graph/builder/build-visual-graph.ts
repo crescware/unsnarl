@@ -507,7 +507,7 @@ export function buildVisualGraph(
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: inter.id,
-      kind: NODE_KIND.LegacyImportIntermediate,
+      kind: NODE_KIND.SyntheticImportIntermediate,
       name: inter.name,
       line: inter.line,
       endLine: null,

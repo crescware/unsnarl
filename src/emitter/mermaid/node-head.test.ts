@@ -39,7 +39,7 @@ describe("nodeHead", () => {
       expected: "module ./mod",
     },
     {
-      kind: NODE_KIND.LegacyImportIntermediate,
+      kind: NODE_KIND.SyntheticImportIntermediate,
       name: "named",
       expected: "import named",
     },

@@ -13,7 +13,10 @@ describe("collectImportSources", () => {
   test("collects ids of ModuleSource and ImportIntermediate nodes", () => {
     const map = asMap(
       { ...baseSimpleNode(NODE_KIND.SyntheticModuleSource), id: "mod_a" },
-      { ...baseSimpleNode(NODE_KIND.LegacyImportIntermediate), id: "import_b" },
+      {
+        ...baseSimpleNode(NODE_KIND.SyntheticImportIntermediate),
+        id: "import_b",
+      },
       { ...baseNode(), id: "n_x" },
     );
     expect([...collectImportSources(map)].sort()).toEqual([

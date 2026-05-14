@@ -32,7 +32,7 @@ export function nodeHead(n: VisualNode): string {
         : name;
     case NODE_KIND.SyntheticModuleSource:
       return `module ${name}`;
-    case NODE_KIND.LegacyImportIntermediate:
+    case NODE_KIND.SyntheticImportIntermediate:
       return `import ${name}`;
     case NODE_KIND.LegacyVariable:
       if (n.initIsFunction) {
