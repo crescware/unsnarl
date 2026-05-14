@@ -218,5 +218,9 @@ export type AstType = InferOutput<typeof astType$>;
 // string verbatim it would be collapsed to the sentinel rather than
 // passed through as if it were a real oxc type.
 export function asAstType(raw: string): AstType {
+  // Set.has() rather than oxcTypes.includes(): asAstType runs once
+  // per AST node on the serializer hot path, and AST_TYPE has on
+  // the order of 190 entries, so the O(1) lookup is worth the
+  // extra Set allocation at module load.
   return knownOxcTypes.has(raw) ? (raw as AstType) : UNKNOWN_AST_TYPE;
 }
