@@ -34,7 +34,7 @@ export function nodeHead(n: VisualNode): string {
       return `module ${name}`;
     case NODE_KIND.SyntheticImportIntermediate:
       return `import ${name}`;
-    case NODE_KIND.LegacyVariable:
+    case NODE_KIND.VarBinding:
       return n.initIsFunction ? `${name}()` : `var ${name}`;
     case NODE_KIND.ConstBinding:
       return n.initIsFunction ? `${name}()` : name;

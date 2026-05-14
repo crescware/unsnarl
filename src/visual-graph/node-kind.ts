@@ -1,5 +1,5 @@
 export const NODE_KIND = {
-  LegacyVariable: "LegacyVariable",
+  VarBinding: "VarBinding",
   ConstBinding: "ConstBinding",
   LetBinding: "LetBinding",
   FunctionDeclaration: "FunctionDeclaration",

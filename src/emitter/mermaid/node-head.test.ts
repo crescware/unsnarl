@@ -7,7 +7,7 @@ import {
   baseImportBindingDefault,
   baseImportBindingNamed,
   baseImportBindingNamespace,
-  baseLegacyVariableNode,
+  baseVarBindingNode,
   baseLetBindingNode,
   baseNode,
   baseSimpleNode,
@@ -124,13 +124,13 @@ describe("nodeHead", () => {
       expected: "x",
     },
     {
-      name: "var-declared LegacyVariable prepends 'var'",
-      node: { ...baseLegacyVariableNode(), name: "x" },
+      name: "var-declared VarBinding prepends 'var'",
+      node: { ...baseVarBindingNode(), name: "x" },
       expected: "var x",
     },
     {
       name: "initIsFunction wins over the var prefix",
-      node: { ...baseLegacyVariableNode(), name: "f", initIsFunction: true },
+      node: { ...baseVarBindingNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
   ])("$name", ({ node, expected }) => {

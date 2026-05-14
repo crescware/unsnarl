@@ -91,16 +91,13 @@ describe("makeVariableNode", () => {
     },
   );
 
-  test("var preserves declarationKind on a LegacyVariable node", () => {
+  test("var is emitted as a VarBinding node (no declarationKind field)", () => {
     const v = parse(serializedVariable$, {
       ...baseVariable(),
       defs: [baseDef("var")],
     });
     const node = makeVariableNode(v);
-    if (node.kind !== NODE_KIND.LegacyVariable) {
-      throw new Error("expected LegacyVariable kind");
-    }
-    expect(node.declarationKind).toEqual("var");
+    expect(node.kind).toEqual(NODE_KIND.VarBinding);
   });
 
   test("const is emitted as a ConstBinding node (no declarationKind field)", () => {

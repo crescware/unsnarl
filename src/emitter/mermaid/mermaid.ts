@@ -1,7 +1,6 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
 import type { Emitter } from "../../pipeline/emit/emitter.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
@@ -175,10 +174,7 @@ function collectVarNodeIds(
 ): readonly string[] {
   const ids: /* mutable */ string[] = [];
   for (const node of nodeMap.values()) {
-    if (
-      node.kind === NODE_KIND.LegacyVariable &&
-      node.declarationKind === VARIABLE_DECLARATION_KIND.Var
-    ) {
+    if (node.kind === NODE_KIND.VarBinding) {
       ids.push(node.id);
     }
   }

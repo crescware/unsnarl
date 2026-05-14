@@ -7,7 +7,7 @@ import { NODE_KIND } from "../node-kind.js";
 // is actually at line N; surrounding declarations are reached via the
 // ancestors BFS, not auto-attached as a separate root.
 export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
-  NODE_KIND.LegacyVariable,
+  NODE_KIND.VarBinding,
   NODE_KIND.ConstBinding,
   NODE_KIND.LetBinding,
   NODE_KIND.FunctionDeclaration,

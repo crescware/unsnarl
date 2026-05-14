@@ -5,7 +5,7 @@ import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { rendersInSyntheticBlock } from "./renders-in-synthetic-block.js";
 import {
   baseImportBindingDefault,
-  baseLegacyVariableNode,
+  baseVarBindingNode,
   baseLetBindingNode,
   baseNode,
   baseSimpleNode,
@@ -18,8 +18,8 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
       return baseNode();
     case NODE_KIND.LetBinding:
       return baseLetBindingNode();
-    case NODE_KIND.LegacyVariable:
-      return baseLegacyVariableNode();
+    case NODE_KIND.VarBinding:
+      return baseVarBindingNode();
     case NODE_KIND.WriteReference:
       return baseWriteOpNode();
     case NODE_KIND.LegacyImportBinding:
@@ -35,7 +35,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticModuleSource, expected: true },
     { kind: NODE_KIND.SyntheticImportIntermediate, expected: true },
     { kind: NODE_KIND.SyntheticExpressionStatement, expected: true },
-    { kind: NODE_KIND.LegacyVariable, expected: false },
+    { kind: NODE_KIND.VarBinding, expected: false },
     { kind: NODE_KIND.ConstBinding, expected: false },
     { kind: NODE_KIND.LetBinding, expected: false },
     { kind: NODE_KIND.FunctionDeclaration, expected: false },

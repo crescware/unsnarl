@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import type { Direction } from "../direction.js";
 import type { NodeKind } from "../node-kind.js";
@@ -25,16 +24,12 @@ const node = (
     endLine: null,
     unused: false,
   } as const;
-  if (kind === NODE_KIND.ConstBinding || kind === NODE_KIND.LetBinding) {
+  if (
+    kind === NODE_KIND.ConstBinding ||
+    kind === NODE_KIND.LetBinding ||
+    kind === NODE_KIND.VarBinding
+  ) {
     return { ...common, kind, initIsFunction: false };
-  }
-  if (kind === NODE_KIND.LegacyVariable) {
-    return {
-      ...common,
-      kind,
-      declarationKind: VARIABLE_DECLARATION_KIND.Var,
-      initIsFunction: false,
-    };
   }
   if (kind === NODE_KIND.WriteReference) {
     return { ...common, kind, declarationKind: null };

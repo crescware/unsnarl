@@ -93,7 +93,7 @@ function variableByName(
   VisualNode,
   {
     kind:
-      | typeof NODE_KIND.LegacyVariable
+      | typeof NODE_KIND.VarBinding
       | typeof NODE_KIND.ConstBinding
       | typeof NODE_KIND.LetBinding;
   }
@@ -101,7 +101,7 @@ function variableByName(
   for (const v of flattenNodes(graph.elements)) {
     if (
       v.name === name &&
-      (v.kind === NODE_KIND.LegacyVariable ||
+      (v.kind === NODE_KIND.VarBinding ||
         v.kind === NODE_KIND.ConstBinding ||
         v.kind === NODE_KIND.LetBinding)
     ) {
@@ -943,7 +943,7 @@ describe("buildVisualGraph: var declarations", () => {
     const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
     const varNode = nodeByName(graph, varName);
     expect(varNode).not.toEqual(null);
-    expect(varNode?.kind).toEqual(NODE_KIND.LegacyVariable);
+    expect(varNode?.kind).toEqual(NODE_KIND.VarBinding);
     // No edges incident on the var node.
     expect(edgesFrom(graph, varNode!.id)).toHaveLength(0);
     expect(edgesTo(graph, varNode!.id)).toHaveLength(0);
@@ -958,7 +958,7 @@ describe("buildVisualGraph: var declarations", () => {
     const varName = freshName();
     const graph = build(`var ${varName} = 0;\nconsole.log(${varName});\n`);
     const varNode = nodeByName(graph, varName);
-    expect(varNode?.kind).toEqual(NODE_KIND.LegacyVariable);
+    expect(varNode?.kind).toEqual(NODE_KIND.VarBinding);
     // Implicit global classification would have produced this kind.
     const implicitGlobals = flattenNodes(graph.elements).filter(
       (node) =>

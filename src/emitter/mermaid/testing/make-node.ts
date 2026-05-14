@@ -1,5 +1,4 @@
 import { IMPORT_KIND } from "../../../serializer/import-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
@@ -39,16 +38,11 @@ export function baseNode(): Extract<
   return { ...COMMON, kind: NODE_KIND.ConstBinding, initIsFunction: false };
 }
 
-export function baseLegacyVariableNode(): Extract<
+export function baseVarBindingNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.LegacyVariable }
+  { kind: typeof NODE_KIND.VarBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.LegacyVariable,
-    declarationKind: VARIABLE_DECLARATION_KIND.Var,
-    initIsFunction: false,
-  };
+  return { ...COMMON, kind: NODE_KIND.VarBinding, initIsFunction: false };
 }
 
 export function baseLetBindingNode(): Extract<
