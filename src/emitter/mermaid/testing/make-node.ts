@@ -5,7 +5,7 @@ import type { VisualNode } from "../../../visual-graph/visual-node.js";
 
 type SimpleKind =
   | typeof NODE_KIND.LegacyFunctionName
-  | typeof NODE_KIND.LegacyClassName
+  | typeof NODE_KIND.ClassDeclaration
   | typeof NODE_KIND.LegacyParameter
   | typeof NODE_KIND.LegacyCatchClause
   | typeof NODE_KIND.SyntheticImplicitGlobal

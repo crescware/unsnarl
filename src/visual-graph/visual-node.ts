@@ -26,7 +26,7 @@ type CommonNodeFields = {
 
 export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyFunctionName })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyClassName })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ClassDeclaration })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyParameter })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyCatchClause })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImplicitGlobal })

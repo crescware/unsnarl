@@ -31,7 +31,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticExpressionStatement, expected: true },
     { kind: NODE_KIND.LegacyVariable, expected: false },
     { kind: NODE_KIND.LegacyFunctionName, expected: false },
-    { kind: NODE_KIND.LegacyClassName, expected: false },
+    { kind: NODE_KIND.ClassDeclaration, expected: false },
     { kind: NODE_KIND.LegacyParameter, expected: false },
     { kind: NODE_KIND.LegacyCatchClause, expected: false },
     { kind: NODE_KIND.LegacyImportBinding, expected: false },

@@ -167,7 +167,7 @@ describe("buildVisualGraph: variable nodes", () => {
       findNodes(g, NODE_KIND.LegacyCatchClause).map((v) => v.name),
     ).toContain("e");
     expect(
-      findNodes(g, NODE_KIND.LegacyClassName).map((v) => v.name),
+      findNodes(g, NODE_KIND.ClassDeclaration).map((v) => v.name),
     ).toContain("Bar");
   });
 

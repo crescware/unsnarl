@@ -15,7 +15,7 @@ export function nodeHead(n: VisualNode): string {
   switch (n.kind) {
     case NODE_KIND.LegacyFunctionName:
       return `${name}()`;
-    case NODE_KIND.LegacyClassName:
+    case NODE_KIND.ClassDeclaration:
       return `class ${name}`;
     case NODE_KIND.LegacyImportBinding: {
       const isRenamedNamed =
