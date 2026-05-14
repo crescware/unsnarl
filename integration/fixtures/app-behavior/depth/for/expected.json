@@ -26,7 +26,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_0",
-          "kind": "LegacyForTest",
+          "kind": "SyntheticForStatementHeader",
           "name": "for-test",
           "line": 1,
           "endLine": null,
@@ -72,7 +72,7 @@
                 {
                   "type": "node",
                   "id": "for_test_scope_2_35",
-                  "kind": "LegacyForTest",
+                  "kind": "SyntheticForStatementHeader",
                   "name": "for-test",
                   "line": 2,
                   "endLine": null,
@@ -118,7 +118,7 @@
                         {
                           "type": "node",
                           "id": "for_test_scope_4_72",
-                          "kind": "LegacyForTest",
+                          "kind": "SyntheticForStatementHeader",
                           "name": "for-test",
                           "line": 3,
                           "endLine": null,
@@ -164,7 +164,7 @@
                                 {
                                   "type": "node",
                                   "id": "for_test_scope_6_111",
-                                  "kind": "LegacyForTest",
+                                  "kind": "SyntheticForStatementHeader",
                                   "name": "for-test",
                                   "line": 4,
                                   "endLine": null,
@@ -210,7 +210,7 @@
                                         {
                                           "type": "node",
                                           "id": "for_test_scope_8_152",
-                                          "kind": "LegacyForTest",
+                                          "kind": "SyntheticForStatementHeader",
                                           "name": "for-test",
                                           "line": 5,
                                           "endLine": null,
@@ -256,7 +256,7 @@
                                                 {
                                                   "type": "node",
                                                   "id": "for_test_scope_10_195",
-                                                  "kind": "LegacyForTest",
+                                                  "kind": "SyntheticForStatementHeader",
                                                   "name": "for-test",
                                                   "line": 6,
                                                   "endLine": null,

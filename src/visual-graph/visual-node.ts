@@ -39,6 +39,9 @@ export type VisualNode =
       kind: typeof NODE_KIND.SyntheticDoWhileStatementTest;
     })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyForTest })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForStatementHeader;
+    })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImportIntermediate })

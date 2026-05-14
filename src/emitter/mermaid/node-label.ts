@@ -20,7 +20,10 @@ function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.SyntheticDoWhileStatementTest) {
     return `do while ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.LegacyForTest) {
+  if (
+    n.kind === NODE_KIND.LegacyForTest ||
+    n.kind === NODE_KIND.SyntheticForStatementHeader
+  ) {
     return `for ()<br/>L${n.line}`;
   }
   if (n.kind === NODE_KIND.SyntheticBeyondDepth) {

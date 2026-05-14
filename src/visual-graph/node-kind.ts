@@ -17,6 +17,7 @@ export const NODE_KIND = {
   SyntheticWhileStatementTest: "SyntheticWhileStatementTest",
   SyntheticDoWhileStatementTest: "SyntheticDoWhileStatementTest",
   LegacyForTest: "LegacyForTest",
+  SyntheticForStatementHeader: "SyntheticForStatementHeader",
   SyntheticModuleSink: "SyntheticModuleSink",
   SyntheticModuleSource: "SyntheticModuleSource",
   SyntheticImportIntermediate: "SyntheticImportIntermediate",

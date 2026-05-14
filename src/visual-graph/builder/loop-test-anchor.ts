@@ -22,10 +22,14 @@ export function attachLoopTestAnchor(
     if (state.forTestAnchorByOffset.has(offset)) {
       return;
     }
+    const kind =
+      scope.block.type === AST_TYPE.ForStatement
+        ? NODE_KIND.SyntheticForStatementHeader
+        : NODE_KIND.LegacyForTest;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: forTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.LegacyForTest,
+      kind,
       name: "for-test",
       line: scope.block.span.line,
       endLine: null,
