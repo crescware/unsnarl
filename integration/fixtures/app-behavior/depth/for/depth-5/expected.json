@@ -48,7 +48,7 @@
         {
           "type": "node",
           "id": "wr_ref_2",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "i1",
           "line": 1,
           "endLine": null,
@@ -95,7 +95,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_5",
-                  "kind": "LegacyWriteOp",
+                  "kind": "WriteReference",
                   "name": "i2",
                   "line": 2,
                   "endLine": null,
@@ -142,7 +142,7 @@
                         {
                           "type": "node",
                           "id": "wr_ref_8",
-                          "kind": "LegacyWriteOp",
+                          "kind": "WriteReference",
                           "name": "i3",
                           "line": 3,
                           "endLine": null,
@@ -189,7 +189,7 @@
                                 {
                                   "type": "node",
                                   "id": "wr_ref_11",
-                                  "kind": "LegacyWriteOp",
+                                  "kind": "WriteReference",
                                   "name": "i4",
                                   "line": 4,
                                   "endLine": null,
@@ -236,7 +236,7 @@
                                         {
                                           "type": "node",
                                           "id": "wr_ref_14",
-                                          "kind": "LegacyWriteOp",
+                                          "kind": "WriteReference",
                                           "name": "i5",
                                           "line": 5,
                                           "endLine": null,
@@ -283,7 +283,7 @@
                                                 {
                                                   "type": "node",
                                                   "id": "wr_ref_17",
-                                                  "kind": "LegacyWriteOp",
+                                                  "kind": "WriteReference",
                                                   "name": "i6",
                                                   "line": 6,
                                                   "endLine": null,

@@ -79,7 +79,7 @@
             {
               "type": "node",
               "id": "wr_ref_3",
-              "kind": "LegacyWriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 7,
               "endLine": null,
@@ -101,7 +101,7 @@
             {
               "type": "node",
               "id": "wr_ref_4",
-              "kind": "LegacyWriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 10,
               "endLine": null,

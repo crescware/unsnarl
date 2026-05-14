@@ -45,9 +45,9 @@ export function baseNode(): Extract<
 
 export function baseWriteOpNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.LegacyWriteOp }
+  { kind: typeof NODE_KIND.WriteReference }
 > {
-  return { ...COMMON, kind: NODE_KIND.LegacyWriteOp, declarationKind: null };
+  return { ...COMMON, kind: NODE_KIND.WriteReference, declarationKind: null };
 }
 
 export function baseSimpleNode(

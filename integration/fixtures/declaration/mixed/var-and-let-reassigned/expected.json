@@ -43,7 +43,7 @@
     {
       "type": "node",
       "id": "wr_ref_3",
-      "kind": "LegacyWriteOp",
+      "kind": "WriteReference",
       "name": "b",
       "line": 4,
       "endLine": null,

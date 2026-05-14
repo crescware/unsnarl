@@ -42,7 +42,7 @@ function returnUse(name: string, line: number): VisualNode {
 function writeOp(name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.LegacyWriteOp,
+    kind: NODE_KIND.WriteReference,
     id: "n",
     name,
     line,

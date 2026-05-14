@@ -74,7 +74,7 @@
         {
           "type": "node",
           "id": "wr_ref_4",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "value",
           "line": 7,
           "endLine": null,
@@ -85,7 +85,7 @@
         {
           "type": "node",
           "id": "wr_ref_3",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "attempts",
           "line": 6,
           "endLine": null,
@@ -116,7 +116,7 @@
         {
           "type": "node",
           "id": "wr_ref_8",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "value",
           "line": 10,
           "endLine": null,
@@ -127,7 +127,7 @@
         {
           "type": "node",
           "id": "wr_ref_7",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "attempts",
           "line": 9,
           "endLine": null,
@@ -148,7 +148,7 @@
         {
           "type": "node",
           "id": "wr_ref_9",
-          "kind": "LegacyWriteOp",
+          "kind": "WriteReference",
           "name": "attempts",
           "line": 12,
           "endLine": null,

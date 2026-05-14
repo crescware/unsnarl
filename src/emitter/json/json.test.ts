@@ -142,7 +142,7 @@ describe("JsonEmitter", () => {
       emit("function f() { let v = 0; v = 1; v = 2; return v; }\n"),
     );
     const writeOps = flattenNodes(graph.elements).filter(
-      (v) => v.kind === NODE_KIND.LegacyWriteOp,
+      (v) => v.kind === NODE_KIND.WriteReference,
     );
     expect(writeOps).toHaveLength(2);
     for (const op of writeOps) {

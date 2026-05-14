@@ -89,7 +89,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.LegacyWriteOp,
+          kind: NODE_KIND.WriteReference,
           name: "x",
           line: 5,
           endLine: null,

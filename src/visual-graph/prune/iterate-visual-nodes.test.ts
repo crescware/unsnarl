@@ -27,7 +27,7 @@ const node = (
   if (kind === NODE_KIND.LegacyVariable) {
     return { ...common, kind, declarationKind: null, initIsFunction: false };
   }
-  if (kind === NODE_KIND.LegacyWriteOp) {
+  if (kind === NODE_KIND.WriteReference) {
     return { ...common, kind, declarationKind: null };
   }
   if (kind === NODE_KIND.LegacyImportBinding) {

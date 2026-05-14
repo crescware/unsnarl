@@ -26,7 +26,7 @@ const variableNode = (name: string, line = 1): VisualNode => ({
 const writeOpNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `w-${name}-${String(line)}`,
-  kind: NODE_KIND.LegacyWriteOp,
+  kind: NODE_KIND.WriteReference,
   name,
   line,
   endLine: null,

@@ -44,7 +44,7 @@ function writeOpNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.LegacyWriteOp,
+    kind: NODE_KIND.WriteReference,
     name,
     line,
     endLine: null,

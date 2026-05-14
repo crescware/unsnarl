@@ -14,7 +14,7 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
   switch (kind) {
     case NODE_KIND.LegacyVariable:
       return baseNode();
-    case NODE_KIND.LegacyWriteOp:
+    case NODE_KIND.WriteReference:
       return baseWriteOpNode();
     case NODE_KIND.LegacyImportBinding:
       return baseImportBindingDefault();
@@ -36,7 +36,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.CatchParameter, expected: false },
     { kind: NODE_KIND.LegacyImportBinding, expected: false },
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
-    { kind: NODE_KIND.LegacyWriteOp, expected: false },
+    { kind: NODE_KIND.WriteReference, expected: false },
     { kind: NODE_KIND.LegacyReturnUse, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
     expect(rendersInSyntheticBlock(nodeOfKind(kind))).toEqual(expected);

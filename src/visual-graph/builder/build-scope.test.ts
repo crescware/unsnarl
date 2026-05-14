@@ -139,7 +139,7 @@ describe("buildScope", () => {
       (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
-      kind: NODE_KIND.LegacyWriteOp,
+      kind: NODE_KIND.WriteReference,
       name: asFilledString("x"),
       line: 4,
       declarationKind: VARIABLE_DECLARATION_KIND.Let,

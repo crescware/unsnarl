@@ -374,7 +374,7 @@ describe("buildVisualGraph: control subgraphs", () => {
 describe("buildVisualGraph: write operations and let-chain edges", () => {
   test("each let assignment becomes its own WriteOp node and they form a set chain", () => {
     const g = build("let v = 0;\nv = 1;\nv = 2;\n");
-    const writeOps = findNodes(g, NODE_KIND.LegacyWriteOp);
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
     expect(writeOps.map((v) => v.name)).toEqual(["v", "v"]);
     const setEdges = g.edges.filter((v) => v.label === "set");
     // n_v -> wr0 and wr0 -> wr1
@@ -383,7 +383,7 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
 
   test("WriteOp nodes carry the declarationKind of the variable being mutated", () => {
     const g = build("let v = 0;\nv = 1;\n");
-    const wr = findNodes(g, NODE_KIND.LegacyWriteOp)[0];
+    const wr = findNodes(g, NODE_KIND.WriteReference)[0];
     expect(wr?.declarationKind).toEqual("let");
   });
 
@@ -445,7 +445,7 @@ describe("buildVisualGraph: read origin edges", () => {
     const reads = edgesTo(g, result!.id).filter((v) => v.label === "read");
     // One read edge per branch's last write.
     expect(reads).toHaveLength(2);
-    const writeOps = findNodes(g, NODE_KIND.LegacyWriteOp);
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
     const writeOpIds = new Set(writeOps.map((v) => v.id));
     expect(reads.every((v) => writeOpIds.has(v.from))).toEqual(true);
   });
@@ -519,7 +519,7 @@ describe("buildVisualGraph: read origin edges", () => {
     ).toEqual(true);
     const incoming = edgesTo(g, postSwitchReturnUse!.id);
     // case "a" must not contribute (it exits the function).
-    const writeOps = findNodes(g, NODE_KIND.LegacyWriteOp);
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
     const aWrite = writeOps.find((v) => v.line === 5);
     expect(aWrite !== null && aWrite !== undefined).toEqual(true);
     expect(incoming.some((v) => v.from === aWrite?.id)).toEqual(false);
@@ -927,7 +927,7 @@ describe("buildVisualGraph: var declarations", () => {
     expect(edgesTo(graph, varNode!.id)).toHaveLength(0);
     // No WriteOp nodes for the var (the init `= 0` does not produce one).
     const writeOps = flattenNodes(graph.elements).filter(
-      (node) => node.kind === NODE_KIND.LegacyWriteOp && node.name === varName,
+      (node) => node.kind === NODE_KIND.WriteReference && node.name === varName,
     );
     expect(writeOps).toHaveLength(0);
   });

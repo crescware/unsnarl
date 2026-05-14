@@ -5,7 +5,7 @@ import { nodeLabel } from "./node-label.js";
 export function nodeSyntax(n: VisualNode, debug: boolean): string {
   const label = nodeLabel(n, debug);
   switch (n.kind) {
-    case NODE_KIND.LegacyWriteOp:
+    case NODE_KIND.WriteReference:
       return `(["${label}"])`;
     case NODE_KIND.SyntheticModuleSink:
       return `((${label}))`;

@@ -9,7 +9,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.LegacyWriteOp,
+        kind: NODE_KIND.WriteReference,
         name: "x",
         line: 3,
       },

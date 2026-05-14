@@ -51,7 +51,7 @@ export type VisualNode =
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.LegacyWriteOp;
+      kind: typeof NODE_KIND.WriteReference;
       declarationKind: VariableDeclarationKind | null;
     })
   | (CommonNodeFields & {

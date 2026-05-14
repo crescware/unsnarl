@@ -26,7 +26,7 @@ export function nodeHead(n: VisualNode): string {
       return `catch ${name}`;
     case NODE_KIND.SyntheticImplicitGlobal:
       return `global ${name}`;
-    case NODE_KIND.LegacyWriteOp:
+    case NODE_KIND.WriteReference:
       return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
         ? `let ${name}`
         : name;
