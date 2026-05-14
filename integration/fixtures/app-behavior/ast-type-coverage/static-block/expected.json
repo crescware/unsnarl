@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/static-block/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_C_6",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_1_C_6",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_41",
+      "kind": "SyntheticExpressionStatement",
+      "name": "C.z = 1",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_C_6",
+      "to": "expr_stmt_41",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

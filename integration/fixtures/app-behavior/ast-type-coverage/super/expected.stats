@@ -1,0 +1,6 @@
+0	1	integration/fixtures/app-behavior/ast-type-coverage/super/input.ts:0 module
+1	0	integration/fixtures/app-behavior/ast-type-coverage/super/input.ts:1 D
+0	0	integration/fixtures/app-behavior/ast-type-coverage/super/input.ts:1 unused D
+0	0	integration/fixtures/app-behavior/ast-type-coverage/super/input.ts:6 unused C
+0	0	integration/fixtures/app-behavior/ast-type-coverage/super/input.ts:6 unused C
+1	1	5 total

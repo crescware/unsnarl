@@ -1,0 +1,4 @@
+0	0	integration/fixtures/app-behavior/ast-type-coverage/yield-expression/input.ts:1 unused g
+1	0	integration/fixtures/app-behavior/ast-type-coverage/yield-expression/input.ts:2 x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/yield-expression/input.ts:3 x
+1	1	3 total

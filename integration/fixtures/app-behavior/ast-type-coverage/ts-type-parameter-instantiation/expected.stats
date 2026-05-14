@@ -1,0 +1,5 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/ts-type-parameter-instantiation/input.ts:1 f
+1	0	integration/fixtures/app-behavior/ast-type-coverage/ts-type-parameter-instantiation/input.ts:1 x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/ts-type-parameter-instantiation/input.ts:2 x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/ts-type-parameter-instantiation/input.ts:4 unused x
+2	2	4 total

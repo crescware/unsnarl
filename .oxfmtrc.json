@@ -1,5 +1,6 @@
 {
   "ignorePatterns": [
+    "integration/fixtures/app-behavior/ast-type-coverage/**/input.*",
     "integration/fixtures/**/expected.*",
     "integration/fixtures/**/preview.md"
   ],

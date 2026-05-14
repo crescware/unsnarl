@@ -8,7 +8,7 @@ import {
   serializedDefinition$,
   type SerializedDefinition,
 } from "../../ir/serialized/serialized-definition.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
@@ -19,11 +19,11 @@ export function serializeDefinition(
 ): SerializedDefinition {
   const common = {
     name: { name: d.name.name, span: spanOf(d.name, raw) },
-    node: { type: d.node.type, span: spanOf(d.node, raw) },
+    node: { type: asAstType(d.node.type), span: spanOf(d.node, raw) },
     parent:
       d.parent === null
         ? null
-        : { type: d.parent.type, span: spanOf(d.parent, raw) },
+        : { type: asAstType(d.parent.type), span: spanOf(d.parent, raw) },
   };
 
   if (d.type === DEFINITION_TYPE.ImportBinding) {
@@ -103,7 +103,7 @@ export function serializeDefinition(
         typeof (initNode as { type: unknown }).type === "string"
       ) {
         const node = initNode as AstNode;
-        init = { type: node.type, span: spanOf(node, raw) };
+        init = { type: asAstType(node.type), span: spanOf(node, raw) };
       }
     }
     if (d.parent === null || d.parent.type !== AST_TYPE.VariableDeclaration) {

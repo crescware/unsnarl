@@ -1,0 +1,18 @@
+# integration/fixtures/app-behavior/ast-type-coverage/template-element/input.ts
+
+## Input
+
+```ts
+const b = "x";
+const x = `a${b}c`;
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_b_6["b<br/>L1"]
+  n_scope_0_x_21["unused x<br/>L2"]
+  n_scope_0_b_6 -->|read| n_scope_0_x_21
+```

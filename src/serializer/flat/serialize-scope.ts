@@ -11,6 +11,7 @@ import {
   type SerializedScope,
 } from "../../ir/serialized/serialized-scope.js";
 import type { VariableId } from "../../ir/serialized/variable-id.js";
+import { asAstType } from "../../parser/ast-type.js";
 import { spanFromOffset } from "../../util/span.js";
 import { spanOf } from "./span-of.js";
 
@@ -37,7 +38,7 @@ export function serializeScope(
       .filter((v): v is ScopeId => v !== null),
     variableScope: scopeIds.get(scope.variableScope) ?? id,
     block: {
-      type: scope.block.type,
+      type: asAstType(scope.block.type),
       span: spanOf(scope.block, raw),
       endSpan: spanFromOffset(raw, scope.block.end ?? scope.block.start ?? 0),
     },

@@ -1,0 +1,72 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/this-expression/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "name": "f",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 4,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_x_23",
+          "name": "x",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_9_35_44",
+          "kind": "return",
+          "line": 3,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnArgumentReference",
+              "name": "x",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_x_23",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

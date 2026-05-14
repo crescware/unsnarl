@@ -1,0 +1,355 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts",
+    "language": "ts"
+  },
+  "raw": "function dec(c: unknown) {\n  return c;\n}\n@dec\nclass C {}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1",
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 0,
+          "offset": 57
+        }
+      },
+      "variables": [
+        "scope#0:dec@9",
+        "scope#0:C@52"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 40
+        }
+      },
+      "variables": [
+        "scope#1:c@13"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "class",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "ClassDeclaration",
+        "span": {
+          "line": 4,
+          "column": 0,
+          "offset": 41
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 10,
+          "offset": 56
+        }
+      },
+      "variables": [
+        "scope#2:C@52"
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "Program",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:dec@9",
+      "name": "dec",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "dec",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:C@52",
+      "name": "C",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 52
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "C",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 52
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 4,
+              "column": 0,
+              "offset": 41
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:c@13",
+      "name": "c",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 13,
+          "offset": 13
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 1,
+              "column": 13,
+              "offset": 13
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:C@52",
+      "name": "C",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 6,
+          "offset": 52
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "C",
+            "span": {
+              "line": 5,
+              "column": 6,
+              "offset": 52
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 4,
+              "column": 0,
+              "offset": 41
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 2,
+          "column": 9,
+          "offset": 36
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:c@13",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 29
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 11,
+          "offset": 38
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "dec",
+        "span": {
+          "line": 4,
+          "column": 1,
+          "offset": 42
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#0:dec@9",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:C@52",
+    "scope#2:C@52"
+  ],
+  "diagnostics": []
+}

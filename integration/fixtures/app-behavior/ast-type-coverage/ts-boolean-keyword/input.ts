@@ -1,0 +1,1 @@
+const x: boolean = true;

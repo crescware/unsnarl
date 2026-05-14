@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_7",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "DefaultImportBinding"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_type_25",
+      "name": "type",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "mod_y",
+      "kind": "SyntheticModuleSource",
+      "name": "y",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_type_25",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_x_7",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "mod_y",
+      "to": "n_scope_0_x_7",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

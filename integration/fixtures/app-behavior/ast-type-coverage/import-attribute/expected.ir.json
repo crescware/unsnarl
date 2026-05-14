@@ -1,0 +1,194 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts",
+    "language": "ts"
+  },
+  "raw": "import x from \"y\" with { type: \"json\" };\n\nexport { x };\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 56
+        }
+      },
+      "variables": [
+        "scope#0:x@7",
+        "scope#0:type@25"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "through": [
+        "ref#0"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:x@7",
+      "name": "x",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 7,
+          "offset": 7
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 1,
+              "column": 7,
+              "offset": 7
+            }
+          },
+          "node": {
+            "type": "ImportDefaultSpecifier",
+            "span": {
+              "line": 1,
+              "column": 7,
+              "offset": 7
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "ImportBinding",
+          "importKind": "default",
+          "importSource": "y"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:type@25",
+      "name": "type",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 25,
+          "offset": 25
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "type",
+            "span": {
+              "line": 1,
+              "column": 25,
+              "offset": 25
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 1,
+              "column": 25,
+              "offset": 25
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "type",
+        "span": {
+          "line": 1,
+          "column": 25,
+          "offset": 25
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:type@25",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 3,
+          "column": 9,
+          "offset": 51
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@7",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

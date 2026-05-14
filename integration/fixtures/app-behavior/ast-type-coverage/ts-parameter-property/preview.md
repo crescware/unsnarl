@@ -1,0 +1,26 @@
+# integration/fixtures/app-behavior/ast-type-coverage/ts-parameter-property/input.ts
+
+## Input
+
+```ts
+class C {
+  constructor(public x: number) {}
+}
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_C_6["unused class C<br/>L1"]
+  n_scope_0_x_31["global x"]
+  n_scope_1_C_6["unused class C<br/>L1"]
+  subgraph s_scope_2["(anonymous)<br/>L2"]
+    direction RL
+  end
+  n_scope_0_x_31 -->|read| module_root
+  module_root((module))
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_2 nestL1;
+```

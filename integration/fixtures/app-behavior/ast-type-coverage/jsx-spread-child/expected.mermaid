@@ -1,0 +1,9 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_b_6["b<br/>L1"]
+  n_scope_0_x_25["unused x<br/>L2"]
+  n_scope_0_i_12["global i"]
+  n_scope_0_a_31["global a"]
+  n_scope_0_i_12 -->|read| n_scope_0_b_6
+  n_scope_0_a_31 -->|read| n_scope_0_x_25
+  n_scope_0_b_6 -->|read| n_scope_0_x_25

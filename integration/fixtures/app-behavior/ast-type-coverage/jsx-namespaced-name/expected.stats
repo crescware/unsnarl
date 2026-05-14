@@ -1,0 +1,4 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/jsx-namespaced-name/input.tsx:0 svg
+1	0	integration/fixtures/app-behavior/ast-type-coverage/jsx-namespaced-name/input.tsx:0 rect
+0	2	integration/fixtures/app-behavior/ast-type-coverage/jsx-namespaced-name/input.tsx:1 unused x
+2	2	3 total
