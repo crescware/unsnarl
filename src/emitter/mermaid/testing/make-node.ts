@@ -8,7 +8,7 @@ type SimpleKind =
   | typeof NODE_KIND.LegacyClassName
   | typeof NODE_KIND.LegacyParameter
   | typeof NODE_KIND.LegacyCatchClause
-  | typeof NODE_KIND.LegacyImplicitGlobalVariable
+  | typeof NODE_KIND.SyntheticImplicitGlobal
   | typeof NODE_KIND.LegacyReturnUse
   | typeof NODE_KIND.LegacyIfTest
   | typeof NODE_KIND.LegacySwitchDiscriminant

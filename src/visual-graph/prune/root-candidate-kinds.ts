@@ -13,7 +13,7 @@ export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.LegacyParameter,
   NODE_KIND.LegacyCatchClause,
   NODE_KIND.LegacyImportBinding,
-  NODE_KIND.LegacyImplicitGlobalVariable,
+  NODE_KIND.SyntheticImplicitGlobal,
   NODE_KIND.LegacyReturnUse,
   NODE_KIND.LegacyWriteOp,
   NODE_KIND.LegacyExpressionStatement,

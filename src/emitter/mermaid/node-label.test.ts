@@ -88,7 +88,7 @@ describe("nodeLabel", () => {
     expect(
       nodeLabel(
         {
-          ...baseSimpleNode(NODE_KIND.LegacyImplicitGlobalVariable),
+          ...baseSimpleNode(NODE_KIND.SyntheticImplicitGlobal),
           name: "Math",
           line: 0,
         },
@@ -179,13 +179,13 @@ describe("nodeLabel", () => {
       expect(
         nodeLabel(
           {
-            ...baseSimpleNode(NODE_KIND.LegacyImplicitGlobalVariable),
+            ...baseSimpleNode(NODE_KIND.SyntheticImplicitGlobal),
             name: "Math",
             line: 0,
           },
           true,
         ),
-      ).toEqual("global Math<br/>LegacyImplicitGlobalVariable");
+      ).toEqual("global Math<br/>SyntheticImplicitGlobal");
     });
   });
 });

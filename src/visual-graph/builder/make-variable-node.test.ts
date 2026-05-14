@@ -64,7 +64,7 @@ describe("makeVariableNode", () => {
       defs: [baseSimpleDef(DEFINITION_TYPE.ImplicitGlobalVariable)] as const,
     };
     const node = makeVariableNode(v);
-    expect(node.kind).toEqual(NODE_KIND.LegacyImplicitGlobalVariable);
+    expect(node.kind).toEqual(NODE_KIND.SyntheticImplicitGlobal);
     expect(node.line).toEqual(0);
   });
 

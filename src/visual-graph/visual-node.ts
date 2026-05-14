@@ -29,7 +29,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyClassName })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyParameter })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyCatchClause })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyImplicitGlobalVariable })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImplicitGlobal })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyReturnUse })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyIfTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacySwitchDiscriminant })

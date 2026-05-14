@@ -5,7 +5,7 @@ export const NODE_KIND = {
   LegacyParameter: "LegacyParameter",
   LegacyCatchClause: "LegacyCatchClause",
   LegacyImportBinding: "LegacyImportBinding",
-  LegacyImplicitGlobalVariable: "LegacyImplicitGlobalVariable",
+  SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   LegacyWriteOp: "LegacyWriteOp",
   LegacyReturnUse: "LegacyReturnUse",
   LegacyIfTest: "LegacyIfTest",

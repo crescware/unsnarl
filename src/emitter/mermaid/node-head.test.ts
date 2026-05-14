@@ -29,7 +29,7 @@ describe("nodeHead", () => {
     { kind: NODE_KIND.LegacyClassName, name: "Foo", expected: "class Foo" },
     { kind: NODE_KIND.LegacyCatchClause, name: "err", expected: "catch err" },
     {
-      kind: NODE_KIND.LegacyImplicitGlobalVariable,
+      kind: NODE_KIND.SyntheticImplicitGlobal,
       name: "global1",
       expected: "global global1",
     },

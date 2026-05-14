@@ -34,7 +34,7 @@ function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.SyntheticModuleSink) {
     return "module";
   }
-  if (n.kind === NODE_KIND.LegacyImplicitGlobalVariable) {
+  if (n.kind === NODE_KIND.SyntheticImplicitGlobal) {
     return head;
   }
   // Unused declarations are surfaced via a textual prefix instead of a

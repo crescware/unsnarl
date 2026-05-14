@@ -192,12 +192,12 @@ describe("buildVisualGraph: variable nodes", () => {
     const directRead = build("function f() { return globalThing; }\n");
     expect(
       nodeByName(directRead, "globalThing")?.kind ===
-        NODE_KIND.LegacyImplicitGlobalVariable,
+        NODE_KIND.SyntheticImplicitGlobal,
     ).toEqual(true);
 
     const onlyReceiver = build("const x = Object.keys({});\n");
     expect(nodeByName(onlyReceiver, "Object")?.kind).toEqual(
-      NODE_KIND.LegacyImplicitGlobalVariable,
+      NODE_KIND.SyntheticImplicitGlobal,
     );
   });
 
@@ -887,7 +887,7 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
       "function f() { if (Math.random() < 0.5) { return 1; } return 0; }\n",
     );
     const math = nodeByName(g, "Math");
-    expect(math?.kind).toEqual(NODE_KIND.LegacyImplicitGlobalVariable);
+    expect(math?.kind).toEqual(NODE_KIND.SyntheticImplicitGlobal);
     const anchor = findNodes(g, NODE_KIND.LegacyIfTest)[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     expect(
@@ -901,7 +901,7 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
     const g = build("const xs = Object.keys({});\n");
     const obj = nodeByName(g, "Object");
     const xs = nodeByName(g, "xs");
-    expect(obj?.kind).toEqual(NODE_KIND.LegacyImplicitGlobalVariable);
+    expect(obj?.kind).toEqual(NODE_KIND.SyntheticImplicitGlobal);
     expect(
       g.edges.some(
         (v) => v.from === obj?.id && v.to === xs?.id && v.label === "read",
@@ -935,7 +935,7 @@ describe("buildVisualGraph: var declarations", () => {
     // Implicit global classification would have produced this kind.
     const implicitGlobals = flattenNodes(graph.elements).filter(
       (node) =>
-        node.kind === NODE_KIND.LegacyImplicitGlobalVariable &&
+        node.kind === NODE_KIND.SyntheticImplicitGlobal &&
         node.name === varName,
     );
     expect(implicitGlobals).toHaveLength(0);

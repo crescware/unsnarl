@@ -24,7 +24,7 @@ export function nodeHead(n: VisualNode): string {
     }
     case NODE_KIND.LegacyCatchClause:
       return `catch ${name}`;
-    case NODE_KIND.LegacyImplicitGlobalVariable:
+    case NODE_KIND.SyntheticImplicitGlobal:
       return `global ${name}`;
     case NODE_KIND.LegacyWriteOp:
       return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
