@@ -17,7 +17,7 @@ describe("nodeHead", () => {
     expect(
       nodeHead({
         ...baseNode(),
-        kind: NODE_KIND.LegacyFunctionName,
+        kind: NODE_KIND.FunctionDeclaration,
         name: "Foo",
         isJsxElement: true,
       }),
@@ -25,7 +25,7 @@ describe("nodeHead", () => {
   });
 
   test.each([
-    { kind: NODE_KIND.LegacyFunctionName, name: "foo", expected: "foo()" },
+    { kind: NODE_KIND.FunctionDeclaration, name: "foo", expected: "foo()" },
     { kind: NODE_KIND.ClassDeclaration, name: "Foo", expected: "class Foo" },
     { kind: NODE_KIND.CatchParameter, name: "err", expected: "catch err" },
     {

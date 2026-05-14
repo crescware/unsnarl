@@ -8,7 +8,7 @@ import { NODE_KIND } from "../node-kind.js";
 // ancestors BFS, not auto-attached as a separate root.
 export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.LegacyVariable,
-  NODE_KIND.LegacyFunctionName,
+  NODE_KIND.FunctionDeclaration,
   NODE_KIND.ClassDeclaration,
   NODE_KIND.FormalParameter,
   NODE_KIND.CatchParameter,

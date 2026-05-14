@@ -30,7 +30,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticImportIntermediate, expected: true },
     { kind: NODE_KIND.SyntheticExpressionStatement, expected: true },
     { kind: NODE_KIND.LegacyVariable, expected: false },
-    { kind: NODE_KIND.LegacyFunctionName, expected: false },
+    { kind: NODE_KIND.FunctionDeclaration, expected: false },
     { kind: NODE_KIND.ClassDeclaration, expected: false },
     { kind: NODE_KIND.FormalParameter, expected: false },
     { kind: NODE_KIND.CatchParameter, expected: false },

@@ -4,7 +4,7 @@ import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.j
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
 
 type SimpleKind =
-  | typeof NODE_KIND.LegacyFunctionName
+  | typeof NODE_KIND.FunctionDeclaration
   | typeof NODE_KIND.ClassDeclaration
   | typeof NODE_KIND.FormalParameter
   | typeof NODE_KIND.CatchParameter

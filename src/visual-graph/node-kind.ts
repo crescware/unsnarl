@@ -1,6 +1,6 @@
 export const NODE_KIND = {
   LegacyVariable: "LegacyVariable",
-  LegacyFunctionName: "LegacyFunctionName",
+  FunctionDeclaration: "FunctionDeclaration",
   ClassDeclaration: "ClassDeclaration",
   FormalParameter: "FormalParameter",
   CatchParameter: "CatchParameter",

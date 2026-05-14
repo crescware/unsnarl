@@ -161,7 +161,7 @@ describe("JsonEmitter", () => {
       (v) => v.id === fnSubgraph?.ownerNodeId,
     );
     expect(ownerNode !== null && ownerNode !== undefined).toEqual(true);
-    expect(ownerNode?.kind).toEqual(NODE_KIND.LegacyFunctionName);
+    expect(ownerNode?.kind).toEqual(NODE_KIND.FunctionDeclaration);
     expect(ownerNode?.name).toEqual("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
       (v) =>

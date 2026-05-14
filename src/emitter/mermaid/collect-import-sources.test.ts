@@ -36,7 +36,7 @@ describe("collectImportSources", () => {
   test("excludes non-synthetic kinds", () => {
     const map = asMap(
       { ...baseNode(), id: "n_x" },
-      { ...baseSimpleNode(NODE_KIND.LegacyFunctionName), id: "n_f" },
+      { ...baseSimpleNode(NODE_KIND.FunctionDeclaration), id: "n_f" },
     );
     expect(collectImportSources(map).size).toEqual(0);
   });

@@ -13,7 +13,7 @@ export function nodeHead(n: VisualNode): string {
     return `&lt;${name}&gt;`;
   }
   switch (n.kind) {
-    case NODE_KIND.LegacyFunctionName:
+    case NODE_KIND.FunctionDeclaration:
       return `${name}()`;
     case NODE_KIND.ClassDeclaration:
       return `class ${name}`;

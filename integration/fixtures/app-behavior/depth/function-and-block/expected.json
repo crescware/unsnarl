@@ -50,7 +50,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "LegacyFunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "node",
@@ -114,7 +114,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "LegacyFunctionName"
+                  "kind": "FunctionDeclaration"
                 },
                 {
                   "type": "subgraph",

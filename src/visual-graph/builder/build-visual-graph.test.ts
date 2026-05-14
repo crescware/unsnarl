@@ -158,7 +158,7 @@ describe("buildVisualGraph: variable nodes", () => {
       findNodes(g, NODE_KIND.LegacyImportBinding).map((v) => v.name),
     ).toContain("imp");
     expect(
-      findNodes(g, NODE_KIND.LegacyFunctionName).map((v) => v.name),
+      findNodes(g, NODE_KIND.FunctionDeclaration).map((v) => v.name),
     ).toContain("foo");
     expect(
       findNodes(g, NODE_KIND.FormalParameter).map((v) => v.name),
@@ -224,7 +224,7 @@ describe("buildVisualGraph: function subgraphs", () => {
       (v) => v.id === fn?.ownerNodeId,
     );
     expect(ownerNode?.name).toEqual("add");
-    expect(ownerNode?.kind).toEqual(NODE_KIND.LegacyFunctionName);
+    expect(ownerNode?.kind).toEqual(NODE_KIND.FunctionDeclaration);
   });
 
   test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
