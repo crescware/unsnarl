@@ -1,0 +1,5 @@
+1	0	integration/fixtures/declaration/destructuring-assignment/object/input.ts:1 unused a
+1	0	integration/fixtures/declaration/destructuring-assignment/object/input.ts:2 unused b
+0	1	integration/fixtures/declaration/destructuring-assignment/object/input.ts:3 a
+0	1	integration/fixtures/declaration/destructuring-assignment/object/input.ts:3 b
+2	2	4 total

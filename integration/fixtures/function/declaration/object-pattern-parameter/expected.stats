@@ -1,0 +1,7 @@
+1	0	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:1 f
+1	0	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:1 a
+1	0	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:1 b
+0	1	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:2 a
+0	1	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:2 b
+0	1	integration/fixtures/function/declaration/object-pattern-parameter/input.ts:5 unused result
+3	3	6 total

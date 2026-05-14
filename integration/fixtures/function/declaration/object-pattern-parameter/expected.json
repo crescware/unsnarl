@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/object-pattern-parameter/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "name": "f",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "LegacyFunctionName"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_74",
+      "name": "result",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "LegacyVariable",
+      "declarationKind": "const",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_a_13",
+          "name": "a",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "LegacyParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_16",
+          "name": "b",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "LegacyParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_9_51_64",
+          "kind": "return",
+          "line": 2,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "LegacyReturnUse",
+              "name": "a",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "LegacyReturnUse",
+              "name": "b",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_a_13",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_16",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_f_9",
+      "to": "n_scope_0_result_74",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
