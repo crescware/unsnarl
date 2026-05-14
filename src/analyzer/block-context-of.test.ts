@@ -2,6 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
+import { other$ } from "../ir/scope/block-context-kind.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { blockContextOf } from "./block-context-of.js";
 
@@ -27,7 +28,7 @@ describe("blockContextOf", () => {
       parentType: AST_TYPE.IfStatement,
       key: "consequent",
       parentSpanOffset: 12,
-      kind: "other",
+      kind: other$.literal,
       ifChainRootOffset: null,
     });
   });
@@ -38,7 +39,7 @@ describe("blockContextOf", () => {
       parentType: AST_TYPE.Program,
       key: "body",
       parentSpanOffset: 0,
-      kind: "other",
+      kind: other$.literal,
       ifChainRootOffset: null,
     });
   });
@@ -67,7 +68,7 @@ describe("blockContextOf", () => {
       key: "consequent",
       parentSpanOffset: 40,
       ifChainRootOffset: 5,
-      kind: "other",
+      kind: other$.literal,
     });
   });
 });

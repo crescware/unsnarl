@@ -116,9 +116,7 @@
           "offset": 34
         }
       },
-      "variables": [
-        "scope#2:arguments@0"
-      ],
+      "variables": [],
       "references": [
         "ref#0"
       ],
@@ -212,14 +210,6 @@
           "type": "ClassName"
         }
       ]
-    },
-    {
-      "id": "scope#2:arguments@0",
-      "name": "arguments",
-      "scope": "scope#2",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     }
   ],
   "references": [

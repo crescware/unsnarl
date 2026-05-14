@@ -1,9 +1,14 @@
+import { parse } from "valibot";
+
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
 import type { Span } from "../../ir/primitive/span.js";
 import type { Definition } from "../../ir/scope/definition.js";
-import type { SerializedDefinition } from "../../ir/serialized/serialized-definition.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import {
+  serializedDefinition$,
+  type SerializedDefinition,
+} from "../../ir/serialized/serialized-definition.js";
+import { asAstType, AST_TYPE, type AstType } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
@@ -14,12 +19,12 @@ export function serializeDefinition(
 ): SerializedDefinition {
   const common = {
     name: { name: d.name.name, span: spanOf(d.name, raw) },
-    node: { type: d.node.type, span: spanOf(d.node, raw) },
+    node: { type: asAstType(d.node.type), span: spanOf(d.node, raw) },
     parent:
       d.parent === null
         ? null
-        : { type: d.parent.type, span: spanOf(d.parent, raw) },
-  } as const;
+        : { type: asAstType(d.parent.type), span: spanOf(d.parent, raw) },
+  };
 
   if (d.type === DEFINITION_TYPE.ImportBinding) {
     const parent = d.parent;
@@ -40,20 +45,20 @@ export function serializeDefinition(
     }
     const importSource = (source as { value: string }).value;
     if (d.node.type === AST_TYPE.ImportDefaultSpecifier) {
-      return {
+      return parse(serializedDefinition$, {
         ...common,
         type: DEFINITION_TYPE.ImportBinding,
         importKind: IMPORT_KIND.Default,
         importSource,
-      };
+      });
     }
     if (d.node.type === AST_TYPE.ImportNamespaceSpecifier) {
-      return {
+      return parse(serializedDefinition$, {
         ...common,
         type: DEFINITION_TYPE.ImportBinding,
         importKind: IMPORT_KIND.Namespace,
         importSource,
-      };
+      });
     }
     if (d.node.type === AST_TYPE.ImportSpecifier) {
       const imported = d.node["imported"];
@@ -74,13 +79,13 @@ export function serializeDefinition(
           `expected imported.name or imported.value on ImportSpecifier for ${d.name.name}`,
         );
       }
-      return {
+      return parse(serializedDefinition$, {
         ...common,
         type: DEFINITION_TYPE.ImportBinding,
         importKind: IMPORT_KIND.Named,
         importedName,
         importSource,
-      };
+      });
     }
     throw new Error(
       `unexpected ImportBinding node type ${d.node.type} for ${d.name.name}`,
@@ -88,7 +93,7 @@ export function serializeDefinition(
   }
 
   if (d.type === DEFINITION_TYPE.Variable) {
-    let init: Readonly<{ type: string; span: Span }> | null = null;
+    let init: Readonly<{ type: AstType; span: Span }> | null = null;
     if (d.node.type === AST_TYPE.VariableDeclarator) {
       const initNode = d.node["init"];
       if (
@@ -98,7 +103,7 @@ export function serializeDefinition(
         typeof (initNode as { type: unknown }).type === "string"
       ) {
         const node = initNode as AstNode;
-        init = { type: node.type, span: spanOf(node, raw) };
+        init = { type: asAstType(node.type), span: spanOf(node, raw) };
       }
     }
     if (d.parent === null || d.parent.type !== AST_TYPE.VariableDeclaration) {
@@ -116,13 +121,13 @@ export function serializeDefinition(
         `expected var/let/const kind on VariableDeclaration parent for Variable definition ${d.name.name}, got ${String(kind)}`,
       );
     }
-    return {
+    return parse(serializedDefinition$, {
       ...common,
       type: DEFINITION_TYPE.Variable,
       init,
       declarationKind: kind,
-    };
+    });
   }
 
-  return { ...common, type: d.type };
+  return parse(serializedDefinition$, { ...common, type: d.type });
 }

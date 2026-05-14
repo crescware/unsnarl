@@ -1,0 +1,106 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_dec_9",
+      "name": "dec",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_C_52",
+      "name": "C",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_dec_9",
+      "ownerName": "dec",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_c_13",
+          "name": "c",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_dec_9_29_38",
+          "kind": "return",
+          "line": 2,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnArgumentReference",
+              "name": "c",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "n_scope_2_C_52",
+      "name": "C",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_c_13",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_dec_9",
+      "to": "module_root",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

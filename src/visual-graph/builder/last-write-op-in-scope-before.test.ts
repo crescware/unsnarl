@@ -1,15 +1,29 @@
 import { describe, expect, test } from "vitest";
 
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { lastWriteOpInScopeBefore } from "./last-write-op-in-scope-before.js";
 import { baseScope } from "./testing/make-scope.js";
 import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
 
-const root = { ...baseScope(), id: "root" };
-const child = { ...baseScope(), id: "child", upper: "root" };
-const sibling = { ...baseScope(), id: "sibling", upper: "root" };
-const grandchild = { ...baseScope(), id: "grandchild", upper: "child" };
+const root = { ...baseScope(), id: asScopeId("root") };
+const child = {
+  ...baseScope(),
+  id: asScopeId("child"),
+  upper: asScopeId("root"),
+};
+const sibling = {
+  ...baseScope(),
+  id: asScopeId("sibling"),
+  upper: asScopeId("root"),
+};
+const grandchild = {
+  ...baseScope(),
+  id: asScopeId("grandchild"),
+  upper: asScopeId("child"),
+};
 const scopeMap = new Map<string, SerializedScope>(
   [root, child, sibling, grandchild].map((v) => [v.id, v]),
 );
@@ -31,37 +45,43 @@ describe("lastWriteOpInScopeBefore", () => {
     expected: string | null;
   }>([
     {
-      name: "root scope sees ops from itself and all descendants",
+      name: asFilledString(
+        "root scope sees ops from itself and all descendants",
+      ),
       scopeId: "root",
       offset: 100,
       expected: "rRoot2",
     },
     {
-      name: "child scope sees its own and grandchild ops, but not root or sibling",
+      name: asFilledString(
+        "child scope sees its own and grandchild ops, but not root or sibling",
+      ),
       scopeId: "child",
       offset: 100,
       expected: "rGrand",
     },
     {
-      name: "child scope before grandchild write picks the child write",
+      name: asFilledString(
+        "child scope before grandchild write picks the child write",
+      ),
       scopeId: "child",
       offset: 12,
       expected: "rChild",
     },
     {
-      name: "sibling scope sees only its own writes",
+      name: asFilledString("sibling scope sees only its own writes"),
       scopeId: "sibling",
       offset: 100,
       expected: "rSib",
     },
     {
-      name: "ops at or after the offset are excluded",
+      name: asFilledString("ops at or after the offset are excluded"),
       scopeId: "root",
       offset: 5,
       expected: null,
     },
     {
-      name: "no candidates -> null",
+      name: asFilledString("no candidates -> null"),
       scopeId: "root",
       offset: 0,
       expected: null,

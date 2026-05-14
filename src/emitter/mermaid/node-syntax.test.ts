@@ -2,19 +2,11 @@ import { describe, expect, test } from "vitest";
 
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeSyntax } from "./node-syntax.js";
-import { baseNode } from "./testing/make-node.js";
+import { baseNode, baseWriteOpNode } from "./testing/make-node.js";
 
 describe("nodeSyntax", () => {
   test('WriteOp uses stadium brackets (["..."])', () => {
-    const got = nodeSyntax(
-      {
-        ...baseNode(),
-        kind: NODE_KIND.WriteOp,
-        name: "x",
-        line: 3,
-      },
-      false,
-    );
+    const got = nodeSyntax({ ...baseWriteOpNode(), name: "x", line: 3 }, false);
     expect(got.startsWith('(["')).toEqual(true);
     expect(got.endsWith('"])')).toEqual(true);
   });
@@ -23,7 +15,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.ModuleSink,
+        kind: NODE_KIND.SyntheticModuleSink,
         name: "module",
       },
       false,
@@ -35,7 +27,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.IfTest,
+        kind: NODE_KIND.SyntheticIfStatementTest,
         name: "if-test",
         line: 5,
       },
@@ -48,7 +40,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.SwitchDiscriminant,
+        kind: NODE_KIND.SyntheticSwitchStatementDiscriminant,
         name: "switch-discriminant",
         line: 7,
       },
@@ -58,15 +50,7 @@ describe("nodeSyntax", () => {
   });
 
   test('default kind uses square brackets ["..."]', () => {
-    const got = nodeSyntax(
-      {
-        ...baseNode(),
-        kind: NODE_KIND.Variable,
-        name: "x",
-        line: 4,
-      },
-      false,
-    );
+    const got = nodeSyntax({ ...baseNode(), name: "x", line: 4 }, false);
     expect(got.startsWith('["')).toEqual(true);
     expect(got.endsWith('"]')).toEqual(true);
   });
@@ -75,12 +59,12 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.IfTest,
+        kind: NODE_KIND.SyntheticIfStatementTest,
         name: "if-test",
         line: 5,
       },
       true,
     );
-    expect(got).toEqual('{"if ()<br/>L5<br/>IfTest"}');
+    expect(got).toEqual('{"if ()<br/>L5<br/>SyntheticIfStatementTest"}');
   });
 });

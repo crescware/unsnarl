@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": true
     },
     {
@@ -26,7 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -46,7 +45,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
@@ -56,8 +55,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -78,8 +76,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
@@ -93,7 +90,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_4",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "doubled",
                   "line": 4,
                   "endLine": null,
@@ -115,7 +112,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "button",
               "line": 6,
               "endLine": null,
@@ -125,7 +122,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "value",
               "line": 6,
               "endLine": null,

@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -31,14 +31,13 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "beyond_depth_s_scope_1",
-          "kind": "BeyondDepth",
+          "kind": "SyntheticBeyondDepth",
           "name": "...",
           "line": 1,
           "endLine": 19,

@@ -2,13 +2,12 @@ import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import type { VisualNode } from "../visual-node.js";
 
 // Highlight reuses the `-r/--roots` query grammar but intentionally
-// diverges on matching semantics: pruning filters `WriteOp` /
-// `ReturnUse` out of bare name queries (so `-r counter` does not drag
-// every assignment / JSX read into the root set), whereas highlight
-// is about painting "every place this identifier appears" and benefits
-// from matching those use-sites. The grammar (line / line-name /
-// range / range-name / name) stays the same -- only the name-query
-// exclusion is dropped.
+// diverges on matching semantics: pruning applies `NAME_QUERY_EXCLUDED`
+// on bare name queries (so `-r counter` does not drag every assignment /
+// JSX read into the root set), whereas highlight is about painting
+// "every place this identifier appears" and benefits from matching those
+// use-sites. The grammar (line / line-name / range / range-name / name)
+// stays the same -- only the name-query exclusion is dropped.
 export function nodeMatchesHighlightQuery(
   node: VisualNode,
   q: ParsedRootQuery,

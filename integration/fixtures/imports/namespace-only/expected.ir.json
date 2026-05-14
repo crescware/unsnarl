@@ -1,0 +1,214 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/imports/namespace-only/input.ts",
+    "language": "ts"
+  },
+  "raw": "import * as ns from \"m\";\n\nconst x = ns;\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 40
+        }
+      },
+      "variables": [
+        "scope#0:ns@12",
+        "scope#0:x@32"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:ns@12",
+      "name": "ns",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 12,
+          "offset": 12
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "ns",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
+          },
+          "node": {
+            "type": "ImportNamespaceSpecifier",
+            "span": {
+              "line": 1,
+              "column": 7,
+              "offset": 7
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "ImportBinding",
+          "importKind": "namespace",
+          "importSource": "m"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:x@32",
+      "name": "x",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 32
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 32
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 32
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 26
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Identifier",
+            "span": {
+              "line": 3,
+              "column": 10,
+              "offset": 36
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 32
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@32",
+      "owners": [
+        "scope#0:x@32"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "ns",
+        "span": {
+          "line": 3,
+          "column": 10,
+          "offset": 36
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:ns@12",
+      "owners": [
+        "scope#0:x@32"
+      ],
+      "init": true,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "returnContainer": null,
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:x@32"
+  ],
+  "diagnostics": []
+}

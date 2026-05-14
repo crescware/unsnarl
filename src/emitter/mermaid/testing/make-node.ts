@@ -1,25 +1,26 @@
-import { IMPORT_KIND } from "../../../serializer/import-kind.js";
 import { NODE_KIND } from "../../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
 
 type SimpleKind =
-  | typeof NODE_KIND.FunctionName
-  | typeof NODE_KIND.ClassName
-  | typeof NODE_KIND.Parameter
-  | typeof NODE_KIND.CatchClause
-  | typeof NODE_KIND.ImplicitGlobalVariable
-  | typeof NODE_KIND.ReturnUse
-  | typeof NODE_KIND.IfTest
-  | typeof NODE_KIND.SwitchDiscriminant
-  | typeof NODE_KIND.WhileTest
-  | typeof NODE_KIND.DoWhileTest
-  | typeof NODE_KIND.ForTest
-  | typeof NODE_KIND.ModuleSink
-  | typeof NODE_KIND.ModuleSource
-  | typeof NODE_KIND.ImportIntermediate
-  | typeof NODE_KIND.ExpressionStatement
-  | typeof NODE_KIND.BeyondDepth;
+  | typeof NODE_KIND.FunctionDeclaration
+  | typeof NODE_KIND.ClassDeclaration
+  | typeof NODE_KIND.FormalParameter
+  | typeof NODE_KIND.CatchParameter
+  | typeof NODE_KIND.SyntheticImplicitGlobal
+  | typeof NODE_KIND.ReturnArgumentReference
+  | typeof NODE_KIND.SyntheticIfStatementTest
+  | typeof NODE_KIND.SyntheticSwitchStatementDiscriminant
+  | typeof NODE_KIND.SyntheticWhileStatementTest
+  | typeof NODE_KIND.SyntheticDoWhileStatementTest
+  | typeof NODE_KIND.SyntheticForStatementHeader
+  | typeof NODE_KIND.SyntheticForInStatementHeader
+  | typeof NODE_KIND.SyntheticForOfStatementHeader
+  | typeof NODE_KIND.SyntheticModuleSink
+  | typeof NODE_KIND.SyntheticModuleSource
+  | typeof NODE_KIND.SyntheticImportIntermediate
+  | typeof NODE_KIND.SyntheticExpressionStatement
+  | typeof NODE_KIND.SyntheticBeyondDepth;
 
 const COMMON = {
   type: VISUAL_ELEMENT_TYPE.Node,
@@ -33,21 +34,30 @@ const COMMON = {
 
 export function baseNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.Variable }
+  { kind: typeof NODE_KIND.ConstBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.Variable,
-    declarationKind: null,
-    initIsFunction: false,
-  };
+  return { ...COMMON, kind: NODE_KIND.ConstBinding, initIsFunction: false };
+}
+
+export function baseVarBindingNode(): Extract<
+  VisualNode,
+  { kind: typeof NODE_KIND.VarBinding }
+> {
+  return { ...COMMON, kind: NODE_KIND.VarBinding, initIsFunction: false };
+}
+
+export function baseLetBindingNode(): Extract<
+  VisualNode,
+  { kind: typeof NODE_KIND.LetBinding }
+> {
+  return { ...COMMON, kind: NODE_KIND.LetBinding, initIsFunction: false };
 }
 
 export function baseWriteOpNode(): Extract<
   VisualNode,
-  { kind: typeof NODE_KIND.WriteOp }
+  { kind: typeof NODE_KIND.WriteReference }
 > {
-  return { ...COMMON, kind: NODE_KIND.WriteOp, declarationKind: null };
+  return { ...COMMON, kind: NODE_KIND.WriteReference, declarationKind: null };
 }
 
 export function baseSimpleNode(
@@ -58,42 +68,24 @@ export function baseSimpleNode(
 
 export function baseImportBindingNamed(
   importedName: string,
-): Extract<
-  VisualNode,
-  { kind: typeof NODE_KIND.ImportBinding; importKind: typeof IMPORT_KIND.Named }
-> {
+): Extract<VisualNode, { kind: typeof NODE_KIND.NamedImportBinding }> {
   return {
     ...COMMON,
-    kind: NODE_KIND.ImportBinding,
-    importKind: IMPORT_KIND.Named,
+    kind: NODE_KIND.NamedImportBinding,
     importedName,
   };
 }
 
 export function baseImportBindingDefault(): Extract<
   VisualNode,
-  {
-    kind: typeof NODE_KIND.ImportBinding;
-    importKind: typeof IMPORT_KIND.Default;
-  }
+  { kind: typeof NODE_KIND.DefaultImportBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.ImportBinding,
-    importKind: IMPORT_KIND.Default,
-  };
+  return { ...COMMON, kind: NODE_KIND.DefaultImportBinding };
 }
 
 export function baseImportBindingNamespace(): Extract<
   VisualNode,
-  {
-    kind: typeof NODE_KIND.ImportBinding;
-    importKind: typeof IMPORT_KIND.Namespace;
-  }
+  { kind: typeof NODE_KIND.NamespaceImportBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.ImportBinding,
-    importKind: IMPORT_KIND.Namespace,
-  };
+  return { ...COMMON, kind: NODE_KIND.NamespaceImportBinding };
 }

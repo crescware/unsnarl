@@ -1,0 +1,7 @@
+0	1	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:0 module
+1	0	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:1 dec
+1	0	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:1 c
+0	1	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:2 c
+0	0	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:5 unused C
+0	0	integration/fixtures/app-behavior/ast-type-coverage/decorator/input.ts:5 unused C
+2	2	6 total

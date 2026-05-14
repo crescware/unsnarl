@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -38,12 +36,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "node",
       "id": "wr_ref_3",
-      "kind": "WriteOp",
+      "kind": "WriteReference",
       "name": "b",
       "line": 4,
       "endLine": null,
@@ -54,7 +52,7 @@
     {
       "type": "node",
       "id": "expr_stmt_36",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 5,
       "endLine": null,

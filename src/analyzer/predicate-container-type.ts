@@ -1,3 +1,5 @@
+import { picklist } from "valibot";
+
 export const PREDICATE_CONTAINER_TYPE = {
   IfStatement: "IfStatement",
   SwitchStatement: "SwitchStatement",
@@ -7,5 +9,13 @@ export const PREDICATE_CONTAINER_TYPE = {
   ForOfStatement: "ForOfStatement",
   ForInStatement: "ForInStatement",
 } as const;
-export type PredicateContainerType =
-  (typeof PREDICATE_CONTAINER_TYPE)[keyof typeof PREDICATE_CONTAINER_TYPE];
+
+export const predicateContainerType$ = picklist([
+  PREDICATE_CONTAINER_TYPE.IfStatement,
+  PREDICATE_CONTAINER_TYPE.SwitchStatement,
+  PREDICATE_CONTAINER_TYPE.WhileStatement,
+  PREDICATE_CONTAINER_TYPE.DoWhileStatement,
+  PREDICATE_CONTAINER_TYPE.ForStatement,
+  PREDICATE_CONTAINER_TYPE.ForOfStatement,
+  PREDICATE_CONTAINER_TYPE.ForInStatement,
+]);

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/jsx-text/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_6",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_12",
+      "name": "a",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_a_12",
+      "to": "n_scope_0_x_6",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

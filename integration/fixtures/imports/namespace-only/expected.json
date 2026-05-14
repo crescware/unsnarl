@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/imports/namespace-only/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_ns_12",
+      "name": "ns",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamespaceImportBinding"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_x_32",
+      "name": "x",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "mod_m",
+      "kind": "SyntheticModuleSource",
+      "name": "m",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_ns_12",
+      "to": "n_scope_0_x_32",
+      "label": "read"
+    },
+    {
+      "from": "mod_m",
+      "to": "n_scope_0_ns_12",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

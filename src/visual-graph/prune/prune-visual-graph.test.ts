@@ -21,18 +21,19 @@ function node(
   id: string,
   name: string,
   line: number,
-  extra: Partial<Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>> = {},
+  extra: Partial<
+    Extract<VisualNode, { kind: typeof NODE_KIND.ConstBinding }>
+  > = {},
 ): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.ConstBinding,
     name,
     line,
     endLine: null,
     isJsxElement: false,
     unused: false,
-    declarationKind: null,
     initIsFunction: false,
     ...extra,
   };
@@ -42,7 +43,7 @@ function writeOpNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.WriteOp,
+    kind: NODE_KIND.WriteReference,
     name,
     line,
     endLine: null,
@@ -61,7 +62,7 @@ function returnUseNode(
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.ReturnUse,
+    kind: NODE_KIND.ReturnArgumentReference,
     name,
     line,
     endLine,

@@ -1,0 +1,5 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts:0 type
+0	2	integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts:0 module
+1	1	integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts:1 x
+1	0	integration/fixtures/app-behavior/ast-type-coverage/import-attribute/input.ts:1 y
+3	3	4 total

@@ -1,12 +1,14 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
+import { asFilledString } from "../../util/filled-string.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildChildren } from "./build-children.js";
@@ -62,11 +64,15 @@ describe("buildChildren", () => {
   test("non-branch children are built directly into the parent container", () => {
     const inner = {
       ...baseScope(),
-      id: "for1",
+      id: asScopeId("for1"),
       type: SCOPE_TYPE.For,
-      upper: "outer",
+      upper: asScopeId("outer"),
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["for1"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("for1")],
+    };
     const ctx = makeCtx([outer, inner]);
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -79,16 +85,20 @@ describe("buildChildren", () => {
   test("a single if branch is not wrapped in an if-else-container; the if-test anchor lives inside the consequent subgraph", () => {
     const cons = {
       ...baseScope(),
-      id: "c",
-      upper: "outer",
+      id: asScopeId("c"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["c"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("c")],
+    };
     const ctx = makeCtx([outer, cons]);
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -105,36 +115,48 @@ describe("buildChildren", () => {
     const anchor = (ifSg as VisualSubgraph).elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("IfTest");
+      expect(anchor.kind).toEqual("SyntheticIfStatementTest");
     }
   });
 
   test("consecutive if siblings (consequent + alternate) wrap in an if-else-container with hasElse=true; the test anchor lives inside the consequent (not the container)", () => {
     const cons = {
       ...baseScope(),
-      id: "c",
-      upper: "outer",
+      id: asScopeId("c"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(5, 1),
+        endSpan: span(10, 2),
+      },
     };
     const alt = {
       ...baseScope(),
-      id: "a",
-      upper: "outer",
+      id: asScopeId("a"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(11, 3), endSpan: span(20, 5) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(11, 3),
+        endSpan: span(20, 5),
+      },
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["c", "a"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("c"), asScopeId("a")],
+    };
     const ctx = makeCtx([outer, cons, alt], "\n".repeat(20));
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -159,43 +181,57 @@ describe("buildChildren", () => {
     const anchor = ifSg.elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("IfTest");
+      expect(anchor.kind).toEqual("SyntheticIfStatementTest");
     }
     const elseSg = sg.elements[1];
     if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
       throw new Error("expected else subgraph at index 1");
     }
     expect(
-      elseSg.elements.every((v) => !(v.type === "node" && v.kind === "IfTest")),
+      elseSg.elements.every(
+        (v) => !(v.type === "node" && v.kind === "SyntheticIfStatementTest"),
+      ),
     ).toEqual(true);
   });
 
   test("if-else-container endLine is the maximum endLine among grouped branches", () => {
     const cons = {
       ...baseScope(),
-      id: "c",
-      upper: "outer",
+      id: asScopeId("c"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(5, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(5, 1),
+        endSpan: span(10, 2),
+      },
     };
     const alt = {
       ...baseScope(),
-      id: "a",
-      upper: "outer",
+      id: asScopeId("a"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 5,
       },
-      block: { type: "Block", span: span(11, 3), endSpan: span(20, 7) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(11, 3),
+        endSpan: span(20, 7),
+      },
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["c", "a"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("c"), asScopeId("a")],
+    };
     const raw = "\n".repeat(20);
     const ctx = makeCtx([outer, cons, alt], raw);
     const container: { elements: VisualElement[] } = { elements: [] };
@@ -209,27 +245,31 @@ describe("buildChildren", () => {
   test("two adjacent if-statements with different parentSpanOffsets are not merged; each gets its own anchor", () => {
     const ifA = {
       ...baseScope(),
-      id: "ifA",
-      upper: "outer",
+      id: asScopeId("ifA"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 5,
       },
     };
     const ifB = {
       ...baseScope(),
-      id: "ifB",
-      upper: "outer",
+      id: asScopeId("ifB"),
+      upper: asScopeId("outer"),
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 30,
       },
     };
-    const outer = { ...baseScope(), id: "outer", childScopes: ["ifA", "ifB"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("ifA"), asScopeId("ifB")],
+    };
     const ctx = makeCtx([outer, ifA, ifB]);
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -251,13 +291,17 @@ describe("buildChildren", () => {
       const anchor = sg.elements[0];
       expect(anchor?.type).toEqual("node");
       if (anchor?.type === "node") {
-        expect(anchor.kind).toEqual("IfTest");
+        expect(anchor.kind).toEqual("SyntheticIfStatementTest");
       }
     }
   });
 
   test("missing child id is skipped silently", () => {
-    const outer = { ...baseScope(), id: "outer", childScopes: ["missing"] };
+    const outer = {
+      ...baseScope(),
+      id: asScopeId("outer"),
+      childScopes: [asScopeId("missing")],
+    };
     const ctx = makeCtx([outer]);
     const container: { elements: VisualElement[] } = { elements: [] };
 

@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -26,7 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -38,7 +37,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_7",
-          "kind": "ForTest",
+          "kind": "SyntheticForStatementHeader",
           "name": "for-test",
           "line": 2,
           "endLine": null,
@@ -48,7 +47,7 @@
         {
           "type": "node",
           "id": "wr_ref_0",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "p",
           "line": 2,
           "endLine": null,
@@ -59,7 +58,7 @@
         {
           "type": "node",
           "id": "wr_ref_2",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "p",
           "line": 2,
           "endLine": null,
@@ -77,7 +76,7 @@
             {
               "type": "node",
               "id": "expr_stmt_35",
-              "kind": "ExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "console.log()",
               "line": 3,
               "endLine": null,

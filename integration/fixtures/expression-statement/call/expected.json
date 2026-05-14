@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,12 +25,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "node",
       "id": "expr_stmt_15",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 2,
       "endLine": null,

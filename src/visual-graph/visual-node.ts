@@ -1,4 +1,3 @@
-import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 import type { NODE_KIND } from "./node-kind.js";
 import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
@@ -25,41 +24,57 @@ type CommonNodeFields = {
 };
 
 export type VisualNode =
-  | (CommonNodeFields & { kind: typeof NODE_KIND.FunctionName })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ClassName })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.Parameter })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.CatchClause })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ImplicitGlobalVariable })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnUse })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.IfTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.SwitchDiscriminant })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.WhileTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.DoWhileTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ForTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSink })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ModuleSource })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ImportIntermediate })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.ExpressionStatement })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.BeyondDepth })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.FunctionDeclaration })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ClassDeclaration })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.FormalParameter })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.CatchParameter })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImplicitGlobal })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnArgumentReference })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticIfStatementTest })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.Variable;
-      declarationKind: VariableDeclarationKind | null;
+      kind: typeof NODE_KIND.SyntheticSwitchStatementDiscriminant;
+    })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticWhileStatementTest })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticDoWhileStatementTest;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForStatementHeader;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForInStatementHeader;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForOfStatementHeader;
+    })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSource })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImportIntermediate })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticExpressionStatement })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticBeyondDepth })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.VarBinding;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.WriteOp;
+      kind: typeof NODE_KIND.ConstBinding;
+      initIsFunction: boolean;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.LetBinding;
+      initIsFunction: boolean;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.WriteReference;
       declarationKind: VariableDeclarationKind | null;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
-      importKind: typeof IMPORT_KIND.Named;
+      kind: typeof NODE_KIND.NamedImportBinding;
       importedName: string;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
-      importKind: typeof IMPORT_KIND.Default;
+      kind: typeof NODE_KIND.DefaultImportBinding;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.ImportBinding;
-      importKind: typeof IMPORT_KIND.Namespace;
+      kind: typeof NODE_KIND.NamespaceImportBinding;
     });

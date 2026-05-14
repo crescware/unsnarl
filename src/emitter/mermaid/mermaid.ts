@@ -1,7 +1,6 @@
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { EmitOptions } from "../../pipeline/emit/emit-options.js";
 import type { Emitter } from "../../pipeline/emit/emitter.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
@@ -130,10 +129,11 @@ function renderMermaid(
   renderTopLevelNodes(state, graph);
   renderTopLevelSubgraphs(state, graph);
 
-  // Edges originating from a synthetic node (ModuleSource / ImportIntermediate)
-  // are import edges and rendered after the synthetic node block. Edges that
-  // merely point INTO a synthetic node (e.g. `n_x -->|read| module_root`) stay
-  // with the body edges to preserve the historical ordering.
+  // Edges originating from an import-side synthetic node (as selected by
+  // `collectImportSources`) are import edges and rendered after the synthetic
+  // node block. Edges that merely point INTO a synthetic node
+  // (e.g. `n_x -->|read| module_root`) stay with the body edges to preserve
+  // the historical ordering.
   const importSources = collectImportSources(nodeMap);
   const { body: bodyEdges, imports: importEdges } = splitEdges(
     graph.edges,
@@ -146,7 +146,7 @@ function renderMermaid(
 
   const stubIds: /* mutable */ string[] = [];
   renderBoundaryEdges(graph, lines, stubIds);
-  // BeyondDepth stubs share the boundary-stub class so they pick up the
+  // Depth-limit stubs share the boundary-stub class so they pick up the
   // same dashed-circle treatment as the pruning ones.
   collectBeyondDepthStubIds(nodeMap, stubIds);
 
@@ -175,10 +175,7 @@ function collectVarNodeIds(
 ): readonly string[] {
   const ids: /* mutable */ string[] = [];
   for (const node of nodeMap.values()) {
-    if (
-      node.kind === NODE_KIND.Variable &&
-      node.declarationKind === VARIABLE_DECLARATION_KIND.Var
-    ) {
+    if (node.kind === NODE_KIND.VarBinding) {
       ids.push(node.id);
     }
   }
@@ -190,7 +187,7 @@ function collectBeyondDepthStubIds(
   out: /* mutable */ string[],
 ): void {
   for (const node of nodeMap.values()) {
-    if (node.kind === NODE_KIND.BeyondDepth) {
+    if (node.kind === NODE_KIND.SyntheticBeyondDepth) {
       out.push(node.id);
     }
   }

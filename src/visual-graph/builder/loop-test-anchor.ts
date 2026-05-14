@@ -22,10 +22,16 @@ export function attachLoopTestAnchor(
     if (state.forTestAnchorByOffset.has(offset)) {
       return;
     }
+    const kind =
+      scope.block.type === AST_TYPE.ForStatement
+        ? NODE_KIND.SyntheticForStatementHeader
+        : scope.block.type === AST_TYPE.ForInStatement
+          ? NODE_KIND.SyntheticForInStatementHeader
+          : NODE_KIND.SyntheticForOfStatementHeader;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: forTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.ForTest,
+      kind,
       name: "for-test",
       line: scope.block.span.line,
       endLine: null,
@@ -55,7 +61,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: whileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.WhileTest,
+      kind: NODE_KIND.SyntheticWhileStatementTest,
       name: "while-test",
       line: scope.block.span.line,
       endLine: null,
@@ -78,7 +84,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: doWhileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.DoWhileTest,
+      kind: NODE_KIND.SyntheticDoWhileStatementTest,
       name: "do-while-test",
       line: scope.block.endSpan.line,
       endLine: null,

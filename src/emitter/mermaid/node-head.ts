@@ -1,4 +1,3 @@
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
@@ -13,49 +12,46 @@ export function nodeHead(n: VisualNode): string {
     return `&lt;${name}&gt;`;
   }
   switch (n.kind) {
-    case NODE_KIND.FunctionName:
+    case NODE_KIND.FunctionDeclaration:
       return `${name}()`;
-    case NODE_KIND.ClassName:
+    case NODE_KIND.ClassDeclaration:
       return `class ${name}`;
-    case NODE_KIND.ImportBinding: {
-      const isRenamedNamed =
-        n.importKind === IMPORT_KIND.Named && n.importedName !== n.name;
-      return isRenamedNamed ? name : `import ${name}`;
-    }
-    case NODE_KIND.CatchClause:
+    case NODE_KIND.NamedImportBinding:
+      return n.importedName !== n.name ? name : `import ${name}`;
+    case NODE_KIND.DefaultImportBinding:
+    case NODE_KIND.NamespaceImportBinding:
+      return `import ${name}`;
+    case NODE_KIND.CatchParameter:
       return `catch ${name}`;
-    case NODE_KIND.ImplicitGlobalVariable:
+    case NODE_KIND.SyntheticImplicitGlobal:
       return `global ${name}`;
-    case NODE_KIND.WriteOp:
+    case NODE_KIND.WriteReference:
       return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
         ? `let ${name}`
         : name;
-    case NODE_KIND.ModuleSource:
+    case NODE_KIND.SyntheticModuleSource:
       return `module ${name}`;
-    case NODE_KIND.ImportIntermediate:
+    case NODE_KIND.SyntheticImportIntermediate:
       return `import ${name}`;
-    case NODE_KIND.Variable:
-      if (n.initIsFunction) {
-        return `${name}()`;
-      }
-      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
-        return `let ${name}`;
-      }
-      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Var) {
-        return `var ${name}`;
-      }
+    case NODE_KIND.VarBinding:
+      return n.initIsFunction ? `${name}()` : `var ${name}`;
+    case NODE_KIND.ConstBinding:
+      return n.initIsFunction ? `${name}()` : name;
+    case NODE_KIND.LetBinding:
+      return n.initIsFunction ? `${name}()` : `let ${name}`;
+    case NODE_KIND.FormalParameter:
+    case NODE_KIND.ReturnArgumentReference:
+    case NODE_KIND.SyntheticIfStatementTest:
+    case NODE_KIND.SyntheticSwitchStatementDiscriminant:
+    case NODE_KIND.SyntheticWhileStatementTest:
+    case NODE_KIND.SyntheticDoWhileStatementTest:
+    case NODE_KIND.SyntheticForStatementHeader:
+    case NODE_KIND.SyntheticForInStatementHeader:
+    case NODE_KIND.SyntheticForOfStatementHeader:
+    case NODE_KIND.SyntheticModuleSink:
+    case NODE_KIND.SyntheticExpressionStatement:
       return name;
-    case NODE_KIND.Parameter:
-    case NODE_KIND.ReturnUse:
-    case NODE_KIND.IfTest:
-    case NODE_KIND.SwitchDiscriminant:
-    case NODE_KIND.WhileTest:
-    case NODE_KIND.DoWhileTest:
-    case NODE_KIND.ForTest:
-    case NODE_KIND.ModuleSink:
-    case NODE_KIND.ExpressionStatement:
-      return name;
-    case NODE_KIND.BeyondDepth:
+    case NODE_KIND.SyntheticBeyondDepth:
       // ASCII "..." rather than U+2026; some Mermaid renderers stumble on
       // multibyte glyphs inside a node-shape label.
       return "...";

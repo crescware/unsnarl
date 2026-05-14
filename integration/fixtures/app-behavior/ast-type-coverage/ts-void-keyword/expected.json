@@ -1,0 +1,34 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-void-keyword/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_f_9",
+      "name": "f",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 1,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_9",
+      "ownerName": "f",
+      "elements": []
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": null
+}

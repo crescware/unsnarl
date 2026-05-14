@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asFilledString } from "../../util/filled-string.js";
 import { stateAt } from "./state-at.js";
 import { baseWriteOp } from "./testing/make-write-op.js";
 import type { WriteOp } from "./write-op.js";
@@ -14,27 +15,29 @@ const byVar = new Map<string, WriteOp[]>([["v", ops]]);
 describe("stateAt", () => {
   test.each<{ name: string; offset: number; expected: string }>([
     {
-      name: "before any write returns the variable id",
+      name: asFilledString("before any write returns the variable id"),
       offset: 5,
       expected: "v",
     },
     {
-      name: "exactly at first write offset still pre-write",
+      name: asFilledString("exactly at first write offset still pre-write"),
       offset: 10,
       expected: "v",
     },
     {
-      name: "between first and second write returns first refId",
+      name: asFilledString(
+        "between first and second write returns first refId",
+      ),
       offset: 15,
       expected: "r1",
     },
     {
-      name: "between second and third returns second refId",
+      name: asFilledString("between second and third returns second refId"),
       offset: 25,
       expected: "r2",
     },
     {
-      name: "after last write returns last refId",
+      name: asFilledString("after last write returns last refId"),
       offset: 999,
       expected: "r3",
     },

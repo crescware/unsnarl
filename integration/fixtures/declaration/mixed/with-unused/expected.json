@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "used"
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "ImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "neverCalled"
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -74,12 +69,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "node",
       "id": "expr_stmt_98",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 7,
       "endLine": null,
@@ -89,7 +84,7 @@
     {
       "type": "node",
       "id": "mod_module",
-      "kind": "ModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "module",
       "line": 1,
       "endLine": null,

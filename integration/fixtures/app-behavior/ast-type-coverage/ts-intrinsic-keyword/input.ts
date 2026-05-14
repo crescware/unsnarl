@@ -1,0 +1,1 @@
+type T = Uppercase<"a">;

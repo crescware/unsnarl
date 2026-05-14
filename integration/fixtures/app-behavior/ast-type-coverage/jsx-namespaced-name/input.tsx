@@ -1,0 +1,1 @@
+const x = (<svg:rect />);

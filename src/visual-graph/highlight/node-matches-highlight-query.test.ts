@@ -1,7 +1,6 @@
 import { describe, expect, test } from "vitest";
 
 import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualNode } from "../visual-node.js";
@@ -14,14 +13,13 @@ function variable(
 ): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.Variable,
+    kind: NODE_KIND.ConstBinding,
     id: "n",
     name,
     line,
     endLine,
     isJsxElement: false,
     unused: false,
-    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
   };
 }
@@ -29,7 +27,7 @@ function variable(
 function returnUse(name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.ReturnUse,
+    kind: NODE_KIND.ReturnArgumentReference,
     id: "n",
     name,
     line,
@@ -42,7 +40,7 @@ function returnUse(name: string, line: number): VisualNode {
 function writeOp(name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.WriteOp,
+    kind: NODE_KIND.WriteReference,
     id: "n",
     name,
     line,

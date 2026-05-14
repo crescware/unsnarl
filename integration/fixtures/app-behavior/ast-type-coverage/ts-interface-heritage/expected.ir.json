@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-interface-heritage/input.ts",
+    "language": "ts"
+  },
+  "raw": "interface J {}\ninterface I extends J {}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 40
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [],
+  "references": [],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

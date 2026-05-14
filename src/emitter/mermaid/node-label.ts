@@ -8,22 +8,26 @@ export function nodeLabel(n: VisualNode, debug: boolean): string {
 }
 
 function baseLabel(n: VisualNode): string {
-  if (n.kind === NODE_KIND.IfTest) {
+  if (n.kind === NODE_KIND.SyntheticIfStatementTest) {
     return `if ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.SwitchDiscriminant) {
+  if (n.kind === NODE_KIND.SyntheticSwitchStatementDiscriminant) {
     return `switch ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.WhileTest) {
+  if (n.kind === NODE_KIND.SyntheticWhileStatementTest) {
     return `while ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.DoWhileTest) {
+  if (n.kind === NODE_KIND.SyntheticDoWhileStatementTest) {
     return `do while ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.ForTest) {
+  if (
+    n.kind === NODE_KIND.SyntheticForStatementHeader ||
+    n.kind === NODE_KIND.SyntheticForInStatementHeader ||
+    n.kind === NODE_KIND.SyntheticForOfStatementHeader
+  ) {
     return `for ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.BeyondDepth) {
+  if (n.kind === NODE_KIND.SyntheticBeyondDepth) {
     // The stub stands in for an arbitrary range of source lines that
     // collapsed past the queried depth; printing a single line number
     // here would be misleading, and printing the full range would
@@ -31,10 +35,10 @@ function baseLabel(n: VisualNode): string {
     return nodeHead(n);
   }
   const head = nodeHead(n);
-  if (n.kind === NODE_KIND.ModuleSink) {
+  if (n.kind === NODE_KIND.SyntheticModuleSink) {
     return "module";
   }
-  if (n.kind === NODE_KIND.ImplicitGlobalVariable) {
+  if (n.kind === NODE_KIND.SyntheticImplicitGlobal) {
     return head;
   }
   // Unused declarations are surfaced via a textual prefix instead of a

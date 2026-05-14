@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/export-all/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": null
+}

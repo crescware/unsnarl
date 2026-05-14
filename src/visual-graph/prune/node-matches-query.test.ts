@@ -9,18 +9,17 @@ import { nodeMatchesQuery } from "./node-matches-query.js";
 
 const node = (
   overrides: Partial<
-    Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>
+    Extract<VisualNode, { kind: typeof NODE_KIND.ConstBinding }>
   > = {},
 ): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.ConstBinding,
   name: "x",
   line: 5,
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: null,
   initIsFunction: false,
   ...overrides,
 });
@@ -89,7 +88,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.WriteOp,
+          kind: NODE_KIND.WriteReference,
           name: "x",
           line: 5,
           endLine: null,
@@ -105,7 +104,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.ReturnUse,
+          kind: NODE_KIND.ReturnArgumentReference,
           name: "x",
           line: 5,
           endLine: null,

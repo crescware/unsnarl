@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "ClassName"
+      "kind": "ClassDeclaration"
     },
     {
       "type": "node",
@@ -24,7 +24,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "ClassName"
+      "kind": "ClassDeclaration"
     },
     {
       "type": "subgraph",
@@ -39,7 +39,7 @@
         {
           "type": "node",
           "id": "expr_stmt_22",
-          "kind": "ExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "new C()",
           "line": 3,
           "endLine": null,

@@ -1,8 +1,17 @@
 import { describe, expect, test } from "vitest";
 
 import type { Span } from "../../ir/primitive/span.js";
+import {
+  identifier$,
+  member$,
+  call$,
+  await$,
+  raw$,
+} from "../../ir/reference/expression-statement-head-kind.js";
+import { asReferenceId } from "../../ir/serialized/reference-id.js";
 import type { SerializedHeadExpression } from "../../ir/serialized/serialized-expression-statement-head.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
@@ -44,8 +53,8 @@ function refWithHead(opts: {
 }): SerializedReference {
   return {
     ...baseRef(),
-    id: opts.refId,
-    identifier: { name: "x", span: span() },
+    id: asReferenceId(opts.refId),
+    identifier: { name: asFilledString("x"), span: span() },
     expressionStatementContainer: {
       startSpan: spanAt(opts.startOffset, opts.startLine),
       endSpan: spanAt(opts.endOffset, opts.endLine ?? opts.startLine),
@@ -55,11 +64,14 @@ function refWithHead(opts: {
 }
 
 const CONSOLE_LOG_HEAD: SerializedHeadExpression = {
-  kind: "call",
+  kind: call$.literal,
   callee: {
-    kind: "member",
-    object: { kind: "identifier", name: "console" },
-    property: "log",
+    kind: member$.literal,
+    object: {
+      kind: identifier$.literal,
+      name: asFilledString("console"),
+    },
+    property: asFilledString("log"),
   },
 };
 
@@ -95,8 +107,8 @@ describe("ensureExpressionStatementNode", () => {
     expect(node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "expr_stmt_0",
-      kind: NODE_KIND.ExpressionStatement,
-      name: "console.log()",
+      kind: NODE_KIND.SyntheticExpressionStatement,
+      name: asFilledString("console.log()"),
       line: 7,
     });
   });
@@ -107,7 +119,10 @@ describe("ensureExpressionStatementNode", () => {
       startOffset: 0,
       endOffset: 2,
       startLine: 2,
-      head: { kind: "identifier", name: "a" },
+      head: {
+        kind: identifier$.literal,
+        name: asFilledString("a"),
+      },
     });
     const elements: VisualElement[] = [];
     const state = makeState();
@@ -123,20 +138,23 @@ describe("ensureExpressionStatementNode", () => {
       startLine: 1,
       endLine: 5,
       head: {
-        kind: "await",
+        kind: await$.literal,
         argument: {
-          kind: "call",
+          kind: call$.literal,
           callee: {
-            kind: "member",
+            kind: member$.literal,
             object: {
-              kind: "call",
+              kind: call$.literal,
               callee: {
-                kind: "member",
-                object: { kind: "identifier", name: "Promise" },
-                property: "resolve",
+                kind: member$.literal,
+                object: {
+                  kind: identifier$.literal,
+                  name: asFilledString("Promise"),
+                },
+                property: asFilledString("resolve"),
               },
             },
-            property: "then",
+            property: asFilledString("then"),
           },
         },
       },
@@ -155,7 +173,11 @@ describe("ensureExpressionStatementNode", () => {
       startOffset: 0,
       endOffset: 6,
       startLine: 3,
-      head: { kind: "raw", startSpan: spanAt(0, 3), endSpan: spanAt(5, 3) },
+      head: {
+        kind: raw$.literal,
+        startSpan: spanAt(0, 3),
+        endSpan: spanAt(5, 3),
+      },
     });
     const elements: VisualElement[] = [];
     const state = makeState();

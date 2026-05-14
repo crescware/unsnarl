@@ -13,20 +13,19 @@ import { resolveAmbiguousQueries } from "./resolve-ambiguous-queries.js";
 const variableNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `n-${name}-${String(line)}`,
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.ConstBinding,
   name,
   line,
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: null,
   initIsFunction: false,
 });
 
 const writeOpNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `w-${name}-${String(line)}`,
-  kind: NODE_KIND.WriteOp,
+  kind: NODE_KIND.WriteReference,
   name,
   line,
   endLine: null,

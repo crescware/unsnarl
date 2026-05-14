@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": true
     },
     {
@@ -26,7 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -46,7 +45,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
@@ -56,8 +55,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": true
         },
         {
@@ -78,7 +76,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Parameter"
+              "kind": "FormalParameter"
             },
             {
               "type": "subgraph",
@@ -91,7 +89,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_3",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "n",
                   "line": 4,
                   "endLine": null,
@@ -101,7 +99,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_4",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "start",
                   "line": 4,
                   "endLine": null,
@@ -123,7 +121,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "button",
               "line": 5,
               "endLine": null,
@@ -133,7 +131,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_7",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "inc",
               "line": 5,
               "endLine": null,

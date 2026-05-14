@@ -1,0 +1,4 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/jsx-spread-attribute/input.tsx:0 a
+1	0	integration/fixtures/app-behavior/ast-type-coverage/jsx-spread-attribute/input.tsx:1 b
+0	2	integration/fixtures/app-behavior/ast-type-coverage/jsx-spread-attribute/input.tsx:2 unused x
+2	2	3 total

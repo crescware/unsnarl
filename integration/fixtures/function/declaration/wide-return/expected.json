@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "subgraph",
@@ -34,8 +34,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -46,8 +45,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -58,8 +56,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -70,8 +67,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -82,8 +78,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -94,8 +89,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -106,8 +100,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -118,8 +111,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -133,7 +125,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_8",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "a",
               "line": 12,
               "endLine": null,
@@ -143,7 +135,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_9",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "b",
               "line": 13,
               "endLine": null,
@@ -153,7 +145,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_10",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "c",
               "line": 14,
               "endLine": null,
@@ -163,7 +155,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_11",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "d",
               "line": 15,
               "endLine": null,
@@ -173,7 +165,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_12",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "e",
               "line": 16,
               "endLine": null,
@@ -183,7 +175,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_13",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "f",
               "line": 17,
               "endLine": null,
@@ -193,7 +185,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_14",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "g",
               "line": 18,
               "endLine": null,
@@ -203,7 +195,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_15",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "h",
               "line": 19,
               "endLine": null,

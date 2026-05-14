@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "node",
@@ -24,8 +24,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -46,7 +45,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
@@ -56,8 +55,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "let",
+          "kind": "LetBinding",
           "initIsFunction": false
         },
         {
@@ -70,7 +68,7 @@
             {
               "type": "node",
               "id": "switch_discriminant_scope_1_55",
-              "kind": "SwitchDiscriminant",
+              "kind": "SyntheticSwitchStatementDiscriminant",
               "name": "switch-discriminant",
               "line": 4,
               "endLine": null,
@@ -87,7 +85,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_2",
-                  "kind": "WriteOp",
+                  "kind": "WriteReference",
                   "name": "label",
                   "line": 6,
                   "endLine": null,
@@ -106,7 +104,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_3",
-                      "kind": "ReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "label",
                       "line": 7,
                       "endLine": null,
@@ -129,7 +127,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_4",
-                  "kind": "WriteOp",
+                  "kind": "WriteReference",
                   "name": "label",
                   "line": 9,
                   "endLine": null,
@@ -151,7 +149,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_5",
-                  "kind": "WriteOp",
+                  "kind": "WriteReference",
                   "name": "label",
                   "line": 12,
                   "endLine": null,
@@ -177,7 +175,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "label",
               "line": 15,
               "endLine": null,

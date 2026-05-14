@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "useCallback"
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": true
     },
     {
@@ -48,8 +46,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": true,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -60,8 +57,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": true,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": true
         },
         {
@@ -82,7 +78,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Parameter"
+              "kind": "FormalParameter"
             },
             {
               "type": "subgraph",
@@ -102,7 +98,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Parameter"
+                  "kind": "FormalParameter"
                 },
                 {
                   "type": "subgraph",
@@ -115,7 +111,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_4",
-                      "kind": "ReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "n",
                       "line": 4,
                       "endLine": null,
@@ -137,7 +133,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_3",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "arr",
                   "line": 4,
                   "endLine": null,
@@ -166,7 +162,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Parameter"
+              "kind": "FormalParameter"
             },
             {
               "type": "subgraph",
@@ -186,7 +182,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Parameter"
+                  "kind": "FormalParameter"
                 },
                 {
                   "type": "subgraph",
@@ -199,7 +195,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_7",
-                      "kind": "ReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "n",
                       "line": 5,
                       "endLine": null,
@@ -221,7 +217,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_6",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "arr",
                   "line": 5,
                   "endLine": null,
@@ -237,7 +233,7 @@
     {
       "type": "node",
       "id": "mod_react",
-      "kind": "ModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "react",
       "line": 1,
       "endLine": null,

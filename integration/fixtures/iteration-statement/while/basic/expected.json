@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -38,7 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -50,7 +48,7 @@
         {
           "type": "node",
           "id": "while_test_scope_0_33",
-          "kind": "WhileTest",
+          "kind": "SyntheticWhileStatementTest",
           "name": "while-test",
           "line": 3,
           "endLine": null,
@@ -60,7 +58,7 @@
         {
           "type": "node",
           "id": "wr_ref_6",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "count",
           "line": 5,
           "endLine": null,
@@ -71,7 +69,7 @@
         {
           "type": "node",
           "id": "expr_stmt_59",
-          "kind": "ExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "console.log()",
           "line": 4,
           "endLine": null,

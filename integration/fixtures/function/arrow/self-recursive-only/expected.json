@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": true
     },
     {
@@ -39,7 +38,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "a",
               "line": 1,
               "endLine": null,

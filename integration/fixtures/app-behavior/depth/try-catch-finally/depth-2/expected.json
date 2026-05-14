@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -33,7 +33,7 @@
             {
               "type": "node",
               "id": "beyond_depth_s_scope_2",
-              "kind": "BeyondDepth",
+              "kind": "SyntheticBeyondDepth",
               "name": "...",
               "line": 2,
               "endLine": 25,
@@ -55,14 +55,13 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
-                  "declarationKind": "const",
+                  "kind": "ConstBinding",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "expr_stmt_408",
-                  "kind": "ExpressionStatement",
+                  "kind": "SyntheticExpressionStatement",
                   "name": "console.log()",
                   "line": 23,
                   "endLine": null,
@@ -90,14 +89,13 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
               "type": "node",
               "id": "expr_stmt_468",
-              "kind": "ExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "console.log()",
               "line": 27,
               "endLine": null,
@@ -125,14 +123,13 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "expr_stmt_520",
-          "kind": "ExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "console.log()",
           "line": 31,
           "endLine": null,

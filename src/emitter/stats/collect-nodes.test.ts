@@ -13,13 +13,12 @@ import { collectNodes } from "./collect-nodes.js";
 const node = (id: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id,
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.ConstBinding,
   name: id,
   line,
   isJsxElement: false,
   endLine: null,
   unused: false,
-  declarationKind: null,
   initIsFunction: false,
 });
 

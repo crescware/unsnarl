@@ -1,0 +1,6 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/meta-property/input.ts:0 new
+1	0	integration/fixtures/app-behavior/ast-type-coverage/meta-property/input.ts:0 target
+0	0	integration/fixtures/app-behavior/ast-type-coverage/meta-property/input.ts:1 unused f
+1	2	integration/fixtures/app-behavior/ast-type-coverage/meta-property/input.ts:2 x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/meta-property/input.ts:3 x
+3	3	5 total

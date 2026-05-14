@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -74,8 +69,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -86,7 +80,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -98,7 +92,7 @@
         {
           "type": "node",
           "id": "if_test_scope_0_97",
-          "kind": "IfTest",
+          "kind": "SyntheticIfStatementTest",
           "name": "if-test",
           "line": 8,
           "endLine": null,
@@ -113,8 +107,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -127,7 +120,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_124",
-              "kind": "IfTest",
+              "kind": "SyntheticIfStatementTest",
               "name": "if-test",
               "line": 10,
               "endLine": null,
@@ -142,14 +135,13 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
               "type": "node",
               "id": "beyond_depth_s_scope_2",
-              "kind": "BeyondDepth",
+              "kind": "SyntheticBeyondDepth",
               "name": "...",
               "line": 10,
               "endLine": 25,

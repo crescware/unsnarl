@@ -100,14 +100,6 @@ export function buildScope(
     if (!v) {
       continue;
     }
-    // Implicit bindings such as `arguments` (FunctionDeclarationInstantiation,
-    // ES spec 9.2.13) carry no source-level identifier or definition; they
-    // exist only to satisfy resolution for in-source references. Surfacing
-    // them as data-flow nodes would add line-0 phantoms with no incident
-    // edges, so skip them here while keeping them in the IR for parity.
-    if (v.defs.length === 0 && v.identifiers.length === 0) {
-      continue;
-    }
     const node = makeVariableNode(v);
     state.nodeIdOriginScope?.set(node.id, scope.id);
     bodyContainer.elements.push(node);
@@ -123,7 +115,7 @@ export function buildScope(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: writeOpNodeId(op.refId),
-      kind: NODE_KIND.WriteOp,
+      kind: NODE_KIND.WriteReference,
       name: op.varName,
       line: op.line,
       endLine: null,

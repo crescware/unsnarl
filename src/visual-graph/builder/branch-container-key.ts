@@ -1,3 +1,4 @@
+import { other$ } from "../../ir/scope/block-context-kind.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 
@@ -14,7 +15,7 @@ export function branchContainerKey(scope: SerializedScope): string | null {
     (ctx.key === "consequent" || ctx.key === "alternate")
   ) {
     const root =
-      ctx.kind === "other" && ctx.ifChainRootOffset !== null
+      ctx.kind === other$.literal && ctx.ifChainRootOffset !== null
         ? ctx.ifChainRootOffset
         : ctx.parentSpanOffset;
     return `if:${scope.upper ?? ""}:${root}`;

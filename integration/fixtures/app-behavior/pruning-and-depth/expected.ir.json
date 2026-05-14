@@ -81,9 +81,7 @@
           "offset": 121
         }
       },
-      "variables": [
-        "scope#1:arguments@0"
-      ],
+      "variables": [],
       "references": [
         "ref#1"
       ],
@@ -224,9 +222,7 @@
           "offset": 157
         }
       },
-      "variables": [
-        "scope#4:arguments@0"
-      ],
+      "variables": [],
       "references": [
         "ref#6"
       ],
@@ -265,9 +261,7 @@
           "offset": 196
         }
       },
-      "variables": [
-        "scope#5:arguments@0"
-      ],
+      "variables": [],
       "references": [],
       "through": [],
       "functionExpressionScope": false,
@@ -490,14 +484,6 @@
       ]
     },
     {
-      "id": "scope#1:arguments@0",
-      "name": "arguments",
-      "scope": "scope#1",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
       "id": "scope#3:x@81",
       "name": "x",
       "scope": "scope#3",
@@ -550,22 +536,6 @@
           "declarationKind": "const"
         }
       ]
-    },
-    {
-      "id": "scope#4:arguments@0",
-      "name": "arguments",
-      "scope": "scope#4",
-      "identifiers": [],
-      "references": [],
-      "defs": []
-    },
-    {
-      "id": "scope#5:arguments@0",
-      "name": "arguments",
-      "scope": "scope#5",
-      "identifiers": [],
-      "references": [],
-      "defs": []
     }
   ],
   "references": [

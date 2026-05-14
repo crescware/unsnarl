@@ -1,12 +1,10 @@
 import { describe, expect, test } from "vitest";
 
-import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { LANGUAGE } from "../../language.js";
 import { OxcParser } from "../../parser/oxc-parser.js";
 import { runAnalysis } from "../../pipeline/analyze/run-analysis.js";
 import { defaultSourceTypeFor } from "../../pipeline/parse/default-source-type-for.js";
 import { FlatSerializer } from "../../serializer/flat/flat-serializer.js";
-import { IMPORT_KIND } from "../../serializer/import-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { DIRECTION } from "../../visual-graph/direction.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
@@ -107,8 +105,7 @@ describe("JsonEmitter", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     const nodes = flattenNodes(graph.elements);
     const a = nodes.find((v) => v.name === "a");
-    expect(a?.kind).toEqual(DEFINITION_TYPE.Variable);
-    expect(a?.declarationKind).toEqual("const");
+    expect(a?.kind).toEqual(NODE_KIND.ConstBinding);
     expect(a?.label).toEqual(undefined);
   });
 
@@ -124,15 +121,15 @@ describe("JsonEmitter", () => {
     );
     const nodes = flattenNodes(graph.elements);
     const def = nodes.find((v) => v.name === "def");
-    expect(def?.kind).toEqual(DEFINITION_TYPE.ImportBinding);
-    expect(def?.importKind).toEqual(IMPORT_KIND.Default);
+    expect(def?.kind).toEqual(NODE_KIND.DefaultImportBinding);
 
     const renamed = nodes.find((v) => v.name === "renamed");
-    expect(renamed?.importKind).toEqual(IMPORT_KIND.Named);
+    expect(renamed?.kind).toEqual(NODE_KIND.NamedImportBinding);
     expect(renamed?.importedName).toEqual("other");
 
     const moduleNode = nodes.find(
-      (v) => v.kind === NODE_KIND.ModuleSource && v.name === "some-default",
+      (v) =>
+        v.kind === NODE_KIND.SyntheticModuleSource && v.name === "some-default",
     );
     expect(moduleNode !== null && moduleNode !== undefined).toEqual(true);
   });
@@ -142,7 +139,7 @@ describe("JsonEmitter", () => {
       emit("function f() { let v = 0; v = 1; v = 2; return v; }\n"),
     );
     const writeOps = flattenNodes(graph.elements).filter(
-      (v) => v.kind === NODE_KIND.WriteOp,
+      (v) => v.kind === NODE_KIND.WriteReference,
     );
     expect(writeOps).toHaveLength(2);
     for (const op of writeOps) {
@@ -161,7 +158,7 @@ describe("JsonEmitter", () => {
       (v) => v.id === fnSubgraph?.ownerNodeId,
     );
     expect(ownerNode !== null && ownerNode !== undefined).toEqual(true);
-    expect(ownerNode?.kind).toEqual(DEFINITION_TYPE.FunctionName);
+    expect(ownerNode?.kind).toEqual(NODE_KIND.FunctionDeclaration);
     expect(ownerNode?.name).toEqual("add");
     const returnSubgraph = (fnSubgraph?.elements ?? []).find(
       (v) =>
@@ -173,7 +170,8 @@ describe("JsonEmitter", () => {
     );
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
       (v) =>
-        v.type === VISUAL_ELEMENT_TYPE.Node && v.kind === NODE_KIND.ReturnUse,
+        v.type === VISUAL_ELEMENT_TYPE.Node &&
+        v.kind === NODE_KIND.ReturnArgumentReference,
     );
     expect(returnUseNodes.length > 0).toEqual(true);
   });

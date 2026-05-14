@@ -14,14 +14,13 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImportBinding",
-      "importKind": "named",
+      "kind": "NamedImportBinding",
       "importedName": "x"
     },
     {
       "type": "node",
       "id": "expr_stmt_23",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "x",
       "line": 2,
       "endLine": null,
@@ -31,7 +30,7 @@
     {
       "type": "node",
       "id": "mod_m",
-      "kind": "ModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "m",
       "line": 1,
       "endLine": null,

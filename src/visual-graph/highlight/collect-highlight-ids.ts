@@ -6,9 +6,9 @@ import { nodeMatchesHighlightQuery } from "./node-matches-highlight-query.js";
 // Returns the ids of every visible node that satisfies at least one of
 // the supplied queries. The query grammar matches `-r/--roots`, but
 // the matching predicate is the highlight-specific
-// `nodeMatchesHighlightQuery`, which deliberately includes use-site
-// nodes (WriteOp, ReturnUse) on bare name queries so `-H counter`
-// paints every place `counter` appears. The caller is responsible for
+// `nodeMatchesHighlightQuery`, which deliberately does not apply the
+// `NAME_QUERY_EXCLUDED` filter so `-H counter` paints every place
+// `counter` appears, use-sites included. The caller is responsible for
 // already having resolved any LineOrName ambiguity (commonly via
 // `resolveAmbiguousQueries`).
 export function collectHighlightIds(

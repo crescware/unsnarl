@@ -1,0 +1,4 @@
+function* g() {
+  const x = yield 1;
+  return x;
+}

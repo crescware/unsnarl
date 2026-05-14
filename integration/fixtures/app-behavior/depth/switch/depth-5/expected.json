@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,7 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -38,7 +37,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_14",
-          "kind": "SwitchDiscriminant",
+          "kind": "SyntheticSwitchStatementDiscriminant",
           "name": "switch-discriminant",
           "line": 3,
           "endLine": null,
@@ -62,7 +61,7 @@
                 {
                   "type": "node",
                   "id": "switch_discriminant_scope_2_41",
-                  "kind": "SwitchDiscriminant",
+                  "kind": "SyntheticSwitchStatementDiscriminant",
                   "name": "switch-discriminant",
                   "line": 5,
                   "endLine": null,
@@ -86,7 +85,7 @@
                         {
                           "type": "node",
                           "id": "switch_discriminant_scope_4_76",
-                          "kind": "SwitchDiscriminant",
+                          "kind": "SyntheticSwitchStatementDiscriminant",
                           "name": "switch-discriminant",
                           "line": 7,
                           "endLine": null,
@@ -110,7 +109,7 @@
                                 {
                                   "type": "node",
                                   "id": "switch_discriminant_scope_6_119",
-                                  "kind": "SwitchDiscriminant",
+                                  "kind": "SyntheticSwitchStatementDiscriminant",
                                   "name": "switch-discriminant",
                                   "line": 9,
                                   "endLine": null,
@@ -134,7 +133,7 @@
                                         {
                                           "type": "node",
                                           "id": "switch_discriminant_scope_8_170",
-                                          "kind": "SwitchDiscriminant",
+                                          "kind": "SyntheticSwitchStatementDiscriminant",
                                           "name": "switch-discriminant",
                                           "line": 11,
                                           "endLine": null,
@@ -151,7 +150,7 @@
                                             {
                                               "type": "node",
                                               "id": "beyond_depth_s_scope_10",
-                                              "kind": "BeyondDepth",
+                                              "kind": "SyntheticBeyondDepth",
                                               "name": "...",
                                               "line": 12,
                                               "endLine": 18,

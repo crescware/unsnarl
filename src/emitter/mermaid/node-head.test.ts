@@ -7,6 +7,8 @@ import {
   baseImportBindingDefault,
   baseImportBindingNamed,
   baseImportBindingNamespace,
+  baseVarBindingNode,
+  baseLetBindingNode,
   baseNode,
   baseSimpleNode,
   baseWriteOpNode,
@@ -17,7 +19,7 @@ describe("nodeHead", () => {
     expect(
       nodeHead({
         ...baseNode(),
-        kind: NODE_KIND.FunctionName,
+        kind: NODE_KIND.FunctionDeclaration,
         name: "Foo",
         isJsxElement: true,
       }),
@@ -25,22 +27,26 @@ describe("nodeHead", () => {
   });
 
   test.each([
-    { kind: NODE_KIND.FunctionName, name: "foo", expected: "foo()" },
-    { kind: NODE_KIND.ClassName, name: "Foo", expected: "class Foo" },
-    { kind: NODE_KIND.CatchClause, name: "err", expected: "catch err" },
+    { kind: NODE_KIND.FunctionDeclaration, name: "foo", expected: "foo()" },
+    { kind: NODE_KIND.ClassDeclaration, name: "Foo", expected: "class Foo" },
+    { kind: NODE_KIND.CatchParameter, name: "err", expected: "catch err" },
     {
-      kind: NODE_KIND.ImplicitGlobalVariable,
+      kind: NODE_KIND.SyntheticImplicitGlobal,
       name: "global1",
       expected: "global global1",
     },
-    { kind: NODE_KIND.ModuleSource, name: "./mod", expected: "module ./mod" },
     {
-      kind: NODE_KIND.ImportIntermediate,
+      kind: NODE_KIND.SyntheticModuleSource,
+      name: "./mod",
+      expected: "module ./mod",
+    },
+    {
+      kind: NODE_KIND.SyntheticImportIntermediate,
       name: "named",
       expected: "import named",
     },
     {
-      kind: NODE_KIND.ExpressionStatement,
+      kind: NODE_KIND.SyntheticExpressionStatement,
       name: "console.log()",
       expected: "console.log()",
     },
@@ -103,50 +109,28 @@ describe("nodeHead", () => {
 
   test.each([
     {
-      name: "Variable initialized with a function uses '<name>()' format",
+      name: "ConstBinding initialized with a function uses '<name>()' format",
       node: { ...baseNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
     {
-      name: "let-declared Variable prepends 'let'",
-      node: {
-        ...baseNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      },
+      name: "LetBinding prepends 'let'",
+      node: { ...baseLetBindingNode(), name: "x" },
       expected: "let x",
     },
     {
-      name: "const-declared Variable has no prefix",
-      node: {
-        ...baseNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Const,
-      },
-      expected: "x",
-    },
-    {
-      name: "var-declared Variable prepends 'var'",
-      node: {
-        ...baseNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Var,
-      },
-      expected: "var x",
-    },
-    {
-      name: "Variable without declarationKind has no prefix",
+      name: "ConstBinding has no prefix",
       node: { ...baseNode(), name: "x" },
       expected: "x",
     },
     {
-      name: "initIsFunction wins over declarationKind",
-      node: {
-        ...baseNode(),
-        name: "f",
-        initIsFunction: true,
-        declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      },
+      name: "var-declared VarBinding prepends 'var'",
+      node: { ...baseVarBindingNode(), name: "x" },
+      expected: "var x",
+    },
+    {
+      name: "initIsFunction wins over the var prefix",
+      node: { ...baseVarBindingNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
   ])("$name", ({ node, expected }) => {
@@ -155,7 +139,11 @@ describe("nodeHead", () => {
 
   test("ReturnUse falls through to the default formatting (uses name only)", () => {
     expect(
-      nodeHead({ ...baseNode(), kind: NODE_KIND.ReturnUse, name: "x" }),
+      nodeHead({
+        ...baseNode(),
+        kind: NODE_KIND.ReturnArgumentReference,
+        name: "x",
+      }),
     ).toEqual("x");
   });
 });

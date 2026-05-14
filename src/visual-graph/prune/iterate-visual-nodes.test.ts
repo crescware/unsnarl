@@ -11,7 +11,10 @@ import type { VisualNode } from "../visual-node.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
-const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => {
+const node = (
+  id: string,
+  kind: NodeKind = NODE_KIND.ConstBinding,
+): VisualNode => {
   const common = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
@@ -21,13 +24,21 @@ const node = (id: string, kind: NodeKind = NODE_KIND.Variable): VisualNode => {
     endLine: null,
     unused: false,
   } as const;
-  if (kind === NODE_KIND.Variable) {
-    return { ...common, kind, declarationKind: null, initIsFunction: false };
+  if (
+    kind === NODE_KIND.ConstBinding ||
+    kind === NODE_KIND.LetBinding ||
+    kind === NODE_KIND.VarBinding
+  ) {
+    return { ...common, kind, initIsFunction: false };
   }
-  if (kind === NODE_KIND.WriteOp) {
+  if (kind === NODE_KIND.WriteReference) {
     return { ...common, kind, declarationKind: null };
   }
-  if (kind === NODE_KIND.ImportBinding) {
+  if (
+    kind === NODE_KIND.NamedImportBinding ||
+    kind === NODE_KIND.DefaultImportBinding ||
+    kind === NODE_KIND.NamespaceImportBinding
+  ) {
     throw new Error(
       "ImportBinding fixture not supported by iterate-visual-nodes test",
     );

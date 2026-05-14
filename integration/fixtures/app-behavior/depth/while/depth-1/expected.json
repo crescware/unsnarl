@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -74,8 +69,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -88,7 +82,7 @@
         {
           "type": "node",
           "id": "while_test_scope_0_73",
-          "kind": "WhileTest",
+          "kind": "SyntheticWhileStatementTest",
           "name": "while-test",
           "line": 8,
           "endLine": null,
@@ -98,7 +92,7 @@
         {
           "type": "node",
           "id": "wr_ref_7",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "n1",
           "line": 9,
           "endLine": null,
@@ -109,7 +103,7 @@
         {
           "type": "node",
           "id": "beyond_depth_s_scope_1",
-          "kind": "BeyondDepth",
+          "kind": "SyntheticBeyondDepth",
           "name": "...",
           "line": 8,
           "endLine": 25,

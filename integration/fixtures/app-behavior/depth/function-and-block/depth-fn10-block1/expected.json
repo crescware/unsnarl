@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -50,7 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "node",
@@ -60,7 +57,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -82,7 +79,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_67",
-              "kind": "IfTest",
+              "kind": "SyntheticIfStatementTest",
               "name": "if-test",
               "line": 6,
               "endLine": null,
@@ -92,7 +89,7 @@
             {
               "type": "node",
               "id": "beyond_depth_s_scope_2",
-              "kind": "BeyondDepth",
+              "kind": "SyntheticBeyondDepth",
               "name": "...",
               "line": 6,
               "endLine": 16,
@@ -107,7 +104,7 @@
     {
       "type": "node",
       "id": "expr_stmt_220",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "f1()",
       "line": 19,
       "endLine": null,

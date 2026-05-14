@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -34,7 +35,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "block",
+        key: asFilledString("block"),
         parentSpanOffset: 0,
       },
       expected: "try",
@@ -43,7 +44,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "finalizer",
+        key: asFilledString("finalizer"),
         parentSpanOffset: 0,
       },
       expected: "finally",
@@ -52,7 +53,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.TryStatement,
-        key: "handler",
+        key: asFilledString("handler"),
         parentSpanOffset: 0,
       },
       expected: "block",
@@ -61,7 +62,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
       expected: "if",
@@ -70,7 +71,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "alternate",
+        key: asFilledString("alternate"),
         parentSpanOffset: 0,
       },
       expected: "else",
@@ -79,7 +80,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "test",
+        key: asFilledString("test"),
         parentSpanOffset: 0,
       },
       expected: "block",
@@ -88,7 +89,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "cases",
+        key: asFilledString("cases"),
         parentSpanOffset: 0,
       },
       expected: "case",
@@ -97,7 +98,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.SwitchStatement,
-        key: "discriminant",
+        key: asFilledString("discriminant"),
         parentSpanOffset: 0,
       },
       expected: "block",
@@ -106,7 +107,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.WhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 0,
       },
       expected: "while",
@@ -115,7 +116,7 @@ describe("controlSubgraphKindOf", () => {
       ctx: {
         ...baseBlockContext(),
         parentType: AST_TYPE.DoWhileStatement,
-        key: "body",
+        key: asFilledString("body"),
         parentSpanOffset: 0,
       },
       expected: "do-while",

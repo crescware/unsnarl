@@ -10,7 +10,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.IfTest,
+          kind: NODE_KIND.SyntheticIfStatementTest,
           name: "ignored",
           line: 3,
         },
@@ -24,7 +24,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.SwitchDiscriminant,
+          kind: NODE_KIND.SyntheticSwitchStatementDiscriminant,
           name: "ignored",
           line: 6,
         },
@@ -38,7 +38,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.WhileTest,
+          kind: NODE_KIND.SyntheticWhileStatementTest,
           name: "ignored",
           line: 5,
         },
@@ -52,7 +52,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.DoWhileTest,
+          kind: NODE_KIND.SyntheticDoWhileStatementTest,
           name: "ignored",
           line: 7,
         },
@@ -66,7 +66,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.ForTest,
+          kind: NODE_KIND.SyntheticForStatementHeader,
           name: "ignored",
           line: 4,
         },
@@ -78,7 +78,7 @@ describe("nodeLabel", () => {
   test("ModuleSink shortcuts to the literal 'module'", () => {
     expect(
       nodeLabel(
-        { ...baseNode(), kind: NODE_KIND.ModuleSink, name: "ignored" },
+        { ...baseNode(), kind: NODE_KIND.SyntheticModuleSink, name: "ignored" },
         false,
       ),
     ).toEqual("module");
@@ -88,7 +88,7 @@ describe("nodeLabel", () => {
     expect(
       nodeLabel(
         {
-          ...baseSimpleNode(NODE_KIND.ImplicitGlobalVariable),
+          ...baseSimpleNode(NODE_KIND.SyntheticImplicitGlobal),
           name: "Math",
           line: 0,
         },
@@ -101,7 +101,7 @@ describe("nodeLabel", () => {
     expect(
       nodeLabel(
         {
-          ...baseSimpleNode(NODE_KIND.ExpressionStatement),
+          ...baseSimpleNode(NODE_KIND.SyntheticExpressionStatement),
           name: "console.log()",
           line: 7,
         },
@@ -144,7 +144,7 @@ describe("nodeLabel", () => {
   describe("debug=true", () => {
     test("appends NODE_KIND to the standard label", () => {
       expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, true)).toEqual(
-        "x<br/>L7<br/>Variable",
+        "x<br/>L7<br/>ConstBinding",
       );
     });
 
@@ -153,35 +153,39 @@ describe("nodeLabel", () => {
         nodeLabel(
           {
             ...baseNode(),
-            kind: NODE_KIND.IfTest,
+            kind: NODE_KIND.SyntheticIfStatementTest,
             name: "ignored",
             line: 3,
           },
           true,
         ),
-      ).toEqual("if ()<br/>L3<br/>IfTest");
+      ).toEqual("if ()<br/>L3<br/>SyntheticIfStatementTest");
     });
 
     test("appends NODE_KIND to ModuleSink even when the base label has no line", () => {
       expect(
         nodeLabel(
-          { ...baseNode(), kind: NODE_KIND.ModuleSink, name: "ignored" },
+          {
+            ...baseNode(),
+            kind: NODE_KIND.SyntheticModuleSink,
+            name: "ignored",
+          },
           true,
         ),
-      ).toEqual("module<br/>ModuleSink");
+      ).toEqual("module<br/>SyntheticModuleSink");
     });
 
     test("appends NODE_KIND to ImplicitGlobalVariable", () => {
       expect(
         nodeLabel(
           {
-            ...baseSimpleNode(NODE_KIND.ImplicitGlobalVariable),
+            ...baseSimpleNode(NODE_KIND.SyntheticImplicitGlobal),
             name: "Math",
             line: 0,
           },
           true,
         ),
-      ).toEqual("global Math<br/>ImplicitGlobalVariable");
+      ).toEqual("global Math<br/>SyntheticImplicitGlobal");
     });
   });
 });

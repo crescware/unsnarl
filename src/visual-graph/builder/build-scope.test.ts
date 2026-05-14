@@ -2,13 +2,16 @@ import { describe, expect, test } from "vitest";
 
 import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
@@ -73,8 +76,17 @@ function makeCtx(opts: {
 
 describe("buildScope", () => {
   test("plain block scope wraps its variable nodes in a 'block' subgraph", () => {
-    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
-    const v = { ...baseVariable(), id: "v1", name: "x", scope: "s" };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("s"),
+      variables: [asVariableId("v1")],
+    };
+    const v = {
+      ...baseVariable(),
+      id: asVariableId("v1"),
+      name: asFilledString("x"),
+      scope: asScopeId("s"),
+    };
     const ctx = makeCtx({ scopes: [scope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -89,18 +101,22 @@ describe("buildScope", () => {
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
       ),
     ).toMatchObject({
-      kind: NODE_KIND.Variable,
-      name: "x",
+      kind: NODE_KIND.LetBinding,
+      name: asFilledString("x"),
     });
   });
 
   test("writeOps in the scope appear as WriteOp nodes with declarationKind from the owning variable", () => {
-    const scope = { ...baseScope(), id: "s", variables: ["v1"] };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("s"),
+      variables: [asVariableId("v1")],
+    };
     const v = {
       ...baseVariable(),
-      id: "v1",
-      name: "x",
-      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)],
+      id: asVariableId("v1"),
+      name: asFilledString("x"),
+      defs: [baseDef(VARIABLE_DECLARATION_KIND.Let)] as const,
     };
     const op = {
       ...baseWriteOp(),
@@ -123,8 +139,8 @@ describe("buildScope", () => {
       (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "wr_r1",
     );
     expect(writeNode).toMatchObject({
-      kind: NODE_KIND.WriteOp,
-      name: "x",
+      kind: NODE_KIND.WriteReference,
+      name: asFilledString("x"),
       line: 4,
       declarationKind: VARIABLE_DECLARATION_KIND.Let,
     });
@@ -133,23 +149,31 @@ describe("buildScope", () => {
   test("function-owner scope wraps body in a function subgraph and registers state", () => {
     const fnScope = {
       ...baseScope(),
-      id: "fn",
+      id: asScopeId("fn"),
       type: SCOPE_TYPE.Function,
-      variables: ["param"],
-      block: { type: "Function", span: span(0, 1), endSpan: span(10, 5) },
+      variables: [asVariableId("param")],
+      block: {
+        type: AST_TYPE.FunctionDeclaration,
+        span: span(0, 1),
+        endSpan: span(10, 5),
+      },
     };
     const param = {
       ...baseVariable(),
-      id: "param",
-      name: "p",
+      id: asVariableId("param"),
+      name: asFilledString("p"),
       defs: [
         {
           ...baseDef(VARIABLE_DECLARATION_KIND.Let),
           type: DEFINITION_TYPE.Parameter,
         },
-      ],
+      ] as const,
     };
-    const owner = { ...baseVariable(), id: "ownerVar", name: "myFn" };
+    const owner = {
+      ...baseVariable(),
+      id: asVariableId("ownerVar"),
+      name: asFilledString("myFn"),
+    };
     const ctx = makeCtx({
       scopes: [fnScope],
       variables: [param, owner],
@@ -179,16 +203,20 @@ describe("buildScope", () => {
   test("control-kind scope (for) wraps body in a control subgraph", () => {
     const forScope = {
       ...baseScope(),
-      id: "for1",
+      id: asScopeId("for1"),
       type: SCOPE_TYPE.For,
-      variables: ["v"],
+      variables: [asVariableId("v")],
       block: {
         type: AST_TYPE.ForStatement,
         span: span(0, 1),
         endSpan: span(10, 3),
       },
     };
-    const v = { ...baseVariable(), id: "v", name: "i" };
+    const v = {
+      ...baseVariable(),
+      id: asVariableId("v"),
+      name: asFilledString("i"),
+    };
     const ctx = makeCtx({ scopes: [forScope], variables: [v] });
     const container: { elements: VisualElement[] } = { elements: [] };
 
@@ -210,13 +238,13 @@ describe("buildScope", () => {
   test("recurses into childScopes", () => {
     const inner = {
       ...baseScope(),
-      id: "inner",
-      upper: "outer",
-      variables: ["vIn"],
+      id: asScopeId("inner"),
+      upper: asScopeId("outer"),
+      variables: [asVariableId("vIn")],
       blockContext: {
         ...baseBlockContext(),
         parentType: AST_TYPE.IfStatement,
-        key: "consequent",
+        key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
     };
@@ -226,11 +254,15 @@ describe("buildScope", () => {
     // the inner if).
     const outer = {
       ...baseScope(),
-      id: "outer",
+      id: asScopeId("outer"),
       type: SCOPE_TYPE.Module,
-      childScopes: ["inner"],
+      childScopes: [asScopeId("inner")],
     };
-    const vIn = { ...baseVariable(), id: "vIn", name: "y" };
+    const vIn = {
+      ...baseVariable(),
+      id: asVariableId("vIn"),
+      name: asFilledString("y"),
+    };
     const ctx = makeCtx({ scopes: [outer, inner], variables: [vIn] });
     const container: { elements: VisualElement[] } = { elements: [] };
 

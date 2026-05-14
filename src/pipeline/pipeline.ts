@@ -80,12 +80,12 @@ export function createPipeline(config: PipelineConfig): Pipeline {
         resolutions = resolution.resolutions;
       }
       if (opts.highlight !== null) {
-        // Roots mode mirrors `-r`'s match set verbatim, so it
-        // inherits `NAME_QUERY_EXCLUDED` (a bare name query like
-        // `-r counter` excludes `WriteOp` / `ReturnUse`, and so does
-        // `-r counter -H`). Queries mode (`-H <raw>`) uses the looser
-        // highlight matcher so explicit highlight queries paint every
-        // occurrence of the identifier.
+        // Roots mode mirrors `-r`'s match set verbatim, so it inherits
+        // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
+        // and `-r counter -H` exclude the same use-site kinds). Queries
+        // mode (`-H <raw>`) uses the looser highlight matcher so
+        // explicit highlight queries paint every occurrence of the
+        // identifier.
         let highlightIds: ReadonlySet<string>;
         if (opts.highlight.kind === "roots") {
           highlightIds = pruneRootIds ?? new Set<string>();

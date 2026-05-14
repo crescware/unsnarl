@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": true
     },
     {
@@ -36,12 +35,12 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Parameter"
+          "kind": "FormalParameter"
         },
         {
           "type": "node",
           "id": "wr_ref_1",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "x",
           "line": 2,
           "endLine": null,
@@ -52,7 +51,7 @@
         {
           "type": "node",
           "id": "wr_ref_3",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "x",
           "line": 3,
           "endLine": null,
@@ -71,7 +70,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "x",
               "line": 4,
               "endLine": null,

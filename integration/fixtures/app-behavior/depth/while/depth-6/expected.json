@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -74,8 +69,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -88,7 +82,7 @@
         {
           "type": "node",
           "id": "while_test_scope_0_73",
-          "kind": "WhileTest",
+          "kind": "SyntheticWhileStatementTest",
           "name": "while-test",
           "line": 8,
           "endLine": null,
@@ -98,7 +92,7 @@
         {
           "type": "node",
           "id": "wr_ref_7",
-          "kind": "WriteOp",
+          "kind": "WriteReference",
           "name": "n1",
           "line": 9,
           "endLine": null,
@@ -116,7 +110,7 @@
             {
               "type": "node",
               "id": "while_test_scope_1_100",
-              "kind": "WhileTest",
+              "kind": "SyntheticWhileStatementTest",
               "name": "while-test",
               "line": 10,
               "endLine": null,
@@ -126,7 +120,7 @@
             {
               "type": "node",
               "id": "wr_ref_9",
-              "kind": "WriteOp",
+              "kind": "WriteReference",
               "name": "n2",
               "line": 11,
               "endLine": null,
@@ -144,7 +138,7 @@
                 {
                   "type": "node",
                   "id": "while_test_scope_2_131",
-                  "kind": "WhileTest",
+                  "kind": "SyntheticWhileStatementTest",
                   "name": "while-test",
                   "line": 12,
                   "endLine": null,
@@ -154,7 +148,7 @@
                 {
                   "type": "node",
                   "id": "wr_ref_11",
-                  "kind": "WriteOp",
+                  "kind": "WriteReference",
                   "name": "n3",
                   "line": 13,
                   "endLine": null,
@@ -172,7 +166,7 @@
                     {
                       "type": "node",
                       "id": "while_test_scope_3_166",
-                      "kind": "WhileTest",
+                      "kind": "SyntheticWhileStatementTest",
                       "name": "while-test",
                       "line": 14,
                       "endLine": null,
@@ -182,7 +176,7 @@
                     {
                       "type": "node",
                       "id": "wr_ref_13",
-                      "kind": "WriteOp",
+                      "kind": "WriteReference",
                       "name": "n4",
                       "line": 15,
                       "endLine": null,
@@ -200,7 +194,7 @@
                         {
                           "type": "node",
                           "id": "while_test_scope_4_205",
-                          "kind": "WhileTest",
+                          "kind": "SyntheticWhileStatementTest",
                           "name": "while-test",
                           "line": 16,
                           "endLine": null,
@@ -210,7 +204,7 @@
                         {
                           "type": "node",
                           "id": "wr_ref_15",
-                          "kind": "WriteOp",
+                          "kind": "WriteReference",
                           "name": "n5",
                           "line": 17,
                           "endLine": null,
@@ -228,7 +222,7 @@
                             {
                               "type": "node",
                               "id": "while_test_scope_5_248",
-                              "kind": "WhileTest",
+                              "kind": "SyntheticWhileStatementTest",
                               "name": "while-test",
                               "line": 18,
                               "endLine": null,
@@ -238,7 +232,7 @@
                             {
                               "type": "node",
                               "id": "wr_ref_17",
-                              "kind": "WriteOp",
+                              "kind": "WriteReference",
                               "name": "n6",
                               "line": 19,
                               "endLine": null,

@@ -26,7 +26,7 @@ function makeIfTestAnchor(
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: ifTestNodeId(parentScopeId, offset),
-    kind: NODE_KIND.IfTest,
+    kind: NODE_KIND.SyntheticIfStatementTest,
     name: "if-test",
     line: lineForOffset(raw, offset),
     endLine: null,

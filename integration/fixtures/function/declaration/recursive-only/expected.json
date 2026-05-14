@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "subgraph",
@@ -29,7 +29,7 @@
         {
           "type": "node",
           "id": "expr_stmt_19",
-          "kind": "ExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "foo()",
           "line": 2,
           "endLine": null,

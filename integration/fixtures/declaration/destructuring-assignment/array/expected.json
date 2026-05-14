@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/destructuring-assignment/array/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_4",
+      "name": "a",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "LetBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_15",
+      "name": "b",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "LetBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_2",
+      "kind": "WriteReference",
+      "name": "a",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": "let"
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_3",
+      "kind": "WriteReference",
+      "name": "b",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": "let"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_a_4",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_b_15",
+      "to": "wr_ref_3",
+      "label": "set"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

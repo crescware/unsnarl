@@ -1,23 +1,41 @@
-import type { ScopeType } from "../../analyzer/scope-type.js";
-import type { NestingDepths } from "../annotations/scope-annotation.js";
-import type { Span } from "../primitive/span.js";
-import type { BlockContext } from "../scope/block-context.js";
-import type { ReferenceId, ScopeId, VariableId } from "./ids.js";
+import {
+  array,
+  boolean,
+  nullable,
+  object,
+  pipe,
+  readonly,
+  type InferOutput,
+} from "valibot";
 
-export type SerializedScope = Readonly<{
-  id: ScopeId;
-  type: ScopeType;
-  isStrict: boolean;
-  upper: ScopeId | null;
-  childScopes: readonly ScopeId[];
-  variableScope: ScopeId;
-  block: Readonly<{ type: string; span: Span; endSpan: Span }>;
-  variables: readonly VariableId[];
-  references: readonly ReferenceId[];
-  through: readonly ReferenceId[];
-  functionExpressionScope: boolean;
-  blockContext: BlockContext | null;
-  fallsThrough: boolean;
-  exitsFunction: boolean;
-  nestingDepths: NestingDepths;
-}>;
+import { scopeType$ } from "../../analyzer/scope-type.js";
+import { astType$ } from "../../parser/ast-type.js";
+import { nestingDepths$ } from "../annotations/scope-annotation.js";
+import { span$ } from "../primitive/span.js";
+import { blockContext$ } from "../scope/block-context.js";
+import { referenceId$ } from "./reference-id.js";
+import { scopeId$ } from "./scope-id.js";
+import { variableId$ } from "./variable-id.js";
+
+export const serializedScope$ = object({
+  id: scopeId$,
+  type: scopeType$,
+  isStrict: boolean(),
+  upper: nullable(scopeId$),
+  childScopes: pipe(array(scopeId$), readonly()),
+  variableScope: scopeId$,
+  block: pipe(
+    object({ type: astType$, span: span$, endSpan: span$ }),
+    readonly(),
+  ),
+  variables: pipe(array(variableId$), readonly()),
+  references: pipe(array(referenceId$), readonly()),
+  through: pipe(array(referenceId$), readonly()),
+  functionExpressionScope: boolean(),
+  blockContext: nullable(blockContext$),
+  fallsThrough: boolean(),
+  exitsFunction: boolean(),
+  nestingDepths: nestingDepths$,
+});
+
+export type SerializedScope = InferOutput<typeof serializedScope$>;

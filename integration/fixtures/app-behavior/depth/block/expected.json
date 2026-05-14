@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -31,8 +31,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -50,8 +49,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
@@ -69,8 +67,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
-                  "declarationKind": "const",
+                  "kind": "ConstBinding",
                   "initIsFunction": false
                 },
                 {
@@ -88,8 +85,7 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "Variable",
-                      "declarationKind": "const",
+                      "kind": "ConstBinding",
                       "initIsFunction": false
                     },
                     {
@@ -107,8 +103,7 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
-                          "declarationKind": "const",
+                          "kind": "ConstBinding",
                           "initIsFunction": false
                         },
                         {
@@ -126,14 +121,13 @@
                               "endLine": null,
                               "isJsxElement": false,
                               "unused": false,
-                              "kind": "Variable",
-                              "declarationKind": "const",
+                              "kind": "ConstBinding",
                               "initIsFunction": false
                             },
                             {
                               "type": "node",
                               "id": "expr_stmt_185",
-                              "kind": "ExpressionStatement",
+                              "kind": "SyntheticExpressionStatement",
                               "name": "console.log()",
                               "line": 13,
                               "endLine": null,

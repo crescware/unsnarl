@@ -1,0 +1,4 @@
+1	1	integration/fixtures/imports/namespace-only/input.ts:1 ns
+1	0	integration/fixtures/imports/namespace-only/input.ts:1 m
+0	1	integration/fixtures/imports/namespace-only/input.ts:3 unused x
+2	2	3 total

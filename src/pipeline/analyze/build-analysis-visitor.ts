@@ -1,3 +1,5 @@
+import { parse } from "valibot";
+
 import { AnnotationsImpl } from "../../analyzer/annotations-impl.js";
 import { blockContextOf } from "../../analyzer/block-context-of.js";
 import { caseExitsFunction } from "../../analyzer/case-exits-function.js";
@@ -17,9 +19,13 @@ import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
 import type { Diagnostic } from "../../ir/diagnostic/diagnostic.js";
 import type { AstNode } from "../../ir/primitive/ast-node.js";
-import type { BlockContext } from "../../ir/scope/block-context.js";
+import { caseClause$ } from "../../ir/scope/block-context-kind.js";
+import {
+  blockContext$,
+  type BlockContext,
+} from "../../ir/scope/block-context.js";
 import type { Scope } from "../../ir/scope/scope.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 
 type AnalysisCapture = Readonly<{
@@ -82,13 +88,13 @@ export function buildAnalysisVisitor(
         const caseTest = isAstNode(test) ? formatCaseTest(test, raw) : null;
         blockContext =
           input.parent && input.key !== null
-            ? {
-                kind: "case-clause",
-                parentType: input.parent.type,
+            ? parse(blockContext$, {
+                kind: caseClause$.literal,
+                parentType: asAstType(input.parent.type),
                 key: input.key,
                 parentSpanOffset: input.parent.start ?? 0,
                 caseTest,
-              }
+              })
             : null;
         const consequent = (block as { consequent?: unknown }).consequent;
         if (Array.isArray(consequent)) {

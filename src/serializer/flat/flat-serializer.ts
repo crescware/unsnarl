@@ -1,11 +1,19 @@
-import { makeReferenceId, makeScopeId, makeVariableId } from "../../ir/id.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
+import {
+  asReferenceId,
+  type ReferenceId,
+} from "../../ir/serialized/reference-id.js";
+import { asScopeId, type ScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedIR } from "../../ir/serialized/serialized-ir.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import {
+  asVariableId,
+  type VariableId,
+} from "../../ir/serialized/variable-id.js";
 import type { IRSerializer } from "../../pipeline/serialize/ir-serializer.js";
 import type { SerializeContext } from "../../pipeline/serialize/serialize-context.js";
 import { SERIALIZED_IR_VERSION } from "../serialized-ir-version.js";
@@ -22,10 +30,10 @@ export class FlatSerializer implements IRSerializer {
 
   serialize(ctx: SerializeContext): SerializedIR {
     const scopes = collectScopesInOrder(ctx.rootScope);
-    const scopeIds = new Map<Scope, string>();
-    scopes.forEach((v, i) => scopeIds.set(v, makeScopeId(i)));
+    const scopeIds = new Map<Scope, ScopeId>();
+    scopes.forEach((v, i) => scopeIds.set(v, asScopeId(`scope#${i}`)));
 
-    const variableIds = new Map<Variable, string>();
+    const variableIds = new Map<Variable, VariableId>();
     const orderedVariables: /* mutable */ Variable[] = [];
     for (const s of scopes) {
       for (const v of s.variables) {
@@ -33,14 +41,22 @@ export class FlatSerializer implements IRSerializer {
         if (sid === null) {
           continue;
         }
+        // Implicit bindings such as `arguments` (FunctionDeclarationInstantiation,
+        // ES spec 9.2.13) carry no source-level identifier or definition;
+        // they exist only to satisfy resolution for in-source references and
+        // have nothing observable to serialize. Exclude them at the boundary
+        // so SerializedVariable can guarantee defs.length >= 1.
+        if (v.defs.length === 0) {
+          continue;
+        }
         const offset = pickVariableOffset(v);
-        const vid = makeVariableId(sid, v.name, offset);
+        const vid = asVariableId(`${sid}:${v.name}@${offset}`);
         variableIds.set(v, vid);
         orderedVariables.push(v);
       }
     }
 
-    const referenceIds = new Map<Reference, string>();
+    const referenceIds = new Map<Reference, ReferenceId>();
     const allReferences: /* mutable */ Reference[] = [];
     for (const s of scopes) {
       for (const r of s.references) {
@@ -53,7 +69,9 @@ export class FlatSerializer implements IRSerializer {
     allReferences.sort(
       (a, b) => offsetOf(a.identifier) - offsetOf(b.identifier),
     );
-    allReferences.forEach((v, i) => referenceIds.set(v, makeReferenceId(i)));
+    allReferences.forEach((v, i) =>
+      referenceIds.set(v, asReferenceId(`ref#${i}`)),
+    );
 
     const serializedScopes: readonly SerializedScope[] = scopes.map((v) =>
       serializeScope(
@@ -83,7 +101,7 @@ export class FlatSerializer implements IRSerializer {
         ),
       );
 
-    const unusedVariableIds: /* mutable */ string[] = [];
+    const unusedVariableIds: /* mutable */ VariableId[] = [];
     for (const v of orderedVariables) {
       if (ctx.annotations.ofVariable(v).isUnused && hasDeclaringDef(v)) {
         const id = variableIds.get(v) ?? null;

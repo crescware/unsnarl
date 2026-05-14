@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "subgraph",
@@ -66,14 +66,13 @@
                               "endLine": null,
                               "isJsxElement": false,
                               "unused": false,
-                              "kind": "Variable",
-                              "declarationKind": "const",
+                              "kind": "ConstBinding",
                               "initIsFunction": false
                             },
                             {
                               "type": "node",
                               "id": "expr_stmt_103",
-                              "kind": "ExpressionStatement",
+                              "kind": "SyntheticExpressionStatement",
                               "name": "console.log()",
                               "line": 8,
                               "endLine": null,
@@ -98,14 +97,13 @@
                               "endLine": null,
                               "isJsxElement": false,
                               "unused": false,
-                              "kind": "Variable",
-                              "declarationKind": "const",
+                              "kind": "ConstBinding",
                               "initIsFunction": false
                             },
                             {
                               "type": "node",
                               "id": "expr_stmt_180",
-                              "kind": "ExpressionStatement",
+                              "kind": "SyntheticExpressionStatement",
                               "name": "console.log()",
                               "line": 11,
                               "endLine": null,
@@ -133,14 +131,13 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "Variable",
-                          "declarationKind": "const",
+                          "kind": "ConstBinding",
                           "initIsFunction": false
                         },
                         {
                           "type": "node",
                           "id": "expr_stmt_264",
-                          "kind": "ExpressionStatement",
+                          "kind": "SyntheticExpressionStatement",
                           "name": "console.log()",
                           "line": 15,
                           "endLine": null,
@@ -168,14 +165,13 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "Variable",
-                      "declarationKind": "const",
+                      "kind": "ConstBinding",
                       "initIsFunction": false
                     },
                     {
                       "type": "node",
                       "id": "expr_stmt_340",
-                      "kind": "ExpressionStatement",
+                      "kind": "SyntheticExpressionStatement",
                       "name": "console.log()",
                       "line": 19,
                       "endLine": null,
@@ -203,14 +199,13 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "Variable",
-                  "declarationKind": "const",
+                  "kind": "ConstBinding",
                   "initIsFunction": false
                 },
                 {
                   "type": "node",
                   "id": "expr_stmt_408",
-                  "kind": "ExpressionStatement",
+                  "kind": "SyntheticExpressionStatement",
                   "name": "console.log()",
                   "line": 23,
                   "endLine": null,
@@ -238,14 +233,13 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "Variable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
               "type": "node",
               "id": "expr_stmt_468",
-              "kind": "ExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "console.log()",
               "line": 27,
               "endLine": null,
@@ -273,14 +267,13 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
           "type": "node",
           "id": "expr_stmt_520",
-          "kind": "ExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "console.log()",
           "line": 31,
           "endLine": null,

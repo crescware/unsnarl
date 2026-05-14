@@ -1,4 +1,4 @@
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
 import type { ScopeManager } from "./manager.js";
 import type { NodeLike } from "./node-like.js";
 import { skipBlockScope } from "./skip-block-scope.js";
@@ -9,7 +9,7 @@ export function handleLeave(
   key: string | null,
   manager: ScopeManager,
 ): void {
-  switch (node.type) {
+  switch (asAstType(node.type)) {
     case AST_TYPE.FunctionDeclaration:
     case AST_TYPE.FunctionExpression:
     case AST_TYPE.ArrowFunctionExpression:
@@ -24,7 +24,7 @@ export function handleLeave(
       manager.pop();
       return;
     case AST_TYPE.BlockStatement:
-      if (parent && key === "body" && skipBlockScope(parent.type)) {
+      if (parent && key === "body" && skipBlockScope(asAstType(parent.type))) {
         return;
       }
       manager.pop();

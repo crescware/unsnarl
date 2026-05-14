@@ -7,18 +7,17 @@ import { formatLabel } from "./format-label.js";
 
 const node = (
   overrides: Partial<
-    Extract<VisualNode, { kind: typeof NODE_KIND.Variable }>
+    Extract<VisualNode, { kind: typeof NODE_KIND.ConstBinding }>
   > = {},
 ): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
-  kind: NODE_KIND.Variable,
+  kind: NODE_KIND.ConstBinding,
   name: "x",
   line: 5,
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: null,
   initIsFunction: false,
   ...overrides,
 });

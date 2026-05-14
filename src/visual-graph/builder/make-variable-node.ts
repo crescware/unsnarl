@@ -2,21 +2,22 @@ import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualNode } from "../visual-node.js";
 import { nodeId } from "./node-id.js";
 
 export function makeVariableNode(v: SerializedVariable): VisualNode {
-  const def = v.defs[0] ?? null;
+  const def = v.defs[0];
   // ImplicitGlobalVariable has no source-level definition; the analyzer
   // pins its synthetic def to the first reference, so any line we read
   // from it would lie about where the global "lives". Treat it as
-  // location-less (line 0), mirroring ModuleSink.
+  // location-less (line 0).
   const line =
-    def?.type === DEFINITION_TYPE.ImplicitGlobalVariable
+    def.type === DEFINITION_TYPE.ImplicitGlobalVariable
       ? 0
-      : (v.identifiers[0]?.line ?? def?.name.span.line ?? 0);
+      : (v.identifiers[0]?.line ?? def.name.span.line);
   const common = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id: nodeId(v.id),
@@ -27,7 +28,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     unused: false,
   } as const;
 
-  if (def?.type === DEFINITION_TYPE.ImportBinding) {
+  if (def.type === DEFINITION_TYPE.ImportBinding) {
     if (def.importKind === IMPORT_KIND.Named) {
       if (def.importedName === null) {
         throw new Error(
@@ -36,35 +37,17 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       }
       return {
         ...common,
-        kind: NODE_KIND.ImportBinding,
-        importKind: IMPORT_KIND.Named,
+        kind: NODE_KIND.NamedImportBinding,
         importedName: def.importedName,
       };
     }
     if (def.importKind === IMPORT_KIND.Default) {
-      return {
-        ...common,
-        kind: NODE_KIND.ImportBinding,
-        importKind: IMPORT_KIND.Default,
-      };
+      return { ...common, kind: NODE_KIND.DefaultImportBinding };
     }
     if (def.importKind === IMPORT_KIND.Namespace) {
-      return {
-        ...common,
-        kind: NODE_KIND.ImportBinding,
-        importKind: IMPORT_KIND.Namespace,
-      };
+      return { ...common, kind: NODE_KIND.NamespaceImportBinding };
     }
     throw new Error(`expected importKind for ImportBinding ${nodeId(v.id)}`);
-  }
-
-  if (def === null) {
-    return {
-      ...common,
-      kind: NODE_KIND.Variable,
-      declarationKind: null,
-      initIsFunction: false,
-    };
   }
 
   if (def.type === DEFINITION_TYPE.Variable) {
@@ -72,13 +55,25 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     const initIsFunction =
       initType === AST_TYPE.ArrowFunctionExpression ||
       initType === AST_TYPE.FunctionExpression;
-    return {
-      ...common,
-      kind: NODE_KIND.Variable,
-      declarationKind: def.declarationKind,
-      initIsFunction,
-    };
+    if (def.declarationKind === VARIABLE_DECLARATION_KIND.Const) {
+      return { ...common, kind: NODE_KIND.ConstBinding, initIsFunction };
+    }
+    if (def.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
+      return { ...common, kind: NODE_KIND.LetBinding, initIsFunction };
+    }
+    return { ...common, kind: NODE_KIND.VarBinding, initIsFunction };
   }
 
-  return { ...common, kind: def.type };
+  switch (def.type) {
+    case DEFINITION_TYPE.FunctionName:
+      return { ...common, kind: NODE_KIND.FunctionDeclaration };
+    case DEFINITION_TYPE.ClassName:
+      return { ...common, kind: NODE_KIND.ClassDeclaration };
+    case DEFINITION_TYPE.Parameter:
+      return { ...common, kind: NODE_KIND.FormalParameter };
+    case DEFINITION_TYPE.CatchClause:
+      return { ...common, kind: NODE_KIND.CatchParameter };
+    case DEFINITION_TYPE.ImplicitGlobalVariable:
+      return { ...common, kind: NODE_KIND.SyntheticImplicitGlobal };
+  }
 }

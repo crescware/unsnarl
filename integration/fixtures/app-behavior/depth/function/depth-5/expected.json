@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "subgraph",
@@ -34,7 +34,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "FunctionName"
+          "kind": "FunctionDeclaration"
         },
         {
           "type": "subgraph",
@@ -54,7 +54,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "FunctionName"
+              "kind": "FunctionDeclaration"
             },
             {
               "type": "subgraph",
@@ -74,7 +74,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "FunctionName"
+                  "kind": "FunctionDeclaration"
                 },
                 {
                   "type": "subgraph",
@@ -94,7 +94,7 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "FunctionName"
+                      "kind": "FunctionDeclaration"
                     },
                     {
                       "type": "subgraph",
@@ -114,7 +114,7 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "FunctionName"
+                          "kind": "FunctionDeclaration"
                         },
                         {
                           "type": "subgraph",
@@ -127,7 +127,7 @@
                             {
                               "type": "node",
                               "id": "ret_use_ref_2",
-                              "kind": "ReturnUse",
+                              "kind": "ReturnArgumentReference",
                               "name": "f6",
                               "line": 10,
                               "endLine": null,
@@ -149,7 +149,7 @@
                         {
                           "type": "node",
                           "id": "ret_use_ref_3",
-                          "kind": "ReturnUse",
+                          "kind": "ReturnArgumentReference",
                           "name": "f5",
                           "line": 12,
                           "endLine": null,
@@ -171,7 +171,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_4",
-                      "kind": "ReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "f4",
                       "line": 14,
                       "endLine": null,
@@ -193,7 +193,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_5",
-                  "kind": "ReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "f3",
                   "line": 16,
                   "endLine": null,
@@ -215,7 +215,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "f2",
               "line": 18,
               "endLine": null,
@@ -229,7 +229,7 @@
     {
       "type": "node",
       "id": "expr_stmt_311",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "f1()",
       "line": 21,
       "endLine": null,

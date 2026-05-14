@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-abstract-property-definition/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_C_15",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_1_C_15",
+      "name": "C",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": null
+}

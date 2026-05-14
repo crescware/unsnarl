@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -74,8 +69,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "const",
+      "kind": "ConstBinding",
       "initIsFunction": false
     },
     {
@@ -88,7 +82,7 @@
         {
           "type": "node",
           "id": "switch_discriminant_scope_0_91",
-          "kind": "SwitchDiscriminant",
+          "kind": "SyntheticSwitchStatementDiscriminant",
           "name": "switch-discriminant",
           "line": 8,
           "endLine": null,
@@ -105,7 +99,7 @@
             {
               "type": "node",
               "id": "wr_ref_8",
-              "kind": "WriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 10,
               "endLine": null,
@@ -127,7 +121,7 @@
             {
               "type": "node",
               "id": "wr_ref_10",
-              "kind": "WriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 13,
               "endLine": null,
@@ -149,7 +143,7 @@
             {
               "type": "node",
               "id": "wr_ref_12",
-              "kind": "WriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 16,
               "endLine": null,
@@ -171,7 +165,7 @@
             {
               "type": "node",
               "id": "wr_ref_13",
-              "kind": "WriteOp",
+              "kind": "WriteReference",
               "name": "label",
               "line": 19,
               "endLine": null,
@@ -189,7 +183,7 @@
     {
       "type": "node",
       "id": "module_root",
-      "kind": "ModuleSink",
+      "kind": "SyntheticModuleSink",
       "name": "module",
       "line": 0,
       "endLine": null,

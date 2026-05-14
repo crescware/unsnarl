@@ -14,14 +14,13 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "Variable",
-      "declarationKind": "let",
+      "kind": "LetBinding",
       "initIsFunction": false
     },
     {
       "type": "node",
       "id": "wr_ref_1",
-      "kind": "WriteOp",
+      "kind": "WriteReference",
       "name": "x",
       "line": 2,
       "endLine": null,

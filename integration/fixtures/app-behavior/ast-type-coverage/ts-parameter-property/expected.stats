@@ -1,0 +1,5 @@
+1	0	integration/fixtures/app-behavior/ast-type-coverage/ts-parameter-property/input.ts:0 x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/ts-parameter-property/input.ts:0 module
+0	0	integration/fixtures/app-behavior/ast-type-coverage/ts-parameter-property/input.ts:1 unused C
+0	0	integration/fixtures/app-behavior/ast-type-coverage/ts-parameter-property/input.ts:1 unused C
+1	1	4 total

@@ -12,7 +12,7 @@ describe("emitSubgraph", () => {
     const owner = {
       ...baseNode(),
       id: "n_owner",
-      kind: NODE_KIND.FunctionName,
+      kind: NODE_KIND.FunctionDeclaration,
       name: "f",
     };
     const state = {
@@ -64,7 +64,7 @@ describe("emitSubgraph", () => {
     const owner = {
       ...baseNode(),
       id: "n_owner",
-      kind: NODE_KIND.FunctionName,
+      kind: NODE_KIND.FunctionDeclaration,
       name: "f",
     };
     const state = {
@@ -89,7 +89,7 @@ describe("emitSubgraph", () => {
     const owner = {
       ...baseNode(),
       id: "n_owner",
-      kind: NODE_KIND.FunctionName,
+      kind: NODE_KIND.FunctionDeclaration,
       name: "f",
     };
     const state = {

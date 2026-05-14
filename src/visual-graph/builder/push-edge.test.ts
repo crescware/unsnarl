@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { asFilledString } from "../../util/filled-string.js";
 import type { BuildState } from "./build-state.js";
 import { pushEdge } from "./push-edge.js";
 
@@ -37,9 +38,9 @@ describe("pushEdge", () => {
   });
 
   test.each<{ name: string; second: [string, string, string] }>([
-    { name: "different label", second: ["a", "write", "b"] },
-    { name: "different from", second: ["x", "read", "b"] },
-    { name: "different to", second: ["a", "read", "z"] },
+    { name: asFilledString("different label"), second: ["a", "write", "b"] },
+    { name: asFilledString("different from"), second: ["x", "read", "b"] },
+    { name: asFilledString("different to"), second: ["a", "read", "z"] },
   ])("$name keeps both edges", ({ second }) => {
     const state = emptyState();
     pushEdge(state, "a", "read", "b");

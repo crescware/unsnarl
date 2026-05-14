@@ -14,7 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": true,
-      "kind": "FunctionName"
+      "kind": "FunctionDeclaration"
     },
     {
       "type": "subgraph",
@@ -34,8 +34,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -46,8 +45,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "Variable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -61,7 +59,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "a",
               "line": 4,
               "endLine": null,
@@ -71,7 +69,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_3",
-              "kind": "ReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "b",
               "line": 4,
               "endLine": null,

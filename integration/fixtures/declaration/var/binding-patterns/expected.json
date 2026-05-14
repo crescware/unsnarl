@@ -14,8 +14,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -26,8 +25,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -38,8 +36,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -50,8 +47,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -62,8 +58,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -74,8 +69,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -86,8 +80,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -98,8 +91,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -110,8 +102,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -122,8 +113,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -134,8 +124,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -146,8 +135,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -158,8 +146,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -170,8 +157,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -182,8 +168,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -194,8 +179,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -206,8 +190,7 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "Variable",
-      "declarationKind": "var",
+      "kind": "VarBinding",
       "initIsFunction": false
     },
     {
@@ -218,12 +201,12 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
-      "kind": "ImplicitGlobalVariable"
+      "kind": "SyntheticImplicitGlobal"
     },
     {
       "type": "node",
       "id": "expr_stmt_557",
-      "kind": "ExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 23,
       "endLine": 41,

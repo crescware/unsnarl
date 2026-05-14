@@ -115,3 +115,11 @@ those exclusions.
 - The shared vocabulary files (`scope-type.ts`, `definition-type.ts`,
   `diagnostic-kind.ts`) live in `src/analyzer/` and are imported by
   both regions. They are enums/constants, not algorithms.
+
+## Related documentation
+
+- `src/visual-graph/README.md` — naming philosophy, categories, and
+  decision rules for `NODE_KIND` values. Read this before adding or
+  renaming a `NODE_KIND`. The relationship between `NODE_KIND` and
+  `DEFINITION_TYPE` (which `DEFINITION_TYPE` must preserve as part of
+  the eslint-scope contract) is documented there.

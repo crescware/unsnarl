@@ -1,3 +1,4 @@
+import { caseClause$ } from "../../ir/scope/block-context-kind.js";
 import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { DIRECTION } from "../direction.js";
@@ -51,11 +52,13 @@ export function describeSubgraph(
   switch (kind) {
     case SUBGRAPH_KIND.Case: {
       const ctx = scope.blockContext;
-      const caseTest = ctx?.kind === "case-clause" ? ctx.caseTest : null;
+      const caseTest = ctx?.kind === caseClause$.literal ? ctx.caseTest : null;
       return { ...common, kind: SUBGRAPH_KIND.Case, caseTest };
     }
+
     case SUBGRAPH_KIND.IfElseContainer:
       return { ...common, kind: SUBGRAPH_KIND.IfElseContainer, hasElse: false };
+
     case SUBGRAPH_KIND.Switch:
     case SUBGRAPH_KIND.If:
     case SUBGRAPH_KIND.Else:
@@ -68,6 +71,7 @@ export function describeSubgraph(
     case SUBGRAPH_KIND.Return:
     case SUBGRAPH_KIND.Block:
       return { ...common, kind };
+
     case SUBGRAPH_KIND.Function:
       throw new Error(
         `unexpected function subgraph kind for scope ${scope.id}`,

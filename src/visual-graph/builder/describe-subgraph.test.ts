@@ -1,8 +1,11 @@
 import { describe, expect, test } from "vitest";
 
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
+import { asScopeId } from "../../ir/serialized/scope-id.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
+import { asVariableId } from "../../ir/serialized/variable-id.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
+import { asFilledString } from "../../util/filled-string.js";
 import { DIRECTION } from "../direction.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -17,7 +20,7 @@ describe("describeSubgraph", () => {
   test("function subgraph returns kind=function with owner metadata", () => {
     const fnScope = {
       ...baseScope(),
-      id: "fnScope",
+      id: asScopeId("fnScope"),
       type: SCOPE_TYPE.Function,
       block: {
         type: AST_TYPE.FunctionDeclaration,
@@ -27,8 +30,8 @@ describe("describeSubgraph", () => {
     };
     const owner: SerializedVariable = {
       ...baseVariable(),
-      id: "ownerVar",
-      name: "myFn",
+      id: asVariableId("ownerVar"),
+      name: asFilledString("myFn"),
       identifiers: [span(0, 5)],
     };
     const owners = new Map([["fnScope", "ownerVar"]]);
@@ -52,7 +55,7 @@ describe("describeSubgraph", () => {
   test("function subgraph falls back to scope.block.span.line when owner has no identifiers", () => {
     const fnScope = {
       ...baseScope(),
-      id: "fn",
+      id: asScopeId("fn"),
       type: SCOPE_TYPE.Function,
       block: {
         type: AST_TYPE.FunctionDeclaration,
@@ -60,7 +63,12 @@ describe("describeSubgraph", () => {
         endSpan: span(20, 9),
       },
     };
-    const owner = { ...baseVariable(), id: "o", name: "f", identifiers: [] };
+    const owner = {
+      ...baseVariable(),
+      id: asVariableId("o"),
+      name: asFilledString("f"),
+      identifiers: [],
+    };
     const sg = describeSubgraph(
       fnScope,
       new Map([["fn", "o"]]),
@@ -70,7 +78,11 @@ describe("describeSubgraph", () => {
   });
 
   test("function subgraph without an owner var renders as anonymous (ownerNodeId null, ownerName empty)", () => {
-    const scope = { ...baseScope(), id: "fn", type: SCOPE_TYPE.Function };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("fn"),
+      type: SCOPE_TYPE.Function,
+    };
     const sg = describeSubgraph(scope, new Map(), new Map());
     expect(sg.kind).toEqual("function");
     if (sg.kind === "function") {
@@ -84,17 +96,29 @@ describe("describeSubgraph", () => {
     type: ScopeType;
     expectedKind: VisualSubgraph["kind"];
   }>([
-    { name: "for", type: SCOPE_TYPE.For, expectedKind: "for" },
-    { name: "catch", type: SCOPE_TYPE.Catch, expectedKind: "catch" },
-    { name: "switch", type: SCOPE_TYPE.Switch, expectedKind: "switch" },
+    { name: asFilledString("for"), type: SCOPE_TYPE.For, expectedKind: "for" },
+    {
+      name: asFilledString("catch"),
+      type: SCOPE_TYPE.Catch,
+      expectedKind: "catch",
+    },
+    {
+      name: asFilledString("switch"),
+      type: SCOPE_TYPE.Switch,
+      expectedKind: "switch",
+    },
   ])(
     "control subgraph for scope type $name -> kind=$expectedKind",
     ({ type, expectedKind }) => {
       const scope = {
         ...baseScope(),
-        id: "ctrl",
+        id: asScopeId("ctrl"),
         type,
-        block: { type: "Block", span: span(0, 1), endSpan: span(10, 3) },
+        block: {
+          type: AST_TYPE.BlockStatement,
+          span: span(0, 1),
+          endSpan: span(10, 3),
+        },
       };
       const sg = describeSubgraph(scope, new Map(), new Map());
       expect(sg.kind).toEqual(expectedKind);
@@ -107,12 +131,16 @@ describe("describeSubgraph", () => {
   test("case subgraph captures caseTest from blockContext", () => {
     const scope = {
       ...baseScope(),
-      id: "case1",
+      id: asScopeId("case1"),
       type: SCOPE_TYPE.Block,
-      block: { type: "Block", span: span(0, 1), endSpan: span(10, 2) },
+      block: {
+        type: AST_TYPE.BlockStatement,
+        span: span(0, 1),
+        endSpan: span(10, 2),
+      },
       blockContext: {
         ...baseCaseClauseBlockContext(),
-        caseTest: "x === 1",
+        caseTest: asFilledString("x === 1"),
       },
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
@@ -126,7 +154,7 @@ describe("describeSubgraph", () => {
   test("case subgraph keeps caseTest null when the case clause has no test (default)", () => {
     const scope = {
       ...baseScope(),
-      id: "case-default",
+      id: asScopeId("case-default"),
       type: SCOPE_TYPE.Block,
       blockContext: baseCaseClauseBlockContext(),
     };
@@ -138,13 +166,21 @@ describe("describeSubgraph", () => {
   });
 
   test("plain block scope renders as the generic 'block' subgraph", () => {
-    const scope = { ...baseScope(), id: "plain", type: SCOPE_TYPE.Block };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("plain"),
+      type: SCOPE_TYPE.Block,
+    };
     const sg = describeSubgraph(scope, new Map(), new Map());
     expect(sg.kind).toEqual(SUBGRAPH_KIND.Block);
   });
 
   test("throws when scope is neither a function subgraph nor a control kind (e.g. module / global)", () => {
-    const scope = { ...baseScope(), id: "mod", type: SCOPE_TYPE.Module };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("mod"),
+      type: SCOPE_TYPE.Module,
+    };
     expect(() => describeSubgraph(scope, new Map(), new Map())).toThrow();
   });
 });
