@@ -78,7 +78,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: doWhileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.LegacyDoWhileTest,
+      kind: NODE_KIND.SyntheticDoWhileStatementTest,
       name: "do-while-test",
       line: scope.block.endSpan.line,
       endLine: null,

@@ -13,7 +13,7 @@ type SimpleKind =
   | typeof NODE_KIND.LegacyIfTest
   | typeof NODE_KIND.LegacySwitchDiscriminant
   | typeof NODE_KIND.SyntheticWhileStatementTest
-  | typeof NODE_KIND.LegacyDoWhileTest
+  | typeof NODE_KIND.SyntheticDoWhileStatementTest
   | typeof NODE_KIND.LegacyForTest
   | typeof NODE_KIND.SyntheticModuleSink
   | typeof NODE_KIND.SyntheticModuleSource

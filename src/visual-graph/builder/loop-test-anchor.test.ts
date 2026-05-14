@@ -212,7 +212,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.position).toEqual("last");
     expect(pending?.node).toMatchObject({
       id: "do_while_test_scope_0_33",
-      kind: NODE_KIND.LegacyDoWhileTest,
+      kind: NODE_KIND.SyntheticDoWhileStatementTest,
       name: asFilledString("do-while-test"),
       line: 6,
     });

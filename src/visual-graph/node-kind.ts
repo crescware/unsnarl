@@ -11,7 +11,7 @@ export const NODE_KIND = {
   LegacyIfTest: "LegacyIfTest",
   LegacySwitchDiscriminant: "LegacySwitchDiscriminant",
   SyntheticWhileStatementTest: "SyntheticWhileStatementTest",
-  LegacyDoWhileTest: "LegacyDoWhileTest",
+  SyntheticDoWhileStatementTest: "SyntheticDoWhileStatementTest",
   LegacyForTest: "LegacyForTest",
   SyntheticModuleSink: "SyntheticModuleSink",
   SyntheticModuleSource: "SyntheticModuleSource",
