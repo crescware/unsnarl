@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { AST_TYPE, UNKNOWN_AST_TYPE } from "../../parser/ast-type.js";
 import { skipBlockScope } from "./skip-block-scope.js";
 
 describe("skipBlockScope", () => {
@@ -13,7 +13,7 @@ describe("skipBlockScope", () => {
     { parentType: AST_TYPE.ForStatement, expected: false },
     { parentType: AST_TYPE.BlockStatement, expected: false },
     { parentType: AST_TYPE.Program, expected: false },
-    { parentType: "", expected: false },
+    { parentType: UNKNOWN_AST_TYPE, expected: false },
   ])("parentType=$parentType -> $expected", ({ parentType, expected }) => {
     expect(skipBlockScope(parentType)).toEqual(expected);
   });

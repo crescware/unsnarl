@@ -25,7 +25,7 @@ import {
   type BlockContext,
 } from "../../ir/scope/block-context.js";
 import type { Scope } from "../../ir/scope/scope.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
 import { NESTING_KIND } from "../../serializer/nesting-kind.js";
 
 type AnalysisCapture = Readonly<{
@@ -90,7 +90,7 @@ export function buildAnalysisVisitor(
           input.parent && input.key !== null
             ? parse(blockContext$, {
                 kind: caseClause$.literal,
-                parentType: input.parent.type,
+                parentType: asAstType(input.parent.type),
                 key: input.key,
                 parentSpanOffset: input.parent.start ?? 0,
                 caseTest,

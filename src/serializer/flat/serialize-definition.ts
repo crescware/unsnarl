@@ -8,7 +8,7 @@ import {
   serializedDefinition$,
   type SerializedDefinition,
 } from "../../ir/serialized/serialized-definition.js";
-import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE, type AstType } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../import-kind.js";
 import { VARIABLE_DECLARATION_KIND } from "../variable-declaration-kind.js";
 import { spanOf } from "./span-of.js";
@@ -93,7 +93,7 @@ export function serializeDefinition(
   }
 
   if (d.type === DEFINITION_TYPE.Variable) {
-    let init: Readonly<{ type: string; span: Span }> | null = null;
+    let init: Readonly<{ type: AstType; span: Span }> | null = null;
     if (d.node.type === AST_TYPE.VariableDeclarator) {
       const initNode = d.node["init"];
       if (

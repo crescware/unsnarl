@@ -1,4 +1,5 @@
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
+import type { AstNode } from "../ir/primitive/ast-node.js";
 import type { PredicateContainer } from "../ir/reference/predicate-container.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
@@ -13,7 +14,7 @@ const LOOP_HEADER_KEYS_FOR_OF_IN: ReadonlySet<string> = new Set([
 ]);
 
 export function findPredicateContainer(
-  parent: { type: string; start?: number } | null,
+  parent: AstNode | null,
   key: string | null,
   path: readonly PathEntry[],
 ): PredicateContainer | null {

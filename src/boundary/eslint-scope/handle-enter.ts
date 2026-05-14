@@ -1,5 +1,5 @@
 import { isTypeOnlySubtree } from "../../analyzer/skip-types.js";
-import { AST_TYPE } from "../../parser/ast-type.js";
+import { asAstType, AST_TYPE } from "../../parser/ast-type.js";
 import type { DiagnosticCollector } from "../../util/diagnostic.js";
 import { enterBlock } from "./enter-block.js";
 import { enterCatch } from "./enter-catch.js";
@@ -26,17 +26,15 @@ export function handleEnter(
   diagnostics: DiagnosticCollector,
   visitor: AnalysisVisitor,
 ): WalkAction {
-  if (isTypeOnlySubtree(node.type, key)) {
+  const nodeType = asAstType(node.type);
+  if (isTypeOnlySubtree(nodeType, key)) {
     return "skip";
   }
-  if (
-    node.type === AST_TYPE.Identifier ||
-    node.type === AST_TYPE.JSXIdentifier
-  ) {
+  if (nodeType === AST_TYPE.Identifier || nodeType === AST_TYPE.JSXIdentifier) {
     handleIdentifierReference(node, parent, key, path, manager, visitor);
     return;
   }
-  switch (node.type) {
+  switch (nodeType) {
     case AST_TYPE.FunctionDeclaration:
     case AST_TYPE.FunctionExpression:
     case AST_TYPE.ArrowFunctionExpression:
@@ -52,7 +50,7 @@ export function handleEnter(
       );
       return;
     case AST_TYPE.BlockStatement:
-      if (parent && key === "body" && skipBlockScope(parent.type)) {
+      if (parent && key === "body" && skipBlockScope(asAstType(parent.type))) {
         return;
       }
       enterBlock(node, parent, key, path, manager, raw, diagnostics, visitor);
