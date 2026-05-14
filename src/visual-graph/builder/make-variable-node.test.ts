@@ -118,7 +118,7 @@ describe("makeVariableNode", () => {
     expect(node.kind).toEqual(NODE_KIND.LetBinding);
   });
 
-  test("Named ImportBinding propagates importKind and importedName", () => {
+  test("Named ImportBinding produces NamedImportBinding kind and propagates importedName", () => {
     const v = parse(serializedVariable$, {
       ...baseVariable(),
       name: "renamed",
