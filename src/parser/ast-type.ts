@@ -3,14 +3,10 @@
 import { picklist, type InferOutput } from "valibot";
 
 // AST_TYPE mirrors the `type` discriminator strings emitted by
-// oxc-parser (@oxc-project/types). The intent is exhaustive coverage
-// of oxc's vocabulary, plus the `UnknownAstType` sentinel for any
-// value the parser emits that this enumeration has not yet caught up
-// to. `asAstType()` is the application-layer normalizer that maps a
-// raw oxc string to AstType, collapsing unrecognized inputs into
-// UnknownAstType so a parser upgrade adding a new node kind degrades
-// into a known fallback rather than crashing astType$ at the schema
-// boundary.
+// oxc-parser (@oxc-project/types). Only values that the parser
+// actually emits belong here. The internal "unknown" sentinel is
+// kept separate as `UNKNOWN_AST_TYPE` below, so that AST_TYPE stays
+// a faithful reflection of the external vocabulary.
 //
 // Codebases that dispatch on AST_TYPE values (visual-graph builders,
 // analyzer producers, ...) do not need to handle every entry;
@@ -192,21 +188,24 @@ export const AST_TYPE = {
   WhileStatement: "WhileStatement",
   WithStatement: "WithStatement",
   YieldExpression: "YieldExpression",
-
-  // Sentinel for AST type strings the parser emits that are not (yet)
-  // enumerated above. `asAstType()` collapses any unknown string to
-  // this value so downstream code can detect "type we don't know
-  // about" instead of seeing a verbatim parser string.
-  UnknownAstType: "UnknownAstType",
 } as const;
 
-const ALL_AST_TYPES = Object.values(
+// Internal sentinel for AST type strings the parser emits that are
+// not (yet) enumerated in AST_TYPE. Kept separate from AST_TYPE so
+// that AST_TYPE remains "oxc emits this" and UNKNOWN_AST_TYPE remains
+// "we synthesized this because oxc surprised us". `asAstType()`
+// collapses any unrecognized string to this value so downstream code
+// can detect "type we don't know about" instead of seeing a verbatim
+// parser string.
+export const UNKNOWN_AST_TYPE = "UnknownAstType" as const;
+
+const oxcTypes = Object.values(
   AST_TYPE,
 ) as readonly (typeof AST_TYPE)[keyof typeof AST_TYPE][];
 
-const KNOWN_AST_TYPES: ReadonlySet<string> = new Set(ALL_AST_TYPES);
+const knownOxcTypes: ReadonlySet<string> = new Set(oxcTypes);
 
-export const astType$ = picklist(ALL_AST_TYPES);
+export const astType$ = picklist([...oxcTypes, UNKNOWN_AST_TYPE]);
 
 export type AstType = InferOutput<typeof astType$>;
 
@@ -214,7 +213,10 @@ export type AstType = InferOutput<typeof astType$>;
 // string before handing it to code that expects an AstType (e.g.
 // serializer entry points that feed astType$). The schema itself
 // stays a pure picklist; the boundary owns the "unknown -> sentinel"
-// decision.
+// decision. The literal string "UnknownAstType" is intentionally not
+// in knownOxcTypes, so even if the parser ever emitted that exact
+// string verbatim it would be collapsed to the sentinel rather than
+// passed through as if it were a real oxc type.
 export function asAstType(raw: string): AstType {
-  return KNOWN_AST_TYPES.has(raw) ? (raw as AstType) : AST_TYPE.UnknownAstType;
+  return knownOxcTypes.has(raw) ? (raw as AstType) : UNKNOWN_AST_TYPE;
 }
