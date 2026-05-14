@@ -39,7 +39,7 @@
         {
           "type": "node",
           "id": "expr_stmt_22",
-          "kind": "LegacyExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "new C()",
           "line": 3,
           "endLine": null,

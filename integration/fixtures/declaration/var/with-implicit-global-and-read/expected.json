@@ -52,7 +52,7 @@
     {
       "type": "node",
       "id": "expr_stmt_23",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 3,
       "endLine": null,

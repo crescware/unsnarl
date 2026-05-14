@@ -89,7 +89,7 @@
             {
               "type": "node",
               "id": "expr_stmt_66",
-              "kind": "LegacyExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "fns.push()",
               "line": 3,
               "endLine": null,
@@ -105,7 +105,7 @@
     {
       "type": "node",
       "id": "expr_stmt_87",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 5,
       "endLine": null,

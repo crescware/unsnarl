@@ -28,7 +28,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticModuleSink, expected: true },
     { kind: NODE_KIND.SyntheticModuleSource, expected: true },
     { kind: NODE_KIND.SyntheticImportIntermediate, expected: true },
-    { kind: NODE_KIND.LegacyExpressionStatement, expected: true },
+    { kind: NODE_KIND.SyntheticExpressionStatement, expected: true },
     { kind: NODE_KIND.LegacyVariable, expected: false },
     { kind: NODE_KIND.LegacyFunctionName, expected: false },
     { kind: NODE_KIND.LegacyClassName, expected: false },

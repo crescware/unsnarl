@@ -61,7 +61,7 @@
     {
       "type": "node",
       "id": "expr_stmt_311",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "f1()",
       "line": 21,
       "endLine": null,

@@ -861,7 +861,7 @@ describe("buildVisualGraph: predicate references", () => {
 describe("buildVisualGraph: ownerless refs at module scope", () => {
   test("a top-level ExpressionStatement gets its own node carrying the call head and line, and consuming reads route into it", () => {
     const g = build("const a = 1;\nconsole.log(a);\n");
-    const exprNode = findNodes(g, NODE_KIND.LegacyExpressionStatement)[0];
+    const exprNode = findNodes(g, NODE_KIND.SyntheticExpressionStatement)[0];
     expect(exprNode !== null && exprNode !== undefined).toEqual(true);
     expect(exprNode?.name).toEqual("console.log()");
     expect(exprNode?.line).toEqual(2);
@@ -877,7 +877,7 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
 
   test("a non-call top-level ExpressionStatement uses the bare expression as the head", () => {
     const g = build("const a = 1;\na;\n");
-    const exprNode = findNodes(g, NODE_KIND.LegacyExpressionStatement)[0];
+    const exprNode = findNodes(g, NODE_KIND.SyntheticExpressionStatement)[0];
     expect(exprNode?.name).toEqual("a");
     expect(exprNode?.line).toEqual(2);
   });

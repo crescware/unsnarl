@@ -29,7 +29,7 @@ export function ensureExpressionStatementNode(
   const node = {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.LegacyExpressionStatement,
+    kind: NODE_KIND.SyntheticExpressionStatement,
     name,
     line: startLine,
     endLine,

@@ -16,7 +16,7 @@ export const NODE_KIND = {
   SyntheticModuleSink: "SyntheticModuleSink",
   SyntheticModuleSource: "SyntheticModuleSource",
   SyntheticImportIntermediate: "SyntheticImportIntermediate",
-  LegacyExpressionStatement: "LegacyExpressionStatement",
+  SyntheticExpressionStatement: "SyntheticExpressionStatement",
   SyntheticBeyondDepth: "SyntheticBeyondDepth",
 } as const;
 export type NodeKind = (typeof NODE_KIND)[keyof typeof NODE_KIND];

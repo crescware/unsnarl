@@ -79,7 +79,7 @@
             {
               "type": "node",
               "id": "expr_stmt_108",
-              "kind": "LegacyExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "console.log()",
               "line": 6,
               "endLine": null,

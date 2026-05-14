@@ -39,7 +39,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImportIntermediate })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyExpressionStatement })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticExpressionStatement })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticBeyondDepth })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.LegacyVariable;

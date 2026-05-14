@@ -107,7 +107,7 @@ describe("ensureExpressionStatementNode", () => {
     expect(node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "expr_stmt_0",
-      kind: NODE_KIND.LegacyExpressionStatement,
+      kind: NODE_KIND.SyntheticExpressionStatement,
       name: asFilledString("console.log()"),
       line: 7,
     });

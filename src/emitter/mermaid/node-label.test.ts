@@ -101,7 +101,7 @@ describe("nodeLabel", () => {
     expect(
       nodeLabel(
         {
-          ...baseSimpleNode(NODE_KIND.LegacyExpressionStatement),
+          ...baseSimpleNode(NODE_KIND.SyntheticExpressionStatement),
           name: "console.log()",
           line: 7,
         },

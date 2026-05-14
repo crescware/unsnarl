@@ -117,7 +117,7 @@
                 {
                   "type": "node",
                   "id": "expr_stmt_94",
-                  "kind": "LegacyExpressionStatement",
+                  "kind": "SyntheticExpressionStatement",
                   "name": "console.log()",
                   "line": 7,
                   "endLine": null,
@@ -145,7 +145,7 @@
         {
           "type": "node",
           "id": "expr_stmt_147",
-          "kind": "LegacyExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "inner()",
           "line": 13,
           "endLine": null,
@@ -168,7 +168,7 @@
     {
       "type": "node",
       "id": "expr_stmt_198",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "callerOf()",
       "line": 20,
       "endLine": null,
@@ -178,7 +178,7 @@
     {
       "type": "node",
       "id": "expr_stmt_210",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "unrelated()",
       "line": 21,
       "endLine": null,

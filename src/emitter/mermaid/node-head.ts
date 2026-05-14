@@ -53,7 +53,7 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.LegacyDoWhileTest:
     case NODE_KIND.LegacyForTest:
     case NODE_KIND.SyntheticModuleSink:
-    case NODE_KIND.LegacyExpressionStatement:
+    case NODE_KIND.SyntheticExpressionStatement:
       return name;
     case NODE_KIND.SyntheticBeyondDepth:
       // ASCII "..." rather than U+2026; some Mermaid renderers stumble on

@@ -44,7 +44,7 @@ describe("nodeHead", () => {
       expected: "import named",
     },
     {
-      kind: NODE_KIND.LegacyExpressionStatement,
+      kind: NODE_KIND.SyntheticExpressionStatement,
       name: "console.log()",
       expected: "console.log()",
     },

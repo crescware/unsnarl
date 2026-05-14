@@ -29,7 +29,7 @@
         {
           "type": "node",
           "id": "expr_stmt_147",
-          "kind": "LegacyExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "inner()",
           "line": 13,
           "endLine": null,

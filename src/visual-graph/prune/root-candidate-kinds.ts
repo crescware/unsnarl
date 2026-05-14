@@ -16,5 +16,5 @@ export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.SyntheticImplicitGlobal,
   NODE_KIND.LegacyReturnUse,
   NODE_KIND.LegacyWriteOp,
-  NODE_KIND.LegacyExpressionStatement,
+  NODE_KIND.SyntheticExpressionStatement,
 ]);

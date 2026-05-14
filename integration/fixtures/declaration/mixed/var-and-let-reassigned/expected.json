@@ -54,7 +54,7 @@
     {
       "type": "node",
       "id": "expr_stmt_36",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "console.log()",
       "line": 5,
       "endLine": null,

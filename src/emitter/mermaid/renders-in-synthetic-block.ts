@@ -6,6 +6,6 @@ export function rendersInSyntheticBlock(n: VisualNode): boolean {
     n.kind === NODE_KIND.SyntheticModuleSink ||
     n.kind === NODE_KIND.SyntheticModuleSource ||
     n.kind === NODE_KIND.SyntheticImportIntermediate ||
-    n.kind === NODE_KIND.LegacyExpressionStatement
+    n.kind === NODE_KIND.SyntheticExpressionStatement
   );
 }

@@ -141,7 +141,7 @@
                 {
                   "type": "node",
                   "id": "expr_stmt_201",
-                  "kind": "LegacyExpressionStatement",
+                  "kind": "SyntheticExpressionStatement",
                   "name": "f2()",
                   "line": 14,
                   "endLine": null,
@@ -159,7 +159,7 @@
     {
       "type": "node",
       "id": "expr_stmt_220",
-      "kind": "LegacyExpressionStatement",
+      "kind": "SyntheticExpressionStatement",
       "name": "f1()",
       "line": 19,
       "endLine": null,

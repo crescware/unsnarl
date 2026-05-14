@@ -73,7 +73,7 @@
                             {
                               "type": "node",
                               "id": "expr_stmt_103",
-                              "kind": "LegacyExpressionStatement",
+                              "kind": "SyntheticExpressionStatement",
                               "name": "console.log()",
                               "line": 8,
                               "endLine": null,
@@ -105,7 +105,7 @@
                             {
                               "type": "node",
                               "id": "expr_stmt_180",
-                              "kind": "LegacyExpressionStatement",
+                              "kind": "SyntheticExpressionStatement",
                               "name": "console.log()",
                               "line": 11,
                               "endLine": null,
@@ -140,7 +140,7 @@
                         {
                           "type": "node",
                           "id": "expr_stmt_264",
-                          "kind": "LegacyExpressionStatement",
+                          "kind": "SyntheticExpressionStatement",
                           "name": "console.log()",
                           "line": 15,
                           "endLine": null,
@@ -175,7 +175,7 @@
                     {
                       "type": "node",
                       "id": "expr_stmt_340",
-                      "kind": "LegacyExpressionStatement",
+                      "kind": "SyntheticExpressionStatement",
                       "name": "console.log()",
                       "line": 19,
                       "endLine": null,
@@ -210,7 +210,7 @@
                 {
                   "type": "node",
                   "id": "expr_stmt_408",
-                  "kind": "LegacyExpressionStatement",
+                  "kind": "SyntheticExpressionStatement",
                   "name": "console.log()",
                   "line": 23,
                   "endLine": null,
@@ -245,7 +245,7 @@
             {
               "type": "node",
               "id": "expr_stmt_468",
-              "kind": "LegacyExpressionStatement",
+              "kind": "SyntheticExpressionStatement",
               "name": "console.log()",
               "line": 27,
               "endLine": null,
@@ -280,7 +280,7 @@
         {
           "type": "node",
           "id": "expr_stmt_520",
-          "kind": "LegacyExpressionStatement",
+          "kind": "SyntheticExpressionStatement",
           "name": "console.log()",
           "line": 31,
           "endLine": null,
