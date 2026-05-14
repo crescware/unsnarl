@@ -165,7 +165,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "label",
               "line": 10,
               "endLine": null,

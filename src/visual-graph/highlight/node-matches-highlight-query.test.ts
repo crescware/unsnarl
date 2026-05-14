@@ -29,7 +29,7 @@ function variable(
 function returnUse(name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.LegacyReturnUse,
+    kind: NODE_KIND.ReturnArgumentReference,
     id: "n",
     name,
     line,

@@ -28,7 +28,7 @@ function variableNode(id: string, name: string, line: number): VisualNode {
 function returnUseNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.LegacyReturnUse,
+    kind: NODE_KIND.ReturnArgumentReference,
     id,
     name,
     line,

@@ -157,7 +157,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "A",
               "line": 11,
               "endLine": 23,
@@ -167,7 +167,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "v",
               "line": 12,
               "endLine": null,
@@ -177,7 +177,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_7",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "B",
               "line": 13,
               "endLine": 22,
@@ -187,7 +187,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_8",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "w",
               "line": 14,
               "endLine": null,
@@ -197,7 +197,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_9",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "C",
               "line": 15,
               "endLine": 21,
@@ -207,7 +207,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_10",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "x",
               "line": 16,
               "endLine": null,
@@ -217,7 +217,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_11",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "D",
               "line": 17,
               "endLine": 20,
@@ -227,7 +227,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_12",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "y",
               "line": 18,
               "endLine": null,
@@ -237,7 +237,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_13",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "E",
               "line": 19,
               "endLine": null,
@@ -247,7 +247,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_14",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "z",
               "line": 19,
               "endLine": null,

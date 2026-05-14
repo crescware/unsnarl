@@ -46,7 +46,7 @@ export function nodeHead(n: VisualNode): string {
       }
       return name;
     case NODE_KIND.FormalParameter:
-    case NODE_KIND.LegacyReturnUse:
+    case NODE_KIND.ReturnArgumentReference:
     case NODE_KIND.SyntheticIfStatementTest:
     case NODE_KIND.SyntheticSwitchStatementDiscriminant:
     case NODE_KIND.SyntheticWhileStatementTest:

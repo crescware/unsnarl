@@ -7,7 +7,7 @@ export const NODE_KIND = {
   LegacyImportBinding: "LegacyImportBinding",
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   WriteReference: "WriteReference",
-  LegacyReturnUse: "LegacyReturnUse",
+  ReturnArgumentReference: "ReturnArgumentReference",
   SyntheticIfStatementTest: "SyntheticIfStatementTest",
   SyntheticSwitchStatementDiscriminant: "SyntheticSwitchStatementDiscriminant",
   SyntheticWhileStatementTest: "SyntheticWhileStatementTest",

@@ -174,7 +174,7 @@ describe("JsonEmitter", () => {
     const returnUseNodes = (returnSubgraph?.elements ?? []).filter(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node &&
-        v.kind === NODE_KIND.LegacyReturnUse,
+        v.kind === NODE_KIND.ReturnArgumentReference,
     );
     expect(returnUseNodes.length > 0).toEqual(true);
   });

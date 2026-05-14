@@ -63,7 +63,7 @@ function returnUseNode(
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.LegacyReturnUse,
+    kind: NODE_KIND.ReturnArgumentReference,
     name,
     line,
     endLine,

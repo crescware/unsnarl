@@ -37,7 +37,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.LegacyImportBinding, expected: false },
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
     { kind: NODE_KIND.WriteReference, expected: false },
-    { kind: NODE_KIND.LegacyReturnUse, expected: false },
+    { kind: NODE_KIND.ReturnArgumentReference, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
     expect(rendersInSyntheticBlock(nodeOfKind(kind))).toEqual(expected);
   });

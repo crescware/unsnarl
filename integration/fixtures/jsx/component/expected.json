@@ -95,7 +95,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "Fragment",
               "line": 8,
               "endLine": 10,
@@ -105,7 +105,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "span",
               "line": 9,
               "endLine": null,
@@ -115,7 +115,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_3",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "props",
               "line": 9,
               "endLine": null,
@@ -147,7 +147,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "Hello",
               "line": 13,
               "endLine": null,

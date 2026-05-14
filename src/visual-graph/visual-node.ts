@@ -30,7 +30,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.FormalParameter })
   | (CommonNodeFields & { kind: typeof NODE_KIND.CatchParameter })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImplicitGlobal })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyReturnUse })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.ReturnArgumentReference })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticIfStatementTest })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.SyntheticSwitchStatementDiscriminant;

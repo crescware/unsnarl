@@ -93,7 +93,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_4",
-                  "kind": "LegacyReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "doubled",
                   "line": 4,
                   "endLine": null,
@@ -115,7 +115,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_5",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "button",
               "line": 6,
               "endLine": null,
@@ -125,7 +125,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "value",
               "line": 6,
               "endLine": null,

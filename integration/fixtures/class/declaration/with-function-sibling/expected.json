@@ -103,7 +103,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_0",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "a",
               "line": 2,
               "endLine": null,
@@ -113,7 +113,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_1",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "b",
               "line": 2,
               "endLine": null,

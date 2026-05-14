@@ -159,7 +159,11 @@ describe("nodeHead", () => {
 
   test("ReturnUse falls through to the default formatting (uses name only)", () => {
     expect(
-      nodeHead({ ...baseNode(), kind: NODE_KIND.LegacyReturnUse, name: "x" }),
+      nodeHead({
+        ...baseNode(),
+        kind: NODE_KIND.ReturnArgumentReference,
+        name: "x",
+      }),
     ).toEqual("x");
   });
 });

@@ -67,7 +67,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_5",
-                  "kind": "LegacyReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "f3",
                   "line": 16,
                   "endLine": null,
@@ -89,7 +89,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_6",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "f2",
               "line": 18,
               "endLine": null,

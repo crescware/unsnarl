@@ -39,7 +39,7 @@
             {
               "type": "node",
               "id": "ret_use_ref_2",
-              "kind": "LegacyReturnUse",
+              "kind": "ReturnArgumentReference",
               "name": "a",
               "line": 4,
               "endLine": null,

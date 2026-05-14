@@ -9,7 +9,7 @@ type SimpleKind =
   | typeof NODE_KIND.FormalParameter
   | typeof NODE_KIND.CatchParameter
   | typeof NODE_KIND.SyntheticImplicitGlobal
-  | typeof NODE_KIND.LegacyReturnUse
+  | typeof NODE_KIND.ReturnArgumentReference
   | typeof NODE_KIND.SyntheticIfStatementTest
   | typeof NODE_KIND.SyntheticSwitchStatementDiscriminant
   | typeof NODE_KIND.SyntheticWhileStatementTest

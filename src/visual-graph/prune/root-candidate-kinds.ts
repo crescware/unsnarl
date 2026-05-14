@@ -14,7 +14,7 @@ export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.CatchParameter,
   NODE_KIND.LegacyImportBinding,
   NODE_KIND.SyntheticImplicitGlobal,
-  NODE_KIND.LegacyReturnUse,
+  NODE_KIND.ReturnArgumentReference,
   NODE_KIND.WriteReference,
   NODE_KIND.SyntheticExpressionStatement,
 ]);

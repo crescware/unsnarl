@@ -511,9 +511,10 @@ describe("buildVisualGraph: read origin edges", () => {
       ].join("\n"),
     );
     // Find the post-switch return-use node for label.
-    const postSwitchReturnUse = findNodes(g, NODE_KIND.LegacyReturnUse).find(
-      (v) => v.line === 13,
-    );
+    const postSwitchReturnUse = findNodes(
+      g,
+      NODE_KIND.ReturnArgumentReference,
+    ).find((v) => v.line === 13);
     expect(
       postSwitchReturnUse !== null && postSwitchReturnUse !== undefined,
     ).toEqual(true);
@@ -539,7 +540,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const uses = ret!.elements.filter(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node &&
-        v.kind === NODE_KIND.LegacyReturnUse,
+        v.kind === NODE_KIND.ReturnArgumentReference,
     );
     expect(uses).toHaveLength(2);
   });
@@ -645,7 +646,7 @@ describe("buildVisualGraph: return subgraphs", () => {
     const retUse = ret?.elements.find(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node &&
-        v.kind === NODE_KIND.LegacyReturnUse,
+        v.kind === NODE_KIND.ReturnArgumentReference,
     );
     expect(
       g.edges.some(
@@ -665,7 +666,7 @@ describe("buildVisualGraph: return subgraphs", () => {
       ");",
     ].join("\n");
     const g = build(code, "tsx");
-    const retUses = findNodes(g, NODE_KIND.LegacyReturnUse);
+    const retUses = findNodes(g, NODE_KIND.ReturnArgumentReference);
     const a = retUses.find((v) => v.name === "A");
     expect(a?.isJsxElement).toEqual(true);
     expect(a?.line).toEqual(3);
@@ -678,7 +679,7 @@ describe("buildVisualGraph: return subgraphs", () => {
       "const App = () => <A>hi</A>;",
     ].join("\n");
     const g = build(code, "tsx");
-    const a = findNodes(g, NODE_KIND.LegacyReturnUse).find(
+    const a = findNodes(g, NODE_KIND.ReturnArgumentReference).find(
       (v) => v.name === "A",
     );
     expect(a?.isJsxElement).toEqual(true);
@@ -692,7 +693,7 @@ describe("buildVisualGraph: return subgraphs", () => {
       ret?.elements.find(
         (v): v is VisualNode =>
           v.type === VISUAL_ELEMENT_TYPE.Node &&
-          v.kind === NODE_KIND.LegacyReturnUse,
+          v.kind === NODE_KIND.ReturnArgumentReference,
       ) ?? null;
     expect(retUse?.isJsxElement).toEqual(false);
     expect(retUse?.endLine).toEqual(null);
@@ -969,7 +970,7 @@ describe("buildVisualGraph: edge deduplication", () => {
     const uses = (ret?.elements ?? []).filter(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node &&
-        v.kind === NODE_KIND.LegacyReturnUse &&
+        v.kind === NODE_KIND.ReturnArgumentReference &&
         v.name === "a",
     );
     expect(uses.length >= 1).toEqual(true);

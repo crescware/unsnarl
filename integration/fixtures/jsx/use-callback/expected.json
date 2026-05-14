@@ -115,7 +115,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_4",
-                      "kind": "LegacyReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "n",
                       "line": 4,
                       "endLine": null,
@@ -137,7 +137,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_3",
-                  "kind": "LegacyReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "arr",
                   "line": 4,
                   "endLine": null,
@@ -199,7 +199,7 @@
                     {
                       "type": "node",
                       "id": "ret_use_ref_7",
-                      "kind": "LegacyReturnUse",
+                      "kind": "ReturnArgumentReference",
                       "name": "n",
                       "line": 5,
                       "endLine": null,
@@ -221,7 +221,7 @@
                 {
                   "type": "node",
                   "id": "ret_use_ref_6",
-                  "kind": "LegacyReturnUse",
+                  "kind": "ReturnArgumentReference",
                   "name": "arr",
                   "line": 5,
                   "endLine": null,

@@ -105,7 +105,7 @@ describe("nodeMatchesQuery", () => {
         {
           type: VISUAL_ELEMENT_TYPE.Node,
           id: "n1",
-          kind: NODE_KIND.LegacyReturnUse,
+          kind: NODE_KIND.ReturnArgumentReference,
           name: "x",
           line: 5,
           endLine: null,

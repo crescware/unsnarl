@@ -7,5 +7,5 @@ import { NODE_KIND } from "../node-kind.js";
 // every JSX usage of `counter`.
 export const NAME_QUERY_EXCLUDED: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.WriteReference,
-  NODE_KIND.LegacyReturnUse,
+  NODE_KIND.ReturnArgumentReference,
 ]);
