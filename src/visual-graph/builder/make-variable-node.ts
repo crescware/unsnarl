@@ -13,7 +13,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
   // ImplicitGlobalVariable has no source-level definition; the analyzer
   // pins its synthetic def to the first reference, so any line we read
   // from it would lie about where the global "lives". Treat it as
-  // location-less (line 0), mirroring SyntheticModuleSink.
+  // location-less (line 0).
   const line =
     def.type === DEFINITION_TYPE.ImplicitGlobalVariable
       ? 0

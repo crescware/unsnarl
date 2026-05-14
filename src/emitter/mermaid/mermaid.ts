@@ -129,10 +129,11 @@ function renderMermaid(
   renderTopLevelNodes(state, graph);
   renderTopLevelSubgraphs(state, graph);
 
-  // Edges originating from a synthetic node (SyntheticModuleSource / SyntheticImportIntermediate)
-  // are import edges and rendered after the synthetic node block. Edges that
-  // merely point INTO a synthetic node (e.g. `n_x -->|read| module_root`) stay
-  // with the body edges to preserve the historical ordering.
+  // Edges originating from an import-side synthetic node (as selected by
+  // `collectImportSources`) are import edges and rendered after the synthetic
+  // node block. Edges that merely point INTO a synthetic node
+  // (e.g. `n_x -->|read| module_root`) stay with the body edges to preserve
+  // the historical ordering.
   const importSources = collectImportSources(nodeMap);
   const { body: bodyEdges, imports: importEdges } = splitEdges(
     graph.edges,
@@ -145,7 +146,7 @@ function renderMermaid(
 
   const stubIds: /* mutable */ string[] = [];
   renderBoundaryEdges(graph, lines, stubIds);
-  // SyntheticBeyondDepth stubs share the boundary-stub class so they pick up the
+  // Depth-limit stubs share the boundary-stub class so they pick up the
   // same dashed-circle treatment as the pruning ones.
   collectBeyondDepthStubIds(nodeMap, stubIds);
 
