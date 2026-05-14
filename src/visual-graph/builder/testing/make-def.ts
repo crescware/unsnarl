@@ -1,12 +1,16 @@
+import { parse } from "valibot";
+
 import { DEFINITION_TYPE } from "../../../analyzer/definition-type.js";
-import type { SerializedDefinition } from "../../../ir/serialized/serialized-definition.js";
+import {
+  serializedDefinition$,
+  type SerializedDefinition,
+} from "../../../ir/serialized/serialized-definition.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 import type { VariableDeclarationKind } from "../../../serializer/variable-declaration-kind.js";
-import { asFilledString } from "../../../util/filled-string.js";
 import { span } from "./span.js";
 
 const COMMON = {
-  name: { name: asFilledString("x"), span: span() },
+  name: { name: "x", span: span() },
   node: { type: AST_TYPE.Identifier, span: span() },
   parent: null,
 } as const;
@@ -14,12 +18,15 @@ const COMMON = {
 export function baseDef(
   declarationKind: VariableDeclarationKind,
 ): Extract<SerializedDefinition, { type: typeof DEFINITION_TYPE.Variable }> {
-  return {
+  return parse(serializedDefinition$, {
     ...COMMON,
     type: DEFINITION_TYPE.Variable,
     init: null,
     declarationKind,
-  };
+  }) as Extract<
+    SerializedDefinition,
+    { type: typeof DEFINITION_TYPE.Variable }
+  >;
 }
 
 type SimpleDefType =
@@ -32,5 +39,8 @@ type SimpleDefType =
 export function baseSimpleDef(
   type: SimpleDefType,
 ): Extract<SerializedDefinition, { type: SimpleDefType }> {
-  return { ...COMMON, type };
+  return parse(serializedDefinition$, { ...COMMON, type }) as Extract<
+    SerializedDefinition,
+    { type: SimpleDefType }
+  >;
 }
