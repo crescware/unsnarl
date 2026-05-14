@@ -78,7 +78,7 @@ describe("nodeLabel", () => {
   test("ModuleSink shortcuts to the literal 'module'", () => {
     expect(
       nodeLabel(
-        { ...baseNode(), kind: NODE_KIND.LegacyModuleSink, name: "ignored" },
+        { ...baseNode(), kind: NODE_KIND.SyntheticModuleSink, name: "ignored" },
         false,
       ),
     ).toEqual("module");
@@ -165,10 +165,14 @@ describe("nodeLabel", () => {
     test("appends NODE_KIND to ModuleSink even when the base label has no line", () => {
       expect(
         nodeLabel(
-          { ...baseNode(), kind: NODE_KIND.LegacyModuleSink, name: "ignored" },
+          {
+            ...baseNode(),
+            kind: NODE_KIND.SyntheticModuleSink,
+            name: "ignored",
+          },
           true,
         ),
-      ).toEqual("module<br/>LegacyModuleSink");
+      ).toEqual("module<br/>SyntheticModuleSink");
     });
 
     test("appends NODE_KIND to ImplicitGlobalVariable", () => {

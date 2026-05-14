@@ -19,7 +19,11 @@ describe("renderSyntheticNodeBlock", () => {
           id: "import_b",
           kind: NODE_KIND.LegacyImportIntermediate,
         },
-        { ...baseNode(), id: "module_root", kind: NODE_KIND.LegacyModuleSink },
+        {
+          ...baseNode(),
+          id: "module_root",
+          kind: NODE_KIND.SyntheticModuleSink,
+        },
       ],
     });
     expect(state.lines.map((v) => v.trim().split(/[[(]/)[0]).sort()).toEqual([

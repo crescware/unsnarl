@@ -23,7 +23,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.LegacyModuleSink,
+        kind: NODE_KIND.SyntheticModuleSink,
         name: "module",
       },
       false,

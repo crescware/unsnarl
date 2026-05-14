@@ -7,7 +7,7 @@ export function nodeSyntax(n: VisualNode, debug: boolean): string {
   switch (n.kind) {
     case NODE_KIND.LegacyWriteOp:
       return `(["${label}"])`;
-    case NODE_KIND.LegacyModuleSink:
+    case NODE_KIND.SyntheticModuleSink:
       return `((${label}))`;
     case NODE_KIND.SyntheticBeyondDepth:
       // Circle shape mirrors the pruning boundary stub; both stand in for

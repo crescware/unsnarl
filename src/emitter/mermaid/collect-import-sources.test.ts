@@ -24,7 +24,7 @@ describe("collectImportSources", () => {
 
   test("excludes other synthetic kinds (e.g. ModuleSink)", () => {
     const map = asMap({
-      ...baseSimpleNode(NODE_KIND.LegacyModuleSink),
+      ...baseSimpleNode(NODE_KIND.SyntheticModuleSink),
       id: "module_root",
     });
     expect(collectImportSources(map).size).toEqual(0);

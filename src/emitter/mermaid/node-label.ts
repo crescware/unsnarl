@@ -31,7 +31,7 @@ function baseLabel(n: VisualNode): string {
     return nodeHead(n);
   }
   const head = nodeHead(n);
-  if (n.kind === NODE_KIND.LegacyModuleSink) {
+  if (n.kind === NODE_KIND.SyntheticModuleSink) {
     return "module";
   }
   if (n.kind === NODE_KIND.LegacyImplicitGlobalVariable) {

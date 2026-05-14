@@ -30,7 +30,11 @@ describe("renderTopLevelNodes", () => {
       elements: [
         { ...baseNode(), id: "mod_a", kind: NODE_KIND.LegacyModuleSource },
         { ...baseNode(), id: "n_b" },
-        { ...baseNode(), id: "module_root", kind: NODE_KIND.LegacyModuleSink },
+        {
+          ...baseNode(),
+          id: "module_root",
+          kind: NODE_KIND.SyntheticModuleSink,
+        },
       ],
     });
     expect(state.lines).toHaveLength(1);

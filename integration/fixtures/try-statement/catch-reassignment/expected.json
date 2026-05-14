@@ -101,7 +101,7 @@
     {
       "type": "node",
       "id": "module_root",
-      "kind": "LegacyModuleSink",
+      "kind": "SyntheticModuleSink",
       "name": "module",
       "line": 0,
       "endLine": null,

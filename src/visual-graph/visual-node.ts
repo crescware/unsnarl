@@ -36,7 +36,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyWhileTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyDoWhileTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyForTest })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyModuleSink })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyImportIntermediate })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyExpressionStatement })
