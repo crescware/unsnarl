@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
-import { isSyntheticNode } from "./is-synthetic-node.js";
+import { rendersInSyntheticBlock } from "./renders-in-synthetic-block.js";
 import {
   baseImportBindingDefault,
   baseNode,
@@ -23,7 +23,7 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
   }
 }
 
-describe("isSyntheticNode", () => {
+describe("rendersInSyntheticBlock", () => {
   test.each<{ kind: VisualNode["kind"]; expected: boolean }>([
     { kind: NODE_KIND.SyntheticModuleSink, expected: true },
     { kind: NODE_KIND.SyntheticModuleSource, expected: true },
@@ -39,6 +39,6 @@ describe("isSyntheticNode", () => {
     { kind: NODE_KIND.LegacyWriteOp, expected: false },
     { kind: NODE_KIND.LegacyReturnUse, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
-    expect(isSyntheticNode(nodeOfKind(kind))).toEqual(expected);
+    expect(rendersInSyntheticBlock(nodeOfKind(kind))).toEqual(expected);
   });
 });
