@@ -52,12 +52,17 @@ export type VisualNode =
       kind: typeof NODE_KIND.LegacyVariable;
       declarationKind: Exclude<
         VariableDeclarationKind,
-        typeof VARIABLE_DECLARATION_KIND.Const
+        | typeof VARIABLE_DECLARATION_KIND.Const
+        | typeof VARIABLE_DECLARATION_KIND.Let
       >;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.ConstBinding;
+      initIsFunction: boolean;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.LetBinding;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {

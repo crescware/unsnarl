@@ -6,6 +6,7 @@ import { rendersInSyntheticBlock } from "./renders-in-synthetic-block.js";
 import {
   baseImportBindingDefault,
   baseLegacyVariableNode,
+  baseLetBindingNode,
   baseNode,
   baseSimpleNode,
   baseWriteOpNode,
@@ -15,6 +16,8 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
   switch (kind) {
     case NODE_KIND.ConstBinding:
       return baseNode();
+    case NODE_KIND.LetBinding:
+      return baseLetBindingNode();
     case NODE_KIND.LegacyVariable:
       return baseLegacyVariableNode();
     case NODE_KIND.WriteReference:
@@ -34,6 +37,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticExpressionStatement, expected: true },
     { kind: NODE_KIND.LegacyVariable, expected: false },
     { kind: NODE_KIND.ConstBinding, expected: false },
+    { kind: NODE_KIND.LetBinding, expected: false },
     { kind: NODE_KIND.FunctionDeclaration, expected: false },
     { kind: NODE_KIND.ClassDeclaration, expected: false },
     { kind: NODE_KIND.FormalParameter, expected: false },

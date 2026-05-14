@@ -16,7 +16,7 @@ import { baseVariable } from "./testing/make-variable.js";
 import { span } from "./testing/span.js";
 
 describe("makeVariableNode", () => {
-  test("plain Variable definition produces a Variable kind node", () => {
+  test("let-declared Variable produces a LetBinding kind node", () => {
     const v = {
       ...baseVariable(),
       id: asVariableId("v1"),
@@ -28,16 +28,15 @@ describe("makeVariableNode", () => {
     expect(node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "n_v1",
-      kind: NODE_KIND.LegacyVariable,
+      kind: NODE_KIND.LetBinding,
       name: asFilledString("x"),
       line: 2,
       isJsxElement: false,
     });
-    if (node.kind !== NODE_KIND.LegacyVariable) {
-      throw new Error("expected Variable kind");
+    if (node.kind !== NODE_KIND.LetBinding) {
+      throw new Error("expected LetBinding kind");
     }
     expect(node.initIsFunction).toEqual(false);
-    expect(node.declarationKind).toEqual("let");
   });
 
   test("falls back to def.name.span.line when identifiers is empty", () => {
@@ -85,27 +84,24 @@ describe("makeVariableNode", () => {
         ],
       });
       const node = makeVariableNode(v);
-      if (node.kind !== NODE_KIND.LegacyVariable) {
-        throw new Error("expected Variable kind");
+      if (node.kind !== NODE_KIND.LetBinding) {
+        throw new Error("expected LetBinding kind");
       }
       expect(node.initIsFunction).toEqual(expected);
     },
   );
 
-  test.each<{ kind: "var" | "let" }>([{ kind: "var" }, { kind: "let" }])(
-    "var/let preserve declarationKind on LegacyVariable: $kind",
-    ({ kind }) => {
-      const v = parse(serializedVariable$, {
-        ...baseVariable(),
-        defs: [baseDef(kind)],
-      });
-      const node = makeVariableNode(v);
-      if (node.kind !== NODE_KIND.LegacyVariable) {
-        throw new Error("expected LegacyVariable kind");
-      }
-      expect(node.declarationKind).toEqual(kind);
-    },
-  );
+  test("var preserves declarationKind on a LegacyVariable node", () => {
+    const v = parse(serializedVariable$, {
+      ...baseVariable(),
+      defs: [baseDef("var")],
+    });
+    const node = makeVariableNode(v);
+    if (node.kind !== NODE_KIND.LegacyVariable) {
+      throw new Error("expected LegacyVariable kind");
+    }
+    expect(node.declarationKind).toEqual("var");
+  });
 
   test("const is emitted as a ConstBinding node (no declarationKind field)", () => {
     const v = parse(serializedVariable$, {
@@ -114,6 +110,15 @@ describe("makeVariableNode", () => {
     });
     const node = makeVariableNode(v);
     expect(node.kind).toEqual(NODE_KIND.ConstBinding);
+  });
+
+  test("let is emitted as a LetBinding node (no declarationKind field)", () => {
+    const v = parse(serializedVariable$, {
+      ...baseVariable(),
+      defs: [baseDef("let")],
+    });
+    const node = makeVariableNode(v);
+    expect(node.kind).toEqual(NODE_KIND.LetBinding);
   });
 
   test("Named ImportBinding propagates importKind and importedName", () => {

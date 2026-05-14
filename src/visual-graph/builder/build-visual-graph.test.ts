@@ -92,13 +92,18 @@ function variableByName(
 ): Extract<
   VisualNode,
   {
-    kind: typeof NODE_KIND.LegacyVariable | typeof NODE_KIND.ConstBinding;
+    kind:
+      | typeof NODE_KIND.LegacyVariable
+      | typeof NODE_KIND.ConstBinding
+      | typeof NODE_KIND.LetBinding;
   }
 > | null {
   for (const v of flattenNodes(graph.elements)) {
     if (
       v.name === name &&
-      (v.kind === NODE_KIND.LegacyVariable || v.kind === NODE_KIND.ConstBinding)
+      (v.kind === NODE_KIND.LegacyVariable ||
+        v.kind === NODE_KIND.ConstBinding ||
+        v.kind === NODE_KIND.LetBinding)
     ) {
       return v;
     }
@@ -187,14 +192,10 @@ describe("buildVisualGraph: variable nodes", () => {
     expect(nodeByName(g, "b")?.unused).toEqual(true);
   });
 
-  test("let preserves declarationKind on a LegacyVariable node", () => {
+  test("let is emitted as a LetBinding node", () => {
     const g = build("let a = 1;\n");
     const a = variableByName(g, "a");
-    expect(a?.kind).toEqual(NODE_KIND.LegacyVariable);
-    if (a?.kind !== NODE_KIND.LegacyVariable) {
-      throw new Error("expected LegacyVariable kind");
-    }
-    expect(a.declarationKind).toEqual("let");
+    expect(a?.kind).toEqual(NODE_KIND.LetBinding);
   });
 
   test("const is emitted as a ConstBinding node", () => {

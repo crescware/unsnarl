@@ -67,6 +67,9 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     if (def.declarationKind === VARIABLE_DECLARATION_KIND.Const) {
       return { ...common, kind: NODE_KIND.ConstBinding, initIsFunction };
     }
+    if (def.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
+      return { ...common, kind: NODE_KIND.LetBinding, initIsFunction };
+    }
     return {
       ...common,
       kind: NODE_KIND.LegacyVariable,

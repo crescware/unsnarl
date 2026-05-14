@@ -1,6 +1,7 @@
 export const NODE_KIND = {
   LegacyVariable: "LegacyVariable",
   ConstBinding: "ConstBinding",
+  LetBinding: "LetBinding",
   FunctionDeclaration: "FunctionDeclaration",
   ClassDeclaration: "ClassDeclaration",
   FormalParameter: "FormalParameter",

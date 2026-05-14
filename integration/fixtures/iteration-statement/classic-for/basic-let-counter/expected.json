@@ -41,8 +41,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "LegacyVariable",
-          "declarationKind": "let",
+          "kind": "LetBinding",
           "initIsFunction": false
         },
         {

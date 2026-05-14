@@ -8,6 +8,7 @@ import {
   baseImportBindingNamed,
   baseImportBindingNamespace,
   baseLegacyVariableNode,
+  baseLetBindingNode,
   baseNode,
   baseSimpleNode,
   baseWriteOpNode,
@@ -113,8 +114,8 @@ describe("nodeHead", () => {
       expected: "f()",
     },
     {
-      name: "let-declared Variable prepends 'let'",
-      node: { ...baseLegacyVariableNode(), name: "x" },
+      name: "LetBinding prepends 'let'",
+      node: { ...baseLetBindingNode(), name: "x" },
       expected: "let x",
     },
     {
@@ -123,16 +124,12 @@ describe("nodeHead", () => {
       expected: "x",
     },
     {
-      name: "var-declared Variable prepends 'var'",
-      node: {
-        ...baseLegacyVariableNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Var,
-      },
+      name: "var-declared LegacyVariable prepends 'var'",
+      node: { ...baseLegacyVariableNode(), name: "x" },
       expected: "var x",
     },
     {
-      name: "initIsFunction wins over the let prefix",
+      name: "initIsFunction wins over the var prefix",
       node: { ...baseLegacyVariableNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },

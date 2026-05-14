@@ -46,9 +46,16 @@ export function baseLegacyVariableNode(): Extract<
   return {
     ...COMMON,
     kind: NODE_KIND.LegacyVariable,
-    declarationKind: VARIABLE_DECLARATION_KIND.Let,
+    declarationKind: VARIABLE_DECLARATION_KIND.Var,
     initIsFunction: false,
   };
+}
+
+export function baseLetBindingNode(): Extract<
+  VisualNode,
+  { kind: typeof NODE_KIND.LetBinding }
+> {
+  return { ...COMMON, kind: NODE_KIND.LetBinding, initIsFunction: false };
 }
 
 export function baseWriteOpNode(): Extract<

@@ -25,14 +25,14 @@ const node = (
     endLine: null,
     unused: false,
   } as const;
-  if (kind === NODE_KIND.ConstBinding) {
+  if (kind === NODE_KIND.ConstBinding || kind === NODE_KIND.LetBinding) {
     return { ...common, kind, initIsFunction: false };
   }
   if (kind === NODE_KIND.LegacyVariable) {
     return {
       ...common,
       kind,
-      declarationKind: VARIABLE_DECLARATION_KIND.Let,
+      declarationKind: VARIABLE_DECLARATION_KIND.Var,
       initIsFunction: false,
     };
   }

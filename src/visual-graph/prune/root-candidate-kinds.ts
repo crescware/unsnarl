@@ -9,6 +9,7 @@ import { NODE_KIND } from "../node-kind.js";
 export const ROOT_CANDIDATE_KINDS: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.LegacyVariable,
   NODE_KIND.ConstBinding,
+  NODE_KIND.LetBinding,
   NODE_KIND.FunctionDeclaration,
   NODE_KIND.ClassDeclaration,
   NODE_KIND.FormalParameter,

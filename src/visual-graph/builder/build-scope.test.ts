@@ -101,7 +101,7 @@ describe("buildScope", () => {
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
       ),
     ).toMatchObject({
-      kind: NODE_KIND.LegacyVariable,
+      kind: NODE_KIND.LetBinding,
       name: asFilledString("x"),
     });
   });

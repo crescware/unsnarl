@@ -35,14 +35,11 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.SyntheticImportIntermediate:
       return `import ${name}`;
     case NODE_KIND.LegacyVariable:
-      if (n.initIsFunction) {
-        return `${name}()`;
-      }
-      return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
-        ? `let ${name}`
-        : `var ${name}`;
+      return n.initIsFunction ? `${name}()` : `var ${name}`;
     case NODE_KIND.ConstBinding:
       return n.initIsFunction ? `${name}()` : name;
+    case NODE_KIND.LetBinding:
+      return n.initIsFunction ? `${name}()` : `let ${name}`;
     case NODE_KIND.FormalParameter:
     case NODE_KIND.ReturnArgumentReference:
     case NODE_KIND.SyntheticIfStatementTest:
