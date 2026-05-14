@@ -6,6 +6,7 @@ import { rendersInSyntheticBlock } from "./renders-in-synthetic-block.js";
 import {
   baseImportBindingDefault,
   baseImportBindingNamed,
+  baseImportBindingNamespace,
   baseLetBindingNode,
   baseNode,
   baseSimpleNode,
@@ -23,11 +24,12 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
       return baseVarBindingNode();
     case NODE_KIND.WriteReference:
       return baseWriteOpNode();
-    case NODE_KIND.LegacyImportBinding:
     case NODE_KIND.DefaultImportBinding:
       return baseImportBindingDefault();
     case NODE_KIND.NamedImportBinding:
       return baseImportBindingNamed("imported");
+    case NODE_KIND.NamespaceImportBinding:
+      return baseImportBindingNamespace();
     default:
       return baseSimpleNode(kind);
   }
@@ -46,9 +48,9 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.ClassDeclaration, expected: false },
     { kind: NODE_KIND.FormalParameter, expected: false },
     { kind: NODE_KIND.CatchParameter, expected: false },
-    { kind: NODE_KIND.LegacyImportBinding, expected: false },
     { kind: NODE_KIND.NamedImportBinding, expected: false },
     { kind: NODE_KIND.DefaultImportBinding, expected: false },
+    { kind: NODE_KIND.NamespaceImportBinding, expected: false },
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
     { kind: NODE_KIND.WriteReference, expected: false },
     { kind: NODE_KIND.ReturnArgumentReference, expected: false },

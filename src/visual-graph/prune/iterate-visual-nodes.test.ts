@@ -35,8 +35,9 @@ const node = (
     return { ...common, kind, declarationKind: null };
   }
   if (
-    kind === NODE_KIND.LegacyImportBinding ||
-    kind === NODE_KIND.NamedImportBinding
+    kind === NODE_KIND.NamedImportBinding ||
+    kind === NODE_KIND.DefaultImportBinding ||
+    kind === NODE_KIND.NamespaceImportBinding
   ) {
     throw new Error(
       "ImportBinding fixture not supported by iterate-visual-nodes test",

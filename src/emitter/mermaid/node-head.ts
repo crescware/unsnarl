@@ -19,7 +19,7 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.NamedImportBinding:
       return n.importedName !== n.name ? name : `import ${name}`;
     case NODE_KIND.DefaultImportBinding:
-    case NODE_KIND.LegacyImportBinding:
+    case NODE_KIND.NamespaceImportBinding:
       return `import ${name}`;
     case NODE_KIND.CatchParameter:
       return `catch ${name}`;

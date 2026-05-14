@@ -1,4 +1,3 @@
-import type { IMPORT_KIND } from "../serializer/import-kind.js";
 import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
 import type { NODE_KIND } from "./node-kind.js";
 import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
@@ -69,6 +68,5 @@ export type VisualNode =
       kind: typeof NODE_KIND.DefaultImportBinding;
     })
   | (CommonNodeFields & {
-      kind: typeof NODE_KIND.LegacyImportBinding;
-      importKind: typeof IMPORT_KIND.Namespace;
+      kind: typeof NODE_KIND.NamespaceImportBinding;
     });

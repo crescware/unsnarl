@@ -45,11 +45,7 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
       return { ...common, kind: NODE_KIND.DefaultImportBinding };
     }
     if (def.importKind === IMPORT_KIND.Namespace) {
-      return {
-        ...common,
-        kind: NODE_KIND.LegacyImportBinding,
-        importKind: IMPORT_KIND.Namespace,
-      };
+      return { ...common, kind: NODE_KIND.NamespaceImportBinding };
     }
     throw new Error(`expected importKind for ImportBinding ${nodeId(v.id)}`);
   }

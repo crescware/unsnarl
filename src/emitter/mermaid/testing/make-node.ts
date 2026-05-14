@@ -1,4 +1,3 @@
-import { IMPORT_KIND } from "../../../serializer/import-kind.js";
 import { NODE_KIND } from "../../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../../visual-graph/visual-node.js";
@@ -84,14 +83,7 @@ export function baseImportBindingDefault(): Extract<
 
 export function baseImportBindingNamespace(): Extract<
   VisualNode,
-  {
-    kind: typeof NODE_KIND.LegacyImportBinding;
-    importKind: typeof IMPORT_KIND.Namespace;
-  }
+  { kind: typeof NODE_KIND.NamespaceImportBinding }
 > {
-  return {
-    ...COMMON,
-    kind: NODE_KIND.LegacyImportBinding,
-    importKind: IMPORT_KIND.Namespace,
-  };
+  return { ...COMMON, kind: NODE_KIND.NamespaceImportBinding };
 }

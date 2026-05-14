@@ -117,15 +117,17 @@ function importBindingByName(
   VisualNode,
   {
     kind:
-      | typeof NODE_KIND.LegacyImportBinding
-      | typeof NODE_KIND.NamedImportBinding;
+      | typeof NODE_KIND.NamedImportBinding
+      | typeof NODE_KIND.DefaultImportBinding
+      | typeof NODE_KIND.NamespaceImportBinding;
   }
 > | null {
   for (const v of flattenNodes(graph.elements)) {
     if (
       v.name === name &&
-      (v.kind === NODE_KIND.LegacyImportBinding ||
-        v.kind === NODE_KIND.NamedImportBinding)
+      (v.kind === NODE_KIND.NamedImportBinding ||
+        v.kind === NODE_KIND.DefaultImportBinding ||
+        v.kind === NODE_KIND.NamespaceImportBinding)
     ) {
       return v;
     }
