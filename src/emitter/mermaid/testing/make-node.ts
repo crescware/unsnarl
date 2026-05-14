@@ -15,6 +15,7 @@ type SimpleKind =
   | typeof NODE_KIND.SyntheticDoWhileStatementTest
   | typeof NODE_KIND.LegacyForTest
   | typeof NODE_KIND.SyntheticForStatementHeader
+  | typeof NODE_KIND.SyntheticForInStatementHeader
   | typeof NODE_KIND.SyntheticModuleSink
   | typeof NODE_KIND.SyntheticModuleSource
   | typeof NODE_KIND.SyntheticImportIntermediate

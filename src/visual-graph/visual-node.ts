@@ -42,6 +42,9 @@ export type VisualNode =
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.SyntheticForStatementHeader;
     })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForInStatementHeader;
+    })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImportIntermediate })
