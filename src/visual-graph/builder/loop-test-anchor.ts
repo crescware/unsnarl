@@ -27,7 +27,7 @@ export function attachLoopTestAnchor(
         ? NODE_KIND.SyntheticForStatementHeader
         : scope.block.type === AST_TYPE.ForInStatement
           ? NODE_KIND.SyntheticForInStatementHeader
-          : NODE_KIND.LegacyForTest;
+          : NODE_KIND.SyntheticForOfStatementHeader;
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: forTestNodeId(scope.upper ?? "", offset),

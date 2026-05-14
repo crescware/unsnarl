@@ -66,7 +66,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.LegacyForTest,
+          kind: NODE_KIND.SyntheticForStatementHeader,
           name: "ignored",
           line: 4,
         },

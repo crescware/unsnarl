@@ -48,7 +48,7 @@
         {
           "type": "node",
           "id": "for_test_scope_0_25",
-          "kind": "LegacyForTest",
+          "kind": "SyntheticForOfStatementHeader",
           "name": "for-test",
           "line": 2,
           "endLine": null,

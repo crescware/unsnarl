@@ -21,9 +21,9 @@ function baseLabel(n: VisualNode): string {
     return `do while ()<br/>L${n.line}`;
   }
   if (
-    n.kind === NODE_KIND.LegacyForTest ||
     n.kind === NODE_KIND.SyntheticForStatementHeader ||
-    n.kind === NODE_KIND.SyntheticForInStatementHeader
+    n.kind === NODE_KIND.SyntheticForInStatementHeader ||
+    n.kind === NODE_KIND.SyntheticForOfStatementHeader
   ) {
     return `for ()<br/>L${n.line}`;
   }

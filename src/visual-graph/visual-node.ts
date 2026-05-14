@@ -38,12 +38,14 @@ export type VisualNode =
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.SyntheticDoWhileStatementTest;
     })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyForTest })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.SyntheticForStatementHeader;
     })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.SyntheticForInStatementHeader;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.SyntheticForOfStatementHeader;
     })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSink })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticModuleSource })

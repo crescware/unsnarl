@@ -61,7 +61,7 @@ describe("attachLoopTestAnchor", () => {
       type: SCOPE_TYPE.For,
       upper: asScopeId("scope_0"),
       block: {
-        type: AST_TYPE.BlockStatement,
+        type: AST_TYPE.ForStatement,
         span: span(34, 3, 0),
         endSpan: span(80, 5, 1),
       },
@@ -78,7 +78,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "for_test_scope_0_34",
-      kind: NODE_KIND.LegacyForTest,
+      kind: NODE_KIND.SyntheticForStatementHeader,
       name: asFilledString("for-test"),
       line: 3,
       endLine: null,
@@ -94,7 +94,7 @@ describe("attachLoopTestAnchor", () => {
       type: SCOPE_TYPE.For,
       upper: asScopeId("scope_0"),
       block: {
-        type: AST_TYPE.BlockStatement,
+        type: AST_TYPE.ForStatement,
         span: span(34, 3, 0),
         endSpan: span(80, 5, 1),
       },
@@ -114,7 +114,7 @@ describe("attachLoopTestAnchor", () => {
       type: SCOPE_TYPE.For,
       upper: null,
       block: {
-        type: AST_TYPE.BlockStatement,
+        type: AST_TYPE.ForStatement,
         span: span(10, 1, 0),
         endSpan: span(50, 3, 1),
       },
