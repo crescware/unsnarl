@@ -19,7 +19,7 @@ type SimpleKind =
   | typeof NODE_KIND.LegacyModuleSource
   | typeof NODE_KIND.LegacyImportIntermediate
   | typeof NODE_KIND.LegacyExpressionStatement
-  | typeof NODE_KIND.LegacyBeyondDepth;
+  | typeof NODE_KIND.SyntheticBeyondDepth;
 
 const COMMON = {
   type: VISUAL_ELEMENT_TYPE.Node,

@@ -24,7 +24,7 @@ function touchesBeyondDepth(
     return false;
   }
   return (
-    nodeMap.get(e.from)?.kind === NODE_KIND.LegacyBeyondDepth ||
-    nodeMap.get(e.to)?.kind === NODE_KIND.LegacyBeyondDepth
+    nodeMap.get(e.from)?.kind === NODE_KIND.SyntheticBeyondDepth ||
+    nodeMap.get(e.to)?.kind === NODE_KIND.SyntheticBeyondDepth
   );
 }

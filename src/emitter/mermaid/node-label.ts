@@ -23,7 +23,7 @@ function baseLabel(n: VisualNode): string {
   if (n.kind === NODE_KIND.LegacyForTest) {
     return `for ()<br/>L${n.line}`;
   }
-  if (n.kind === NODE_KIND.LegacyBeyondDepth) {
+  if (n.kind === NODE_KIND.SyntheticBeyondDepth) {
     // The stub stands in for an arbitrary range of source lines that
     // collapsed past the queried depth; printing a single line number
     // here would be misleading, and printing the full range would

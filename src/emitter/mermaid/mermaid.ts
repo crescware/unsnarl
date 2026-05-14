@@ -190,7 +190,7 @@ function collectBeyondDepthStubIds(
   out: /* mutable */ string[],
 ): void {
   for (const node of nodeMap.values()) {
-    if (node.kind === NODE_KIND.LegacyBeyondDepth) {
+    if (node.kind === NODE_KIND.SyntheticBeyondDepth) {
       out.push(node.id);
     }
   }

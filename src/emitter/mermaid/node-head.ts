@@ -55,7 +55,7 @@ export function nodeHead(n: VisualNode): string {
     case NODE_KIND.LegacyModuleSink:
     case NODE_KIND.LegacyExpressionStatement:
       return name;
-    case NODE_KIND.LegacyBeyondDepth:
+    case NODE_KIND.SyntheticBeyondDepth:
       // ASCII "..." rather than U+2026; some Mermaid renderers stumble on
       // multibyte glyphs inside a node-shape label.
       return "...";

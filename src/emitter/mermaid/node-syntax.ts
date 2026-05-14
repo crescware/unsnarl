@@ -9,7 +9,7 @@ export function nodeSyntax(n: VisualNode, debug: boolean): string {
       return `(["${label}"])`;
     case NODE_KIND.LegacyModuleSink:
       return `((${label}))`;
-    case NODE_KIND.LegacyBeyondDepth:
+    case NODE_KIND.SyntheticBeyondDepth:
       // Circle shape mirrors the pruning boundary stub; both stand in for
       // "more graph keeps going past this rendered boundary".
       return `((${label}))`;

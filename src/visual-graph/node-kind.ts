@@ -17,6 +17,6 @@ export const NODE_KIND = {
   LegacyModuleSource: "LegacyModuleSource",
   LegacyImportIntermediate: "LegacyImportIntermediate",
   LegacyExpressionStatement: "LegacyExpressionStatement",
-  LegacyBeyondDepth: "LegacyBeyondDepth",
+  SyntheticBeyondDepth: "SyntheticBeyondDepth",
 } as const;
 export type NodeKind = (typeof NODE_KIND)[keyof typeof NODE_KIND];

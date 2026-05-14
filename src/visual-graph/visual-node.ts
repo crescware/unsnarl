@@ -40,7 +40,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyModuleSource })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyImportIntermediate })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyExpressionStatement })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyBeyondDepth })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticBeyondDepth })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.LegacyVariable;
       declarationKind: VariableDeclarationKind | null;

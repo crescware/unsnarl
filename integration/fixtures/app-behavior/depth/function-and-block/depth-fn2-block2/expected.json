@@ -129,7 +129,7 @@
                     {
                       "type": "node",
                       "id": "beyond_depth_s_scope_4",
-                      "kind": "LegacyBeyondDepth",
+                      "kind": "SyntheticBeyondDepth",
                       "name": "...",
                       "line": 8,
                       "endLine": 13,
