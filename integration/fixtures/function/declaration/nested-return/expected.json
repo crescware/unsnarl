@@ -70,7 +70,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_38",
-              "kind": "LegacyIfTest",
+              "kind": "SyntheticIfStatementTest",
               "name": "if-test",
               "line": 4,
               "endLine": null,

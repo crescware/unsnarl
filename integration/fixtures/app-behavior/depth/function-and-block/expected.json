@@ -82,7 +82,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_67",
-              "kind": "LegacyIfTest",
+              "kind": "SyntheticIfStatementTest",
               "name": "if-test",
               "line": 6,
               "endLine": null,
@@ -99,7 +99,7 @@
                 {
                   "type": "node",
                   "id": "if_test_scope_2_80",
-                  "kind": "LegacyIfTest",
+                  "kind": "SyntheticIfStatementTest",
                   "name": "if-test",
                   "line": 7,
                   "endLine": null,
@@ -136,7 +136,7 @@
                         {
                           "type": "node",
                           "id": "if_test_scope_4_119",
-                          "kind": "LegacyIfTest",
+                          "kind": "SyntheticIfStatementTest",
                           "name": "if-test",
                           "line": 9,
                           "endLine": null,

@@ -13,7 +13,7 @@ export function nodeSyntax(n: VisualNode, debug: boolean): string {
       // Circle shape mirrors the pruning boundary stub; both stand in for
       // "more graph keeps going past this rendered boundary".
       return `((${label}))`;
-    case NODE_KIND.LegacyIfTest:
+    case NODE_KIND.SyntheticIfStatementTest:
     case NODE_KIND.LegacySwitchDiscriminant:
       return `{"${label}"}`;
     default:

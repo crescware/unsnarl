@@ -8,7 +8,7 @@ export const NODE_KIND = {
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   LegacyWriteOp: "LegacyWriteOp",
   LegacyReturnUse: "LegacyReturnUse",
-  LegacyIfTest: "LegacyIfTest",
+  SyntheticIfStatementTest: "SyntheticIfStatementTest",
   LegacySwitchDiscriminant: "LegacySwitchDiscriminant",
   SyntheticWhileStatementTest: "SyntheticWhileStatementTest",
   SyntheticDoWhileStatementTest: "SyntheticDoWhileStatementTest",

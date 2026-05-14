@@ -10,7 +10,7 @@ type SimpleKind =
   | typeof NODE_KIND.LegacyCatchClause
   | typeof NODE_KIND.SyntheticImplicitGlobal
   | typeof NODE_KIND.LegacyReturnUse
-  | typeof NODE_KIND.LegacyIfTest
+  | typeof NODE_KIND.SyntheticIfStatementTest
   | typeof NODE_KIND.LegacySwitchDiscriminant
   | typeof NODE_KIND.SyntheticWhileStatementTest
   | typeof NODE_KIND.SyntheticDoWhileStatementTest

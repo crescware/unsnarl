@@ -98,7 +98,7 @@
         {
           "type": "node",
           "id": "if_test_scope_0_97",
-          "kind": "LegacyIfTest",
+          "kind": "SyntheticIfStatementTest",
           "name": "if-test",
           "line": 8,
           "endLine": null,
@@ -127,7 +127,7 @@
             {
               "type": "node",
               "id": "if_test_scope_1_124",
-              "kind": "LegacyIfTest",
+              "kind": "SyntheticIfStatementTest",
               "name": "if-test",
               "line": 10,
               "endLine": null,
@@ -156,7 +156,7 @@
                 {
                   "type": "node",
                   "id": "if_test_scope_2_156",
-                  "kind": "LegacyIfTest",
+                  "kind": "SyntheticIfStatementTest",
                   "name": "if-test",
                   "line": 12,
                   "endLine": null,
@@ -185,7 +185,7 @@
                     {
                       "type": "node",
                       "id": "if_test_scope_3_192",
-                      "kind": "LegacyIfTest",
+                      "kind": "SyntheticIfStatementTest",
                       "name": "if-test",
                       "line": 14,
                       "endLine": null,
@@ -214,7 +214,7 @@
                         {
                           "type": "node",
                           "id": "if_test_scope_4_232",
-                          "kind": "LegacyIfTest",
+                          "kind": "SyntheticIfStatementTest",
                           "name": "if-test",
                           "line": 16,
                           "endLine": null,
@@ -243,7 +243,7 @@
                             {
                               "type": "node",
                               "id": "if_test_scope_5_276",
-                              "kind": "LegacyIfTest",
+                              "kind": "SyntheticIfStatementTest",
                               "name": "if-test",
                               "line": 18,
                               "endLine": null,

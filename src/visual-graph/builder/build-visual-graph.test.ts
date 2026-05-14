@@ -308,7 +308,7 @@ describe("buildVisualGraph: control subgraphs", () => {
     expect(findSubgraphs(g, "if-else-container")).toHaveLength(0);
     const ifS = findSubgraphs(g, "if")[0];
     expect(ifS?.line).toEqual(3);
-    const anchor = findNodes(g, NODE_KIND.LegacyIfTest)[0];
+    const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor?.line).toEqual(3);
     const flag = nodeByName(g, "flag");
     expect(flag !== null && flag !== undefined).toEqual(true);
@@ -774,7 +774,7 @@ describe("buildVisualGraph: predicate references", () => {
     );
     const flag = nodeByName(g, "flag");
     const container = findSubgraphs(g, "if-else-container")[0];
-    const anchor = findNodes(g, NODE_KIND.LegacyIfTest)[0];
+    const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     const ifBranch = container?.elements.find(
       (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "if",
@@ -787,7 +787,8 @@ describe("buildVisualGraph: predicate references", () => {
     );
     expect(
       elseBranch?.elements.every(
-        (v) => !(v.type === "node" && v.kind === NODE_KIND.LegacyIfTest),
+        (v) =>
+          !(v.type === "node" && v.kind === NODE_KIND.SyntheticIfStatementTest),
       ),
     ).toEqual(true);
     expect(
@@ -802,7 +803,7 @@ describe("buildVisualGraph: predicate references", () => {
       ["let v = 0;", "const flag = true;", "if (flag) { v = 1; }"].join("\n"),
     );
     const flag = nodeByName(g, "flag");
-    const anchor = findNodes(g, NODE_KIND.LegacyIfTest)[0];
+    const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     expect(
       g.edges.some(
@@ -829,7 +830,7 @@ describe("buildVisualGraph: predicate references", () => {
     );
     const container = findSubgraphs(g, "if-else-container")[0];
     expect(container !== null && container !== undefined).toEqual(true);
-    const anchors = findNodes(g, NODE_KIND.LegacyIfTest);
+    const anchors = findNodes(g, NODE_KIND.SyntheticIfStatementTest);
     expect(anchors).toHaveLength(2);
     const lines = anchors.map((v) => v.line).sort((a, b) => a - b);
     expect(lines).toEqual([3, 5]);
@@ -847,7 +848,8 @@ describe("buildVisualGraph: predicate references", () => {
     );
     expect(
       elseBranch?.elements.every(
-        (v) => !(v.type === "node" && v.kind === NODE_KIND.LegacyIfTest),
+        (v) =>
+          !(v.type === "node" && v.kind === NODE_KIND.SyntheticIfStatementTest),
       ),
     ).toEqual(true);
     const n = nodeByName(g, "n");
@@ -888,7 +890,7 @@ describe("buildVisualGraph: ownerless refs at module scope", () => {
     );
     const math = nodeByName(g, "Math");
     expect(math?.kind).toEqual(NODE_KIND.SyntheticImplicitGlobal);
-    const anchor = findNodes(g, NODE_KIND.LegacyIfTest)[0];
+    const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     expect(
       g.edges.some(

@@ -115,7 +115,7 @@ describe("buildChildren", () => {
     const anchor = (ifSg as VisualSubgraph).elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("LegacyIfTest");
+      expect(anchor.kind).toEqual("SyntheticIfStatementTest");
     }
   });
 
@@ -181,7 +181,7 @@ describe("buildChildren", () => {
     const anchor = ifSg.elements[0];
     expect(anchor?.type).toEqual("node");
     if (anchor?.type === "node") {
-      expect(anchor.kind).toEqual("LegacyIfTest");
+      expect(anchor.kind).toEqual("SyntheticIfStatementTest");
     }
     const elseSg = sg.elements[1];
     if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
@@ -189,7 +189,7 @@ describe("buildChildren", () => {
     }
     expect(
       elseSg.elements.every(
-        (v) => !(v.type === "node" && v.kind === "LegacyIfTest"),
+        (v) => !(v.type === "node" && v.kind === "SyntheticIfStatementTest"),
       ),
     ).toEqual(true);
   });
@@ -291,7 +291,7 @@ describe("buildChildren", () => {
       const anchor = sg.elements[0];
       expect(anchor?.type).toEqual("node");
       if (anchor?.type === "node") {
-        expect(anchor.kind).toEqual("LegacyIfTest");
+        expect(anchor.kind).toEqual("SyntheticIfStatementTest");
       }
     }
   });

@@ -10,7 +10,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.LegacyIfTest,
+          kind: NODE_KIND.SyntheticIfStatementTest,
           name: "ignored",
           line: 3,
         },
@@ -153,13 +153,13 @@ describe("nodeLabel", () => {
         nodeLabel(
           {
             ...baseNode(),
-            kind: NODE_KIND.LegacyIfTest,
+            kind: NODE_KIND.SyntheticIfStatementTest,
             name: "ignored",
             line: 3,
           },
           true,
         ),
-      ).toEqual("if ()<br/>L3<br/>LegacyIfTest");
+      ).toEqual("if ()<br/>L3<br/>SyntheticIfStatementTest");
     });
 
     test("appends NODE_KIND to ModuleSink even when the base label has no line", () => {

@@ -8,7 +8,7 @@ export function nodeLabel(n: VisualNode, debug: boolean): string {
 }
 
 function baseLabel(n: VisualNode): string {
-  if (n.kind === NODE_KIND.LegacyIfTest) {
+  if (n.kind === NODE_KIND.SyntheticIfStatementTest) {
     return `if ()<br/>L${n.line}`;
   }
   if (n.kind === NODE_KIND.LegacySwitchDiscriminant) {

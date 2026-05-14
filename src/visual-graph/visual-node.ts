@@ -31,7 +31,7 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyCatchClause })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticImplicitGlobal })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyReturnUse })
-  | (CommonNodeFields & { kind: typeof NODE_KIND.LegacyIfTest })
+  | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticIfStatementTest })
   | (CommonNodeFields & { kind: typeof NODE_KIND.LegacySwitchDiscriminant })
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticWhileStatementTest })
   | (CommonNodeFields & {

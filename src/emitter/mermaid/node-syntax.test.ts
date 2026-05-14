@@ -35,7 +35,7 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.LegacyIfTest,
+        kind: NODE_KIND.SyntheticIfStatementTest,
         name: "if-test",
         line: 5,
       },
@@ -75,12 +75,12 @@ describe("nodeSyntax", () => {
     const got = nodeSyntax(
       {
         ...baseNode(),
-        kind: NODE_KIND.LegacyIfTest,
+        kind: NODE_KIND.SyntheticIfStatementTest,
         name: "if-test",
         line: 5,
       },
       true,
     );
-    expect(got).toEqual('{"if ()<br/>L5<br/>LegacyIfTest"}');
+    expect(got).toEqual('{"if ()<br/>L5<br/>SyntheticIfStatementTest"}');
   });
 });
