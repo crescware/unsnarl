@@ -12,7 +12,7 @@ describe("renderSyntheticNodeBlock", () => {
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_a", kind: NODE_KIND.LegacyModuleSource },
+        { ...baseNode(), id: "mod_a", kind: NODE_KIND.SyntheticModuleSource },
         { ...baseNode(), id: "n_a", kind: NODE_KIND.LegacyVariable },
         {
           ...baseNode(),
@@ -47,7 +47,11 @@ describe("renderSyntheticNodeBlock", () => {
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_first", kind: NODE_KIND.LegacyModuleSource },
+        {
+          ...baseNode(),
+          id: "mod_first",
+          kind: NODE_KIND.SyntheticModuleSource,
+        },
         {
           ...baseNode(),
           id: "import_second",

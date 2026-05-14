@@ -34,7 +34,7 @@ describe("nodeHead", () => {
       expected: "global global1",
     },
     {
-      kind: NODE_KIND.LegacyModuleSource,
+      kind: NODE_KIND.SyntheticModuleSource,
       name: "./mod",
       expected: "module ./mod",
     },

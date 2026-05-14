@@ -132,7 +132,7 @@ describe("JsonEmitter", () => {
 
     const moduleNode = nodes.find(
       (v) =>
-        v.kind === NODE_KIND.LegacyModuleSource && v.name === "some-default",
+        v.kind === NODE_KIND.SyntheticModuleSource && v.name === "some-default",
     );
     expect(moduleNode !== null && moduleNode !== undefined).toEqual(true);
   });

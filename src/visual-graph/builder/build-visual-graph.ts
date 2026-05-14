@@ -495,7 +495,7 @@ export function buildVisualGraph(
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: mod.id,
-      kind: NODE_KIND.LegacyModuleSource,
+      kind: NODE_KIND.SyntheticModuleSource,
       name: mod.source,
       line: mod.line,
       endLine: null,

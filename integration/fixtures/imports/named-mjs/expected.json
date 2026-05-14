@@ -31,7 +31,7 @@
     {
       "type": "node",
       "id": "mod_m",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "m",
       "line": 1,
       "endLine": null,

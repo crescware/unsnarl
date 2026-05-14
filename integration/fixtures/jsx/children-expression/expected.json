@@ -85,7 +85,7 @@
     {
       "type": "node",
       "id": "mod___sub",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "./sub",
       "line": 1,
       "endLine": null,

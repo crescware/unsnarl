@@ -206,7 +206,7 @@
     {
       "type": "node",
       "id": "mod_react",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "react",
       "line": 1,
       "endLine": null,

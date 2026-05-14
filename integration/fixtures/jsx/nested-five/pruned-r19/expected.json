@@ -163,7 +163,7 @@
     {
       "type": "node",
       "id": "mod_components",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "components",
       "line": 1,
       "endLine": null,

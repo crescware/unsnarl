@@ -26,7 +26,7 @@ function nodeOfKind(kind: VisualNode["kind"]): VisualNode {
 describe("isSyntheticNode", () => {
   test.each<{ kind: VisualNode["kind"]; expected: boolean }>([
     { kind: NODE_KIND.SyntheticModuleSink, expected: true },
-    { kind: NODE_KIND.LegacyModuleSource, expected: true },
+    { kind: NODE_KIND.SyntheticModuleSource, expected: true },
     { kind: NODE_KIND.LegacyImportIntermediate, expected: true },
     { kind: NODE_KIND.LegacyExpressionStatement, expected: true },
     { kind: NODE_KIND.LegacyVariable, expected: false },

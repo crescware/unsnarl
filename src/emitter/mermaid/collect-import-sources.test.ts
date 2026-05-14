@@ -12,7 +12,7 @@ function asMap(...nodes: readonly VisualNode[]): Map<string, VisualNode> {
 describe("collectImportSources", () => {
   test("collects ids of ModuleSource and ImportIntermediate nodes", () => {
     const map = asMap(
-      { ...baseSimpleNode(NODE_KIND.LegacyModuleSource), id: "mod_a" },
+      { ...baseSimpleNode(NODE_KIND.SyntheticModuleSource), id: "mod_a" },
       { ...baseSimpleNode(NODE_KIND.LegacyImportIntermediate), id: "import_b" },
       { ...baseNode(), id: "n_x" },
     );

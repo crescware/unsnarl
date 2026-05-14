@@ -89,7 +89,7 @@
     {
       "type": "node",
       "id": "mod_module",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "module",
       "line": 1,
       "endLine": null,

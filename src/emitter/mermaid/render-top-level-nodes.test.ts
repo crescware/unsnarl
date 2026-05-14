@@ -28,7 +28,7 @@ describe("renderTopLevelNodes", () => {
     renderTopLevelNodes(state, {
       ...baseGraph(),
       elements: [
-        { ...baseNode(), id: "mod_a", kind: NODE_KIND.LegacyModuleSource },
+        { ...baseNode(), id: "mod_a", kind: NODE_KIND.SyntheticModuleSource },
         { ...baseNode(), id: "n_b" },
         {
           ...baseNode(),

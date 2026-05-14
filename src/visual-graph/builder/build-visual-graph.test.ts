@@ -702,7 +702,7 @@ describe("buildVisualGraph: return subgraphs", () => {
 describe("buildVisualGraph: imports", () => {
   test("default imports get a single ModuleSource and one read edge into the local binding", () => {
     const g = build("import def from 'lib';\nvoid def;\n");
-    const moduleSource = findNodes(g, NODE_KIND.LegacyModuleSource)[0];
+    const moduleSource = findNodes(g, NODE_KIND.SyntheticModuleSource)[0];
     expect(moduleSource?.name).toEqual("lib");
     const def = nodeByName(g, "def");
     expect(
@@ -718,7 +718,7 @@ describe("buildVisualGraph: imports", () => {
     expect(intermediates).toHaveLength(1);
     expect(intermediates[0]?.name).toEqual("other");
     // ModuleSource -> Intermediate -> local binding
-    const moduleSource = findNodes(g, NODE_KIND.LegacyModuleSource)[0];
+    const moduleSource = findNodes(g, NODE_KIND.SyntheticModuleSource)[0];
     const renamed = nodeByName(g, "renamed");
     expect(
       g.edges.some(
@@ -735,7 +735,7 @@ describe("buildVisualGraph: imports", () => {
   test("namespace imports point directly from the module to the local binding (no intermediate)", () => {
     const g = build("import * as ns from 'lib';\nvoid ns;\n");
     expect(findNodes(g, NODE_KIND.LegacyImportIntermediate)).toHaveLength(0);
-    const moduleSource = findNodes(g, NODE_KIND.LegacyModuleSource)[0];
+    const moduleSource = findNodes(g, NODE_KIND.SyntheticModuleSource)[0];
     const ns = nodeByName(g, "ns");
     expect(
       g.edges.some((v) => v.from === moduleSource?.id && v.to === ns?.id),

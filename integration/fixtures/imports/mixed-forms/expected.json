@@ -103,7 +103,7 @@
     {
       "type": "node",
       "id": "mod_some_default",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "some-default",
       "line": 1,
       "endLine": null,
@@ -113,7 +113,7 @@
     {
       "type": "node",
       "id": "mod_some_named",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "some-named",
       "line": 2,
       "endLine": null,
@@ -123,7 +123,7 @@
     {
       "type": "node",
       "id": "mod_some_namespace",
-      "kind": "LegacyModuleSource",
+      "kind": "SyntheticModuleSource",
       "name": "some-namespace",
       "line": 3,
       "endLine": null,

@@ -30,7 +30,7 @@ export function nodeHead(n: VisualNode): string {
       return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
         ? `let ${name}`
         : name;
-    case NODE_KIND.LegacyModuleSource:
+    case NODE_KIND.SyntheticModuleSource:
       return `module ${name}`;
     case NODE_KIND.LegacyImportIntermediate:
       return `import ${name}`;
