@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../../visual-graph/visual-element-type.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
@@ -8,18 +7,17 @@ import { formatLabel } from "./format-label.js";
 
 const node = (
   overrides: Partial<
-    Extract<VisualNode, { kind: typeof NODE_KIND.LegacyVariable }>
+    Extract<VisualNode, { kind: typeof NODE_KIND.ConstBinding }>
   > = {},
 ): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: "n1",
-  kind: NODE_KIND.LegacyVariable,
+  kind: NODE_KIND.ConstBinding,
   name: "x",
   line: 5,
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: VARIABLE_DECLARATION_KIND.Const,
   initIsFunction: false,
   ...overrides,
 });

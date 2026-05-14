@@ -2,7 +2,6 @@ import { describe, expect, test } from "vitest";
 
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -14,13 +13,12 @@ import { resolveAmbiguousQueries } from "./resolve-ambiguous-queries.js";
 const variableNode = (name: string, line = 1): VisualNode => ({
   type: VISUAL_ELEMENT_TYPE.Node,
   id: `n-${name}-${String(line)}`,
-  kind: NODE_KIND.LegacyVariable,
+  kind: NODE_KIND.ConstBinding,
   name,
   line,
   endLine: null,
   isJsxElement: false,
   unused: false,
-  declarationKind: VARIABLE_DECLARATION_KIND.Const,
   initIsFunction: false,
 });
 

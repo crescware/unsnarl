@@ -217,9 +217,9 @@ describe("runCli (integration)", () => {
     ]);
     expect(noDebug.exitCode).toEqual(0);
     expect(debug.exitCode).toEqual(0);
-    expect(noDebug.stdout).not.toContain("<br/>LegacyVariable");
-    expect(debug.stdout).toContain('"a<br/>L1<br/>LegacyVariable"');
-    expect(debug.stdout).toContain('"b<br/>L2<br/>LegacyVariable"');
+    expect(noDebug.stdout).not.toContain("<br/>ConstBinding");
+    expect(debug.stdout).toContain('"a<br/>L1<br/>ConstBinding"');
+    expect(debug.stdout).toContain('"b<br/>L2<br/>ConstBinding"');
   });
 
   test("missing input returns exit 2 with usage", async () => {

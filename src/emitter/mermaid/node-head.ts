@@ -38,13 +38,11 @@ export function nodeHead(n: VisualNode): string {
       if (n.initIsFunction) {
         return `${name}()`;
       }
-      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Let) {
-        return `let ${name}`;
-      }
-      if (n.declarationKind === VARIABLE_DECLARATION_KIND.Var) {
-        return `var ${name}`;
-      }
-      return name;
+      return n.declarationKind === VARIABLE_DECLARATION_KIND.Let
+        ? `let ${name}`
+        : `var ${name}`;
+    case NODE_KIND.ConstBinding:
+      return n.initIsFunction ? `${name}()` : name;
     case NODE_KIND.FormalParameter:
     case NODE_KIND.ReturnArgumentReference:
     case NODE_KIND.SyntheticIfStatementTest:

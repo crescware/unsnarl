@@ -2,6 +2,7 @@ import { DEFINITION_TYPE } from "../../analyzer/definition-type.js";
 import type { SerializedVariable } from "../../ir/serialized/serialized-variable.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { IMPORT_KIND } from "../../serializer/import-kind.js";
+import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualNode } from "../visual-node.js";
@@ -63,6 +64,9 @@ export function makeVariableNode(v: SerializedVariable): VisualNode {
     const initIsFunction =
       initType === AST_TYPE.ArrowFunctionExpression ||
       initType === AST_TYPE.FunctionExpression;
+    if (def.declarationKind === VARIABLE_DECLARATION_KIND.Const) {
+      return { ...common, kind: NODE_KIND.ConstBinding, initIsFunction };
+    }
     return {
       ...common,
       kind: NODE_KIND.LegacyVariable,

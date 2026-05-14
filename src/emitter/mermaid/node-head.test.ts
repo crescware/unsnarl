@@ -7,6 +7,7 @@ import {
   baseImportBindingDefault,
   baseImportBindingNamed,
   baseImportBindingNamespace,
+  baseLegacyVariableNode,
   baseNode,
   baseSimpleNode,
   baseWriteOpNode,
@@ -107,50 +108,32 @@ describe("nodeHead", () => {
 
   test.each([
     {
-      name: "Variable initialized with a function uses '<name>()' format",
+      name: "ConstBinding initialized with a function uses '<name>()' format",
       node: { ...baseNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
     {
       name: "let-declared Variable prepends 'let'",
-      node: {
-        ...baseNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      },
+      node: { ...baseLegacyVariableNode(), name: "x" },
       expected: "let x",
     },
     {
-      name: "const-declared Variable has no prefix",
-      node: {
-        ...baseNode(),
-        name: "x",
-        declarationKind: VARIABLE_DECLARATION_KIND.Const,
-      },
+      name: "ConstBinding has no prefix",
+      node: { ...baseNode(), name: "x" },
       expected: "x",
     },
     {
       name: "var-declared Variable prepends 'var'",
       node: {
-        ...baseNode(),
+        ...baseLegacyVariableNode(),
         name: "x",
         declarationKind: VARIABLE_DECLARATION_KIND.Var,
       },
       expected: "var x",
     },
     {
-      name: "Variable without declarationKind has no prefix",
-      node: { ...baseNode(), name: "x" },
-      expected: "x",
-    },
-    {
-      name: "initIsFunction wins over declarationKind",
-      node: {
-        ...baseNode(),
-        name: "f",
-        initIsFunction: true,
-        declarationKind: VARIABLE_DECLARATION_KIND.Let,
-      },
+      name: "initIsFunction wins over the let prefix",
+      node: { ...baseLegacyVariableNode(), name: "f", initIsFunction: true },
       expected: "f()",
     },
   ])("$name", ({ node, expected }) => {

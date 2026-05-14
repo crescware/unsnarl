@@ -13,7 +13,7 @@ describe("renderSyntheticNodeBlock", () => {
       ...baseGraph(),
       elements: [
         { ...baseNode(), id: "mod_a", kind: NODE_KIND.SyntheticModuleSource },
-        { ...baseNode(), id: "n_a", kind: NODE_KIND.LegacyVariable },
+        { ...baseNode(), id: "n_a" },
         {
           ...baseNode(),
           id: "import_b",
@@ -37,7 +37,7 @@ describe("renderSyntheticNodeBlock", () => {
     const state = baseRenderState();
     renderSyntheticNodeBlock(state, {
       ...baseGraph(),
-      elements: [{ ...baseNode(), id: "n_x", kind: NODE_KIND.LegacyVariable }],
+      elements: [{ ...baseNode(), id: "n_x" }],
     });
     expect(state.lines).toEqual([]);
   });

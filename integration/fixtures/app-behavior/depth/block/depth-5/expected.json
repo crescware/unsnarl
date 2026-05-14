@@ -31,8 +31,7 @@
           "endLine": null,
           "isJsxElement": false,
           "unused": false,
-          "kind": "LegacyVariable",
-          "declarationKind": "const",
+          "kind": "ConstBinding",
           "initIsFunction": false
         },
         {
@@ -50,8 +49,7 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false,
-              "kind": "LegacyVariable",
-              "declarationKind": "const",
+              "kind": "ConstBinding",
               "initIsFunction": false
             },
             {
@@ -69,8 +67,7 @@
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false,
-                  "kind": "LegacyVariable",
-                  "declarationKind": "const",
+                  "kind": "ConstBinding",
                   "initIsFunction": false
                 },
                 {
@@ -88,8 +85,7 @@
                       "endLine": null,
                       "isJsxElement": false,
                       "unused": false,
-                      "kind": "LegacyVariable",
-                      "declarationKind": "const",
+                      "kind": "ConstBinding",
                       "initIsFunction": false
                     },
                     {
@@ -107,8 +103,7 @@
                           "endLine": null,
                           "isJsxElement": false,
                           "unused": false,
-                          "kind": "LegacyVariable",
-                          "declarationKind": "const",
+                          "kind": "ConstBinding",
                           "initIsFunction": false
                         },
                         {

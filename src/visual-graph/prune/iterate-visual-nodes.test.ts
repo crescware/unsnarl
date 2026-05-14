@@ -14,7 +14,7 @@ import { iterateVisualNodes } from "./iterate-visual-nodes.js";
 
 const node = (
   id: string,
-  kind: NodeKind = NODE_KIND.LegacyVariable,
+  kind: NodeKind = NODE_KIND.ConstBinding,
 ): VisualNode => {
   const common = {
     type: VISUAL_ELEMENT_TYPE.Node,
@@ -25,11 +25,14 @@ const node = (
     endLine: null,
     unused: false,
   } as const;
+  if (kind === NODE_KIND.ConstBinding) {
+    return { ...common, kind, initIsFunction: false };
+  }
   if (kind === NODE_KIND.LegacyVariable) {
     return {
       ...common,
       kind,
-      declarationKind: VARIABLE_DECLARATION_KIND.Const,
+      declarationKind: VARIABLE_DECLARATION_KIND.Let,
       initIsFunction: false,
     };
   }

@@ -34,12 +34,19 @@ const COMMON = {
 
 export function baseNode(): Extract<
   VisualNode,
+  { kind: typeof NODE_KIND.ConstBinding }
+> {
+  return { ...COMMON, kind: NODE_KIND.ConstBinding, initIsFunction: false };
+}
+
+export function baseLegacyVariableNode(): Extract<
+  VisualNode,
   { kind: typeof NODE_KIND.LegacyVariable }
 > {
   return {
     ...COMMON,
     kind: NODE_KIND.LegacyVariable,
-    declarationKind: VARIABLE_DECLARATION_KIND.Const,
+    declarationKind: VARIABLE_DECLARATION_KIND.Let,
     initIsFunction: false,
   };
 }

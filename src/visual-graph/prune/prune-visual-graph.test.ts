@@ -4,7 +4,6 @@ import { LANGUAGE } from "../../language.js";
 import type { ParsedRootQuery } from "../../root-query/parsed-root-query.js";
 import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import type { SubgraphKind } from "../subgraph-kind.js";
@@ -23,19 +22,18 @@ function node(
   name: string,
   line: number,
   extra: Partial<
-    Extract<VisualNode, { kind: typeof NODE_KIND.LegacyVariable }>
+    Extract<VisualNode, { kind: typeof NODE_KIND.ConstBinding }>
   > = {},
 ): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.LegacyVariable,
+    kind: NODE_KIND.ConstBinding,
     name,
     line,
     endLine: null,
     isJsxElement: false,
     unused: false,
-    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
     ...extra,
   };

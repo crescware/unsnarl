@@ -2,7 +2,6 @@ import { describe, expect, test } from "vitest";
 
 import { LANGUAGE } from "../../language.js";
 import { ROOT_QUERY_KIND } from "../../root-query/root-query-kind.js";
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
@@ -13,14 +12,13 @@ import { collectHighlightIds } from "./collect-highlight-ids.js";
 function variableNode(id: string, name: string, line: number): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
-    kind: NODE_KIND.LegacyVariable,
+    kind: NODE_KIND.ConstBinding,
     id,
     name,
     line,
     endLine: null,
     isJsxElement: false,
     unused: false,
-    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
   };
 }

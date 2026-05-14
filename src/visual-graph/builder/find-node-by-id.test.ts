@@ -1,6 +1,5 @@
 import { describe, expect, test } from "vitest";
 
-import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
 import { SUBGRAPH_KIND } from "../subgraph-kind.js";
@@ -13,13 +12,12 @@ function leafNode(id: string, name = id): VisualNode {
   return {
     type: VISUAL_ELEMENT_TYPE.Node,
     id,
-    kind: NODE_KIND.LegacyVariable,
+    kind: NODE_KIND.ConstBinding,
     name,
     line: 1,
     endLine: null,
     isJsxElement: false,
     unused: false,
-    declarationKind: VARIABLE_DECLARATION_KIND.Const,
     initIsFunction: false,
   };
 }

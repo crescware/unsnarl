@@ -2,19 +2,11 @@ import { describe, expect, test } from "vitest";
 
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { nodeSyntax } from "./node-syntax.js";
-import { baseNode } from "./testing/make-node.js";
+import { baseNode, baseWriteOpNode } from "./testing/make-node.js";
 
 describe("nodeSyntax", () => {
   test('WriteOp uses stadium brackets (["..."])', () => {
-    const got = nodeSyntax(
-      {
-        ...baseNode(),
-        kind: NODE_KIND.WriteReference,
-        name: "x",
-        line: 3,
-      },
-      false,
-    );
+    const got = nodeSyntax({ ...baseWriteOpNode(), name: "x", line: 3 }, false);
     expect(got.startsWith('(["')).toEqual(true);
     expect(got.endsWith('"])')).toEqual(true);
   });
@@ -58,15 +50,7 @@ describe("nodeSyntax", () => {
   });
 
   test('default kind uses square brackets ["..."]', () => {
-    const got = nodeSyntax(
-      {
-        ...baseNode(),
-        kind: NODE_KIND.LegacyVariable,
-        name: "x",
-        line: 4,
-      },
-      false,
-    );
+    const got = nodeSyntax({ ...baseNode(), name: "x", line: 4 }, false);
     expect(got.startsWith('["')).toEqual(true);
     expect(got.endsWith('"]')).toEqual(true);
   });

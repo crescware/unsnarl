@@ -92,20 +92,28 @@ describe("makeVariableNode", () => {
     },
   );
 
-  test.each<{ kind: "var" | "let" | "const" }>([
-    { kind: "var" },
-    { kind: "let" },
-    { kind: "const" },
-  ])("preserves declarationKind=$kind", ({ kind }) => {
+  test.each<{ kind: "var" | "let" }>([{ kind: "var" }, { kind: "let" }])(
+    "var/let preserve declarationKind on LegacyVariable: $kind",
+    ({ kind }) => {
+      const v = parse(serializedVariable$, {
+        ...baseVariable(),
+        defs: [baseDef(kind)],
+      });
+      const node = makeVariableNode(v);
+      if (node.kind !== NODE_KIND.LegacyVariable) {
+        throw new Error("expected LegacyVariable kind");
+      }
+      expect(node.declarationKind).toEqual(kind);
+    },
+  );
+
+  test("const is emitted as a ConstBinding node (no declarationKind field)", () => {
     const v = parse(serializedVariable$, {
       ...baseVariable(),
-      defs: [baseDef(kind)],
+      defs: [baseDef("const")],
     });
     const node = makeVariableNode(v);
-    if (node.kind !== NODE_KIND.LegacyVariable) {
-      throw new Error("expected Variable kind");
-    }
-    expect(node.declarationKind).toEqual(kind);
+    expect(node.kind).toEqual(NODE_KIND.ConstBinding);
   });
 
   test("Named ImportBinding propagates importKind and importedName", () => {

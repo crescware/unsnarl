@@ -89,11 +89,21 @@ function nodeByName(graph: VisualGraph, name: string): VisualNode | null {
 function variableByName(
   graph: VisualGraph,
   name: string,
-): Extract<VisualNode, { kind: typeof NODE_KIND.LegacyVariable }> | null {
-  return (
-    findNodes(graph, NODE_KIND.LegacyVariable).find((v) => v.name === name) ??
-    null
-  );
+): Extract<
+  VisualNode,
+  {
+    kind: typeof NODE_KIND.LegacyVariable | typeof NODE_KIND.ConstBinding;
+  }
+> | null {
+  for (const v of flattenNodes(graph.elements)) {
+    if (
+      v.name === name &&
+      (v.kind === NODE_KIND.LegacyVariable || v.kind === NODE_KIND.ConstBinding)
+    ) {
+      return v;
+    }
+  }
+  return null;
 }
 
 function importBindingByName(
@@ -136,9 +146,9 @@ describe("buildVisualGraph: top-level structure", () => {
     expect(g.edges).toEqual([]);
   });
 
-  test("a single const declaration emits exactly one Variable node and no edges", () => {
+  test("a single const declaration emits exactly one ConstBinding node and no edges", () => {
     const g = build("const a = 1;\n");
-    const nodes = findNodes(g, NODE_KIND.LegacyVariable);
+    const nodes = findNodes(g, NODE_KIND.ConstBinding);
     expect(nodes).toHaveLength(1);
     expect(nodes[0]?.name).toEqual("a");
     expect(g.edges).toEqual([]);
@@ -177,10 +187,20 @@ describe("buildVisualGraph: variable nodes", () => {
     expect(nodeByName(g, "b")?.unused).toEqual(true);
   });
 
-  test("declarationKind is preserved on Variable nodes for let / const", () => {
-    const g = build("let a = 1;\nconst b = 2;\n");
-    expect(variableByName(g, "a")?.declarationKind).toEqual("let");
-    expect(variableByName(g, "b")?.declarationKind).toEqual("const");
+  test("let preserves declarationKind on a LegacyVariable node", () => {
+    const g = build("let a = 1;\n");
+    const a = variableByName(g, "a");
+    expect(a?.kind).toEqual(NODE_KIND.LegacyVariable);
+    if (a?.kind !== NODE_KIND.LegacyVariable) {
+      throw new Error("expected LegacyVariable kind");
+    }
+    expect(a.declarationKind).toEqual("let");
+  });
+
+  test("const is emitted as a ConstBinding node", () => {
+    const g = build("const b = 2;\n");
+    const b = variableByName(g, "b");
+    expect(b?.kind).toEqual(NODE_KIND.ConstBinding);
   });
 
   test("a const initialised by a function expression is marked initIsFunction", () => {

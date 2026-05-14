@@ -1,5 +1,8 @@
 import type { IMPORT_KIND } from "../serializer/import-kind.js";
-import type { VariableDeclarationKind } from "../serializer/variable-declaration-kind.js";
+import type {
+  VARIABLE_DECLARATION_KIND,
+  VariableDeclarationKind,
+} from "../serializer/variable-declaration-kind.js";
 import type { NODE_KIND } from "./node-kind.js";
 import type { VISUAL_ELEMENT_TYPE } from "./visual-element-type.js";
 
@@ -47,7 +50,14 @@ export type VisualNode =
   | (CommonNodeFields & { kind: typeof NODE_KIND.SyntheticBeyondDepth })
   | (CommonNodeFields & {
       kind: typeof NODE_KIND.LegacyVariable;
-      declarationKind: VariableDeclarationKind;
+      declarationKind: Exclude<
+        VariableDeclarationKind,
+        typeof VARIABLE_DECLARATION_KIND.Const
+      >;
+      initIsFunction: boolean;
+    })
+  | (CommonNodeFields & {
+      kind: typeof NODE_KIND.ConstBinding;
       initIsFunction: boolean;
     })
   | (CommonNodeFields & {

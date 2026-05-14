@@ -106,8 +106,7 @@ describe("JsonEmitter", () => {
     const graph = JSON.parse(emit("const a = 1;\nconst b = a;\n"));
     const nodes = flattenNodes(graph.elements);
     const a = nodes.find((v) => v.name === "a");
-    expect(a?.kind).toEqual(NODE_KIND.LegacyVariable);
-    expect(a?.declarationKind).toEqual("const");
+    expect(a?.kind).toEqual(NODE_KIND.ConstBinding);
     expect(a?.label).toEqual(undefined);
   });
 

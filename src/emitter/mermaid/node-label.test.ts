@@ -144,7 +144,7 @@ describe("nodeLabel", () => {
   describe("debug=true", () => {
     test("appends NODE_KIND to the standard label", () => {
       expect(nodeLabel({ ...baseNode(), name: "x", line: 7 }, true)).toEqual(
-        "x<br/>L7<br/>LegacyVariable",
+        "x<br/>L7<br/>ConstBinding",
       );
     });
 
