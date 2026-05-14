@@ -38,7 +38,7 @@ describe("nodeLabel", () => {
       nodeLabel(
         {
           ...baseNode(),
-          kind: NODE_KIND.LegacyWhileTest,
+          kind: NODE_KIND.SyntheticWhileStatementTest,
           name: "ignored",
           line: 5,
         },

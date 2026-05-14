@@ -156,7 +156,7 @@ describe("attachLoopTestAnchor", () => {
     expect(pending?.node).toMatchObject({
       type: VISUAL_ELEMENT_TYPE.Node,
       id: "while_test_scope_0_27",
-      kind: NODE_KIND.LegacyWhileTest,
+      kind: NODE_KIND.SyntheticWhileStatementTest,
       name: asFilledString("while-test"),
       line: 3,
     });

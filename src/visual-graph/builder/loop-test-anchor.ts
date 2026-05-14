@@ -55,7 +55,7 @@ export function attachLoopTestAnchor(
     const node = {
       type: VISUAL_ELEMENT_TYPE.Node,
       id: whileTestNodeId(scope.upper ?? "", offset),
-      kind: NODE_KIND.LegacyWhileTest,
+      kind: NODE_KIND.SyntheticWhileStatementTest,
       name: "while-test",
       line: scope.block.span.line,
       endLine: null,

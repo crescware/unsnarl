@@ -88,7 +88,7 @@
         {
           "type": "node",
           "id": "while_test_scope_0_73",
-          "kind": "LegacyWhileTest",
+          "kind": "SyntheticWhileStatementTest",
           "name": "while-test",
           "line": 8,
           "endLine": null,
@@ -116,7 +116,7 @@
             {
               "type": "node",
               "id": "while_test_scope_1_100",
-              "kind": "LegacyWhileTest",
+              "kind": "SyntheticWhileStatementTest",
               "name": "while-test",
               "line": 10,
               "endLine": null,
@@ -144,7 +144,7 @@
                 {
                   "type": "node",
                   "id": "while_test_scope_2_131",
-                  "kind": "LegacyWhileTest",
+                  "kind": "SyntheticWhileStatementTest",
                   "name": "while-test",
                   "line": 12,
                   "endLine": null,
@@ -172,7 +172,7 @@
                     {
                       "type": "node",
                       "id": "while_test_scope_3_166",
-                      "kind": "LegacyWhileTest",
+                      "kind": "SyntheticWhileStatementTest",
                       "name": "while-test",
                       "line": 14,
                       "endLine": null,
@@ -200,7 +200,7 @@
                         {
                           "type": "node",
                           "id": "while_test_scope_4_205",
-                          "kind": "LegacyWhileTest",
+                          "kind": "SyntheticWhileStatementTest",
                           "name": "while-test",
                           "line": 16,
                           "endLine": null,
