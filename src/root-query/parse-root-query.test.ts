@@ -21,6 +21,21 @@ describe("parseRootQuery", () => {
     });
   });
 
+  test("parses line:name with a name starting with $ or _", () => {
+    expect(parseRootQuery("10:$counter")).toEqual({
+      kind: ROOT_QUERY_KIND.LineName,
+      line: 10,
+      name: "$counter",
+      raw: "10:$counter",
+    });
+    expect(parseRootQuery("10:_counter")).toEqual({
+      kind: ROOT_QUERY_KIND.LineName,
+      line: 10,
+      name: "_counter",
+      raw: "10:_counter",
+    });
+  });
+
   test("parses a range n-m", () => {
     expect(parseRootQuery("9-13")).toEqual({
       kind: ROOT_QUERY_KIND.Range,
@@ -37,6 +52,23 @@ describe("parseRootQuery", () => {
       end: 13,
       name: "value",
       raw: "9-13:value",
+    });
+  });
+
+  test("parses range:name with a name starting with $ or _", () => {
+    expect(parseRootQuery("9-13:$value")).toEqual({
+      kind: ROOT_QUERY_KIND.RangeName,
+      start: 9,
+      end: 13,
+      name: "$value",
+      raw: "9-13:$value",
+    });
+    expect(parseRootQuery("9-13:_value")).toEqual({
+      kind: ROOT_QUERY_KIND.RangeName,
+      start: 9,
+      end: 13,
+      name: "_value",
+      raw: "9-13:_value",
     });
   });
 
@@ -59,6 +91,40 @@ describe("parseRootQuery", () => {
     });
   });
 
+  test("accepts identifiers with digits in the middle and end", () => {
+    expect(parseRootQuery("foo1")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "foo1",
+      raw: "foo1",
+    });
+    expect(parseRootQuery("bar2baz")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "bar2baz",
+      raw: "bar2baz",
+    });
+  });
+
+  test("accepts a single $ or _ as an identifier", () => {
+    expect(parseRootQuery("$")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "$",
+      raw: "$",
+    });
+    expect(parseRootQuery("_")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "_",
+      raw: "_",
+    });
+  });
+
+  test("accepts identifiers containing $ in the middle", () => {
+    expect(parseRootQuery("foo$bar")).toEqual({
+      kind: ROOT_QUERY_KIND.Name,
+      name: "foo$bar",
+      raw: "foo$bar",
+    });
+  });
+
   test("treats n-n as a single-line range", () => {
     expect(parseRootQuery("5-5")).toMatchObject({
       kind: ROOT_QUERY_KIND.Range,
@@ -73,12 +139,14 @@ describe("parseRootQuery", () => {
 
   test("rejects identifier starting with a digit", () => {
     const r = parseRootQuery("10:1foo");
-    expect(r).toMatchObject({ error: expect.stringContaining("invalid") });
+    expect(r).toMatchObject({
+      error: expect.stringContaining("unrecognized token"),
+    });
   });
 
   test("rejects empty identifier after colon", () => {
     expect(parseRootQuery("10:")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected empty identifier after ':'"),
     });
   });
 
@@ -90,13 +158,13 @@ describe("parseRootQuery", () => {
 
   test("rejects malformed ranges", () => {
     expect(parseRootQuery("1-")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected empty range end"),
     });
     expect(parseRootQuery("-5")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
     expect(parseRootQuery("1-2-3")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
   });
 
@@ -111,10 +179,10 @@ describe("parseRootQuery", () => {
 
   test("rejects identifiers with disallowed characters", () => {
     expect(parseRootQuery("foo-bar")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
     expect(parseRootQuery("foo.bar")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
   });
 
@@ -164,6 +232,9 @@ describe("parseRootQuery", () => {
     expect(parseRootQuery("L5-1")).toMatchObject({
       error: expect.stringContaining("range start must be <= end"),
     });
+    expect(parseRootQuery("l5-1")).toMatchObject({
+      error: expect.stringContaining("range start must be <= end"),
+    });
   });
 
   test("treats LL12 as a plain identifier (Name)", () => {
@@ -178,13 +249,13 @@ describe("parseRootQuery", () => {
 
   test("rejects 1L2 (digit-leading, not an identifier)", () => {
     expect(parseRootQuery("1L2")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
   });
 
   test("does not extend tolerance to L<n>:<id>", () => {
     expect(parseRootQuery("L12:foo")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
   });
 });
