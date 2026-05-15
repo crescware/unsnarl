@@ -1,103 +1,23 @@
+import { parseRootQueryAst } from "./parse-root-query-ast.js";
 import type { ParsedRootQuery } from "./parsed-root-query.js";
-import { ROOT_QUERY_KIND } from "./root-query-kind.js";
-
-const ID_RE = /^[A-Za-z_$][A-Za-z0-9_$]*$/;
-const LINE_RE = /^([0-9]+)$/;
-const LINE_NAME_RE = /^([0-9]+):([A-Za-z_$][A-Za-z0-9_$]*)$/;
-const RANGE_RE = /^([0-9]+)-([0-9]+)$/;
-const RANGE_NAME_RE = /^([0-9]+)-([0-9]+):([A-Za-z_$][A-Za-z0-9_$]*)$/;
-const L_RANGE_RE = /^[Ll]([0-9]+)-([0-9]+)$/;
-const L_LINE_OR_NAME_RE = /^[Ll]([0-9]+)$/;
+import { ROOT_QUERY_SCOPE_POINT_ONLY } from "./root-query-scope.js";
+import { validateRootQuery } from "./validate-root-query.js";
 
 export function parseRootQuery(
   token: string,
 ): ParsedRootQuery | { error: string } {
-  if (token === "") {
-    return { error: "empty root query" };
+  const ast = parseRootQueryAst(token, ROOT_QUERY_SCOPE_POINT_ONLY);
+  if (!ast.ok) {
+    return { error: ast.errors[0]?.message ?? "(no message)" };
   }
-
-  const lineMatch = LINE_RE.exec(token);
-  if (lineMatch !== null) {
-    const line = Number.parseInt(lineMatch[1] ?? "", 10);
-    if (line <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
-    return { kind: ROOT_QUERY_KIND.Line, line, raw: token };
+  const validated = validateRootQuery(ast.value);
+  if (!validated.ok) {
+    return { error: validated.errors[0]?.message ?? "(no message)" };
   }
-
-  const lineNameMatch = LINE_NAME_RE.exec(token);
-  if (lineNameMatch !== null) {
-    const line = Number.parseInt(lineNameMatch[1] ?? "", 10);
-    const name = lineNameMatch[2] ?? "";
-    if (line <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
-    return { kind: ROOT_QUERY_KIND.LineName, line, name, raw: token };
-  }
-
-  const rangeNameMatch = RANGE_NAME_RE.exec(token);
-  if (rangeNameMatch !== null) {
-    const start = Number.parseInt(rangeNameMatch[1] ?? "", 10);
-    const end = Number.parseInt(rangeNameMatch[2] ?? "", 10);
-    const name = rangeNameMatch[3] ?? "";
-    if (start <= 0 || end <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
-    if (start > end) {
-      return {
-        error: `invalid root query '${token}': range start must be <= end`,
-      };
-    }
-    return { kind: ROOT_QUERY_KIND.RangeName, start, end, name, raw: token };
-  }
-
-  const rangeMatch = RANGE_RE.exec(token);
-  if (rangeMatch !== null) {
-    const start = Number.parseInt(rangeMatch[1] ?? "", 10);
-    const end = Number.parseInt(rangeMatch[2] ?? "", 10);
-    if (start <= 0 || end <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
-    if (start > end) {
-      return {
-        error: `invalid root query '${token}': range start must be <= end`,
-      };
-    }
-    return { kind: ROOT_QUERY_KIND.Range, start, end, raw: token };
-  }
-
-  const lRangeMatch = L_RANGE_RE.exec(token);
-  if (lRangeMatch !== null) {
-    const start = Number.parseInt(lRangeMatch[1] ?? "", 10);
-    const end = Number.parseInt(lRangeMatch[2] ?? "", 10);
-    if (start <= 0 || end <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
-    if (start > end) {
-      return {
-        error: `invalid root query '${token}': range start must be <= end`,
-      };
-    }
-    return { kind: ROOT_QUERY_KIND.Range, start, end, raw: token };
-  }
-
-  const lLineOrNameMatch = L_LINE_OR_NAME_RE.exec(token);
-  if (lLineOrNameMatch !== null) {
-    const line = Number.parseInt(lLineOrNameMatch[1] ?? "", 10);
-    if (line <= 0) {
-      return { error: `invalid root query '${token}': line must be >= 1` };
-    }
+  if (validated.value.kind !== "single") {
     return {
-      kind: ROOT_QUERY_KIND.LineOrName,
-      line,
-      name: token,
-      raw: token,
+      error: `internal error: expected 'single' RootQuery, got '${validated.value.kind}'`,
     };
   }
-
-  if (ID_RE.test(token)) {
-    return { kind: ROOT_QUERY_KIND.Name, name: token, raw: token };
-  }
-
-  return { error: `invalid root query '${token}'` };
+  return validated.value.query;
 }

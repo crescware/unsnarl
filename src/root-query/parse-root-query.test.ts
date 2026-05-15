@@ -139,12 +139,14 @@ describe("parseRootQuery", () => {
 
   test("rejects identifier starting with a digit", () => {
     const r = parseRootQuery("10:1foo");
-    expect(r).toMatchObject({ error: expect.stringContaining("invalid") });
+    expect(r).toMatchObject({
+      error: expect.stringContaining("unrecognized token"),
+    });
   });
 
   test("rejects empty identifier after colon", () => {
     expect(parseRootQuery("10:")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected empty identifier after ':'"),
     });
   });
 
@@ -156,13 +158,13 @@ describe("parseRootQuery", () => {
 
   test("rejects malformed ranges", () => {
     expect(parseRootQuery("1-")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected empty range end"),
     });
     expect(parseRootQuery("-5")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
     expect(parseRootQuery("1-2-3")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
   });
 
@@ -177,10 +179,10 @@ describe("parseRootQuery", () => {
 
   test("rejects identifiers with disallowed characters", () => {
     expect(parseRootQuery("foo-bar")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
     expect(parseRootQuery("foo.bar")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
   });
 
@@ -247,13 +249,13 @@ describe("parseRootQuery", () => {
 
   test("rejects 1L2 (digit-leading, not an identifier)", () => {
     expect(parseRootQuery("1L2")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unrecognized token"),
     });
   });
 
   test("does not extend tolerance to L<n>:<id>", () => {
     expect(parseRootQuery("L12:foo")).toMatchObject({
-      error: expect.stringContaining("invalid"),
+      error: expect.stringContaining("unexpected character in identifier"),
     });
   });
 });
