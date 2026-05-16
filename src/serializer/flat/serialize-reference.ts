@@ -1,7 +1,6 @@
-import { parse, type InferOutput } from "valibot";
+import { parse } from "valibot";
 
 import type { Annotations } from "../../ir/annotations/annotations.js";
-import type { return$, throw$ } from "../../ir/reference/completion-kind.js";
 import { normal$ } from "../../ir/reference/completion-kind.js";
 import type { AbruptCompletion } from "../../ir/reference/completion.js";
 import type { Reference } from "../../ir/reference/reference.js";
@@ -84,7 +83,7 @@ function serializeAbruptCompletion(
   c: AbruptCompletion,
   raw: string,
 ): Readonly<{
-  kind: InferOutput<typeof return$> | InferOutput<typeof throw$>;
+  kind: AbruptCompletion["kind"];
   startSpan: ReturnType<typeof spanFromOffset>;
   endSpan: ReturnType<typeof spanFromOffset>;
 }> {
