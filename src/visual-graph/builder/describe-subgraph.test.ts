@@ -84,8 +84,8 @@ describe("describeSubgraph", () => {
       type: SCOPE_TYPE.Function,
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    expect(sg.kind).toEqual("function");
-    if (sg.kind === "function") {
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Function);
+    if (sg.kind === SUBGRAPH_KIND.Function) {
       expect(sg.ownerNodeId).toEqual(null);
       expect(sg.ownerName).toEqual("");
     }
@@ -96,16 +96,20 @@ describe("describeSubgraph", () => {
     type: ScopeType;
     expectedKind: VisualSubgraph["kind"];
   }>([
-    { name: asFilledString("for"), type: SCOPE_TYPE.For, expectedKind: "for" },
+    {
+      name: asFilledString("for"),
+      type: SCOPE_TYPE.For,
+      expectedKind: SUBGRAPH_KIND.For,
+    },
     {
       name: asFilledString("catch"),
       type: SCOPE_TYPE.Catch,
-      expectedKind: "catch",
+      expectedKind: SUBGRAPH_KIND.Catch,
     },
     {
       name: asFilledString("switch"),
       type: SCOPE_TYPE.Switch,
-      expectedKind: "switch",
+      expectedKind: SUBGRAPH_KIND.Switch,
     },
   ])(
     "control subgraph for scope type $name -> kind=$expectedKind",
@@ -144,8 +148,8 @@ describe("describeSubgraph", () => {
       },
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    expect(sg.kind).toEqual("case");
-    if (sg.kind !== "case") {
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Case);
+    if (sg.kind !== SUBGRAPH_KIND.Case) {
       throw new Error("expected case");
     }
     expect(sg.caseTest).toEqual("x === 1");
@@ -159,7 +163,7 @@ describe("describeSubgraph", () => {
       blockContext: baseCaseClauseBlockContext(),
     };
     const sg = describeSubgraph(scope, new Map(), new Map());
-    if (sg.kind !== "case") {
+    if (sg.kind !== SUBGRAPH_KIND.Case) {
       throw new Error("expected case");
     }
     expect(sg.caseTest).toEqual(null);

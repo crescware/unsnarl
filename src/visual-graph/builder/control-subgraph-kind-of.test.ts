@@ -4,6 +4,7 @@ import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { asFilledString } from "../../util/filled-string.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
 import { baseBlockContext } from "./testing/make-block-context.js";
@@ -13,9 +14,9 @@ type Kind = VisualSubgraph["kind"] | null;
 
 describe("controlSubgraphKindOf", () => {
   test.each<{ type: ScopeType; expected: Kind }>([
-    { type: SCOPE_TYPE.Catch, expected: "catch" },
-    { type: SCOPE_TYPE.For, expected: "for" },
-    { type: SCOPE_TYPE.Switch, expected: "switch" },
+    { type: SCOPE_TYPE.Catch, expected: SUBGRAPH_KIND.Catch },
+    { type: SCOPE_TYPE.For, expected: SUBGRAPH_KIND.For },
+    { type: SCOPE_TYPE.Switch, expected: SUBGRAPH_KIND.Switch },
     { type: SCOPE_TYPE.Function, expected: null },
     { type: SCOPE_TYPE.Module, expected: null },
     { type: SCOPE_TYPE.Global, expected: null },
@@ -27,7 +28,7 @@ describe("controlSubgraphKindOf", () => {
   test("returns 'block' for a block scope without blockContext (bare {})", () => {
     expect(
       controlSubgraphKindOf({ ...baseScope(), type: SCOPE_TYPE.Block }),
-    ).toEqual("block");
+    ).toEqual(SUBGRAPH_KIND.Block);
   });
 
   test.each<{ ctx: BlockContext; expected: Kind }>([
@@ -38,7 +39,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("block"),
         parentSpanOffset: 0,
       },
-      expected: "try",
+      expected: SUBGRAPH_KIND.Try,
     },
     {
       ctx: {
@@ -47,7 +48,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("finalizer"),
         parentSpanOffset: 0,
       },
-      expected: "finally",
+      expected: SUBGRAPH_KIND.Finally,
     },
     {
       ctx: {
@@ -56,7 +57,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("handler"),
         parentSpanOffset: 0,
       },
-      expected: "block",
+      expected: SUBGRAPH_KIND.Block,
     },
     {
       ctx: {
@@ -65,7 +66,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("consequent"),
         parentSpanOffset: 0,
       },
-      expected: "if",
+      expected: SUBGRAPH_KIND.If,
     },
     {
       ctx: {
@@ -74,7 +75,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("alternate"),
         parentSpanOffset: 0,
       },
-      expected: "else",
+      expected: SUBGRAPH_KIND.Else,
     },
     {
       ctx: {
@@ -83,7 +84,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("test"),
         parentSpanOffset: 0,
       },
-      expected: "block",
+      expected: SUBGRAPH_KIND.Block,
     },
     {
       ctx: {
@@ -92,7 +93,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("cases"),
         parentSpanOffset: 0,
       },
-      expected: "case",
+      expected: SUBGRAPH_KIND.Case,
     },
     {
       ctx: {
@@ -101,7 +102,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("discriminant"),
         parentSpanOffset: 0,
       },
-      expected: "block",
+      expected: SUBGRAPH_KIND.Block,
     },
     {
       ctx: {
@@ -110,7 +111,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("body"),
         parentSpanOffset: 0,
       },
-      expected: "while",
+      expected: SUBGRAPH_KIND.While,
     },
     {
       ctx: {
@@ -119,7 +120,7 @@ describe("controlSubgraphKindOf", () => {
         key: asFilledString("body"),
         parentSpanOffset: 0,
       },
-      expected: "do-while",
+      expected: SUBGRAPH_KIND.DoWhile,
     },
   ])(
     "block + parentType=$ctx.parentType key=$ctx.key -> $expected",

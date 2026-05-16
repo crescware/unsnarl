@@ -753,8 +753,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -782,8 +783,9 @@
         "type": "SwitchStatement",
         "offset": 14
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -811,8 +813,9 @@
         "type": "SwitchStatement",
         "offset": 41
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -840,8 +843,9 @@
         "type": "SwitchStatement",
         "offset": 76
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -869,8 +873,9 @@
         "type": "SwitchStatement",
         "offset": 119
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -898,8 +903,9 @@
         "type": "SwitchStatement",
         "offset": 170
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -927,8 +933,9 @@
         "type": "SwitchStatement",
         "offset": 229
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -953,8 +960,9 @@
         "receiver": true
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -1001,8 +1009,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {

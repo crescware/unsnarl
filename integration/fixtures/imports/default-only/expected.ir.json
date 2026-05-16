@@ -175,8 +175,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -203,8 +204,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     }

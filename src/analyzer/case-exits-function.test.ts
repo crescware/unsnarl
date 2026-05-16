@@ -40,6 +40,50 @@ describe("caseExitsFunction", () => {
       consequent: [42],
       expected: false,
     },
+    {
+      name: "ends in IfStatement (break / throw) -> false",
+      consequent: [
+        {
+          type: AST_TYPE.IfStatement,
+          consequent: { type: AST_TYPE.BreakStatement },
+          alternate: { type: AST_TYPE.ThrowStatement },
+        },
+      ],
+      expected: false,
+    },
+    {
+      name: "ends in IfStatement (return / break) -> false",
+      consequent: [
+        {
+          type: AST_TYPE.IfStatement,
+          consequent: { type: AST_TYPE.ReturnStatement },
+          alternate: { type: AST_TYPE.BreakStatement },
+        },
+      ],
+      expected: false,
+    },
+    {
+      name: "ends in IfStatement (return / continue) -> false",
+      consequent: [
+        {
+          type: AST_TYPE.IfStatement,
+          consequent: { type: AST_TYPE.ReturnStatement },
+          alternate: { type: AST_TYPE.ContinueStatement },
+        },
+      ],
+      expected: false,
+    },
+    {
+      name: "ends in IfStatement (return / throw) -> true",
+      consequent: [
+        {
+          type: AST_TYPE.IfStatement,
+          consequent: { type: AST_TYPE.ReturnStatement },
+          alternate: { type: AST_TYPE.ThrowStatement },
+        },
+      ],
+      expected: true,
+    },
   ])("$name", ({ consequent, expected }) => {
     expect(caseExitsFunction(consequent)).toEqual(expected);
   });

@@ -615,8 +615,9 @@
         "type": "SwitchStatement",
         "offset": 60
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -644,8 +645,9 @@
         "type": "IfStatement",
         "offset": 91
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -672,8 +674,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -724,8 +727,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -776,8 +780,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -828,8 +833,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -878,7 +884,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 17,
           "column": 2,
@@ -890,7 +897,6 @@
           "offset": 297
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -917,8 +923,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -945,8 +952,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     }

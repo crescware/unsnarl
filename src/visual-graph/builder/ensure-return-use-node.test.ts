@@ -17,10 +17,10 @@ import type { VisualSubgraph } from "../visual-subgraph.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { returnCompletion } from "./testing/completion.js";
 import { jsxContainer } from "./testing/jsx-container.js";
 import { baseRef } from "./testing/make-ref.js";
 import { baseVariable } from "./testing/make-variable.js";
-import { returnContainer } from "./testing/return-container.js";
 import { span } from "./testing/span.js";
 import type { WriteOp } from "./write-op.js";
 
@@ -114,7 +114,7 @@ describe("ensureReturnUseNode", () => {
         {
           ...baseRef(),
           from: asScopeId("scope"),
-          returnContainer: returnContainer(0, 10),
+          completion: returnCompletion(0, 10),
         },
         ctx,
         state,
@@ -122,7 +122,7 @@ describe("ensureReturnUseNode", () => {
     ).toEqual(null);
   });
 
-  test("returns null when the reference has no returnContainer", () => {
+  test("returns null when the reference completion is not return", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
@@ -154,7 +154,7 @@ describe("ensureReturnUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("x"), span: span(0, 3) },
       resolved: asVariableId("v"),
-      returnContainer: returnContainer(0, 50, 3, 5),
+      completion: returnCompletion(0, 50, 3, 5),
     };
 
     const id = ensureReturnUseNode("fnVar", ref, ctx, state);
@@ -162,7 +162,7 @@ describe("ensureReturnUseNode", () => {
     expect(id).toEqual("ret_use_r1");
     expect(host.elements).toHaveLength(1);
     const sg = host.elements[0] as VisualSubgraph;
-    expect(sg.kind).toEqual("return");
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Return);
     expect(sg.line).toEqual(3);
     expect(sg.endLine).toEqual(5);
     const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
@@ -182,20 +182,20 @@ describe("ensureReturnUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("literal"), span: span(0, 1) },
       resolved: null,
-      returnContainer: returnContainer(0, 10),
+      completion: returnCompletion(0, 10),
     };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
     expect((sg.elements[0] as { name: string }).name).toEqual("literal");
   });
 
-  test("groups references that share the same returnContainer offsets into one subgraph", () => {
+  test("groups references that share the same return completion offsets into one subgraph", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const rc = returnContainer(0, 50, 3, 5);
-    const ref1 = { ...baseRef(), id: asReferenceId("r1"), returnContainer: rc };
-    const ref2 = { ...baseRef(), id: asReferenceId("r2"), returnContainer: rc };
+    const rc = returnCompletion(0, 50, 3, 5);
+    const ref1 = { ...baseRef(), id: asReferenceId("r1"), completion: rc };
+    const ref2 = { ...baseRef(), id: asReferenceId("r2"), completion: rc };
 
     ensureReturnUseNode("fnVar", ref1, ctx, state);
     ensureReturnUseNode("fnVar", ref2, ctx, state);
@@ -208,19 +208,19 @@ describe("ensureReturnUseNode", () => {
     ]);
   });
 
-  test("references with different returnContainer offsets create separate subgraphs", () => {
+  test("references with different return completion offsets create separate subgraphs", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
     const ref1 = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      returnContainer: returnContainer(0, 10),
+      completion: returnCompletion(0, 10),
     };
     const ref2 = {
       ...baseRef(),
       id: asReferenceId("r2"),
-      returnContainer: returnContainer(20, 30),
+      completion: returnCompletion(20, 30),
     };
 
     ensureReturnUseNode("fnVar", ref1, ctx, state);
@@ -236,7 +236,7 @@ describe("ensureReturnUseNode", () => {
     const ref = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      returnContainer: returnContainer(0, 10),
+      completion: returnCompletion(0, 10),
     };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     ensureReturnUseNode("fnVar", ref, ctx, state);
@@ -253,7 +253,7 @@ describe("ensureReturnUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("Foo"), span: span(0, 2) },
       jsxElement: jsxContainer(0, 30, 2, 5),
-      returnContainer: returnContainer(0, 30, 2, 5),
+      completion: returnCompletion(0, 30, 2, 5),
     };
     ensureReturnUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;

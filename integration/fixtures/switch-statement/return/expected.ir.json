@@ -493,8 +493,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -522,8 +523,9 @@
         "type": "SwitchStatement",
         "offset": 55
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -550,8 +552,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -600,7 +603,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 7,
           "column": 6,
@@ -612,7 +616,6 @@
           "offset": 127
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -639,8 +642,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -691,8 +695,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -741,7 +746,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 15,
           "column": 2,
@@ -753,7 +759,6 @@
           "offset": 233
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -780,8 +785,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -808,8 +814,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     }

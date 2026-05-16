@@ -5,16 +5,40 @@ import {
   object,
   pipe,
   readonly,
+  variant,
   type InferOutput,
 } from "valibot";
 
 import { filledString$ } from "../../util/filled-string.js";
+import { normal$, return$, throw$ } from "../completion/completion-type.js";
 import { span$ } from "../primitive/span.js";
 import { predicateContainer$ } from "../reference/predicate-container.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
 import { serializedHeadExpression$ } from "./serialized-expression-statement-head.js";
 import { variableId$ } from "./variable-id.js";
+
+/**
+ * Span-based Completion shape, narrowed to the Reference-side
+ * subset (normal / return / throw).
+ *
+ * `AbruptCompletion` covers all four ECMA §6.2.4 abrupt types
+ * (return, throw, break, continue), but serialized References never
+ * carry a break / continue completion: the source-side narrowing in
+ * `ReferenceCompletion` rules them out, so any variant beyond these
+ * three would be dead at serialization time. Keep the shape locked
+ * to the Reference-side subset and let `AbruptCompletion` evolve
+ * independently for non-Reference consumers (e.g. statement-level
+ * analyzers).
+ *
+ * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
+ * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
+ */
+const serializedCompletion$ = variant("type", [
+  pipe(object({ type: normal$ }), readonly()),
+  pipe(object({ type: return$, startSpan: span$, endSpan: span$ }), readonly()),
+  pipe(object({ type: throw$, startSpan: span$, endSpan: span$ }), readonly()),
+]);
 
 export const serializedReference$ = object({
   id: referenceId$,
@@ -33,12 +57,7 @@ export const serializedReference$ = object({
     readonly(),
   ),
   predicateContainer: nullable(predicateContainer$),
-  returnContainer: nullable(
-    pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
-  ),
-  throwContainer: nullable(
-    pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
-  ),
+  completion: serializedCompletion$,
   jsxElement: nullable(
     pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
   ),

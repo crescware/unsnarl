@@ -254,8 +254,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -280,7 +281,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 5,
           "column": 2,
@@ -292,7 +294,6 @@
           "offset": 112
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 5,
@@ -328,7 +329,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 5,
           "column": 2,
@@ -340,7 +342,6 @@
           "offset": 112
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

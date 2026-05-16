@@ -1,3 +1,4 @@
+import { throw$ } from "../../ir/completion/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -17,15 +18,15 @@ export function ensureThrowUseNode(
   ctx: BuilderContext,
   state: BuildState,
 ): string | null {
-  if (ref.throwContainer === null) {
+  if (ref.completion.type !== throw$.literal) {
     return null;
   }
   const host = findHostSubgraph(ref, enclosingFnVarId, ctx.scopeMap, state);
   if (!host) {
     return null;
   }
-  const throwContainer = ref.throwContainer;
-  const containerKey = `${throwContainer.startSpan.offset}-${throwContainer.endSpan.offset}`;
+  const completion = ref.completion;
+  const containerKey = `${completion.startSpan.offset}-${completion.endSpan.offset}`;
   let perFn = state.throwSubgraphsByFn.get(enclosingFnVarId);
   if (!perFn) {
     perFn = new Map();
@@ -34,8 +35,8 @@ export function ensureThrowUseNode(
   const existing = perFn.get(containerKey) ?? null;
   let sg: VisualSubgraph;
   if (existing === null) {
-    const startLine = throwContainer.startSpan.line;
-    const rawEndLine = throwContainer.endSpan.line;
+    const startLine = completion.startSpan.line;
+    const rawEndLine = completion.endSpan.line;
     const endLine = rawEndLine !== startLine ? rawEndLine : null;
     sg = {
       type: VISUAL_ELEMENT_TYPE.Subgraph,

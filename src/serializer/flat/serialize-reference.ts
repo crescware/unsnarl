@@ -1,6 +1,8 @@
-import { parse } from "valibot";
+import { parse, type InferOutput } from "valibot";
 
 import type { Annotations } from "../../ir/annotations/annotations.js";
+import { normal$ } from "../../ir/completion/completion-type.js";
+import type { ReferenceCompletion } from "../../ir/reference/reference-completion.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
@@ -48,18 +50,10 @@ export function serializeReference(
       receiver: ann.flags.receiver,
     },
     predicateContainer: ann.predicateContainer,
-    returnContainer: ann.returnContainer
-      ? {
-          startSpan: spanFromOffset(raw, ann.returnContainer.startOffset),
-          endSpan: spanFromOffset(raw, ann.returnContainer.endOffset),
-        }
-      : null,
-    throwContainer: ann.throwContainer
-      ? {
-          startSpan: spanFromOffset(raw, ann.throwContainer.startOffset),
-          endSpan: spanFromOffset(raw, ann.throwContainer.endOffset),
-        }
-      : null,
+    completion:
+      ann.completion.type === normal$.literal
+        ? { type: normal$.literal }
+        : serializeAbruptCompletion(ann.completion, raw),
     jsxElement: ann.jsxElement
       ? {
           startSpan: spanFromOffset(raw, ann.jsxElement.startOffset),
@@ -83,4 +77,24 @@ export function serializeReference(
         }
       : null,
   });
+}
+
+type ReferenceAbruptCompletion = Exclude<
+  ReferenceCompletion,
+  { type: InferOutput<typeof normal$> }
+>;
+
+function serializeAbruptCompletion(
+  c: ReferenceAbruptCompletion,
+  raw: string,
+): Readonly<{
+  type: ReferenceAbruptCompletion["type"];
+  startSpan: ReturnType<typeof spanFromOffset>;
+  endSpan: ReturnType<typeof spanFromOffset>;
+}> {
+  return {
+    type: c.type,
+    startSpan: spanFromOffset(raw, c.startOffset),
+    endSpan: spanFromOffset(raw, c.endOffset),
+  };
 }

@@ -1,3 +1,4 @@
+import { SUBGRAPH_KIND } from "../../visual-graph/subgraph-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { escape } from "./escape.js";
@@ -18,7 +19,7 @@ function baseLabel(
 ): string {
   const range = lineRangeLabel(sg);
   switch (sg.kind) {
-    case "function": {
+    case SUBGRAPH_KIND.Function: {
       // Prefer the name baked onto the subgraph at build time; the owner
       // node may be absent after pruning even when the subgraph survives.
       // ownerName is empty when the owner variable was missing at build
@@ -30,36 +31,50 @@ function baseLabel(
       const name = sg.ownerName !== "" ? sg.ownerName : (ownerNode?.name ?? "");
       return `${escape(name)}()<br/>${range}`;
     }
-    case "switch":
+
+    case SUBGRAPH_KIND.Switch:
       return `switch ${range}`;
-    case "case":
+
+    case SUBGRAPH_KIND.Case:
       if (sg.caseTest === null) {
         return `default ${range}`;
       }
       return `case ${escape(sg.caseTest)} ${range}`;
-    case "if":
+
+    case SUBGRAPH_KIND.If:
       return `if ${range}`;
-    case "else":
+
+    case SUBGRAPH_KIND.Else:
       return `else ${range}`;
-    case "if-else-container":
+
+    case SUBGRAPH_KIND.IfElseContainer:
       return `${sg.hasElse ? "if-else" : "if"} ${range}`;
-    case "try":
+
+    case SUBGRAPH_KIND.Try:
       return `try ${range}`;
-    case "catch":
+
+    case SUBGRAPH_KIND.Catch:
       return `catch ${range}`;
-    case "finally":
+
+    case SUBGRAPH_KIND.Finally:
       return `finally ${range}`;
-    case "for":
+
+    case SUBGRAPH_KIND.For:
       return `for ${range}`;
-    case "while":
+
+    case SUBGRAPH_KIND.While:
       return `while ${range}`;
-    case "do-while":
+
+    case SUBGRAPH_KIND.DoWhile:
       return `do-while ${range}`;
-    case "return":
+
+    case SUBGRAPH_KIND.Return:
       return `return ${range}`;
-    case "throw":
+
+    case SUBGRAPH_KIND.Throw:
       return `throw ${range}`;
-    case "block":
+
+    case SUBGRAPH_KIND.Block:
       return `block ${range}`;
   }
 }

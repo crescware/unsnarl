@@ -4,6 +4,7 @@ import {
   serializedReference$,
   type SerializedReference,
 } from "../../../ir/serialized/serialized-reference.js";
+import { normalCompletion } from "./completion.js";
 import { span } from "./span.js";
 
 export function baseRef(): SerializedReference {
@@ -16,8 +17,7 @@ export function baseRef(): SerializedReference {
     init: false,
     flags: { read: false, write: false, call: false, receiver: false },
     predicateContainer: null,
-    returnContainer: null,
-    throwContainer: null,
+    completion: normalCompletion(),
     jsxElement: null,
     expressionStatementContainer: null,
   });

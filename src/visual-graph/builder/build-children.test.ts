@@ -9,6 +9,7 @@ import { LANGUAGE } from "../../language.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js";
 import { asFilledString } from "../../util/filled-string.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { buildChildren } from "./build-children.js";
@@ -81,7 +82,9 @@ describe("buildChildren", () => {
     buildChildren(outer, container, ctx, emptyState());
 
     expect(container.elements).toHaveLength(1);
-    expect((container.elements[0] as VisualSubgraph).kind).toEqual("for");
+    expect((container.elements[0] as VisualSubgraph).kind).toEqual(
+      SUBGRAPH_KIND.For,
+    );
   });
 
   test("a single if branch is not wrapped in an if-else-container; the if-test anchor lives inside the consequent subgraph", () => {
@@ -108,10 +111,11 @@ describe("buildChildren", () => {
 
     expect(container.elements).toHaveLength(1);
     const ifSg = container.elements[0];
-    expect((ifSg as VisualSubgraph).kind).toEqual("if");
+    expect((ifSg as VisualSubgraph).kind).toEqual(SUBGRAPH_KIND.If);
     expect(
       container.elements.some(
-        (v) => v.type === "subgraph" && v.kind === "if-else-container",
+        (v) =>
+          v.type === "subgraph" && v.kind === SUBGRAPH_KIND.IfElseContainer,
       ),
     ).toEqual(false);
     const anchor = (ifSg as VisualSubgraph).elements[0];
@@ -166,8 +170,8 @@ describe("buildChildren", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.kind).toEqual("if-else-container");
-    if (sg.kind !== "if-else-container") {
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.IfElseContainer);
+    if (sg.kind !== SUBGRAPH_KIND.IfElseContainer) {
       throw new Error("expected if-else-container");
     }
     expect(sg.hasElse).toEqual(true);
@@ -175,9 +179,12 @@ describe("buildChildren", () => {
     // lives inside the `if` (consequent) branch, and the `else`
     // (alternate) carries no test of its own.
     expect(sg.elements.map((v) => v.type)).toEqual(["subgraph", "subgraph"]);
-    expect(sg.elements.map((v) => v.kind)).toEqual(["if", "else"]);
+    expect(sg.elements.map((v) => v.kind)).toEqual([
+      SUBGRAPH_KIND.If,
+      SUBGRAPH_KIND.Else,
+    ]);
     const ifSg = sg.elements[0];
-    if (ifSg?.type !== "subgraph" || ifSg.kind !== "if") {
+    if (ifSg?.type !== "subgraph" || ifSg.kind !== SUBGRAPH_KIND.If) {
       throw new Error("expected if subgraph at index 0");
     }
     const anchor = ifSg.elements[0];
@@ -186,7 +193,7 @@ describe("buildChildren", () => {
       expect(anchor.kind).toEqual("SyntheticIfStatementTest");
     }
     const elseSg = sg.elements[1];
-    if (elseSg?.type !== "subgraph" || elseSg.kind !== "else") {
+    if (elseSg?.type !== "subgraph" || elseSg.kind !== SUBGRAPH_KIND.Else) {
       throw new Error("expected else subgraph at index 1");
     }
     expect(
@@ -285,7 +292,10 @@ describe("buildChildren", () => {
       "subgraph",
       "subgraph",
     ]);
-    expect(container.elements.map((v) => v.kind)).toEqual(["if", "if"]);
+    expect(container.elements.map((v) => v.kind)).toEqual([
+      SUBGRAPH_KIND.If,
+      SUBGRAPH_KIND.If,
+    ]);
     for (const sg of container.elements) {
       if (sg.type !== "subgraph") {
         throw new Error("expected subgraph");

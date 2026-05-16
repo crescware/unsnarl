@@ -678,8 +678,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -706,8 +707,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -734,8 +736,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -762,8 +765,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -790,8 +794,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "type": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -816,7 +821,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -828,7 +834,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 11,
@@ -864,7 +869,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -876,7 +882,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -901,7 +906,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -913,7 +919,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 13,
@@ -949,7 +954,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -961,7 +967,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -986,7 +991,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -998,7 +1004,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 15,
@@ -1034,7 +1039,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -1046,7 +1052,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1071,7 +1076,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -1083,7 +1089,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 17,
@@ -1119,7 +1124,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -1131,7 +1137,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1156,7 +1161,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -1168,7 +1174,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 19,
@@ -1204,7 +1209,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "type": "return",
         "startSpan": {
           "line": 10,
           "column": 2,
@@ -1216,7 +1222,6 @@
           "offset": 331
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }
