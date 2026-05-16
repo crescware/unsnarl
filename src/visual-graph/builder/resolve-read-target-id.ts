@@ -12,13 +12,30 @@ export function resolveReadTargetId(
   ctx: BuilderContext,
   state: BuildState,
 ): string {
-  let targetId: string | null = exprStmtId;
-  if (targetId === null && enclosingFnVarId !== null) {
-    if (ref.returnContainer !== null) {
-      targetId = ensureReturnUseNode(enclosingFnVarId, ref, ctx, state);
-    } else if (ref.throwContainer !== null) {
-      targetId = ensureThrowUseNode(enclosingFnVarId, ref, ctx, state);
-    }
+  if (exprStmtId !== null) {
+    return exprStmtId;
   }
-  return targetId ?? MODULE_ROOT_ID;
+  if (enclosingFnVarId === null) {
+    return MODULE_ROOT_ID;
+  }
+  if (ref.returnContainer !== null && ref.throwContainer !== null) {
+    // Mutually exclusive per AST grammar: see issue #94. Asserted here so an
+    // analyzer regression surfaces immediately instead of silently routing
+    // via an implicit precedence rule.
+    // @TODO https://github.com/crescware/unsnarl/issues/94
+    throw new Error(
+      "resolveReadTargetId: returnContainer and throwContainer are mutually exclusive",
+    );
+  }
+  if (ref.returnContainer !== null) {
+    return (
+      ensureReturnUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
+    );
+  }
+  if (ref.throwContainer !== null) {
+    return (
+      ensureThrowUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
+    );
+  }
+  return MODULE_ROOT_ID;
 }

@@ -264,30 +264,24 @@ describe("resolveReadTargetId", () => {
     });
 
     describe("when both returnContainer and throwContainer are set", () => {
-      // The analyzer is expected to enforce mutual exclusivity, but the
-      // resolver pins the precedence here so a future regression does
-      // not silently flip the routing.
-      let host: VisualSubgraph;
-      let state: BuildState;
-      let result: ReturnType<typeof resolveReadTargetId>;
-
-      beforeEach(() => {
-        host = makeHostSubgraph();
+      // Mutual exclusivity is an AST-grammar invariant the analyzer
+      // upholds (see issue #94). The resolver asserts it so that an
+      // analyzer regression surfaces as an immediate throw instead of
+      // silently routing through an implicit precedence rule.
+      test("throws because the combination is structurally impossible", () => {
+        const host = makeHostSubgraph();
         const context = makeContext();
-        state = makeStateWithHost(host);
+        const state = makeStateWithHost(host);
         const reference = makeReadReference(
           returnContainer(0, 50, 3, 5),
           throwContainer(0, 50, 3, 5),
         );
-        result = resolveReadTargetId(null, "fnVar", reference, context, state);
-      });
 
-      test("returnContainer wins and the result is the return-use id", () => {
-        expect(result).toEqual("ret_use_r1");
-      });
-
-      test("no throw subgraph is registered", () => {
-        expect(state.throwSubgraphsByFn.size).toEqual(0);
+        expect(() =>
+          resolveReadTargetId(null, "fnVar", reference, context, state),
+        ).toThrow(
+          "resolveReadTargetId: returnContainer and throwContainer are mutually exclusive",
+        );
       });
     });
 
