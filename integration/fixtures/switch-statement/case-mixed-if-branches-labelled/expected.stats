@@ -1,0 +1,10 @@
+1	0	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:1 classify
+1	0	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:1 kind
+1	0	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:1 force
+1	0	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:2 label
+0	1	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:4 switch-discriminant
+0	1	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:6 if-test
+1	1	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:12 label
+0	1	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:15 label
+0	1	integration/fixtures/switch-statement/case-mixed-if-branches-labelled/input.ts:18 unused result
+5	5	9 total

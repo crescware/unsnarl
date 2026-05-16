@@ -1,0 +1,216 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/switch-statement/case-mixed-if-branches/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_classify_9",
+      "name": "classify",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_255",
+      "name": "result",
+      "line": 18,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 16,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_kind_18",
+          "name": "kind",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_force_32",
+          "name": "force",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_label_56",
+          "name": "label",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "LetBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 13,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "switch_discriminant_scope_1_71",
+              "kind": "SyntheticSwitchStatementDiscriminant",
+              "name": "switch-discriminant",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 10,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "cont_if_scope_3_107",
+                  "kind": "if-else-container",
+                  "line": 6,
+                  "endLine": 10,
+                  "direction": "RL",
+                  "hasElse": true,
+                  "elements": [
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_4",
+                      "line": 6,
+                      "endLine": 8,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "if_test_scope_3_107",
+                          "kind": "SyntheticIfStatementTest",
+                          "name": "if-test",
+                          "line": 6,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ],
+                      "kind": "if"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_5",
+                      "line": 8,
+                      "endLine": 10,
+                      "direction": "RL",
+                      "elements": [],
+                      "kind": "else"
+                    }
+                  ]
+                }
+              ],
+              "kind": "case",
+              "caseTest": "\"a\""
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_6",
+              "line": 11,
+              "endLine": 12,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "wr_ref_3",
+                  "kind": "WriteReference",
+                  "name": "label",
+                  "line": 12,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "declarationKind": "let"
+                }
+              ],
+              "kind": "case",
+              "caseTest": null
+            }
+          ],
+          "kind": "switch"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_classify_9_232_245",
+          "kind": "return",
+          "line": 15,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnArgumentReference",
+              "name": "label",
+              "line": 15,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_label_56",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_1_kind_18",
+      "to": "switch_discriminant_scope_1_71",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_force_32",
+      "to": "if_test_scope_3_107",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_3",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_classify_9",
+      "to": "n_scope_0_result_255",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
