@@ -1,4 +1,5 @@
-import { isAbruptCompletionStatement } from "./is-abrupt-completion-statement.js";
+import { return$, throw$ } from "../ir/completion/completion-type.js";
+import { abruptCompletionTypeOf } from "./abrupt-completion-type-of.js";
 import { isAstNode } from "./is-ast-node.js";
 
 export function caseExitsFunction(consequent: readonly unknown[]): boolean {
@@ -9,5 +10,14 @@ export function caseExitsFunction(consequent: readonly unknown[]): boolean {
   if (!isAstNode(last)) {
     return false;
   }
-  return isAbruptCompletionStatement(last);
+  const abruptTypes = abruptCompletionTypeOf(last);
+  if (abruptTypes === null) {
+    return false;
+  }
+  for (const abruptType of abruptTypes) {
+    if (abruptType !== return$.literal && abruptType !== throw$.literal) {
+      return false;
+    }
+  }
+  return true;
 }
