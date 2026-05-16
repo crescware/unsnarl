@@ -6,14 +6,13 @@ import type { AbruptCompletion, Completion } from "../completion/completion.js";
 /**
  * The subset of Completion that a Reference's value can flow into.
  *
- * `break` / `continue` take no Expression argument syntactically
- * (only an optional label Identifier), and eslint-scope classifies
- * labels as `Label`, not `Reference`. A Reference's value therefore
- * cannot flow into a break / continue completion; the IR enforces
- * this by narrowing through `Extract` here.
- *
- * Extend the union when JS grammar adds a new value-carrying abrupt
- * completion.
+ * `break` / `continue` accept only an optional label Identifier
+ * syntactically (no Expression argument), and eslint-scope
+ * classifies a label as `Label`, not `Reference`. A Reference's
+ * value therefore cannot flow into a break / continue completion.
+ * The `Extract` narrowing makes the IR type system enforce that
+ * invariant: any attempt to assign a break / continue
+ * AbruptCompletion to a Reference annotation is a type error.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
