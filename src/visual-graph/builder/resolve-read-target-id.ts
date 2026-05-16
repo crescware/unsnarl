@@ -7,17 +7,17 @@ import { MODULE_ROOT_ID } from "./module-root-id.js";
 
 export function resolveReadTargetId(
   exprStmtId: string | null,
-  enclosingFn: string | null,
+  enclosingFnVarId: string | null,
   ref: SerializedReference,
   ctx: BuilderContext,
   state: BuildState,
 ): string {
   let targetId: string | null = exprStmtId;
-  if (targetId === null && enclosingFn !== null) {
+  if (targetId === null && enclosingFnVarId !== null) {
     if (ref.returnContainer !== null) {
-      targetId = ensureReturnUseNode(enclosingFn, ref, ctx, state);
+      targetId = ensureReturnUseNode(enclosingFnVarId, ref, ctx, state);
     } else if (ref.throwContainer !== null) {
-      targetId = ensureThrowUseNode(enclosingFn, ref, ctx, state);
+      targetId = ensureThrowUseNode(enclosingFnVarId, ref, ctx, state);
     }
   }
   return targetId ?? MODULE_ROOT_ID;

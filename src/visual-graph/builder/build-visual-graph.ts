@@ -405,12 +405,12 @@ export function buildVisualGraph(
         }
       }
     } else {
-      const enclosingFn = enclosingFunctionVar(
+      const enclosingFnVarId = enclosingFunctionVar(
         r.from,
         scopeMap,
         subgraphOwnerVar,
       );
-      const host = findHostSubgraph(r, enclosingFn, scopeMap, state);
+      const host = findHostSubgraph(r, enclosingFnVarId, scopeMap, state);
       const targetElements = host?.elements ?? graph.elements;
       const exprStmtId = ensureExpressionStatementNode(
         r,
@@ -420,7 +420,7 @@ export function buildVisualGraph(
       );
       const targetId = resolveReadTargetId(
         exprStmtId,
-        enclosingFn,
+        enclosingFnVarId,
         r,
         ctx,
         state,

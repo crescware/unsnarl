@@ -139,7 +139,7 @@ describe("resolveReadTargetId", () => {
       expect(result).toEqual("expr_42");
     });
 
-    test("returns exprStmtId verbatim even when enclosingFn is null", () => {
+    test("returns exprStmtId verbatim even when enclosingFnVarId is null", () => {
       const context = makeContext();
       const state = makeEmptyState();
       const reference = makeReadReference(null, null);
@@ -198,7 +198,7 @@ describe("resolveReadTargetId", () => {
     });
   });
 
-  describe("when exprStmtId is null and enclosingFn is null", () => {
+  describe("when exprStmtId is null and enclosingFnVarId is null", () => {
     test("falls back to module root", () => {
       const context = makeContext();
       const state = makeEmptyState();
@@ -210,7 +210,7 @@ describe("resolveReadTargetId", () => {
     });
   });
 
-  describe("when exprStmtId is null and enclosingFn is non-null", () => {
+  describe("when exprStmtId is null and enclosingFnVarId is non-null", () => {
     describe("with a returnContainer and a registered host subgraph", () => {
       let host: VisualSubgraph;
       let state: BuildState;
