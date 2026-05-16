@@ -1,8 +1,8 @@
 import { describe, expect, test } from "vitest";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
+import { normal$, return$, throw$ } from "../ir/completion/completion-type.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
-import { normal$, return$, throw$ } from "../ir/reference/completion-type.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { findCompletion } from "./find-completion.js";
 

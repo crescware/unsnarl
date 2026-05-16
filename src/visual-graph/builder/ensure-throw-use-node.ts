@@ -1,4 +1,4 @@
-import { throw$ } from "../../ir/reference/completion-type.js";
+import { throw$ } from "../../ir/completion/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";

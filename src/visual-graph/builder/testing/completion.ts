@@ -1,11 +1,11 @@
 import type { InferOutput } from "valibot";
 
-import type { Span } from "../../../ir/primitive/span.js";
 import {
   normal$,
   return$,
   throw$,
-} from "../../../ir/reference/completion-type.js";
+} from "../../../ir/completion/completion-type.js";
+import type { Span } from "../../../ir/primitive/span.js";
 import { span } from "./span.js";
 
 /**

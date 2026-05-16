@@ -1,8 +1,8 @@
 import type { InferOutput } from "valibot";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
-import { normal$, return$, throw$ } from "../ir/reference/completion-type.js";
-import type { Completion } from "../ir/reference/completion.js";
+import { normal$, return$, throw$ } from "../ir/completion/completion-type.js";
+import type { ReferenceCompletion } from "../ir/reference/reference-completion.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
 /**
@@ -13,7 +13,9 @@ import { AST_TYPE } from "../parser/ast-type.js";
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  */
-export function findCompletion(path: readonly PathEntry[]): Completion {
+export function findCompletion(
+  path: readonly PathEntry[],
+): ReferenceCompletion {
   for (let i = path.length - 1; i >= 0; i--) {
     const entry = path[i];
     if (!entry) {
@@ -53,12 +55,12 @@ export function findCompletion(path: readonly PathEntry[]): Completion {
   return NORMAL_COMPLETION;
 }
 
-const NORMAL_COMPLETION: Completion = { type: normal$.literal };
+const NORMAL_COMPLETION: ReferenceCompletion = { type: normal$.literal };
 
 function completionFromNode(
   type: InferOutput<typeof return$> | InferOutput<typeof throw$>,
   node: { start?: number; end?: number },
-): Completion {
+): ReferenceCompletion {
   const start = node.start;
   const end = node.end;
   if (typeof start !== "number" || typeof end !== "number") {

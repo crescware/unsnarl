@@ -2,7 +2,7 @@ import {
   normal$,
   return$,
   throw$,
-} from "../../ir/reference/completion-type.js";
+} from "../../ir/completion/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";

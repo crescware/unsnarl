@@ -1,8 +1,8 @@
-import { parse } from "valibot";
+import { parse, type InferOutput } from "valibot";
 
 import type { Annotations } from "../../ir/annotations/annotations.js";
-import { normal$ } from "../../ir/reference/completion-type.js";
-import type { AbruptCompletion } from "../../ir/reference/completion.js";
+import { normal$ } from "../../ir/completion/completion-type.js";
+import type { ReferenceCompletion } from "../../ir/reference/reference-completion.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
@@ -79,11 +79,16 @@ export function serializeReference(
   });
 }
 
+type ReferenceAbruptCompletion = Exclude<
+  ReferenceCompletion,
+  { type: InferOutput<typeof normal$> }
+>;
+
 function serializeAbruptCompletion(
-  c: AbruptCompletion,
+  c: ReferenceAbruptCompletion,
   raw: string,
 ): Readonly<{
-  type: AbruptCompletion["type"];
+  type: ReferenceAbruptCompletion["type"];
   startSpan: ReturnType<typeof spanFromOffset>;
   endSpan: ReturnType<typeof spanFromOffset>;
 }> {

@@ -1,4 +1,4 @@
-import { return$ } from "../../ir/reference/completion-type.js";
+import { return$ } from "../../ir/completion/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";

@@ -10,8 +10,8 @@ import {
 } from "valibot";
 
 import { filledString$ } from "../../util/filled-string.js";
+import { normal$, return$, throw$ } from "../completion/completion-type.js";
 import { span$ } from "../primitive/span.js";
-import { normal$, return$, throw$ } from "../reference/completion-type.js";
 import { predicateContainer$ } from "../reference/predicate-container.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
