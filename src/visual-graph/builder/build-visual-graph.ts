@@ -21,27 +21,26 @@ import type { BuilderContext, BuildVisualGraphOptions } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
-import { ensureReturnUseNode } from "./ensure-return-use-node.js";
 import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
 import { lastWriteOpInScopeBefore } from "./last-write-op-in-scope-before.js";
+import { MODULE_ROOT_ID } from "./module-root-id.js";
 import { nodeId } from "./node-id.js";
 import { ownerTargetId } from "./owner-target-id.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { pushEdge } from "./push-edge.js";
 import { readOrigins } from "./read-origins.js";
+import { resolveReadTargetId } from "./resolve-read-target-id.js";
 import { retUseNodeId } from "./ret-use-node-id.js";
 import { sanitize } from "./sanitize.js";
 import { setPredecessorOf } from "./set-predecessor-of.js";
 import { stateRefId } from "./state-ref-id.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 import type { WriteOp } from "./write-op.js";
-
-const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(
   ir: SerializedIR,
@@ -418,16 +417,18 @@ export function buildVisualGraph(
         targetElements,
         state,
       );
-      let targetId: string | null = exprStmtId;
-      if (targetId === null && enclosingFn) {
-        targetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
-      }
-      if (targetId === null) {
-        targetId = MODULE_ROOT_ID;
+      const resolved = resolveReadTargetId(
+        exprStmtId,
+        enclosingFn,
+        r,
+        ctx,
+        state,
+      );
+      if (resolved.needsModuleRoot) {
         needsModuleRoot = true;
       }
       for (const fromId of fromIds) {
-        pushEdge(state, fromId, label, targetId);
+        pushEdge(state, fromId, label, resolved.targetId);
       }
     }
   }
