@@ -5,6 +5,7 @@ import { blockContextOf } from "../../analyzer/block-context-of.js";
 import { caseExitsFunction } from "../../analyzer/case-exits-function.js";
 import { caseFallsThrough } from "../../analyzer/case-falls-through.js";
 import { findExpressionStatementContainer } from "../../analyzer/expression-statement-container.js";
+import { findCompletion } from "../../analyzer/find-completion.js";
 import { formatCaseTest } from "../../analyzer/format-case-test.js";
 import { isAstNode } from "../../analyzer/is-ast-node.js";
 import { isUnused } from "../../analyzer/is-unused.js";
@@ -12,9 +13,7 @@ import { findJsxElementSpan } from "../../analyzer/jsx-element-span.js";
 import { findReferenceOwners } from "../../analyzer/owner/find-reference-owners.js";
 import { findPredicateContainer } from "../../analyzer/predicate.js";
 import { referenceCallReceiverFlags } from "../../analyzer/reference-call-receiver.js";
-import { findReturnContainer } from "../../analyzer/return-container.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
-import { findThrowContainer } from "../../analyzer/throw-container.js";
 import type { AnalysisVisitor } from "../../boundary/eslint-scope/visitor.js";
 import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
@@ -69,8 +68,7 @@ export function buildAnalysisVisitor(
           input.key,
           input.path,
         ),
-        returnContainer: findReturnContainer(input.path),
-        throwContainer: findThrowContainer(input.path),
+        completion: findCompletion(input.path),
         jsxElement: findJsxElementSpan(input.path),
         expressionStatementContainer: findExpressionStatementContainer(
           input.path,

@@ -405,8 +405,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -433,8 +434,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -461,8 +463,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -489,8 +492,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -515,7 +519,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 6,
           "column": 4,
@@ -527,7 +532,6 @@
           "offset": 168
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -552,7 +556,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 8,
           "column": 2,
@@ -564,7 +569,6 @@
           "offset": 218
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 8,
@@ -600,7 +604,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 8,
           "column": 2,
@@ -612,7 +617,6 @@
           "offset": 218
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

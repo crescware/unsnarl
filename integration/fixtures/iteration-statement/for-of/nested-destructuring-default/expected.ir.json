@@ -315,8 +315,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -344,8 +345,9 @@
         "type": "ForOfStatement",
         "offset": 93
       },
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -370,8 +372,9 @@
         "receiver": true
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -418,8 +421,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {

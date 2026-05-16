@@ -17,11 +17,11 @@ import type { VisualSubgraph } from "../visual-subgraph.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { ensureThrowUseNode } from "./ensure-throw-use-node.js";
+import { throwCompletion } from "./testing/completion.js";
 import { jsxContainer } from "./testing/jsx-container.js";
 import { baseRef } from "./testing/make-ref.js";
 import { baseVariable } from "./testing/make-variable.js";
 import { span } from "./testing/span.js";
-import { throwContainer } from "./testing/throw-container.js";
 import type { WriteOp } from "./write-op.js";
 
 function makeHostSubgraph(): VisualSubgraph {
@@ -114,7 +114,7 @@ describe("ensureThrowUseNode", () => {
         {
           ...baseRef(),
           from: asScopeId("scope"),
-          throwContainer: throwContainer(0, 10),
+          completion: throwCompletion(0, 10),
         },
         ctx,
         state,
@@ -122,7 +122,7 @@ describe("ensureThrowUseNode", () => {
     ).toEqual(null);
   });
 
-  test("returns null when the reference has no throwContainer", () => {
+  test("returns null when the reference completion is not throw", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
@@ -154,7 +154,7 @@ describe("ensureThrowUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("x"), span: span(0, 3) },
       resolved: asVariableId("v"),
-      throwContainer: throwContainer(0, 50, 3, 5),
+      completion: throwCompletion(0, 50, 3, 5),
     };
 
     const id = ensureThrowUseNode("fnVar", ref, ctx, state);
@@ -182,20 +182,20 @@ describe("ensureThrowUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("literal"), span: span(0, 1) },
       resolved: null,
-      throwContainer: throwContainer(0, 10),
+      completion: throwCompletion(0, 10),
     };
     ensureThrowUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;
     expect((sg.elements[0] as { name: string }).name).toEqual("literal");
   });
 
-  test("groups references that share the same throwContainer offsets into one subgraph", () => {
+  test("groups references that share the same throw completion offsets into one subgraph", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
-    const tc = throwContainer(0, 50, 3, 5);
-    const ref1 = { ...baseRef(), id: asReferenceId("r1"), throwContainer: tc };
-    const ref2 = { ...baseRef(), id: asReferenceId("r2"), throwContainer: tc };
+    const tc = throwCompletion(0, 50, 3, 5);
+    const ref1 = { ...baseRef(), id: asReferenceId("r1"), completion: tc };
+    const ref2 = { ...baseRef(), id: asReferenceId("r2"), completion: tc };
 
     ensureThrowUseNode("fnVar", ref1, ctx, state);
     ensureThrowUseNode("fnVar", ref2, ctx, state);
@@ -208,19 +208,19 @@ describe("ensureThrowUseNode", () => {
     ]);
   });
 
-  test("references with different throwContainer offsets create separate subgraphs", () => {
+  test("references with different throw completion offsets create separate subgraphs", () => {
     const host = makeHostSubgraph();
     const ctx = makeCtx();
     const state = makeState(host);
     const ref1 = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      throwContainer: throwContainer(0, 10),
+      completion: throwCompletion(0, 10),
     };
     const ref2 = {
       ...baseRef(),
       id: asReferenceId("r2"),
-      throwContainer: throwContainer(20, 30),
+      completion: throwCompletion(20, 30),
     };
 
     ensureThrowUseNode("fnVar", ref1, ctx, state);
@@ -236,7 +236,7 @@ describe("ensureThrowUseNode", () => {
     const ref = {
       ...baseRef(),
       id: asReferenceId("r1"),
-      throwContainer: throwContainer(0, 10),
+      completion: throwCompletion(0, 10),
     };
     ensureThrowUseNode("fnVar", ref, ctx, state);
     ensureThrowUseNode("fnVar", ref, ctx, state);
@@ -253,7 +253,7 @@ describe("ensureThrowUseNode", () => {
       id: asReferenceId("r1"),
       identifier: { name: asFilledString("Foo"), span: span(0, 2) },
       jsxElement: jsxContainer(0, 30, 2, 5),
-      throwContainer: throwContainer(0, 30, 2, 5),
+      completion: throwCompletion(0, 30, 2, 5),
     };
     ensureThrowUseNode("fnVar", ref, ctx, state);
     const sg = host.elements[0] as VisualSubgraph;

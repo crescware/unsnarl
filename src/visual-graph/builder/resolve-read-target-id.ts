@@ -18,24 +18,16 @@ export function resolveReadTargetId(
   if (enclosingFnVarId === null) {
     return MODULE_ROOT_ID;
   }
-  if (ref.returnContainer !== null && ref.throwContainer !== null) {
-    // Mutually exclusive per AST grammar: see issue #94. Asserted here so an
-    // analyzer regression surfaces immediately instead of silently routing
-    // via an implicit precedence rule.
-    // @TODO https://github.com/crescware/unsnarl/issues/94
-    throw new Error(
-      "resolveReadTargetId: returnContainer and throwContainer are mutually exclusive",
-    );
+  switch (ref.completion.kind) {
+    case "return":
+      return (
+        ensureReturnUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
+      );
+    case "throw":
+      return (
+        ensureThrowUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
+      );
+    case "normal":
+      return MODULE_ROOT_ID;
   }
-  if (ref.returnContainer !== null) {
-    return (
-      ensureReturnUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
-    );
-  }
-  if (ref.throwContainer !== null) {
-    return (
-      ensureThrowUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
-    );
-  }
-  return MODULE_ROOT_ID;
 }

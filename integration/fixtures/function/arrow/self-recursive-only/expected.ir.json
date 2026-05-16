@@ -169,8 +169,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -195,7 +196,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 1,
           "column": 16,
@@ -207,7 +209,6 @@
           "offset": 17
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

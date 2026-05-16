@@ -438,8 +438,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -466,8 +467,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -494,8 +496,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -520,7 +523,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 4,
           "column": 41,
@@ -532,7 +536,6 @@
           "offset": 140
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -557,7 +560,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 4,
           "column": 41,
@@ -569,7 +573,6 @@
           "offset": 140
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -596,8 +599,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -622,7 +626,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 5,
           "column": 2,
@@ -634,7 +639,6 @@
           "offset": 187
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 5,
@@ -670,7 +674,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 5,
           "column": 2,
@@ -682,7 +687,6 @@
           "offset": 187
         }
       },
-      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

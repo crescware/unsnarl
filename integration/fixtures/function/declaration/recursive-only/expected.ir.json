@@ -148,8 +148,9 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": null,
-      "throwContainer": null,
+      "completion": {
+        "kind": "normal"
+      },
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {

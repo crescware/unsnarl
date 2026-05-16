@@ -11,8 +11,7 @@ const EMPTY_REFERENCE_ANNOTATION: ReferenceAnnotation = {
   owners: [],
   flags: { call: false, receiver: false },
   predicateContainer: null,
-  returnContainer: null,
-  throwContainer: null,
+  completion: { kind: "normal" },
   jsxElement: null,
   expressionStatementContainer: null,
 };

@@ -1,5 +1,5 @@
+import { isAbruptCompletionStatement } from "./is-abrupt-completion-statement.js";
 import { isAstNode } from "./is-ast-node.js";
-import { isFunctionExit } from "./is-function-exit.js";
 
 export function caseExitsFunction(consequent: readonly unknown[]): boolean {
   if (consequent.length === 0) {
@@ -9,5 +9,5 @@ export function caseExitsFunction(consequent: readonly unknown[]): boolean {
   if (!isAstNode(last)) {
     return false;
   }
-  return isFunctionExit(last);
+  return isAbruptCompletionStatement(last);
 }

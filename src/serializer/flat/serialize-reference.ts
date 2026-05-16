@@ -1,6 +1,7 @@
 import { parse } from "valibot";
 
 import type { Annotations } from "../../ir/annotations/annotations.js";
+import type { AbruptCompletion } from "../../ir/reference/completion.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
 import type { Variable } from "../../ir/scope/variable.js";
@@ -48,18 +49,10 @@ export function serializeReference(
       receiver: ann.flags.receiver,
     },
     predicateContainer: ann.predicateContainer,
-    returnContainer: ann.returnContainer
-      ? {
-          startSpan: spanFromOffset(raw, ann.returnContainer.startOffset),
-          endSpan: spanFromOffset(raw, ann.returnContainer.endOffset),
-        }
-      : null,
-    throwContainer: ann.throwContainer
-      ? {
-          startSpan: spanFromOffset(raw, ann.throwContainer.startOffset),
-          endSpan: spanFromOffset(raw, ann.throwContainer.endOffset),
-        }
-      : null,
+    completion:
+      ann.completion.kind === "normal"
+        ? { kind: "normal" }
+        : serializeAbruptCompletion(ann.completion, raw),
     jsxElement: ann.jsxElement
       ? {
           startSpan: spanFromOffset(raw, ann.jsxElement.startOffset),
@@ -83,4 +76,19 @@ export function serializeReference(
         }
       : null,
   });
+}
+
+function serializeAbruptCompletion(
+  c: AbruptCompletion,
+  raw: string,
+): Readonly<{
+  kind: "return" | "throw";
+  startSpan: ReturnType<typeof spanFromOffset>;
+  endSpan: ReturnType<typeof spanFromOffset>;
+}> {
+  return {
+    kind: c.kind,
+    startSpan: spanFromOffset(raw, c.startOffset),
+    endSpan: spanFromOffset(raw, c.endOffset),
+  };
 }

@@ -2,9 +2,9 @@ import { describe, expect, test } from "vitest";
 
 import type { AstNode } from "../ir/primitive/ast-node.js";
 import { AST_TYPE } from "../parser/ast-type.js";
-import { isFunctionExit } from "./is-function-exit.js";
+import { isAbruptCompletionStatement } from "./is-abrupt-completion-statement.js";
 
-describe("isFunctionExit", () => {
+describe("isAbruptCompletionStatement", () => {
   test.each([
     {
       name: "ReturnStatement -> true",
@@ -32,7 +32,7 @@ describe("isFunctionExit", () => {
       expected: false,
     },
   ])("$name", ({ node, expected }) => {
-    expect(isFunctionExit(node as AstNode)).toEqual(expected);
+    expect(isAbruptCompletionStatement(node as AstNode)).toEqual(expected);
   });
 
   test("BlockStatement: ends in ReturnStatement -> true", () => {
@@ -43,7 +43,7 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ReturnStatement },
       ],
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toEqual(true);
+    expect(isAbruptCompletionStatement(node)).toEqual(true);
   });
 
   test("BlockStatement: ends in non-exit -> false", () => {
@@ -54,13 +54,13 @@ describe("isFunctionExit", () => {
         { type: AST_TYPE.ExpressionStatement },
       ],
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toEqual(false);
+    expect(isAbruptCompletionStatement(node)).toEqual(false);
   });
 
   test("BlockStatement: empty body -> false", () => {
-    expect(isFunctionExit({ type: AST_TYPE.BlockStatement, body: [] })).toEqual(
-      false,
-    );
+    expect(
+      isAbruptCompletionStatement({ type: AST_TYPE.BlockStatement, body: [] }),
+    ).toEqual(false);
   });
 
   test("IfStatement: both branches exit -> true", () => {
@@ -69,7 +69,7 @@ describe("isFunctionExit", () => {
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ThrowStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toEqual(true);
+    expect(isAbruptCompletionStatement(node)).toEqual(true);
   });
 
   test("IfStatement: only consequent exits -> false", () => {
@@ -78,7 +78,7 @@ describe("isFunctionExit", () => {
       consequent: { type: AST_TYPE.ReturnStatement },
       alternate: { type: AST_TYPE.ExpressionStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toEqual(false);
+    expect(isAbruptCompletionStatement(node)).toEqual(false);
   });
 
   test("IfStatement: missing alternate -> false", () => {
@@ -86,6 +86,6 @@ describe("isFunctionExit", () => {
       type: AST_TYPE.IfStatement,
       consequent: { type: AST_TYPE.ReturnStatement },
     } as const satisfies AstNode;
-    expect(isFunctionExit(node)).toEqual(false);
+    expect(isAbruptCompletionStatement(node)).toEqual(false);
   });
 });

@@ -1,10 +1,12 @@
 import {
   array,
   boolean,
+  literal,
   nullable,
   object,
   pipe,
   readonly,
+  variant,
   type InferOutput,
 } from "valibot";
 
@@ -15,6 +17,26 @@ import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
 import { serializedHeadExpression$ } from "./serialized-expression-statement-head.js";
 import { variableId$ } from "./variable-id.js";
+
+/**
+ * Reference の値がどの ECMAScript Completion 種別の [[Value]] として
+ * 産出されるかを表す serialized (span-based) スキーマ。詳細は
+ * `src/ir/reference/completion.ts` のドキュメントを参照。
+ *
+ * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
+ * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
+ */
+const serializedCompletion$ = variant("kind", [
+  pipe(object({ kind: literal("normal") }), readonly()),
+  pipe(
+    object({ kind: literal("return"), startSpan: span$, endSpan: span$ }),
+    readonly(),
+  ),
+  pipe(
+    object({ kind: literal("throw"), startSpan: span$, endSpan: span$ }),
+    readonly(),
+  ),
+]);
 
 export const serializedReference$ = object({
   id: referenceId$,
@@ -33,12 +55,7 @@ export const serializedReference$ = object({
     readonly(),
   ),
   predicateContainer: nullable(predicateContainer$),
-  returnContainer: nullable(
-    pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
-  ),
-  throwContainer: nullable(
-    pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
-  ),
+  completion: serializedCompletion$,
   jsxElement: nullable(
     pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
   ),

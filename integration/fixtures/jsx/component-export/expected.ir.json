@@ -194,7 +194,8 @@
         "receiver": false
       },
       "predicateContainer": null,
-      "returnContainer": {
+      "completion": {
+        "kind": "return",
         "startSpan": {
           "line": 4,
           "column": 2,
@@ -206,7 +207,6 @@
           "offset": 79
         }
       },
-      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 4,
