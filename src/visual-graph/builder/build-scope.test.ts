@@ -13,6 +13,7 @@ import { SERIALIZED_IR_VERSION } from "../../serializer/serialized-ir-version.js
 import { VARIABLE_DECLARATION_KIND } from "../../serializer/variable-declaration-kind.js";
 import { asFilledString } from "../../util/filled-string.js";
 import { NODE_KIND } from "../node-kind.js";
+import { SUBGRAPH_KIND } from "../subgraph-kind.js";
 import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
@@ -97,7 +98,7 @@ describe("buildScope", () => {
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
     expect(sg.type).toEqual(VISUAL_ELEMENT_TYPE.Subgraph);
-    expect(sg.kind).toEqual("block");
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Block);
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v1",
@@ -189,7 +190,7 @@ describe("buildScope", () => {
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
     expect(sg.type).toEqual("subgraph");
-    expect(sg.kind).toEqual("function");
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Function);
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_param",
@@ -226,7 +227,7 @@ describe("buildScope", () => {
 
     expect(container.elements).toHaveLength(1);
     const sg = container.elements[0] as VisualSubgraph;
-    expect(sg.kind).toEqual("for");
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.For);
     expect(
       sg.elements.find(
         (v) => v.type === VISUAL_ELEMENT_TYPE.Node && v.id === "n_v",
@@ -274,6 +275,6 @@ describe("buildScope", () => {
       (v) => v.type === VISUAL_ELEMENT_TYPE.Subgraph,
     ) as VisualSubgraph;
     expect(childSg !== null && childSg !== undefined).toEqual(true);
-    expect(childSg.kind).toEqual("if");
+    expect(childSg.kind).toEqual(SUBGRAPH_KIND.If);
   });
 });

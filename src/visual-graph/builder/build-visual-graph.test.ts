@@ -248,7 +248,7 @@ describe("buildVisualGraph: variable nodes", () => {
 describe("buildVisualGraph: function subgraphs", () => {
   test("a FunctionDeclaration becomes a function subgraph with ownerNodeId pointing to the FunctionName", () => {
     const g = build("function add(a, b) { return a + b; }\n");
-    const fn = findSubgraphs(g, "function")[0];
+    const fn = findSubgraphs(g, SUBGRAPH_KIND.Function)[0];
     expect(fn !== null && fn !== undefined).toEqual(true);
     expect(fn?.ownerNodeId !== null && fn?.ownerNodeId !== undefined).toEqual(
       true,
@@ -262,7 +262,7 @@ describe("buildVisualGraph: function subgraphs", () => {
 
   test("function subgraph mirrors the owner's name as ownerName so labels survive when pruning drops the owner node", () => {
     const g = build("function add(a, b) { return a + b; }\n");
-    const fn = findSubgraphs(g, "function")[0];
+    const fn = findSubgraphs(g, SUBGRAPH_KIND.Function)[0];
     expect(fn?.ownerName).toEqual("add");
   });
 
@@ -273,20 +273,20 @@ describe("buildVisualGraph: function subgraphs", () => {
       "function fn(p) { return p; }",
     ]) {
       const g = build(code + "\n");
-      expect(findSubgraphs(g, "function")).toHaveLength(1);
+      expect(findSubgraphs(g, SUBGRAPH_KIND.Function)).toHaveLength(1);
     }
   });
 
   test("function subgraph line range covers the whole function block", () => {
     const g = build("function f() {\n  return 1;\n}\n");
-    const fn = findSubgraphs(g, "function")[0];
+    const fn = findSubgraphs(g, SUBGRAPH_KIND.Function)[0];
     expect(fn?.line).toEqual(1);
     expect(fn?.endLine).toEqual(3);
   });
 
   test("a single-line function reports endLine equal to line (renderers collapse equal ranges)", () => {
     const g = build("function f() { return 1; }\n");
-    const fn = findSubgraphs(g, "function")[0];
+    const fn = findSubgraphs(g, SUBGRAPH_KIND.Function)[0];
     expect(fn?.line).toEqual(1);
     expect(fn?.endLine).toEqual(1);
   });
@@ -306,9 +306,9 @@ describe("buildVisualGraph: control subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const tryS = findSubgraphs(g, "try")[0];
-    const catchS = findSubgraphs(g, "catch")[0];
-    const finallyS = findSubgraphs(g, "finally")[0];
+    const tryS = findSubgraphs(g, SUBGRAPH_KIND.Try)[0];
+    const catchS = findSubgraphs(g, SUBGRAPH_KIND.Catch)[0];
+    const finallyS = findSubgraphs(g, SUBGRAPH_KIND.Finally)[0];
     expect(tryS).toEqual(
       expect.objectContaining({ line: 2, endLine: 4, kind: SUBGRAPH_KIND.Try }),
     );
@@ -338,8 +338,8 @@ describe("buildVisualGraph: control subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    expect(findSubgraphs(g, "if-else-container")).toHaveLength(0);
-    const ifS = findSubgraphs(g, "if")[0];
+    expect(findSubgraphs(g, SUBGRAPH_KIND.IfElseContainer)).toHaveLength(0);
+    const ifS = findSubgraphs(g, SUBGRAPH_KIND.If)[0];
     expect(ifS?.line).toEqual(3);
     const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor?.line).toEqual(3);
@@ -364,7 +364,7 @@ describe("buildVisualGraph: control subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const container = findSubgraphs(g, "if-else-container")[0];
+    const container = findSubgraphs(g, SUBGRAPH_KIND.IfElseContainer)[0];
     expect(container?.line).toEqual(3);
     expect(container?.endLine).toEqual(7);
     expect(container?.hasElse).toEqual(true);
@@ -386,10 +386,10 @@ describe("buildVisualGraph: control subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const sw = findSubgraphs(g, "switch")[0];
+    const sw = findSubgraphs(g, SUBGRAPH_KIND.Switch)[0];
     expect(sw?.line).toEqual(3);
     expect(sw?.endLine).toEqual(9);
-    const cases = findSubgraphs(g, "case");
+    const cases = findSubgraphs(g, SUBGRAPH_KIND.Case);
     expect(cases).toHaveLength(2);
     const tests = cases.map((v) => v.caseTest);
     // The default clause is also a "case" subgraph but with caseTest = null;
@@ -400,7 +400,7 @@ describe("buildVisualGraph: control subgraphs", () => {
 
   test("for loop bodies become for subgraphs", () => {
     const g = build("for (let i = 0; i < 1; i++) { i; }\n");
-    expect(findSubgraphs(g, "for")).toHaveLength(1);
+    expect(findSubgraphs(g, SUBGRAPH_KIND.For)).toHaveLength(1);
   });
 });
 
@@ -568,7 +568,7 @@ describe("buildVisualGraph: read origin edges", () => {
 describe("buildVisualGraph: return subgraphs", () => {
   test("a ReturnStatement yields a return subgraph with one ReturnUse per ownerless ref", () => {
     const g = build("function f(a, b) { return a + b; }\n");
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     expect(ret !== null && ret !== undefined).toEqual(true);
     const uses = ret!.elements.filter(
       (v) =>
@@ -589,7 +589,7 @@ describe("buildVisualGraph: return subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const returns = findSubgraphs(g, "return");
+    const returns = findSubgraphs(g, SUBGRAPH_KIND.Return);
     expect(returns).toHaveLength(2);
     const lines = returns.map((v) => v.line).sort((a, b) => a - b);
     expect(lines).toEqual([4, 5]);
@@ -607,8 +607,8 @@ describe("buildVisualGraph: return subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const fn = findSubgraphs(g, "function")[0];
-    const ifS = findSubgraphs(g, "if")[0];
+    const fn = findSubgraphs(g, SUBGRAPH_KIND.Function)[0];
+    const ifS = findSubgraphs(g, SUBGRAPH_KIND.If)[0];
     const fnDirectReturns = childSubgraphsOf(fn!).filter(
       (v) => v.kind === SUBGRAPH_KIND.Return,
     );
@@ -635,7 +635,7 @@ describe("buildVisualGraph: return subgraphs", () => {
         "}",
       ].join("\n"),
     );
-    const cases = findSubgraphs(g, "case");
+    const cases = findSubgraphs(g, SUBGRAPH_KIND.Case);
     // The default case body has a ReturnUse for x; check it is nested there.
     const caseWithReturnUse = cases.find((caseSg) =>
       childSubgraphsOf(caseSg).some((v) => v.kind === SUBGRAPH_KIND.Return),
@@ -648,26 +648,26 @@ describe("buildVisualGraph: return subgraphs", () => {
 
   test("an arrow with an expression body uses the body span as the implicit return container", () => {
     const g = build(["const fn = (x) => (", "  x + 1", ");"].join("\n"));
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     expect(ret?.line).toEqual(1);
     expect(ret?.endLine).toEqual(3);
   });
 
   test("an arrow with a block body falls through to the inner ReturnStatement's span", () => {
     const g = build(["const fn = (x) => {", "  return x;", "};"].join("\n"));
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     expect(ret?.line).toEqual(2);
     expect(ret?.endLine).toEqual(null);
   });
 
   test("a function with no ownerless refs in its body produces no return subgraph", () => {
     const g = build("function f() { return 1; }\n"); // literal only
-    expect(findSubgraphs(g, "return")).toHaveLength(0);
+    expect(findSubgraphs(g, SUBGRAPH_KIND.Return)).toHaveLength(0);
   });
 
   test("a single-line return subgraph leaves endLine null (rendered as plain L<n>)", () => {
     const g = build("function f(x) { return x; }\n");
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     expect(ret?.line).toEqual(1);
     expect(ret?.endLine).toEqual(null);
   });
@@ -675,7 +675,7 @@ describe("buildVisualGraph: return subgraphs", () => {
   test("ownerless refs flow into ReturnUse nodes via |read| edges", () => {
     const g = build("function f(a) { return a; }\n");
     const aParam = nodeByName(g, "a");
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     const retUse = ret?.elements.find(
       (v) =>
         v.type === VISUAL_ELEMENT_TYPE.Node &&
@@ -721,7 +721,7 @@ describe("buildVisualGraph: return subgraphs", () => {
 
   test("non-JSX ReturnUse stays isJsxElement=false with endLine null", () => {
     const g = build("function f(a) { return a; }\n");
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     const retUse =
       ret?.elements.find(
         (v): v is VisualNode =>
@@ -792,7 +792,7 @@ describe("buildVisualGraph: predicate references", () => {
       NODE_KIND.SyntheticSwitchStatementDiscriminant,
     )[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
-    const sw = findSubgraphs(g, "switch")[0];
+    const sw = findSubgraphs(g, SUBGRAPH_KIND.Switch)[0];
     expect(sw?.elements[0]).toEqual(anchor);
     expect(
       g.edges.some(
@@ -810,17 +810,19 @@ describe("buildVisualGraph: predicate references", () => {
       ].join("\n"),
     );
     const flag = nodeByName(g, "flag");
-    const container = findSubgraphs(g, "if-else-container")[0];
+    const container = findSubgraphs(g, SUBGRAPH_KIND.IfElseContainer)[0];
     const anchor = findNodes(g, NODE_KIND.SyntheticIfStatementTest)[0];
     expect(anchor !== null && anchor !== undefined).toEqual(true);
     const ifBranch = container?.elements.find(
-      (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "if",
+      (v): v is VisualSubgraph =>
+        v.type === "subgraph" && v.kind === SUBGRAPH_KIND.If,
     );
     expect(ifBranch?.elements).toContainEqual(
       expect.objectContaining({ id: anchor?.id }),
     );
     const elseBranch = container?.elements.find(
-      (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "else",
+      (v): v is VisualSubgraph =>
+        v.type === "subgraph" && v.kind === SUBGRAPH_KIND.Else,
     );
     expect(
       elseBranch?.elements.every(
@@ -865,14 +867,15 @@ describe("buildVisualGraph: predicate references", () => {
         "}",
       ].join("\n"),
     );
-    const container = findSubgraphs(g, "if-else-container")[0];
+    const container = findSubgraphs(g, SUBGRAPH_KIND.IfElseContainer)[0];
     expect(container !== null && container !== undefined).toEqual(true);
     const anchors = findNodes(g, NODE_KIND.SyntheticIfStatementTest);
     expect(anchors).toHaveLength(2);
     const lines = anchors.map((v) => v.line).sort((a, b) => a - b);
     expect(lines).toEqual([3, 5]);
     const ifBranches = (container?.elements ?? []).filter(
-      (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "if",
+      (v): v is VisualSubgraph =>
+        v.type === "subgraph" && v.kind === SUBGRAPH_KIND.If,
     );
     for (const anchor of anchors) {
       const hosts = ifBranches.filter((branch) =>
@@ -881,7 +884,8 @@ describe("buildVisualGraph: predicate references", () => {
       expect(hosts).toHaveLength(1);
     }
     const elseBranch = container?.elements.find(
-      (v): v is VisualSubgraph => v.type === "subgraph" && v.kind === "else",
+      (v): v is VisualSubgraph =>
+        v.type === "subgraph" && v.kind === SUBGRAPH_KIND.Else,
     );
     expect(
       elseBranch?.elements.every(
@@ -997,7 +1001,7 @@ describe("buildVisualGraph: edge deduplication", () => {
     // ReturnUse would be emitted. After dedup, only one survives.
     const g = build("function f(a) { return a + a; }\n");
     const a = nodeByName(g, "a");
-    const ret = findSubgraphs(g, "return")[0];
+    const ret = findSubgraphs(g, SUBGRAPH_KIND.Return)[0];
     // Only one ReturnUse for the variable `a` survives because both reads
     // share the same destination.
     const uses = (ret?.elements ?? []).filter(

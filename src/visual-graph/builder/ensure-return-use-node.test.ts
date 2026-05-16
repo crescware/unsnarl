@@ -162,7 +162,7 @@ describe("ensureReturnUseNode", () => {
     expect(id).toEqual("ret_use_r1");
     expect(host.elements).toHaveLength(1);
     const sg = host.elements[0] as VisualSubgraph;
-    expect(sg.kind).toEqual("return");
+    expect(sg.kind).toEqual(SUBGRAPH_KIND.Return);
     expect(sg.line).toEqual(3);
     expect(sg.endLine).toEqual(5);
     const node = sg.elements.find((v) => v.type === VISUAL_ELEMENT_TYPE.Node);
