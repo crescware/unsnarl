@@ -19,9 +19,7 @@ import { serializedHeadExpression$ } from "./serialized-expression-statement-hea
 import { variableId$ } from "./variable-id.js";
 
 /**
- * Reference の値がどの ECMAScript Completion 種別の [[Value]] として
- * 産出されるかを表す serialized (span-based) スキーマ。詳細は
- * `src/ir/reference/completion.ts` のドキュメントを参照。
+ * Span-based Completion shape.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94

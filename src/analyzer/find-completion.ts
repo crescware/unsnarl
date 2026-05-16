@@ -6,12 +6,9 @@ import type { Completion } from "../ir/reference/completion.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
 /**
- * Reference の祖先列を leaf から root へ走査し、その値が運ばれる
- * Completion 種別を一意に決定する (total)。
- *
- * 旧 `findReturnContainer` / `findThrowContainer` を統合したもの。
- * 同じ祖先列を 2 回走査していた現状を 1 回に統合し、ECMA §6.2.4 の
- * Completion 種別を直接返す。
+ * Walk a Reference's ancestor chain from leaf to root and resolve the
+ * Completion category that carries its value. Total: every Reference
+ * is classified.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94

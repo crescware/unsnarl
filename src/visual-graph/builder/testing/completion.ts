@@ -9,11 +9,9 @@ import {
 import { span } from "./span.js";
 
 /**
- * Serialized completion shape (with spans) を生成するテストヘルパー。
- * ECMA §6.2.4 の Completion Record の Reference annotation 投影に対応。
- *
- * 命名は仕様の各 Completion 種別（NormalCompletion / ReturnCompletion /
- * ThrowCompletion）に揃える。
+ * Test helpers producing span-based Completion shapes. The helper
+ * names mirror ECMA §6.2.4's NormalCompletion / ReturnCompletion /
+ * ThrowCompletion.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94

@@ -3,14 +3,12 @@ import { AST_TYPE } from "../parser/ast-type.js";
 import { isAstNode } from "./is-ast-node.js";
 
 /**
- * Statement が ECMA §6.2.4 の abrupt completion (return / throw) を産出
- * するか、あるいはネスト構造の終端で必ず産出するかを判定する。
+ * True if the Statement produces an ECMA §6.2.4 abrupt completion
+ * (return / throw), either directly or at every reachable termination
+ * of a nested structure.
  *
- * 旧名は `isFunctionExit`。Completion 抽象の導入に合わせて、ECMAScript
- * 仕様の語彙（abrupt completion）に揃えてリネームした。break / continue
- * は本判定の対象に含まれない（Reference annotation のスコープ上、値を
- * 運ばない completion はモデル化していない。詳細は
- * `src/ir/reference/completion.ts` を参照）。
+ * break / continue are out of scope: they carry no value, so they
+ * never appear as a Reference's completion category.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
