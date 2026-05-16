@@ -1,3 +1,8 @@
+import {
+  normal$,
+  return$,
+  throw$,
+} from "../../ir/reference/completion-kind.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
@@ -19,15 +24,15 @@ export function resolveReadTargetId(
     return MODULE_ROOT_ID;
   }
   switch (ref.completion.kind) {
-    case "return":
+    case return$.literal:
       return (
         ensureReturnUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
       );
-    case "throw":
+    case throw$.literal:
       return (
         ensureThrowUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID
       );
-    case "normal":
+    case normal$.literal:
       return MODULE_ROOT_ID;
   }
 }

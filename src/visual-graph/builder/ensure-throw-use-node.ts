@@ -1,3 +1,4 @@
+import { throw$ } from "../../ir/reference/completion-kind.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -17,7 +18,7 @@ export function ensureThrowUseNode(
   ctx: BuilderContext,
   state: BuildState,
 ): string | null {
-  if (ref.completion.kind !== "throw") {
+  if (ref.completion.kind !== throw$.literal) {
     return null;
   }
   const host = findHostSubgraph(ref, enclosingFnVarId, ctx.scopeMap, state);

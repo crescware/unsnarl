@@ -1,4 +1,11 @@
+import type { InferOutput } from "valibot";
+
 import type { Span } from "../../../ir/primitive/span.js";
+import {
+  normal$,
+  return$,
+  throw$,
+} from "../../../ir/reference/completion-kind.js";
 import { span } from "./span.js";
 
 /**
@@ -13,21 +20,23 @@ import { span } from "./span.js";
  */
 
 export type SerializedReturnCompletion = Readonly<{
-  kind: "return";
+  kind: InferOutput<typeof return$>;
   startSpan: Span;
   endSpan: Span;
 }>;
 
 export type SerializedThrowCompletion = Readonly<{
-  kind: "throw";
+  kind: InferOutput<typeof throw$>;
   startSpan: Span;
   endSpan: Span;
 }>;
 
-export type SerializedNormalCompletion = Readonly<{ kind: "normal" }>;
+export type SerializedNormalCompletion = Readonly<{
+  kind: InferOutput<typeof normal$>;
+}>;
 
 export function normalCompletion(): SerializedNormalCompletion {
-  return { kind: "normal" };
+  return { kind: normal$.literal };
 }
 
 export function returnCompletion(
@@ -37,7 +46,7 @@ export function returnCompletion(
   endLine = startLine,
 ): SerializedReturnCompletion {
   return {
-    kind: "return",
+    kind: return$.literal,
     startSpan: span(startOffset, startLine),
     endSpan: span(endOffset, endLine),
   };
@@ -50,7 +59,7 @@ export function throwCompletion(
   endLine = startLine,
 ): SerializedThrowCompletion {
   return {
-    kind: "throw",
+    kind: throw$.literal,
     startSpan: span(startOffset, startLine),
     endSpan: span(endOffset, endLine),
   };

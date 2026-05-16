@@ -2,6 +2,7 @@ import type { Annotations } from "../ir/annotations/annotations.js";
 import type { ReferenceAnnotation } from "../ir/annotations/reference-annotation.js";
 import type { ScopeAnnotation } from "../ir/annotations/scope-annotation.js";
 import type { VariableAnnotation } from "../ir/annotations/variable-annotation.js";
+import { normal$ } from "../ir/reference/completion-kind.js";
 import type { Reference } from "../ir/reference/reference.js";
 import type { Scope } from "../ir/scope/scope.js";
 import type { Variable } from "../ir/scope/variable.js";
@@ -11,7 +12,7 @@ const EMPTY_REFERENCE_ANNOTATION: ReferenceAnnotation = {
   owners: [],
   flags: { call: false, receiver: false },
   predicateContainer: null,
-  completion: { kind: "normal" },
+  completion: { kind: normal$.literal },
   jsxElement: null,
   expressionStatementContainer: null,
 };

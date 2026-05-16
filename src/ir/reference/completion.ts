@@ -1,3 +1,7 @@
+import type { InferOutput } from "valibot";
+
+import type { normal$, return$, throw$ } from "./completion-kind.js";
+
 /**
  * Reference の値がどの ECMAScript Completion 種別の [[Value]] として
  * 産出されるかを表す annotation-side (offset-based) 型。
@@ -21,7 +25,9 @@
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  */
-export type Completion = AbruptCompletion | Readonly<{ kind: "normal" }>;
+export type Completion =
+  | AbruptCompletion
+  | Readonly<{ kind: InferOutput<typeof normal$> }>;
 
 /**
  * ECMA §6.2.4 が定義する abrupt completion (break | continue | return |
@@ -41,5 +47,13 @@ export type Completion = AbruptCompletion | Readonly<{ kind: "normal" }>;
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  */
 export type AbruptCompletion =
-  | Readonly<{ kind: "return"; startOffset: number; endOffset: number }>
-  | Readonly<{ kind: "throw"; startOffset: number; endOffset: number }>;
+  | Readonly<{
+      kind: InferOutput<typeof return$>;
+      startOffset: number;
+      endOffset: number;
+    }>
+  | Readonly<{
+      kind: InferOutput<typeof throw$>;
+      startOffset: number;
+      endOffset: number;
+    }>;

@@ -1,7 +1,6 @@
 import {
   array,
   boolean,
-  literal,
   nullable,
   object,
   pipe,
@@ -12,6 +11,7 @@ import {
 
 import { filledString$ } from "../../util/filled-string.js";
 import { span$ } from "../primitive/span.js";
+import { normal$, return$, throw$ } from "../reference/completion-kind.js";
 import { predicateContainer$ } from "../reference/predicate-container.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
@@ -27,15 +27,9 @@ import { variableId$ } from "./variable-id.js";
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  */
 const serializedCompletion$ = variant("kind", [
-  pipe(object({ kind: literal("normal") }), readonly()),
-  pipe(
-    object({ kind: literal("return"), startSpan: span$, endSpan: span$ }),
-    readonly(),
-  ),
-  pipe(
-    object({ kind: literal("throw"), startSpan: span$, endSpan: span$ }),
-    readonly(),
-  ),
+  pipe(object({ kind: normal$ }), readonly()),
+  pipe(object({ kind: return$, startSpan: span$, endSpan: span$ }), readonly()),
+  pipe(object({ kind: throw$, startSpan: span$, endSpan: span$ }), readonly()),
 ]);
 
 export const serializedReference$ = object({

@@ -1,4 +1,7 @@
+import type { InferOutput } from "valibot";
+
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
+import { normal$, return$, throw$ } from "../ir/reference/completion-kind.js";
 import type { Completion } from "../ir/reference/completion.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
@@ -21,10 +24,10 @@ export function findCompletion(path: readonly PathEntry[]): Completion {
     }
     const type = entry.node.type;
     if (type === AST_TYPE.ReturnStatement) {
-      return completionFromNode("return", entry.node);
+      return completionFromNode(return$.literal, entry.node);
     }
     if (type === AST_TYPE.ThrowStatement) {
-      return completionFromNode("throw", entry.node);
+      return completionFromNode(throw$.literal, entry.node);
     }
     if (type === AST_TYPE.ArrowFunctionExpression) {
       // Block-body arrows defer to an inner ReturnStatement (already handled
@@ -35,7 +38,7 @@ export function findCompletion(path: readonly PathEntry[]): Completion {
       ).body;
       if (body && body.type !== AST_TYPE.BlockStatement) {
         return completionFromNode(
-          "return",
+          return$.literal,
           body as { start?: number; end?: number },
         );
       }
@@ -53,10 +56,10 @@ export function findCompletion(path: readonly PathEntry[]): Completion {
   return NORMAL_COMPLETION;
 }
 
-const NORMAL_COMPLETION: Completion = { kind: "normal" };
+const NORMAL_COMPLETION: Completion = { kind: normal$.literal };
 
 function completionFromNode(
-  kind: "return" | "throw",
+  kind: InferOutput<typeof return$> | InferOutput<typeof throw$>,
   node: { start?: number; end?: number },
 ): Completion {
   const start = node.start;
