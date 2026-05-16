@@ -41,6 +41,7 @@ export function nodeHead(n: VisualNode): string {
       return n.initIsFunction ? `${name}()` : `let ${name}`;
     case NODE_KIND.FormalParameter:
     case NODE_KIND.ReturnArgumentReference:
+    case NODE_KIND.ThrowArgumentReference:
     case NODE_KIND.SyntheticIfStatementTest:
     case NODE_KIND.SyntheticSwitchStatementDiscriminant:
     case NODE_KIND.SyntheticWhileStatementTest:

@@ -54,6 +54,7 @@ describe("rendersInSyntheticBlock", () => {
     { kind: NODE_KIND.SyntheticImplicitGlobal, expected: false },
     { kind: NODE_KIND.WriteReference, expected: false },
     { kind: NODE_KIND.ReturnArgumentReference, expected: false },
+    { kind: NODE_KIND.ThrowArgumentReference, expected: false },
   ])("kind=$kind -> $expected", ({ kind, expected }) => {
     expect(rendersInSyntheticBlock(nodeOfKind(kind))).toEqual(expected);
   });

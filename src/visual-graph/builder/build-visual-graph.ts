@@ -21,27 +21,27 @@ import type { BuilderContext, BuildVisualGraphOptions } from "./context.js";
 import { edgeLabelOfRef } from "./edge-label-of-ref.js";
 import { enclosingFunctionVar } from "./enclosing-function-var.js";
 import { ensureExpressionStatementNode } from "./ensure-expression-statement-node.js";
-import { ensureReturnUseNode } from "./ensure-return-use-node.js";
 import { expressionStatementNodeId } from "./expression-statement-node-id.js";
 import { findHostSubgraph } from "./find-host-subgraph.js";
 import { findNodeById } from "./find-node-by-id.js";
 import { intermediateKey } from "./intermediate-key.js";
 import { isAncestorScope } from "./is-ancestor-scope.js";
 import { lastWriteOpInScopeBefore } from "./last-write-op-in-scope-before.js";
+import { MODULE_ROOT_ID } from "./module-root-id.js";
 import { nodeId } from "./node-id.js";
 import { ownerTargetId } from "./owner-target-id.js";
 import { predicateTargetId } from "./predicate-target-id.js";
 import { previousFallthroughCase } from "./previous-fallthrough-case.js";
 import { pushEdge } from "./push-edge.js";
 import { readOrigins } from "./read-origins.js";
+import { resolveReadTargetId } from "./resolve-read-target-id.js";
 import { retUseNodeId } from "./ret-use-node-id.js";
 import { sanitize } from "./sanitize.js";
 import { setPredecessorOf } from "./set-predecessor-of.js";
 import { stateRefId } from "./state-ref-id.js";
+import { throwUseNodeId } from "./throw-use-node-id.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 import type { WriteOp } from "./write-op.js";
-
-const MODULE_ROOT_ID = "module_root";
 
 export function buildVisualGraph(
   ir: SerializedIR,
@@ -189,6 +189,8 @@ export function buildVisualGraph(
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    throwSubgraphsByFn: new Map(),
+    throwUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
     switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
@@ -211,8 +213,6 @@ export function buildVisualGraph(
   if (root) {
     buildScope(root, graph, ctx, state);
   }
-
-  let needsModuleRoot = false;
 
   // let-chain edges (set / fallthrough)
   for (const ops of writeOpsByVariable.values()) {
@@ -405,12 +405,12 @@ export function buildVisualGraph(
         }
       }
     } else {
-      const enclosingFn = enclosingFunctionVar(
+      const enclosingFnVarId = enclosingFunctionVar(
         r.from,
         scopeMap,
         subgraphOwnerVar,
       );
-      const host = findHostSubgraph(r, enclosingFn, scopeMap, state);
+      const host = findHostSubgraph(r, enclosingFnVarId, scopeMap, state);
       const targetElements = host?.elements ?? graph.elements;
       const exprStmtId = ensureExpressionStatementNode(
         r,
@@ -418,20 +418,22 @@ export function buildVisualGraph(
         targetElements,
         state,
       );
-      let targetId: string | null = exprStmtId;
-      if (targetId === null && enclosingFn) {
-        targetId = ensureReturnUseNode(enclosingFn, r, ctx, state);
-      }
-      if (targetId === null) {
-        targetId = MODULE_ROOT_ID;
-        needsModuleRoot = true;
-      }
+      const targetId = resolveReadTargetId(
+        exprStmtId,
+        enclosingFnVarId,
+        r,
+        ctx,
+        state,
+      );
       for (const fromId of fromIds) {
         pushEdge(state, fromId, label, targetId);
       }
     }
   }
 
+  const needsModuleRoot = state.edges.some(
+    (edge) => edge.to === MODULE_ROOT_ID,
+  );
   if (needsModuleRoot) {
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,
@@ -612,8 +614,8 @@ function redirectEdgesIntoCollapsed(
       originScopeByNodeId.set(id, v.scope);
     }
   }
-  // References whose nodes (write op / return-use / expression statement)
-  // were never created because their containing scope collapsed.
+  // References whose nodes (write op / return-use / throw-use / expression
+  // statement) were never created because their containing scope collapsed.
   for (const r of ir.references) {
     const wid = writeOpNodeId(r.id);
     if (!originScopeByNodeId.has(wid)) {
@@ -622,6 +624,10 @@ function redirectEdgesIntoCollapsed(
     const ruid = retUseNodeId(r.id);
     if (!originScopeByNodeId.has(ruid)) {
       originScopeByNodeId.set(ruid, r.from);
+    }
+    const tuid = throwUseNodeId(r.id);
+    if (!originScopeByNodeId.has(tuid)) {
+      originScopeByNodeId.set(tuid, r.from);
     }
     const c = r.expressionStatementContainer;
     if (c) {

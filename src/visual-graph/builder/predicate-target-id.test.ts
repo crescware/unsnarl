@@ -13,6 +13,8 @@ function makeState(overrides: Partial<BuildState> = {}): BuildState {
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    throwSubgraphsByFn: new Map(),
+    throwUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
     switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),

@@ -17,6 +17,7 @@ export function baseRef(): SerializedReference {
     flags: { read: false, write: false, call: false, receiver: false },
     predicateContainer: null,
     returnContainer: null,
+    throwContainer: null,
     jsxElement: null,
     expressionStatementContainer: null,
   });

@@ -112,6 +112,7 @@ function subgraph(
     case SUBGRAPH_KIND.While:
     case SUBGRAPH_KIND.DoWhile:
     case SUBGRAPH_KIND.Return:
+    case SUBGRAPH_KIND.Throw:
     case SUBGRAPH_KIND.Block:
       return { ...common, kind };
   }

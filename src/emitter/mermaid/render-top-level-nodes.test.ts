@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { MODULE_ROOT_ID } from "../../visual-graph/builder/module-root-id.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { renderTopLevelNodes } from "./render-top-level-nodes.js";
 import { baseGraph } from "./testing/make-graph.js";
@@ -32,7 +33,7 @@ describe("renderTopLevelNodes", () => {
         { ...baseNode(), id: "n_b" },
         {
           ...baseNode(),
-          id: "module_root",
+          id: MODULE_ROOT_ID,
           kind: NODE_KIND.SyntheticModuleSink,
         },
       ],

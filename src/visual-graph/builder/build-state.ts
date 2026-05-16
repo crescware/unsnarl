@@ -13,6 +13,8 @@ export type BuildState = Readonly<{
   functionSubgraphByFn: Map<string, VisualSubgraph>;
   returnSubgraphsByFn: Map<string, Map<string, VisualSubgraph>>;
   returnUseAdded: Set<string>;
+  throwSubgraphsByFn: Map<string, Map<string, VisualSubgraph>>;
+  throwUseAdded: Set<string>;
   ifTestAnchorByOffset: Map<number, string>;
   switchDiscriminantAnchorByOffset: Map<number, string>;
   whileTestAnchorByOffset: Map<number, string>;

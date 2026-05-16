@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { MODULE_ROOT_ID } from "../../visual-graph/builder/module-root-id.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
 import { collectImportSources } from "./collect-import-sources.js";
@@ -28,7 +29,7 @@ describe("collectImportSources", () => {
   test("excludes other synthetic kinds (e.g. ModuleSink)", () => {
     const map = asMap({
       ...baseSimpleNode(NODE_KIND.SyntheticModuleSink),
-      id: "module_root",
+      id: MODULE_ROOT_ID,
     });
     expect(collectImportSources(map).size).toEqual(0);
   });

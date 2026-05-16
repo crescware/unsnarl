@@ -679,6 +679,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -706,6 +707,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -733,6 +735,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -760,6 +763,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -787,6 +791,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -823,6 +828,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 11,
@@ -870,6 +876,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -906,6 +913,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 13,
@@ -953,6 +961,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -989,6 +998,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 15,
@@ -1036,6 +1046,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1072,6 +1083,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 17,
@@ -1119,6 +1131,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1155,6 +1168,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 19,
@@ -1202,6 +1216,7 @@
           "offset": 331
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

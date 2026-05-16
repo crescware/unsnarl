@@ -323,6 +323,18 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 4,
+          "offset": 36
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 28,
+          "offset": 60
+        }
+      },
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -350,6 +362,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -410,6 +423,7 @@
           "offset": 111
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

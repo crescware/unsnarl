@@ -49,4 +49,5 @@ export type VisualSubgraph =
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.While })
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.DoWhile })
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Return })
+  | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Throw })
   | (CommonSubgraphFields & { kind: typeof SUBGRAPH_KIND.Block });

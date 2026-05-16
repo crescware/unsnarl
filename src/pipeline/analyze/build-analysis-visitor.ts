@@ -14,6 +14,7 @@ import { findPredicateContainer } from "../../analyzer/predicate.js";
 import { referenceCallReceiverFlags } from "../../analyzer/reference-call-receiver.js";
 import { findReturnContainer } from "../../analyzer/return-container.js";
 import { SCOPE_TYPE } from "../../analyzer/scope-type.js";
+import { findThrowContainer } from "../../analyzer/throw-container.js";
 import type { AnalysisVisitor } from "../../boundary/eslint-scope/visitor.js";
 import type { Annotations } from "../../ir/annotations/annotations.js";
 import type { NestingDepths } from "../../ir/annotations/scope-annotation.js";
@@ -69,6 +70,7 @@ export function buildAnalysisVisitor(
           input.path,
         ),
         returnContainer: findReturnContainer(input.path),
+        throwContainer: findThrowContainer(input.path),
         jsxElement: findJsxElementSpan(input.path),
         expressionStatementContainer: findExpressionStatementContainer(
           input.path,

@@ -255,6 +255,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -291,6 +292,7 @@
           "offset": 112
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 5,
@@ -338,6 +340,7 @@
           "offset": 112
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

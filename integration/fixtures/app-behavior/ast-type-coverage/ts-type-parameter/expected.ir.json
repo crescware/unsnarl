@@ -197,6 +197,7 @@
           "offset": 36
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

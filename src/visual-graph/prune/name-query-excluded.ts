@@ -8,4 +8,5 @@ import { NODE_KIND } from "../node-kind.js";
 export const NAME_QUERY_EXCLUDED: ReadonlySet<NodeKind> = new Set<NodeKind>([
   NODE_KIND.WriteReference,
   NODE_KIND.ReturnArgumentReference,
+  NODE_KIND.ThrowArgumentReference,
 ]);

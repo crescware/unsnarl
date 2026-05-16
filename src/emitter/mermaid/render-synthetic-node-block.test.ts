@@ -1,5 +1,6 @@
 import { describe, expect, test } from "vitest";
 
+import { MODULE_ROOT_ID } from "../../visual-graph/builder/module-root-id.js";
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import { renderSyntheticNodeBlock } from "./render-synthetic-node-block.js";
 import { baseGraph } from "./testing/make-graph.js";
@@ -21,7 +22,7 @@ describe("renderSyntheticNodeBlock", () => {
         },
         {
           ...baseNode(),
-          id: "module_root",
+          id: MODULE_ROOT_ID,
           kind: NODE_KIND.SyntheticModuleSink,
         },
       ],
@@ -29,7 +30,7 @@ describe("renderSyntheticNodeBlock", () => {
     expect(state.lines.map((v) => v.trim().split(/[[(]/)[0]).sort()).toEqual([
       "import_b",
       "mod_a",
-      "module_root",
+      MODULE_ROOT_ID,
     ]);
   });
 
