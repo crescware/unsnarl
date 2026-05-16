@@ -13,6 +13,7 @@ import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
+import { MODULE_ROOT_ID } from "./module-root-id.js";
 import { resolveReadTargetId } from "./resolve-read-target-id.js";
 import { baseRef } from "./testing/make-ref.js";
 import { returnContainer } from "./testing/return-container.js";
@@ -205,7 +206,7 @@ describe("resolveReadTargetId", () => {
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
   });
 
@@ -306,7 +307,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
 
     test("falls back to module root when the function body collapsed and exposes no host subgraph (return)", () => {
@@ -323,7 +324,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
 
     test("falls back to module root when the function body collapsed and exposes no host subgraph (throw)", () => {
@@ -340,7 +341,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
   });
 
@@ -357,7 +358,7 @@ describe("resolveReadTargetId", () => {
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
 
     test("falls back to module root for a top-level reference whose throwContainer is non-null", () => {
@@ -367,7 +368,7 @@ describe("resolveReadTargetId", () => {
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
-      expect(result).toEqual("module_root");
+      expect(result).toEqual(MODULE_ROOT_ID);
     });
   });
 
