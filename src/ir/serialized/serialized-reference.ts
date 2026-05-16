@@ -19,7 +19,17 @@ import { serializedHeadExpression$ } from "./serialized-expression-statement-hea
 import { variableId$ } from "./variable-id.js";
 
 /**
- * Span-based Completion shape.
+ * Span-based Completion shape, narrowed to the Reference-side
+ * subset (normal / return / throw).
+ *
+ * `AbruptCompletion` covers all four ECMA §6.2.4 abrupt types
+ * (return, throw, break, continue), but serialized References never
+ * carry a break / continue completion: the source-side narrowing in
+ * `ReferenceCompletion` rules them out, so any variant beyond these
+ * three would be dead at serialization time. Keep the shape locked
+ * to the Reference-side subset and let `AbruptCompletion` evolve
+ * independently for non-Reference consumers (e.g. statement-level
+ * analyzers).
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
