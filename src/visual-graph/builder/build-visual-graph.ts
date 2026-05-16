@@ -211,8 +211,6 @@ export function buildVisualGraph(
     buildScope(root, graph, ctx, state);
   }
 
-  let needsModuleRoot = false;
-
   // let-chain edges (set / fallthrough)
   for (const ops of writeOpsByVariable.values()) {
     const head = ops[0];
@@ -417,22 +415,22 @@ export function buildVisualGraph(
         targetElements,
         state,
       );
-      const resolved = resolveReadTargetId(
+      const targetId = resolveReadTargetId(
         exprStmtId,
         enclosingFn,
         r,
         ctx,
         state,
       );
-      if (resolved.needsModuleRoot) {
-        needsModuleRoot = true;
-      }
       for (const fromId of fromIds) {
-        pushEdge(state, fromId, label, resolved.targetId);
+        pushEdge(state, fromId, label, targetId);
       }
     }
   }
 
+  const needsModuleRoot = state.edges.some(
+    (edge) => edge.to === MODULE_ROOT_ID,
+  );
   if (needsModuleRoot) {
     graph.elements.push({
       type: VISUAL_ELEMENT_TYPE.Node,

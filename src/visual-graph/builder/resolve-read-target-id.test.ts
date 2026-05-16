@@ -128,10 +128,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual({
-        targetId: "expr_42",
-        needsModuleRoot: false,
-      });
+      expect(result).toEqual("expr_42");
     });
 
     test("returns exprStmtId verbatim even when enclosingFn is null", () => {
@@ -147,10 +144,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual({
-        targetId: "expr_42",
-        needsModuleRoot: false,
-      });
+      expect(result).toEqual("expr_42");
     });
 
     describe("does not produce return-side effects even when returnContainer is set", () => {
@@ -183,10 +177,7 @@ describe("resolveReadTargetId", () => {
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
-      expect(result).toEqual({
-        targetId: "module_root",
-        needsModuleRoot: true,
-      });
+      expect(result).toEqual("module_root");
     });
   });
 
@@ -205,10 +196,7 @@ describe("resolveReadTargetId", () => {
       });
 
       test("returns the return-use id of the reference", () => {
-        expect(result).toEqual({
-          targetId: "ret_use_r1",
-          needsModuleRoot: false,
-        });
+        expect(result).toEqual("ret_use_r1");
       });
 
       test("registers a return subgraph under the enclosing function", () => {
@@ -236,10 +224,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual({
-        targetId: "module_root",
-        needsModuleRoot: true,
-      });
+      expect(result).toEqual("module_root");
     });
 
     test("falls back to module root when the function body collapsed and exposes no host subgraph", () => {
@@ -256,10 +241,7 @@ describe("resolveReadTargetId", () => {
         state,
       );
 
-      expect(result).toEqual({
-        targetId: "module_root",
-        needsModuleRoot: true,
-      });
+      expect(result).toEqual("module_root");
     });
   });
 
@@ -275,10 +257,7 @@ describe("resolveReadTargetId", () => {
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
-      expect(result).toEqual({
-        targetId: "module_root",
-        needsModuleRoot: true,
-      });
+      expect(result).toEqual("module_root");
     });
   });
 
