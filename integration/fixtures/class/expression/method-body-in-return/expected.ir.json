@@ -1,0 +1,410 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/method-body-in-return/input.ts",
+    "language": "ts"
+  },
+  "raw": "function makeFactory(seed: number) {\n  return class {\n    next() {\n      return seed;\n    }\n  };\n}\n\nconst C = makeFactory(0);\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 0,
+          "offset": 126
+        }
+      },
+      "variables": [
+        "scope#0:makeFactory@9",
+        "scope#0:C@106"
+      ],
+      "references": [
+        "ref#1",
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 1,
+          "offset": 98
+        }
+      },
+      "variables": [
+        "scope#1:seed@21"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "class",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [
+        "scope#3"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ClassExpression",
+        "span": {
+          "line": 2,
+          "column": 9,
+          "offset": 46
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 3,
+          "offset": 95
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ReturnStatement",
+        "key": "argument",
+        "parentSpanOffset": 39,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#3",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#2",
+      "childScopes": [],
+      "variableScope": "scope#3",
+      "block": {
+        "type": "FunctionExpression",
+        "span": {
+          "line": 3,
+          "column": 8,
+          "offset": 62
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 5,
+          "offset": 91
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 2,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:makeFactory@9",
+      "name": "makeFactory",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "makeFactory",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:C@106",
+      "name": "C",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 9,
+          "column": 6,
+          "offset": 106
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "C",
+            "span": {
+              "line": 9,
+              "column": 6,
+              "offset": 106
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 9,
+              "column": 6,
+              "offset": 106
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 9,
+              "column": 0,
+              "offset": 100
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "CallExpression",
+            "span": {
+              "line": 9,
+              "column": 10,
+              "offset": 110
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:seed@21",
+      "name": "seed",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 21,
+          "offset": 21
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "seed",
+            "span": {
+              "line": 1,
+              "column": 21,
+              "offset": 21
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "seed",
+        "span": {
+          "line": 4,
+          "column": 13,
+          "offset": 80
+        }
+      },
+      "from": "scope#3",
+      "resolved": "scope#1:seed@21",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 4,
+          "column": 6,
+          "offset": 73
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 18,
+          "offset": 85
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "C",
+        "span": {
+          "line": 9,
+          "column": 6,
+          "offset": 106
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:C@106",
+      "owners": [
+        "scope#0:C@106"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "makeFactory",
+        "span": {
+          "line": 9,
+          "column": 10,
+          "offset": 110
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:makeFactory@9",
+      "owners": [
+        "scope#0:C@106"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:C@106"
+  ],
+  "diagnostics": []
+}

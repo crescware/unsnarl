@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/decorator-on-member-in-return/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_dec_9",
+      "name": "dec",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_makeClass_74",
+      "name": "makeClass",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_C_139",
+      "name": "C",
+      "line": 12,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_dec_9",
+      "ownerName": "dec",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_value_13",
+          "name": "value",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1__ctx_29",
+          "name": "_ctx",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_dec_9_48_61",
+          "kind": "return",
+          "line": 2,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_0",
+              "kind": "ReturnArgumentReference",
+              "name": "value",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "function",
+      "line": 5,
+      "endLine": 10,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_makeClass_74",
+      "ownerName": "makeClass",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "kind": "function",
+          "line": 8,
+          "endLine": 8,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": []
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_makeClass_74_90_129",
+          "kind": "return",
+          "line": 6,
+          "endLine": 9,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_1",
+              "kind": "ReturnArgumentReference",
+              "name": "dec",
+              "line": 7,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_value_13",
+      "to": "ret_use_ref_0",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_dec_9",
+      "to": "ret_use_ref_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_makeClass_74",
+      "to": "n_scope_0_C_139",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,18 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_C_97["unused C<br/>L9"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_makeClass_9["makeClass()<br/>L1"]
+    subgraph s_scope_1["makeClass()<br/>L1-7"]
+      direction RL
+      n_scope_1_seed_19["seed<br/>L1"]
+      expr_stmt_71["seed<br/>L4"]
+    end
+  end
+  n_scope_1_seed_19 -->|read| expr_stmt_71
+  n_scope_0_makeClass_9 -->|read,call| n_scope_0_C_97
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;

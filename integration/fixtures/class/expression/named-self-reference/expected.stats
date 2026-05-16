@@ -1,0 +1,5 @@
+0	1	integration/fixtures/class/expression/named-self-reference/input.ts:0 module
+1	0	integration/fixtures/class/expression/named-self-reference/input.ts:1 Counter
+1	0	integration/fixtures/class/expression/named-self-reference/input.ts:1 unused Inner
+0	1	integration/fixtures/class/expression/named-self-reference/input.ts:7 unused c
+2	2	4 total

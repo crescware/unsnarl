@@ -1,0 +1,8 @@
+1	0	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:1 dec
+1	0	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:1 value
+0	0	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:1 unused _ctx
+0	1	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:2 value
+1	0	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:5 makeClass
+0	1	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:7 dec
+0	1	integration/fixtures/class/expression/decorator-on-member-in-return/input.ts:12 unused C
+3	3	7 total

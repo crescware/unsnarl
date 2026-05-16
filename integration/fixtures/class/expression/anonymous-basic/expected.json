@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/anonymous-basic/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_Counter_6",
+      "name": "Counter",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_47",
+      "name": "c",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Counter_6",
+      "to": "n_scope_0_c_47",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

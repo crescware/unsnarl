@@ -1,0 +1,419 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/named-self-reference/input.ts",
+    "language": "ts"
+  },
+  "raw": "const Counter = class Inner {\n  next() {\n    return new Inner();\n  }\n};\n\nconst c = new Counter();\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 0,
+          "offset": 98
+        }
+      },
+      "variables": [
+        "scope#0:Counter@6",
+        "scope#0:c@79"
+      ],
+      "references": [
+        "ref#0",
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "class",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "ClassExpression",
+        "span": {
+          "line": 1,
+          "column": 16,
+          "offset": 16
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 1,
+          "offset": 70
+        }
+      },
+      "variables": [
+        "scope#1:Inner@22"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "VariableDeclarator",
+        "key": "init",
+        "parentSpanOffset": 6,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "FunctionExpression",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 36
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 3,
+          "offset": 68
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:Counter@6",
+      "name": "Counter",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "Counter",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ClassExpression",
+            "span": {
+              "line": 1,
+              "column": 16,
+              "offset": 16
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:c@79",
+      "name": "c",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 7,
+          "column": 6,
+          "offset": 79
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 7,
+              "column": 6,
+              "offset": 79
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 7,
+              "column": 6,
+              "offset": 79
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 7,
+              "column": 0,
+              "offset": 73
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "NewExpression",
+            "span": {
+              "line": 7,
+              "column": 10,
+              "offset": 83
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:Inner@22",
+      "name": "Inner",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 22,
+          "offset": 22
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "Inner",
+            "span": {
+              "line": 1,
+              "column": 22,
+              "offset": 22
+            }
+          },
+          "node": {
+            "type": "ClassExpression",
+            "span": {
+              "line": 1,
+              "column": 16,
+              "offset": 16
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "Counter",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:Counter@6",
+      "owners": [
+        "scope#0:Counter@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "Inner",
+        "span": {
+          "line": 3,
+          "column": 15,
+          "offset": 56
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:Inner@22",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 3,
+          "column": 4,
+          "offset": 45
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 23,
+          "offset": 64
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 7,
+          "column": 6,
+          "offset": 79
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:c@79",
+      "owners": [
+        "scope#0:c@79"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "Counter",
+        "span": {
+          "line": 7,
+          "column": 14,
+          "offset": 87
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:Counter@6",
+      "owners": [
+        "scope#0:c@79"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:c@79",
+    "scope#1:Inner@22"
+  ],
+  "diagnostics": []
+}
