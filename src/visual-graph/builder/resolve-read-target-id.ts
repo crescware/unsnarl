@@ -2,7 +2,7 @@ import {
   normal$,
   return$,
   throw$,
-} from "../../ir/reference/completion-kind.js";
+} from "../../ir/reference/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
@@ -23,7 +23,7 @@ export function resolveReadTargetId(
   if (enclosingFnVarId === null) {
     return MODULE_ROOT_ID;
   }
-  switch (ref.completion.kind) {
+  switch (ref.completion.type) {
     case return$.literal:
       return (
         ensureReturnUseNode(enclosingFnVarId, ref, ctx, state) ?? MODULE_ROOT_ID

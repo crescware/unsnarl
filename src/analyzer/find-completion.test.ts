@@ -2,7 +2,7 @@ import { describe, expect, test } from "vitest";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
 import type { AstNode } from "../ir/primitive/ast-node.js";
-import { normal$, return$, throw$ } from "../ir/reference/completion-kind.js";
+import { normal$, return$, throw$ } from "../ir/reference/completion-type.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 import { findCompletion } from "./find-completion.js";
 
@@ -19,7 +19,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.Identifier, start: 27, end: 28 }, "argument"),
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({
-      kind: return$.literal,
+      type: return$.literal,
       startOffset: 20,
       endOffset: 50,
     });
@@ -43,7 +43,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.Identifier, start: 30, end: 31 }, "left"),
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({
-      kind: return$.literal,
+      type: return$.literal,
       startOffset: 30,
       endOffset: 50,
     });
@@ -67,7 +67,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 30, end: 50 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 30, end: 31 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 
   test("prefers an inner ReturnStatement over the enclosing arrow body", () => {
@@ -89,7 +89,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.Identifier, start: 37, end: 38 }, "argument"),
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({
-      kind: return$.literal,
+      type: return$.literal,
       startOffset: 30,
       endOffset: 50,
     });
@@ -102,7 +102,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 20, end: 35 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 20, end: 21 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 
   test("returns normal-completion for a top-level identifier with no exit ancestor", () => {
@@ -111,7 +111,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.ExpressionStatement, start: 0, end: 10 }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 0, end: 5 }, "expression"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 
   test("returns throw-completion when a ThrowStatement is on the path", () => {
@@ -122,7 +122,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.Identifier, start: 26, end: 27 }, "argument"),
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({
-      kind: throw$.literal,
+      type: throw$.literal,
       startOffset: 20,
       endOffset: 50,
     });
@@ -139,7 +139,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.Identifier, start: 6, end: 7 }, "argument"),
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({
-      kind: throw$.literal,
+      type: throw$.literal,
       startOffset: 0,
       endOffset: 30,
     });
@@ -163,7 +163,7 @@ describe("findCompletion", () => {
       ),
       entry({ type: AST_TYPE.Identifier, start: 30, end: 31 }, "body"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 
   test("falls back to normal-completion when ReturnStatement offsets are missing", () => {
@@ -172,7 +172,7 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.ReturnStatement }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 27, end: 28 }, "argument"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 
   test("falls back to normal-completion when ThrowStatement offsets are missing", () => {
@@ -181,6 +181,6 @@ describe("findCompletion", () => {
       entry({ type: AST_TYPE.ThrowStatement }, "body"),
       entry({ type: AST_TYPE.Identifier, start: 27, end: 28 }, "argument"),
     ] satisfies PathEntry[];
-    expect(findCompletion(path)).toEqual({ kind: normal$.literal });
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
 });

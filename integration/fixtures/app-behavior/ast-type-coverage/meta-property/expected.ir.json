@@ -290,7 +290,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -319,7 +319,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -348,7 +348,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -375,7 +375,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 3,
           "column": 2,

@@ -439,7 +439,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -468,7 +468,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -497,7 +497,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -524,7 +524,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 4,
           "column": 41,
@@ -561,7 +561,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 4,
           "column": 41,
@@ -600,7 +600,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null
@@ -627,7 +627,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 5,
           "column": 2,
@@ -675,7 +675,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 5,
           "column": 2,

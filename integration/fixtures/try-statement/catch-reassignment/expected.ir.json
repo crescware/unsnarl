@@ -323,7 +323,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "throw",
+        "type": "throw",
         "startSpan": {
           "line": 3,
           "column": 4,
@@ -362,7 +362,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "normal"
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": {
@@ -413,7 +413,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "kind": "return",
+        "type": "return",
         "startSpan": {
           "line": 6,
           "column": 4,

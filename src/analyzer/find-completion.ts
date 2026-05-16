@@ -1,7 +1,7 @@
 import type { InferOutput } from "valibot";
 
 import type { PathEntry } from "../boundary/eslint-scope/walk/path-entry.js";
-import { normal$, return$, throw$ } from "../ir/reference/completion-kind.js";
+import { normal$, return$, throw$ } from "../ir/reference/completion-type.js";
 import type { Completion } from "../ir/reference/completion.js";
 import { AST_TYPE } from "../parser/ast-type.js";
 
@@ -53,10 +53,10 @@ export function findCompletion(path: readonly PathEntry[]): Completion {
   return NORMAL_COMPLETION;
 }
 
-const NORMAL_COMPLETION: Completion = { kind: normal$.literal };
+const NORMAL_COMPLETION: Completion = { type: normal$.literal };
 
 function completionFromNode(
-  kind: InferOutput<typeof return$> | InferOutput<typeof throw$>,
+  type: InferOutput<typeof return$> | InferOutput<typeof throw$>,
   node: { start?: number; end?: number },
 ): Completion {
   const start = node.start;
@@ -66,5 +66,5 @@ function completionFromNode(
     // normal so the analyzer never throws on malformed input.
     return NORMAL_COMPLETION;
   }
-  return { kind, startOffset: start, endOffset: end };
+  return { type, startOffset: start, endOffset: end };
 }

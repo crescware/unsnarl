@@ -5,7 +5,7 @@ import {
   normal$,
   return$,
   throw$,
-} from "../../../ir/reference/completion-kind.js";
+} from "../../../ir/reference/completion-type.js";
 import { span } from "./span.js";
 
 /**
@@ -18,23 +18,23 @@ import { span } from "./span.js";
  */
 
 export type SerializedReturnCompletion = Readonly<{
-  kind: InferOutput<typeof return$>;
+  type: InferOutput<typeof return$>;
   startSpan: Span;
   endSpan: Span;
 }>;
 
 export type SerializedThrowCompletion = Readonly<{
-  kind: InferOutput<typeof throw$>;
+  type: InferOutput<typeof throw$>;
   startSpan: Span;
   endSpan: Span;
 }>;
 
 export type SerializedNormalCompletion = Readonly<{
-  kind: InferOutput<typeof normal$>;
+  type: InferOutput<typeof normal$>;
 }>;
 
 export function normalCompletion(): SerializedNormalCompletion {
-  return { kind: normal$.literal };
+  return { type: normal$.literal };
 }
 
 export function returnCompletion(
@@ -44,7 +44,7 @@ export function returnCompletion(
   endLine = startLine,
 ): SerializedReturnCompletion {
   return {
-    kind: return$.literal,
+    type: return$.literal,
     startSpan: span(startOffset, startLine),
     endSpan: span(endOffset, endLine),
   };
@@ -57,7 +57,7 @@ export function throwCompletion(
   endLine = startLine,
 ): SerializedThrowCompletion {
   return {
-    kind: throw$.literal,
+    type: throw$.literal,
     startSpan: span(startOffset, startLine),
     endSpan: span(endOffset, endLine),
   };

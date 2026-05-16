@@ -1,6 +1,6 @@
 import type { InferOutput } from "valibot";
 
-import type { normal$, return$, throw$ } from "./completion-kind.js";
+import type { normal$, return$, throw$ } from "./completion-type.js";
 
 /**
  * Records which ECMAScript Completion category carries the value
@@ -21,7 +21,7 @@ import type { normal$, return$, throw$ } from "./completion-kind.js";
  */
 export type Completion =
   | AbruptCompletion
-  | Readonly<{ kind: InferOutput<typeof normal$> }>;
+  | Readonly<{ type: InferOutput<typeof normal$> }>;
 
 /**
  * The value-carrying subset of the abrupt completions in
@@ -41,12 +41,12 @@ export type Completion =
  */
 export type AbruptCompletion =
   | Readonly<{
-      kind: InferOutput<typeof return$>;
+      type: InferOutput<typeof return$>;
       startOffset: number;
       endOffset: number;
     }>
   | Readonly<{
-      kind: InferOutput<typeof throw$>;
+      type: InferOutput<typeof throw$>;
       startOffset: number;
       endOffset: number;
     }>;

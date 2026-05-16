@@ -1,4 +1,4 @@
-import { return$ } from "../../ir/reference/completion-kind.js";
+import { return$ } from "../../ir/reference/completion-type.js";
 import type { SerializedReference } from "../../ir/serialized/serialized-reference.js";
 import { DIRECTION } from "../direction.js";
 import { NODE_KIND } from "../node-kind.js";
@@ -18,7 +18,7 @@ export function ensureReturnUseNode(
   ctx: BuilderContext,
   state: BuildState,
 ): string | null {
-  if (ref.completion.kind !== return$.literal) {
+  if (ref.completion.type !== return$.literal) {
     return null;
   }
   const host = findHostSubgraph(ref, enclosingFnVarId, ctx.scopeMap, state);

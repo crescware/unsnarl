@@ -1,7 +1,7 @@
 import { parse } from "valibot";
 
 import type { Annotations } from "../../ir/annotations/annotations.js";
-import { normal$ } from "../../ir/reference/completion-kind.js";
+import { normal$ } from "../../ir/reference/completion-type.js";
 import type { AbruptCompletion } from "../../ir/reference/completion.js";
 import type { Reference } from "../../ir/reference/reference.js";
 import type { Scope } from "../../ir/scope/scope.js";
@@ -51,8 +51,8 @@ export function serializeReference(
     },
     predicateContainer: ann.predicateContainer,
     completion:
-      ann.completion.kind === normal$.literal
-        ? { kind: normal$.literal }
+      ann.completion.type === normal$.literal
+        ? { type: normal$.literal }
         : serializeAbruptCompletion(ann.completion, raw),
     jsxElement: ann.jsxElement
       ? {
@@ -83,12 +83,12 @@ function serializeAbruptCompletion(
   c: AbruptCompletion,
   raw: string,
 ): Readonly<{
-  kind: AbruptCompletion["kind"];
+  type: AbruptCompletion["type"];
   startSpan: ReturnType<typeof spanFromOffset>;
   endSpan: ReturnType<typeof spanFromOffset>;
 }> {
   return {
-    kind: c.kind,
+    type: c.type,
     startSpan: spanFromOffset(raw, c.startOffset),
     endSpan: spanFromOffset(raw, c.endOffset),
   };

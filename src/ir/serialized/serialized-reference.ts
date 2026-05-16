@@ -11,7 +11,7 @@ import {
 
 import { filledString$ } from "../../util/filled-string.js";
 import { span$ } from "../primitive/span.js";
-import { normal$, return$, throw$ } from "../reference/completion-kind.js";
+import { normal$, return$, throw$ } from "../reference/completion-type.js";
 import { predicateContainer$ } from "../reference/predicate-container.js";
 import { referenceId$ } from "./reference-id.js";
 import { scopeId$ } from "./scope-id.js";
@@ -24,10 +24,10 @@ import { variableId$ } from "./variable-id.js";
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  */
-const serializedCompletion$ = variant("kind", [
-  pipe(object({ kind: normal$ }), readonly()),
-  pipe(object({ kind: return$, startSpan: span$, endSpan: span$ }), readonly()),
-  pipe(object({ kind: throw$, startSpan: span$, endSpan: span$ }), readonly()),
+const serializedCompletion$ = variant("type", [
+  pipe(object({ type: normal$ }), readonly()),
+  pipe(object({ type: return$, startSpan: span$, endSpan: span$ }), readonly()),
+  pipe(object({ type: throw$, startSpan: span$, endSpan: span$ }), readonly()),
 ]);
 
 export const serializedReference$ = object({
