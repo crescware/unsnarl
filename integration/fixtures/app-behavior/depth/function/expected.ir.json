@@ -610,6 +610,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -646,6 +647,7 @@
           "offset": 172
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -682,6 +684,7 @@
           "offset": 207
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -718,6 +721,7 @@
           "offset": 238
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -754,6 +758,7 @@
           "offset": 265
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -790,6 +795,7 @@
           "offset": 288
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -826,6 +832,7 @@
           "offset": 307
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -851,6 +858,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {

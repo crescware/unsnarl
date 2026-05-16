@@ -39,6 +39,7 @@ import { retUseNodeId } from "./ret-use-node-id.js";
 import { sanitize } from "./sanitize.js";
 import { setPredecessorOf } from "./set-predecessor-of.js";
 import { stateRefId } from "./state-ref-id.js";
+import { throwUseNodeId } from "./throw-use-node-id.js";
 import { writeOpNodeId } from "./write-op-node-id.js";
 import type { WriteOp } from "./write-op.js";
 
@@ -188,6 +189,8 @@ export function buildVisualGraph(
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    throwSubgraphsByFn: new Map(),
+    throwUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
     switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
@@ -611,8 +614,8 @@ function redirectEdgesIntoCollapsed(
       originScopeByNodeId.set(id, v.scope);
     }
   }
-  // References whose nodes (write op / return-use / expression statement)
-  // were never created because their containing scope collapsed.
+  // References whose nodes (write op / return-use / throw-use / expression
+  // statement) were never created because their containing scope collapsed.
   for (const r of ir.references) {
     const wid = writeOpNodeId(r.id);
     if (!originScopeByNodeId.has(wid)) {
@@ -621,6 +624,10 @@ function redirectEdgesIntoCollapsed(
     const ruid = retUseNodeId(r.id);
     if (!originScopeByNodeId.has(ruid)) {
       originScopeByNodeId.set(ruid, r.from);
+    }
+    const tuid = throwUseNodeId(r.id);
+    if (!originScopeByNodeId.has(tuid)) {
+      originScopeByNodeId.set(tuid, r.from);
     }
     const c = r.expressionStatementContainer;
     if (c) {

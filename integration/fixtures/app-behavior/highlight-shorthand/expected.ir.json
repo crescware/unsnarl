@@ -263,6 +263,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -290,6 +291,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -326,6 +328,7 @@
           "offset": 71
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -362,6 +365,7 @@
           "offset": 71
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

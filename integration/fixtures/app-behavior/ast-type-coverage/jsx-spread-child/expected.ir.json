@@ -266,6 +266,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -293,6 +294,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 1,
@@ -331,6 +333,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -358,6 +361,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 2,
@@ -396,6 +400,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

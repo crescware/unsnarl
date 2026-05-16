@@ -12,6 +12,7 @@ export const NODE_KIND = {
   SyntheticImplicitGlobal: "SyntheticImplicitGlobal",
   WriteReference: "WriteReference",
   ReturnArgumentReference: "ReturnArgumentReference",
+  ThrowArgumentReference: "ThrowArgumentReference",
   SyntheticIfStatementTest: "SyntheticIfStatementTest",
   SyntheticSwitchStatementDiscriminant: "SyntheticSwitchStatementDiscriminant",
   SyntheticWhileStatementTest: "SyntheticWhileStatementTest",

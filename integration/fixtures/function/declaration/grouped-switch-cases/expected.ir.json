@@ -653,6 +653,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -681,6 +682,7 @@
         "offset": 45
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -708,6 +710,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -759,6 +762,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -810,6 +814,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -870,6 +875,7 @@
           "offset": 319
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

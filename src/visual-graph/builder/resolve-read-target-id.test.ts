@@ -16,6 +16,7 @@ import type { BuilderContext } from "./context.js";
 import { resolveReadTargetId } from "./resolve-read-target-id.js";
 import { baseRef } from "./testing/make-ref.js";
 import { returnContainer } from "./testing/return-container.js";
+import { throwContainer } from "./testing/throw-container.js";
 import type { WriteOp } from "./write-op.js";
 
 function makeHostSubgraph(): VisualSubgraph {
@@ -71,6 +72,8 @@ function makeStateWithHost(
     functionSubgraphByFn: new Map([[fnVarId, host]]),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    throwSubgraphsByFn: new Map(),
+    throwUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
     switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
@@ -89,6 +92,8 @@ function makeEmptyState(): BuildState {
     functionSubgraphByFn: new Map(),
     returnSubgraphsByFn: new Map(),
     returnUseAdded: new Set(),
+    throwSubgraphsByFn: new Map(),
+    throwUseAdded: new Set(),
     ifTestAnchorByOffset: new Map(),
     switchDiscriminantAnchorByOffset: new Map(),
     whileTestAnchorByOffset: new Map(),
@@ -103,12 +108,14 @@ function makeEmptyState(): BuildState {
 
 function makeReadReference(
   returnContainerValue: ReturnType<typeof returnContainer> | null,
+  throwContainerValue: ReturnType<typeof throwContainer> | null,
 ) {
   return {
     ...baseRef(),
     id: asReferenceId("r1"),
     from: asScopeId("scope"),
     returnContainer: returnContainerValue,
+    throwContainer: throwContainerValue,
   };
 }
 
@@ -118,7 +125,7 @@ describe("resolveReadTargetId", () => {
       const host = makeHostSubgraph();
       const context = makeContext();
       const state = makeStateWithHost(host);
-      const reference = makeReadReference(returnContainer(0, 10));
+      const reference = makeReadReference(returnContainer(0, 10), null);
 
       const result = resolveReadTargetId(
         "expr_42",
@@ -134,7 +141,7 @@ describe("resolveReadTargetId", () => {
     test("returns exprStmtId verbatim even when enclosingFn is null", () => {
       const context = makeContext();
       const state = makeEmptyState();
-      const reference = makeReadReference(null);
+      const reference = makeReadReference(null, null);
 
       const result = resolveReadTargetId(
         "expr_42",
@@ -155,12 +162,33 @@ describe("resolveReadTargetId", () => {
         host = makeHostSubgraph();
         const context = makeContext();
         state = makeStateWithHost(host);
-        const reference = makeReadReference(returnContainer(0, 10));
+        const reference = makeReadReference(returnContainer(0, 10), null);
         resolveReadTargetId("expr_42", "fnVar", reference, context, state);
       });
 
       test("leaves returnSubgraphsByFn empty", () => {
         expect(state.returnSubgraphsByFn.size).toEqual(0);
+      });
+
+      test("appends nothing to the host", () => {
+        expect(host.elements).toEqual([]);
+      });
+    });
+
+    describe("does not produce throw-side effects even when throwContainer is set", () => {
+      let host: VisualSubgraph;
+      let state: BuildState;
+
+      beforeEach(() => {
+        host = makeHostSubgraph();
+        const context = makeContext();
+        state = makeStateWithHost(host);
+        const reference = makeReadReference(null, throwContainer(0, 10));
+        resolveReadTargetId("expr_42", "fnVar", reference, context, state);
+      });
+
+      test("leaves throwSubgraphsByFn empty", () => {
+        expect(state.throwSubgraphsByFn.size).toEqual(0);
       });
 
       test("appends nothing to the host", () => {
@@ -173,7 +201,7 @@ describe("resolveReadTargetId", () => {
     test("falls back to module root", () => {
       const context = makeContext();
       const state = makeEmptyState();
-      const reference = makeReadReference(null);
+      const reference = makeReadReference(null, null);
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
@@ -191,7 +219,7 @@ describe("resolveReadTargetId", () => {
         host = makeHostSubgraph();
         const context = makeContext();
         state = makeStateWithHost(host);
-        const reference = makeReadReference(returnContainer(0, 50, 3, 5));
+        const reference = makeReadReference(returnContainer(0, 50, 3, 5), null);
         result = resolveReadTargetId(null, "fnVar", reference, context, state);
       });
 
@@ -208,13 +236,67 @@ describe("resolveReadTargetId", () => {
       });
     });
 
-    test("falls back to module root when returnContainer is null", () => {
+    describe("with a throwContainer and a registered host subgraph", () => {
+      let host: VisualSubgraph;
+      let state: BuildState;
+      let result: ReturnType<typeof resolveReadTargetId>;
+
+      beforeEach(() => {
+        host = makeHostSubgraph();
+        const context = makeContext();
+        state = makeStateWithHost(host);
+        const reference = makeReadReference(null, throwContainer(0, 50, 3, 5));
+        result = resolveReadTargetId(null, "fnVar", reference, context, state);
+      });
+
+      test("returns the throw-use id of the reference", () => {
+        expect(result).toEqual("throw_use_r1");
+      });
+
+      test("registers a throw subgraph under the enclosing function", () => {
+        expect(state.throwSubgraphsByFn.get("fnVar")?.size).toEqual(1);
+      });
+
+      test("appends the throw subgraph to the host", () => {
+        expect(host.elements).toHaveLength(1);
+      });
+    });
+
+    describe("when both returnContainer and throwContainer are set", () => {
+      // The analyzer is expected to enforce mutual exclusivity, but the
+      // resolver pins the precedence here so a future regression does
+      // not silently flip the routing.
+      let host: VisualSubgraph;
+      let state: BuildState;
+      let result: ReturnType<typeof resolveReadTargetId>;
+
+      beforeEach(() => {
+        host = makeHostSubgraph();
+        const context = makeContext();
+        state = makeStateWithHost(host);
+        const reference = makeReadReference(
+          returnContainer(0, 50, 3, 5),
+          throwContainer(0, 50, 3, 5),
+        );
+        result = resolveReadTargetId(null, "fnVar", reference, context, state);
+      });
+
+      test("returnContainer wins and the result is the return-use id", () => {
+        expect(result).toEqual("ret_use_r1");
+      });
+
+      test("no throw subgraph is registered", () => {
+        expect(state.throwSubgraphsByFn.size).toEqual(0);
+      });
+    });
+
+    test("falls back to module root when both containers are null", () => {
       // Today this routes to module root rather than throwing,
       // so callers can still emit an edge.
       const host = makeHostSubgraph();
       const context = makeContext();
       const state = makeStateWithHost(host);
-      const reference = makeReadReference(null);
+      const reference = makeReadReference(null, null);
 
       const result = resolveReadTargetId(
         null,
@@ -227,11 +309,28 @@ describe("resolveReadTargetId", () => {
       expect(result).toEqual("module_root");
     });
 
-    test("falls back to module root when the function body collapsed and exposes no host subgraph", () => {
+    test("falls back to module root when the function body collapsed and exposes no host subgraph (return)", () => {
       // Internally this is the path where ensureReturnUseNode returns null.
       const context = makeContext();
       const state = makeEmptyState();
-      const reference = makeReadReference(returnContainer(0, 10));
+      const reference = makeReadReference(returnContainer(0, 10), null);
+
+      const result = resolveReadTargetId(
+        null,
+        "fnVar",
+        reference,
+        context,
+        state,
+      );
+
+      expect(result).toEqual("module_root");
+    });
+
+    test("falls back to module root when the function body collapsed and exposes no host subgraph (throw)", () => {
+      // Internally this is the path where ensureThrowUseNode returns null.
+      const context = makeContext();
+      const state = makeEmptyState();
+      const reference = makeReadReference(null, throwContainer(0, 10));
 
       const result = resolveReadTargetId(
         null,
@@ -246,14 +345,25 @@ describe("resolveReadTargetId", () => {
   });
 
   describe("structurally impossible inputs (defensive)", () => {
-    // ReturnStatement requires a function body, so a top-level reference
-    // whose ancestor chain holds a returnContainer should not occur in
-    // practice. These tests pin the safe degradation regardless.
+    // ReturnStatement / ThrowStatement both require a function body, so
+    // a top-level reference whose ancestor chain holds either container
+    // should not occur in practice. These tests pin the safe
+    // degradation regardless.
 
     test("falls back to module root for a top-level reference whose returnContainer is non-null", () => {
       const context = makeContext();
       const state = makeEmptyState();
-      const reference = makeReadReference(returnContainer(0, 10));
+      const reference = makeReadReference(returnContainer(0, 10), null);
+
+      const result = resolveReadTargetId(null, null, reference, context, state);
+
+      expect(result).toEqual("module_root");
+    });
+
+    test("falls back to module root for a top-level reference whose throwContainer is non-null", () => {
+      const context = makeContext();
+      const state = makeEmptyState();
+      const reference = makeReadReference(null, throwContainer(0, 10));
 
       const result = resolveReadTargetId(null, null, reference, context, state);
 
@@ -270,7 +380,7 @@ describe("resolveReadTargetId", () => {
       host = makeHostSubgraph();
       const context = makeContext();
       const state = makeStateWithHost(host);
-      const reference = makeReadReference(returnContainer(0, 50, 3, 5));
+      const reference = makeReadReference(returnContainer(0, 50, 3, 5), null);
       first = resolveReadTargetId(null, "fnVar", reference, context, state);
       second = resolveReadTargetId(null, "fnVar", reference, context, state);
     });

@@ -703,6 +703,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -730,6 +731,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -757,6 +759,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -784,6 +787,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -811,6 +815,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -838,6 +843,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -866,6 +872,7 @@
         "offset": 73
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -891,6 +898,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -943,6 +951,7 @@
         "offset": 100
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -968,6 +977,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -1020,6 +1030,7 @@
         "offset": 131
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1045,6 +1056,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -1097,6 +1109,7 @@
         "offset": 166
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1122,6 +1135,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -1174,6 +1188,7 @@
         "offset": 205
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1199,6 +1214,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {
@@ -1251,6 +1267,7 @@
         "offset": 248
       },
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -1276,6 +1293,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": {
         "startSpan": {

@@ -2,6 +2,7 @@ import type { ExpressionStatementContainer } from "../reference/expression-state
 import type { JsxElementContainer } from "../reference/jsx-element-container.js";
 import type { PredicateContainer } from "../reference/predicate-container.js";
 import type { ReturnContainer } from "../reference/return-container.js";
+import type { ThrowContainer } from "../reference/throw-container.js";
 import type { Variable } from "../scope/variable.js";
 
 export type ReferenceAnnotation = Readonly<{
@@ -9,6 +10,7 @@ export type ReferenceAnnotation = Readonly<{
   flags: Readonly<{ call: boolean; receiver: boolean }>;
   predicateContainer: PredicateContainer | null;
   returnContainer: ReturnContainer | null;
+  throwContainer: ThrowContainer | null;
   jsxElement: JsxElementContainer | null;
   expressionStatementContainer: ExpressionStatementContainer | null;
 }>;

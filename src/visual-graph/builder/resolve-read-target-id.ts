@@ -2,6 +2,7 @@ import type { SerializedReference } from "../../ir/serialized/serialized-referen
 import type { BuildState } from "./build-state.js";
 import type { BuilderContext } from "./context.js";
 import { ensureReturnUseNode } from "./ensure-return-use-node.js";
+import { ensureThrowUseNode } from "./ensure-throw-use-node.js";
 import { MODULE_ROOT_ID } from "./module-root-id.js";
 
 export function resolveReadTargetId(
@@ -13,7 +14,11 @@ export function resolveReadTargetId(
 ): string {
   let targetId: string | null = exprStmtId;
   if (targetId === null && enclosingFn !== null) {
-    targetId = ensureReturnUseNode(enclosingFn, ref, ctx, state);
+    if (ref.returnContainer !== null) {
+      targetId = ensureReturnUseNode(enclosingFn, ref, ctx, state);
+    } else if (ref.throwContainer !== null) {
+      targetId = ensureThrowUseNode(enclosingFn, ref, ctx, state);
+    }
   }
   return targetId ?? MODULE_ROOT_ID;
 }

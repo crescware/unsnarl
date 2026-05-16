@@ -453,6 +453,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -489,6 +490,7 @@
           "offset": 187
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 8,
@@ -536,6 +538,7 @@
           "offset": 187
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 9,
@@ -583,6 +586,7 @@
           "offset": 187
         }
       },
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -610,6 +614,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -646,6 +651,7 @@
           "offset": 228
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 13,
@@ -684,6 +690,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     },
@@ -711,6 +718,7 @@
       },
       "predicateContainer": null,
       "returnContainer": null,
+      "throwContainer": null,
       "jsxElement": null,
       "expressionStatementContainer": null
     }

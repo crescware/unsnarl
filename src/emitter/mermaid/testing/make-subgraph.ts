@@ -52,7 +52,8 @@ type PlainSubgraphKind =
   | typeof SUBGRAPH_KIND.Catch
   | typeof SUBGRAPH_KIND.Finally
   | typeof SUBGRAPH_KIND.For
-  | typeof SUBGRAPH_KIND.Return;
+  | typeof SUBGRAPH_KIND.Return
+  | typeof SUBGRAPH_KIND.Throw;
 
 export function basePlainSubgraph(
   kind: PlainSubgraphKind,

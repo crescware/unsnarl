@@ -54,6 +54,12 @@ export function serializeReference(
           endSpan: spanFromOffset(raw, ann.returnContainer.endOffset),
         }
       : null,
+    throwContainer: ann.throwContainer
+      ? {
+          startSpan: spanFromOffset(raw, ann.throwContainer.startOffset),
+          endSpan: spanFromOffset(raw, ann.throwContainer.endOffset),
+        }
+      : null,
     jsxElement: ann.jsxElement
       ? {
           startSpan: spanFromOffset(raw, ann.jsxElement.startOffset),

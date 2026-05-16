@@ -206,6 +206,7 @@
           "offset": 79
         }
       },
+      "throwContainer": null,
       "jsxElement": {
         "startSpan": {
           "line": 4,

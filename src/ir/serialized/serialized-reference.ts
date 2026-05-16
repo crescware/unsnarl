@@ -36,6 +36,9 @@ export const serializedReference$ = object({
   returnContainer: nullable(
     pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
   ),
+  throwContainer: nullable(
+    pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
+  ),
   jsxElement: nullable(
     pipe(object({ startSpan: span$, endSpan: span$ }), readonly()),
   ),
