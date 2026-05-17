@@ -27,6 +27,7 @@ flowchart RL
     n_scope_1_D_6["unused class D<br/>L1"]
     subgraph s_scope_2["(anonymous)<br/>L2-4"]
       direction RL
+      elk_empty_s_scope_2["No nodes"]
     end
   end
   subgraph s_scope_3["class C<br/>L6-10"]
@@ -34,6 +35,7 @@ flowchart RL
     n_scope_3_C_44["unused class C<br/>L6"]
     subgraph s_scope_4["(anonymous)<br/>L7-9"]
       direction RL
+      elk_empty_s_scope_4["No nodes"]
     end
   end
   n_scope_0_D_6 -->|read| module_root
@@ -44,4 +46,7 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_2 nestL2;
   class s_scope_4 nestL2;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
+  class elk_empty_s_scope_4 elkEmptyPlaceholder;
 ```

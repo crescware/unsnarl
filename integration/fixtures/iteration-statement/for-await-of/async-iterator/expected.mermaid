@@ -11,6 +11,7 @@ flowchart RL
         n_scope_1_gen_47["gen()<br/>L2"]
         subgraph s_scope_2["gen()<br/>L2-5"]
           direction RL
+          elk_empty_s_scope_2["No nodes"]
         end
       end
       subgraph s_scope_3["for L6-8"]
@@ -37,3 +38,5 @@ flowchart RL
   classDef nestL4 fill:#2d3b57,stroke:transparent;
   class s_scope_2 nestL4;
   class s_scope_4 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;

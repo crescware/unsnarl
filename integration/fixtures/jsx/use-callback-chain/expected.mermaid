@@ -12,6 +12,7 @@ flowchart RL
       n_scope_1_c_150["c<br/>L6"]
       subgraph s_scope_2["(anonymous)<br/>L4"]
         direction RL
+        elk_empty_s_scope_2["No nodes"]
       end
       subgraph s_scope_3["(anonymous)<br/>L5"]
         direction RL
@@ -59,3 +60,5 @@ flowchart RL
   classDef nestL4 fill:#2d3b57,stroke:transparent;
   class s_return_scope_0_Comp_44_127_134 nestL4;
   class s_return_scope_0_Comp_44_172_179 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;

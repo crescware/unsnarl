@@ -21,10 +21,13 @@ flowchart RL
     n_scope_1_C_6["unused class C<br/>L1"]
     subgraph s_scope_2["(anonymous)<br/>L2-4"]
       direction RL
+      elk_empty_s_scope_2["No nodes"]
     end
   end
   classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_2 nestL2;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
 ```

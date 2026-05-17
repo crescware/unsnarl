@@ -12,7 +12,6 @@ export const lightTheme: ColorTheme = {
   elkEmptyPlaceholder: {
     fill: "transparent",
     stroke: "transparent",
-    color: "transparent",
   },
   // Six-entry gradient mirroring the dark theme's compression: kept
   // in the light half of the spectrum so dark label text retains a

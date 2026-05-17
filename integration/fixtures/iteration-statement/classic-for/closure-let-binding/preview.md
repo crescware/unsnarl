@@ -27,6 +27,7 @@ flowchart RL
       expr_stmt_66["fns.push()<br/>L3"]
       subgraph s_scope_3["(anonymous)<br/>L3"]
         direction RL
+        elk_empty_s_scope_3["No nodes"]
       end
     end
   end
@@ -43,4 +44,6 @@ flowchart RL
   class s_scope_2 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
   class s_scope_3 nestL3;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
 ```

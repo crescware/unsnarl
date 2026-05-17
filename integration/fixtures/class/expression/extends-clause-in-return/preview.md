@@ -25,6 +25,7 @@ flowchart RL
       n_scope_1_Base_22["Base<br/>L1"]
       subgraph s_scope_2["class (anonymous)<br/>L2"]
         direction RL
+        elk_empty_s_scope_2["No nodes"]
       end
     end
   end
@@ -38,4 +39,6 @@ flowchart RL
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
   class s_scope_2 nestL3;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
 ```

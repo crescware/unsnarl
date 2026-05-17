@@ -16,7 +16,6 @@ describe("ColorTheme", () => {
       elkEmptyPlaceholder: {
         fill: "transparent",
         stroke: "transparent",
-        color: "transparent",
       },
       nestPalette: [{ fill: "#111", stroke: "#222" }],
       highlight: {

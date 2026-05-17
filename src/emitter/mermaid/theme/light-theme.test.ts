@@ -10,16 +10,18 @@ describe("lightTheme", () => {
     expect(lightTheme.varNode.strokeDasharray).not.toEqual("");
     expect(lightTheme.elkEmptyPlaceholder.fill).not.toEqual("");
     expect(lightTheme.elkEmptyPlaceholder.stroke).not.toEqual("");
-    expect(lightTheme.elkEmptyPlaceholder.color).not.toEqual("");
   });
 
   test("nestPalette has at least six entries to keep wrap / body brightness distinct", () => {
     expect(lightTheme.nestPalette.length >= 6).toEqual(true);
   });
 
-  test("elkEmptyPlaceholder is invisible (same workaround as the dark theme)", () => {
+  // The placeholder is a layout-only hack -- it is not a node. fill and
+  // stroke stay transparent so no rectangle is drawn around the label.
+  // Text color is left to Mermaid's default so the "No nodes" label
+  // stays readable against whichever subgraph background it lands on.
+  test("elkEmptyPlaceholder has transparent fill and stroke (same workaround as the dark theme)", () => {
     expect(lightTheme.elkEmptyPlaceholder.fill).toEqual("transparent");
     expect(lightTheme.elkEmptyPlaceholder.stroke).toEqual("transparent");
-    expect(lightTheme.elkEmptyPlaceholder.color).toEqual("transparent");
   });
 });

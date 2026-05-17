@@ -13,10 +13,13 @@ describe("darkTheme", () => {
     expect(darkTheme.varNode.strokeDasharray).toEqual("5 5");
   });
 
-  test("elkEmptyPlaceholder keeps the all-transparent literals", () => {
+  // fill and stroke stay transparent so the placeholder leaves no
+  // rectangle around the "No nodes" label. Text color is intentionally
+  // omitted so Mermaid's default (which adapts to the background) keeps
+  // the label readable.
+  test("elkEmptyPlaceholder keeps the transparent fill / stroke literals", () => {
     expect(darkTheme.elkEmptyPlaceholder.fill).toEqual("transparent");
     expect(darkTheme.elkEmptyPlaceholder.stroke).toEqual("transparent");
-    expect(darkTheme.elkEmptyPlaceholder.color).toEqual("transparent");
   });
 
   // Each function consumes two adjacent slots (wrapper at N, body at
