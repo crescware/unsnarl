@@ -171,6 +171,30 @@ describe("buildHeadExpression: AssignmentExpression", () => {
     const result = buildHeadExpression(node, fallback);
     expect(result.kind).toEqual(raw$.literal);
   });
+
+  // Defensive: the head reducer doesn't inspect node.start/end for the
+  // recognised vocabulary, so an Identifier without offsets still
+  // reduces to a head -- but operandFromHead can't ground the span and
+  // returns null, pushing buildOperand to null. The AssignmentExpression
+  // branch must catch that and fall back to raw rather than emitting an
+  // assign head with an ungrounded operand.
+  test("falls back to raw when an operand reduces but lacks offsets", () => {
+    const left = identifier("a", 0, 1);
+    const right = {
+      type: AST_TYPE.Identifier,
+      name: "b",
+    } as unknown as AstNode;
+    const node: AstNode = {
+      type: AST_TYPE.AssignmentExpression,
+      operator: "=",
+      left,
+      right,
+      start: 0,
+      end: 5,
+    };
+    const result = buildHeadExpression(node, fallback);
+    expect(result.kind).toEqual(raw$.literal);
+  });
 });
 
 describe("buildHeadExpression: UpdateExpression", () => {
@@ -252,6 +276,28 @@ describe("buildHeadExpression: UpdateExpression", () => {
       argument,
       start: 0,
       end: 6,
+    };
+    const result = buildHeadExpression(node, fallback);
+    expect(result.kind).toEqual(raw$.literal);
+  });
+
+  // Defensive: tryBuild for Identifier / MemberExpression / etc. doesn't
+  // inspect node.start/end, so the head reduces successfully even when
+  // the argument's offsets are missing. operandFromHead returns null in
+  // that case, and the UpdateExpression branch must fall back to raw
+  // rather than emitting an update head with an ungrounded operand.
+  test("falls back to raw when the argument reduces but lacks offsets", () => {
+    const argument = {
+      type: AST_TYPE.Identifier,
+      name: "x",
+    } as unknown as AstNode;
+    const node: AstNode = {
+      type: AST_TYPE.UpdateExpression,
+      operator: "++",
+      prefix: true,
+      argument,
+      start: 0,
+      end: 3,
     };
     const result = buildHeadExpression(node, fallback);
     expect(result.kind).toEqual(raw$.literal);
