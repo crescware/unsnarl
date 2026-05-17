@@ -1,16 +1,6 @@
-// Guards every AST_TYPE entry against drift from the integration
-// fixture tree: each enumerated type must be exercised by at least
-// one fixture, so that a new oxc-parser AST type added through
-// ast-type.oxc-parity.test.ts also surfaces a missing-fixture
-// failure here until a corresponding input is added under
-// integration/fixtures/.
-//
-// The walk is intentionally structural (not via analyze()):
-// src/boundary/eslint-scope/handle-enter.ts skips a number of TS
-// subtrees through isTypeOnlySubtree, so analyze() would under-
-// count those types. Calling walkNode directly with visitorKeys-
-// based descent reproduces only the structural traversal, with no
-// semantic skip.
+// Walks fixtures via walkNode directly rather than analyze(): the
+// analyzer skips TS subtrees through isTypeOnlySubtree, which
+// would under-count those types.
 
 import { readdirSync, readFileSync } from "node:fs";
 import { join, relative } from "node:path";

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-optional-type/input.ts",
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/export-default-declaration/input.ts",
     "language": "ts"
   },
-  "raw": "type T = [string?];\n",
+  "raw": "export default 1;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -23,7 +23,7 @@
         "endSpan": {
           "line": 2,
           "column": 0,
-          "offset": 20
+          "offset": 18
         }
       },
       "variables": [],

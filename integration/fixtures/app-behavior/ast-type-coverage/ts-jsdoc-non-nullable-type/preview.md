@@ -1,9 +1,9 @@
-# integration/fixtures/app-behavior/ast-type-coverage/ts-optional-type/input.ts
+# integration/fixtures/app-behavior/ast-type-coverage/ts-jsdoc-non-nullable-type/input.ts
 
 ## Input
 
 ```ts
-type T = [string?];
+type T = !number;
 ```
 
 ## Mermaid

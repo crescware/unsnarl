@@ -1,7 +1,13 @@
 import { parse, ValiError } from "valibot";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE, asAstType, astType$, UNKNOWN_AST_TYPE } from "./ast-type.js";
+import {
+  AST_TYPE,
+  AST_TYPE_UNREACHABLE,
+  asAstType,
+  astType$,
+  UNKNOWN_AST_TYPE,
+} from "./ast-type.js";
 
 describe("asAstType", () => {
   test.each<{ raw: string; expected: string }>([
@@ -27,12 +33,13 @@ describe("asAstType", () => {
 });
 
 describe("astType$ schema", () => {
-  test.each(Object.values(AST_TYPE).map((value) => ({ value })))(
-    "accepts AST_TYPE.$value",
-    ({ value }) => {
-      expect(parse(astType$, value)).toEqual(value);
-    },
-  );
+  test.each(
+    [...Object.values(AST_TYPE), ...Object.values(AST_TYPE_UNREACHABLE)].map(
+      (value) => ({ value }),
+    ),
+  )("accepts $value", ({ value }) => {
+    expect(parse(astType$, value)).toEqual(value);
+  });
 
   test("accepts UNKNOWN_AST_TYPE sentinel", () => {
     expect(parse(astType$, UNKNOWN_AST_TYPE)).toEqual(UNKNOWN_AST_TYPE);
