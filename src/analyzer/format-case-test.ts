@@ -20,11 +20,8 @@ export function formatCaseTest(node: AstNode, raw: string): string {
       const name = node["name"];
       return typeof name === "string" ? name : "<expr>";
     }
-    case AST_TYPE.NullLiteral:
-      return "null";
-    case AST_TYPE.BooleanLiteral:
-    case AST_TYPE.NumericLiteral:
-    case AST_TYPE.StringLiteral: {
+    case AST_TYPE.Literal: {
+      // See @oxc-project/types Literal variants for value shapes.
       const value = node["value"];
       if (typeof value === "string") {
         return JSON.stringify(value);

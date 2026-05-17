@@ -17,7 +17,6 @@
 import { readFileSync } from "node:fs";
 import { createRequire } from "node:module";
 import { dirname } from "node:path";
-
 import { describe, expect, test } from "vitest";
 
 import { AST_TYPE } from "./ast-type.js";
@@ -66,17 +65,24 @@ function extractOxcAstTypes(): {
   const unknownAliases = new Set<string>();
 
   for (const m of src.matchAll(literalDiscriminator)) {
-    types.add(m[1]);
+    const literal = m[1];
+    if (literal === undefined) {
+      continue;
+    }
+    types.add(literal);
   }
   for (const m of src.matchAll(aliasDiscriminator)) {
     const aliasName = m[1];
+    if (aliasName === undefined) {
+      continue;
+    }
     const expansion = OXC_TYPE_ALIAS_EXPANSIONS[aliasName];
     if (expansion === undefined) {
       unknownAliases.add(aliasName);
       continue;
     }
-    for (const t of expansion) {
-      types.add(t);
+    for (const v of expansion) {
+      types.add(v);
     }
   }
   return { types, unknownAliases: [...unknownAliases].sort() };
@@ -94,12 +100,12 @@ describe("AST_TYPE parity with @oxc-project/types", () => {
   });
 
   test("AST_TYPE contains no entries that oxc does not emit", () => {
-    const extra = [...declared].filter((t) => !oxcTypes.has(t)).sort();
+    const extra = [...declared].filter((v) => !oxcTypes.has(v)).sort();
     expect(extra).toEqual([]);
   });
 
   test("AST_TYPE lists every type string oxc emits", () => {
-    const missing = [...oxcTypes].filter((t) => !declared.has(t)).sort();
+    const missing = [...oxcTypes].filter((v) => !declared.has(v)).sort();
     expect(missing).toEqual([]);
   });
 });

@@ -60,16 +60,19 @@ describe("formatCaseTest", () => {
   });
 
   test.each([
-    { type: AST_TYPE.NullLiteral, expected: "null" },
-    { type: AST_TYPE.BooleanLiteral, value: true, expected: "true" },
-    { type: AST_TYPE.NumericLiteral, value: 42, expected: "42" },
-    { type: AST_TYPE.StringLiteral, value: "hi", expected: '"hi"' },
+    { type: AST_TYPE.Literal, value: null, expected: "null" },
+    { type: AST_TYPE.Literal, value: true, expected: "true" },
+    { type: AST_TYPE.Literal, value: 42, expected: "42" },
+    { type: AST_TYPE.Literal, value: "hi", expected: '"hi"' },
     { type: AST_TYPE.ArrayExpression, expected: "<expr>" },
     { type: AST_TYPE.Identifier, expected: "<expr>" },
-  ])("type-specific fallback for $type", ({ type, value, expected }) => {
-    const node = { type, value } as AstNode;
-    expect(formatCaseTest(node, "")).toEqual(expected);
-  });
+  ])(
+    "type-specific fallback for $type -> $expected",
+    ({ type, value, expected }) => {
+      const node = { type, value } as AstNode;
+      expect(formatCaseTest(node, "")).toEqual(expected);
+    },
+  );
 
   test("Identifier without name returns <expr>", () => {
     const node = { type: AST_TYPE.Identifier } as const satisfies AstNode;
