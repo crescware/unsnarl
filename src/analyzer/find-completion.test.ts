@@ -183,4 +183,40 @@ describe("findCompletion", () => {
     ] satisfies PathEntry[];
     expect(findCompletion(path)).toEqual({ type: normal$.literal });
   });
+
+  test("stops at a ClassExpression boundary so a class field initializer does not flow into the outer return", () => {
+    // `function f() { return class { x = ID; }; }` — the class is in
+    // the outer return slot, but the field initializer runs as part of
+    // a synthetic per-instance constructor, not the enclosing
+    // function's Completion `[[Value]]`.
+    const path = [
+      entry({ type: AST_TYPE.FunctionDeclaration, start: 0, end: 100 }),
+      entry({ type: AST_TYPE.BlockStatement, start: 15, end: 100 }, "body"),
+      entry({ type: AST_TYPE.ReturnStatement, start: 20, end: 90 }, "body"),
+      entry({ type: AST_TYPE.ClassExpression, start: 27, end: 85 }, "argument"),
+      entry({ type: AST_TYPE.ClassBody, start: 33, end: 85 }, "body"),
+      entry({ type: AST_TYPE.PropertyDefinition, start: 35, end: 50 }, "body"),
+      entry({ type: AST_TYPE.Identifier, start: 39, end: 42 }, "value"),
+    ] satisfies PathEntry[];
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
+  });
+
+  test("stops at a ClassDeclaration boundary so a class decorator does not flow into the enclosing return", () => {
+    // `function f() { return decorate(@dec class A {}); }` (conceptual) — even
+    // when the class lives inside a return slot, the decorator expression is
+    // evaluated at class-definition time and never lands in the outer
+    // function's Completion `[[Value]]`.
+    const path = [
+      entry({ type: AST_TYPE.FunctionDeclaration, start: 0, end: 120 }),
+      entry({ type: AST_TYPE.BlockStatement, start: 15, end: 120 }, "body"),
+      entry({ type: AST_TYPE.ReturnStatement, start: 20, end: 110 }, "body"),
+      entry(
+        { type: AST_TYPE.ClassDeclaration, start: 27, end: 100 },
+        "argument",
+      ),
+      entry({ type: AST_TYPE.Decorator, start: 27, end: 31 }, "decorators"),
+      entry({ type: AST_TYPE.Identifier, start: 28, end: 31 }, "expression"),
+    ] satisfies PathEntry[];
+    expect(findCompletion(path)).toEqual({ type: normal$.literal });
+  });
 });

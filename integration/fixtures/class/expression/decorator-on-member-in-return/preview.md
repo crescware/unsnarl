@@ -41,18 +41,18 @@ flowchart RL
     n_scope_0_makeClass_74["makeClass()<br/>L5"]
     subgraph s_scope_2["makeClass()<br/>L5-10"]
       direction RL
-      subgraph s_scope_4["(anonymous)<br/>L8"]
+      subgraph s_scope_3["class (anonymous)<br/>L6-9"]
         direction RL
-      end
-      subgraph s_return_scope_0_makeClass_74_90_129["return L6-9"]
-        direction RL
-        ret_use_ref_1["dec<br/>L7"]
+        subgraph s_scope_4["(anonymous)<br/>L8"]
+          direction RL
+        end
       end
     end
   end
   n_scope_1_value_13 -->|read| ret_use_ref_0
-  n_scope_0_dec_9 -->|read| ret_use_ref_1
+  n_scope_0_dec_9 -->|read| module_root
   n_scope_0_makeClass_74 -->|read,call| n_scope_0_C_139
+  module_root((module))
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
   class wrap_s_scope_2 nestL1;
@@ -61,6 +61,7 @@ flowchart RL
   class s_scope_2 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
   class s_return_scope_0_dec_9_48_61 nestL3;
-  class s_scope_4 nestL3;
-  class s_return_scope_0_makeClass_74_90_129 nestL3;
+  class s_scope_3 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_4 nestL4;
 ```

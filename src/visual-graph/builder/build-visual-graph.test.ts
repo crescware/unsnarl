@@ -292,6 +292,70 @@ describe("buildVisualGraph: function subgraphs", () => {
   });
 });
 
+describe("buildVisualGraph: class subgraphs", () => {
+  test("a ClassDeclaration becomes a class subgraph whose className matches the class identifier", () => {
+    const g = build("class Foo {}\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual("Foo");
+  });
+
+  test("a named ClassExpression's className is the inner identifier, not the variable it is assigned to", () => {
+    const g = build("const X = class Inner {};\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual("Inner");
+  });
+
+  test("an anonymous ClassExpression's className is null", () => {
+    const g = build("const X = class {};\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual(null);
+  });
+
+  test("treats the outer binding of a named class expression as a separate variable node from the inner ClassName binding", () => {
+    // `const X = class Inner {}` produces two distinct variable nodes:
+    //   - `X` lives in the enclosing scope, outside the class subgraph
+    //   - `Inner` lives inside the class subgraph (the ClassName binding
+    //     visible only within the class body)
+    // The two must NOT be unified into a single node; that would mean
+    // referencing `Inner` from inside the class body resolves to the
+    // outer-scope `X`, which contradicts the named-ClassExpression scope
+    // rule.
+    const g = build("const X = class Inner {};\n");
+    const classSg = findSubgraphs(g, SUBGRAPH_KIND.Class)[0];
+    expect(classSg !== undefined).toEqual(true);
+    const outerX = flattenNodes(g.elements).find(
+      (v) =>
+        v.name === "X" && !flattenNodes(classSg?.elements ?? []).includes(v),
+    );
+    const innerInner = flattenNodes(classSg?.elements ?? []).find(
+      (v) => v.name === "Inner",
+    );
+    expect(outerX !== undefined).toEqual(true);
+    expect(innerInner !== undefined).toEqual(true);
+    expect(outerX?.id).not.toEqual(innerInner?.id);
+  });
+
+  test("treats the outer hoisted binding of a ClassDeclaration as a separate variable node from the inner ClassName binding", () => {
+    // The inner ClassName binding inside the class scope is distinct from
+    // the hoisted outer binding the class declaration adds to its
+    // enclosing scope. The two share a name but must be different nodes.
+    const g = build("class C {}\n");
+    const classSg = findSubgraphs(g, SUBGRAPH_KIND.Class)[0];
+    expect(classSg !== undefined).toEqual(true);
+    const insideClass = flattenNodes(classSg?.elements ?? []);
+    const outerC = flattenNodes(g.elements).find(
+      (v) => v.name === "C" && !insideClass.includes(v),
+    );
+    const innerC = insideClass.find((v) => v.name === "C");
+    expect(outerC !== undefined).toEqual(true);
+    expect(innerC !== undefined).toEqual(true);
+    expect(outerC?.id).not.toEqual(innerC?.id);
+  });
+});
+
 describe("buildVisualGraph: control subgraphs", () => {
   test("a try/catch/finally produces three sibling subgraphs with ascending line ranges", () => {
     const g = build(

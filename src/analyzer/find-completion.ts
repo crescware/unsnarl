@@ -7,11 +7,22 @@ import { AST_TYPE } from "../parser/ast-type.js";
 
 /**
  * Walk a Reference's ancestor chain from leaf to root and resolve the
- * Completion category that carries its value. Total: every Reference
- * is classified.
+ * Completion category that carries its value, returning a Completion
+ * for every Reference (the result is total over the input path).
+ *
+ * Function-shaped nodes (`FunctionDeclaration`, `FunctionExpression`,
+ * `ArrowFunctionExpression`) and class-shaped nodes (`ClassDeclaration`,
+ * `ClassExpression`) act as boundaries: anything reached through one of
+ * them belongs to that inner construct, not to the enclosing function
+ * whose `[[Value]]` we are classifying for. The class boundary covers
+ * field initializers (synthetic per-instance constructor), static
+ * blocks (class-definition-time enclosing context), computed property
+ * keys, extends clauses, and member decorators -- none of which
+ * contribute to the enclosing function's Completion Record.
  *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
+ * @see https://github.com/crescware/unsnarl/issues/98 Issue #98
  */
 export function findCompletion(
   path: readonly PathEntry[],
@@ -49,6 +60,18 @@ export function findCompletion(
     ) {
       // A nested function boundary cuts off the search: a return/throw inside
       // an inner function belongs to that inner function, not to the outer one.
+      return NORMAL_COMPLETION;
+    }
+    if (
+      type === AST_TYPE.ClassExpression ||
+      type === AST_TYPE.ClassDeclaration
+    ) {
+      // Class internals (field initializers, static blocks, computed keys,
+      // extends clauses, member decorators) never flow into the enclosing
+      // function's Completion `[[Value]]`. Member methods / getters / setters /
+      // constructors are wrapped in their own FunctionExpression and are
+      // already handled by the function boundary above; stopping at the class
+      // here catches everything else inside the class body.
       return NORMAL_COMPLETION;
     }
   }

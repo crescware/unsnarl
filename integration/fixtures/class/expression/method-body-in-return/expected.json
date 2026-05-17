@@ -49,31 +49,42 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_3",
-          "kind": "function",
-          "line": 3,
-          "endLine": 5,
+          "id": "s_scope_2",
+          "kind": "class",
+          "line": 2,
+          "endLine": 6,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
+          "className": null,
           "elements": [
             {
               "type": "subgraph",
-              "id": "s_return_scope_0_makeFactory_9_73_85",
-              "kind": "return",
-              "line": 4,
-              "endLine": null,
+              "id": "s_scope_3",
+              "kind": "function",
+              "line": 3,
+              "endLine": 5,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
               "elements": [
                 {
-                  "type": "node",
-                  "id": "ret_use_ref_0",
-                  "kind": "ReturnArgumentReference",
-                  "name": "seed",
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_makeFactory_9_73_85",
+                  "kind": "return",
                   "line": 4,
                   "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_0",
+                      "kind": "ReturnArgumentReference",
+                      "name": "seed",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }

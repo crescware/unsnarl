@@ -25,7 +25,6 @@ flowchart RL
   n_scope_0_total_94["total<br/>L9"]
   n_scope_0_c_119["unused c<br/>L10"]
   n_scope_0_result_144["unused result<br/>L11"]
-  n_scope_2_Counter_62["unused class Counter<br/>L5"]
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_add_9["add()<br/>L1"]
@@ -40,6 +39,10 @@ flowchart RL
       end
     end
   end
+  subgraph s_scope_2["class Counter<br/>L5-7"]
+    direction RL
+    n_scope_2_Counter_62["unused class Counter<br/>L5"]
+  end
   n_scope_1_a_13 -->|read| ret_use_ref_0
   n_scope_1_b_24 -->|read| ret_use_ref_1
   n_scope_0_add_9 -->|read,call| n_scope_0_total_94
@@ -47,6 +50,7 @@ flowchart RL
   n_scope_0_total_94 -->|read| n_scope_0_result_144
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class s_scope_2 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

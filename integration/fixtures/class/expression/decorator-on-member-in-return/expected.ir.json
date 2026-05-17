@@ -480,17 +480,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "type": "return",
-        "startSpan": {
-          "line": 6,
-          "column": 2,
-          "offset": 90
-        },
-        "endSpan": {
-          "line": 9,
-          "column": 4,
-          "offset": 129
-        }
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null

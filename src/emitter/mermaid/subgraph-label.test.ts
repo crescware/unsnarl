@@ -1,10 +1,12 @@
 import { describe, expect, test } from "vitest";
 
 import type { VisualNode } from "../../visual-graph/visual-node.js";
+import type { VisualSubgraph } from "../../visual-graph/visual-subgraph.js";
 import { subgraphLabel } from "./subgraph-label.js";
 import { baseNode } from "./testing/make-node.js";
 import {
   baseCaseSubgraph,
+  baseClassSubgraph,
   baseIfElseContainerSubgraph,
   baseSubgraph,
 } from "./testing/make-subgraph.js";
@@ -19,7 +21,7 @@ describe("subgraphLabel", () => {
       ownerNodeId: "n_owner",
       line: 2,
       endLine: 5,
-    };
+    } as const satisfies VisualSubgraph;
     expect(subgraphLabel(sg, emptyMap, false)).toEqual("myFn()<br/>L2-5");
   });
 
@@ -29,7 +31,7 @@ describe("subgraphLabel", () => {
       ownerNodeId: "n_owner",
       ownerName: "",
       line: 1,
-    };
+    } as const satisfies VisualSubgraph;
     const map = new Map([
       ["n_owner", { ...baseNode(), id: "n_owner", name: "fallback" }],
     ]);
@@ -42,18 +44,48 @@ describe("subgraphLabel", () => {
       ownerNodeId: "n_owner",
       ownerName: "",
       line: 1,
-    };
+    } as const satisfies VisualSubgraph;
     expect(subgraphLabel(sg, emptyMap, false)).toEqual("()<br/>L1");
   });
 
   test("case with explicit caseTest gets 'case <test>'", () => {
-    const sg = { ...baseCaseSubgraph(), caseTest: "1", line: 4 };
+    const sg = {
+      ...baseCaseSubgraph(),
+      caseTest: "1",
+      line: 4,
+    } as const satisfies VisualSubgraph;
     expect(subgraphLabel(sg, emptyMap, false)).toEqual("case 1 L4");
   });
 
   test("case with null caseTest renders as 'default'", () => {
-    const sg = { ...baseCaseSubgraph(), caseTest: null, line: 4 };
+    const sg = {
+      ...baseCaseSubgraph(),
+      caseTest: null,
+      line: 4,
+    } as const satisfies VisualSubgraph;
     expect(subgraphLabel(sg, emptyMap, false)).toEqual("default L4");
+  });
+
+  test("class with a className renders as 'class <name>'", () => {
+    const sg = {
+      ...baseClassSubgraph(),
+      className: "Foo",
+      line: 5,
+      endLine: 7,
+    } as const satisfies VisualSubgraph;
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual("class Foo<br/>L5-7");
+  });
+
+  test("class with className null renders as 'class (anonymous)'", () => {
+    const sg = {
+      ...baseClassSubgraph(),
+      className: null,
+      line: 2,
+      endLine: 4,
+    } as const satisfies VisualSubgraph;
+    expect(subgraphLabel(sg, emptyMap, false)).toEqual(
+      "class (anonymous)<br/>L2-4",
+    );
   });
 
   test("if-else-container with hasElse=true says 'if-else', otherwise 'if'", () => {
@@ -81,7 +113,7 @@ describe("subgraphLabel", () => {
         ownerNodeId: "n_owner",
         line: 2,
         endLine: 5,
-      };
+      } as const satisfies VisualSubgraph;
       expect(subgraphLabel(sg, emptyMap, true)).toEqual(
         "myFn()<br/>L2-5<br/>function",
       );

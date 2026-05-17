@@ -1,14 +1,14 @@
-import { parse } from "valibot";
+import { type InferOutput, parse } from "valibot";
 
 import { caseClause$, other$ } from "../../../ir/scope/block-context-kind.js";
 import {
-  blockContext$,
-  type BlockContext,
+  caseClauseBlockContext$,
+  otherBlockContext$,
 } from "../../../ir/scope/block-context.js";
 import { AST_TYPE } from "../../../parser/ast-type.js";
 
-export function baseBlockContext(): BlockContext {
-  return parse(blockContext$, {
+export function baseBlockContext(): InferOutput<typeof otherBlockContext$> {
+  return parse(otherBlockContext$, {
     kind: other$.literal,
     parentType: AST_TYPE.IfStatement,
     key: "consequent",
@@ -17,8 +17,10 @@ export function baseBlockContext(): BlockContext {
   });
 }
 
-export function baseCaseClauseBlockContext(): BlockContext {
-  return parse(blockContext$, {
+export function baseCaseClauseBlockContext(): InferOutput<
+  typeof caseClauseBlockContext$
+> {
+  return parse(caseClauseBlockContext$, {
     kind: caseClause$.literal,
     parentType: AST_TYPE.SwitchStatement,
     key: "cases",

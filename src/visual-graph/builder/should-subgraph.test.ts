@@ -3,6 +3,7 @@ import { describe, expect, test } from "vitest";
 import { SCOPE_TYPE, type ScopeType } from "../../analyzer/scope-type.js";
 import type { BlockContext } from "../../ir/scope/block-context.js";
 import { asScopeId } from "../../ir/serialized/scope-id.js";
+import type { SerializedScope } from "../../ir/serialized/serialized-scope.js";
 import { AST_TYPE } from "../../parser/ast-type.js";
 import { asFilledString } from "../../util/filled-string.js";
 import { shouldSubgraph } from "./should-subgraph.js";
@@ -19,6 +20,12 @@ describe("shouldSubgraph", () => {
     {
       name: asFilledString("function scope -> true"),
       type: SCOPE_TYPE.Function,
+      blockContext: null,
+      expected: true,
+    },
+    {
+      name: asFilledString("class scope -> true"),
+      type: SCOPE_TYPE.Class,
       blockContext: null,
       expected: true,
     },
@@ -60,7 +67,12 @@ describe("shouldSubgraph", () => {
       expected: false,
     },
   ])("$name", ({ type, blockContext, expected }) => {
-    const scope = { ...baseScope(), id: asScopeId("s"), type, blockContext };
+    const scope = {
+      ...baseScope(),
+      id: asScopeId("s"),
+      type,
+      blockContext,
+    } as const satisfies SerializedScope;
     expect(shouldSubgraph(scope)).toEqual(expected);
   });
 });

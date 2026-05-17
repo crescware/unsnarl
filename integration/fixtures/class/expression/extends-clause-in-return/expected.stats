@@ -1,6 +1,6 @@
 1	0	integration/fixtures/class/expression/extends-clause-in-return/input.ts:0 Object
+0	1	integration/fixtures/class/expression/extends-clause-in-return/input.ts:0 module
 1	0	integration/fixtures/class/expression/extends-clause-in-return/input.ts:1 makeSubclass
 1	0	integration/fixtures/class/expression/extends-clause-in-return/input.ts:1 Base
-0	1	integration/fixtures/class/expression/extends-clause-in-return/input.ts:2 Base
 0	2	integration/fixtures/class/expression/extends-clause-in-return/input.ts:5 unused C
 3	3	5 total

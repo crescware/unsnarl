@@ -1,13 +1,18 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_C_6["class C<br/>L1"]
-  n_scope_1_C_6["unused class C<br/>L1"]
-  subgraph s_scope_2["(anonymous)<br/>L2-4"]
+  subgraph s_scope_1["class C<br/>L1-5"]
     direction RL
-    expr_stmt_22["new C()<br/>L3"]
+    n_scope_1_C_6["unused class C<br/>L1"]
+    subgraph s_scope_2["(anonymous)<br/>L2-4"]
+      direction RL
+      expr_stmt_22["new C()<br/>L3"]
+    end
   end
   n_scope_1_C_6 -->|read,call| expr_stmt_22
   n_scope_0_C_6 -->|read,call| expr_stmt_38
   expr_stmt_38["new C()<br/>L7"]
   classDef nestL1 fill:#11192a,stroke:transparent;
-  class s_scope_2 nestL1;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;

@@ -290,17 +290,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "type": "return",
-        "startSpan": {
-          "line": 2,
-          "column": 2,
-          "offset": 37
-        },
-        "endSpan": {
-          "line": 6,
-          "column": 4,
-          "offset": 87
-        }
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": {

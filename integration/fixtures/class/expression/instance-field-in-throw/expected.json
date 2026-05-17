@@ -38,23 +38,13 @@
         },
         {
           "type": "subgraph",
-          "id": "s_throw_scope_0_failWith_9_36_68",
-          "kind": "throw",
+          "id": "s_scope_2",
+          "kind": "class",
           "line": 2,
           "endLine": 4,
           "direction": "RL",
-          "elements": [
-            {
-              "type": "node",
-              "id": "throw_use_ref_0",
-              "kind": "ThrowArgumentReference",
-              "name": "seed",
-              "line": 3,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            }
-          ]
+          "className": null,
+          "elements": []
         }
       ]
     },
@@ -67,12 +57,22 @@
       "endLine": null,
       "isJsxElement": false,
       "unused": false
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
     {
       "from": "n_scope_1_seed_18",
-      "to": "throw_use_ref_0",
+      "to": "module_root",
       "label": "read"
     },
     {

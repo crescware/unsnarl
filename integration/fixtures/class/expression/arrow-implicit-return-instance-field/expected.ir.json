@@ -337,17 +337,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "type": "return",
-        "startSpan": {
-          "line": 2,
-          "column": 2,
-          "offset": 38
-        },
-        "endSpan": {
-          "line": 4,
-          "column": 3,
-          "offset": 63
-        }
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null

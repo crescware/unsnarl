@@ -30,6 +30,13 @@ export type VisualSubgraph =
       ownerName: string;
     })
   | (CommonSubgraphFields & {
+      kind: typeof SUBGRAPH_KIND.Class;
+      // The class's own identifier (the `Foo` in `class Foo {}`), used
+      // for the subgraph label. Null for anonymous `ClassExpression`
+      // (`class {}`).
+      className: string | null;
+    })
+  | (CommonSubgraphFields & {
       kind: typeof SUBGRAPH_KIND.Case;
       // null when this is the `default:` clause; otherwise the source
       // text of the case test expression.

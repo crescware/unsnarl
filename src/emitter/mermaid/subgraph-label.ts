@@ -32,6 +32,12 @@ function baseLabel(
       return `${escape(name)}()<br/>${range}`;
     }
 
+    case SUBGRAPH_KIND.Class:
+      if (sg.className === null) {
+        return `class (anonymous)<br/>${range}`;
+      }
+      return `class ${escape(sg.className)}<br/>${range}`;
+
     case SUBGRAPH_KIND.Switch:
       return `switch ${range}`;
 

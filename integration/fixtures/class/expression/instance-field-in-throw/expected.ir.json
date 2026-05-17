@@ -235,17 +235,7 @@
       },
       "predicateContainer": null,
       "completion": {
-        "type": "throw",
-        "startSpan": {
-          "line": 2,
-          "column": 2,
-          "offset": 36
-        },
-        "endSpan": {
-          "line": 4,
-          "column": 4,
-          "offset": 68
-        }
+        "type": "normal"
       },
       "jsxElement": null,
       "expressionStatementContainer": null

@@ -1,5 +1,5 @@
+0	1	integration/fixtures/class/expression/computed-key-in-return/input.ts:0 module
 1	0	integration/fixtures/class/expression/computed-key-in-return/input.ts:1 makeClass
 1	0	integration/fixtures/class/expression/computed-key-in-return/input.ts:1 key
-0	1	integration/fixtures/class/expression/computed-key-in-return/input.ts:3 key
 0	1	integration/fixtures/class/expression/computed-key-in-return/input.ts:7 unused C
 2	2	4 total

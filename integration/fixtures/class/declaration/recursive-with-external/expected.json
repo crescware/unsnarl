@@ -17,34 +17,45 @@
       "kind": "ClassDeclaration"
     },
     {
-      "type": "node",
-      "id": "n_scope_1_C_6",
-      "name": "C",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": true,
-      "kind": "ClassDeclaration"
-    },
-    {
       "type": "subgraph",
-      "id": "s_scope_2",
-      "kind": "function",
-      "line": 2,
-      "endLine": 4,
+      "id": "s_scope_1",
+      "kind": "class",
+      "line": 1,
+      "endLine": 5,
       "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
+      "className": "C",
       "elements": [
         {
           "type": "node",
-          "id": "expr_stmt_22",
-          "kind": "SyntheticExpressionStatement",
-          "name": "new C()",
-          "line": 3,
+          "id": "n_scope_1_C_6",
+          "name": "C",
+          "line": 1,
           "endLine": null,
           "isJsxElement": false,
-          "unused": false
+          "unused": true,
+          "kind": "ClassDeclaration"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 2,
+          "endLine": 4,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_22",
+              "kind": "SyntheticExpressionStatement",
+              "name": "new C()",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
         }
       ]
     },

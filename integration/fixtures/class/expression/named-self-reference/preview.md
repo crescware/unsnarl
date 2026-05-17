@@ -19,13 +19,18 @@ const c = new Counter();
 flowchart RL
   n_scope_0_Counter_6["Counter<br/>L1"]
   n_scope_0_c_79["unused c<br/>L7"]
-  n_scope_1_Inner_22["unused class Inner<br/>L1"]
-  subgraph s_scope_2["(anonymous)<br/>L2-4"]
+  subgraph s_scope_1["class Inner<br/>L1-5"]
     direction RL
+    n_scope_1_Inner_22["unused class Inner<br/>L1"]
+    subgraph s_scope_2["(anonymous)<br/>L2-4"]
+      direction RL
+    end
   end
   n_scope_1_Inner_22 -->|read,call| module_root
   n_scope_0_Counter_6 -->|read,call| n_scope_0_c_79
   module_root((module))
   classDef nestL1 fill:#11192a,stroke:transparent;
-  class s_scope_2 nestL1;
+  class s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
 ```

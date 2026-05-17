@@ -7,6 +7,7 @@ import { VISUAL_ELEMENT_TYPE } from "../visual-element-type.js";
 import type { VisualElement } from "../visual-element.js";
 import type { VisualSubgraph } from "../visual-subgraph.js";
 import { controlSubgraphKindOf } from "./control-subgraph-kind-of.js";
+import { isClassSubgraph } from "./is-class-subgraph.js";
 import { isFunctionSubgraph } from "./is-function-subgraph.js";
 import { nodeId } from "./node-id.js";
 import { subgraphScopeId } from "./subgraph-scope-id.js";
@@ -32,6 +33,27 @@ export function describeSubgraph(
       direction: DIRECTION.RL,
       ownerNodeId: ownerVarId !== null ? nodeId(ownerVarId) : null,
       ownerName: ownerVar?.name ?? "",
+      elements: [],
+    };
+  }
+  if (isClassSubgraph(scope)) {
+    // The class's own identifier (`Foo` in `class Foo {}`) lives inside
+    // the class scope as the inner ClassName binding. Anonymous
+    // `ClassExpression` has no such binding, so the variables list is
+    // empty -- the subgraph label falls back to "(anonymous)" then.
+    const innerNameVarId = scope.variables[0];
+    const innerName =
+      innerNameVarId !== undefined
+        ? (variableMap.get(innerNameVarId)?.name ?? null)
+        : null;
+    return {
+      type: VISUAL_ELEMENT_TYPE.Subgraph,
+      id,
+      kind: SUBGRAPH_KIND.Class,
+      line: scope.block.span.line,
+      endLine,
+      direction: DIRECTION.RL,
+      className: innerName,
       elements: [],
     };
   }
@@ -77,5 +99,8 @@ export function describeSubgraph(
       throw new Error(
         `unexpected function subgraph kind for scope ${scope.id}`,
       );
+
+    case SUBGRAPH_KIND.Class:
+      throw new Error(`unexpected class subgraph kind for scope ${scope.id}`);
   }
 }

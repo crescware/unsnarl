@@ -18,27 +18,31 @@ import { caseClause$, other$ } from "./block-context-kind.js";
 // that adds a field. ifChainRootOffset is set on if-consequent / if-alternate
 // blocks that participate in an `else if` chain; it points to the start of
 // the outermost IfStatement so all branches in the chain share a merge key.
+export const caseClauseBlockContext$ = pipe(
+  object({
+    kind: caseClause$,
+    parentType: astType$,
+    key: filledString$,
+    parentSpanOffset: number(),
+    caseTest: nullable(filledString$),
+  }),
+  readonly(),
+);
+
+export const otherBlockContext$ = pipe(
+  object({
+    kind: other$,
+    parentType: astType$,
+    key: filledString$,
+    parentSpanOffset: number(),
+    ifChainRootOffset: nullable(number()),
+  }),
+  readonly(),
+);
+
 export const blockContext$ = variant("kind", [
-  pipe(
-    object({
-      kind: caseClause$,
-      parentType: astType$,
-      key: filledString$,
-      parentSpanOffset: number(),
-      caseTest: nullable(filledString$),
-    }),
-    readonly(),
-  ),
-  pipe(
-    object({
-      kind: other$,
-      parentType: astType$,
-      key: filledString$,
-      parentSpanOffset: number(),
-      ifChainRootOffset: nullable(number()),
-    }),
-    readonly(),
-  ),
+  caseClauseBlockContext$,
+  otherBlockContext$,
 ]);
 
 export type BlockContext = InferOutput<typeof blockContext$>;
