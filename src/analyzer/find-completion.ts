@@ -20,6 +20,17 @@ import { AST_TYPE } from "../parser/ast-type.js";
  * keys, extends clauses, and member decorators -- none of which
  * contribute to the enclosing function's Completion Record.
  *
+ * The walk runs leaf -> root, so the boundary only fires when *no*
+ * `ReturnStatement` / `ThrowStatement` sits between the leaf and the
+ * boundary node. A `throw` inside a static block, for example,
+ * propagates out of the class definition and *does* feed the
+ * enclosing function's `[[Throw]]`; that case is classified before
+ * the class boundary check is reached because the ThrowStatement is
+ * encountered deeper in the path. The boundary thus targets the
+ * residual cases (bare reads in initializers / static blocks /
+ * computed keys / decorators) where no explicit completion-bearing
+ * statement intervenes.
+ *
  * @see https://tc39.es/ecma262/#sec-completion-record-specification-type ECMA §6.2.4 Completion Record
  * @see https://github.com/crescware/unsnarl/issues/94 Issue #94
  * @see https://github.com/crescware/unsnarl/issues/98 Issue #98

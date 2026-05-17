@@ -41,6 +41,15 @@ export function describeSubgraph(
     // the class scope as the inner ClassName binding. Anonymous
     // `ClassExpression` has no such binding, so the variables list is
     // empty -- the subgraph label falls back to "(anonymous)" then.
+    //
+    // Invariant: `boundary/eslint-scope/enter-class.ts` declares ONLY
+    // the inner ClassName into the class scope (methods / fields /
+    // static blocks live in their own nested scopes). So `variables[0]`
+    // is either that ClassName or absent. Function subgraphs need the
+    // explicit `subgraphOwnerVar` map because the owner lives in the
+    // *enclosing* scope; class subgraphs can read the inner binding
+    // directly because the ClassName is the only entry in this scope's
+    // own `variables`.
     const innerNameVarId = scope.variables[0];
     const innerName =
       innerNameVarId !== undefined
