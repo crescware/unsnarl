@@ -18,7 +18,6 @@ export type ColorTheme = Readonly<{
   elkEmptyPlaceholder: Readonly<{
     fill: string;
     stroke: string;
-    color: string;
   }>;
   // Cycled per subgraph depth (1-based). Empty is invalid: every theme
   // must provide at least one palette entry so cycling has a target.

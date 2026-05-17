@@ -276,6 +276,12 @@ describe("findExpressionStatementContainer", () => {
   });
 
   test("falls back to a `raw` head with the expression's span when the shape is not in the recognised vocabulary", () => {
+    // BinaryExpression is deliberately outside the head vocabulary
+    // (the diagram cares about who-references-whom, not about generic
+    // arithmetic), so it has to land on the raw fallback path. The
+    // previous version of this test used an AssignmentExpression, which
+    // now does reduce to an `assign` head — using BinaryExpression
+    // restores the test's original "unrecognised shape" intent.
     const left = {
       type: AST_TYPE.Identifier,
       name: "x",
@@ -287,24 +293,24 @@ describe("findExpressionStatementContainer", () => {
       start: 4,
       end: 5,
     } as const satisfies AstNode;
-    const assign = {
-      type: AST_TYPE.AssignmentExpression,
+    const binary = {
+      type: AST_TYPE.BinaryExpression,
       start: 0,
       end: 5,
       left,
       right,
-      operator: "=",
+      operator: "+",
     } as const satisfies AstNode;
     const stmt = {
       type: AST_TYPE.ExpressionStatement,
       start: 0,
       end: 6,
-      expression: assign,
+      expression: binary,
     } as const satisfies AstNode;
     const path = [
       entry({ type: AST_TYPE.Program, start: 0, end: 6 }),
       entry(stmt, "body"),
-      entry(assign, "expression"),
+      entry(binary, "expression"),
     ] satisfies PathEntry[];
     expect(findExpressionStatementContainer(path)).toEqual({
       startOffset: 0,

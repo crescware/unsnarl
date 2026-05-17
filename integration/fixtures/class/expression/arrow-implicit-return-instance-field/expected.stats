@@ -1,0 +1,5 @@
+0	1	integration/fixtures/class/expression/arrow-implicit-return-instance-field/input.ts:0 module
+1	0	integration/fixtures/class/expression/arrow-implicit-return-instance-field/input.ts:1 makeClass
+1	0	integration/fixtures/class/expression/arrow-implicit-return-instance-field/input.ts:1 seed
+0	1	integration/fixtures/class/expression/arrow-implicit-return-instance-field/input.ts:6 unused C
+2	2	4 total

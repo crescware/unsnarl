@@ -11,6 +11,7 @@ flowchart RL
         n_scope_1_a_29["a()<br/>L2"]
         subgraph s_scope_2["a()<br/>L2"]
           direction RL
+          elk_empty_s_scope_2["No nodes"]
         end
       end
       subgraph wrap_s_scope_3[" "]
@@ -64,3 +65,5 @@ flowchart RL
   classDef nestL5 fill:#364666,stroke:transparent;
   class s_return_scope_1_b_50_60_67 nestL5;
   class s_return_scope_1_c_77_87_94 nestL5;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;

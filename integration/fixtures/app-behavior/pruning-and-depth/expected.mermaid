@@ -32,6 +32,7 @@ flowchart RL
     n_scope_0_unrelated_168["unrelated()<br/>L16"]
     subgraph s_scope_5["unrelated()<br/>L16-18"]
       direction RL
+      elk_empty_s_scope_5["No nodes"]
     end
   end
   n_scope_0_flag_6 -->|read| if_test_scope_1_41
@@ -55,3 +56,5 @@ flowchart RL
   class s_scope_2 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
   class s_scope_3 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_5 elkEmptyPlaceholder;

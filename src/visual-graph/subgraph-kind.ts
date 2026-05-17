@@ -1,5 +1,6 @@
 export const SUBGRAPH_KIND = {
   Function: "function",
+  Class: "class",
   Switch: "switch",
   Case: "case",
   If: "if",

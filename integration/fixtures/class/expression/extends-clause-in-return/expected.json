@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/extends-clause-in-return/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_makeSubclass_9",
+      "name": "makeSubclass",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_C_90",
+      "name": "C",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Object_107",
+      "name": "Object",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_makeSubclass_9",
+      "ownerName": "makeSubclass",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_Base_22",
+          "name": "Base",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "class",
+          "line": 2,
+          "endLine": 2,
+          "direction": "RL",
+          "className": null,
+          "elements": []
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_Base_22",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_makeSubclass_9",
+      "to": "n_scope_0_C_90",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_Object_107",
+      "to": "n_scope_0_C_90",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

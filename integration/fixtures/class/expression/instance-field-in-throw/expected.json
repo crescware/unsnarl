@@ -1,0 +1,86 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/instance-field-in-throw/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_failWith_9",
+      "name": "failWith",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_failWith_9",
+      "ownerName": "failWith",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_seed_18",
+          "name": "seed",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "class",
+          "line": 2,
+          "endLine": 4,
+          "direction": "RL",
+          "className": null,
+          "elements": []
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_72",
+      "kind": "SyntheticExpressionStatement",
+      "name": "failWith()",
+      "line": 7,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_seed_18",
+      "to": "module_root",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_failWith_9",
+      "to": "expr_stmt_72",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

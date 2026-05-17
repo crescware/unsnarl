@@ -31,6 +31,7 @@ flowchart RL
     switch_discriminant_scope_0_35{"switch ()<br/>L4"}
     subgraph s_scope_2["case &quot;a&quot; L5"]
       direction RL
+      elk_empty_s_scope_2["No nodes"]
     end
     subgraph s_scope_3["case &quot;b&quot; L6-8"]
       direction RL
@@ -52,4 +53,6 @@ flowchart RL
   class s_scope_2 nestL2;
   class s_scope_3 nestL2;
   class s_scope_4 nestL2;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
 ```

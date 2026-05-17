@@ -38,7 +38,6 @@ export function emitPlainSubgraph(
     const patch = state.strategy.emptySubgraphPlaceholder({
       subgraphId: sg.id,
       indent: childIndent,
-      referencedByEdge: state.edgeEndpointIds.has(sg.id),
     });
     if (patch !== null) {
       state.lines.push(patch.line);

@@ -213,16 +213,38 @@
           "offset": 22
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 2,
-            "column": 0,
-            "offset": 11
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "global"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 0,
+              "offset": 11
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 6,
+              "offset": 17
+            }
           },
-          "endSpan": {
-            "line": 2,
-            "column": 10,
-            "offset": 21
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 9,
+              "offset": 20
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 10,
+              "offset": 21
+            }
           }
         }
       }

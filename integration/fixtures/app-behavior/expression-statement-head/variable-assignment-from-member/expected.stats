@@ -1,0 +1,4 @@
+1	0	integration/fixtures/app-behavior/expression-statement-head/variable-assignment-from-member/input.ts:1 unused a
+1	0	integration/fixtures/app-behavior/expression-statement-head/variable-assignment-from-member/input.ts:2 b
+0	2	integration/fixtures/app-behavior/expression-statement-head/variable-assignment-from-member/input.ts:3 a
+2	2	3 total

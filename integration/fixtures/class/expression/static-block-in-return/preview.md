@@ -1,0 +1,43 @@
+# integration/fixtures/class/expression/static-block-in-return/input.ts
+
+## Input
+
+```ts
+function makeClass(seed: number) {
+  return class {
+    static {
+      seed;
+    }
+  };
+}
+
+const C = makeClass(0);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_C_97["unused C<br/>L9"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_makeClass_9["makeClass()<br/>L1"]
+    subgraph s_scope_1["makeClass()<br/>L1-7"]
+      direction RL
+      n_scope_1_seed_19["seed<br/>L1"]
+      subgraph s_scope_2["class (anonymous)<br/>L2-6"]
+        direction RL
+        expr_stmt_71["seed<br/>L4"]
+      end
+    end
+  end
+  n_scope_1_seed_19 -->|read| expr_stmt_71
+  n_scope_0_makeClass_9 -->|read,call| n_scope_0_C_97
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+```

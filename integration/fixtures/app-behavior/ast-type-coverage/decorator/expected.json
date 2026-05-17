@@ -69,14 +69,25 @@
       ]
     },
     {
-      "type": "node",
-      "id": "n_scope_2_C_52",
-      "name": "C",
-      "line": 5,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": true,
-      "kind": "ClassDeclaration"
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "class",
+      "line": 4,
+      "endLine": 5,
+      "direction": "RL",
+      "className": "C",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_2_C_52",
+          "name": "C",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "ClassDeclaration"
+        }
+      ]
     },
     {
       "type": "node",

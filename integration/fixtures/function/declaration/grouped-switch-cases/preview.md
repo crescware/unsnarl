@@ -42,15 +42,19 @@ flowchart RL
         switch_discriminant_scope_1_45{"switch ()<br/>L3"}
         subgraph s_scope_3["case &quot;mon&quot; L4"]
           direction RL
+          elk_empty_s_scope_3["No nodes"]
         end
         subgraph s_scope_4["case &quot;tue&quot; L5"]
           direction RL
+          elk_empty_s_scope_4["No nodes"]
         end
         subgraph s_scope_5["case &quot;wed&quot; L6"]
           direction RL
+          elk_empty_s_scope_5["No nodes"]
         end
         subgraph s_scope_6["case &quot;thu&quot; L7"]
           direction RL
+          elk_empty_s_scope_6["No nodes"]
         end
         subgraph s_scope_7["case &quot;fri&quot; L8-10"]
           direction RL
@@ -58,6 +62,7 @@ flowchart RL
         end
         subgraph s_scope_8["case &quot;sat&quot; L11"]
           direction RL
+          elk_empty_s_scope_8["No nodes"]
         end
         subgraph s_scope_9["case &quot;sun&quot; L12-14"]
           direction RL
@@ -97,4 +102,10 @@ flowchart RL
   class s_scope_8 nestL4;
   class s_scope_9 nestL4;
   class s_scope_10 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
+  class elk_empty_s_scope_4 elkEmptyPlaceholder;
+  class elk_empty_s_scope_5 elkEmptyPlaceholder;
+  class elk_empty_s_scope_6 elkEmptyPlaceholder;
+  class elk_empty_s_scope_8 elkEmptyPlaceholder;
 ```

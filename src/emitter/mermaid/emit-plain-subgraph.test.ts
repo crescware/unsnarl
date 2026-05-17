@@ -123,29 +123,6 @@ describe("emitPlainSubgraph", () => {
     expect(state.placeholderIds).toEqual([]);
   });
 
-  test("forwards referencedByEdge=true when subgraph id appears in edgeEndpointIds", () => {
-    let observed: boolean | null = null;
-    const strategy = {
-      ...baseStrategy(),
-      emptySubgraphPlaceholder: (ctx) => {
-        observed = ctx.referencedByEdge;
-        return null;
-      },
-    } satisfies MermaidStrategy;
-    const state = {
-      ...baseRenderState(),
-      strategy,
-      edgeEndpointIds: new Set(["empty"]),
-    };
-    emitPlainSubgraph(
-      state,
-      { ...baseSubgraph(), id: "empty", kind: SUBGRAPH_KIND.If },
-      "  ",
-      1,
-    );
-    expect(observed).toEqual(true);
-  });
-
   test("records the subgraph id under its 1-based depth in nestClassMap", () => {
     const state = baseRenderState();
     emitPlainSubgraph(

@@ -12,7 +12,6 @@ export const darkTheme: ColorTheme = {
   elkEmptyPlaceholder: {
     fill: "transparent",
     stroke: "transparent",
-    color: "transparent",
   },
   // Six-entry gradient kept in the dark half of the spectrum so the
   // diagram stays comfortable on a dark page and white label text

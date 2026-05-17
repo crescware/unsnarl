@@ -207,16 +207,42 @@
           "offset": 49
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 4,
-            "column": 4,
-            "offset": 41
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "C"
+              },
+              "property": "z"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 4,
+              "offset": 41
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 7,
+              "offset": 44
+            }
           },
-          "endSpan": {
-            "line": 4,
-            "column": 11,
-            "offset": 48
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 10,
+              "offset": 47
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 11,
+              "offset": 48
+            }
           }
         }
       }

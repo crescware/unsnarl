@@ -292,6 +292,70 @@ describe("buildVisualGraph: function subgraphs", () => {
   });
 });
 
+describe("buildVisualGraph: class subgraphs", () => {
+  test("a ClassDeclaration becomes a class subgraph whose className matches the class identifier", () => {
+    const g = build("class Foo {}\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual("Foo");
+  });
+
+  test("a named ClassExpression's className is the inner identifier, not the variable it is assigned to", () => {
+    const g = build("const X = class Inner {};\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual("Inner");
+  });
+
+  test("an anonymous ClassExpression's className is null", () => {
+    const g = build("const X = class {};\n");
+    const subs = findSubgraphs(g, SUBGRAPH_KIND.Class);
+    expect(subs).toHaveLength(1);
+    expect(subs[0]?.className).toEqual(null);
+  });
+
+  test("treats the outer binding of a named class expression as a separate variable node from the inner ClassName binding", () => {
+    // `const X = class Inner {}` produces two distinct variable nodes:
+    //   - `X` lives in the enclosing scope, outside the class subgraph
+    //   - `Inner` lives inside the class subgraph (the ClassName binding
+    //     visible only within the class body)
+    // The two must NOT be unified into a single node; that would mean
+    // referencing `Inner` from inside the class body resolves to the
+    // outer-scope `X`, which contradicts the named-ClassExpression scope
+    // rule.
+    const g = build("const X = class Inner {};\n");
+    const classSg = findSubgraphs(g, SUBGRAPH_KIND.Class)[0];
+    expect(classSg !== undefined).toEqual(true);
+    const outerX = flattenNodes(g.elements).find(
+      (v) =>
+        v.name === "X" && !flattenNodes(classSg?.elements ?? []).includes(v),
+    );
+    const innerInner = flattenNodes(classSg?.elements ?? []).find(
+      (v) => v.name === "Inner",
+    );
+    expect(outerX !== undefined).toEqual(true);
+    expect(innerInner !== undefined).toEqual(true);
+    expect(outerX?.id).not.toEqual(innerInner?.id);
+  });
+
+  test("treats the outer hoisted binding of a ClassDeclaration as a separate variable node from the inner ClassName binding", () => {
+    // The inner ClassName binding inside the class scope is distinct from
+    // the hoisted outer binding the class declaration adds to its
+    // enclosing scope. The two share a name but must be different nodes.
+    const g = build("class C {}\n");
+    const classSg = findSubgraphs(g, SUBGRAPH_KIND.Class)[0];
+    expect(classSg !== undefined).toEqual(true);
+    const insideClass = flattenNodes(classSg?.elements ?? []);
+    const outerC = flattenNodes(g.elements).find(
+      (v) => v.name === "C" && !insideClass.includes(v),
+    );
+    const innerC = insideClass.find((v) => v.name === "C");
+    expect(outerC !== undefined).toEqual(true);
+    expect(innerC !== undefined).toEqual(true);
+    expect(outerC?.id).not.toEqual(innerC?.id);
+  });
+});
+
 describe("buildVisualGraph: control subgraphs", () => {
   test("a try/catch/finally produces three sibling subgraphs with ascending line ranges", () => {
     const g = build(
@@ -418,6 +482,41 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
     const g = build("let v = 0;\nv = 1;\n");
     const wr = findNodes(g, NODE_KIND.WriteReference)[0];
     expect(wr?.declarationKind).toEqual("let");
+  });
+
+  // The routing invariant the rest of the renderer leans on: a
+  // reference that the analyzer marked as write goes through the
+  // WriteOp chain (`wr_ref_*` nodes) and NEVER duplicates into a
+  // SyntheticExpressionStatement. Without this, a single `x = 1`
+  // statement would surface twice -- once as `wr_ref_*` and once
+  // as `expr_stmt_*` -- and downstream label-rendering logic
+  // (which only formats the head for the expr_stmt path) would
+  // start to disagree about how `x = 1` is shown.
+  test("a variable-write assignment routes through wr_ref, not a SyntheticExpressionStatement", () => {
+    const g = build("let v = 0;\nv = 1;\n");
+    const exprStmts = findNodes(g, NODE_KIND.SyntheticExpressionStatement);
+    expect(exprStmts).toHaveLength(0);
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
+    expect(writeOps.map((v) => v.name)).toEqual(["v"]);
+  });
+
+  // Counterpart of the routing invariant: a member-write like
+  // `C.z = 1` has `C` as a *read* reference (eslint-scope correctly
+  // classifies the base of an assignment-target member as read),
+  // so it does NOT go through the WriteOp chain. The expr_stmt
+  // path picks it up and the assign head surfaces as `C.z = ...`.
+  // This test pins both halves of the routing decision in place.
+  test("a member-write assignment routes through SyntheticExpressionStatement, not wr_ref, for the base reference", () => {
+    const g = build(
+      "class C {\n  static z = 0;\n  static {\n    C.z = 1;\n  }\n}\n",
+    );
+    const exprStmts = findNodes(g, NODE_KIND.SyntheticExpressionStatement);
+    expect(exprStmts).toHaveLength(1);
+    expect(exprStmts[0]?.name).toEqual("C.z = ...");
+    // `C` itself is never a WriteOp target — only the property `z`
+    // is being written, and `z` isn't a tracked variable.
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
+    expect(writeOps).toHaveLength(0);
   });
 
   test("a switch case that falls through emits a |fallthrough| edge to the next case's WriteOp", () => {

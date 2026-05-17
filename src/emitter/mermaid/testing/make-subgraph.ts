@@ -32,6 +32,18 @@ export function baseCaseSubgraph(): Extract<
   return { ...COMMON, kind: SUBGRAPH_KIND.Case, caseTest: null, elements: [] };
 }
 
+export function baseClassSubgraph(): Extract<
+  VisualSubgraph,
+  { kind: typeof SUBGRAPH_KIND.Class }
+> {
+  return {
+    ...COMMON,
+    kind: SUBGRAPH_KIND.Class,
+    className: null,
+    elements: [],
+  };
+}
+
 export function baseIfElseContainerSubgraph(): Extract<
   VisualSubgraph,
   { kind: typeof SUBGRAPH_KIND.IfElseContainer }

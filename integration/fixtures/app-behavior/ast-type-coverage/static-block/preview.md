@@ -17,7 +17,12 @@ class C {
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   n_scope_0_C_6["unused class C<br/>L1"]
-  n_scope_1_C_6["unused class C<br/>L1"]
+  subgraph s_scope_1["class C<br/>L1-6"]
+    direction RL
+    n_scope_1_C_6["unused class C<br/>L1"]
+    expr_stmt_41["C.z = ...<br/>L4"]
+  end
   n_scope_1_C_6 -->|read| expr_stmt_41
-  expr_stmt_41["C.z = 1<br/>L4"]
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
 ```

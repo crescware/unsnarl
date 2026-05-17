@@ -1,0 +1,5 @@
+0	1	integration/fixtures/class/expression/instance-field-in-throw/input.ts:0 module
+1	0	integration/fixtures/class/expression/instance-field-in-throw/input.ts:1 failWith
+1	0	integration/fixtures/class/expression/instance-field-in-throw/input.ts:1 seed
+0	1	integration/fixtures/class/expression/instance-field-in-throw/input.ts:7 failWith()
+2	2	4 total

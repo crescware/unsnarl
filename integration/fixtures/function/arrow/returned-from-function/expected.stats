@@ -1,0 +1,6 @@
+1	0	integration/fixtures/function/arrow/returned-from-function/input.ts:1 f
+1	0	integration/fixtures/function/arrow/returned-from-function/input.ts:1 a
+0	1	integration/fixtures/function/arrow/returned-from-function/input.ts:3 a
+1	1	integration/fixtures/function/arrow/returned-from-function/input.ts:7 g
+0	1	integration/fixtures/function/arrow/returned-from-function/input.ts:8 unused v
+3	3	5 total

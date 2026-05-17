@@ -627,16 +627,38 @@
           "offset": 73
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 6,
-            "column": 2,
-            "offset": 60
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "attempts"
+            },
+            "startSpan": {
+              "line": 6,
+              "column": 2,
+              "offset": 60
+            },
+            "endSpan": {
+              "line": 6,
+              "column": 10,
+              "offset": 68
+            }
           },
-          "endSpan": {
-            "line": 6,
-            "column": 14,
-            "offset": 72
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 6,
+              "column": 13,
+              "offset": 71
+            },
+            "endSpan": {
+              "line": 6,
+              "column": 14,
+              "offset": 72
+            }
           }
         }
       }
@@ -680,16 +702,42 @@
           "offset": 96
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 7,
-            "column": 2,
-            "offset": 76
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "value"
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 2,
+              "offset": 76
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 7,
+              "offset": 81
+            }
           },
-          "endSpan": {
-            "line": 7,
-            "column": 21,
-            "offset": 95
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "identifier",
+                "name": "Number"
+              }
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 10,
+              "offset": 84
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 21,
+              "offset": 95
+            }
           }
         }
       }
@@ -733,16 +781,42 @@
           "offset": 96
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 7,
-            "column": 2,
-            "offset": 76
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "value"
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 2,
+              "offset": 76
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 7,
+              "offset": 81
+            }
           },
-          "endSpan": {
-            "line": 7,
-            "column": 21,
-            "offset": 95
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "identifier",
+                "name": "Number"
+              }
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 10,
+              "offset": 84
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 21,
+              "offset": 95
+            }
           }
         }
       }
@@ -786,16 +860,42 @@
           "offset": 96
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 7,
-            "column": 2,
-            "offset": 76
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "value"
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 2,
+              "offset": 76
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 7,
+              "offset": 81
+            }
           },
-          "endSpan": {
-            "line": 7,
-            "column": 21,
-            "offset": 95
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "identifier",
+                "name": "Number"
+              }
+            },
+            "startSpan": {
+              "line": 7,
+              "column": 10,
+              "offset": 84
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 21,
+              "offset": 95
+            }
           }
         }
       }
@@ -839,16 +939,38 @@
           "offset": 129
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 9,
-            "column": 2,
-            "offset": 115
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "attempts"
+            },
+            "startSpan": {
+              "line": 9,
+              "column": 2,
+              "offset": 115
+            },
+            "endSpan": {
+              "line": 9,
+              "column": 10,
+              "offset": 123
+            }
           },
-          "endSpan": {
-            "line": 9,
-            "column": 15,
-            "offset": 128
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 9,
+              "column": 13,
+              "offset": 126
+            },
+            "endSpan": {
+              "line": 9,
+              "column": 15,
+              "offset": 128
+            }
           }
         }
       }
@@ -892,16 +1014,38 @@
           "offset": 143
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 10,
-            "column": 2,
-            "offset": 132
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "value"
+            },
+            "startSpan": {
+              "line": 10,
+              "column": 2,
+              "offset": 132
+            },
+            "endSpan": {
+              "line": 10,
+              "column": 7,
+              "offset": 137
+            }
           },
-          "endSpan": {
-            "line": 10,
-            "column": 12,
-            "offset": 142
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 10,
+              "column": 10,
+              "offset": 140
+            },
+            "endSpan": {
+              "line": 10,
+              "column": 12,
+              "offset": 142
+            }
           }
         }
       }
@@ -945,16 +1089,38 @@
           "offset": 172
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 12,
-            "column": 2,
-            "offset": 158
+          "kind": "assign",
+          "operator": "+=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "attempts"
+            },
+            "startSpan": {
+              "line": 12,
+              "column": 2,
+              "offset": 158
+            },
+            "endSpan": {
+              "line": 12,
+              "column": 10,
+              "offset": 166
+            }
           },
-          "endSpan": {
-            "line": 12,
-            "column": 15,
-            "offset": 171
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 12,
+              "column": 14,
+              "offset": 170
+            },
+            "endSpan": {
+              "line": 12,
+              "column": 15,
+              "offset": 171
+            }
           }
         }
       }

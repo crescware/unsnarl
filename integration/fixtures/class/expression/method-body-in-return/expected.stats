@@ -1,0 +1,5 @@
+1	0	integration/fixtures/class/expression/method-body-in-return/input.ts:1 makeFactory
+1	0	integration/fixtures/class/expression/method-body-in-return/input.ts:1 seed
+0	1	integration/fixtures/class/expression/method-body-in-return/input.ts:4 seed
+0	1	integration/fixtures/class/expression/method-body-in-return/input.ts:9 unused C
+2	2	4 total

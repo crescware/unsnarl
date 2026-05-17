@@ -94,6 +94,8 @@ function subgraph(
         ownerNodeId: "n_owner",
         ownerName: "owner",
       };
+    case SUBGRAPH_KIND.Class:
+      return { ...common, kind: SUBGRAPH_KIND.Class, className: null };
     case SUBGRAPH_KIND.Case:
       return { ...common, kind: SUBGRAPH_KIND.Case, caseTest: null };
     case SUBGRAPH_KIND.IfElseContainer:

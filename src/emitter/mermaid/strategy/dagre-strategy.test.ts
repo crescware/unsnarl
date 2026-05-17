@@ -17,20 +17,12 @@ describe("dagreStrategy", () => {
 });
 
 describe("dagreStrategy.emptySubgraphPlaceholder", () => {
-  test("returns null when the subgraph is not referenced by any edge", () => {
+  // dagre sizes empty clusters correctly on its own, so no placeholder is
+  // needed regardless of how the subgraph is wired to the rest of the graph.
+  test("always returns null (dagre needs no workaround)", () => {
     const result = dagreStrategy.emptySubgraphPlaceholder({
       subgraphId: "s_scope_42",
       indent: "    ",
-      referencedByEdge: false,
-    });
-    expect(result).toEqual(null);
-  });
-
-  test("returns null even when the subgraph is referenced by an edge (dagre needs no workaround)", () => {
-    const result = dagreStrategy.emptySubgraphPlaceholder({
-      subgraphId: "s_scope_42",
-      indent: "    ",
-      referencedByEdge: true,
     });
     expect(result).toEqual(null);
   });

@@ -8,7 +8,6 @@ export function baseRenderState(): RenderState {
     lines: [],
     nodeMap: new Map<string, VisualNode>(),
     wrappedOwnerIds: new Set<string>(),
-    edgeEndpointIds: new Set<string>(),
     placeholderIds: [],
     nestClassMap: new Map<number, string[]>(),
     strategy: baseStrategy(),
