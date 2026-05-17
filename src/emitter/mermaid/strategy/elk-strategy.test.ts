@@ -40,23 +40,10 @@ describe("elkStrategy.trailerLines", () => {
 });
 
 describe("elkStrategy.emptySubgraphPlaceholder", () => {
-  test("returns a placeholder line + id even when the subgraph is not edge-referenced", () => {
+  test("returns a placeholder line + id for any empty subgraph", () => {
     const result = elkStrategy.emptySubgraphPlaceholder({
       subgraphId: "s_scope_42",
       indent: "    ",
-      referencedByEdge: false,
-    });
-    expect(result).toEqual({
-      line: '    elk_empty_s_scope_42["No nodes"]',
-      placeholderId: "elk_empty_s_scope_42",
-    });
-  });
-
-  test("returns a placeholder line + id when the subgraph is an edge endpoint", () => {
-    const result = elkStrategy.emptySubgraphPlaceholder({
-      subgraphId: "s_scope_42",
-      indent: "    ",
-      referencedByEdge: true,
     });
     expect(result).toEqual({
       line: '    elk_empty_s_scope_42["No nodes"]',
@@ -68,7 +55,6 @@ describe("elkStrategy.emptySubgraphPlaceholder", () => {
     const result = elkStrategy.emptySubgraphPlaceholder({
       subgraphId: "x",
       indent: "\t\t",
-      referencedByEdge: true,
     });
     expect(result?.line).toEqual('\t\telk_empty_x["No nodes"]');
   });
@@ -77,7 +63,6 @@ describe("elkStrategy.emptySubgraphPlaceholder", () => {
     const result = elkStrategy.emptySubgraphPlaceholder({
       subgraphId: "cont_if_scope_0_99",
       indent: "  ",
-      referencedByEdge: true,
     });
     expect(result?.placeholderId).toEqual("elk_empty_cont_if_scope_0_99");
   });

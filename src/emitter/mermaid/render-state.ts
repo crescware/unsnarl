@@ -6,7 +6,6 @@ export type RenderState = Readonly<{
   lines: /* mutable */ string[];
   nodeMap: ReadonlyMap<string, VisualNode>;
   wrappedOwnerIds: ReadonlySet<string>;
-  edgeEndpointIds: ReadonlySet<string>;
   placeholderIds: /* mutable */ string[];
   // Subgraph ids grouped by 0-based palette slot. Filled as subgraphs
   // (including function wrappers) are emitted with their depth; consumed

@@ -5,7 +5,6 @@ import { buildVisualGraph } from "../../visual-graph/builder/build-visual-graph.
 import { NODE_KIND } from "../../visual-graph/node-kind.js";
 import type { VisualGraph } from "../../visual-graph/visual-graph.js";
 import type { VisualNode } from "../../visual-graph/visual-node.js";
-import { collectEdgeEndpointIds } from "./collect-edge-endpoint-ids.js";
 import { collectHighlightEdgeIndices } from "./collect-highlight-edge-indices.js";
 import { collectImportSources } from "./collect-import-sources.js";
 import { collectNodesInto } from "./collect-nodes-into.js";
@@ -103,18 +102,10 @@ function renderMermaid(
   const wrappedOwnerIds = new Set<string>();
   collectWrappedOwnerIds(graph.elements, wrappedOwnerIds);
 
-  // Pre-compute the set of ids that appear as edge endpoints. The
-  // emptySubgraphPlaceholder hook uses this to decide whether a workaround
-  // is needed (the layout-elk crash only triggers during edge processing,
-  // so subgraphs that are not edge endpoints don't need the patch even
-  // under elk).
-  const edgeEndpointIds = collectEdgeEndpointIds(graph.edges);
-
   const state = {
     lines,
     nodeMap,
     wrappedOwnerIds,
-    edgeEndpointIds,
     placeholderIds: [],
     nestClassMap: new Map<number, string[]>(),
     strategy,

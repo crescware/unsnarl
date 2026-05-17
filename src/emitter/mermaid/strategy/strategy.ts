@@ -5,8 +5,6 @@ type EmptySubgraphContext = Readonly<{
   subgraphId: string;
   /** Indent prefix to use for any line emitted inside the subgraph. */
   indent: string;
-  /** True if any edge in the graph references this subgraph as src or dst. */
-  referencedByEdge: boolean;
 }>;
 
 export type MermaidStrategy = Readonly<{
