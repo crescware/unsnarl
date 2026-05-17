@@ -1,0 +1,5 @@
+1	0	integration/fixtures/app-behavior/expression-statement-head/update-member/input.ts:1 a
+1	0	integration/fixtures/app-behavior/expression-statement-head/update-member/input.ts:2 b
+0	1	integration/fixtures/app-behavior/expression-statement-head/update-member/input.ts:3 ++a.z
+0	1	integration/fixtures/app-behavior/expression-statement-head/update-member/input.ts:4 b.z--
+2	2	4 total

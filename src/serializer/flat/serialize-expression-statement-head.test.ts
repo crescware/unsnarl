@@ -6,6 +6,9 @@ import {
   call$,
   new$,
   await$,
+  assign$,
+  update$,
+  elided$,
   raw$,
 } from "../../ir/reference/expression-statement-head-kind.js";
 import type { HeadExpression } from "../../ir/reference/expression-statement-head.js";
@@ -66,6 +69,121 @@ describe("serializeHeadExpression", () => {
       argument: {
         kind: call$.literal,
         callee: { kind: identifier$.literal, name: "go" },
+      },
+    });
+  });
+
+  test("recurses through an assign head and converts each operand's offsets to spans", () => {
+    const raw = "C.z = v";
+    const head: HeadExpression = {
+      kind: assign$.literal,
+      operator: "=",
+      left: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startOffset: 0,
+        endOffset: 3,
+      },
+      right: {
+        head: { kind: identifier$.literal, name: "v" },
+        startOffset: 6,
+        endOffset: 7,
+      },
+    };
+    expect(serializeHeadExpression(head, raw)).toEqual({
+      kind: assign$.literal,
+      operator: "=",
+      left: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startSpan: { offset: 0, line: 1, column: 0 },
+        endSpan: { offset: 3, line: 1, column: 3 },
+      },
+      right: {
+        head: { kind: identifier$.literal, name: "v" },
+        startSpan: { offset: 6, line: 1, column: 6 },
+        endSpan: { offset: 7, line: 1, column: 7 },
+      },
+    });
+  });
+
+  // The elided side has no structural position of its own, so the
+  // operand's span IS the only locator for that side. Verify the
+  // serializer keeps it intact and well-formed.
+  test("preserves the span on an elided assign operand through serialization", () => {
+    const raw = "C.z = 1";
+    const head: HeadExpression = {
+      kind: assign$.literal,
+      operator: "=",
+      left: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startOffset: 0,
+        endOffset: 3,
+      },
+      right: {
+        head: { kind: elided$.literal },
+        startOffset: 6,
+        endOffset: 7,
+      },
+    };
+    expect(serializeHeadExpression(head, raw)).toEqual({
+      kind: assign$.literal,
+      operator: "=",
+      left: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startSpan: { offset: 0, line: 1, column: 0 },
+        endSpan: { offset: 3, line: 1, column: 3 },
+      },
+      right: {
+        head: { kind: elided$.literal },
+        startSpan: { offset: 6, line: 1, column: 6 },
+        endSpan: { offset: 7, line: 1, column: 7 },
+      },
+    });
+  });
+
+  test("recurses through an update head and keeps operator + prefix + argument span", () => {
+    const raw = "++C.z;";
+    const head: HeadExpression = {
+      kind: update$.literal,
+      operator: "++",
+      prefix: true,
+      argument: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startOffset: 2,
+        endOffset: 5,
+      },
+    };
+    expect(serializeHeadExpression(head, raw)).toEqual({
+      kind: update$.literal,
+      operator: "++",
+      prefix: true,
+      argument: {
+        head: {
+          kind: member$.literal,
+          object: { kind: identifier$.literal, name: "C" },
+          property: "z",
+        },
+        startSpan: { offset: 2, line: 1, column: 2 },
+        endSpan: { offset: 5, line: 1, column: 5 },
       },
     });
   });

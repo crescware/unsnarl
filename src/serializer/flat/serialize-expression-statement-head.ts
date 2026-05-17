@@ -6,12 +6,19 @@ import {
   call$,
   new$,
   await$,
+  assign$,
+  update$,
+  elided$,
   raw$,
 } from "../../ir/reference/expression-statement-head-kind.js";
-import type { HeadExpression } from "../../ir/reference/expression-statement-head.js";
+import type {
+  HeadExpression,
+  HeadOperand,
+} from "../../ir/reference/expression-statement-head.js";
 import {
   serializedHeadExpression$,
   type SerializedHeadExpression,
+  type SerializedHeadOperand,
 } from "../../ir/serialized/serialized-expression-statement-head.js";
 import { spanFromOffset } from "../../util/span.js";
 
@@ -51,6 +58,25 @@ export function serializeHeadExpression(
         argument: serializeHeadExpression(head.argument, raw),
       });
 
+    case assign$.literal:
+      return parse(serializedHeadExpression$, {
+        kind: assign$.literal,
+        operator: head.operator,
+        left: serializeHeadOperand(head.left, raw),
+        right: serializeHeadOperand(head.right, raw),
+      });
+
+    case update$.literal:
+      return parse(serializedHeadExpression$, {
+        kind: update$.literal,
+        operator: head.operator,
+        prefix: head.prefix,
+        argument: serializeHeadOperand(head.argument, raw),
+      });
+
+    case elided$.literal:
+      return parse(serializedHeadExpression$, { kind: elided$.literal });
+
     case raw$.literal:
       return parse(serializedHeadExpression$, {
         kind: raw$.literal,
@@ -58,4 +84,15 @@ export function serializeHeadExpression(
         endSpan: spanFromOffset(raw, head.endOffset),
       });
   }
+}
+
+function serializeHeadOperand(
+  operand: HeadOperand,
+  raw: string,
+): SerializedHeadOperand {
+  return {
+    head: serializeHeadExpression(operand.head, raw),
+    startSpan: spanFromOffset(raw, operand.startOffset),
+    endSpan: spanFromOffset(raw, operand.endOffset),
+  };
 }

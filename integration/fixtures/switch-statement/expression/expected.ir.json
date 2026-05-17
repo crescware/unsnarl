@@ -855,16 +855,38 @@
           "offset": 111
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 8,
-            "column": 4,
-            "offset": 97
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "label"
+            },
+            "startSpan": {
+              "line": 8,
+              "column": 4,
+              "offset": 97
+            },
+            "endSpan": {
+              "line": 8,
+              "column": 9,
+              "offset": 102
+            }
           },
-          "endSpan": {
-            "line": 8,
-            "column": 17,
-            "offset": 110
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 8,
+              "column": 12,
+              "offset": 105
+            },
+            "endSpan": {
+              "line": 8,
+              "column": 17,
+              "offset": 110
+            }
           }
         }
       }
@@ -962,16 +984,38 @@
           "offset": 159
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 11,
-            "column": 4,
-            "offset": 141
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "label"
+            },
+            "startSpan": {
+              "line": 11,
+              "column": 4,
+              "offset": 141
+            },
+            "endSpan": {
+              "line": 11,
+              "column": 9,
+              "offset": 146
+            }
           },
-          "endSpan": {
-            "line": 11,
-            "column": 21,
-            "offset": 158
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 11,
+              "column": 12,
+              "offset": 149
+            },
+            "endSpan": {
+              "line": 11,
+              "column": 21,
+              "offset": 158
+            }
           }
         }
       }
@@ -1042,16 +1086,38 @@
           "offset": 251
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 14,
-            "column": 4,
-            "offset": 207
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "label"
+            },
+            "startSpan": {
+              "line": 14,
+              "column": 4,
+              "offset": 207
+            },
+            "endSpan": {
+              "line": 14,
+              "column": 9,
+              "offset": 212
+            }
           },
-          "endSpan": {
-            "line": 14,
-            "column": 47,
-            "offset": 250
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 14,
+              "column": 12,
+              "offset": 215
+            },
+            "endSpan": {
+              "line": 14,
+              "column": 47,
+              "offset": 250
+            }
           }
         }
       }
@@ -1095,16 +1161,38 @@
           "offset": 294
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 17,
-            "column": 4,
-            "offset": 278
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "label"
+            },
+            "startSpan": {
+              "line": 17,
+              "column": 4,
+              "offset": 278
+            },
+            "endSpan": {
+              "line": 17,
+              "column": 9,
+              "offset": 283
+            }
           },
-          "endSpan": {
-            "line": 17,
-            "column": 19,
-            "offset": 293
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 17,
+              "column": 12,
+              "offset": 286
+            },
+            "endSpan": {
+              "line": 17,
+              "column": 19,
+              "offset": 293
+            }
           }
         }
       }

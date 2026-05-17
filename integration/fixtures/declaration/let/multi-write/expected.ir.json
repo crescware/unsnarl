@@ -376,16 +376,38 @@
           "offset": 65
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 3,
-            "column": 0,
-            "offset": 43
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "counter"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 43
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 7,
+              "offset": 50
+            }
           },
-          "endSpan": {
-            "line": 3,
-            "column": 21,
-            "offset": 64
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 10,
+              "offset": 53
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 21,
+              "offset": 64
+            }
           }
         }
       }
@@ -429,16 +451,38 @@
           "offset": 65
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 3,
-            "column": 0,
-            "offset": 43
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "counter"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 43
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 7,
+              "offset": 50
+            }
           },
-          "endSpan": {
-            "line": 3,
-            "column": 21,
-            "offset": 64
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 10,
+              "offset": 53
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 21,
+              "offset": 64
+            }
           }
         }
       }
@@ -482,16 +526,38 @@
           "offset": 79
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 4,
-            "column": 0,
-            "offset": 66
+          "kind": "assign",
+          "operator": "+=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "counter"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 0,
+              "offset": 66
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 7,
+              "offset": 73
+            }
           },
-          "endSpan": {
-            "line": 4,
-            "column": 12,
-            "offset": 78
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 11,
+              "offset": 77
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 12,
+              "offset": 78
+            }
           }
         }
       }
@@ -533,16 +599,24 @@
           "offset": 90
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 5,
-            "column": 0,
-            "offset": 80
-          },
-          "endSpan": {
-            "line": 5,
-            "column": 9,
-            "offset": 89
+          "kind": "update",
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "counter"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 0,
+              "offset": 80
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 7,
+              "offset": 87
+            }
           }
         }
       }

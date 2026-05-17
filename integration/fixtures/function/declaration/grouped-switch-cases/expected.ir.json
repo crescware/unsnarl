@@ -727,16 +727,38 @@
           "offset": 176
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 9,
-            "column": 6,
-            "offset": 160
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "ret"
+            },
+            "startSpan": {
+              "line": 9,
+              "column": 6,
+              "offset": 160
+            },
+            "endSpan": {
+              "line": 9,
+              "column": 9,
+              "offset": 163
+            }
           },
-          "endSpan": {
-            "line": 9,
-            "column": 21,
-            "offset": 175
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 9,
+              "column": 12,
+              "offset": 166
+            },
+            "endSpan": {
+              "line": 9,
+              "column": 21,
+              "offset": 175
+            }
           }
         }
       }
@@ -780,16 +802,38 @@
           "offset": 244
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 13,
-            "column": 6,
-            "offset": 228
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "ret"
+            },
+            "startSpan": {
+              "line": 13,
+              "column": 6,
+              "offset": 228
+            },
+            "endSpan": {
+              "line": 13,
+              "column": 9,
+              "offset": 231
+            }
           },
-          "endSpan": {
-            "line": 13,
-            "column": 21,
-            "offset": 243
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 13,
+              "column": 12,
+              "offset": 234
+            },
+            "endSpan": {
+              "line": 13,
+              "column": 21,
+              "offset": 243
+            }
           }
         }
       }
@@ -833,16 +877,38 @@
           "offset": 288
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 16,
-            "column": 6,
-            "offset": 277
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "ret"
+            },
+            "startSpan": {
+              "line": 16,
+              "column": 6,
+              "offset": 277
+            },
+            "endSpan": {
+              "line": 16,
+              "column": 9,
+              "offset": 280
+            }
           },
-          "endSpan": {
-            "line": 16,
-            "column": 16,
-            "offset": 287
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 16,
+              "column": 12,
+              "offset": 283
+            },
+            "endSpan": {
+              "line": 16,
+              "column": 16,
+              "offset": 287
+            }
           }
         }
       }

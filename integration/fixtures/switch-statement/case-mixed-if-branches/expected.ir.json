@@ -675,16 +675,38 @@
           "offset": 224
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 12,
-            "column": 6,
-            "offset": 208
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "label"
+            },
+            "startSpan": {
+              "line": 12,
+              "column": 6,
+              "offset": 208
+            },
+            "endSpan": {
+              "line": 12,
+              "column": 11,
+              "offset": 213
+            }
           },
-          "endSpan": {
-            "line": 12,
-            "column": 21,
-            "offset": 223
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 12,
+              "column": 14,
+              "offset": 216
+            },
+            "endSpan": {
+              "line": 12,
+              "column": 21,
+              "offset": 223
+            }
           }
         }
       }

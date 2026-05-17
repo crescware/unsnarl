@@ -484,6 +484,41 @@ describe("buildVisualGraph: write operations and let-chain edges", () => {
     expect(wr?.declarationKind).toEqual("let");
   });
 
+  // The routing invariant the rest of the renderer leans on: a
+  // reference that the analyzer marked as write goes through the
+  // WriteOp chain (`wr_ref_*` nodes) and NEVER duplicates into a
+  // SyntheticExpressionStatement. Without this, a single `x = 1`
+  // statement would surface twice -- once as `wr_ref_*` and once
+  // as `expr_stmt_*` -- and downstream label-rendering logic
+  // (which only formats the head for the expr_stmt path) would
+  // start to disagree about how `x = 1` is shown.
+  test("a variable-write assignment routes through wr_ref, not a SyntheticExpressionStatement", () => {
+    const g = build("let v = 0;\nv = 1;\n");
+    const exprStmts = findNodes(g, NODE_KIND.SyntheticExpressionStatement);
+    expect(exprStmts).toHaveLength(0);
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
+    expect(writeOps.map((v) => v.name)).toEqual(["v"]);
+  });
+
+  // Counterpart of the routing invariant: a member-write like
+  // `C.z = 1` has `C` as a *read* reference (eslint-scope correctly
+  // classifies the base of an assignment-target member as read),
+  // so it does NOT go through the WriteOp chain. The expr_stmt
+  // path picks it up and the assign head surfaces as `C.z = ...`.
+  // This test pins both halves of the routing decision in place.
+  test("a member-write assignment routes through SyntheticExpressionStatement, not wr_ref, for the base reference", () => {
+    const g = build(
+      "class C {\n  static z = 0;\n  static {\n    C.z = 1;\n  }\n}\n",
+    );
+    const exprStmts = findNodes(g, NODE_KIND.SyntheticExpressionStatement);
+    expect(exprStmts).toHaveLength(1);
+    expect(exprStmts[0]?.name).toEqual("C.z = ...");
+    // `C` itself is never a WriteOp target — only the property `z`
+    // is being written, and `z` isn't a tracked variable.
+    const writeOps = findNodes(g, NODE_KIND.WriteReference);
+    expect(writeOps).toHaveLength(0);
+  });
+
   test("a switch case that falls through emits a |fallthrough| edge to the next case's WriteOp", () => {
     const g = build(
       [

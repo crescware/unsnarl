@@ -39,7 +39,7 @@
           "type": "node",
           "id": "expr_stmt_41",
           "kind": "SyntheticExpressionStatement",
-          "name": "C.z = 1",
+          "name": "C.z = ...",
           "line": 4,
           "endLine": null,
           "isJsxElement": false,

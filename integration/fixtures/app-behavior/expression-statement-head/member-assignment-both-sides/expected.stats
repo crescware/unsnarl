@@ -1,0 +1,4 @@
+1	0	integration/fixtures/app-behavior/expression-statement-head/member-assignment-both-sides/input.ts:1 a
+1	0	integration/fixtures/app-behavior/expression-statement-head/member-assignment-both-sides/input.ts:2 b
+0	2	integration/fixtures/app-behavior/expression-statement-head/member-assignment-both-sides/input.ts:3 a.z = b.z
+2	2	3 total

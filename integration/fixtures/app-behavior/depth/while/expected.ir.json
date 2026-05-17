@@ -920,16 +920,24 @@
           "offset": 97
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 9,
-            "column": 2,
-            "offset": 92
-          },
-          "endSpan": {
-            "line": 9,
-            "column": 6,
-            "offset": 96
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n1"
+            },
+            "startSpan": {
+              "line": 9,
+              "column": 2,
+              "offset": 92
+            },
+            "endSpan": {
+              "line": 9,
+              "column": 4,
+              "offset": 94
+            }
           }
         }
       }
@@ -1001,16 +1009,24 @@
           "offset": 126
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 11,
-            "column": 4,
-            "offset": 121
-          },
-          "endSpan": {
-            "line": 11,
-            "column": 8,
-            "offset": 125
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n2"
+            },
+            "startSpan": {
+              "line": 11,
+              "column": 4,
+              "offset": 121
+            },
+            "endSpan": {
+              "line": 11,
+              "column": 6,
+              "offset": 123
+            }
           }
         }
       }
@@ -1082,16 +1098,24 @@
           "offset": 159
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 13,
-            "column": 6,
-            "offset": 154
-          },
-          "endSpan": {
-            "line": 13,
-            "column": 10,
-            "offset": 158
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n3"
+            },
+            "startSpan": {
+              "line": 13,
+              "column": 6,
+              "offset": 154
+            },
+            "endSpan": {
+              "line": 13,
+              "column": 8,
+              "offset": 156
+            }
           }
         }
       }
@@ -1163,16 +1187,24 @@
           "offset": 196
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 15,
-            "column": 8,
-            "offset": 191
-          },
-          "endSpan": {
-            "line": 15,
-            "column": 12,
-            "offset": 195
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n4"
+            },
+            "startSpan": {
+              "line": 15,
+              "column": 8,
+              "offset": 191
+            },
+            "endSpan": {
+              "line": 15,
+              "column": 10,
+              "offset": 193
+            }
           }
         }
       }
@@ -1244,16 +1276,24 @@
           "offset": 237
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 17,
-            "column": 10,
-            "offset": 232
-          },
-          "endSpan": {
-            "line": 17,
-            "column": 14,
-            "offset": 236
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n5"
+            },
+            "startSpan": {
+              "line": 17,
+              "column": 10,
+              "offset": 232
+            },
+            "endSpan": {
+              "line": 17,
+              "column": 12,
+              "offset": 234
+            }
           }
         }
       }
@@ -1325,16 +1365,24 @@
           "offset": 282
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 19,
-            "column": 12,
-            "offset": 277
-          },
-          "endSpan": {
-            "line": 19,
-            "column": 16,
-            "offset": 281
+          "kind": "update",
+          "operator": "--",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "n6"
+            },
+            "startSpan": {
+              "line": 19,
+              "column": 12,
+              "offset": 277
+            },
+            "endSpan": {
+              "line": 19,
+              "column": 14,
+              "offset": 279
+            }
           }
         }
       }

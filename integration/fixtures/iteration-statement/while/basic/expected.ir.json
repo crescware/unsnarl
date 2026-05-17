@@ -509,16 +509,24 @@
           "offset": 89
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 5,
-            "column": 2,
-            "offset": 81
-          },
-          "endSpan": {
-            "line": 5,
-            "column": 9,
-            "offset": 88
+          "kind": "update",
+          "operator": "++",
+          "prefix": false,
+          "argument": {
+            "head": {
+              "kind": "identifier",
+              "name": "count"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 2,
+              "offset": 81
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 7,
+              "offset": 86
+            }
           }
         }
       }

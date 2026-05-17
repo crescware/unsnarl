@@ -393,16 +393,38 @@
           "offset": 63
         },
         "head": {
-          "kind": "raw",
-          "startSpan": {
-            "line": 5,
-            "column": 2,
-            "offset": 51
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "counter"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 2,
+              "offset": 51
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 9,
+              "offset": 58
+            }
           },
-          "endSpan": {
-            "line": 5,
-            "column": 13,
-            "offset": 62
+          "right": {
+            "head": {
+              "kind": "elided"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 12,
+              "offset": 61
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 13,
+              "offset": 62
+            }
           }
         }
       }
