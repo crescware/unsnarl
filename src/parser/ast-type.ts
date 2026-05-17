@@ -12,11 +12,9 @@ import { picklist, type InferOutput } from "valibot";
 // analyzer producers, ...) do not need to handle every entry;
 // unmatched values simply do not participate in those dispatches.
 //
-// BooleanLiteral / NullLiteral / NumericLiteral / StringLiteral are
-// retained as legacy dispatch entries in format-case-test.ts even
-// though oxc-parser emits the unified `Literal` type instead. They
-// are kept so the dispatch keeps compiling; oxc input will not flow
-// into those branches.
+// Membership is guarded by ast-type.oxc-parity.test.ts, which reads
+// the upstream types.d.ts and fails if AST_TYPE diverges in either
+// direction.
 export const AST_TYPE = {
   AccessorProperty: "AccessorProperty",
   ArrayExpression: "ArrayExpression",
@@ -27,7 +25,6 @@ export const AST_TYPE = {
   AwaitExpression: "AwaitExpression",
   BinaryExpression: "BinaryExpression",
   BlockStatement: "BlockStatement",
-  BooleanLiteral: "BooleanLiteral",
   BreakStatement: "BreakStatement",
   CallExpression: "CallExpression",
   CatchClause: "CatchClause",
@@ -82,8 +79,6 @@ export const AST_TYPE = {
   MetaProperty: "MetaProperty",
   MethodDefinition: "MethodDefinition",
   NewExpression: "NewExpression",
-  NullLiteral: "NullLiteral",
-  NumericLiteral: "NumericLiteral",
   ObjectExpression: "ObjectExpression",
   ObjectPattern: "ObjectPattern",
   ParenthesizedExpression: "ParenthesizedExpression",
@@ -96,7 +91,6 @@ export const AST_TYPE = {
   SequenceExpression: "SequenceExpression",
   SpreadElement: "SpreadElement",
   StaticBlock: "StaticBlock",
-  StringLiteral: "StringLiteral",
   Super: "Super",
   SwitchCase: "SwitchCase",
   SwitchStatement: "SwitchStatement",
