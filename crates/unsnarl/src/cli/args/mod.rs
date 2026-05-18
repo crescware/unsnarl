@@ -130,3 +130,6 @@ where
         Some(Some(v)) => s.serialize_str(v),
     }
 }
+
+#[cfg(test)]
+mod test;

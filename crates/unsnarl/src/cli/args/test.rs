@@ -1,6 +1,5 @@
+use super::*;
 use clap::error::ErrorKind;
-use clap::Parser;
-use unsnarl::cli::args::Args;
 
 fn parse(argv: &[&str]) -> Args {
     Args::try_parse_from(argv).expect("argv should parse")
