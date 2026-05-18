@@ -1,8 +1,10 @@
 //! `uns` binary entry point.
-//!
-//! Step 1 skeleton: CLI parsing arrives in Step 2; pipeline in Steps 7–21.
+
+use clap::Parser;
+use unsnarl::cli::args::Args;
+use unsnarl::run::run;
 
 fn main() {
-    eprintln!("Not implemented yet");
-    std::process::exit(0);
+    let args = Args::parse();
+    run(&args);
 }

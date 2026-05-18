@@ -24,4 +24,4 @@ lives in the per-implementation CLAUDE.md.
 cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
 ```
 
-TS 実装の検証コマンドは `ts/CLAUDE.md` を参照。
+See `ts/CLAUDE.md` for the TypeScript implementation's verification command.
