@@ -51,4 +51,5 @@ fn emit_stub(label: &str, args: &Args, out: &mut dyn Write) {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "run_test.rs"]
+mod run_test;

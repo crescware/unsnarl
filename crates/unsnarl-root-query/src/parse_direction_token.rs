@@ -42,4 +42,5 @@ fn bad(text: &str) -> Vec<ParseError> {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_direction_token_test.rs"]
+mod parse_direction_token_test;

@@ -14,4 +14,5 @@ pub fn validate_root_query(rq: &RootQuery) -> Result<(), Vec<ParseError>> {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "validate_root_query_test.rs"]
+mod validate_root_query_test;

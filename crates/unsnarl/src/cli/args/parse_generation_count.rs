@@ -19,4 +19,5 @@ pub fn parse_generation_count(value: &str) -> Result<u32, String> {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_generation_count_test.rs"]
+mod parse_generation_count_test;

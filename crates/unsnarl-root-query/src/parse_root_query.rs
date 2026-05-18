@@ -28,4 +28,5 @@ fn first_message(errs: Vec<ParseError>) -> String {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_root_query_test.rs"]
+mod parse_root_query_test;
