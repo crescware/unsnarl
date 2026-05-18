@@ -245,23 +245,104 @@ fn depth_flags_reject_decimal_with_exit_2() {
 }
 
 #[test]
-fn out_dir_and_out_file_both_accepted() {
-    let args = parse(&[
-        "uns",
-        "-o",
-        "build/",
-        "--out-file",
-        "build/graph.mmd",
-        "x.ts",
-    ]);
+fn out_dir_alone_accepted() {
+    let args = parse(&["uns", "-o", "build/", "x.ts"]);
     assert_eq!(args.out_dir.as_deref(), Some("build/"));
+    assert!(args.out_file.is_none());
+}
+
+#[test]
+fn out_file_alone_accepted() {
+    let args = parse(&["uns", "--out-file", "build/graph.mmd", "x.ts"]);
+    assert!(args.out_dir.is_none());
     assert_eq!(args.out_file.as_deref(), Some("build/graph.mmd"));
 }
 
 #[test]
-fn plugin_repeats_and_keeps_commas() {
-    let args = parse(&["uns", "--plugin", "react", "--plugin", "a,b", "x.ts"]);
-    assert_eq!(args.plugins, vec!["react".to_string(), "a,b".to_string()]);
+fn out_dir_and_out_file_conflict_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&[
+            "uns",
+            "-o",
+            "build/",
+            "--out-file",
+            "build/graph.mmd",
+            "x.ts",
+        ]),
+        2
+    );
+}
+
+#[test]
+fn plugin_short_name_accepted() {
+    let args = parse(&["uns", "--plugin", "react", "x.ts"]);
+    assert_eq!(args.plugins, vec!["react".to_string()]);
+}
+
+#[test]
+fn plugin_prefixed_form_normalized_to_short() {
+    let args = parse(&["uns", "--plugin", "unsnarl-plugin-react", "x.ts"]);
+    assert_eq!(args.plugins, vec!["react".to_string()]);
+}
+
+#[test]
+fn plugin_comma_list_splits_and_dedups() {
+    let args = parse(&["uns", "--plugin", "react,unsnarl-plugin-react", "x.ts"]);
+    assert_eq!(args.plugins, vec!["react".to_string()]);
+}
+
+#[test]
+fn plugin_repeated_occurrences_dedupe_across_invocations() {
+    let args = parse(&[
+        "uns",
+        "--plugin",
+        "react",
+        "--plugin",
+        "unsnarl-plugin-react",
+        "x.ts",
+    ]);
+    assert_eq!(args.plugins, vec!["react".to_string()]);
+}
+
+#[test]
+fn plugin_empty_fragments_dropped() {
+    let args = parse(&["uns", "--plugin", "react,,unsnarl-plugin-react", "x.ts"]);
+    assert_eq!(args.plugins, vec!["react".to_string()]);
+}
+
+#[test]
+fn plugin_unknown_name_yields_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "--plugin", "vue", "x.ts"]), 2);
+}
+
+#[test]
+fn plugin_unknown_in_comma_list_yields_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--plugin", "react,vue", "x.ts"]),
+        2
+    );
+}
+
+#[test]
+fn plugin_unknown_across_repeated_occurrences_yields_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--plugin", "react", "--plugin", "vue", "x.ts"]),
+        2
+    );
+}
+
+#[test]
+fn plugin_serializes_as_flat_string_array() {
+    let args = parse(&[
+        "uns",
+        "--plugin",
+        "react",
+        "--plugin",
+        "unsnarl-plugin-react",
+        "x.ts",
+    ]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert_eq!(v["plugins"], serde_json::json!(["react"]));
 }
 
 #[test]

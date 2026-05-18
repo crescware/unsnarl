@@ -1,5 +1,4 @@
 use super::*;
-use clap::Parser;
 
 fn capture(argv: &[&str]) -> String {
     let args = Args::try_parse_from(argv).expect("argv should parse");

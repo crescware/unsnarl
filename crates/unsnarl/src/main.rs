@@ -1,6 +1,5 @@
 //! `uns` binary entry point.
 
-use clap::Parser;
 use unsnarl::cli::args::Args;
 use unsnarl::run::run;
 
