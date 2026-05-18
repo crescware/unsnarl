@@ -17,3 +17,11 @@ lives in the per-implementation CLAUDE.md.
   rather than assembling your own equivalents.
 - Do not invent your own verification methods. Trust the provided commands as
   the source of truth for validating work.
+
+## Verification Command (Rust implementation at <root>)
+
+```bash
+cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
+```
+
+TS 実装の検証コマンドは `ts/CLAUDE.md` を参照。

@@ -1,0 +1,12 @@
+[package]
+name = "unsnarl-ir"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+oxc_span = { workspace = true }
+oxc_index = { workspace = true }
+serde = { workspace = true }
