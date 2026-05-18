@@ -5,16 +5,20 @@ fn parse(argv: &[&str]) -> Args {
     Args::try_parse_from(argv).expect("argv should parse")
 }
 
+fn parse_err_exit_code(argv: &[&str]) -> i32 {
+    Args::try_parse_from(argv).unwrap_err().exit_code()
+}
+
 #[test]
 fn defaults_match_ts_commander() {
     let args = parse(&["uns", "input.ts"]);
     assert_eq!(args.file.as_deref(), Some("input.ts"));
-    assert_eq!(args.format, "mermaid");
+    assert_eq!(args.format, CliFormat::Mermaid);
     assert!(args.pretty_json);
     assert!(args.mermaid_renderer.is_none());
-    assert_eq!(args.color_theme, "dark");
+    assert_eq!(args.color_theme, CliColorTheme::Dark);
     assert!(!args.stdin);
-    assert_eq!(args.stdin_lang, "ts");
+    assert_eq!(args.stdin_lang, CliLanguage::Ts);
     assert!(args.roots.is_empty());
     assert!(args.highlight.is_none());
     assert!(args.descendants.is_none());
@@ -37,8 +41,32 @@ fn file_argument_is_optional() {
 
 #[test]
 fn format_flag_short_and_long() {
-    assert_eq!(parse(&["uns", "-f", "json", "x.ts"]).format, "json");
-    assert_eq!(parse(&["uns", "--format", "ir", "x.ts"]).format, "ir");
+    assert_eq!(
+        parse(&["uns", "-f", "json", "x.ts"]).format,
+        CliFormat::Json
+    );
+    assert_eq!(
+        parse(&["uns", "--format", "ir", "x.ts"]).format,
+        CliFormat::Ir
+    );
+}
+
+#[test]
+fn format_accepts_all_registry_values() {
+    for (raw, expected) in [
+        ("mermaid", CliFormat::Mermaid),
+        ("ir", CliFormat::Ir),
+        ("json", CliFormat::Json),
+        ("markdown", CliFormat::Markdown),
+        ("stats", CliFormat::Stats),
+    ] {
+        assert_eq!(parse(&["uns", "-f", raw, "x.ts"]).format, expected);
+    }
+}
+
+#[test]
+fn format_rejects_unknown_value_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-f", "bogus", "x.ts"]), 2);
 }
 
 #[test]
@@ -48,24 +76,67 @@ fn no_pretty_json_sets_pretty_json_false() {
 }
 
 #[test]
-fn mermaid_renderer_captures_any_value() {
-    let args = parse(&["uns", "--mermaid-renderer", "dagre", "x.ts"]);
-    assert_eq!(args.mermaid_renderer.as_deref(), Some("dagre"));
-    let args = parse(&["uns", "--mermaid-renderer", "unknown-engine", "x.ts"]);
-    assert_eq!(args.mermaid_renderer.as_deref(), Some("unknown-engine"));
+fn mermaid_renderer_accepts_dagre_and_elk() {
+    assert_eq!(
+        parse(&["uns", "--mermaid-renderer", "dagre", "x.ts"]).mermaid_renderer,
+        Some(CliMermaidRenderer::Dagre)
+    );
+    assert_eq!(
+        parse(&["uns", "--mermaid-renderer", "elk", "x.ts"]).mermaid_renderer,
+        Some(CliMermaidRenderer::Elk)
+    );
+}
+
+#[test]
+fn mermaid_renderer_rejects_unknown_value_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--mermaid-renderer", "unknown-engine", "x.ts"]),
+        2
+    );
 }
 
 #[test]
 fn color_theme_long_only() {
     let args = parse(&["uns", "--color-theme", "light", "x.ts"]);
-    assert_eq!(args.color_theme, "light");
+    assert_eq!(args.color_theme, CliColorTheme::Light);
+}
+
+#[test]
+fn color_theme_rejects_unknown_value_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--color-theme", "neon", "x.ts"]),
+        2
+    );
 }
 
 #[test]
 fn stdin_flags() {
     let args = parse(&["uns", "--stdin", "--stdin-lang", "tsx"]);
     assert!(args.stdin);
-    assert_eq!(args.stdin_lang, "tsx");
+    assert_eq!(args.stdin_lang, CliLanguage::Tsx);
+}
+
+#[test]
+fn stdin_lang_accepts_all_languages() {
+    for (raw, expected) in [
+        ("ts", CliLanguage::Ts),
+        ("tsx", CliLanguage::Tsx),
+        ("js", CliLanguage::Js),
+        ("jsx", CliLanguage::Jsx),
+    ] {
+        assert_eq!(
+            parse(&["uns", "--stdin", "--stdin-lang", raw]).stdin_lang,
+            expected
+        );
+    }
+}
+
+#[test]
+fn stdin_lang_rejects_unknown_value_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--stdin", "--stdin-lang", "coffee"]),
+        2
+    );
 }
 
 #[test]
@@ -102,17 +173,41 @@ fn highlight_short_consumes_next_token_as_value() {
 }
 
 #[test]
-fn generation_flags_capture_raw_values() {
+fn generation_flags_parse_non_negative_integers() {
     let args = parse(&["uns", "-A", "2", "-B", "3", "-C", "4", "x.ts"]);
-    assert_eq!(args.descendants.as_deref(), Some("2"));
-    assert_eq!(args.ancestors.as_deref(), Some("3"));
-    assert_eq!(args.context.as_deref(), Some("4"));
-    let args = parse(&["uns", "-A", "abc", "x.ts"]);
-    assert_eq!(args.descendants.as_deref(), Some("abc"));
+    assert_eq!(args.descendants, Some(2));
+    assert_eq!(args.ancestors, Some(3));
+    assert_eq!(args.context, Some(4));
 }
 
 #[test]
-fn depth_flags_capture_raw_values() {
+fn generation_flags_accept_zero() {
+    let args = parse(&["uns", "-A", "0", "x.ts"]);
+    assert_eq!(args.descendants, Some(0));
+}
+
+#[test]
+fn generation_flags_reject_negative_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-A", "-1", "x.ts"]), 2);
+}
+
+#[test]
+fn generation_flags_reject_non_digit_string_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-A", "abc", "x.ts"]), 2);
+}
+
+#[test]
+fn generation_flags_reject_decimal_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-B", "1.5", "x.ts"]), 2);
+}
+
+#[test]
+fn generation_flags_reject_leading_plus_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-C", "+1", "x.ts"]), 2);
+}
+
+#[test]
+fn depth_flags_parse_non_negative_integers() {
     let args = parse(&[
         "uns",
         "--depth",
@@ -123,9 +218,30 @@ fn depth_flags_capture_raw_values() {
         "3",
         "x.ts",
     ]);
-    assert_eq!(args.depth.as_deref(), Some("5"));
-    assert_eq!(args.depth_function.as_deref(), Some("8"));
-    assert_eq!(args.depth_block.as_deref(), Some("3"));
+    assert_eq!(args.depth, Some(5));
+    assert_eq!(args.depth_function, Some(8));
+    assert_eq!(args.depth_block, Some(3));
+}
+
+#[test]
+fn depth_flags_reject_negative_with_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "--depth", "-1", "x.ts"]), 2);
+}
+
+#[test]
+fn depth_flags_reject_non_digit_string_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--depth-function", "abc", "x.ts"]),
+        2
+    );
+}
+
+#[test]
+fn depth_flags_reject_decimal_with_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--depth-block", "2.5", "x.ts"]),
+        2
+    );
 }
 
 #[test]
@@ -206,6 +322,35 @@ fn highlight_serializes_as_string_when_inline_value_given() {
         v["highlight"],
         serde_json::Value::String("foo,bar".to_string())
     );
+}
+
+#[test]
+fn enum_fields_serialize_as_lowercase_strings() {
+    let args = parse(&[
+        "uns",
+        "--mermaid-renderer",
+        "dagre",
+        "--stdin-lang",
+        "tsx",
+        "--color-theme",
+        "light",
+        "--stdin",
+    ]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert_eq!(v["format"], serde_json::Value::String("mermaid".into()));
+    assert_eq!(v["stdinLang"], serde_json::Value::String("tsx".into()));
+    assert_eq!(
+        v["mermaidRenderer"],
+        serde_json::Value::String("dagre".into())
+    );
+    assert_eq!(v["colorTheme"], serde_json::Value::String("light".into()));
+}
+
+#[test]
+fn mermaid_renderer_serializes_as_null_when_default() {
+    let args = parse(&["uns", "x.ts"]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert_eq!(v["mermaidRenderer"], serde_json::Value::Null);
 }
 
 #[test]
