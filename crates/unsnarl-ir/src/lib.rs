@@ -35,7 +35,7 @@ pub use arena::IrArena;
 pub use ast_type::{as_ast_type, AstType, UNKNOWN_AST_TYPE};
 pub use definition_type::DefinitionType;
 pub use diagnostic_kind::DiagnosticKind;
-pub use filled_string::{FilledString, FilledStringError};
+pub use filled_string::FilledString;
 pub use ids::{DefinitionId, ReferenceId, ScopeId, VariableId};
 pub use import_kind::ImportKind;
 pub use language::Language;

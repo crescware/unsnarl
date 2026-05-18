@@ -6,7 +6,7 @@ use crate::primitive::Span;
 use crate::variable_declaration_kind::VariableDeclarationKind;
 
 fn filled(s: &str) -> FilledString {
-    FilledString::new(s).unwrap()
+    FilledString::new(s)
 }
 
 fn name() -> DefinitionName {

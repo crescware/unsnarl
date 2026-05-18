@@ -4,7 +4,7 @@ use crate::filled_string::FilledString;
 use crate::primitive::Span;
 
 fn filled(s: &str) -> FilledString {
-    FilledString::new(s).unwrap()
+    FilledString::new(s)
 }
 
 fn scope_id(s: &str) -> SerializedScopeId {
