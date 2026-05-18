@@ -1,5 +1,4 @@
-//! Discriminator for `HeadExpression` variants. Ports
-//! `ts/src/ir/reference/expression-statement-head-kind.ts`.
+//! Discriminator for `HeadExpression` variants.
 
 use serde::Serialize;
 

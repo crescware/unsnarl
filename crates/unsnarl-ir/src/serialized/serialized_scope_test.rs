@@ -12,7 +12,7 @@ fn scope_id(s: &str) -> SerializedScopeId {
 }
 
 #[test]
-fn serialized_scope_field_order_matches_ts() {
+fn serialized_scope_field_order() {
     let scope = SerializedScope {
         id: scope_id("scope#0"),
         r#type: ScopeType::Module,

@@ -1,5 +1,4 @@
-//! Predicate container categorization. Ports
-//! `ts/src/analyzer/predicate-container-type.ts`.
+//! Predicate-container categorization.
 
 use serde::Serialize;
 

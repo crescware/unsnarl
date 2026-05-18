@@ -1,7 +1,7 @@
 use super::*;
 
 #[test]
-fn nesting_depths_emits_ts_field_order() {
+fn nesting_depths_emits_keys_in_declared_order() {
     let depths = NestingDepths::uniform(0);
     let json = serde_json::to_string(&depths).unwrap();
     assert_eq!(

@@ -1,7 +1,4 @@
-//! Variable row. Ports `ts/src/ir/scope/variable.ts`.
-//!
-//! TS holds direct object references (`scope: Scope`, `references:
-//! Reference[]`, `defs: Definition[]`); the Rust IR uses arena IDs.
+//! Variable row. Cross-entity links go through arena IDs.
 
 use crate::ids::{DefinitionId, ReferenceId, ScopeId};
 use crate::primitive::AstIdentifier;

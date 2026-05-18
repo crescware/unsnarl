@@ -1,4 +1,4 @@
-//! ImportBinding subkind. Ports `ts/src/serializer/import-kind.ts`.
+//! ImportBinding subkind.
 
 use serde::Serialize;
 

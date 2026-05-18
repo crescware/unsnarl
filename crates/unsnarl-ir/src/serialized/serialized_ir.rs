@@ -1,5 +1,4 @@
-//! Top-level on-disk IR shape. Ports
-//! `ts/src/ir/serialized/serialized-ir.ts`.
+//! Top-level on-disk IR shape.
 
 use serde::Serialize;
 

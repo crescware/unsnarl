@@ -1,6 +1,3 @@
-//! Package name. Ports `ts/src/name.ts`.
-//!
-//! TS reads `pkg.name` from `package.json`; Rust pins the value at the
-//! crate root.
+//! Package name. Pinned literal; not read from any manifest.
 
 pub const NAME: &str = "unsnarl";

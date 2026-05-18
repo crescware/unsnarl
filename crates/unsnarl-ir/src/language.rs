@@ -1,4 +1,4 @@
-//! Source language tag. Ports `ts/src/language.ts`.
+//! Source language tag.
 
 use serde::Serialize;
 

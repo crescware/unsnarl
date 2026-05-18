@@ -1,4 +1,4 @@
-//! Definition categorization. Ports `ts/src/analyzer/definition-type.ts`.
+//! Definition categorization.
 
 use serde::Serialize;
 

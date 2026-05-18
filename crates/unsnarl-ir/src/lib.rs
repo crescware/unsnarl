@@ -1,14 +1,14 @@
-//! IR contract types ported 1:1 from `ts/src/ir/` plus the accompanying
-//! `ts/src/language.ts` / `ts/src/name.ts`.
+//! IR contract types: the in-arena rows (`ScopeData` /
+//! `VariableData` / `ReferenceData` / `DefinitionData`) and the
+//! on-disk shape (`serialized::*`).
 //!
-//! Several supporting enums (`AstType`, `ScopeType`, `DefinitionType`,
-//! `DiagnosticKind`, `PredicateContainerType`, `ImportKind`,
-//! `VariableDeclarationKind`, `NestingKind`, `NestingDepths`,
-//! `SerializedIrVersion`, `FilledString`) live in TS under
-//! `analyzer/` / `parser/` / `serializer/` / `util/` / `ir/annotations/`,
-//! but in Rust they sit in `unsnarl-ir` because the contract types
-//! reference them and `unsnarl-ir` is the bottom of the crate-dependency
-//! graph.
+//! Several enums that are conceptually about analyzer / parser /
+//! serializer / annotations (`AstType`, `ScopeType`,
+//! `DefinitionType`, `DiagnosticKind`, `PredicateContainerType`,
+//! `ImportKind`, `VariableDeclarationKind`, `NestingKind`,
+//! `NestingDepths`, `SerializedIrVersion`, `FilledString`) sit in
+//! this crate because the contract types reference them and
+//! `unsnarl-ir` is the bottom of the dependency graph.
 
 pub mod arena;
 pub mod ast_type;

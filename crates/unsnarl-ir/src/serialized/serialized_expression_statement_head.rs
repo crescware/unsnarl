@@ -1,9 +1,9 @@
-//! Serialized counterpart of `HeadExpression`. Ports
-//! `ts/src/ir/serialized/serialized-expression-statement-head.ts`.
+//! Serialized counterpart of `HeadExpression`.
 //!
-//! Identical shape to the internal head expression except the `raw`
+//! Identical shape to the internal head expression except the `Raw`
 //! leaf carries `Span` (line/column/offset) instead of bare offsets,
-//! and assign / update operands likewise carry spans.
+//! and `Assign` / `Update` operands likewise carry spans rather than
+//! raw offsets.
 
 use serde::Serialize;
 

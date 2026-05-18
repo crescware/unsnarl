@@ -1,9 +1,8 @@
-//! Diagnostic record carried in `SerializedIR.diagnostics`. Ports
-//! `ts/src/ir/diagnostic/diagnostic.ts`.
+//! Diagnostic record carried in `SerializedIR.diagnostics`.
 //!
-//! Flattened into a single file rather than `diagnostic/diagnostic.rs`
-//! to avoid Rust's `module_inception` shape; TS had `diagnostic/` only
-//! because the broader `ir/` tree groups files by topic.
+//! Flattened into a single file (rather than `diagnostic/diagnostic.rs`)
+//! to avoid Rust's `module_inception` shape; the topic doesn't fan out
+//! into multiple files yet.
 
 use serde::Serialize;
 

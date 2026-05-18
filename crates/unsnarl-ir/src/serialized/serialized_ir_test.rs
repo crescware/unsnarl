@@ -4,7 +4,7 @@ use crate::language::Language;
 use crate::serialized_ir_version::SERIALIZED_IR_VERSION;
 
 #[test]
-fn serialized_ir_top_level_field_order_matches_ts() {
+fn serialized_ir_top_level_field_order() {
     let ir = SerializedIR {
         version: SERIALIZED_IR_VERSION,
         source: SerializedSource {

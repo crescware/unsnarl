@@ -1,15 +1,12 @@
-//! Serialized counterpart of `Definition`. Ports
-//! `ts/src/ir/serialized/serialized-definition.ts`.
+//! Serialized counterpart of `Definition`.
 //!
-//! TS expresses this as a 9-way `union(...)`: 7 "no-extra-fields"
-//! definition kinds plus 3 ImportBinding sub-shapes keyed by
-//! `importKind`. Serde's tagged-enum modes can't reproduce the TS
-//! JSON shape because each TS variant declares `commonDefFields`
-//! (`name`, `node`, `parent`) BEFORE the `type` discriminator, so the
-//! tag appears in the middle of the object. We therefore model each
-//! variant as its own struct (each with TS-declared field order) and
-//! provide a wrapper enum whose `Serialize` impl delegates to the
-//! variant's struct.
+//! The JSON shape is a 9-way union: 5 "no-extra-fields" definition
+//! kinds plus 3 `ImportBinding` sub-shapes keyed by `importKind`,
+//! plus `Variable`. `name` / `node` / `parent` are declared BEFORE
+//! the `type` discriminator (so the tag appears in the middle of the
+//! object). Serde's tagged-enum modes always put the tag first, so
+//! each variant is its own struct with explicit field order and the
+//! wrapper enum delegates `Serialize` to the variant's struct.
 
 use serde::Serialize;
 
@@ -192,7 +189,7 @@ impl ImportBindingNamespaceDef {
     }
 }
 
-/// The 5 "no-extra-fields" definition variants: `FunctionName`,
+/// The 5 "no-extra-fields" variants share one struct: `FunctionName`,
 /// `ClassName`, `Parameter`, `CatchClause`, `ImplicitGlobalVariable`.
 #[derive(Serialize)]
 pub struct SimpleDef {

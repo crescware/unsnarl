@@ -1,10 +1,10 @@
-//! Scope-side IR contract types. Ports `ts/src/ir/scope/`.
+//! Scope-side IR contract types.
 //!
-//! `Scope` / `ScopeData` lives in this parent module rather than a
-//! same-named child (`scope/scope.rs`) to avoid Rust's
-//! `module_inception` shape. TS holds direct object references
-//! (`upper: Scope | null`, `childScopes: Scope[]`, etc.); the Rust IR
-//! replaces those with arena IDs. Fields stay mutable in their
+//! `ScopeData` lives in this parent module rather than a same-named
+//! child to avoid Rust's `module_inception` shape.
+//!
+//! Cross-entity links go through arena IDs (`upper: Option<ScopeId>`,
+//! `child_scopes: Vec<ScopeId>`, etc.). Fields stay mutable in the
 //! owning `IrArena`: the analyzer pass pushes onto `child_scopes` /
 //! `variables` / `references` / `through` during scope analysis.
 

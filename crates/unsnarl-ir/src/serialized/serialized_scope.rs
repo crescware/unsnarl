@@ -1,5 +1,4 @@
-//! Serialized counterpart of `Scope`. Ports
-//! `ts/src/ir/serialized/serialized-scope.ts`.
+//! Serialized counterpart of `Scope`.
 
 use serde::Serialize;
 

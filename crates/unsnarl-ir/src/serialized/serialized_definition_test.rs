@@ -32,7 +32,7 @@ fn node(r#type: AstType) -> DefinitionNode {
 }
 
 #[test]
-fn variable_def_field_order_matches_ts() {
+fn variable_def_field_order() {
     let def = VariableDef::new(
         name(),
         node(AstType::VariableDeclarator),
@@ -51,7 +51,7 @@ fn variable_def_field_order_matches_ts() {
 }
 
 #[test]
-fn import_binding_named_field_order_matches_ts() {
+fn import_binding_named_field_order() {
     let def = ImportBindingNamedDef::new(
         name(),
         node(AstType::ImportSpecifier),
@@ -79,7 +79,7 @@ fn import_binding_named_field_order_matches_ts() {
 }
 
 #[test]
-fn import_binding_default_field_order_matches_ts() {
+fn import_binding_default_field_order() {
     let def = ImportBindingDefaultDef::new(
         name(),
         node(AstType::ImportDefaultSpecifier),
@@ -104,7 +104,7 @@ fn import_binding_default_field_order_matches_ts() {
 }
 
 #[test]
-fn simple_def_field_order_matches_ts() {
+fn simple_def_field_order() {
     let def = SimpleDef {
         name: name(),
         node: node(AstType::FunctionDeclaration),

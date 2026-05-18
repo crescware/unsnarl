@@ -1,5 +1,4 @@
-//! Discriminator for `BlockContext` variants. Ports
-//! `ts/src/ir/scope/block-context-kind.ts`.
+//! Discriminator for `BlockContext` variants.
 
 use serde::Serialize;
 

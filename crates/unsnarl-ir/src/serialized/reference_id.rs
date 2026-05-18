@@ -1,5 +1,4 @@
-//! String ID for a serialized Reference row. Ports
-//! `ts/src/ir/serialized/reference-id.ts`.
+//! String ID for a serialized Reference row.
 
 use serde::Serialize;
 

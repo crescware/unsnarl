@@ -1,4 +1,4 @@
-//! IR-side primitive types. Ports `ts/src/ir/primitive/`.
+//! IR-side primitive types.
 
 pub mod ast_identifier;
 pub mod ast_node;

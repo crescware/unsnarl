@@ -1,5 +1,4 @@
-//! Source-position triple used in the serialized IR. Ports
-//! `ts/src/ir/primitive/span.ts`.
+//! Source-position triple used in the serialized IR.
 //!
 //! Internally the IR carries raw `u32` offsets (or `oxc_span::Span`)
 //! and the serializer converts those into a `Span` by walking line

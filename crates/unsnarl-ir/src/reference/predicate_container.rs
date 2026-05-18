@@ -1,5 +1,4 @@
-//! Predicate-container side info for a `Reference`. Ports
-//! `ts/src/ir/reference/predicate-container.ts`.
+//! Predicate-container side info for a `Reference`.
 
 use serde::Serialize;
 

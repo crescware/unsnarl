@@ -1,12 +1,9 @@
-//! Serialized counterpart of `Variable`. Ports
-//! `ts/src/ir/serialized/serialized-variable.ts`.
+//! Serialized counterpart of `Variable`.
 //!
-//! TS uses `tupleWithRest([serializedDefinition$], serializedDefinition$)`
-//! for `defs` to encode "at least one def by construction": the
-//! serializer filters implicit-arguments bindings (the only producer of
-//! empty defs) at boundary entry. The Rust port keeps the data shape
-//! (`Vec<SerializedDefinition>`) and relies on the boundary to uphold
-//! that invariant.
+//! `defs` is `Vec<SerializedDefinition>` rather than a "non-empty"
+//! newtype: the boundary upholds the "at least one def" invariant
+//! by filtering implicit-arguments bindings (the sole producer of
+//! empty defs) at entry.
 
 use serde::Serialize;
 

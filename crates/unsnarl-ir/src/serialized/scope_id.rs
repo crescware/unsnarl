@@ -1,5 +1,4 @@
-//! String ID for a serialized Scope row. Ports
-//! `ts/src/ir/serialized/scope-id.ts`.
+//! String ID for a serialized Scope row.
 
 use serde::Serialize;
 

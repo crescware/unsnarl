@@ -1,4 +1,4 @@
-//! On-disk IR shape. Ports `ts/src/ir/serialized/`.
+//! On-disk IR shape.
 
 pub mod reference_id;
 pub mod scope_id;

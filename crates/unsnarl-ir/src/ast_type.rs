@@ -1,15 +1,14 @@
-//! AST node `type` discriminator. Ports `ts/src/parser/ast-type.ts`.
+//! AST node `type` discriminator.
 //!
-//! Lives in `unsnarl-ir` rather than `unsnarl-boundary-eslint-scope` (the
-//! crate that will house `parser/` in Step 8) because the IR contract
-//! types reference it.
+//! Lives in `unsnarl-ir` rather than the boundary crate because the IR
+//! contract types reference it.
 //!
-//! The variant list mirrors the union of TS `AST_TYPE` and
-//! `AST_TYPE_UNREACHABLE` (the second group being node `type`s that
-//! `@oxc-project/types` declares but `parseSync` cannot reach in
-//! practice). They are kept in one Rust enum because TS folds both into
-//! its `astType$` picklist, and downstream serialization treats them
-//! identically.
+//! The variant list folds together two groups: types the parser
+//! actually emits, and a tail of nodes `oxc_ast` declares but no
+//! public `parse` input can produce in practice (`Hashbang`,
+//! `TSJSDocUnknownType`, `V8IntrinsicExpression`). Downstream
+//! serialization treats them identically, so they share one enum.
+//! `UnknownAstType` is the sentinel for any value we don't recognise.
 
 use serde::Serialize;
 
@@ -180,8 +179,9 @@ pub enum AstType {
     WhileStatement,
     WithStatement,
     YieldExpression,
-    // AST_TYPE_UNREACHABLE: declared by `@oxc-project/types` but
-    // unreachable through `parseSync` -> walker descent.
+    // Declared by `oxc_ast` but unreachable through any public
+    // `parse` -> walker descent: kept here so the discriminator is
+    // total over the upstream surface.
     Hashbang,
     TSJSDocUnknownType,
     V8IntrinsicExpression,
@@ -190,10 +190,9 @@ pub enum AstType {
     UnknownAstType,
 }
 
-/// Application-layer normalizer. Maps a raw oxc-parser `type` string to
-/// `AstType`, collapsing any unrecognized value to `UnknownAstType`.
-/// Ports the `asAstType` function from
-/// `ts/src/parser/ast-type.ts`.
+/// Maps a raw `oxc_ast` `type` string to `AstType`, collapsing any
+/// unrecognised value to `UnknownAstType`. Use at the boundary where
+/// parser output enters the IR.
 pub fn as_ast_type(raw: &str) -> AstType {
     match raw {
         "AccessorProperty" => AstType::AccessorProperty,

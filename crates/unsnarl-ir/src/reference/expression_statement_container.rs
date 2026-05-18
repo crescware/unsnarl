@@ -1,5 +1,4 @@
-//! ExpressionStatement-wrapping info for a `Reference`. Ports
-//! `ts/src/ir/reference/expression-statement-container.ts`.
+//! ExpressionStatement-wrapping info for a `Reference`.
 
 use crate::reference::expression_statement_head::HeadExpression;
 

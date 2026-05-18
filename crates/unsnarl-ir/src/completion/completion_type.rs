@@ -1,5 +1,4 @@
-//! ECMA §6.2.4 Completion Record `[[Type]]` discriminator. Ports
-//! `ts/src/ir/completion/completion-type.ts`.
+//! ECMA §6.2.4 Completion Record `[[Type]]` discriminator.
 
 use serde::Serialize;
 

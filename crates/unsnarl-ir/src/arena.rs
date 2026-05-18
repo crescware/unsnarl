@@ -1,10 +1,11 @@
 //! `IrArena`: the in-memory IR backing store.
 //!
-//! Object references in the TS IR (e.g. `Scope.upper: Scope | null`,
-//! `Variable.references: Reference[]`) become arena IDs in Rust
-//! (`ScopeData.upper: Option<ScopeId>`,
-//! `VariableData.references: Vec<ReferenceId>`). Each entity is held in
-//! an `IndexVec` keyed by its corresponding ID newtype.
+//! Cross-entity links go through arena IDs rather than `Rc` /
+//! reference graphs: `ScopeData.upper: Option<ScopeId>`,
+//! `VariableData.references: Vec<ReferenceId>`, etc. Each entity is
+//! held in an `IndexVec` keyed by its corresponding ID newtype. The
+//! arena is append-only after build, so no generational handles are
+//! needed.
 
 use oxc_index::IndexVec;
 

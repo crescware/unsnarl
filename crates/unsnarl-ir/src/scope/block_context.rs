@@ -1,10 +1,9 @@
-//! Block-context metadata attached to scope serializations. Ports
-//! `ts/src/ir/scope/block-context.ts`.
+//! Block-context metadata attached to scope serializations.
 //!
-//! `caseTest` is only meaningful when the block is a switch-case
-//! clause. `ifChainRootOffset` is set on `else if` chain branches and
-//! points at the outermost `IfStatement` so all branches share a merge
-//! key.
+//! `case_test` is only meaningful when the block is a switch-case
+//! clause. `if_chain_root_offset` is set on `else if` chain branches
+//! and points at the outermost `IfStatement` so all branches share a
+//! merge key.
 
 use serde::Serialize;
 
@@ -31,10 +30,10 @@ pub struct OtherBlockContext {
     pub if_chain_root_offset: Option<u32>,
 }
 
-/// `variant("kind", ...)` in TS. The discriminator is repeated inside
-/// each variant (matching the TS shape) rather than synthesised by
-/// serde so callers can construct either variant directly without an
-/// extra wrapper layer.
+/// The discriminator is repeated inside each variant struct rather
+/// than synthesised by serde so callers can construct either variant
+/// directly without an extra wrapper layer, and the `Serialize` impl
+/// simply delegates to the variant's struct.
 pub enum BlockContext {
     CaseClause(CaseClauseBlockContext),
     Other(OtherBlockContext),

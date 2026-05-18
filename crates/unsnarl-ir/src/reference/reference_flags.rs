@@ -1,4 +1,4 @@
-//! Read / Write bitmask. Ports `ts/src/ir/reference/reference-flags.ts`.
+//! Read / Write bitmask.
 
 pub type ReferenceFlagBits = u32;
 

@@ -1,4 +1,4 @@
-//! Diagnostic categorization. Ports `ts/src/analyzer/diagnostic-kind.ts`.
+//! Diagnostic categorization.
 
 use serde::Serialize;
 

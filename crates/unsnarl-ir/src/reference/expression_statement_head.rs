@@ -1,8 +1,7 @@
-//! Mini-AST captured for an ExpressionStatement's "head". Ports
-//! `ts/src/ir/reference/expression-statement-head.ts`.
+//! Mini-AST captured for an ExpressionStatement's "head".
 //!
-//! Recursive (member / call / new / await all reference
-//! `HeadExpression`). Assign / update operands carry their own
+//! Recursive: `Member` / `Call` / `New` / `Await` all reference
+//! `HeadExpression`. `Assign` / `Update` operands carry their own
 //! per-side offset so downstream consumers retain operand-level
 //! positions even when the operand is `Elided` and therefore has no
 //! intrinsic span.

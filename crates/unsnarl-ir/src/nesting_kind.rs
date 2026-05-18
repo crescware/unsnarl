@@ -1,8 +1,8 @@
-//! Nesting depth tracking. Ports `ts/src/serializer/nesting-kind.ts` and
-//! the `NestingDepths` shape from
-//! `ts/src/ir/annotations/scope-annotation.ts`. `NestingDepths` lives
-//! here (rather than in `unsnarl-annotations`) because `SerializedScope`
-//! embeds it and `unsnarl-ir` cannot depend on `unsnarl-annotations`.
+//! Nesting-depth tracking.
+//!
+//! `NestingDepths` lives in `unsnarl-ir` (rather than
+//! `unsnarl-annotations`) because `SerializedScope` embeds it directly
+//! and `unsnarl-ir` cannot depend on `unsnarl-annotations`.
 
 use serde::Serialize;
 

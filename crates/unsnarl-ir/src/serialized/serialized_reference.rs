@@ -1,5 +1,4 @@
-//! Serialized counterpart of `Reference`. Ports
-//! `ts/src/ir/serialized/serialized-reference.ts`.
+//! Serialized counterpart of `Reference`.
 
 use serde::Serialize;
 
@@ -18,9 +17,9 @@ pub struct SerializedReferenceIdentifier {
 }
 
 /// 4-bool flag block. The internal IR's `flags` bitmask covers only
-/// read / write; `call` and `receiver` come from the
-/// `ReferenceAnnotation` side table (ported in Step 10) and are folded
-/// in at serialization time.
+/// read / write; `call` and `receiver` are pulled from the
+/// `ReferenceAnnotation` side table and folded in at serialization
+/// time.
 #[derive(Serialize)]
 pub struct SerializedFlags {
     pub read: bool,
@@ -45,9 +44,8 @@ pub struct SerializedExpressionStatementContainer {
 }
 
 /// Reference-side completion in serialized (span-based) form.
-/// Narrowed to `normal` / `return` / `throw` for the same reason
-/// `ReferenceCompletion` is narrowed (see
-/// `reference/reference-completion.rs`).
+/// Narrowed to `Normal` / `Return` / `Throw` for the same reason
+/// `ReferenceCompletion` is narrowed.
 #[derive(Serialize)]
 #[serde(tag = "type", rename_all = "lowercase")]
 pub enum SerializedCompletion {

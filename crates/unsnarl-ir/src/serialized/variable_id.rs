@@ -1,5 +1,4 @@
-//! String ID for a serialized Variable row. Ports
-//! `ts/src/ir/serialized/variable-id.ts`.
+//! String ID for a serialized Variable row.
 
 use serde::Serialize;
 

@@ -1,8 +1,7 @@
-//! Branded non-empty `String`. Ports `ts/src/util/filled-string.ts`.
+//! Branded non-empty `String`.
 //!
-//! Although the TS counterpart lives under `util/`, in Rust this type sits
-//! in `unsnarl-ir` because both the IR contract types (in this crate) and
-//! later crates depend on it, and `unsnarl-ir` is the bottom of the
+//! Lives in `unsnarl-ir` because the IR contract types and later
+//! crates depend on it, and `unsnarl-ir` is the bottom of the
 //! dependency graph.
 //!
 //! `new` is infallible: every in-tree producer (the boundary that

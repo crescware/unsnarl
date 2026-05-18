@@ -1,5 +1,5 @@
 //! The subset of `Completion` that a `Reference`'s value can flow
-//! into. Ports `ts/src/ir/reference/reference-completion.ts`.
+//! into.
 //!
 //! `Break` / `Continue` accept only a label `Identifier`
 //! syntactically and eslint-scope classifies a label as `Label`, not

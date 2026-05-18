@@ -1,12 +1,7 @@
-//! Reference-side IR contract types. Ports `ts/src/ir/reference/`.
+//! Reference-side IR contract types.
 //!
-//! `Reference` / `ReferenceData` lives in this parent module rather
-//! than a same-named child (`reference/reference.rs`) to avoid Rust's
-//! `module_inception` shape. TS exposes `isWrite` / `isRead` /
-//! `isReadOnly` / `isWriteOnly` / `isReadWrite` as methods on the
-//! `Reference` interface and stores the underlying bitmask on
-//! `ReferenceImpl`. The Rust IR merges those: `flags` lives on
-//! `ReferenceData` directly.
+//! `ReferenceData` lives in this parent module rather than a
+//! same-named child to avoid Rust's `module_inception` shape.
 
 use crate::ids::{ScopeId, VariableId};
 use crate::primitive::AstIdentifier;

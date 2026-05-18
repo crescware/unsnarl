@@ -1,7 +1,7 @@
-//! Scope categorization. Ports `ts/src/analyzer/scope-type.ts`.
+//! Scope categorization.
 //!
-//! Lives in `unsnarl-ir` rather than `unsnarl-analyzer` because the IR
-//! contract types reference it and `unsnarl-ir` is below
+//! Lives in `unsnarl-ir` rather than `unsnarl-analyzer` because the
+//! IR contract types reference it and `unsnarl-ir` sits below
 //! `unsnarl-analyzer` in the dependency graph.
 
 use serde::Serialize;

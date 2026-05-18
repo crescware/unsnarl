@@ -1,5 +1,4 @@
-//! `var` / `let` / `const`. Ports
-//! `ts/src/serializer/variable-declaration-kind.ts`.
+//! `var` / `let` / `const`.
 
 use serde::Serialize;
 
