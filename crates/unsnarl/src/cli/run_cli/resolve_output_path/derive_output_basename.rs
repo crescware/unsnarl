@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/cli/run-cli/resolve-output-path/derive-output-basename.ts`.
-
 use std::path::Path;
 
 use unsnarl_root_query::ParsedRootQuery;

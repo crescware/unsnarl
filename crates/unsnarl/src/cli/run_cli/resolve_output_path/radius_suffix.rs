@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/cli/run-cli/resolve-output-path/radius-suffix.ts`.
-
 /// Stable a-b-c ordering keeps the filename deterministic regardless of
 /// CLI argument order. Flags the user did not type are omitted, so an
 /// implicit -C 10 default produces no suffix. -C is shorthand for setting

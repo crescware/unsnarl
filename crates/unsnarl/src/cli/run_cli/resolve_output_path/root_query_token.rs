@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/cli/run-cli/resolve-output-path/root-query-token.ts`.
-
 use unsnarl_root_query::ParsedRootQuery;
 
 pub fn root_query_token(q: &ParsedRootQuery) -> String {

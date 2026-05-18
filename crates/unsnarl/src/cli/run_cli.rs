@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/cli/run-cli/` (parent module).
-
 pub mod emit_out_flag_notice;
 pub mod resolve_output_path;
 

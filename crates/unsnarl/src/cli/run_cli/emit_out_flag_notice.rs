@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/cli/run-cli/emit-out-flag-notice.ts`.
-
 use std::io::Write;
 use std::path::Path;
 
