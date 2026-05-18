@@ -48,7 +48,6 @@ export const AST_TYPE = {
   ForStatement: "ForStatement",
   FunctionDeclaration: "FunctionDeclaration",
   FunctionExpression: "FunctionExpression",
-  Hashbang: "Hashbang",
   Identifier: "Identifier",
   IfStatement: "IfStatement",
   ImportAttribute: "ImportAttribute",
@@ -134,7 +133,6 @@ export const AST_TYPE = {
   TSIntrinsicKeyword: "TSIntrinsicKeyword",
   TSJSDocNonNullableType: "TSJSDocNonNullableType",
   TSJSDocNullableType: "TSJSDocNullableType",
-  TSJSDocUnknownType: "TSJSDocUnknownType",
   TSLiteralType: "TSLiteralType",
   TSMappedType: "TSMappedType",
   TSMethodSignature: "TSMethodSignature",
@@ -176,12 +174,35 @@ export const AST_TYPE = {
   TSVoidKeyword: "TSVoidKeyword",
   UnaryExpression: "UnaryExpression",
   UpdateExpression: "UpdateExpression",
-  V8IntrinsicExpression: "V8IntrinsicExpression",
   VariableDeclaration: "VariableDeclaration",
   VariableDeclarator: "VariableDeclarator",
   WhileStatement: "WhileStatement",
   WithStatement: "WithStatement",
   YieldExpression: "YieldExpression",
+} as const;
+
+// Declared as `type:` discriminators in @oxc-project/types/types.d.ts
+// (so the parity test against the upstream surface requires them to
+// appear in the combined vocabulary), but unreachable through the
+// public oxc-parser API in the `parseSync` → `walkNode` direction.
+// Kept apart from AST_TYPE so that the fixture coverage guard
+// (`integration/ast-type-coverage.test.ts`) does not require fixture
+// inputs for entries no fixture could exercise.
+export const AST_TYPE_UNREACHABLE = {
+  // Emitted at `Program.hashbang`, but oxc-parser's
+  // `visitorKeys.Program` is `["body"]`, so walker descent never
+  // visits the slot.
+  Hashbang: "Hashbang",
+
+  // No public `parseSync` input emits this node: every `*`-bearing
+  // type-position syntax (`type T = *`, `function f(x: *)`,
+  // `type T = [*]`, dts and jsx variants) is a parse error.
+  TSJSDocUnknownType: "TSJSDocUnknownType",
+
+  // No public `parseSync` input emits this node: every `%name()`
+  // form is a parse error under all `lang` × `sourceType` × known
+  // boolean option combinations.
+  V8IntrinsicExpression: "V8IntrinsicExpression",
 } as const;
 
 // Internal sentinel for AST type strings the parser emits that are
@@ -193,9 +214,13 @@ export const AST_TYPE = {
 // parser string.
 export const UNKNOWN_AST_TYPE = "UnknownAstType" as const;
 
-const oxcTypes = Object.values(
-  AST_TYPE,
-) as readonly (typeof AST_TYPE)[keyof typeof AST_TYPE][];
+const oxcTypes = [
+  ...Object.values(AST_TYPE),
+  ...Object.values(AST_TYPE_UNREACHABLE),
+] as readonly (
+  | (typeof AST_TYPE)[keyof typeof AST_TYPE]
+  | (typeof AST_TYPE_UNREACHABLE)[keyof typeof AST_TYPE_UNREACHABLE]
+)[];
 
 const knownOxcTypes: ReadonlySet<string> = new Set(oxcTypes);
 

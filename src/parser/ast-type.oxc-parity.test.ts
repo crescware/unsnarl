@@ -19,7 +19,7 @@ import { createRequire } from "node:module";
 import { dirname } from "node:path";
 import { describe, expect, test } from "vitest";
 
-import { AST_TYPE } from "./ast-type.js";
+import { AST_TYPE, AST_TYPE_UNREACHABLE } from "./ast-type.js";
 
 // Resolve the @oxc-project/types instance that the directly-pinned
 // oxc-parser actually pulls in, rather than another copy pnpm may
@@ -90,7 +90,10 @@ function extractOxcAstTypes(): {
 
 describe("AST_TYPE parity with @oxc-project/types", () => {
   const { types: oxcTypes, unknownAliases } = extractOxcAstTypes();
-  const declared = new Set<string>(Object.values(AST_TYPE));
+  const declared = new Set<string>([
+    ...Object.values(AST_TYPE),
+    ...Object.values(AST_TYPE_UNREACHABLE),
+  ]);
 
   test("OXC_TYPE_ALIAS_EXPANSIONS covers every alias used as a `type:` discriminator in types.d.ts", () => {
     // If this fails, oxc introduced a new string-union alias used as

@@ -1,10 +1,10 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-optional-type/input.ts",
+    "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-jsdoc-non-nullable-type/input.ts",
     "language": "ts"
   },
-  "raw": "type T = [string?];\n",
+  "raw": "type T = !number;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -23,7 +23,7 @@
         "endSpan": {
           "line": 2,
           "column": 0,
-          "offset": 20
+          "offset": 18
         }
       },
       "variables": [],

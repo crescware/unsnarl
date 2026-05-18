@@ -1,9 +1,9 @@
-# integration/fixtures/app-behavior/ast-type-coverage/ts-optional-type/input.ts
+# integration/fixtures/app-behavior/ast-type-coverage/export-default-declaration/input.ts
 
 ## Input
 
 ```ts
-type T = [string?];
+export default 1;
 ```
 
 ## Mermaid

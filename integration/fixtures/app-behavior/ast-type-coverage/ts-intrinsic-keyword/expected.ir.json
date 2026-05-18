@@ -4,7 +4,7 @@
     "path": "integration/fixtures/app-behavior/ast-type-coverage/ts-intrinsic-keyword/input.ts",
     "language": "ts"
   },
-  "raw": "type T = Uppercase<\"a\">;\n",
+  "raw": "type T = intrinsic;\n",
   "scopes": [
     {
       "id": "scope#0",
@@ -23,7 +23,7 @@
         "endSpan": {
           "line": 2,
           "column": 0,
-          "offset": 25
+          "offset": 20
         }
       },
       "variables": [],

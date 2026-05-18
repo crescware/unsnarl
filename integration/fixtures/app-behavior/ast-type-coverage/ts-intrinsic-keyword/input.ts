@@ -1,1 +1,1 @@
-type T = Uppercase<"a">;
+type T = intrinsic;
