@@ -56,7 +56,13 @@ pub struct Args {
     )]
     pub roots: Vec<String>,
 
-    /// Highlight matching nodes and adjacent edges (defaults to the -r/--roots queries)
+    /// Highlight matching nodes and adjacent edges (defaults to the -r/--roots queries).
+    ///
+    /// Tri-state mirroring the TS commander result type
+    /// `RawHighlight = false | true | string`:
+    /// - `None`          : flag absent
+    /// - `Some(None)`    : flag given with no value (follow `-r/--roots`)
+    /// - `Some(Some(s))` : flag given with inline value
     #[arg(
         short = 'H',
         long = "highlight",
