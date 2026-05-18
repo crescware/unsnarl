@@ -1,5 +1,6 @@
 use super::*;
 use clap::error::ErrorKind;
+use unsnarl_root_query::ParsedRootQuery;
 
 fn parse(argv: &[&str]) -> Args {
     Args::try_parse_from(argv).expect("argv should parse")
@@ -20,7 +21,7 @@ fn defaults_match_ts_commander() {
     assert!(!args.stdin);
     assert_eq!(args.stdin_lang, CliLanguage::Ts);
     assert!(args.roots.is_empty());
-    assert!(args.highlight.is_none());
+    assert_eq!(args.highlight, Highlight::Absent);
     assert!(args.descendants.is_none());
     assert!(args.ancestors.is_none());
     assert!(args.context.is_none());
@@ -140,36 +141,77 @@ fn stdin_lang_rejects_unknown_value_with_exit_2() {
 }
 
 #[test]
-fn roots_repeatable_keeps_comma_strings_unsplit() {
+fn roots_repeatable_flattens_comma_lists_into_parsed_queries() {
     let args = parse(&["uns", "-r", "1", "-r", "2,3", "x.ts"]);
-    assert_eq!(args.roots, vec!["1".to_string(), "2,3".to_string()]);
+    assert_eq!(
+        args.roots,
+        vec![
+            ParsedRootQuery::Line {
+                line: 1,
+                raw: "1".to_string(),
+            },
+            ParsedRootQuery::Line {
+                line: 2,
+                raw: "2".to_string(),
+            },
+            ParsedRootQuery::Line {
+                line: 3,
+                raw: "3".to_string(),
+            },
+        ],
+    );
 }
 
 #[test]
-fn highlight_absent_is_none() {
+fn roots_invalid_value_yields_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "-r", "foo-bar", "x.ts"]), 2);
+}
+
+#[test]
+fn highlight_absent_is_absent_variant() {
     let args = parse(&["uns", "x.ts"]);
-    assert!(args.highlight.is_none());
+    assert_eq!(args.highlight, Highlight::Absent);
 }
 
 #[test]
 fn highlight_present_without_value_at_end() {
     let args = parse(&["uns", "x.ts", "-H"]);
     assert_eq!(args.file.as_deref(), Some("x.ts"));
-    assert_eq!(args.highlight, Some(None));
+    assert_eq!(args.highlight, Highlight::NoValue);
 }
 
 #[test]
 fn highlight_with_inline_value_via_equals() {
     let args = parse(&["uns", "--highlight=foo", "x.ts"]);
-    assert_eq!(args.highlight, Some(Some("foo".to_string())));
+    assert_eq!(
+        args.highlight,
+        Highlight::Value(vec![ParsedRootQuery::Name {
+            name: "foo".to_string(),
+            raw: "foo".to_string(),
+        }]),
+    );
     assert_eq!(args.file.as_deref(), Some("x.ts"));
 }
 
 #[test]
 fn highlight_short_consumes_next_token_as_value() {
-    let args = parse(&["uns", "-H", "foo.ts"]);
-    assert_eq!(args.highlight, Some(Some("foo.ts".to_string())));
+    let args = parse(&["uns", "-H", "foo"]);
+    assert_eq!(
+        args.highlight,
+        Highlight::Value(vec![ParsedRootQuery::Name {
+            name: "foo".to_string(),
+            raw: "foo".to_string(),
+        }]),
+    );
     assert!(args.file.is_none());
+}
+
+#[test]
+fn highlight_invalid_inline_value_yields_exit_2() {
+    assert_eq!(
+        parse_err_exit_code(&["uns", "--highlight=foo-bar", "x.ts"]),
+        2
+    );
 }
 
 #[test]
@@ -396,12 +438,15 @@ fn highlight_serializes_as_true_when_no_inline_value() {
 }
 
 #[test]
-fn highlight_serializes_as_string_when_inline_value_given() {
+fn highlight_serializes_as_parsed_root_query_array_when_inline_value_given() {
     let args = parse(&["uns", "--highlight=foo,bar"]);
     let v = serde_json::to_value(&args).unwrap();
     assert_eq!(
         v["highlight"],
-        serde_json::Value::String("foo,bar".to_string())
+        serde_json::json!([
+            { "kind": "name", "name": "foo", "raw": "foo" },
+            { "kind": "name", "name": "bar", "raw": "bar" },
+        ]),
     );
 }
 
