@@ -1,4 +1,8 @@
 //! Binary crate library surface.
 //!
-//! Exposes pipeline functions for in-process invocation from the workspace-root
-//! parity harness (`<root>/tests/parity.rs`). Populated alongside Step 21.
+//! Exposes CLI types for integration testing and pipeline functions for
+//! in-process invocation from the workspace-root parity harness
+//! (`<root>/tests/parity.rs`). The pipeline side is populated alongside
+//! Step 21.
+
+pub mod cli;
