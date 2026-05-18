@@ -788,6 +788,7 @@ dependencies = [
  "oxc_index",
  "oxc_span",
  "serde",
+ "serde_json",
 ]
 
 [[package]]
