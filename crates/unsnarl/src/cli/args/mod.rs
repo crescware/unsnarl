@@ -3,19 +3,22 @@
 //! it.
 
 use clap::Parser;
-use serde::{Serialize, Serializer};
+use serde::Serialize;
+use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
 
 pub mod cli_color_theme;
 pub mod cli_format;
 pub mod cli_language;
 pub mod cli_mermaid_renderer;
 pub mod collect_plugins;
+pub mod highlight;
 pub mod parse_generation_count;
 
 pub use cli_color_theme::CliColorTheme;
 pub use cli_format::CliFormat;
 pub use cli_language::CliLanguage;
 pub use cli_mermaid_renderer::CliMermaidRenderer;
+pub use highlight::Highlight;
 
 use collect_plugins::parse_plugin_occurrence;
 use parse_generation_count::parse_generation_count;
@@ -80,23 +83,36 @@ pub struct Args {
         value_name = "queries",
         action = clap::ArgAction::Append
     )]
-    pub roots: Vec<String>,
+    #[serde(skip)]
+    raw_roots: Vec<String>,
+
+    /// Parsed `-r` / `--roots` queries. The clap-facing `raw_roots`
+    /// field is folded into this typed `Vec<ParsedRootQuery>` by
+    /// `finalize`.
+    #[arg(skip)]
+    pub roots: Vec<ParsedRootQuery>,
 
     /// Highlight matching nodes and adjacent edges (defaults to the -r/--roots queries).
     ///
     /// Tri-state mirroring the TS commander result type
-    /// `RawHighlight = false | true | string`:
+    /// `RawHighlight = false | true | readonly ParsedRootQuery[]`:
     /// - `None`          : flag absent
     /// - `Some(None)`    : flag given with no value (follow `-r/--roots`)
-    /// - `Some(Some(s))` : flag given with inline value
+    /// - `Some(Some(s))` : flag given with inline value (parsed by `finalize`)
     #[arg(
         short = 'H',
         long = "highlight",
         value_name = "queries",
         num_args = 0..=1,
     )]
-    #[serde(serialize_with = "serialize_highlight")]
-    pub highlight: Option<Option<String>>,
+    #[serde(skip)]
+    raw_highlight: Option<Option<String>>,
+
+    /// Parsed `-H` / `--highlight` value, mirroring the TS commander
+    /// `RawHighlight = false | true | readonly ParsedRootQuery[]` form.
+    /// Populated by `finalize`.
+    #[arg(skip)]
+    pub highlight: Highlight,
 
     /// Descendants generations
     #[arg(
@@ -205,7 +221,7 @@ impl Args {
         T: Into<std::ffi::OsString> + Clone,
     {
         let mut args = <Self as clap::Parser>::try_parse_from(itr)?;
-        args.finalize();
+        args.finalize()?;
         Ok(args)
     }
 
@@ -213,31 +229,40 @@ impl Args {
         Self::try_parse_from(std::env::args_os()).unwrap_or_else(|e| e.exit())
     }
 
-    fn finalize(&mut self) {
-        let raw = std::mem::take(&mut self.plugin_occurrences);
-        for occurrence in raw {
+    fn finalize(&mut self) -> Result<(), clap::Error> {
+        let raw_plugins = std::mem::take(&mut self.plugin_occurrences);
+        for occurrence in raw_plugins {
             for name in occurrence {
                 if !self.plugins.contains(&name) {
                     self.plugins.push(name);
                 }
             }
         }
+        let raw_roots = std::mem::take(&mut self.raw_roots);
+        for raw in raw_roots {
+            match parse_root_queries(&raw) {
+                Ok(qs) => self.roots.extend(qs),
+                Err(msg) => return Err(value_validation_error(msg)),
+            }
+        }
+        let raw_highlight = std::mem::take(&mut self.raw_highlight);
+        self.highlight = match raw_highlight {
+            None => Highlight::Absent,
+            Some(None) => Highlight::NoValue,
+            Some(Some(raw)) => match parse_root_queries(&raw) {
+                Ok(qs) => Highlight::Value(qs),
+                Err(msg) => return Err(value_validation_error(msg)),
+            },
+        };
+        Ok(())
     }
 }
 
-// Mirrors TS commander's RawHighlight = false | true | string:
-//   absent             -> false (None)
-//   present, no value  -> true  (Some(None))
-//   present with value -> string (Some(Some(...)))
-fn serialize_highlight<S>(value: &Option<Option<String>>, s: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    match value {
-        None => s.serialize_bool(false),
-        Some(None) => s.serialize_bool(true),
-        Some(Some(v)) => s.serialize_str(v),
-    }
+fn value_validation_error(message: String) -> clap::Error {
+    clap::Error::raw(
+        clap::error::ErrorKind::ValueValidation,
+        format!("{message}\n"),
+    )
 }
 
 #[cfg(test)]
