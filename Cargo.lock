@@ -717,6 +717,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "unsnarl-ast-type"
+version = "0.3.0-beta.0"
+dependencies = [
+ "serde",
+]
+
+[[package]]
 name = "unsnarl-boundary-eslint-scope"
 version = "0.3.0-beta.0"
 dependencies = [
@@ -789,6 +796,7 @@ dependencies = [
  "oxc_span",
  "serde",
  "serde_json",
+ "unsnarl-ast-type",
 ]
 
 [[package]]

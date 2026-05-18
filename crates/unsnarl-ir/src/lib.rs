@@ -2,16 +2,20 @@
 //! `VariableData` / `ReferenceData` / `DefinitionData`) and the
 //! on-disk shape (`serialized::*`).
 //!
-//! Several enums that are conceptually about analyzer / parser /
-//! serializer / annotations (`AstType`, `ScopeType`,
-//! `DefinitionType`, `DiagnosticKind`, `PredicateContainerType`,
-//! `ImportKind`, `VariableDeclarationKind`, `NestingKind`,
-//! `NestingDepths`, `SerializedIrVersion`, `FilledString`) sit in
-//! this crate because the contract types reference them and
-//! `unsnarl-ir` is the bottom of the dependency graph.
+//! Several enums that are conceptually about analyzer / serializer /
+//! annotations (`ScopeType`, `DefinitionType`, `DiagnosticKind`,
+//! `PredicateContainerType`, `ImportKind`, `VariableDeclarationKind`,
+//! `NestingKind`, `NestingDepths`, `SerializedIrVersion`,
+//! `FilledString`) sit in this crate because the contract types
+//! reference them and `unsnarl-ir` is the bottom of the dependency
+//! graph.
+//!
+//! `AstType` is deliberately NOT here: it has to match `oxc_ast`
+//! value-for-value, so it lives in its own crate (`unsnarl-ast-type`)
+//! to keep that parity responsibility from leaking into the IR
+//! contract.
 
 pub mod arena;
-pub mod ast_type;
 pub mod completion;
 pub mod definition_type;
 pub mod diagnostic;
@@ -32,7 +36,6 @@ pub mod serialized_ir_version;
 pub mod variable_declaration_kind;
 
 pub use arena::IrArena;
-pub use ast_type::{as_ast_type, AstType, UNKNOWN_AST_TYPE};
 pub use definition_type::DefinitionType;
 pub use diagnostic_kind::DiagnosticKind;
 pub use filled_string::FilledString;

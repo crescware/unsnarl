@@ -2,7 +2,6 @@
 
 use serde::Serialize;
 
-use crate::ast_type::AstType;
 use crate::nesting_kind::NestingDepths;
 use crate::primitive::Span;
 use crate::scope::block_context::BlockContext;
@@ -10,6 +9,7 @@ use crate::scope_type::ScopeType;
 use crate::serialized::reference_id::SerializedReferenceId;
 use crate::serialized::scope_id::SerializedScopeId;
 use crate::serialized::variable_id::SerializedVariableId;
+use unsnarl_ast_type::AstType;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]

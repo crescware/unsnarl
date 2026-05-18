@@ -7,8 +7,8 @@
 
 use serde::Serialize;
 
-use crate::ast_type::AstType;
 use crate::filled_string::FilledString;
+use unsnarl_ast_type::AstType;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]

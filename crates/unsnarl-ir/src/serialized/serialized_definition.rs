@@ -10,11 +10,11 @@
 
 use serde::Serialize;
 
-use crate::ast_type::AstType;
 use crate::filled_string::FilledString;
 use crate::import_kind::ImportKind;
 use crate::primitive::Span;
 use crate::variable_declaration_kind::VariableDeclarationKind;
+use unsnarl_ast_type::AstType;
 
 #[derive(Serialize)]
 pub struct DefinitionName {

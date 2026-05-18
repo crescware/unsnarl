@@ -1,9 +1,9 @@
 use super::*;
 
-use crate::ast_type::AstType;
 use crate::filled_string::FilledString;
 use crate::primitive::Span;
 use crate::variable_declaration_kind::VariableDeclarationKind;
+use unsnarl_ast_type::AstType;
 
 fn filled(s: &str) -> FilledString {
     FilledString::new(s)

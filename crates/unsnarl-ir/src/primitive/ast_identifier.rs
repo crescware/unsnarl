@@ -2,7 +2,7 @@
 
 use oxc_span::Span;
 
-use crate::ast_type::AstType;
+use unsnarl_ast_type::AstType;
 
 pub struct AstIdentifier {
     pub r#type: AstType,

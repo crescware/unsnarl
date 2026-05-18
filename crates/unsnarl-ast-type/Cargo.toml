@@ -1,5 +1,5 @@
 [package]
-name = "unsnarl-ir"
+name = "unsnarl-ast-type"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -7,10 +7,4 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
-unsnarl-ast-type = { workspace = true }
-oxc_span = { workspace = true }
-oxc_index = { workspace = true }
 serde = { workspace = true }
-
-[dev-dependencies]
-serde_json = { workspace = true }

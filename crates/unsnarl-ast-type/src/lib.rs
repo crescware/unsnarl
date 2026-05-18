@@ -1,7 +1,11 @@
 //! AST node `type` discriminator.
 //!
-//! Lives in `unsnarl-ir` rather than the boundary crate because the IR
-//! contract types reference it.
+//! The variant set must match `oxc_ast` value-for-value, so this
+//! crate is the single place where that parity is maintained. Other
+//! crates (the IR, the boundary that drives the parser, the analyzer,
+//! ...) depend on this crate rather than redeclaring the discriminator;
+//! keeping AstType out of `unsnarl-ir` prevents the IR contract from
+//! silently absorbing oxc upgrades.
 //!
 //! The variant list folds together two groups: types the parser
 //! actually emits, and a tail of nodes `oxc_ast` declares but no
