@@ -34,4 +34,5 @@ pub fn validate_endpoint_query(eq: &ParsedRootQuery) -> Result<(), Vec<ParseErro
 }
 
 #[cfg(test)]
-mod test;
+#[path = "validate_endpoint_query_test.rs"]
+mod validate_endpoint_query_test;

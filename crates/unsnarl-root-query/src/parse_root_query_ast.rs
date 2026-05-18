@@ -89,4 +89,5 @@ pub fn parse_root_query_ast(
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_root_query_ast_test.rs"]
+mod parse_root_query_ast_test;

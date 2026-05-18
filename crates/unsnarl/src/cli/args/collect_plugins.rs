@@ -30,4 +30,5 @@ pub fn parse_plugin_occurrence(value: &str) -> Result<Vec<String>, String> {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "collect_plugins_test.rs"]
+mod collect_plugins_test;

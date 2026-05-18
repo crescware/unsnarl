@@ -207,4 +207,5 @@ fn has_identifier_like_head_with_disallowed_char(s: &str) -> bool {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_endpoint_query_test.rs"]
+mod parse_endpoint_query_test;

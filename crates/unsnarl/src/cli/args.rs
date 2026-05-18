@@ -266,4 +266,5 @@ fn value_validation_error(message: String) -> clap::Error {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "args_test.rs"]
+mod args_test;

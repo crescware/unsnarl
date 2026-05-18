@@ -13,4 +13,5 @@ pub fn parse_root_queries(value: &str) -> Result<Vec<ParsedRootQuery>, String> {
 }
 
 #[cfg(test)]
-mod test;
+#[path = "parse_root_queries_test.rs"]
+mod parse_root_queries_test;
