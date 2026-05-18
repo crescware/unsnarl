@@ -193,7 +193,13 @@ pub struct Args {
 }
 
 impl Args {
-    pub fn try_parse_argv<I, T>(itr: I) -> Result<Self, clap::Error>
+    // Inherent `parse` / `try_parse_from` shadow the same-named methods
+    // provided by the derived `clap::Parser` impl. This makes it
+    // impossible to obtain an `Args` without running `finalize`: the
+    // `Parser` trait methods are still reachable via fully qualified
+    // syntax (`<Args as clap::Parser>::parse()`), but a plain
+    // `Args::parse()` call resolves to the inherent method.
+    pub fn try_parse_from<I, T>(itr: I) -> Result<Self, clap::Error>
     where
         I: IntoIterator<Item = T>,
         T: Into<std::ffi::OsString> + Clone,
@@ -203,8 +209,8 @@ impl Args {
         Ok(args)
     }
 
-    pub fn parse_argv() -> Self {
-        Self::try_parse_argv(std::env::args_os()).unwrap_or_else(|e| e.exit())
+    pub fn parse() -> Self {
+        Self::try_parse_from(std::env::args_os()).unwrap_or_else(|e| e.exit())
     }
 
     fn finalize(&mut self) {

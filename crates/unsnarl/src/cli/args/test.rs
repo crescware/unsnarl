@@ -2,11 +2,11 @@ use super::*;
 use clap::error::ErrorKind;
 
 fn parse(argv: &[&str]) -> Args {
-    Args::try_parse_argv(argv).expect("argv should parse")
+    Args::try_parse_from(argv).expect("argv should parse")
 }
 
 fn parse_err_exit_code(argv: &[&str]) -> i32 {
-    Args::try_parse_argv(argv).unwrap_err().exit_code()
+    Args::try_parse_from(argv).unwrap_err().exit_code()
 }
 
 #[test]
@@ -353,30 +353,30 @@ fn debug_flag() {
 
 #[test]
 fn unknown_flag_yields_exit_code_2() {
-    let err = Args::try_parse_argv(["uns", "--unknown"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--unknown"]).unwrap_err();
     assert_eq!(err.exit_code(), 2);
 }
 
 #[test]
 fn version_short_lowercase_uses_display_version() {
-    let err = Args::try_parse_argv(["uns", "-v"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "-v"]).unwrap_err();
     assert_eq!(err.kind(), ErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn version_long_uses_display_version() {
-    let err = Args::try_parse_argv(["uns", "--version"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--version"]).unwrap_err();
     assert_eq!(err.kind(), ErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn help_short_and_long_use_display_help() {
-    let err = Args::try_parse_argv(["uns", "-h"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "-h"]).unwrap_err();
     assert_eq!(err.kind(), ErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
-    let err = Args::try_parse_argv(["uns", "--help"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--help"]).unwrap_err();
     assert_eq!(err.kind(), ErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
 }

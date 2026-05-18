@@ -1,7 +1,7 @@
 use super::*;
 
 fn capture(argv: &[&str]) -> String {
-    let args = Args::try_parse_argv(argv).expect("argv should parse");
+    let args = Args::try_parse_from(argv).expect("argv should parse");
     let mut buf = Vec::new();
     run_to(&args, &mut buf);
     String::from_utf8(buf).expect("output should be valid UTF-8")
@@ -49,7 +49,7 @@ fn stats_format_routes_to_stats_emitter() {
 
 #[test]
 fn unknown_format_is_rejected_by_clap_before_dispatch() {
-    let err = Args::try_parse_argv(["uns", "-f", "bogus", "x.ts"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "-f", "bogus", "x.ts"]).unwrap_err();
     assert_eq!(err.exit_code(), 2);
 }
 

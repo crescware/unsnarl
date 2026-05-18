@@ -4,6 +4,6 @@ use unsnarl::cli::args::Args;
 use unsnarl::run::run;
 
 fn main() {
-    let args = Args::parse_argv();
+    let args = Args::parse();
     run(&args);
 }
