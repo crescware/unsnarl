@@ -1,6 +1,6 @@
 {
   "name": "unsnarl",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Single-file ECMAScript / TypeScript scope and reference analyzer that emits a Mermaid flowchart and a deterministic IR (JSON).",
   "keywords": [
     "analyzer",
