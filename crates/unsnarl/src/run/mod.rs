@@ -1,6 +1,6 @@
 use std::io::{self, Write};
 
-use crate::cli::args::Args;
+use crate::cli::args::{Args, CliFormat};
 
 pub fn run(args: &Args) {
     let mut stderr = io::stderr().lock();
@@ -14,14 +14,13 @@ pub(crate) fn run_to(args: &Args, out: &mut dyn Write) {
 
 type Handler = fn(&Args, &mut dyn Write);
 
-fn select_handler(format: &str) -> Handler {
+fn select_handler(format: &CliFormat) -> Handler {
     match format {
-        "mermaid" => emit_mermaid,
-        "ir" => emit_ir,
-        "json" => emit_json,
-        "markdown" => emit_markdown,
-        "stats" => emit_stats,
-        _ => emit_unknown_format,
+        CliFormat::Mermaid => emit_mermaid,
+        CliFormat::Ir => emit_ir,
+        CliFormat::Json => emit_json,
+        CliFormat::Markdown => emit_markdown,
+        CliFormat::Stats => emit_stats,
     }
 }
 
@@ -43,11 +42,6 @@ fn emit_markdown(args: &Args, out: &mut dyn Write) {
 
 fn emit_stats(args: &Args, out: &mut dyn Write) {
     emit_stub("stats emitter", args, out);
-}
-
-fn emit_unknown_format(args: &Args, out: &mut dyn Write) {
-    let label = format!("unknown format \"{}\"", args.format);
-    emit_stub(&label, args, out);
 }
 
 fn emit_stub(label: &str, args: &Args, out: &mut dyn Write) {

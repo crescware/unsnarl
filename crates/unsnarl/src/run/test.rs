@@ -49,12 +49,9 @@ fn stats_format_routes_to_stats_emitter() {
 }
 
 #[test]
-fn unknown_format_routes_to_unknown_format_handler() {
-    let out = capture(&["uns", "-f", "bogus", "x.ts"]);
-    assert_eq!(
-        first_line(&out),
-        "Not implemented yet: unknown format \"bogus\""
-    );
+fn unknown_format_is_rejected_by_clap_before_dispatch() {
+    let err = Args::try_parse_from(["uns", "-f", "bogus", "x.ts"]).unwrap_err();
+    assert_eq!(err.exit_code(), 2);
 }
 
 #[test]

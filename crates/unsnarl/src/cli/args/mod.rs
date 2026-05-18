@@ -5,6 +5,19 @@
 use clap::Parser;
 use serde::{Serialize, Serializer};
 
+pub mod cli_color_theme;
+pub mod cli_format;
+pub mod cli_language;
+pub mod cli_mermaid_renderer;
+pub mod parse_generation_count;
+
+pub use cli_color_theme::CliColorTheme;
+pub use cli_format::CliFormat;
+pub use cli_language::CliLanguage;
+pub use cli_mermaid_renderer::CliMermaidRenderer;
+
+use parse_generation_count::parse_generation_count;
+
 #[derive(Parser, Debug, Serialize)]
 #[command(
     name = "unsnarl",
@@ -23,29 +36,40 @@ pub struct Args {
         short = 'f',
         long = "format",
         value_name = "id",
+        value_enum,
         default_value = "mermaid"
     )]
-    pub format: String,
+    pub format: CliFormat,
 
     /// Disable pretty-printed JSON output
     #[arg(long = "no-pretty-json", action = clap::ArgAction::SetFalse)]
     pub pretty_json: bool,
 
     /// Layout engine for Mermaid output
-    #[arg(long = "mermaid-renderer", value_name = "renderer")]
-    pub mermaid_renderer: Option<String>,
+    #[arg(long = "mermaid-renderer", value_name = "renderer", value_enum)]
+    pub mermaid_renderer: Option<CliMermaidRenderer>,
 
     /// Color theme for Mermaid output (dark, light)
-    #[arg(long = "color-theme", value_name = "theme", default_value = "dark")]
-    pub color_theme: String,
+    #[arg(
+        long = "color-theme",
+        value_name = "theme",
+        value_enum,
+        default_value = "dark"
+    )]
+    pub color_theme: CliColorTheme,
 
     /// Read from stdin
     #[arg(long = "stdin", action = clap::ArgAction::SetTrue)]
     pub stdin: bool,
 
     /// Language for stdin input
-    #[arg(long = "stdin-lang", value_name = "lang", default_value = "ts")]
-    pub stdin_lang: String,
+    #[arg(
+        long = "stdin-lang",
+        value_name = "lang",
+        value_enum,
+        default_value = "ts"
+    )]
+    pub stdin_lang: CliLanguage,
 
     /// Comma-separated root queries (repeatable)
     #[arg(
@@ -73,28 +97,55 @@ pub struct Args {
     pub highlight: Option<Option<String>>,
 
     /// Descendants generations
-    #[arg(short = 'A', long = "descendants", value_name = "N")]
-    pub descendants: Option<String>,
+    #[arg(
+        short = 'A',
+        long = "descendants",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub descendants: Option<u32>,
 
     /// Ancestors generations
-    #[arg(short = 'B', long = "ancestors", value_name = "N")]
-    pub ancestors: Option<String>,
+    #[arg(
+        short = 'B',
+        long = "ancestors",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub ancestors: Option<u32>,
 
     /// Context generations (-A and -B shorthand)
-    #[arg(short = 'C', long = "context", value_name = "N")]
-    pub context: Option<String>,
+    #[arg(
+        short = 'C',
+        long = "context",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub context: Option<u32>,
 
     /// Sugar: set both --depth-function and --depth-block to <N>
-    #[arg(long = "depth", value_name = "N")]
-    pub depth: Option<String>,
+    #[arg(
+        long = "depth",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub depth: Option<u32>,
 
     /// Max function-scope nesting depth before scopes collapse to a single node
-    #[arg(long = "depth-function", value_name = "N")]
-    pub depth_function: Option<String>,
+    #[arg(
+        long = "depth-function",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub depth_function: Option<u32>,
 
     /// Max block-scope nesting depth (applies to if/for/while/switch/try-catch-finally/block) before scopes collapse to a single node
-    #[arg(long = "depth-block", value_name = "N")]
-    pub depth_block: Option<String>,
+    #[arg(
+        long = "depth-block",
+        value_name = "N",
+        value_parser = parse_generation_count
+    )]
+    pub depth_block: Option<u32>,
 
     /// Write output to <dir>/<auto-name>.<ext>
     #[arg(short = 'o', long = "out-dir", value_name = "dir")]

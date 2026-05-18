@@ -1,5 +1,11 @@
 # Development Rules
 
+## Project Conventions
+
+Before starting any work, read every file under `docs/`. The conventions
+recorded there (directory layout, test placement, etc.) are mandatory
+and are not duplicated in this file.
+
 ## Verification Command
 
 Upon completing any work, the project-defined verification command for the
