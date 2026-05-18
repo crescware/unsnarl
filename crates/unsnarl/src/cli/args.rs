@@ -6,6 +6,8 @@ use clap::Parser;
 use serde::Serialize;
 use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
 
+use crate::cli::run_cli::derive_output_basename;
+
 pub mod cli_color_theme;
 pub mod cli_format;
 pub mod cli_language;
@@ -178,6 +180,14 @@ pub struct Args {
     #[arg(long = "out-file", value_name = "path")]
     pub out_file: Option<String>,
 
+    /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C` (or the
+    /// positional input file when no roots are given). Populated by
+    /// `finalize` when `-o` / `--out-dir` is set; otherwise `None`. Mirrors
+    /// the TS `deriveOutputBasename` result that resolveOutputPath would
+    /// pass to the emitter for the `<dir>/<basename>.<ext>` filename.
+    #[arg(skip)]
+    pub derived_basename: Option<String>,
+
     /// Annotate Mermaid labels with the underlying NODE_KIND / SUBGRAPH_KIND
     #[arg(long = "debug", action = clap::ArgAction::SetTrue)]
     pub debug: bool,
@@ -254,6 +264,30 @@ impl Args {
                 Err(msg) => return Err(value_validation_error(msg)),
             },
         };
+        if self.out_dir.is_some() {
+            // `-o` writes to `<dir>/<auto-basename>.<ext>`, so it needs
+            // either a positional file (basename comes from it) or at
+            // least one `-r` query (basename comes from the root tokens).
+            // `--stdin` removes the positional path, leaving `-r` as the
+            // only remaining basename source.
+            if self.stdin && self.roots.is_empty() {
+                return Err(value_validation_error(
+                    "--out-dir requires either -r/--roots or an input file path".to_string(),
+                ));
+            }
+            let input_path = if self.stdin {
+                ""
+            } else {
+                self.file.as_deref().unwrap_or("")
+            };
+            self.derived_basename = Some(derive_output_basename(
+                &self.roots,
+                self.descendants,
+                self.ancestors,
+                self.context,
+                input_path,
+            ));
+        }
         Ok(())
     }
 }

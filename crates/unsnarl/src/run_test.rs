@@ -63,3 +63,19 @@ fn emitter_output_includes_parsed_args_json_after_label() {
     assert_eq!(value["format"], "ir");
     assert_eq!(value["file"], "x.ts");
 }
+
+#[test]
+fn out_flag_notice_is_emitted_when_out_dir_basename_has_an_extension() {
+    let out = capture(&["uns", "-o", "graph.mmd", "x.ts"]);
+    let first = first_line(&out);
+    assert_eq!(
+        first,
+        "uns: notice: -o 'graph.mmd' is treated as a directory name; use --out-file to write to that path as a file."
+    );
+}
+
+#[test]
+fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
+    let out = capture(&["uns", "-o", "build", "x.ts"]);
+    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
+}

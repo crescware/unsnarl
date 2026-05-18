@@ -1,6 +1,7 @@
 use std::io::{self, Write};
 
 use crate::cli::args::{Args, CliFormat};
+use crate::cli::run_cli::emit_out_flag_notice;
 
 pub fn run(args: &Args) {
     let mut stderr = io::stderr().lock();
@@ -8,6 +9,7 @@ pub fn run(args: &Args) {
 }
 
 pub(crate) fn run_to(args: &Args, out: &mut dyn Write) {
+    emit_out_flag_notice(args.out_dir.as_deref(), out);
     let handler = select_handler(&args.format);
     handler(args, out);
 }

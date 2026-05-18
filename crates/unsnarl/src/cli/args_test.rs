@@ -316,6 +316,91 @@ fn out_dir_and_out_file_conflict_with_exit_2() {
 }
 
 #[test]
+fn derived_basename_is_none_when_out_dir_is_absent() {
+    assert!(parse(&["uns", "x.ts"]).derived_basename.is_none());
+    assert!(parse(&["uns", "--out-file", "build/graph.mmd", "x.ts"])
+        .derived_basename
+        .is_none());
+}
+
+#[test]
+fn derived_basename_from_positional_file_strips_extension() {
+    let args = parse(&["uns", "-o", "build", "src/deep/foo.ts"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("foo"));
+}
+
+#[test]
+fn derived_basename_uses_root_token_over_input_file() {
+    let args = parse(&["uns", "-r", "render", "-o", "build", "x.ts"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("render"));
+}
+
+#[test]
+fn derived_basename_joins_multiple_roots_with_plus() {
+    let args = parse(&["uns", "-r", "render,foo", "-o", "build", "x.ts"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("render+foo"));
+}
+
+#[test]
+fn derived_basename_appends_radius_suffix_in_a_b_c_order() {
+    let args = parse(&[
+        "uns", "-r", "render", "-A", "1", "-B", "2", "-o", "build", "x.ts",
+    ]);
+    assert_eq!(args.derived_basename.as_deref(), Some("render-a1-b2"));
+}
+
+#[test]
+fn derived_basename_drops_c_when_both_a_and_b_are_explicit() {
+    let args = parse(&[
+        "uns", "-r", "render", "-A", "1", "-B", "2", "-C", "3", "-o", "build", "x.ts",
+    ]);
+    assert_eq!(args.derived_basename.as_deref(), Some("render-a1-b2"));
+}
+
+#[test]
+fn derived_basename_normalizes_line_or_name_to_l_n() {
+    let args = parse(&["uns", "-r", "L12", "-o", "build", "x.ts"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("l12"));
+    let args = parse(&["uns", "-r", "12", "-o", "build", "x.ts"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("l12"));
+}
+
+#[test]
+fn stdin_with_out_dir_requires_roots_else_exit_2() {
+    assert_eq!(parse_err_exit_code(&["uns", "--stdin", "-o", "build"]), 2);
+}
+
+#[test]
+fn stdin_with_out_dir_and_roots_is_accepted_and_derives_root_basename() {
+    let args = parse(&["uns", "--stdin", "-r", "render", "-o", "build"]);
+    assert_eq!(args.derived_basename.as_deref(), Some("render"));
+}
+
+#[test]
+fn stdin_with_out_file_is_accepted_without_roots() {
+    let args = parse(&["uns", "--stdin", "--out-file", "build/graph.mmd"]);
+    assert!(args.derived_basename.is_none());
+    assert_eq!(args.out_file.as_deref(), Some("build/graph.mmd"));
+}
+
+#[test]
+fn derived_basename_serializes_as_camel_case_field_under_out_dir() {
+    let args = parse(&["uns", "-r", "render", "-o", "build", "x.ts"]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert_eq!(
+        v["derivedBasename"],
+        serde_json::Value::String("render".into())
+    );
+}
+
+#[test]
+fn derived_basename_serializes_as_null_when_absent() {
+    let args = parse(&["uns", "x.ts"]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert_eq!(v["derivedBasename"], serde_json::Value::Null);
+}
+
+#[test]
 fn plugin_short_name_accepted() {
     let args = parse(&["uns", "--plugin", "react", "x.ts"]);
     assert_eq!(args.plugins, vec!["react".to_string()]);
