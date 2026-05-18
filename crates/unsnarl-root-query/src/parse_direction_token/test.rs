@@ -80,3 +80,29 @@ fn rejects_direction_like_text_without_plus() {
     assert_err_contains("a", "unexpected direction token");
     assert_err_contains("a3", "unexpected direction token");
 }
+
+// `u32::from_str("+5")` returns `Ok(5)`, so without the byte-level
+// `is_ascii_digit` guard `+a+5` would silently parse to level 5. Lock in
+// the guard so a future "drop the redundant pre-scan" refactor cannot
+// regress this case.
+#[test]
+fn rejects_signed_level_suffix() {
+    assert_err_contains("+a+5", "unexpected direction token");
+    assert_err_contains("+a-5", "unexpected direction token");
+}
+
+#[test]
+fn rejects_u32_overflow_level() {
+    assert_err_contains("+a4294967296", "unexpected direction token");
+}
+
+#[test]
+fn syntactically_accepts_u32_max_level() {
+    assert_eq!(
+        parse_direction_token("+a4294967295"),
+        Ok(ParsedDirectionToken {
+            dir: Direction::After,
+            level: Some(u32::MAX),
+        }),
+    );
+}

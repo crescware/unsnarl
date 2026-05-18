@@ -274,3 +274,34 @@ fn reports_unrecognized_token() {
         assert_err_contains(input, "unrecognized token");
     }
 }
+
+// `u32::from_str` accepts a leading `+`, so without an explicit byte-level
+// guard `+5`, `+5-3`, `+5:foo` would all be silently accepted as line / range
+// / line-name forms. The TS grammar pins them to `^[0-9]+$`, so pin the Rust
+// port the same way.
+#[test]
+fn rejects_leading_plus_in_numeric_forms() {
+    for input in ["+5", "+5:foo", "+5-3", "+5:", "+5-"] {
+        assert!(
+            parse_endpoint_query(input).is_err(),
+            "expected error for {input:?}, got {:?}",
+            parse_endpoint_query(input),
+        );
+    }
+}
+
+#[test]
+fn syntactically_accepts_u32_max_line() {
+    assert_eq!(
+        parse_endpoint_query("4294967295"),
+        Ok(ParsedRootQuery::Line {
+            line: u32::MAX,
+            raw: "4294967295".to_string(),
+        }),
+    );
+}
+
+#[test]
+fn rejects_u32_overflow_line() {
+    assert_err_contains("4294967296", "unrecognized token");
+}

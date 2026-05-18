@@ -258,3 +258,27 @@ fn scope_with_direction_but_no_level_rejects_level() {
     let r = parse_root_query_ast("foo..+a3", &scope);
     assert_err_contains(&r, "unexpected level in direction token");
 }
+
+#[test]
+fn scope_with_point_disabled_rejects_bare_endpoint() {
+    let scope = RootQueryScope {
+        point: false,
+        path: true,
+        direction: true,
+        direction_level: true,
+    };
+    let r = parse_root_query_ast("10", &scope);
+    assert_err_contains(&r, "unexpected token");
+}
+
+#[test]
+fn propagates_lhs_endpoint_parse_error_in_path() {
+    let r = parse_root_query_ast("foo-bar..1", &SCOPE_FULL);
+    assert_err_contains(&r, "unexpected character in identifier");
+}
+
+#[test]
+fn propagates_rhs_endpoint_parse_error_in_path() {
+    let r = parse_root_query_ast("1..foo-bar", &SCOPE_FULL);
+    assert_err_contains(&r, "unexpected character in identifier");
+}
