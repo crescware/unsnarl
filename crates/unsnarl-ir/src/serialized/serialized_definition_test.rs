@@ -1,23 +1,19 @@
 use super::*;
 
-use crate::filled_string::FilledString;
-use crate::primitive::Span;
-use crate::variable_declaration_kind::VariableDeclarationKind;
 use unsnarl_ast_type::AstType;
 
-fn filled(s: &str) -> FilledString {
-    FilledString::new(s)
-}
+use crate::primitive::Span;
+use crate::variable_declaration_kind::VariableDeclarationKind;
 
 fn name() -> DefinitionName {
-    DefinitionName {
-        name: filled("x"),
-        span: Span {
+    DefinitionName::new(
+        "x",
+        Span {
             line: 1,
             column: 0,
             offset: 0,
         },
-    }
+    )
 }
 
 fn node(r#type: AstType) -> DefinitionNode {
@@ -56,8 +52,8 @@ fn import_binding_named_field_order() {
         name(),
         node(AstType::ImportSpecifier),
         Some(node(AstType::ImportDeclaration)),
-        filled("Sub"),
-        filled("./sub"),
+        "Sub",
+        "./sub",
     );
     let json = serde_json::to_string(&def).unwrap();
     let object_start = json.find('{').unwrap();
@@ -84,7 +80,7 @@ fn import_binding_default_field_order() {
         name(),
         node(AstType::ImportDefaultSpecifier),
         Some(node(AstType::ImportDeclaration)),
-        filled("./sub"),
+        "./sub",
     );
     let json = serde_json::to_string(&def).unwrap();
     let object_start = json.find('{').unwrap();

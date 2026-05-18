@@ -7,27 +7,73 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
 use unsnarl_ast_type::AstType;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CaseClauseBlockContext {
-    pub kind: super::block_context_kind::BlockContextKind,
-    pub parent_type: AstType,
-    pub key: FilledString,
-    pub parent_span_offset: u32,
-    pub case_test: Option<FilledString>,
+    kind: super::block_context_kind::BlockContextKind,
+    parent_type: AstType,
+    key: String,
+    parent_span_offset: u32,
+    case_test: Option<String>,
+}
+
+impl CaseClauseBlockContext {
+    pub fn new(
+        parent_type: AstType,
+        key: impl Into<String>,
+        parent_span_offset: u32,
+        case_test: Option<String>,
+    ) -> Self {
+        let key = key.into();
+        assert!(
+            !key.is_empty(),
+            "CaseClauseBlockContext.key must be non-empty"
+        );
+        if let Some(t) = case_test.as_deref() {
+            assert!(
+                !t.is_empty(),
+                "CaseClauseBlockContext.case_test, when present, must be non-empty"
+            );
+        }
+        Self {
+            kind: super::block_context_kind::BlockContextKind::CaseClause,
+            parent_type,
+            key,
+            parent_span_offset,
+            case_test,
+        }
+    }
 }
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OtherBlockContext {
-    pub kind: super::block_context_kind::BlockContextKind,
-    pub parent_type: AstType,
-    pub key: FilledString,
-    pub parent_span_offset: u32,
-    pub if_chain_root_offset: Option<u32>,
+    kind: super::block_context_kind::BlockContextKind,
+    parent_type: AstType,
+    key: String,
+    parent_span_offset: u32,
+    if_chain_root_offset: Option<u32>,
+}
+
+impl OtherBlockContext {
+    pub fn new(
+        parent_type: AstType,
+        key: impl Into<String>,
+        parent_span_offset: u32,
+        if_chain_root_offset: Option<u32>,
+    ) -> Self {
+        let key = key.into();
+        assert!(!key.is_empty(), "OtherBlockContext.key must be non-empty");
+        Self {
+            kind: super::block_context_kind::BlockContextKind::Other,
+            parent_type,
+            key,
+            parent_span_offset,
+            if_chain_root_offset,
+        }
+    }
 }
 
 /// The discriminator is repeated inside each variant struct rather

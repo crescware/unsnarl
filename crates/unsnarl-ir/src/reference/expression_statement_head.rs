@@ -45,3 +45,26 @@ pub enum HeadExpression {
         end_offset: u32,
     },
 }
+
+impl HeadExpression {
+    pub fn identifier(name: impl Into<String>) -> Self {
+        let name = name.into();
+        assert!(
+            !name.is_empty(),
+            "HeadExpression::Identifier.name must be non-empty"
+        );
+        Self::Identifier { name }
+    }
+
+    pub fn member(object: HeadExpression, property: impl Into<String>) -> Self {
+        let property = property.into();
+        assert!(
+            !property.is_empty(),
+            "HeadExpression::Member.property must be non-empty"
+        );
+        Self::Member {
+            object: Box::new(object),
+            property,
+        }
+    }
+}

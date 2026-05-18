@@ -2,7 +2,6 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
 use crate::primitive::Span;
 use crate::reference::predicate_container::PredicateContainer;
 use crate::serialized::reference_id::SerializedReferenceId;
@@ -12,8 +11,19 @@ use crate::serialized::variable_id::SerializedVariableId;
 
 #[derive(Serialize)]
 pub struct SerializedReferenceIdentifier {
-    pub name: FilledString,
-    pub span: Span,
+    name: String,
+    span: Span,
+}
+
+impl SerializedReferenceIdentifier {
+    pub fn new(name: impl Into<String>, span: Span) -> Self {
+        let name = name.into();
+        assert!(
+            !name.is_empty(),
+            "SerializedReferenceIdentifier.name must be non-empty"
+        );
+        Self { name, span }
+    }
 }
 
 /// 4-bool flag block. The internal IR's `flags` bitmask covers only

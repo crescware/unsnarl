@@ -7,7 +7,6 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
 use crate::primitive::Span;
 use crate::serialized::reference_id::SerializedReferenceId;
 use crate::serialized::scope_id::SerializedScopeId;
@@ -17,9 +16,34 @@ use crate::serialized::variable_id::SerializedVariableId;
 #[derive(Serialize)]
 pub struct SerializedVariable {
     pub id: SerializedVariableId,
-    pub name: FilledString,
+    name: String,
     pub scope: SerializedScopeId,
     pub identifiers: Vec<Span>,
     pub references: Vec<SerializedReferenceId>,
     pub defs: Vec<SerializedDefinition>,
+}
+
+impl SerializedVariable {
+    pub fn new(
+        id: SerializedVariableId,
+        name: impl Into<String>,
+        scope: SerializedScopeId,
+        identifiers: Vec<Span>,
+        references: Vec<SerializedReferenceId>,
+        defs: Vec<SerializedDefinition>,
+    ) -> Self {
+        let name = name.into();
+        assert!(
+            !name.is_empty(),
+            "SerializedVariable.name must be non-empty"
+        );
+        Self {
+            id,
+            name,
+            scope,
+            identifiers,
+            references,
+            defs,
+        }
+    }
 }

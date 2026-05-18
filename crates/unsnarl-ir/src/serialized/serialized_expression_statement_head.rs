@@ -7,7 +7,6 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
 use crate::primitive::Span;
 
 #[derive(Serialize)]
@@ -22,11 +21,11 @@ pub struct SerializedHeadOperand {
 #[serde(tag = "kind", rename_all = "lowercase")]
 pub enum SerializedHeadExpression {
     Identifier {
-        name: FilledString,
+        name: String,
     },
     Member {
         object: Box<SerializedHeadExpression>,
-        property: FilledString,
+        property: String,
     },
     Call {
         callee: Box<SerializedHeadExpression>,
@@ -53,4 +52,27 @@ pub enum SerializedHeadExpression {
         start_span: Span,
         end_span: Span,
     },
+}
+
+impl SerializedHeadExpression {
+    pub fn identifier(name: impl Into<String>) -> Self {
+        let name = name.into();
+        assert!(
+            !name.is_empty(),
+            "SerializedHeadExpression::Identifier.name must be non-empty"
+        );
+        Self::Identifier { name }
+    }
+
+    pub fn member(object: SerializedHeadExpression, property: impl Into<String>) -> Self {
+        let property = property.into();
+        assert!(
+            !property.is_empty(),
+            "SerializedHeadExpression::Member.property must be non-empty"
+        );
+        Self::Member {
+            object: Box::new(object),
+            property,
+        }
+    }
 }

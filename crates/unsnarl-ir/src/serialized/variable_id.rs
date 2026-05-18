@@ -2,14 +2,14 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
-
 #[derive(Serialize)]
 #[serde(transparent)]
-pub struct SerializedVariableId(FilledString);
+pub struct SerializedVariableId(String);
 
 impl SerializedVariableId {
-    pub fn new(value: FilledString) -> Self {
+    pub fn new(value: impl Into<String>) -> Self {
+        let value = value.into();
+        assert!(!value.is_empty(), "SerializedVariableId must be non-empty");
         Self(value)
     }
 }

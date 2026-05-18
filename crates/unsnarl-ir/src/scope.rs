@@ -4,9 +4,11 @@
 //! child to avoid Rust's `module_inception` shape.
 //!
 //! Cross-entity links go through arena IDs (`upper: Option<ScopeId>`,
-//! `child_scopes: Vec<ScopeId>`, etc.). Fields stay mutable in the
-//! owning `IrArena`: the analyzer pass pushes onto `child_scopes` /
-//! `variables` / `references` / `through` during scope analysis.
+//! `child_scopes: Vec<ScopeId>`, etc.). The analyzer pass mutates
+//! `child_scopes` / `variables` / `references` / `through` /
+//! `set` during scope analysis; `set` is gated behind
+//! `insert_into_set` so the "variable names are non-empty" invariant
+//! cannot be violated.
 
 use std::collections::HashMap;
 
@@ -32,10 +34,53 @@ pub struct ScopeData {
     pub variable_scope: ScopeId,
     pub block: AstNode,
     pub variables: Vec<VariableId>,
-    pub set: HashMap<String, VariableId>,
+    set: HashMap<String, VariableId>,
     pub references: Vec<ReferenceId>,
     pub through: Vec<ReferenceId>,
     pub function_expression_scope: bool,
+}
+
+impl ScopeData {
+    #[allow(clippy::too_many_arguments)]
+    pub fn new(
+        r#type: ScopeType,
+        is_strict: bool,
+        upper: Option<ScopeId>,
+        child_scopes: Vec<ScopeId>,
+        variable_scope: ScopeId,
+        block: AstNode,
+        variables: Vec<VariableId>,
+        references: Vec<ReferenceId>,
+        through: Vec<ReferenceId>,
+        function_expression_scope: bool,
+    ) -> Self {
+        Self {
+            r#type,
+            is_strict,
+            upper,
+            child_scopes,
+            variable_scope,
+            block,
+            variables,
+            set: HashMap::new(),
+            references,
+            through,
+            function_expression_scope,
+        }
+    }
+
+    pub fn insert_into_set(&mut self, name: impl Into<String>, id: VariableId) {
+        let name = name.into();
+        assert!(
+            !name.is_empty(),
+            "ScopeData.set key (variable name) must be non-empty"
+        );
+        self.set.insert(name, id);
+    }
+
+    pub fn set(&self) -> &HashMap<String, VariableId> {
+        &self.set
+    }
 }
 
 pub type Scope = ScopeData;

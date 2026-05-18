@@ -5,22 +5,25 @@
 //! Several enums that are conceptually about analyzer / serializer /
 //! annotations (`ScopeType`, `DefinitionType`, `DiagnosticKind`,
 //! `PredicateContainerType`, `ImportKind`, `VariableDeclarationKind`,
-//! `NestingKind`, `NestingDepths`, `SerializedIrVersion`,
-//! `FilledString`) sit in this crate because the contract types
-//! reference them and `unsnarl-ir` is the bottom of the dependency
-//! graph.
+//! `NestingKind`, `NestingDepths`, `SerializedIrVersion`) sit in
+//! this crate because the contract types reference them and
+//! `unsnarl-ir` is the bottom of the dependency graph.
 //!
 //! `AstType` is deliberately NOT here: it has to match `oxc_ast`
 //! value-for-value, so it lives in its own crate (`unsnarl-ast-type`)
 //! to keep that parity responsibility from leaking into the IR
 //! contract.
+//!
+//! Non-empty string invariants are enforced at construction sites
+//! (newtype `new` for IDs, `new` constructors on structs / enum
+//! variants that carry "must be non-empty" `String` fields) rather
+//! than through a separate branded type.
 
 pub mod arena;
 pub mod completion;
 pub mod definition_type;
 pub mod diagnostic;
 pub mod diagnostic_kind;
-pub mod filled_string;
 pub mod ids;
 pub mod import_kind;
 pub mod language;
@@ -38,7 +41,6 @@ pub mod variable_declaration_kind;
 pub use arena::IrArena;
 pub use definition_type::DefinitionType;
 pub use diagnostic_kind::DiagnosticKind;
-pub use filled_string::FilledString;
 pub use ids::{DefinitionId, ReferenceId, ScopeId, VariableId};
 pub use import_kind::ImportKind;
 pub use language::Language;

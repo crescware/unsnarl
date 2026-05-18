@@ -10,16 +10,24 @@
 
 use serde::Serialize;
 
-use crate::filled_string::FilledString;
+use unsnarl_ast_type::AstType;
+
 use crate::import_kind::ImportKind;
 use crate::primitive::Span;
 use crate::variable_declaration_kind::VariableDeclarationKind;
-use unsnarl_ast_type::AstType;
 
 #[derive(Serialize)]
 pub struct DefinitionName {
-    pub name: FilledString,
-    pub span: Span,
+    name: String,
+    span: Span,
+}
+
+impl DefinitionName {
+    pub fn new(name: impl Into<String>, span: Span) -> Self {
+        let name = name.into();
+        assert!(!name.is_empty(), "DefinitionName.name must be non-empty");
+        Self { name, span }
+    }
 }
 
 #[derive(Serialize)]
@@ -28,7 +36,6 @@ pub struct DefinitionNode {
     pub span: Span,
 }
 
-/// Discriminator literal for the `Variable` definition variant.
 #[derive(Serialize)]
 enum VariableTag {
     Variable,
@@ -37,12 +44,12 @@ enum VariableTag {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct VariableDef {
-    pub name: DefinitionName,
-    pub node: DefinitionNode,
-    pub parent: Option<DefinitionNode>,
+    name: DefinitionName,
+    node: DefinitionNode,
+    parent: Option<DefinitionNode>,
     r#type: VariableTag,
-    pub init: Option<DefinitionNode>,
-    pub declaration_kind: VariableDeclarationKind,
+    init: Option<DefinitionNode>,
+    declaration_kind: VariableDeclarationKind,
 }
 
 impl VariableDef {
@@ -70,18 +77,6 @@ enum ImportBindingTag {
 }
 
 #[derive(Serialize)]
-#[serde(rename_all = "camelCase")]
-pub struct ImportBindingNamedDef {
-    pub name: DefinitionName,
-    pub node: DefinitionNode,
-    pub parent: Option<DefinitionNode>,
-    r#type: ImportBindingTag,
-    import_kind: NamedImportKind,
-    pub imported_name: FilledString,
-    pub import_source: FilledString,
-}
-
-#[derive(Serialize)]
 enum NamedImportKind {
     #[serde(rename = "named")]
     Named,
@@ -99,14 +94,36 @@ enum NamespaceImportKind {
     Namespace,
 }
 
+#[derive(Serialize)]
+#[serde(rename_all = "camelCase")]
+pub struct ImportBindingNamedDef {
+    name: DefinitionName,
+    node: DefinitionNode,
+    parent: Option<DefinitionNode>,
+    r#type: ImportBindingTag,
+    import_kind: NamedImportKind,
+    imported_name: String,
+    import_source: String,
+}
+
 impl ImportBindingNamedDef {
     pub fn new(
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        imported_name: FilledString,
-        import_source: FilledString,
+        imported_name: impl Into<String>,
+        import_source: impl Into<String>,
     ) -> Self {
+        let imported_name = imported_name.into();
+        let import_source = import_source.into();
+        assert!(
+            !imported_name.is_empty(),
+            "ImportBindingNamedDef.imported_name must be non-empty"
+        );
+        assert!(
+            !import_source.is_empty(),
+            "ImportBindingNamedDef.import_source must be non-empty"
+        );
         Self {
             name,
             node,
@@ -126,12 +143,12 @@ impl ImportBindingNamedDef {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImportBindingDefaultDef {
-    pub name: DefinitionName,
-    pub node: DefinitionNode,
-    pub parent: Option<DefinitionNode>,
+    name: DefinitionName,
+    node: DefinitionNode,
+    parent: Option<DefinitionNode>,
     r#type: ImportBindingTag,
     import_kind: DefaultImportKind,
-    pub import_source: FilledString,
+    import_source: String,
 }
 
 impl ImportBindingDefaultDef {
@@ -139,8 +156,13 @@ impl ImportBindingDefaultDef {
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        import_source: FilledString,
+        import_source: impl Into<String>,
     ) -> Self {
+        let import_source = import_source.into();
+        assert!(
+            !import_source.is_empty(),
+            "ImportBindingDefaultDef.import_source must be non-empty"
+        );
         Self {
             name,
             node,
@@ -159,12 +181,12 @@ impl ImportBindingDefaultDef {
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ImportBindingNamespaceDef {
-    pub name: DefinitionName,
-    pub node: DefinitionNode,
-    pub parent: Option<DefinitionNode>,
+    name: DefinitionName,
+    node: DefinitionNode,
+    parent: Option<DefinitionNode>,
     r#type: ImportBindingTag,
     import_kind: NamespaceImportKind,
-    pub import_source: FilledString,
+    import_source: String,
 }
 
 impl ImportBindingNamespaceDef {
@@ -172,8 +194,13 @@ impl ImportBindingNamespaceDef {
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        import_source: FilledString,
+        import_source: impl Into<String>,
     ) -> Self {
+        let import_source = import_source.into();
+        assert!(
+            !import_source.is_empty(),
+            "ImportBindingNamespaceDef.import_source must be non-empty"
+        );
         Self {
             name,
             node,
