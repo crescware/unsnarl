@@ -1,0 +1,34 @@
+[package]
+name = "unsnarl"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[[bin]]
+name = "uns"
+path = "src/main.rs"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+unsnarl-ir = { workspace = true }
+unsnarl-annotations = { workspace = true }
+unsnarl-boundary-eslint-scope = { workspace = true }
+unsnarl-analyzer = { workspace = true }
+unsnarl-root-query = { workspace = true }
+unsnarl-visual-graph = { workspace = true }
+unsnarl-emitter = { workspace = true }
+unsnarl-emitter-ir = { workspace = true }
+unsnarl-emitter-json = { workspace = true }
+unsnarl-emitter-mermaid = { workspace = true }
+unsnarl-emitter-markdown = { workspace = true }
+unsnarl-emitter-stats = { workspace = true }
+unsnarl-plugin = { workspace = true }
+unsnarl-plugin-react = { workspace = true }
+
+clap = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
