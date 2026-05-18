@@ -13,9 +13,9 @@ pub fn parse_direction_token(text: &str) -> Result<ParsedDirectionToken, Vec<Par
         return Err(bad(text));
     }
     let dir = match bytes[1] {
-        b'a' => Direction::A,
-        b'b' => Direction::B,
-        b'c' => Direction::C,
+        b'a' => Direction::After,
+        b'b' => Direction::Before,
+        b'c' => Direction::Context,
         _ => return Err(bad(text)),
     };
     let rest = &bytes[2..];

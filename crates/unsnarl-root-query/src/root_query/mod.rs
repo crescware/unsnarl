@@ -1,10 +1,10 @@
 use crate::parsed_root_query::ParsedRootQuery;
 
-#[derive(Debug, PartialEq, Eq, Clone, Copy)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Direction {
-    A,
-    B,
-    C,
+    After,
+    Before,
+    Context,
 }
 
 #[derive(Debug, PartialEq, Eq)]

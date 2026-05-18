@@ -14,17 +14,21 @@ pub fn parse_root_query_ast(
         }]);
     }
 
-    let parts: Vec<&str> = token.split("..").collect();
+    let mut parts = token.splitn(3, "..");
+    let first = parts
+        .next()
+        .expect("splitn always yields at least one item");
+    let second = parts.next();
+    let third = parts.next();
 
-    if parts.len() >= 3 {
+    if third.is_some() {
         return Err(vec![ParseError {
             message: format!("unexpected duplicate '..' in '{token}'"),
         }]);
     }
 
-    if parts.len() == 1 {
-        let lone = parts[0];
-        let query = parse_endpoint_query(lone)?;
+    let Some(rhs_text) = second else {
+        let query = parse_endpoint_query(first)?;
         if !scope.point {
             return Err(vec![ParseError {
                 message: format!("unexpected token '{token}'"),
@@ -34,10 +38,9 @@ pub fn parse_root_query_ast(
             query,
             raw: token.to_string(),
         });
-    }
+    };
 
-    let lhs_text = parts[0];
-    let rhs_text = parts[1];
+    let lhs_text = first;
 
     if lhs_text.is_empty() {
         return Err(vec![ParseError {

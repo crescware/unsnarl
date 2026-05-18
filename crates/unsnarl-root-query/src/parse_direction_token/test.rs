@@ -12,9 +12,9 @@ fn assert_err_contains(text: &str, needle: &str) {
 #[test]
 fn parses_bare_direction_with_level_none() {
     for (input, dir) in [
-        ("+a", Direction::A),
-        ("+b", Direction::B),
-        ("+c", Direction::C),
+        ("+a", Direction::After),
+        ("+b", Direction::Before),
+        ("+c", Direction::Context),
     ] {
         assert_eq!(
             parse_direction_token(input),
@@ -26,9 +26,9 @@ fn parses_bare_direction_with_level_none() {
 #[test]
 fn parses_direction_with_explicit_level() {
     for (input, dir, level) in [
-        ("+a3", Direction::A, 3),
-        ("+b10", Direction::B, 10),
-        ("+c1", Direction::C, 1),
+        ("+a3", Direction::After, 3),
+        ("+b10", Direction::Before, 10),
+        ("+c1", Direction::Context, 1),
     ] {
         assert_eq!(
             parse_direction_token(input),
@@ -45,7 +45,7 @@ fn syntactically_accepts_level_zero() {
     assert_eq!(
         parse_direction_token("+a0"),
         Ok(ParsedDirectionToken {
-            dir: Direction::A,
+            dir: Direction::After,
             level: Some(0),
         }),
     );

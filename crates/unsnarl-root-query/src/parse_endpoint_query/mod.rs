@@ -80,7 +80,7 @@ fn match_all_digits(s: &str) -> Option<u32> {
 }
 
 fn match_line_name(s: &str) -> Option<(u32, &str)> {
-    let (lhs, rhs) = split_once(s, b':')?;
+    let (lhs, rhs) = split_once_byte(s, b':')?;
     let line = parse_digits(lhs)?;
     if !is_identifier(rhs) {
         return None;
@@ -89,14 +89,14 @@ fn match_line_name(s: &str) -> Option<(u32, &str)> {
 }
 
 fn match_range(s: &str) -> Option<(u32, u32)> {
-    let (lhs, rhs) = split_once(s, b'-')?;
+    let (lhs, rhs) = split_once_byte(s, b'-')?;
     let start = parse_digits(lhs)?;
     let end = parse_digits(rhs)?;
     Some((start, end))
 }
 
 fn match_range_name(s: &str) -> Option<(u32, u32, &str)> {
-    let (lhs, name) = split_once(s, b':')?;
+    let (lhs, name) = split_once_byte(s, b':')?;
     if !is_identifier(name) {
         return None;
     }
@@ -119,13 +119,13 @@ fn strip_l_prefix(s: &str) -> Option<&str> {
 }
 
 fn parse_digits(s: &str) -> Option<u32> {
-    if s.is_empty() || !s.bytes().all(|b| b.is_ascii_digit()) {
-        return None;
-    }
+    // `u32::from_str` already rejects empty strings, non-digits, signs,
+    // whitespace, and overflow, so a separate byte-level pre-scan would
+    // be redundant.
     s.parse().ok()
 }
 
-fn split_once(s: &str, sep: u8) -> Option<(&str, &str)> {
+fn split_once_byte(s: &str, sep: u8) -> Option<(&str, &str)> {
     let i = s.bytes().position(|b| b == sep)?;
     Some((&s[..i], &s[i + 1..]))
 }
@@ -156,7 +156,7 @@ fn is_empty_after_colon(s: &str) -> bool {
         return false;
     }
     // Variant A: digits, optionally followed by '-' digits.
-    if let Some((a, b)) = split_once(head, b'-') {
+    if let Some((a, b)) = split_once_byte(head, b'-') {
         return parse_digits(a).is_some() && parse_digits(b).is_some();
     }
     if parse_digits(head).is_some() {

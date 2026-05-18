@@ -126,9 +126,9 @@ fn parses_path_with_mixed_endpoint_kinds() {
 #[test]
 fn parses_direction_without_level() {
     for (suffix, dir) in [
-        ("+a", Direction::A),
-        ("+b", Direction::B),
-        ("+c", Direction::C),
+        ("+a", Direction::After),
+        ("+b", Direction::Before),
+        ("+c", Direction::Context),
     ] {
         let token = format!("foo..{suffix}");
         assert_eq!(
@@ -151,7 +151,7 @@ fn parses_direction_with_level() {
     let r = parse_root_query_ast("foo..+a3", &SCOPE_FULL).unwrap();
     match r {
         RootQuery::Direction { dir, level, .. } => {
-            assert_eq!(dir, Direction::A);
+            assert_eq!(dir, Direction::After);
             assert_eq!(level, Some(3));
         }
         other => panic!("expected Direction, got {other:?}"),
@@ -160,7 +160,7 @@ fn parses_direction_with_level() {
     let r = parse_root_query_ast("foo..+a0", &SCOPE_FULL).unwrap();
     match r {
         RootQuery::Direction { dir, level, .. } => {
-            assert_eq!(dir, Direction::A);
+            assert_eq!(dir, Direction::After);
             assert_eq!(level, Some(0));
         }
         other => panic!("expected Direction, got {other:?}"),
