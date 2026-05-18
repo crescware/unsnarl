@@ -9,6 +9,7 @@ pub mod cli_color_theme;
 pub mod cli_format;
 pub mod cli_language;
 pub mod cli_mermaid_renderer;
+pub mod collect_plugins;
 pub mod parse_generation_count;
 
 pub use cli_color_theme::CliColorTheme;
@@ -16,6 +17,7 @@ pub use cli_format::CliFormat;
 pub use cli_language::CliLanguage;
 pub use cli_mermaid_renderer::CliMermaidRenderer;
 
+use collect_plugins::parse_plugin_occurrence;
 use parse_generation_count::parse_generation_count;
 
 #[derive(Parser, Debug, Serialize)]
@@ -148,7 +150,12 @@ pub struct Args {
     pub depth_block: Option<u32>,
 
     /// Write output to <dir>/<auto-name>.<ext>
-    #[arg(short = 'o', long = "out-dir", value_name = "dir")]
+    #[arg(
+        short = 'o',
+        long = "out-dir",
+        value_name = "dir",
+        conflicts_with = "out_file"
+    )]
     pub out_dir: Option<String>,
 
     /// Write output to <path> (full file path, no auto-naming)
@@ -160,17 +167,56 @@ pub struct Args {
     pub debug: bool,
 
     /// Enable plugin(s). Repeat the flag or comma-delimit for multiple. The 'unsnarl-plugin-' prefix may be omitted.
+    ///
+    /// Stored per-occurrence as the validated list returned by
+    /// `collect_plugins`. `finalize` folds the per-occurrence lists into
+    /// the public `plugins` field.
     #[arg(
         long = "plugin",
         value_name = "names",
-        action = clap::ArgAction::Append
+        action = clap::ArgAction::Append,
+        value_parser = parse_plugin_occurrence,
     )]
+    #[serde(skip)]
+    plugin_occurrences: Vec<Vec<String>>,
+
+    /// Flattened-and-deduped plugin list, mirroring the output of TS
+    /// commander's `collectPlugins` accumulator. Populated by `finalize`
+    /// after clap parsing.
+    #[arg(skip)]
     pub plugins: Vec<String>,
 
     /// Show version
     #[arg(short = 'v', long = "version", action = clap::ArgAction::Version)]
     #[serde(skip)]
     pub version: (),
+}
+
+impl Args {
+    pub fn try_parse_argv<I, T>(itr: I) -> Result<Self, clap::Error>
+    where
+        I: IntoIterator<Item = T>,
+        T: Into<std::ffi::OsString> + Clone,
+    {
+        let mut args = <Self as clap::Parser>::try_parse_from(itr)?;
+        args.finalize();
+        Ok(args)
+    }
+
+    pub fn parse_argv() -> Self {
+        Self::try_parse_argv(std::env::args_os()).unwrap_or_else(|e| e.exit())
+    }
+
+    fn finalize(&mut self) {
+        let raw = std::mem::take(&mut self.plugin_occurrences);
+        for occurrence in raw {
+            for name in occurrence {
+                if !self.plugins.contains(&name) {
+                    self.plugins.push(name);
+                }
+            }
+        }
+    }
 }
 
 // Mirrors TS commander's RawHighlight = false | true | string:
