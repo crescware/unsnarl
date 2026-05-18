@@ -1,19 +1,6 @@
-//! `uns` CLI argument definitions.
-//!
-//! Step 2 skeleton. The source of truth is the TS commander implementation
-//! at `ts/src/cli/args/build-command.ts` and the per-option files alongside
-//! it (`format-options.ts`, `scope-options.ts`, `highlight-options.ts`,
-//! `depth-options.ts`, `plugin-options.ts`). Every flag is accepted as a
-//! raw `String` (or `Option<String>`) here; per-Step deferral:
-//!
-//! - Step 3: `ValueEnum`-style validation for `-f` / `--stdin-lang` /
-//!   `--mermaid-renderer` / `--color-theme`, and `String` -> `u32` parse
-//!   for `-A` / `-B` / `-C` / depth-family.
-//! - Step 4: `-o` <-> `--out-file` mutual exclusion, `--plugin` bundled
-//!   name validation.
-//! - Step 5: `-r` / `-H` query grammar parser.
-//! - Step 21: default-value resolution (`DEFAULT_GENERATIONS`,
-//!   `DEFAULT_DEPTH`, `mermaidRenderer ?? Elk`).
+//! `uns` CLI argument definitions. Mirrors the TS commander source at
+//! `ts/src/cli/args/build-command.ts` and the per-option files alongside
+//! it.
 
 use clap::Parser;
 use serde::{Serialize, Serializer};
