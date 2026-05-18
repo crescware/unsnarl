@@ -69,8 +69,7 @@ impl ScopeData {
         }
     }
 
-    pub fn insert_into_set(&mut self, name: impl Into<String>, id: VariableId) {
-        let name = name.into();
+    pub fn insert_into_set(&mut self, name: String, id: VariableId) {
         assert!(
             !name.is_empty(),
             "ScopeData.set key (variable name) must be non-empty"

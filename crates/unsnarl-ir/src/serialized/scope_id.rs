@@ -7,8 +7,7 @@ use serde::Serialize;
 pub struct SerializedScopeId(String);
 
 impl SerializedScopeId {
-    pub fn new(value: impl Into<String>) -> Self {
-        let value = value.into();
+    pub fn new(value: String) -> Self {
         assert!(!value.is_empty(), "SerializedScopeId must be non-empty");
         Self(value)
     }

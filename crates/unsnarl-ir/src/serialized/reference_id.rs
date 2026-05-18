@@ -7,8 +7,7 @@ use serde::Serialize;
 pub struct SerializedReferenceId(String);
 
 impl SerializedReferenceId {
-    pub fn new(value: impl Into<String>) -> Self {
-        let value = value.into();
+    pub fn new(value: String) -> Self {
         assert!(!value.is_empty(), "SerializedReferenceId must be non-empty");
         Self(value)
     }

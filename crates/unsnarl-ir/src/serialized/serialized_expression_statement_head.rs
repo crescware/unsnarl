@@ -55,8 +55,7 @@ pub enum SerializedHeadExpression {
 }
 
 impl SerializedHeadExpression {
-    pub fn identifier(name: impl Into<String>) -> Self {
-        let name = name.into();
+    pub fn identifier(name: String) -> Self {
         assert!(
             !name.is_empty(),
             "SerializedHeadExpression::Identifier.name must be non-empty"
@@ -64,8 +63,7 @@ impl SerializedHeadExpression {
         Self::Identifier { name }
     }
 
-    pub fn member(object: SerializedHeadExpression, property: impl Into<String>) -> Self {
-        let property = property.into();
+    pub fn member(object: SerializedHeadExpression, property: String) -> Self {
         assert!(
             !property.is_empty(),
             "SerializedHeadExpression::Member.property must be non-empty"

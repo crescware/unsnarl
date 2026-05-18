@@ -16,8 +16,7 @@ pub struct SerializedReferenceIdentifier {
 }
 
 impl SerializedReferenceIdentifier {
-    pub fn new(name: impl Into<String>, span: Span) -> Self {
-        let name = name.into();
+    pub fn new(name: String, span: Span) -> Self {
         assert!(
             !name.is_empty(),
             "SerializedReferenceIdentifier.name must be non-empty"

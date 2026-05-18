@@ -11,8 +11,7 @@ pub struct AstIdentifier {
 }
 
 impl AstIdentifier {
-    pub fn new(r#type: AstType, name: impl Into<String>, span: Span) -> Self {
-        let name = name.into();
+    pub fn new(r#type: AstType, name: String, span: Span) -> Self {
         assert!(!name.is_empty(), "AstIdentifier.name must be non-empty");
         Self { r#type, name, span }
     }

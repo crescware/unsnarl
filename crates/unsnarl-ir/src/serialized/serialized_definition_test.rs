@@ -7,7 +7,7 @@ use crate::variable_declaration_kind::VariableDeclarationKind;
 
 fn name() -> DefinitionName {
     DefinitionName::new(
-        "x",
+        "x".to_string(),
         Span {
             line: 1,
             column: 0,
@@ -52,8 +52,8 @@ fn import_binding_named_field_order() {
         name(),
         node(AstType::ImportSpecifier),
         Some(node(AstType::ImportDeclaration)),
-        "Sub",
-        "./sub",
+        "Sub".to_string(),
+        "./sub".to_string(),
     );
     let json = serde_json::to_string(&def).unwrap();
     let object_start = json.find('{').unwrap();
@@ -80,7 +80,7 @@ fn import_binding_default_field_order() {
         name(),
         node(AstType::ImportDefaultSpecifier),
         Some(node(AstType::ImportDeclaration)),
-        "./sub",
+        "./sub".to_string(),
     );
     let json = serde_json::to_string(&def).unwrap();
     let object_start = json.find('{').unwrap();

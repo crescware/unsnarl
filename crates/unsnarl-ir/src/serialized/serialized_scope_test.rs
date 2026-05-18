@@ -3,7 +3,7 @@ use super::*;
 use crate::primitive::Span;
 
 fn scope_id(s: &str) -> SerializedScopeId {
-    SerializedScopeId::new(s)
+    SerializedScopeId::new(s.to_string())
 }
 
 #[test]

@@ -22,11 +22,10 @@ pub struct CaseClauseBlockContext {
 impl CaseClauseBlockContext {
     pub fn new(
         parent_type: AstType,
-        key: impl Into<String>,
+        key: String,
         parent_span_offset: u32,
         case_test: Option<String>,
     ) -> Self {
-        let key = key.into();
         assert!(
             !key.is_empty(),
             "CaseClauseBlockContext.key must be non-empty"
@@ -60,11 +59,10 @@ pub struct OtherBlockContext {
 impl OtherBlockContext {
     pub fn new(
         parent_type: AstType,
-        key: impl Into<String>,
+        key: String,
         parent_span_offset: u32,
         if_chain_root_offset: Option<u32>,
     ) -> Self {
-        let key = key.into();
         assert!(!key.is_empty(), "OtherBlockContext.key must be non-empty");
         Self {
             kind: super::block_context_kind::BlockContextKind::Other,

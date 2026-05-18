@@ -26,13 +26,12 @@ pub struct SerializedVariable {
 impl SerializedVariable {
     pub fn new(
         id: SerializedVariableId,
-        name: impl Into<String>,
+        name: String,
         scope: SerializedScopeId,
         identifiers: Vec<Span>,
         references: Vec<SerializedReferenceId>,
         defs: Vec<SerializedDefinition>,
     ) -> Self {
-        let name = name.into();
         assert!(
             !name.is_empty(),
             "SerializedVariable.name must be non-empty"

@@ -23,8 +23,7 @@ pub struct DefinitionName {
 }
 
 impl DefinitionName {
-    pub fn new(name: impl Into<String>, span: Span) -> Self {
-        let name = name.into();
+    pub fn new(name: String, span: Span) -> Self {
         assert!(!name.is_empty(), "DefinitionName.name must be non-empty");
         Self { name, span }
     }
@@ -111,11 +110,9 @@ impl ImportBindingNamedDef {
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        imported_name: impl Into<String>,
-        import_source: impl Into<String>,
+        imported_name: String,
+        import_source: String,
     ) -> Self {
-        let imported_name = imported_name.into();
-        let import_source = import_source.into();
         assert!(
             !imported_name.is_empty(),
             "ImportBindingNamedDef.imported_name must be non-empty"
@@ -156,9 +153,8 @@ impl ImportBindingDefaultDef {
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        import_source: impl Into<String>,
+        import_source: String,
     ) -> Self {
-        let import_source = import_source.into();
         assert!(
             !import_source.is_empty(),
             "ImportBindingDefaultDef.import_source must be non-empty"
@@ -194,9 +190,8 @@ impl ImportBindingNamespaceDef {
         name: DefinitionName,
         node: DefinitionNode,
         parent: Option<DefinitionNode>,
-        import_source: impl Into<String>,
+        import_source: String,
     ) -> Self {
-        let import_source = import_source.into();
         assert!(
             !import_source.is_empty(),
             "ImportBindingNamespaceDef.import_source must be non-empty"

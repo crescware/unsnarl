@@ -47,8 +47,7 @@ pub enum HeadExpression {
 }
 
 impl HeadExpression {
-    pub fn identifier(name: impl Into<String>) -> Self {
-        let name = name.into();
+    pub fn identifier(name: String) -> Self {
         assert!(
             !name.is_empty(),
             "HeadExpression::Identifier.name must be non-empty"
@@ -56,8 +55,7 @@ impl HeadExpression {
         Self::Identifier { name }
     }
 
-    pub fn member(object: HeadExpression, property: impl Into<String>) -> Self {
-        let property = property.into();
+    pub fn member(object: HeadExpression, property: String) -> Self {
         assert!(
             !property.is_empty(),
             "HeadExpression::Member.property must be non-empty"

@@ -13,13 +13,12 @@ pub struct VariableData {
 
 impl VariableData {
     pub fn new(
-        name: impl Into<String>,
+        name: String,
         scope: ScopeId,
         identifiers: Vec<AstIdentifier>,
         references: Vec<ReferenceId>,
         defs: Vec<DefinitionId>,
     ) -> Self {
-        let name = name.into();
         assert!(!name.is_empty(), "VariableData.name must be non-empty");
         Self {
             name,
