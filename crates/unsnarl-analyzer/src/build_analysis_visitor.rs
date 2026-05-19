@@ -526,7 +526,15 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         let kind = AstKind::SwitchCase(self.alloc(it));
         self.fire_scope(it.span, &kind);
         self.push_path(kind, None);
-        oxc_ast_visit::walk::walk_switch_case(self, it);
+        self.visit_span(&it.span);
+        if let Some(test) = it.test.as_ref() {
+            self.key_stack.push(Some("test"));
+            self.visit_expression(test);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("consequent"));
+        self.visit_statements(&it.consequent);
+        self.key_stack.pop();
         self.pop_path();
     }
 
