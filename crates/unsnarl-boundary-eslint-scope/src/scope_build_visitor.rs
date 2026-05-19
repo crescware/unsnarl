@@ -22,10 +22,11 @@
 
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
-    Class, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter,
-    Function, IdentifierName, IdentifierReference, ImportAttribute, ImportDefaultSpecifier,
-    ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression,
-    MetaProperty, SwitchCase, SwitchStatement, UpdateExpression, VariableDeclarator,
+    Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement,
+    FormalParameter, Function, IdentifierName, IdentifierReference, ImportAttribute,
+    ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier,
+    JSXMemberExpression, MetaProperty, SwitchCase, SwitchStatement, UpdateExpression,
+    VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -460,6 +461,42 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.key_stack.push(Some("local"));
         self.visit_binding_identifier(&it.local);
         self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_export_named_declaration(&mut self, it: &ExportNamedDeclaration<'a>) {
+        // oxc's auto-generated `walk_export_named_declaration` descends
+        // into each child slot without recording the parent-slot key,
+        // so a `(parent=ExportNamedDeclaration, key="body")` mis-tag
+        // leaks down to the contained `Declaration`/specifier
+        // identifiers from whatever the surrounding statement-list
+        // pushed (typically `"body"` from `Program.body`). The TS
+        // pipeline keys each child off the npm `oxc-parser` visitorKey
+        // list, which for `ExportNamedDeclaration` is
+        // `["declaration", "specifiers", "source", "attributes"]`.
+        // Match it byte-for-byte so `classify_*` / `is_skip_context`
+        // observe the same slot label downstream.
+        let kind = AstKind::ExportNamedDeclaration(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        if let Some(declaration) = &it.declaration {
+            self.key_stack.push(Some("declaration"));
+            self.visit_declaration(declaration);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("specifiers"));
+        self.visit_export_specifiers(&it.specifiers);
+        self.key_stack.pop();
+        if let Some(source) = &it.source {
+            self.key_stack.push(Some("source"));
+            self.visit_string_literal(source);
+            self.key_stack.pop();
+        }
+        if let Some(with_clause) = &it.with_clause {
+            self.key_stack.push(Some("attributes"));
+            self.visit_with_clause(with_clause);
+            self.key_stack.pop();
+        }
         self.leave_node(kind);
     }
 

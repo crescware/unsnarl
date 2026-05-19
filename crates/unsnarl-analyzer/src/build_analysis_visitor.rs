@@ -25,11 +25,11 @@ use std::collections::HashMap;
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
-    ExpressionStatement, ForInStatement, ForOfStatement, ForStatement, Function, IdentifierName,
-    IdentifierReference, IfStatement, ImportAttribute, JSXIdentifier, MetaProperty, NewExpression,
-    PrivateFieldExpression, Program, ReturnStatement, StaticMemberExpression, SwitchCase,
-    SwitchStatement, ThrowStatement, TryStatement, UpdateExpression, VariableDeclarator,
-    WhileStatement,
+    ExportNamedDeclaration, ExpressionStatement, ForInStatement, ForOfStatement, ForStatement,
+    Function, IdentifierName, IdentifierReference, IfStatement, ImportAttribute, JSXIdentifier,
+    MetaProperty, NewExpression, PrivateFieldExpression, Program, ReturnStatement,
+    StaticMemberExpression, SwitchCase, SwitchStatement, ThrowStatement, TryStatement,
+    UpdateExpression, VariableDeclarator, WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
@@ -401,6 +401,40 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         self.fire_scope(it.span, &kind);
         self.push_path(kind, None);
         oxc_ast_visit::walk::walk_class(self, it);
+        self.pop_path();
+    }
+
+    fn visit_export_named_declaration(&mut self, it: &ExportNamedDeclaration<'a>) {
+        // `block_context_of` keys the emitted `blockContext.key` off
+        // the current slot label. Without this override the inner
+        // declaration (class / function / variable) inherits whatever
+        // the surrounding statement list pushed -- typically `"body"`
+        // from `Program.body` -- which surfaces in the IR as
+        // `{ parentType: "ExportNamedDeclaration", key: "body" }`
+        // instead of the TS reference's `key: "declaration"`. Match
+        // npm `oxc-parser`'s visitorKey list
+        // `["declaration", "specifiers", "source", "attributes"]`.
+        let kind = AstKind::ExportNamedDeclaration(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        if let Some(declaration) = &it.declaration {
+            self.key_stack.push(Some("declaration"));
+            self.visit_declaration(declaration);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("specifiers"));
+        self.visit_export_specifiers(&it.specifiers);
+        self.key_stack.pop();
+        if let Some(source) = &it.source {
+            self.key_stack.push(Some("source"));
+            self.visit_string_literal(source);
+            self.key_stack.pop();
+        }
+        if let Some(with_clause) = &it.with_clause {
+            self.key_stack.push(Some("attributes"));
+            self.visit_with_clause(with_clause);
+            self.key_stack.pop();
+        }
         self.pop_path();
     }
 
@@ -867,3 +901,7 @@ fn is_explicitly_handled(kind: &AstKind<'_>) -> bool {
             | AstKind::JSXIdentifier(_)
     )
 }
+
+#[cfg(test)]
+#[path = "build_analysis_visitor_test.rs"]
+mod build_analysis_visitor_test;
