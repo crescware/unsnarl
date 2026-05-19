@@ -226,13 +226,24 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             find_predicate_container(parent_type.as_ref(), parent_offset, key, &path_entries);
         let completion = find_completion(&path_entries);
         let jsx_element = find_jsx_element_span(&path_entries);
-        let expression_statement_container = self.path.iter().rev().find_map(|f| match &f.kind {
-            AstKind::ExpressionStatement(es) => Some(build_expression_statement_container(
-                es.span,
-                Some(&es.expression),
-            )),
-            _ => None,
-        });
+        let expression_statement_container =
+            self.path
+                .iter()
+                .enumerate()
+                .rev()
+                .find_map(|(i, f)| match &f.kind {
+                    AstKind::ExpressionStatement(es) => {
+                        if is_synthetic_arrow_body_expression_statement(&self.path, i) {
+                            None
+                        } else {
+                            Some(build_expression_statement_container(
+                                es.span,
+                                Some(&es.expression),
+                            ))
+                        }
+                    }
+                    _ => None,
+                });
         self.annotations.set_reference(
             ref_id,
             ReferenceAnnotation {
@@ -708,6 +719,35 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         }
         self.pop_path();
     }
+}
+
+/// oxc represents the body of an expression-arrow (`() => expr`) as
+/// a `FunctionBody { statements: [ExpressionStatement { expression:
+/// expr }] }` synthetic wrapper, while the TS npm `oxc-parser` keeps
+/// `ArrowFunctionExpression.body = Expression` directly. The IR
+/// emitter must NOT report that synthetic ExpressionStatement as the
+/// reference's `expressionStatementContainer`, so flag it here based
+/// on its path position: ExpressionStatement at index `i` is
+/// synthetic iff `path[i-1]` is a FunctionBody and `path[i-2]` is an
+/// ArrowFunctionExpression whose `arrow_body.is_block == false`.
+fn is_synthetic_arrow_body_expression_statement(path: &[PathFrame<'_>], i: usize) -> bool {
+    let Some(prev) = i.checked_sub(1).and_then(|j| path.get(j)) else {
+        return false;
+    };
+    if !matches!(prev.kind, AstKind::FunctionBody(_)) {
+        return false;
+    }
+    let Some(arrow) = i.checked_sub(2).and_then(|j| path.get(j)) else {
+        return false;
+    };
+    if !matches!(arrow.kind, AstKind::ArrowFunctionExpression(_)) {
+        return false;
+    }
+    arrow
+        .arrow_body
+        .as_ref()
+        .map(|b| !b.is_block)
+        .unwrap_or(false)
 }
 
 fn is_explicitly_handled(kind: &AstKind<'_>) -> bool {
