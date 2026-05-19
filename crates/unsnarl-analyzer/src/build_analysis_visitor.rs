@@ -494,7 +494,9 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         self.visit_block_statement(&it.block);
         self.key_stack.pop();
         if let Some(handler) = it.handler.as_deref() {
+            self.key_stack.push(Some("handler"));
             self.visit_catch_clause(handler);
+            self.key_stack.pop();
         }
         if let Some(finalizer) = it.finalizer.as_deref() {
             self.key_stack.push(Some("finalizer"));

@@ -289,9 +289,33 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_catch_clause(&mut self, it: &CatchClause<'a>) {
+        // The TS pipeline (npm `oxc-parser`) ESTree-fies the catch
+        // param down to `CatchClause.param: BindingPattern`, with the
+        // `CatchParameter` wrapper collapsed away. `classify/*` is
+        // therefore wired to recognise `(parent=CatchClause,
+        // key="param")` as a direct binding. Walk the pattern
+        // directly (skipping the `CatchParameter` wrapper) and push
+        // `"param"` so `is_direct_binding` fires and no write
+        // reference is created for `err` in `catch (err) { ... }`.
         let scope_id = enter_catch(self.state, it, self.raw);
         self.fire_on_scope(scope_id);
-        oxc_ast_visit::walk::walk_catch_clause(self, it);
+        let kind = AstKind::CatchClause(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.enter_scope(ScopeFlags::CatchClause, &it.scope_id);
+        if let Some(param) = it.param.as_ref() {
+            self.key_stack.push(Some("param"));
+            self.visit_binding_pattern(&param.pattern);
+            self.key_stack.pop();
+            if let Some(type_annotation) = param.type_annotation.as_deref() {
+                self.key_stack.push(Some("typeAnnotation"));
+                self.visit_ts_type_annotation(type_annotation);
+                self.key_stack.pop();
+            }
+        }
+        self.visit_block_statement(&it.body);
+        self.leave_scope();
+        self.leave_node(kind);
         pop_scope(self.state);
     }
 
