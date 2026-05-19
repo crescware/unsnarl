@@ -28,6 +28,7 @@ use oxc_ast::ast::{
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
 
+use unsnarl_ir::ids::ScopeId;
 use unsnarl_oxc_parity::AstType;
 
 use crate::enter_block::enter_block;
@@ -38,21 +39,29 @@ use crate::enter_function::{enter_arrow_function_expression, enter_function};
 use crate::enter_switch::enter_switch;
 use crate::enter_switch_case::enter_switch_case;
 use crate::handle_identifier_reference::handle_identifier_reference;
+use crate::materialise::{ast_node_of, materialise_path};
 use crate::skip_block_scope::skip_block_scope;
 use crate::state::{pop_scope, ScopeBuilderState};
+use crate::visitor::AnalysisVisitor;
 use crate::walk::PathEntry;
 
 pub(crate) struct ScopeBuildVisitor<'a, 'v> {
     pub(crate) state: &'v mut ScopeBuilderState,
+    pub(crate) visitor: &'v mut dyn AnalysisVisitor,
     pub(crate) raw: &'v str,
     pub(crate) key_stack: Vec<Option<&'static str>>,
     pub(crate) path: Vec<PathEntry<'a>>,
 }
 
 impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
-    pub(crate) fn new(state: &'v mut ScopeBuilderState, raw: &'v str) -> Self {
+    pub(crate) fn new(
+        state: &'v mut ScopeBuilderState,
+        visitor: &'v mut dyn AnalysisVisitor,
+        raw: &'v str,
+    ) -> Self {
         Self {
             state,
+            visitor,
             raw,
             key_stack: Vec::new(),
             path: Vec::new(),
@@ -69,6 +78,20 @@ impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
         // `walk_*` body, which is the next step). The last entry on
         // `path` is therefore the immediate parent.
         self.path.last().map(|p| p.node)
+    }
+
+    fn fire_on_scope(&mut self, scope_id: ScopeId) {
+        let parent = self.parent_kind();
+        let parent_node = parent.as_ref().map(ast_node_of);
+        let key = self.current_key();
+        let path_materialised = materialise_path(&self.path);
+        self.visitor.on_scope(
+            scope_id,
+            parent_node.as_ref(),
+            key,
+            &path_materialised,
+            self.state,
+        );
     }
 }
 
@@ -92,17 +115,15 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             oxc_ast_visit::walk::walk_block_statement(self, it);
             return;
         }
-        enter_block(self.state, it, self.raw);
+        let scope_id = enter_block(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_block_statement(self, it);
         pop_scope(self.state);
     }
 
     fn visit_function(&mut self, it: &Function<'a>, flags: ScopeFlags) {
-        enter_function(self.state, it, self.raw);
-        // Walk fields with key context so classify sees the right keys
-        // for `params` (binding terminator) and `body`. We replicate
-        // `walk_function`'s structure to keep `enter_node` /
-        // `leave_node` firing in the right places.
+        let scope_id = enter_function(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         let kind = AstKind::Function(self.alloc(it));
         self.enter_node(kind);
         self.visit_span(&it.span);
@@ -135,7 +156,8 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_arrow_function_expression(&mut self, it: &ArrowFunctionExpression<'a>) {
-        enter_arrow_function_expression(self.state, it, self.raw);
+        let scope_id = enter_arrow_function_expression(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         let kind = AstKind::ArrowFunctionExpression(self.alloc(it));
         self.enter_node(kind);
         self.visit_span(&it.span);
@@ -167,9 +189,6 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_formal_parameter(&mut self, it: &FormalParameter<'a>) {
-        // Push `pattern` key so the binding terminator inside
-        // `find_binding_root_context` recognises FormalParameter as
-        // the param-binding root.
         let kind = AstKind::FormalParameter(self.alloc(it));
         self.enter_node(kind);
         self.visit_span(&it.span);
@@ -187,43 +206,50 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_class(&mut self, it: &Class<'a>) {
-        enter_class(self.state, it);
+        let scope_id = enter_class(self.state, it);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_class(self, it);
         pop_scope(self.state);
     }
 
     fn visit_catch_clause(&mut self, it: &CatchClause<'a>) {
-        enter_catch(self.state, it, self.raw);
+        let scope_id = enter_catch(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_catch_clause(self, it);
         pop_scope(self.state);
     }
 
     fn visit_for_statement(&mut self, it: &ForStatement<'a>) {
-        enter_for_statement(self.state, it, self.raw);
+        let scope_id = enter_for_statement(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_for_statement(self, it);
         pop_scope(self.state);
     }
 
     fn visit_for_in_statement(&mut self, it: &ForInStatement<'a>) {
-        enter_for_in_statement(self.state, it, self.raw);
+        let scope_id = enter_for_in_statement(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_for_in_statement(self, it);
         pop_scope(self.state);
     }
 
     fn visit_for_of_statement(&mut self, it: &ForOfStatement<'a>) {
-        enter_for_of_statement(self.state, it, self.raw);
+        let scope_id = enter_for_of_statement(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_for_of_statement(self, it);
         pop_scope(self.state);
     }
 
     fn visit_switch_statement(&mut self, it: &SwitchStatement<'a>) {
-        enter_switch(self.state, it);
+        let scope_id = enter_switch(self.state, it);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_switch_statement(self, it);
         pop_scope(self.state);
     }
 
     fn visit_switch_case(&mut self, it: &SwitchCase<'a>) {
-        enter_switch_case(self.state, it, self.raw);
+        let scope_id = enter_switch_case(self.state, it, self.raw);
+        self.fire_on_scope(scope_id);
         oxc_ast_visit::walk::walk_switch_case(self, it);
         pop_scope(self.state);
     }
@@ -283,13 +309,11 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_identifier_reference(&mut self, it: &IdentifierReference<'a>) {
-        // Capture parent / key BEFORE pushing IdentifierReference onto
-        // the path: classify sees the identifier's parent as
-        // `path.last()` and its key as the surrounding key_stack top.
         let parent = self.parent_kind();
         let key = self.current_key();
         handle_identifier_reference(
             self.state,
+            self.visitor,
             parent.as_ref(),
             key,
             &self.path,

@@ -1,18 +1,18 @@
 //! Entry point for the eslint-scope-compatible scope-builder.
 //!
 //! Mirrors `analyze` in `ts/src/boundary/eslint-scope/analyze.ts`.
-//! Step 9 fills the body incrementally: this initial layer seeds the
-//! root scope but does not yet walk or hoist. Subsequent commits port
-//! hoisting, the `enter_*` group, classify, and the per-AST-type
-//! `visit_*` overrides; later commits then turn the seeded state into
-//! a populated [`EslintScopeAnalysisResult`].
+//! The body now runs end-to-end: seed the root scope, hoist the
+//! program-level declarations, drive the walker via
+//! [`ScopeBuildVisitor`], flush accumulated diagnostics into the
+//! supplied visitor, and finally drain the build state into an
+//! [`EslintScopeAnalysisResult`].
 
 use oxc_ast::ast::Program;
+use oxc_ast_visit::Visit;
+
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
-
-use oxc_ast_visit::Visit;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::hoist_into::hoist_into;
@@ -38,9 +38,8 @@ pub struct AnalyzeOptions<'a> {
 pub fn analyze<'a>(
     program: &Program<'a>,
     options: &AnalyzeOptions<'a>,
-    visitor: &dyn AnalysisVisitor,
+    visitor: &mut dyn AnalysisVisitor,
 ) -> EslintScopeAnalysisResult {
-    let _ = visitor;
     let root_kind = match options.source_type {
         SourceType::Module => ScopeType::Module,
         SourceType::Script => ScopeType::Global,
@@ -52,10 +51,16 @@ pub fn analyze<'a>(
     let mut state = ScopeBuilderState::new(root_kind, root_block);
     let global_scope = state.global_scope;
     hoist_into(&mut state, program, global_scope, options.raw);
-    let mut walker = ScopeBuildVisitor::new(&mut state, options.raw);
+    let mut walker = ScopeBuildVisitor::new(&mut state, visitor, options.raw);
     walker.visit_program(program);
-    let (_arena, _global_scope, _diagnostics) = finish(state);
-    EslintScopeAnalysisResult {}
+    let (arena, global_scope, diagnostics) = finish(state);
+    for diag in &diagnostics {
+        visitor.on_diagnostic(diag);
+    }
+    EslintScopeAnalysisResult {
+        arena,
+        global_scope,
+    }
 }
 
 #[cfg(test)]

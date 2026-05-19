@@ -35,12 +35,13 @@ fn analyze_completes_for_trivial_source() {
             },
         )
         .unwrap();
+    let mut visitor = NoopVisitor;
     let _ = analyze(
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
             raw: parsed.raw,
         },
-        &NoopVisitor,
+        &mut visitor,
     );
 }
