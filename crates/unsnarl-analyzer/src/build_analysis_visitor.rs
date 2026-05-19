@@ -264,18 +264,18 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
     fn visit_program(&mut self, it: &Program<'a>) {
         let kind = AstKind::Program(self.alloc(it));
         // Match the normalised Program span the boundary stamps on
-        // the global scope's `block` -- start at the first
-        // hashbang / directive / body node offset (the TS
-        // `oxc-parser` shape), end at `program.span.end`. Using
-        // `it.span` here would key into `span_to_scope` with the
-        // oxc-Rust native span and miss the global scope when the
-        // source has leading comments.
+        // the global scope's `block` -- start at the first directive /
+        // body node offset (the TS `oxc-parser` shape, which skips
+        // leading comments AND the hashbang line), end at
+        // `program.span.end`. Using `it.span` here would key into
+        // `span_to_scope` with the oxc-Rust native span and miss the
+        // global scope when the source has leading comments.
         let start = it
-            .hashbang
-            .as_ref()
-            .map(|h| h.span.start)
-            .or_else(|| it.directives.first().map(|d| d.span.start))
+            .directives
+            .first()
+            .map(|d| d.span.start)
             .or_else(|| it.body.first().map(|s| oxc_span::GetSpan::span(s).start))
+            .or_else(|| it.hashbang.as_ref().map(|h| h.span.end))
             .unwrap_or(it.span.start);
         let program_span = Span::new(start, it.span.end);
         self.fire_scope(program_span, &kind);

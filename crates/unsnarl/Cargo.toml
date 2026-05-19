@@ -36,3 +36,10 @@ serde_json = { workspace = true }
 
 [dev-dependencies]
 tempfile = "3"
+libtest-mimic = { workspace = true }
+pretty_assertions = { workspace = true }
+
+[[test]]
+name = "parity"
+path = "tests/parity.rs"
+harness = false
