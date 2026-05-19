@@ -18,20 +18,33 @@ pub enum NestingKind {
     Block,
 }
 
+/// Nesting count for a single `NestingKind`. Newtype over `u32` so
+/// depths cannot be confused with source offsets / line numbers /
+/// other 32-bit IR counters. `#[serde(transparent)]` keeps the
+/// on-disk JSON shape a bare number.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
+#[serde(transparent)]
+pub struct NestingDepth(pub u32);
+
 #[derive(Serialize)]
 pub struct NestingDepths {
-    pub function: u32,
-    pub r#if: u32,
-    pub r#for: u32,
-    pub r#while: u32,
-    pub switch: u32,
+    pub function: NestingDepth,
+    pub r#if: NestingDepth,
+    pub r#for: NestingDepth,
+    pub r#while: NestingDepth,
+    pub switch: NestingDepth,
     #[serde(rename = "try-catch-finally")]
-    pub try_catch_finally: u32,
-    pub block: u32,
+    pub try_catch_finally: NestingDepth,
+    pub block: NestingDepth,
 }
 
 impl NestingDepths {
-    pub fn uniform(value: u32) -> Self {
+    /// Build a `NestingDepths` with the same depth across all
+    /// `NestingKind`s. The argument is `NestingDepth` (not bare `u32`)
+    /// because relaxing it to `u32` would let any 32-bit scalar
+    /// (offsets, line numbers, version) flow into the function and
+    /// silently become a depth -- defeating the point of the newtype.
+    pub fn uniform(value: NestingDepth) -> Self {
         Self {
             function: value,
             r#if: value,

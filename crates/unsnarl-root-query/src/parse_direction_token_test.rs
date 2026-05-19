@@ -1,4 +1,5 @@
 use super::*;
+use crate::generation_count::GenerationCount;
 
 fn assert_err_contains(text: &str, needle: &str) {
     let err = parse_direction_token(text).unwrap_err();
@@ -34,7 +35,7 @@ fn parses_direction_with_explicit_level() {
             parse_direction_token(input),
             Ok(ParsedDirectionToken {
                 dir,
-                level: Some(level),
+                level: Some(GenerationCount(level)),
             }),
         );
     }
@@ -46,7 +47,7 @@ fn syntactically_accepts_level_zero() {
         parse_direction_token("+a0"),
         Ok(ParsedDirectionToken {
             dir: Direction::After,
-            level: Some(0),
+            level: Some(GenerationCount(0)),
         }),
     );
 }
@@ -102,7 +103,7 @@ fn syntactically_accepts_u32_max_level() {
         parse_direction_token("+a4294967295"),
         Ok(ParsedDirectionToken {
             dir: Direction::After,
-            level: Some(u32::MAX),
+            level: Some(GenerationCount(u32::MAX)),
         }),
     );
 }

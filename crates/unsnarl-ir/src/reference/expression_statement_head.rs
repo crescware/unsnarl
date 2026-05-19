@@ -6,10 +6,12 @@
 //! positions even when the operand is `Elided` and therefore has no
 //! intrinsic span.
 
+use crate::primitive::SourceOffset;
+
 pub struct HeadOperand {
     pub head: HeadExpression,
-    pub start_offset: u32,
-    pub end_offset: u32,
+    pub start_offset: SourceOffset,
+    pub end_offset: SourceOffset,
 }
 
 pub enum HeadExpression {
@@ -41,8 +43,8 @@ pub enum HeadExpression {
     },
     Elided,
     Raw {
-        start_offset: u32,
-        end_offset: u32,
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
     },
 }
 

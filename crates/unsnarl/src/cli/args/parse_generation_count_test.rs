@@ -2,17 +2,17 @@ use super::*;
 
 #[test]
 fn non_negative_integer_zero() {
-    assert_eq!(parse_generation_count("0"), Ok(0));
+    assert_eq!(parse_generation_count("0"), Ok(GenerationCount(0)));
 }
 
 #[test]
 fn non_negative_integer_one() {
-    assert_eq!(parse_generation_count("1"), Ok(1));
+    assert_eq!(parse_generation_count("1"), Ok(GenerationCount(1)));
 }
 
 #[test]
 fn non_negative_integer_forty_two() {
-    assert_eq!(parse_generation_count("42"), Ok(42));
+    assert_eq!(parse_generation_count("42"), Ok(GenerationCount(42)));
 }
 
 #[test]

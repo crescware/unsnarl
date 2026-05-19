@@ -1,6 +1,7 @@
 use super::*;
 
-use crate::primitive::Span;
+use crate::nesting_kind::NestingDepth;
+use crate::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
 
 fn scope_id(s: &str) -> SerializedScopeId {
     SerializedScopeId::new(s.to_string())
@@ -18,14 +19,14 @@ fn serialized_scope_field_order() {
         block: SerializedBlock {
             r#type: AstType::Program,
             span: Span {
-                line: 1,
-                column: 0,
-                offset: 0,
+                line: SourceLine(1),
+                column: SourceColumn(0),
+                offset: SourceOffset(0),
             },
             end_span: Span {
-                line: 1,
-                column: 0,
-                offset: 0,
+                line: SourceLine(1),
+                column: SourceColumn(0),
+                offset: SourceOffset(0),
             },
         },
         variables: Vec::new(),
@@ -35,7 +36,7 @@ fn serialized_scope_field_order() {
         block_context: None,
         falls_through: false,
         exits_function: false,
-        nesting_depths: NestingDepths::uniform(0),
+        nesting_depths: NestingDepths::uniform(NestingDepth(0)),
     };
     let json = serde_json::to_string(&scope).unwrap();
     let object_start = json.find('{').unwrap();

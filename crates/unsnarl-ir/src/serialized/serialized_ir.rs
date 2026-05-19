@@ -20,9 +20,15 @@ use crate::serialized::variable_id::SerializedVariableId;
 
 /// On-disk schema version of [`SerializedIR`]. Bump every time the
 /// serialized shape changes so downstream consumers can switch on it.
-pub const SERIALIZED_IR_VERSION: u32 = 1;
+pub const SERIALIZED_IR_VERSION: SerializedIrVersion = SerializedIrVersion(1);
 
-pub type SerializedIrVersion = u32;
+/// Newtype over `u32` so a schema version cannot be confused with
+/// other 32-bit IR scalars (source offsets, depth counters, flag
+/// bits, ...). `#[serde(transparent)]` keeps the on-disk JSON shape
+/// a bare number.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize)]
+#[serde(transparent)]
+pub struct SerializedIrVersion(pub u32);
 
 #[derive(Serialize)]
 pub struct SerializedSource {

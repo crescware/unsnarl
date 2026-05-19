@@ -1,15 +1,15 @@
 use std::path::Path;
 
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
 
 use super::radius_suffix::radius_suffix;
 use super::root_query_token::root_query_token;
 
 pub fn derive_output_basename(
     roots: &[ParsedRootQuery],
-    descendants: Option<u32>,
-    ancestors: Option<u32>,
-    context: Option<u32>,
+    descendants: Option<GenerationCount>,
+    ancestors: Option<GenerationCount>,
+    context: Option<GenerationCount>,
     input_path: &str,
 ) -> String {
     if !roots.is_empty() {

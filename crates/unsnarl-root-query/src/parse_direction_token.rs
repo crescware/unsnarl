@@ -1,10 +1,11 @@
+use crate::generation_count::GenerationCount;
 use crate::parse_error::ParseError;
 use crate::root_query::Direction;
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct ParsedDirectionToken {
     pub dir: Direction,
-    pub level: Option<u32>,
+    pub level: Option<GenerationCount>,
 }
 
 pub fn parse_direction_token(text: &str) -> Result<ParsedDirectionToken, Vec<ParseError>> {
@@ -31,7 +32,7 @@ pub fn parse_direction_token(text: &str) -> Result<ParsedDirectionToken, Vec<Par
         .map_err(|_| bad(text))?;
     Ok(ParsedDirectionToken {
         dir,
-        level: Some(level),
+        level: Some(GenerationCount(level)),
     })
 }
 

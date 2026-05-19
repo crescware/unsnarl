@@ -4,7 +4,8 @@
 
 use clap::Parser;
 use serde::Serialize;
-use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
+use unsnarl_ir::NestingDepth;
+use unsnarl_root_query::{parse_root_queries, GenerationCount, ParsedRootQuery};
 
 use crate::cli::run_cli::derive_output_basename;
 
@@ -23,7 +24,7 @@ pub use cli_mermaid_renderer::CliMermaidRenderer;
 pub use highlight::Highlight;
 
 use collect_plugins::parse_plugin_occurrence;
-use parse_generation_count::parse_generation_count;
+use parse_generation_count::{parse_generation_count, parse_nesting_depth};
 
 #[derive(Parser, Debug, Serialize)]
 #[command(
@@ -123,7 +124,7 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub descendants: Option<u32>,
+    pub descendants: Option<GenerationCount>,
 
     /// Ancestors generations
     #[arg(
@@ -132,7 +133,7 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub ancestors: Option<u32>,
+    pub ancestors: Option<GenerationCount>,
 
     /// Context generations (-A and -B shorthand)
     #[arg(
@@ -141,31 +142,31 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub context: Option<u32>,
+    pub context: Option<GenerationCount>,
 
     /// Sugar: set both --depth-function and --depth-block to <N>
     #[arg(
         long = "depth",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth: Option<u32>,
+    pub depth: Option<NestingDepth>,
 
     /// Max function-scope nesting depth before scopes collapse to a single node
     #[arg(
         long = "depth-function",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth_function: Option<u32>,
+    pub depth_function: Option<NestingDepth>,
 
     /// Max block-scope nesting depth (applies to if/for/while/switch/try-catch-finally/block) before scopes collapse to a single node
     #[arg(
         long = "depth-block",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth_block: Option<u32>,
+    pub depth_block: Option<NestingDepth>,
 
     /// Write output to <dir>/<auto-name>.<ext>
     #[arg(

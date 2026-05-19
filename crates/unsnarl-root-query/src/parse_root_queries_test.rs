@@ -1,4 +1,5 @@
 use super::*;
+use unsnarl_ir::SourceLine;
 
 #[test]
 fn parses_single_token() {
@@ -6,7 +7,10 @@ fn parses_single_token() {
     assert_eq!(queries.len(), 1);
     assert!(matches!(
         queries[0],
-        ParsedRootQuery::LineName { line: 10, .. },
+        ParsedRootQuery::LineName {
+            line: SourceLine(10),
+            ..
+        },
     ));
 }
 
@@ -26,7 +30,7 @@ fn parses_l_prefixed_forms_in_comma_list() {
     assert_eq!(
         queries[0],
         ParsedRootQuery::LineOrName {
-            line: 10,
+            line: SourceLine(10),
             name: "L10".to_string(),
             raw: "L10".to_string(),
         },
@@ -34,15 +38,15 @@ fn parses_l_prefixed_forms_in_comma_list() {
     assert_eq!(
         queries[1],
         ParsedRootQuery::Range {
-            start: 5,
-            end: 10,
+            start: SourceLine(5),
+            end: SourceLine(10),
             raw: "L5-10".to_string(),
         },
     );
     assert_eq!(
         queries[2],
         ParsedRootQuery::LineOrName {
-            line: 20,
+            line: SourceLine(20),
             name: "L20".to_string(),
             raw: "L20".to_string(),
         },

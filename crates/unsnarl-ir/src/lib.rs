@@ -53,5 +53,6 @@ pub use diagnostic_kind::DiagnosticKind;
 pub use ids::{DefinitionId, ReferenceId, ScopeId, VariableId};
 pub use import_kind::ImportKind;
 pub use language::Language;
-pub use nesting_kind::{NestingDepths, NestingKind};
+pub use nesting_kind::{NestingDepth, NestingDepths, NestingKind};
+pub use primitive::{SourceColumn, SourceLine, SourceOffset};
 pub use scope_type::ScopeType;

@@ -4,8 +4,10 @@ use serde::Serialize;
 
 use unsnarl_oxc_parity::PredicateContainerType;
 
+use crate::primitive::SourceOffset;
+
 #[derive(Serialize)]
 pub struct PredicateContainer {
     pub r#type: PredicateContainerType,
-    pub offset: u32,
+    pub offset: SourceOffset,
 }

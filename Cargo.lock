@@ -821,6 +821,7 @@ name = "unsnarl-root-query"
 version = "0.3.0-beta.0"
 dependencies = [
  "serde",
+ "unsnarl-ir",
 ]
 
 [[package]]

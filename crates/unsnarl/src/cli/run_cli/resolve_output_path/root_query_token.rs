@@ -3,18 +3,18 @@ use unsnarl_root_query::ParsedRootQuery;
 pub fn root_query_token(q: &ParsedRootQuery) -> String {
     match q {
         ParsedRootQuery::Name { name, .. } => name.clone(),
-        ParsedRootQuery::Line { line, .. } => format!("l{line}"),
-        ParsedRootQuery::LineName { line, name, .. } => format!("l{line}-{name}"),
-        ParsedRootQuery::Range { start, end, .. } => format!("l{start}-{end}"),
+        ParsedRootQuery::Line { line, .. } => format!("l{}", line.0),
+        ParsedRootQuery::LineName { line, name, .. } => format!("l{}-{name}", line.0),
+        ParsedRootQuery::Range { start, end, .. } => format!("l{}-{}", start.0, end.0),
         ParsedRootQuery::RangeName {
             start, end, name, ..
-        } => format!("l{start}-{end}-{name}"),
+        } => format!("l{}-{}-{name}", start.0, end.0),
         // Filename is derived from CLI args before the resolver runs, so
         // we only know the line number here. Normalize to the same
         // lowercase shape as a plain Line query to keep `-r L12` and
         // `-r 12` filenames aligned (the L-prefix is a typing-convenience
         // syntax).
-        ParsedRootQuery::LineOrName { line, .. } => format!("l{line}"),
+        ParsedRootQuery::LineOrName { line, .. } => format!("l{}", line.0),
     }
 }
 

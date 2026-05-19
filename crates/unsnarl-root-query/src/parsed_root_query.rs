@@ -1,25 +1,26 @@
 use serde::Serialize;
+use unsnarl_ir::SourceLine;
 
 #[derive(Debug, PartialEq, Eq, Serialize)]
 #[serde(tag = "kind", rename_all = "kebab-case")]
 pub enum ParsedRootQuery {
     Line {
-        line: u32,
+        line: SourceLine,
         raw: String,
     },
     LineName {
-        line: u32,
+        line: SourceLine,
         name: String,
         raw: String,
     },
     Range {
-        start: u32,
-        end: u32,
+        start: SourceLine,
+        end: SourceLine,
         raw: String,
     },
     RangeName {
-        start: u32,
-        end: u32,
+        start: SourceLine,
+        end: SourceLine,
         name: String,
         raw: String,
     },
@@ -28,7 +29,7 @@ pub enum ParsedRootQuery {
         raw: String,
     },
     LineOrName {
-        line: u32,
+        line: SourceLine,
         name: String,
         raw: String,
     },

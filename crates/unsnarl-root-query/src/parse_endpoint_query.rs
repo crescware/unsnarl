@@ -1,17 +1,19 @@
+use unsnarl_ir::SourceLine;
+
 use crate::parse_error::ParseError;
 use crate::parsed_root_query::ParsedRootQuery;
 
 pub fn parse_endpoint_query(text: &str) -> Result<ParsedRootQuery, Vec<ParseError>> {
     if let Some(line) = match_all_digits(text) {
         return Ok(ParsedRootQuery::Line {
-            line,
+            line: SourceLine(line),
             raw: text.to_string(),
         });
     }
 
     if let Some((line, name)) = match_line_name(text) {
         return Ok(ParsedRootQuery::LineName {
-            line,
+            line: SourceLine(line),
             name: name.to_string(),
             raw: text.to_string(),
         });
@@ -19,8 +21,8 @@ pub fn parse_endpoint_query(text: &str) -> Result<ParsedRootQuery, Vec<ParseErro
 
     if let Some((start, end, name)) = match_range_name(text) {
         return Ok(ParsedRootQuery::RangeName {
-            start,
-            end,
+            start: SourceLine(start),
+            end: SourceLine(end),
             name: name.to_string(),
             raw: text.to_string(),
         });
@@ -28,23 +30,23 @@ pub fn parse_endpoint_query(text: &str) -> Result<ParsedRootQuery, Vec<ParseErro
 
     if let Some((start, end)) = match_range(text) {
         return Ok(ParsedRootQuery::Range {
-            start,
-            end,
+            start: SourceLine(start),
+            end: SourceLine(end),
             raw: text.to_string(),
         });
     }
 
     if let Some((start, end)) = match_l_range(text) {
         return Ok(ParsedRootQuery::Range {
-            start,
-            end,
+            start: SourceLine(start),
+            end: SourceLine(end),
             raw: text.to_string(),
         });
     }
 
     if let Some(line) = match_l_line_or_name(text) {
         return Ok(ParsedRootQuery::LineOrName {
-            line,
+            line: SourceLine(line),
             name: text.to_string(),
             raw: text.to_string(),
         });

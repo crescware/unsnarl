@@ -1,6 +1,7 @@
 use super::*;
 use clap::error::ErrorKind;
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_ir::{NestingDepth, SourceLine};
+use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
 
 fn parse(argv: &[&str]) -> Args {
     Args::try_parse_from(argv).expect("argv should parse")
@@ -147,15 +148,15 @@ fn roots_repeatable_flattens_comma_lists_into_parsed_queries() {
         args.roots,
         vec![
             ParsedRootQuery::Line {
-                line: 1,
+                line: SourceLine(1),
                 raw: "1".to_string(),
             },
             ParsedRootQuery::Line {
-                line: 2,
+                line: SourceLine(2),
                 raw: "2".to_string(),
             },
             ParsedRootQuery::Line {
-                line: 3,
+                line: SourceLine(3),
                 raw: "3".to_string(),
             },
         ],
@@ -217,15 +218,15 @@ fn highlight_invalid_inline_value_yields_exit_2() {
 #[test]
 fn generation_flags_parse_non_negative_integers() {
     let args = parse(&["uns", "-A", "2", "-B", "3", "-C", "4", "x.ts"]);
-    assert_eq!(args.descendants, Some(2));
-    assert_eq!(args.ancestors, Some(3));
-    assert_eq!(args.context, Some(4));
+    assert_eq!(args.descendants, Some(GenerationCount(2)));
+    assert_eq!(args.ancestors, Some(GenerationCount(3)));
+    assert_eq!(args.context, Some(GenerationCount(4)));
 }
 
 #[test]
 fn generation_flags_accept_zero() {
     let args = parse(&["uns", "-A", "0", "x.ts"]);
-    assert_eq!(args.descendants, Some(0));
+    assert_eq!(args.descendants, Some(GenerationCount(0)));
 }
 
 #[test]
@@ -260,9 +261,9 @@ fn depth_flags_parse_non_negative_integers() {
         "3",
         "x.ts",
     ]);
-    assert_eq!(args.depth, Some(5));
-    assert_eq!(args.depth_function, Some(8));
-    assert_eq!(args.depth_block, Some(3));
+    assert_eq!(args.depth, Some(NestingDepth(5)));
+    assert_eq!(args.depth_function, Some(NestingDepth(8)));
+    assert_eq!(args.depth_block, Some(NestingDepth(3)));
 }
 
 #[test]
