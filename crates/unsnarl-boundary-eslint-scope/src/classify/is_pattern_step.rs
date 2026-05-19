@@ -26,6 +26,13 @@ pub(crate) fn is_pattern_step(node: &AstKind<'_>, path: &[PathEntry<'_>], i: usi
         | AstKind::ArrayPattern(_)
         | AstKind::BindingRestElement(_)
         | AstKind::AssignmentPattern(_) => true,
+        // oxc-specific: TS folds `Function.params -> Pattern[]` into a
+        // flat array, but oxc routes each rest parameter through
+        // `FormalParameters.rest -> FormalParameterRest ->
+        // BindingRestElement`. Treat the two wrapper nodes as
+        // transparent pattern steps so `find_binding_root_context`
+        // can keep climbing past them to the `Function` terminator.
+        AstKind::FormalParameters(_) | AstKind::FormalParameterRest(_) => true,
         // oxc-specific: destructuring on the LHS of an assignment
         // expression (`[a, b] = ...` / `({ a } = ...)`) uses a
         // dedicated `AssignmentTarget*` family of nodes instead of
