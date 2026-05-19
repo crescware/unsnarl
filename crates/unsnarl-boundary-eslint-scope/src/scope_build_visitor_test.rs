@@ -156,6 +156,57 @@ fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
 }
 
 #[test]
+fn parameter_default_immediate_identifier_does_not_register_as_runtime_reference() {
+    // `function f(b = a) { ... }` -- TS classifies `a` (the direct
+    // child of the parameter's initializer slot) as a binding, not a
+    // reference, because in its ESTree shape the parent is
+    // `AssignmentPattern` (a pattern step). oxc instead stores this
+    // as `FormalParameter { pattern: b, initializer: a }`, so we
+    // must short-circuit the classify walk at
+    // `(parent=FormalParameter, key="initializer")` to produce the
+    // same outcome.
+    let r = analyze_source("function f(a = 0, b = a) { return a + b; }\n", Language::Ts);
+    let refs = reference_identifier_names(&r.arena);
+    // Body references: `a` (in `a + b`), `b` (in `a + b`). The
+    // initializer-direct `a` (in `b = a`) must not be tracked.
+    assert_eq!(refs, vec!["a".to_string(), "b".to_string()]);
+}
+
+#[test]
+fn parameter_default_nested_identifier_still_registers_as_runtime_reference() {
+    // `function f(c = a + b)` -- `a` and `b` sit inside a
+    // BinaryExpression nested in the initializer, so their immediate
+    // parent is the BinaryExpression (not `FormalParameter`). The
+    // classify fast-path for FormalParameter must NOT fire; they
+    // should remain ordinary references.
+    let r = analyze_source("function f(c = a + b) { return c; }\n", Language::Ts);
+    let refs = reference_identifier_names(&r.arena);
+    // Order: parameter-default `a`, then `b`, then body `c`.
+    assert_eq!(
+        refs,
+        vec!["a".to_string(), "b".to_string(), "c".to_string()]
+    );
+}
+
+#[test]
+fn ts_parameter_property_identifier_still_classifies_as_reference() {
+    // `constructor(public x: number)` -- the TS parameter-property
+    // case still falls through to `classify_ordinary_reference`,
+    // producing a read reference resolved against the implicit
+    // globals scope. The new initializer-slot fast-path must not
+    // apply (`key="params"`, not `"initializer"`).
+    let r = analyze_source(
+        "class C {\n  constructor(public x: number) {}\n}\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        refs.iter().any(|n| n == "x"),
+        "TS parameter property `public x` must still register `x` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
 fn ts_as_const_does_not_register_const_as_runtime_reference() {
     // Parity regression: oxc's auto-generated `walk_ts_as_expression`
     // descends into `type_annotation` without recording the

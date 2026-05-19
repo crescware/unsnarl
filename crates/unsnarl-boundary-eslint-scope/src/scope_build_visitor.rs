@@ -274,7 +274,20 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.key_stack.pop();
         }
         if let Some(initializer) = it.initializer.as_deref() {
+            // oxc routes `function f(a = b)` as
+            // `FormalParameter { pattern: a, initializer: b }`, while
+            // the TS pipeline sees `AssignmentPattern { left: a,
+            // right: b }`. To mirror TS's classify outcome -- where
+            // `b` is the direct child of `AssignmentPattern` and
+            // `find_binding_root_context` walks `AssignmentPattern`
+            // (a pattern step) up to `Function@params` and returns
+            // `param` -- push an `"initializer"` key so the slot is
+            // recognizable. Identifiers nested inside an expression
+            // (e.g. `a + b` in `c = a + b`) keep their immediate
+            // expression parent and still classify as references.
+            self.key_stack.push(Some("initializer"));
             self.visit_expression(initializer);
+            self.key_stack.pop();
         }
         self.leave_node(kind);
     }
