@@ -8,3 +8,4 @@
 //! aligned with the TS source.
 
 pub(crate) mod collect_binding_identifiers;
+pub(crate) mod declare_implicit_arguments;

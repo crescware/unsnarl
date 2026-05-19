@@ -743,6 +743,7 @@ dependencies = [
  "oxc_index",
  "oxc_parser",
  "oxc_span",
+ "oxc_syntax",
  "unsnarl-ir",
  "unsnarl-oxc-parity",
 ]

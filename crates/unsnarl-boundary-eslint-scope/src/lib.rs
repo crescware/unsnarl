@@ -12,8 +12,16 @@
 pub mod analysis_result;
 pub mod analyze;
 pub(crate) mod declare;
+pub(crate) mod declare_for_left;
+pub(crate) mod declare_function_params;
 pub(crate) mod diagnostic_collector;
 pub(crate) mod enter_block;
+pub(crate) mod enter_catch;
+pub(crate) mod enter_class;
+pub(crate) mod enter_for;
+pub(crate) mod enter_function;
+pub(crate) mod enter_switch;
+pub(crate) mod enter_switch_case;
 pub(crate) mod hoist_into;
 pub(crate) mod hoisting;
 pub mod parser;
