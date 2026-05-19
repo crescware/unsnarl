@@ -14,8 +14,8 @@
 # target directory.
 #
 # Usage:
-#   ./bench-ir-parity.sh               # default work dir
-#   ./bench-ir-parity.sh path/to/dir   # custom work dir
+#   ./scripts/bench-ir-parity.sh               # default work dir
+#   ./scripts/bench-ir-parity.sh path/to/dir   # custom work dir
 #
 # Outputs (under the work dir):
 #   summary.txt         human-readable totals + "smallest diffs first" preview
@@ -34,7 +34,9 @@ set -u
 zmodload zsh/datetime
 zmodload zsh/mathfunc
 
-REPO_ROOT="${0:A:h}"
+# Script lives at `scripts/bench-ir-parity.sh`; the repo root is the
+# parent directory.
+REPO_ROOT="${0:A:h:h}"
 TS_ROOT="${REPO_ROOT}/ts"
 RUST_BIN="${REPO_ROOT}/target/release/uns"
 TS_BIN=(node "${TS_ROOT}/dist/index.js")

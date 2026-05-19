@@ -2,6 +2,17 @@
 node = "24.15.0"
 rust = "1.95.0"
 
+# Helper-script convention
+# -----------------------
+# Multi-line shell helpers live under `scripts/` and are invoked from
+# the task `run` line via `./scripts/<name>.sh`. Keeping all scripts in
+# one directory (rather than at the repo root) avoids cluttering the
+# top-level listing as more tasks accumulate, and makes
+# repo-root-relative paths inside each script uniform: every script
+# resolves the root via `${0:A:h:h}`. New mise tasks that need more
+# than a single shell command should add a new `scripts/<name>.sh`
+# rather than inline a heredoc here.
+
 [tasks."check:no-allow-dead-code"]
 description = "Fail if any `#[allow(dead_code)]` / `#[expect(dead_code)]` is present in the Rust source tree."
 run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
@@ -22,4 +33,8 @@ run = "./target/release/uns -f ir"
 [tasks."bench:ir-parity"]
 description = "Run `-f ir` against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench/."
 depends = ["build"]
-run = "./bench-ir-parity.sh"
+run = "./scripts/bench-ir-parity.sh"
+
+[tasks."cov"]
+description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Pass a filename regex as the first arg to filter rows (e.g. `mise run cov -- build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
+run = "./scripts/cov.sh"
