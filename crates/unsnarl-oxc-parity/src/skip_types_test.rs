@@ -8,7 +8,7 @@
 //! lands and the parity harness covers the same fixtures end-to-end.
 //! Until then we cover only the decision function itself.
 
-use unsnarl_oxc_parity::AstType;
+use crate::AstType;
 
 use super::is_type_only_subtree;
 

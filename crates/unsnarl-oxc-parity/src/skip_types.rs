@@ -5,7 +5,7 @@
 //! parent) is a TypeScript type-only subtree the analyzer should skip
 //! over.
 
-use unsnarl_oxc_parity::AstType;
+use crate::AstType;
 
 pub fn is_type_only_subtree(node_type: &AstType, key: Option<&str>) -> bool {
     if let Some(k) = key {

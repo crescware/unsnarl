@@ -28,6 +28,15 @@ pub(crate) fn declare_function_params(
     params: &FormalParameters<'_>,
 ) {
     for p in &params.items {
+        // TS parameter property (`constructor(public x: number)` etc.):
+        // npm `oxc-parser` ESTree-fies this as a `TSParameterProperty`
+        // wrapper and the inner identifier classifies as a plain read
+        // reference (resolving as an implicit global), not a binding.
+        // Mirror that: skip declaring the parameter binding when oxc
+        // records an accessibility / readonly / override flag.
+        if p.accessibility.is_some() || p.readonly || p.r#override {
+            continue;
+        }
         for ident in collect_binding_identifiers(&p.pattern) {
             declare_variable(
                 state,

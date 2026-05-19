@@ -11,8 +11,10 @@
 //! inside the analyzer call site rather than being baked into the IR.
 
 pub mod abrupt_completion_type_of;
+pub mod analyzed_source;
 pub mod annotations_impl;
 pub mod block_context_of;
+pub mod build_analysis_visitor;
 pub mod build_head_expression;
 pub mod case_exits_function;
 pub mod case_falls_through;
@@ -29,12 +31,13 @@ pub mod is_unused;
 pub mod owner;
 pub mod path_entry;
 pub mod reference_call_receiver;
-pub mod skip_types;
+pub mod run_analysis;
 
 #[cfg(test)]
 pub(crate) mod testing;
 
 pub use abrupt_completion_type_of::abrupt_completion_type_of;
+pub use analyzed_source::AnalyzedSource;
 pub use annotations_impl::AnnotationsImpl;
 pub use block_context_of::block_context_of;
 pub use build_head_expression::build_head_expression;
@@ -57,4 +60,4 @@ pub use owner::{
 };
 pub use path_entry::{ArrowBodyInfo, PathEntry};
 pub use reference_call_receiver::reference_call_receiver_flags;
-pub use skip_types::is_type_only_subtree;
+pub use run_analysis::run_analysis;

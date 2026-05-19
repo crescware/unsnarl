@@ -14,7 +14,7 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 #[serde(rename_all = "lowercase")]
 pub enum VariableDeclarationKind {
     Var,

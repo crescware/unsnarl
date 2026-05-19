@@ -11,7 +11,7 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::primitive::SourceOffset;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CaseClauseBlockContext {
     kind: super::block_context_kind::BlockContextKind,
@@ -48,7 +48,7 @@ impl CaseClauseBlockContext {
     }
 }
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct OtherBlockContext {
     kind: super::block_context_kind::BlockContextKind,
@@ -80,6 +80,7 @@ impl OtherBlockContext {
 /// than synthesised by serde so callers can construct either variant
 /// directly without an extra wrapper layer, and the `Serialize` impl
 /// simply delegates to the variant's struct.
+#[derive(Clone)]
 pub enum BlockContext {
     CaseClause(CaseClauseBlockContext),
     Other(OtherBlockContext),

@@ -24,13 +24,14 @@ use oxc_ast::ast::{VariableDeclaration, VariableDeclarationKind};
 
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::ids::ScopeId;
+use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::DefinitionType;
-use unsnarl_oxc_parity::AstType;
+use unsnarl_oxc_parity::{AstType, VariableDeclarationKind as IrVariableDeclarationKind};
 
 use crate::declare::collect_binding_identifiers::collect_binding_identifiers;
-use crate::span_util::span_from_offset;
-use crate::state::{declare_variable, ScopeBuilderState};
+use crate::materialise::ast_node_of_expression;
+use crate::state::{declare_variable_with_extras, DefinitionExtras, ScopeBuilderState};
 
 pub(crate) fn handle_variable_declaration(
     state: &mut ScopeBuilderState,
@@ -64,21 +65,41 @@ pub(crate) fn handle_variable_declaration(
         r#type: AstType::VariableDeclaration,
         span: var_decl.span,
     };
+    let declaration_kind = ir_variable_declaration_kind(var_decl.kind);
     for declarator in &var_decl.declarations {
         let declarator_node = AstNode {
             r#type: AstType::VariableDeclarator,
             span: declarator.span,
         };
+        let init = declarator.init.as_ref().map(ast_node_of_expression);
         for ident in collect_binding_identifiers(&declarator.id) {
-            declare_variable(
+            declare_variable_with_extras(
                 state,
                 target,
                 ident,
                 DefinitionType::Variable,
                 declarator_node.clone(),
                 Some(var_decl_node.clone()),
+                DefinitionExtras {
+                    init: init.clone(),
+                    declaration_kind: declaration_kind.clone(),
+                    ..DefinitionExtras::default()
+                },
             );
         }
+    }
+}
+
+fn ir_variable_declaration_kind(
+    kind: VariableDeclarationKind,
+) -> Option<IrVariableDeclarationKind> {
+    match kind {
+        VariableDeclarationKind::Var => Some(IrVariableDeclarationKind::Var),
+        VariableDeclarationKind::Let => Some(IrVariableDeclarationKind::Let),
+        VariableDeclarationKind::Const => Some(IrVariableDeclarationKind::Const),
+        // `using` / `await using` are accepted by oxc but not by the
+        // serializer; the surrounding caller already rejected them.
+        _ => None,
     }
 }
 

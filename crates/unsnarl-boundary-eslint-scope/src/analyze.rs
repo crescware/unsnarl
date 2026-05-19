@@ -44,9 +44,26 @@ pub fn analyze<'a>(
         SourceType::Module => ScopeType::Module,
         SourceType::Script => ScopeType::Global,
     };
+    // The npm `oxc-parser` package the TS pipeline consumes reports
+    // `Program.start` at the first directive / body offset, skipping
+    // leading comments AND any hashbang line. The Rust `oxc_parser`
+    // crate emits `Program.span.start = 0` regardless. Normalise here
+    // so the IR `Program` block matches the TS baseline byte-for-byte.
+    let normalised_start = program
+        .directives
+        .first()
+        .map(|d| d.span.start)
+        .or_else(|| {
+            program
+                .body
+                .first()
+                .map(|s| oxc_span::GetSpan::span(s).start)
+        })
+        .or_else(|| program.hashbang.as_ref().map(|h| h.span.end))
+        .unwrap_or(program.span.start);
     let root_block = AstNode {
         r#type: AstType::Program,
-        span: program.span,
+        span: oxc_span::Span::new(normalised_start, program.span.end),
     };
     let mut state = ScopeBuilderState::new(root_kind, root_block);
     let global_scope = state.global_scope;

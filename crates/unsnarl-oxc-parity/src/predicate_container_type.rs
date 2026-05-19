@@ -20,7 +20,7 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub enum PredicateContainerType {
     IfStatement,
     SwitchStatement,

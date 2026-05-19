@@ -26,12 +26,11 @@ pub(crate) mod enter_switch_case;
 pub(crate) mod handle_identifier_reference;
 pub(crate) mod hoist_into;
 pub(crate) mod hoisting;
-pub(crate) mod materialise;
+pub mod materialise;
 pub mod parser;
 pub mod resolve;
 pub(crate) mod scope_build_visitor;
 pub(crate) mod skip_block_scope;
-pub(crate) mod span_util;
 pub(crate) mod state;
 #[cfg(test)]
 pub(crate) mod testing;

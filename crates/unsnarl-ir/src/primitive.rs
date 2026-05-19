@@ -6,4 +6,4 @@ pub mod span;
 
 pub use ast_identifier::AstIdentifier;
 pub use ast_node::AstNode;
-pub use span::{SourceColumn, SourceLine, SourceOffset, Span};
+pub use span::{span_from_offset, SourceColumn, SourceLine, SourceOffset, Span};

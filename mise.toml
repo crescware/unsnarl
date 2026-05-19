@@ -5,3 +5,21 @@ rust = "1.95.0"
 [tasks."check:no-allow-dead-code"]
 description = "Fail if any `#[allow(dead_code)]` / `#[expect(dead_code)]` is present in the Rust source tree."
 run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
+
+[tasks."build"]
+description = "Build the `uns` CLI binary in release mode. Output: target/release/uns."
+run = "cargo build --release -p unsnarl"
+
+[tasks."parity"]
+description = "Run the parity harness against ts/integration/fixtures/**/expected.ir.json (Step 12 baseline)."
+run = "cargo test --workspace --test parity"
+
+[tasks."emit:ir"]
+description = "Emit IR for the given input. Extra args are forwarded to `uns -f ir` (e.g. `mise run emit:ir -- path/to/file.ts`, or `mise run emit:ir -- --stdin --stdin-lang ts < file.ts`)."
+depends = ["build"]
+run = "./target/release/uns -f ir"
+
+[tasks."bench:ir-parity"]
+description = "Run `-f ir` against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench/."
+depends = ["build"]
+run = "./bench-ir-parity.sh"

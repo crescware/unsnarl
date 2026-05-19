@@ -18,6 +18,14 @@ pub(crate) fn is_direct_binding(parent: &AstKind<'_>, key: Option<&'static str>)
         AstKind::ArrowFunctionExpression(_) if key == Some("params") => true,
         AstKind::Class(_) if key == Some("id") => true,
         AstKind::CatchClause(_) if key == Some("param") => true,
+        // oxc-specific: the TS port has `Function.params -> Pattern[]`
+        // flat, so `function f(x)` reaches the binding identifier with
+        // `(parent=Function, key="params")`. oxc wraps each parameter
+        // in `FormalParameter { pattern: BindingPattern }`, so the
+        // non-destructured case ends with `(parent=FormalParameter,
+        // key="pattern")`. Treat that slot as a direct binding to
+        // match the TS classify outcome.
+        AstKind::FormalParameter(_) if key == Some("pattern") => true,
         AstKind::ImportSpecifier(_)
         | AstKind::ImportDefaultSpecifier(_)
         | AstKind::ImportNamespaceSpecifier(_)

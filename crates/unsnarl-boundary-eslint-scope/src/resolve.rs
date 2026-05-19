@@ -38,33 +38,31 @@ pub(crate) fn bind_reference(
     state.arena.scopes[scope].references.push(ref_id);
 
     let resolved = resolve_in_scope_chain(&state.arena, scope, &name);
-    let target = match resolved {
-        Some(id) => id,
-        None => declare_implicit_global(state, &name, ref_id),
-    };
+    if let Some(target) = resolved {
+        state.arena.references[ref_id].resolved = Some(target);
+        state.arena.variables[target].references.push(ref_id);
+        return ref_id;
+    }
+    let target = declare_implicit_global(state, &name, ref_id);
     state.arena.references[ref_id].resolved = Some(target);
     state.arena.variables[target].references.push(ref_id);
 
-    // Walk up the scope chain, including the global scope, marking
-    // every scope between (and including) `scope` and `global_scope`
-    // with `through.push(ref_id)`. TS shape: loop up to (not
-    // including) global, then push to global outside the loop. The
-    // Rust port collapses to a single loop that breaks once it
-    // pushes for `global_scope`. `ScopeBuilderState::new` seeds
-    // `global_scope` as the chain root with `upper = None`, and
-    // `push_scope` always sets each new scope's `upper` to the
-    // current top, so the chain from any reachable scope is
-    // guaranteed to terminate at `global_scope` and the loop will
-    // always push there.
+    // Implicit-global path only: the reference did not resolve in any
+    // reachable scope, so every scope between `scope` and the global
+    // scope (exclusive) "passes the reference through" up to the
+    // global where the implicit binding lives. The global scope is
+    // appended last so the order in `globalScope.through` matches
+    // TS's `bindReference`.
     let global = state.global_scope;
     let mut cur = Some(scope);
     while let Some(s) = cur {
-        state.arena.scopes[s].through.push(ref_id);
         if s == global {
             break;
         }
+        state.arena.scopes[s].through.push(ref_id);
         cur = state.arena.scopes[s].upper;
     }
+    state.arena.scopes[global].through.push(ref_id);
     ref_id
 }
 
@@ -112,6 +110,10 @@ fn declare_implicit_global(
         name: ident_copy,
         node: ident_node,
         parent: None,
+        init: None,
+        declaration_kind: None,
+        import_source: None,
+        imported_name: None,
     });
     state.arena.variables[var_id].defs.push(def_id);
     var_id
