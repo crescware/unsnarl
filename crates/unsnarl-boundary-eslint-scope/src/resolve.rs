@@ -68,7 +68,7 @@ pub(crate) fn bind_reference(
     ref_id
 }
 
-fn resolve_in_scope_chain(arena: &IrArena, scope: ScopeId, name: &str) -> Option<VariableId> {
+pub fn resolve_in_scope_chain(arena: &IrArena, scope: ScopeId, name: &str) -> Option<VariableId> {
     let mut cur = Some(scope);
     while let Some(s) = cur {
         if let Some(&id) = arena.scopes[s].set().get(name) {

@@ -6,7 +6,13 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+// `Clone` and `Copy` are derived because `compute_nesting_depths`
+// stores `Option<NestingKind>` in an enter/leave stack: pushing,
+// popping, and matching all require the inner value to be `Copy` so
+// the visitor can move the kind out by value when decrementing
+// counters without juggling references. The enum carries no payload,
+// so `Copy` is free.
+#[derive(Clone, Copy, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum NestingKind {
     Function,

@@ -7,5 +7,7 @@
 //! `ScopeBuilderState`) and keeps the rest here so the imports stay
 //! aligned with the TS source.
 
-pub(crate) mod collect_binding_identifiers;
+pub mod collect_binding_identifiers;
 pub(crate) mod declare_implicit_arguments;
+
+pub use collect_binding_identifiers::collect_binding_identifiers;

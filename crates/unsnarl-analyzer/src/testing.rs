@@ -75,3 +75,47 @@ pub(crate) fn parse_ts<'a>(allocator: &'a Allocator, source: &'a str) -> Program
     );
     program
 }
+
+/// Parse `source` as TypeScript and run the eslint-scope-compatible
+/// scope builder over it, returning both the program (for AST-level
+/// inspection) and the analysis result (arena + global scope id).
+pub(crate) fn parse_and_analyze_ts<'a>(
+    allocator: &'a Allocator,
+    source: &'a str,
+) -> (
+    Program<'a>,
+    unsnarl_boundary_eslint_scope::analysis_result::EslintScopeAnalysisResult,
+) {
+    use unsnarl_boundary_eslint_scope::analyze::{analyze, AnalyzeOptions};
+    use unsnarl_boundary_eslint_scope::parser::SourceType as BoundarySourceType;
+    use unsnarl_boundary_eslint_scope::visitor::AnalysisVisitor;
+    let source_type = SourceType::ts();
+    let ParserReturn {
+        program,
+        errors,
+        panicked,
+        ..
+    } = Parser::new(allocator, source, source_type).parse();
+    assert!(!panicked, "parser panicked on test source");
+    assert!(
+        errors.is_empty(),
+        "parser reported errors on test source: {errors:?}"
+    );
+    struct NoopVisitor;
+    impl AnalysisVisitor for NoopVisitor {}
+    let mut visitor = NoopVisitor;
+    let boundary_source_type = if source_type.is_module() {
+        BoundarySourceType::Module
+    } else {
+        BoundarySourceType::Script
+    };
+    let result = analyze(
+        &program,
+        &AnalyzeOptions {
+            source_type: boundary_source_type,
+            raw: source,
+        },
+        &mut visitor,
+    );
+    (program, result)
+}
