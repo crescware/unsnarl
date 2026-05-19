@@ -1,0 +1,119 @@
+//! Reference resolution against the live scope chain plus implicit
+//! global fallback.
+//!
+//! Mirrors `bindReference` / `resolveInScopeChain` in
+//! `ts/src/boundary/eslint-scope/resolve.ts`. The TS port mutates the
+//! `Reference` object's `resolved` field via a cast; the Rust port
+//! goes through the arena (`arena.references[id].resolved = ...`).
+//!
+//! When the identifier doesn't resolve in any reachable scope, we
+//! create an `ImplicitGlobalVariable` on the global scope so the
+//! downstream IR has a binding to point at. This matches
+//! eslint-scope's `__defineImplicitVariable` shape.
+
+use unsnarl_ir::ids::{ReferenceId, ScopeId, VariableId};
+use unsnarl_ir::primitive::{AstIdentifier, AstNode};
+use unsnarl_ir::reference::reference_flags::ReferenceFlagBits;
+use unsnarl_ir::reference::ReferenceData;
+use unsnarl_ir::scope::{DefinitionData, VariableData};
+use unsnarl_ir::{DefinitionType, IrArena};
+
+use crate::state::ScopeBuilderState;
+
+pub(crate) fn bind_reference(
+    state: &mut ScopeBuilderState,
+    scope: ScopeId,
+    identifier: AstIdentifier,
+    flags: ReferenceFlagBits,
+    init: bool,
+) -> ReferenceId {
+    let name = identifier.name().to_string();
+    let ref_id = state.arena.references.push(ReferenceData {
+        identifier,
+        from: scope,
+        resolved: None,
+        init,
+        flags,
+    });
+    state.arena.scopes[scope].references.push(ref_id);
+
+    let resolved = resolve_in_scope_chain(&state.arena, scope, &name);
+    let target = match resolved {
+        Some(id) => id,
+        None => declare_implicit_global(state, &name, ref_id),
+    };
+    state.arena.references[ref_id].resolved = Some(target);
+    state.arena.variables[target].references.push(ref_id);
+
+    // Walk up the scope chain, including the global scope, marking
+    // every scope between (and including) `scope` and `global_scope`
+    // with `through.push(ref_id)`. TS shape: loop up to (not
+    // including) global, then push to global outside the loop. The
+    // Rust port collapses to a single loop that breaks once it
+    // pushes for `global_scope`.
+    let global = state.global_scope;
+    let mut cur = Some(scope);
+    while let Some(s) = cur {
+        state.arena.scopes[s].through.push(ref_id);
+        if s == global {
+            break;
+        }
+        cur = state.arena.scopes[s].upper;
+    }
+    if !state.stack.contains(&global) {
+        // Defensive: if `scope` is somehow not on a chain that
+        // reaches `global`, ensure `global.through` still records
+        // the reference (TS pushes to `global.through` unconditionally
+        // at the end). In practice the scope chain always terminates
+        // at the global scope.
+        state.arena.scopes[global].through.push(ref_id);
+    }
+    ref_id
+}
+
+fn resolve_in_scope_chain(arena: &IrArena, scope: ScopeId, name: &str) -> Option<VariableId> {
+    let mut cur = Some(scope);
+    while let Some(s) = cur {
+        if let Some(&id) = arena.scopes[s].set().get(name) {
+            return Some(id);
+        }
+        cur = arena.scopes[s].upper;
+    }
+    None
+}
+
+fn declare_implicit_global(
+    state: &mut ScopeBuilderState,
+    name: &str,
+    ref_id: ReferenceId,
+) -> VariableId {
+    let global = state.global_scope;
+    if let Some(&existing) = state.arena.scopes[global].set().get(name) {
+        return existing;
+    }
+    let ident_copy = state.arena.references[ref_id].identifier.clone();
+    let var_id = state.arena.variables.push(VariableData::new(
+        name.to_string(),
+        global,
+        Vec::new(),
+        Vec::new(),
+        Vec::new(),
+    ));
+    state.arena.scopes[global].insert_into_set(name.to_string(), var_id);
+    state.arena.scopes[global].variables.push(var_id);
+    let ident_node = AstNode {
+        r#type: ident_copy.r#type.clone(),
+        span: ident_copy.span,
+    };
+    state.arena.variables[var_id]
+        .identifiers
+        .push(ident_copy.clone());
+    let def_id = state.arena.definitions.push(DefinitionData {
+        r#type: DefinitionType::ImplicitGlobalVariable,
+        name: ident_copy,
+        node: ident_node,
+        parent: None,
+    });
+    state.arena.variables[var_id].defs.push(def_id);
+    var_id
+}
