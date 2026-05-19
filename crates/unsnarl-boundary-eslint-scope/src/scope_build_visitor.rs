@@ -156,6 +156,19 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.leave_node(kind);
             return;
         }
+        // Inside a TS type-only subtree (`abstract m(): void;` is a
+        // FunctionExpression child of `TSAbstractMethodDefinition`),
+        // the TS pipeline returns "skip" at the enclosing ancestor
+        // and never reaches `visit_function`. oxc's `Visit` trait has
+        // no "skip" return, so we instead enter the node (for
+        // `type_only_depth` bookkeeping) and walk the body without
+        // creating a function scope.
+        if self.type_only_depth > 0 {
+            let kind = AstKind::Function(self.alloc(it));
+            self.enter_node(kind);
+            self.leave_node(kind);
+            return;
+        }
         let scope_id = enter_function(self.state, it, self.raw);
         self.fire_on_scope(scope_id);
         let kind = AstKind::Function(self.alloc(it));
@@ -235,9 +248,24 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.enter_node(kind);
         self.visit_span(&it.span);
         self.visit_decorators(&it.decorators);
-        self.key_stack.push(Some("pattern"));
-        self.visit_binding_pattern(&it.pattern);
-        self.key_stack.pop();
+        // TS parameter property (`constructor(public x: number)` etc.):
+        // npm `oxc-parser` ESTree-fies this as a `TSParameterProperty`
+        // wrapper and the inner identifier falls through to
+        // `classify_ordinary_reference` -- i.e. it becomes a plain
+        // read reference (resolving as an implicit global), not a
+        // binding. oxc records it on the FormalParameter directly via
+        // `accessibility` / `readonly` / `override`, so detect those
+        // flags here and skip the `pattern` slot key so
+        // `is_direct_binding`'s `FormalParameter.pattern` rule does
+        // not fire.
+        let is_param_property = it.accessibility.is_some() || it.readonly || it.r#override;
+        if is_param_property {
+            self.visit_binding_pattern(&it.pattern);
+        } else {
+            self.key_stack.push(Some("pattern"));
+            self.visit_binding_pattern(&it.pattern);
+            self.key_stack.pop();
+        }
         if let Some(type_annotation) = it.type_annotation.as_deref() {
             self.key_stack.push(Some("typeAnnotation"));
             self.visit_ts_type_annotation(type_annotation);
