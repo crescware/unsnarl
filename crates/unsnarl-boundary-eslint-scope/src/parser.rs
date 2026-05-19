@@ -35,13 +35,18 @@ pub struct ParseOptions {
 
 /// Successful parse result.
 ///
-/// Mirrors `ParsedSource` in `ts/src/pipeline/parse/parsed-source.ts`. The
-/// `program` field carries the arena lifetime `'a` so this type — and any
+/// Mirrors `ParsedSource` in `ts/src/pipeline/parse/parsed-source.ts` with two
+/// field omissions: `language` and `source_path` are present on the TS type
+/// but never read by any downstream consumer (`runAnalysis` reads
+/// `program` / `raw` / `sourceType` only; `pipeline.ts` re-reads
+/// `opts.language` / `opts.sourcePath` directly rather than via the parsed
+/// value). They are therefore omitted here and may be re-added when a real
+/// consumer appears.
+///
+/// The `program` field carries the arena lifetime `'a` so this type — and any
 /// downstream consumer — must stay within the boundary crate.
 pub struct ParsedSource<'a> {
     pub program: Program<'a>,
-    pub language: Language,
-    pub source_path: String,
     pub source_type: SourceType,
     pub raw: &'a str,
 }
@@ -155,8 +160,6 @@ impl OxcParser {
 
         Ok(ParsedSource {
             program: ret.program,
-            language: opts.language,
-            source_path: opts.source_path.clone(),
             source_type: opts.source_type,
             raw: code,
         })

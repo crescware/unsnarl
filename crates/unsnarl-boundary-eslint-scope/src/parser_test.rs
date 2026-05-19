@@ -43,8 +43,6 @@ fn parses_a_simple_ts_program_into_an_estree_compatible_program_node() {
         )
         .unwrap();
 
-    assert!(matches!(parsed.language, Language::Ts));
-    assert_eq!(parsed.source_path, "input.ts");
     assert!(matches!(parsed.source_type, SourceType::Module));
     assert_eq!(parsed.raw, code);
 
