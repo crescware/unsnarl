@@ -18,12 +18,17 @@
 #   ./bench-ir-parity.sh path/to/dir   # custom work dir
 #
 # Outputs (under the work dir):
-#   summary.txt         human-readable totals
+#   summary.txt         human-readable totals + "smallest diffs first" preview
 #   timings.tsv         file<TAB>rust_ms<TAB>ts_ms<TAB>match
 #   fail_list.txt       paths whose stdouts differ
+#   failures.tsv        file<TAB>diff_line_count, sorted ascending (smallest
+#                       diffs first, since those are the cheapest to fix)
 #   diff/<safe>.diff    unified diff (TS vs Rust) for each mismatch
 #   rust/, ts/          raw IR stdouts (mismatches only; matches are deleted)
 #   stderr/             non-empty stderr from either implementation
+#
+# Exit code:
+#   0 if every file matched byte-for-byte, 1 otherwise.
 
 set -u
 zmodload zsh/datetime
@@ -136,7 +141,28 @@ denom=$(( TOTAL > 0 ? TOTAL : 1 ))
 RUST_AVG_MS=$(( RUST_TOTAL_MS / denom ))
 TS_AVG_MS=$(( TS_TOTAL_MS / denom ))
 
+FAILURES_TSV="$WORK/failures.tsv"
+: > "$FAILURES_TSV"
+if (( FAIL > 0 )); then
+    # diff line count = `wc -l` on the unified diff. Smallest first =
+    # cheapest to inspect / fix.
+    for d in "$WORK"/diff/*.diff; do
+        rel="${d##*/}"
+        rel="${rel%.diff}"
+        rel="${rel//__//}"
+        n=$(wc -l < "$d" | tr -d ' ')
+        print -- "$rel\t$n"
+    done | sort -t$'\t' -k2,2n -k1,1 > "$FAILURES_TSV"
+fi
+
+if (( FAIL == 0 )); then
+    STATUS="PASS"
+else
+    STATUS="FAIL"
+fi
+
 {
+    print -- "status=$STATUS"
     print -- "files_total=$TOTAL"
     print -- "files_pass=$PASS"
     print -- "files_fail=$FAIL"
@@ -149,4 +175,19 @@ TS_AVG_MS=$(( TS_TOTAL_MS / denom ))
     print -- "rust_max_ms=$RUST_MAX_MS\t$RUST_MAX_FILE"
     print -- "ts_max_ms=$TS_MAX_MS\t$TS_MAX_FILE"
     print -- "wallclock_total_ms=$overall_ms"
+
+    if (( FAIL > 0 )); then
+        print --
+        print -- "failures (smallest diff first; full list in failures.tsv):"
+        head -n 20 "$FAILURES_TSV" | while IFS=$'\t' read -r f n; do
+            printf '  %5d lines  %s\n' "$n" "$f"
+        done
+        if (( FAIL > 20 )); then
+            print -- "  ... and $(( FAIL - 20 )) more (see failures.tsv)"
+        fi
+    fi
 } | tee "$WORK/summary.txt"
+
+if (( FAIL > 0 )); then
+    exit 1
+fi
