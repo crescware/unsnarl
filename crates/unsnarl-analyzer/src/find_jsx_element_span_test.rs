@@ -1,0 +1,87 @@
+//! Unit tests for `find_jsx_element_span` driving the path-walking
+//! logic directly.
+//!
+//! TS-side `jsx-element-span.test.ts` is an integration test routed
+//! through `runAnalysis` (pipeline, Step 21); the parity harness will
+//! cover the same fixtures end-to-end once Step 12 lands. Until then
+//! we cover only the decision function itself.
+
+use unsnarl_oxc_parity::AstType;
+
+use crate::testing::{ast_node, ast_node_with_end, entry};
+
+use super::find_jsx_element_span;
+
+#[test]
+fn empty_path_returns_none() {
+    assert!(find_jsx_element_span(&[]).is_none());
+}
+
+#[test]
+fn opening_element_with_jsx_element_grandparent_returns_element_span() {
+    let path = vec![
+        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        entry(
+            ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
+            Some("openingElement"),
+        ),
+    ];
+    let span = find_jsx_element_span(&path).expect("Some");
+    assert_eq!(span.start_offset.0, 10);
+    assert_eq!(span.end_offset.0, 40);
+}
+
+#[test]
+fn opening_element_at_path_root_returns_none() {
+    let path = vec![entry(
+        ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
+        Some("openingElement"),
+    )];
+    assert!(find_jsx_element_span(&path).is_none());
+}
+
+#[test]
+fn opening_element_without_jsx_element_grandparent_returns_none() {
+    let path = vec![
+        entry(ast_node(AstType::Program, 0), None),
+        entry(
+            ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
+            Some("openingElement"),
+        ),
+    ];
+    assert!(find_jsx_element_span(&path).is_none());
+}
+
+#[test]
+fn member_expression_segment_is_walked_through() {
+    let path = vec![
+        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        entry(
+            ast_node_with_end(AstType::JSXOpeningElement, 10, 30),
+            Some("openingElement"),
+        ),
+        entry(
+            ast_node_with_end(AstType::JSXMemberExpression, 11, 22),
+            Some("name"),
+        ),
+    ];
+    let span = find_jsx_element_span(&path).expect("Some");
+    assert_eq!(span.start_offset.0, 10);
+    assert_eq!(span.end_offset.0, 40);
+}
+
+#[test]
+fn unrelated_innermost_entry_returns_none() {
+    let path = vec![
+        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        entry(
+            ast_node_with_end(AstType::JSXOpeningElement, 10, 30),
+            Some("openingElement"),
+        ),
+        entry(
+            ast_node_with_end(AstType::JSXAttribute, 12, 28),
+            Some("attribute"),
+        ),
+    ];
+    assert!(find_jsx_element_span(&path).is_none());
+}
