@@ -17,6 +17,7 @@ members = [
     "crates/unsnarl-plugin",
     "crates/unsnarl-plugin-react",
     "crates/unsnarl",
+    "crates/no-allow-dead-code",
 ]
 
 [workspace.package]
