@@ -50,7 +50,12 @@ pub(crate) fn bind_reference(
     // with `through.push(ref_id)`. TS shape: loop up to (not
     // including) global, then push to global outside the loop. The
     // Rust port collapses to a single loop that breaks once it
-    // pushes for `global_scope`.
+    // pushes for `global_scope`. `ScopeBuilderState::new` seeds
+    // `global_scope` as the chain root with `upper = None`, and
+    // `push_scope` always sets each new scope's `upper` to the
+    // current top, so the chain from any reachable scope is
+    // guaranteed to terminate at `global_scope` and the loop will
+    // always push there.
     let global = state.global_scope;
     let mut cur = Some(scope);
     while let Some(s) = cur {
@@ -59,14 +64,6 @@ pub(crate) fn bind_reference(
             break;
         }
         cur = state.arena.scopes[s].upper;
-    }
-    if !state.stack.contains(&global) {
-        // Defensive: if `scope` is somehow not on a chain that
-        // reaches `global`, ensure `global.through` still records
-        // the reference (TS pushes to `global.through` unconditionally
-        // at the end). In practice the scope chain always terminates
-        // at the global scope.
-        state.arena.scopes[global].through.push(ref_id);
     }
     ref_id
 }

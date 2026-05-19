@@ -37,3 +37,15 @@ pub(crate) mod state;
 pub(crate) mod testing;
 pub mod visitor;
 pub(crate) mod walk;
+
+// `ScopeBuilderState` itself is a public type, but the surrounding
+// `state` module stays `pub(crate)` so the build-only free functions
+// (`push_scope`, `pop_scope`, `declare_variable`, `finish`,
+// `current_scope`) remain inaccessible from outside this crate.
+//
+// `AnalysisVisitor::on_scope` / `on_reference` pass `&ScopeBuilderState`
+// through to consumers, so the type must be nameable externally for
+// downstream crates to implement those callbacks. The re-export here
+// satisfies that requirement without exposing the build-time mutation
+// surface.
+pub use state::ScopeBuilderState;

@@ -80,3 +80,7 @@ pub(crate) fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
 pub(crate) fn materialise_path(path: &[PathEntry<'_>]) -> Vec<AstNode> {
     path.iter().map(|p| ast_node_of(&p.node)).collect()
 }
+
+#[cfg(test)]
+#[path = "materialise_test.rs"]
+mod materialise_test;

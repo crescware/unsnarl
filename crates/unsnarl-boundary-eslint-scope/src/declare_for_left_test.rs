@@ -60,3 +60,53 @@ fn for_var_head_emits_var_detected_diagnostic() {
     );
     assert_eq!(visitor.count, 1);
 }
+
+#[test]
+fn for_of_using_head_is_skipped_by_declare_for_left() {
+    // `for (using x of arr)` uses a `using` head — neither
+    // Var/Let/Const, so `declare_for_left` must skip it: no binding
+    // is registered on the For scope, and the `var-detected`
+    // diagnostic is not emitted.
+    struct Capture {
+        var_detected: usize,
+    }
+    impl AnalysisVisitor for Capture {
+        fn on_diagnostic(&mut self, diag: &unsnarl_ir::diagnostic::Diagnostic) {
+            if matches!(diag.kind, DiagnosticKind::VarDetected) {
+                self.var_detected += 1;
+            }
+        }
+    }
+    let allocator = oxc_allocator::Allocator::default();
+    let parsed = OxcParser
+        .parse(
+            &allocator,
+            "for (using x of arr) {}\n",
+            &ParseOptions {
+                language: Language::Ts,
+                source_path: "input.ts".to_string(),
+                source_type: default_source_type_for(Language::Ts),
+            },
+        )
+        .unwrap();
+    let mut visitor = Capture { var_detected: 0 };
+    let r = analyze(
+        &parsed.program,
+        &AnalyzeOptions {
+            source_type: parsed.source_type,
+            raw: parsed.raw,
+        },
+        &mut visitor,
+    );
+    let for_scope = find_first_descendant_scope(&r.arena, r.global_scope, ScopeType::For)
+        .expect("a For scope must exist");
+    let names = variable_names_in_scope(&r.arena, for_scope);
+    assert!(
+        !names.iter().any(|n| n == "x"),
+        "`using` head must not register a binding on the For scope"
+    );
+    assert_eq!(
+        visitor.var_detected, 0,
+        "`using` head must not trigger the var-detected diagnostic"
+    );
+}
