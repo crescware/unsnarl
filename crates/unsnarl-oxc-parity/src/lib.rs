@@ -31,16 +31,25 @@
 //!   statement types; a curated subset of `AstType` values exposed
 //!   as its own enum because downstream code matches on it
 //!   exhaustively.
+//! * [`AssignOperator`]: the 16 assignment operators
+//!   (`=`, `+=`, ..., `??=`) read off
+//!   `AssignmentExpression.operator`.
+//! * [`UpdateOperator`]: the 2 update operators (`++`, `--`) read
+//!   off `UpdateExpression.operator`.
 //!
 //! Other crates (the IR, the boundary, the analyzer, ...) depend
 //! on this crate rather than redeclaring these types.
 
 use serde::Serialize;
 
+pub mod assign_operator;
 pub mod predicate_container_type;
+pub mod update_operator;
 pub mod variable_declaration_kind;
 
+pub use assign_operator::AssignOperator;
 pub use predicate_container_type::PredicateContainerType;
+pub use update_operator::UpdateOperator;
 pub use variable_declaration_kind::VariableDeclarationKind;
 
 pub const UNKNOWN_AST_TYPE: &str = "UnknownAstType";

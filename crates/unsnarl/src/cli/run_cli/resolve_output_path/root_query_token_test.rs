@@ -1,5 +1,7 @@
 use super::*;
 
+use unsnarl_ir::SourceLine;
+
 #[test]
 fn name_uses_identifier_verbatim() {
     let q = ParsedRootQuery::Name {
@@ -12,7 +14,7 @@ fn name_uses_identifier_verbatim() {
 #[test]
 fn line_yields_l_n() {
     let q = ParsedRootQuery::Line {
-        line: 42,
+        line: SourceLine(42),
         raw: "42".to_string(),
     };
     assert_eq!(root_query_token(&q), "l42");
@@ -21,7 +23,7 @@ fn line_yields_l_n() {
 #[test]
 fn line_name_yields_l_n_dash_id() {
     let q = ParsedRootQuery::LineName {
-        line: 42,
+        line: SourceLine(42),
         name: "render".to_string(),
         raw: "42:render".to_string(),
     };
@@ -31,8 +33,8 @@ fn line_name_yields_l_n_dash_id() {
 #[test]
 fn range_yields_l_start_dash_end() {
     let q = ParsedRootQuery::Range {
-        start: 10,
-        end: 12,
+        start: SourceLine(10),
+        end: SourceLine(12),
         raw: "10-12".to_string(),
     };
     assert_eq!(root_query_token(&q), "l10-12");
@@ -41,8 +43,8 @@ fn range_yields_l_start_dash_end() {
 #[test]
 fn range_name_yields_l_start_dash_end_dash_id() {
     let q = ParsedRootQuery::RangeName {
-        start: 10,
-        end: 12,
+        start: SourceLine(10),
+        end: SourceLine(12),
         name: "render".to_string(),
         raw: "10-12:render".to_string(),
     };
@@ -52,7 +54,7 @@ fn range_name_yields_l_start_dash_end_dash_id() {
 #[test]
 fn line_or_name_normalizes_to_plain_line_shape() {
     let q = ParsedRootQuery::LineOrName {
-        line: 12,
+        line: SourceLine(12),
         name: "L12".to_string(),
         raw: "L12".to_string(),
     };

@@ -1,4 +1,5 @@
 use super::*;
+use unsnarl_ir::SourceLine;
 
 fn assert_err_contains(text: &str, needle: &str) {
     let err = parse_endpoint_query(text).unwrap_err();
@@ -14,7 +15,7 @@ fn parses_a_bare_line_number() {
     assert_eq!(
         parse_endpoint_query("10"),
         Ok(ParsedRootQuery::Line {
-            line: 10,
+            line: SourceLine(10),
             raw: "10".to_string(),
         }),
     );
@@ -25,7 +26,7 @@ fn parses_line_name() {
     assert_eq!(
         parse_endpoint_query("10:counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "counter".to_string(),
             raw: "10:counter".to_string(),
         }),
@@ -37,7 +38,7 @@ fn parses_line_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_endpoint_query("10:$counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "$counter".to_string(),
             raw: "10:$counter".to_string(),
         }),
@@ -45,7 +46,7 @@ fn parses_line_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_endpoint_query("10:_counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "_counter".to_string(),
             raw: "10:_counter".to_string(),
         }),
@@ -57,8 +58,8 @@ fn parses_range() {
     assert_eq!(
         parse_endpoint_query("9-13"),
         Ok(ParsedRootQuery::Range {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             raw: "9-13".to_string(),
         }),
     );
@@ -69,8 +70,8 @@ fn parses_range_name() {
     assert_eq!(
         parse_endpoint_query("9-13:value"),
         Ok(ParsedRootQuery::RangeName {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             name: "value".to_string(),
             raw: "9-13:value".to_string(),
         }),
@@ -147,7 +148,7 @@ fn parses_uppercase_l_as_line_or_name() {
     assert_eq!(
         parse_endpoint_query("L12"),
         Ok(ParsedRootQuery::LineOrName {
-            line: 12,
+            line: SourceLine(12),
             name: "L12".to_string(),
             raw: "L12".to_string(),
         }),
@@ -159,7 +160,7 @@ fn parses_lowercase_l_as_line_or_name() {
     assert_eq!(
         parse_endpoint_query("l1"),
         Ok(ParsedRootQuery::LineOrName {
-            line: 1,
+            line: SourceLine(1),
             name: "l1".to_string(),
             raw: "l1".to_string(),
         }),
@@ -171,16 +172,16 @@ fn parses_l_range_preserving_raw() {
     assert_eq!(
         parse_endpoint_query("L12-34"),
         Ok(ParsedRootQuery::Range {
-            start: 12,
-            end: 34,
+            start: SourceLine(12),
+            end: SourceLine(34),
             raw: "L12-34".to_string(),
         }),
     );
     assert_eq!(
         parse_endpoint_query("l9-13"),
         Ok(ParsedRootQuery::Range {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             raw: "l9-13".to_string(),
         }),
     );
@@ -202,14 +203,14 @@ fn syntactically_accepts_zero_line_forms() {
     assert_eq!(
         parse_endpoint_query("0"),
         Ok(ParsedRootQuery::Line {
-            line: 0,
+            line: SourceLine(0),
             raw: "0".to_string(),
         }),
     );
     assert_eq!(
         parse_endpoint_query("0:foo"),
         Ok(ParsedRootQuery::LineName {
-            line: 0,
+            line: SourceLine(0),
             name: "foo".to_string(),
             raw: "0:foo".to_string(),
         }),
@@ -217,15 +218,15 @@ fn syntactically_accepts_zero_line_forms() {
     assert_eq!(
         parse_endpoint_query("0-3"),
         Ok(ParsedRootQuery::Range {
-            start: 0,
-            end: 3,
+            start: SourceLine(0),
+            end: SourceLine(3),
             raw: "0-3".to_string(),
         }),
     );
     assert_eq!(
         parse_endpoint_query("L0"),
         Ok(ParsedRootQuery::LineOrName {
-            line: 0,
+            line: SourceLine(0),
             name: "L0".to_string(),
             raw: "L0".to_string(),
         }),
@@ -237,7 +238,7 @@ fn syntactically_accepts_descending_ranges() {
     for input in ["5-1", "L5-1", "l5-1"] {
         match parse_endpoint_query(input).unwrap() {
             ParsedRootQuery::Range { start, end, .. } => {
-                assert_eq!((start, end), (5, 1));
+                assert_eq!((start, end), (SourceLine(5), SourceLine(1)));
             }
             other => panic!("expected Range for {input:?}, got {other:?}"),
         }
@@ -295,7 +296,7 @@ fn syntactically_accepts_u32_max_line() {
     assert_eq!(
         parse_endpoint_query("4294967295"),
         Ok(ParsedRootQuery::Line {
-            line: u32::MAX,
+            line: SourceLine(u32::MAX),
             raw: "4294967295".to_string(),
         }),
     );

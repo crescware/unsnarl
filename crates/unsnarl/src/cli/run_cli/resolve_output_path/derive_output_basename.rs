@@ -1,16 +1,16 @@
 use std::path::Path;
 
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
 
 use super::radius_suffix::radius_suffix;
 use super::root_query_token::root_query_token;
 
 pub fn derive_output_basename(
     roots: &[ParsedRootQuery],
-    descendants: Option<u32>,
-    ancestors: Option<u32>,
-    context: Option<u32>,
-    input_path: &str,
+    descendants: Option<GenerationCount>,
+    ancestors: Option<GenerationCount>,
+    context: Option<GenerationCount>,
+    input_path: &Path,
 ) -> String {
     if !roots.is_empty() {
         let root_token = roots
@@ -22,9 +22,9 @@ pub fn derive_output_basename(
         return format!("{root_token}{suffix}");
     }
 
-    match Path::new(input_path).file_stem().and_then(|s| s.to_str()) {
+    match input_path.file_stem().and_then(|s| s.to_str()) {
         Some(stem) => stem.to_string(),
-        None => input_path.to_string(),
+        None => input_path.to_string_lossy().into_owned(),
     }
 }
 

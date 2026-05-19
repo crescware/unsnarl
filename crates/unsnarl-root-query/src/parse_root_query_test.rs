@@ -1,4 +1,5 @@
 use super::*;
+use unsnarl_ir::SourceLine;
 
 fn assert_err_contains(text: &str, needle: &str) {
     let err = parse_root_query(text).unwrap_err();
@@ -13,7 +14,7 @@ fn parses_a_bare_line_number() {
     assert_eq!(
         parse_root_query("10"),
         Ok(ParsedRootQuery::Line {
-            line: 10,
+            line: SourceLine(10),
             raw: "10".to_string(),
         }),
     );
@@ -24,7 +25,7 @@ fn parses_line_name() {
     assert_eq!(
         parse_root_query("10:counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "counter".to_string(),
             raw: "10:counter".to_string(),
         }),
@@ -36,7 +37,7 @@ fn parses_line_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_root_query("10:$counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "$counter".to_string(),
             raw: "10:$counter".to_string(),
         }),
@@ -44,7 +45,7 @@ fn parses_line_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_root_query("10:_counter"),
         Ok(ParsedRootQuery::LineName {
-            line: 10,
+            line: SourceLine(10),
             name: "_counter".to_string(),
             raw: "10:_counter".to_string(),
         }),
@@ -56,8 +57,8 @@ fn parses_range() {
     assert_eq!(
         parse_root_query("9-13"),
         Ok(ParsedRootQuery::Range {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             raw: "9-13".to_string(),
         }),
     );
@@ -68,8 +69,8 @@ fn parses_range_name() {
     assert_eq!(
         parse_root_query("9-13:value"),
         Ok(ParsedRootQuery::RangeName {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             name: "value".to_string(),
             raw: "9-13:value".to_string(),
         }),
@@ -81,8 +82,8 @@ fn parses_range_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_root_query("9-13:$value"),
         Ok(ParsedRootQuery::RangeName {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             name: "$value".to_string(),
             raw: "9-13:$value".to_string(),
         }),
@@ -90,8 +91,8 @@ fn parses_range_name_with_dollar_or_underscore_head() {
     assert_eq!(
         parse_root_query("9-13:_value"),
         Ok(ParsedRootQuery::RangeName {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             name: "_value".to_string(),
             raw: "9-13:_value".to_string(),
         }),
@@ -179,8 +180,8 @@ fn treats_n_dash_n_as_single_line_range() {
     assert_eq!(
         parse_root_query("5-5"),
         Ok(ParsedRootQuery::Range {
-            start: 5,
-            end: 5,
+            start: SourceLine(5),
+            end: SourceLine(5),
             raw: "5-5".to_string(),
         }),
     );
@@ -230,7 +231,7 @@ fn parses_uppercase_l_as_line_or_name() {
     assert_eq!(
         parse_root_query("L12"),
         Ok(ParsedRootQuery::LineOrName {
-            line: 12,
+            line: SourceLine(12),
             name: "L12".to_string(),
             raw: "L12".to_string(),
         }),
@@ -242,7 +243,7 @@ fn parses_lowercase_l_as_line_or_name() {
     assert_eq!(
         parse_root_query("l1"),
         Ok(ParsedRootQuery::LineOrName {
-            line: 1,
+            line: SourceLine(1),
             name: "l1".to_string(),
             raw: "l1".to_string(),
         }),
@@ -254,16 +255,16 @@ fn parses_l_range_preserving_raw() {
     assert_eq!(
         parse_root_query("L12-34"),
         Ok(ParsedRootQuery::Range {
-            start: 12,
-            end: 34,
+            start: SourceLine(12),
+            end: SourceLine(34),
             raw: "L12-34".to_string(),
         }),
     );
     assert_eq!(
         parse_root_query("l9-13"),
         Ok(ParsedRootQuery::Range {
-            start: 9,
-            end: 13,
+            start: SourceLine(9),
+            end: SourceLine(13),
             raw: "l9-13".to_string(),
         }),
     );

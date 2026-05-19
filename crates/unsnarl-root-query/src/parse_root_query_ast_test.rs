@@ -1,4 +1,7 @@
 use super::*;
+use unsnarl_ir::SourceLine;
+
+use crate::generation_count::GenerationCount;
 use crate::parsed_root_query::ParsedRootQuery;
 use crate::root_query::Direction;
 use crate::root_query_scope::ROOT_QUERY_SCOPE_POINT_ONLY;
@@ -25,7 +28,7 @@ fn wraps_bare_line_as_single_under_point_only() {
         parse_root_query_ast("10", &ROOT_QUERY_SCOPE_POINT_ONLY),
         Ok(RootQuery::Single {
             query: ParsedRootQuery::Line {
-                line: 10,
+                line: SourceLine(10),
                 raw: "10".to_string(),
             },
             raw: "10".to_string(),
@@ -63,7 +66,7 @@ fn syntactically_accepts_zero_line() {
         parse_root_query_ast("0", &ROOT_QUERY_SCOPE_POINT_ONLY),
         Ok(RootQuery::Single {
             query: ParsedRootQuery::Line {
-                line: 0,
+                line: SourceLine(0),
                 raw: "0".to_string(),
             },
             raw: "0".to_string(),
@@ -77,8 +80,8 @@ fn syntactically_accepts_descending_range() {
         parse_root_query_ast("5-1", &ROOT_QUERY_SCOPE_POINT_ONLY),
         Ok(RootQuery::Single {
             query: ParsedRootQuery::Range {
-                start: 5,
-                end: 1,
+                start: SourceLine(5),
+                end: SourceLine(1),
                 raw: "5-1".to_string(),
             },
             raw: "5-1".to_string(),
@@ -110,11 +113,11 @@ fn parses_path_with_mixed_endpoint_kinds() {
         parse_root_query_ast("10..L20", &SCOPE_FULL),
         Ok(RootQuery::Path {
             lhs: ParsedRootQuery::Line {
-                line: 10,
+                line: SourceLine(10),
                 raw: "10".to_string(),
             },
             rhs: ParsedRootQuery::LineOrName {
-                line: 20,
+                line: SourceLine(20),
                 name: "L20".to_string(),
                 raw: "L20".to_string(),
             },
@@ -152,7 +155,7 @@ fn parses_direction_with_level() {
     match r {
         RootQuery::Direction { dir, level, .. } => {
             assert_eq!(dir, Direction::After);
-            assert_eq!(level, Some(3));
+            assert_eq!(level, Some(GenerationCount(3)));
         }
         other => panic!("expected Direction, got {other:?}"),
     }
@@ -161,7 +164,7 @@ fn parses_direction_with_level() {
     match r {
         RootQuery::Direction { dir, level, .. } => {
             assert_eq!(dir, Direction::After);
-            assert_eq!(level, Some(0));
+            assert_eq!(level, Some(GenerationCount(0)));
         }
         other => panic!("expected Direction, got {other:?}"),
     }

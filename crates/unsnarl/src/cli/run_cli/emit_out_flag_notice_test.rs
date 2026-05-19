@@ -1,8 +1,10 @@
+use std::path::Path;
+
 use super::*;
 
 fn capture(out_dir: Option<&str>) -> String {
     let mut buf = Vec::new();
-    emit_out_flag_notice(out_dir, &mut buf);
+    emit_out_flag_notice(out_dir.map(Path::new), &mut buf);
     String::from_utf8(buf).expect("output should be valid UTF-8")
 }
 

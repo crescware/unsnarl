@@ -2,9 +2,12 @@
 //! `ts/src/cli/args/build-command.ts` and the per-option files alongside
 //! it.
 
+use std::path::{Path, PathBuf};
+
 use clap::Parser;
 use serde::Serialize;
-use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
+use unsnarl_ir::NestingDepth;
+use unsnarl_root_query::{parse_root_queries, GenerationCount, ParsedRootQuery};
 
 use crate::cli::run_cli::derive_output_basename;
 
@@ -23,7 +26,7 @@ pub use cli_mermaid_renderer::CliMermaidRenderer;
 pub use highlight::Highlight;
 
 use collect_plugins::parse_plugin_occurrence;
-use parse_generation_count::parse_generation_count;
+use parse_generation_count::{parse_generation_count, parse_nesting_depth};
 
 #[derive(Parser, Debug, Serialize)]
 #[command(
@@ -36,7 +39,7 @@ use parse_generation_count::parse_generation_count;
 #[serde(rename_all = "camelCase")]
 pub struct Args {
     /// Input file
-    pub file: Option<String>,
+    pub file: Option<PathBuf>,
 
     /// Emitter format (mermaid, ir, json, markdown, stats)
     #[arg(
@@ -123,7 +126,7 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub descendants: Option<u32>,
+    pub descendants: Option<GenerationCount>,
 
     /// Ancestors generations
     #[arg(
@@ -132,7 +135,7 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub ancestors: Option<u32>,
+    pub ancestors: Option<GenerationCount>,
 
     /// Context generations (-A and -B shorthand)
     #[arg(
@@ -141,31 +144,31 @@ pub struct Args {
         value_name = "N",
         value_parser = parse_generation_count
     )]
-    pub context: Option<u32>,
+    pub context: Option<GenerationCount>,
 
     /// Sugar: set both --depth-function and --depth-block to <N>
     #[arg(
         long = "depth",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth: Option<u32>,
+    pub depth: Option<NestingDepth>,
 
     /// Max function-scope nesting depth before scopes collapse to a single node
     #[arg(
         long = "depth-function",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth_function: Option<u32>,
+    pub depth_function: Option<NestingDepth>,
 
     /// Max block-scope nesting depth (applies to if/for/while/switch/try-catch-finally/block) before scopes collapse to a single node
     #[arg(
         long = "depth-block",
         value_name = "N",
-        value_parser = parse_generation_count
+        value_parser = parse_nesting_depth
     )]
-    pub depth_block: Option<u32>,
+    pub depth_block: Option<NestingDepth>,
 
     /// Write output to <dir>/<auto-name>.<ext>
     #[arg(
@@ -174,11 +177,11 @@ pub struct Args {
         value_name = "dir",
         conflicts_with = "out_file"
     )]
-    pub out_dir: Option<String>,
+    pub out_dir: Option<PathBuf>,
 
     /// Write output to <path> (full file path, no auto-naming)
     #[arg(long = "out-file", value_name = "path")]
-    pub out_file: Option<String>,
+    pub out_file: Option<PathBuf>,
 
     /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C` (or the
     /// positional input file when no roots are given). Populated by
@@ -252,7 +255,7 @@ impl Args {
         for raw in raw_roots {
             match parse_root_queries(&raw) {
                 Ok(qs) => self.roots.extend(qs),
-                Err(msg) => return Err(value_validation_error(msg)),
+                Err(msg) => return Err(value_validation_error(&msg)),
             }
         }
         let raw_highlight = std::mem::take(&mut self.raw_highlight);
@@ -261,7 +264,7 @@ impl Args {
             Some(None) => Highlight::NoValue,
             Some(Some(raw)) => match parse_root_queries(&raw) {
                 Ok(qs) => Highlight::Value(qs),
-                Err(msg) => return Err(value_validation_error(msg)),
+                Err(msg) => return Err(value_validation_error(&msg)),
             },
         };
         if self.out_dir.is_some() {
@@ -272,13 +275,13 @@ impl Args {
             // only remaining basename source.
             if self.stdin && self.roots.is_empty() {
                 return Err(value_validation_error(
-                    "--out-dir requires either -r/--roots or an input file path".to_string(),
+                    "--out-dir requires either -r/--roots or an input file path",
                 ));
             }
             let input_path = if self.stdin {
-                ""
+                Path::new("")
             } else {
-                self.file.as_deref().unwrap_or("")
+                self.file.as_deref().unwrap_or_else(|| Path::new(""))
             };
             self.derived_basename = Some(derive_output_basename(
                 &self.roots,
@@ -292,7 +295,7 @@ impl Args {
     }
 }
 
-fn value_validation_error(message: String) -> clap::Error {
+fn value_validation_error(message: &str) -> clap::Error {
     clap::Error::raw(
         clap::error::ErrorKind::ValueValidation,
         format!("{message}\n"),

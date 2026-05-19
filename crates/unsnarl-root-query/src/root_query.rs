@@ -1,3 +1,4 @@
+use crate::generation_count::GenerationCount;
 use crate::parsed_root_query::ParsedRootQuery;
 
 #[derive(Debug, PartialEq, Eq)]
@@ -21,7 +22,7 @@ pub enum RootQuery {
     Direction {
         lhs: ParsedRootQuery,
         dir: Direction,
-        level: Option<u32>,
+        level: Option<GenerationCount>,
         raw: String,
     },
 }

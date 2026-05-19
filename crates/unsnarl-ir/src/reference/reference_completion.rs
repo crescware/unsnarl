@@ -7,8 +7,16 @@
 //! continue completion. The variant set is therefore narrowed to
 //! `Normal` / `Return` / `Throw`.
 
+use crate::primitive::SourceOffset;
+
 pub enum ReferenceCompletion {
     Normal,
-    Return { start_offset: u32, end_offset: u32 },
-    Throw { start_offset: u32, end_offset: u32 },
+    Return {
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
+    },
+    Throw {
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
+    },
 }

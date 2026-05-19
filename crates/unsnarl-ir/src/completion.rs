@@ -12,6 +12,8 @@ pub mod completion_type;
 
 pub use completion_type::CompletionType;
 
+use crate::primitive::SourceOffset;
+
 pub enum Completion {
     Normal,
     Abrupt(AbruptCompletion),
@@ -19,21 +21,21 @@ pub enum Completion {
 
 pub enum AbruptCompletion {
     Return {
-        start_offset: u32,
-        end_offset: u32,
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
     },
     Throw {
-        start_offset: u32,
-        end_offset: u32,
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
     },
     Break {
         target: Option<String>,
-        start_offset: u32,
-        end_offset: u32,
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
     },
     Continue {
         target: Option<String>,
-        start_offset: u32,
-        end_offset: u32,
+        start_offset: SourceOffset,
+        end_offset: SourceOffset,
     },
 }

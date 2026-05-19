@@ -9,13 +9,15 @@ use serde::Serialize;
 
 use unsnarl_oxc_parity::AstType;
 
+use crate::primitive::SourceOffset;
+
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct CaseClauseBlockContext {
     kind: super::block_context_kind::BlockContextKind,
     parent_type: AstType,
     key: String,
-    parent_span_offset: u32,
+    parent_span_offset: SourceOffset,
     case_test: Option<String>,
 }
 
@@ -23,7 +25,7 @@ impl CaseClauseBlockContext {
     pub fn new(
         parent_type: AstType,
         key: String,
-        parent_span_offset: u32,
+        parent_span_offset: SourceOffset,
         case_test: Option<String>,
     ) -> Self {
         assert!(
@@ -52,16 +54,16 @@ pub struct OtherBlockContext {
     kind: super::block_context_kind::BlockContextKind,
     parent_type: AstType,
     key: String,
-    parent_span_offset: u32,
-    if_chain_root_offset: Option<u32>,
+    parent_span_offset: SourceOffset,
+    if_chain_root_offset: Option<SourceOffset>,
 }
 
 impl OtherBlockContext {
     pub fn new(
         parent_type: AstType,
         key: String,
-        parent_span_offset: u32,
-        if_chain_root_offset: Option<u32>,
+        parent_span_offset: SourceOffset,
+        if_chain_root_offset: Option<SourceOffset>,
     ) -> Self {
         assert!(!key.is_empty(), "OtherBlockContext.key must be non-empty");
         Self {
