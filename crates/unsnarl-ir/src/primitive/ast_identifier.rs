@@ -4,6 +4,7 @@ use oxc_span::Span;
 
 use unsnarl_oxc_parity::AstType;
 
+#[derive(Clone)]
 pub struct AstIdentifier {
     pub r#type: AstType,
     name: String,

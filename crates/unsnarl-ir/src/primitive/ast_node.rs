@@ -9,6 +9,7 @@ use oxc_span::Span;
 
 use unsnarl_oxc_parity::AstType;
 
+#[derive(Clone)]
 pub struct AstNode {
     pub r#type: AstType,
     pub span: Span,

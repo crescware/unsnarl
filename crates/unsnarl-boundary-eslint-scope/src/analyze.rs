@@ -13,6 +13,7 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
+use crate::hoist_into::hoist_into;
 use crate::parser::SourceType;
 use crate::state::{finish, ScopeBuilderState};
 use crate::visitor::AnalysisVisitor;
@@ -36,7 +37,7 @@ pub fn analyze<'a>(
     options: &AnalyzeOptions<'a>,
     visitor: &dyn AnalysisVisitor,
 ) -> EslintScopeAnalysisResult {
-    let _ = (options.raw, visitor);
+    let _ = visitor;
     let root_kind = match options.source_type {
         SourceType::Module => ScopeType::Module,
         SourceType::Script => ScopeType::Global,
@@ -45,8 +46,10 @@ pub fn analyze<'a>(
         r#type: AstType::Program,
         span: program.span,
     };
-    let state = ScopeBuilderState::new(root_kind, root_block);
-    let (_arena, _global_scope) = finish(state);
+    let mut state = ScopeBuilderState::new(root_kind, root_block);
+    let global_scope = state.global_scope;
+    hoist_into(&mut state, program, global_scope, options.raw);
+    let (_arena, _global_scope, _diagnostics) = finish(state);
     EslintScopeAnalysisResult {}
 }
 

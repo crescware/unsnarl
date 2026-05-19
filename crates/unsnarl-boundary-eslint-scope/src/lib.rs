@@ -11,6 +11,11 @@
 
 pub mod analysis_result;
 pub mod analyze;
+pub(crate) mod declare;
+pub(crate) mod diagnostic_collector;
+pub(crate) mod hoist_into;
+pub(crate) mod hoisting;
 pub mod parser;
+pub(crate) mod span_util;
 pub(crate) mod state;
 pub mod visitor;
