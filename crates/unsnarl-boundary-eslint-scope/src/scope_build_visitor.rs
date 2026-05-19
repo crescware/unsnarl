@@ -168,7 +168,9 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         }
         self.enter_scope(flags, &it.scope_id);
         if let Some(type_parameters) = it.type_parameters.as_deref() {
+            self.key_stack.push(Some("typeParameters"));
             self.visit_ts_type_parameter_declaration(type_parameters);
+            self.key_stack.pop();
         }
         if let Some(this_param) = it.this_param.as_deref() {
             self.visit_ts_this_parameter(this_param);
@@ -177,7 +179,9 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.visit_formal_parameters(&it.params);
         self.key_stack.pop();
         if let Some(return_type) = it.return_type.as_deref() {
+            self.key_stack.push(Some("returnType"));
             self.visit_ts_type_annotation(return_type);
+            self.key_stack.pop();
         }
         if let Some(body) = it.body.as_deref() {
             self.key_stack.push(Some("body"));
@@ -206,13 +210,17 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             &it.scope_id,
         );
         if let Some(type_parameters) = it.type_parameters.as_deref() {
+            self.key_stack.push(Some("typeParameters"));
             self.visit_ts_type_parameter_declaration(type_parameters);
+            self.key_stack.pop();
         }
         self.key_stack.push(Some("params"));
         self.visit_formal_parameters(&it.params);
         self.key_stack.pop();
         if let Some(return_type) = it.return_type.as_deref() {
+            self.key_stack.push(Some("returnType"));
             self.visit_ts_type_annotation(return_type);
+            self.key_stack.pop();
         }
         self.key_stack.push(Some("body"));
         self.visit_function_body(&it.body);
@@ -231,7 +239,9 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.visit_binding_pattern(&it.pattern);
         self.key_stack.pop();
         if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
             self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
         }
         if let Some(initializer) = it.initializer.as_deref() {
             self.visit_expression(initializer);
@@ -252,7 +262,9 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.key_stack.pop();
         }
         if let Some(type_parameters) = it.type_parameters.as_deref() {
+            self.key_stack.push(Some("typeParameters"));
             self.visit_ts_type_parameter_declaration(type_parameters);
+            self.key_stack.pop();
         }
         if let Some(super_class) = it.super_class.as_ref() {
             self.key_stack.push(Some("superClass"));
@@ -260,11 +272,15 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.key_stack.pop();
         }
         if let Some(super_type_arguments) = it.super_type_arguments.as_deref() {
+            self.key_stack.push(Some("superTypeArguments"));
             self.visit_ts_type_parameter_instantiation(super_type_arguments);
+            self.key_stack.pop();
         }
+        self.key_stack.push(Some("implements"));
         for ts_class_implements in &it.implements {
             self.visit_ts_class_implements(ts_class_implements);
         }
+        self.key_stack.pop();
         self.key_stack.push(Some("body"));
         self.visit_class_body(&it.body);
         self.key_stack.pop();
@@ -322,7 +338,9 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.visit_binding_pattern(&it.id);
         self.key_stack.pop();
         if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
             self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
         }
         if let Some(init) = it.init.as_ref() {
             self.key_stack.push(Some("init"));
