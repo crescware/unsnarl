@@ -147,6 +147,43 @@ fn compound_assignment_preserves_operator() {
 }
 
 #[test]
+fn assignment_operator_translation_covers_every_variant() {
+    // The 16 entries below pair every JS / TS assignment operator with the
+    // `AssignOperator` variant `convert_assign_operator` is expected to
+    // produce. The list mirrors `oxc_syntax::operator::AssignmentOperator`
+    // exhaustively so a mismatch in the table is caught.
+    let cases: &[(&str, AssignOperator)] = &[
+        ("x = y;", AssignOperator::Assign),
+        ("x += y;", AssignOperator::AddAssign),
+        ("x -= y;", AssignOperator::SubAssign),
+        ("x *= y;", AssignOperator::MulAssign),
+        ("x /= y;", AssignOperator::DivAssign),
+        ("x %= y;", AssignOperator::RemAssign),
+        ("x **= y;", AssignOperator::ExpAssign),
+        ("x <<= y;", AssignOperator::ShlAssign),
+        ("x >>= y;", AssignOperator::ShrAssign),
+        ("x >>>= y;", AssignOperator::UnsignedShrAssign),
+        ("x |= y;", AssignOperator::BitOrAssign),
+        ("x ^= y;", AssignOperator::BitXorAssign),
+        ("x &= y;", AssignOperator::BitAndAssign),
+        ("x ||= y;", AssignOperator::LogicalOrAssign),
+        ("x &&= y;", AssignOperator::LogicalAndAssign),
+        ("x ??= y;", AssignOperator::NullishAssign),
+    ];
+    for (src, expected) in cases {
+        let alloc = Allocator::default();
+        let program = parse_ts(&alloc, src);
+        let head = build_head_expression(Some(expression_of(&program)), fallback_span(&program));
+        match head {
+            HeadExpression::Assign { operator, .. } => {
+                assert_eq!(&operator, expected, "operator mismatch for source `{src}`");
+            }
+            _ => panic!("expected assign head for source `{src}`"),
+        }
+    }
+}
+
+#[test]
 fn assignment_with_elided_rhs_collapses_to_raw_when_both_sides_elided() {
     // Both sides reduce to elided (`[a]` is a destructuring pattern which we
     // don't reduce, `[1]` is an array literal which we don't reduce either),

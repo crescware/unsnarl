@@ -17,11 +17,11 @@
 use std::collections::HashMap;
 
 use oxc_ast::ast::{
-    BlockStatement, CatchClause, ForInStatement, ForOfStatement, ForStatement, Function,
-    IfStatement, Program, Statement, SwitchStatement, TryStatement, WhileStatement,
+    CatchClause, ForInStatement, ForOfStatement, ForStatement, Function, IfStatement, Program,
+    SwitchStatement, TryStatement, WhileStatement,
 };
 use oxc_ast::AstKind;
-use oxc_ast_visit::{walk, Visit};
+use oxc_ast_visit::Visit;
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths, NestingKind};
@@ -426,20 +426,6 @@ impl<'a> Visit<'a> for NestingDepthVisitor {
         self.key_stack.pop();
         self.leave_scope();
         self.leave_node(kind);
-    }
-
-    fn visit_block_statement(&mut self, it: &BlockStatement<'a>) {
-        // The enter_node / leave_node pair is handled by `walk_block_statement`
-        // via the default visit, but we re-implement to ensure the
-        // `BlockStatement`'s own enter_node sees the parent's key stack.
-        // The default `walk_block_statement` increments scope around the
-        // block; we keep that behavior here.
-        walk::walk_block_statement(self, it);
-    }
-
-    fn visit_statement(&mut self, it: &Statement<'a>) {
-        // Inherit default; the key was already pushed by the parent.
-        walk::walk_statement(self, it);
     }
 }
 

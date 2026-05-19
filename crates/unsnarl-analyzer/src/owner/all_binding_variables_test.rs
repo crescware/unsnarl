@@ -200,6 +200,49 @@ fn assignment_target_member_expression_is_skipped() {
 }
 
 #[test]
+fn assignment_target_array_rest_is_collected() {
+    let alloc = Allocator::default();
+    let (program, result) = parse_and_analyze_ts(&alloc, "let a; let rest; [a, ...rest] = arr;");
+    let assign = match program.body.get(2).unwrap() {
+        Statement::ExpressionStatement(es) => match &es.expression {
+            Expression::AssignmentExpression(a) => a,
+            _ => unreachable!(),
+        },
+        _ => unreachable!(),
+    };
+    let vars = assignment_target_variables(&assign.left, result.global_scope, &result.arena);
+    let names: Vec<&str> = vars
+        .iter()
+        .map(|&id| result.arena.variables[id].name())
+        .collect();
+    assert_eq!(names, vec!["a", "rest"]);
+}
+
+#[test]
+fn assignment_target_object_rest_is_collected() {
+    let alloc = Allocator::default();
+    let (program, result) =
+        parse_and_analyze_ts(&alloc, "let a; let rest; ({ a, ...rest } = obj);");
+    let assign = match program.body.get(2).unwrap() {
+        Statement::ExpressionStatement(es) => match &es.expression {
+            Expression::ParenthesizedExpression(p) => match &p.expression {
+                Expression::AssignmentExpression(a) => a,
+                _ => unreachable!(),
+            },
+            Expression::AssignmentExpression(a) => a,
+            _ => unreachable!(),
+        },
+        _ => unreachable!(),
+    };
+    let vars = assignment_target_variables(&assign.left, result.global_scope, &result.arena);
+    let names: Vec<&str> = vars
+        .iter()
+        .map(|&id| result.arena.variables[id].name())
+        .collect();
+    assert_eq!(names, vec!["a", "rest"]);
+}
+
+#[test]
 fn duplicate_names_are_deduped() {
     // The TS function de-dupes via `Array.includes`; the Rust port
     // mirrors that with a `Vec::contains` check. Build a pattern that
