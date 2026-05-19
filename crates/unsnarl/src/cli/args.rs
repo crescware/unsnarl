@@ -255,7 +255,7 @@ impl Args {
         for raw in raw_roots {
             match parse_root_queries(&raw) {
                 Ok(qs) => self.roots.extend(qs),
-                Err(msg) => return Err(value_validation_error(msg)),
+                Err(msg) => return Err(value_validation_error(&msg)),
             }
         }
         let raw_highlight = std::mem::take(&mut self.raw_highlight);
@@ -264,7 +264,7 @@ impl Args {
             Some(None) => Highlight::NoValue,
             Some(Some(raw)) => match parse_root_queries(&raw) {
                 Ok(qs) => Highlight::Value(qs),
-                Err(msg) => return Err(value_validation_error(msg)),
+                Err(msg) => return Err(value_validation_error(&msg)),
             },
         };
         if self.out_dir.is_some() {
@@ -275,7 +275,7 @@ impl Args {
             // only remaining basename source.
             if self.stdin && self.roots.is_empty() {
                 return Err(value_validation_error(
-                    "--out-dir requires either -r/--roots or an input file path".to_string(),
+                    "--out-dir requires either -r/--roots or an input file path",
                 ));
             }
             let input_path = if self.stdin {
@@ -295,7 +295,7 @@ impl Args {
     }
 }
 
-fn value_validation_error(message: String) -> clap::Error {
+fn value_validation_error(message: &str) -> clap::Error {
     clap::Error::raw(
         clap::error::ErrorKind::ValueValidation,
         format!("{message}\n"),

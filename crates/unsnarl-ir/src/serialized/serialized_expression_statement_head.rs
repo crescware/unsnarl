@@ -6,6 +6,7 @@
 //! raw offsets.
 
 use serde::Serialize;
+use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
 use crate::primitive::Span;
 
@@ -37,12 +38,12 @@ pub enum SerializedHeadExpression {
         argument: Box<SerializedHeadExpression>,
     },
     Assign {
-        operator: String,
+        operator: AssignOperator,
         left: Box<SerializedHeadOperand>,
         right: Box<SerializedHeadOperand>,
     },
     Update {
-        operator: String,
+        operator: UpdateOperator,
         prefix: bool,
         argument: Box<SerializedHeadOperand>,
     },

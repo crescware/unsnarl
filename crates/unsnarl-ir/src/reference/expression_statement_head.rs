@@ -6,6 +6,8 @@
 //! positions even when the operand is `Elided` and therefore has no
 //! intrinsic span.
 
+use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
+
 use crate::primitive::SourceOffset;
 
 pub struct HeadOperand {
@@ -32,12 +34,12 @@ pub enum HeadExpression {
         argument: Box<HeadExpression>,
     },
     Assign {
-        operator: String,
+        operator: AssignOperator,
         left: Box<HeadOperand>,
         right: Box<HeadOperand>,
     },
     Update {
-        operator: String,
+        operator: UpdateOperator,
         prefix: bool,
         argument: Box<HeadOperand>,
     },
