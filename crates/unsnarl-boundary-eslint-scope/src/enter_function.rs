@@ -62,3 +62,7 @@ pub(crate) fn enter_arrow_function_expression(
     hoist_declarations(state, &arrow.body.statements, scope_id, raw);
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_function_test.rs"]
+mod enter_function_test;

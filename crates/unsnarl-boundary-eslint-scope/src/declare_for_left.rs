@@ -75,3 +75,7 @@ pub(crate) fn declare_for_left(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "declare_for_left_test.rs"]
+mod declare_for_left_test;

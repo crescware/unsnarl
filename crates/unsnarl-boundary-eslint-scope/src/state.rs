@@ -209,3 +209,7 @@ pub(crate) fn finish(state: ScopeBuilderState) -> (IrArena, ScopeId, Vec<Diagnos
         state.diagnostics.into_list(),
     )
 }
+
+#[cfg(test)]
+#[path = "state_test.rs"]
+mod state_test;

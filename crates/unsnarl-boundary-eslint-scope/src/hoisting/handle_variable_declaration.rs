@@ -81,3 +81,7 @@ pub(crate) fn handle_variable_declaration(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "handle_variable_declaration_test.rs"]
+mod handle_variable_declaration_test;

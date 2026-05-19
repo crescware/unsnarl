@@ -66,3 +66,7 @@ fn visit_declaration(
         _ => {}
     }
 }
+
+#[cfg(test)]
+#[path = "visit_test.rs"]
+mod visit_test;

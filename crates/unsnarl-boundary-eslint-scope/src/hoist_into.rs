@@ -20,3 +20,7 @@ pub(crate) fn hoist_into(
 ) {
     hoist_declarations(state, &program.body, scope, raw);
 }
+
+#[cfg(test)]
+#[path = "hoist_into_test.rs"]
+mod hoist_into_test;

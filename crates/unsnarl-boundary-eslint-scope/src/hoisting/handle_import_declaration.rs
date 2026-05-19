@@ -71,3 +71,7 @@ pub(crate) fn handle_import_declaration(
         );
     }
 }
+
+#[cfg(test)]
+#[path = "handle_import_declaration_test.rs"]
+mod handle_import_declaration_test;

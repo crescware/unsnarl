@@ -34,3 +34,7 @@ pub(crate) fn is_pattern_step(node: &AstKind<'_>, path: &[PathEntry<'_>], i: usi
         _ => false,
     }
 }
+
+#[cfg(test)]
+#[path = "is_pattern_step_test.rs"]
+mod is_pattern_step_test;

@@ -46,3 +46,7 @@ pub(crate) fn enter_class(state: &mut ScopeBuilderState, class: &Class<'_>) -> S
     }
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_class_test.rs"]
+mod enter_class_test;

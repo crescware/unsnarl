@@ -62,3 +62,7 @@ pub(crate) fn classify_identifier(
     }
     classify_ordinary_reference(parent, key)
 }
+
+#[cfg(test)]
+#[path = "classify_identifier_test.rs"]
+mod classify_identifier_test;

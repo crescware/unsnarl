@@ -37,3 +37,7 @@ pub(crate) fn handle_class_declaration(
         None,
     );
 }
+
+#[cfg(test)]
+#[path = "handle_class_declaration_test.rs"]
+mod handle_class_declaration_test;

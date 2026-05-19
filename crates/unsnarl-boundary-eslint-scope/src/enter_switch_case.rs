@@ -31,3 +31,7 @@ pub(crate) fn enter_switch_case(
     hoist_declarations(state, &case.consequent, scope_id, raw);
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_switch_case_test.rs"]
+mod enter_switch_case_test;

@@ -46,3 +46,7 @@ pub(crate) fn enter_catch(
     hoist_declarations(state, &catch.body.body, scope_id, raw);
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_catch_test.rs"]
+mod enter_catch_test;

@@ -66,3 +66,7 @@ pub(crate) fn enter_for_of_statement(
     }
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_for_test.rs"]
+mod enter_for_test;

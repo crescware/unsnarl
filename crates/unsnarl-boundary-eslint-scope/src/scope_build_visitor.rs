@@ -324,3 +324,7 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         oxc_ast_visit::walk::walk_identifier_reference(self, it);
     }
 }
+
+#[cfg(test)]
+#[path = "scope_build_visitor_test.rs"]
+mod scope_build_visitor_test;

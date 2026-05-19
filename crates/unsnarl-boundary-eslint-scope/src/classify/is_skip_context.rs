@@ -46,3 +46,7 @@ pub(crate) fn is_skip_context(parent: &AstKind<'_>, key: Option<&'static str>) -
         _ => false,
     }
 }
+
+#[cfg(test)]
+#[path = "is_skip_context_test.rs"]
+mod is_skip_context_test;

@@ -4,7 +4,9 @@
 //! offers `parse(code, language)` and `findFirst(root, type)`; the
 //! Rust port replaces both with a higher-level helper
 //! ([`analyze_source`]) that drives `OxcParser` → `analyze` and
-//! returns the populated [`EslintScopeAnalysisResult`].
+//! returns the populated [`EslintScopeAnalysisResult`], plus a
+//! handful of shared IR-shape predicates used by the sibling
+//! `*_test.rs` files.
 //!
 //! Per issue #118, boundary tests stay integration-style — source
 //! string in, IR observation out — so individual `enter_*` / classify
@@ -16,6 +18,10 @@
 
 use oxc_allocator::Allocator;
 
+use unsnarl_ir::ids::ScopeId;
+use unsnarl_ir::scope_type::ScopeType;
+use unsnarl_ir::DefinitionType;
+use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
@@ -27,9 +33,7 @@ pub(crate) struct NoopVisitor;
 impl AnalysisVisitor for NoopVisitor {}
 
 /// Parse `code` as the requested language and run the full
-/// scope-builder pass against it. The allocator is dropped on the
-/// caller's behalf once the returned arena leaves the parser
-/// lifetime, so callers don't need to manage it.
+/// scope-builder pass against it.
 pub(crate) fn analyze_source(code: &str, language: Language) -> EslintScopeAnalysisResult {
     let allocator = Allocator::default();
     let parsed = OxcParser
@@ -61,4 +65,98 @@ fn language_extension(language: Language) -> &'static str {
         Language::Ts => "ts",
         Language::Tsx => "tsx",
     }
+}
+
+/// Variable names live in a scope, ordered by `variables` insertion.
+pub(crate) fn variable_names_in_scope(arena: &IrArena, scope: ScopeId) -> Vec<String> {
+    arena.scopes[scope]
+        .variables
+        .iter()
+        .map(|&id| arena.variables[id].name().to_string())
+        .collect()
+}
+
+/// First child of `root` matching `target` scope type. Useful for
+/// pulling the function / class / catch scope out of the global
+/// scope's `child_scopes` without having to count indices.
+pub(crate) fn find_first_descendant_scope(
+    arena: &IrArena,
+    root: ScopeId,
+    target: ScopeType,
+) -> Option<ScopeId> {
+    if scope_type_matches(&arena.scopes[root].r#type, &target) {
+        return Some(root);
+    }
+    for &child in arena.scopes[root].child_scopes.clone().iter() {
+        if let Some(hit) = find_first_descendant_scope(arena, child, scope_type_copy(&target)) {
+            return Some(hit);
+        }
+    }
+    None
+}
+
+fn scope_type_copy(t: &ScopeType) -> ScopeType {
+    match t {
+        ScopeType::Block => ScopeType::Block,
+        ScopeType::Catch => ScopeType::Catch,
+        ScopeType::Class => ScopeType::Class,
+        ScopeType::ClassFieldInitializer => ScopeType::ClassFieldInitializer,
+        ScopeType::ClassStaticBlock => ScopeType::ClassStaticBlock,
+        ScopeType::For => ScopeType::For,
+        ScopeType::Function => ScopeType::Function,
+        ScopeType::FunctionExpressionName => ScopeType::FunctionExpressionName,
+        ScopeType::Global => ScopeType::Global,
+        ScopeType::Module => ScopeType::Module,
+        ScopeType::Switch => ScopeType::Switch,
+        ScopeType::With => ScopeType::With,
+    }
+}
+
+fn scope_type_matches(a: &ScopeType, b: &ScopeType) -> bool {
+    matches!(
+        (a, b),
+        (ScopeType::Block, ScopeType::Block)
+            | (ScopeType::Catch, ScopeType::Catch)
+            | (ScopeType::Class, ScopeType::Class)
+            | (
+                ScopeType::ClassFieldInitializer,
+                ScopeType::ClassFieldInitializer
+            )
+            | (ScopeType::ClassStaticBlock, ScopeType::ClassStaticBlock)
+            | (ScopeType::For, ScopeType::For)
+            | (ScopeType::Function, ScopeType::Function)
+            | (
+                ScopeType::FunctionExpressionName,
+                ScopeType::FunctionExpressionName
+            )
+            | (ScopeType::Global, ScopeType::Global)
+            | (ScopeType::Module, ScopeType::Module)
+            | (ScopeType::Switch, ScopeType::Switch)
+            | (ScopeType::With, ScopeType::With)
+    )
+}
+
+pub(crate) fn variable_has_def_of(arena: &IrArena, name: &str, kind: DefinitionType) -> bool {
+    arena
+        .variables
+        .iter()
+        .filter(|v| v.name() == name)
+        .flat_map(|v| v.defs.iter())
+        .any(|&d| def_type_matches(&arena.definitions[d].r#type, &kind))
+}
+
+fn def_type_matches(a: &DefinitionType, b: &DefinitionType) -> bool {
+    matches!(
+        (a, b),
+        (DefinitionType::CatchClause, DefinitionType::CatchClause)
+            | (DefinitionType::ClassName, DefinitionType::ClassName)
+            | (DefinitionType::FunctionName, DefinitionType::FunctionName)
+            | (
+                DefinitionType::ImplicitGlobalVariable,
+                DefinitionType::ImplicitGlobalVariable
+            )
+            | (DefinitionType::ImportBinding, DefinitionType::ImportBinding)
+            | (DefinitionType::Parameter, DefinitionType::Parameter)
+            | (DefinitionType::Variable, DefinitionType::Variable)
+    )
 }

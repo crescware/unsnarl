@@ -16,3 +16,7 @@ use oxc_ast::AstKind;
 pub(crate) fn skip_block_scope(parent: &AstKind<'_>) -> bool {
     matches!(parent, AstKind::CatchClause(_))
 }
+
+#[cfg(test)]
+#[path = "skip_block_scope_test.rs"]
+mod skip_block_scope_test;

@@ -36,3 +36,7 @@ pub(crate) fn enter_block(
     hoist_declarations(state, &block.body, scope_id, raw);
     scope_id
 }
+
+#[cfg(test)]
+#[path = "enter_block_test.rs"]
+mod enter_block_test;

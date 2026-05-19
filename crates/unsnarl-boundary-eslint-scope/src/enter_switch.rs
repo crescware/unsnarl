@@ -21,3 +21,7 @@ pub(crate) fn enter_switch(state: &mut ScopeBuilderState, switch: &SwitchStateme
     };
     push_scope(state, ScopeType::Switch, node)
 }
+
+#[cfg(test)]
+#[path = "enter_switch_test.rs"]
+mod enter_switch_test;

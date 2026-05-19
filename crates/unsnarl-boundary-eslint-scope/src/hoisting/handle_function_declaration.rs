@@ -37,3 +37,7 @@ pub(crate) fn handle_function_declaration(
         None,
     );
 }
+
+#[cfg(test)]
+#[path = "handle_function_declaration_test.rs"]
+mod handle_function_declaration_test;

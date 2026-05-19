@@ -35,3 +35,7 @@ pub(crate) fn classify_ordinary_reference(
     let init = matches!(parent, AstKind::VariableDeclarator(_)) && key == Some("init");
     reference(ReferenceFlags::READ, init)
 }
+
+#[cfg(test)]
+#[path = "classify_ordinary_reference_test.rs"]
+mod classify_ordinary_reference_test;

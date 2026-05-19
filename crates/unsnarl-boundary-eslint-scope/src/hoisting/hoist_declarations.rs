@@ -24,3 +24,7 @@ pub(crate) fn hoist_declarations(
         visit_statement(state, scope, stmt, raw);
     }
 }
+
+#[cfg(test)]
+#[path = "hoist_declarations_test.rs"]
+mod hoist_declarations_test;

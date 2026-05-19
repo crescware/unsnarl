@@ -75,3 +75,7 @@ pub(crate) fn find_binding_root_context(
     }
     None
 }
+
+#[cfg(test)]
+#[path = "find_binding_root_context_test.rs"]
+mod find_binding_root_context_test;

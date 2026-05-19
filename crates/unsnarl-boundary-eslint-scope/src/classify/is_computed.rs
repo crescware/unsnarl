@@ -20,3 +20,7 @@ pub(crate) fn is_computed(node: &AstKind<'_>) -> bool {
         _ => false,
     }
 }
+
+#[cfg(test)]
+#[path = "is_computed_test.rs"]
+mod is_computed_test;

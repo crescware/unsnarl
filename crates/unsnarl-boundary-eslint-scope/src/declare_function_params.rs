@@ -52,3 +52,7 @@ pub(crate) fn declare_function_params(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "declare_function_params_test.rs"]
+mod declare_function_params_test;

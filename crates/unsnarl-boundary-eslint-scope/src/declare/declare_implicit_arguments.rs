@@ -28,3 +28,7 @@ pub(crate) fn declare_implicit_arguments(state: &mut ScopeBuilderState, scope: S
     state.arena.scopes[scope].insert_into_set(name.to_string(), id);
     state.arena.scopes[scope].variables.push(id);
 }
+
+#[cfg(test)]
+#[path = "declare_implicit_arguments_test.rs"]
+mod declare_implicit_arguments_test;

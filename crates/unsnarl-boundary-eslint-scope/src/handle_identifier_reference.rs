@@ -51,3 +51,7 @@ pub(crate) fn handle_identifier_reference(
         state,
     );
 }
+
+#[cfg(test)]
+#[path = "handle_identifier_reference_test.rs"]
+mod handle_identifier_reference_test;

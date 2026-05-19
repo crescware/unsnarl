@@ -28,3 +28,7 @@ pub(crate) fn is_direct_binding(parent: &AstKind<'_>, key: Option<&'static str>)
         _ => false,
     }
 }
+
+#[cfg(test)]
+#[path = "is_direct_binding_test.rs"]
+mod is_direct_binding_test;

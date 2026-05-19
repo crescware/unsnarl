@@ -55,3 +55,7 @@ fn collect(pattern: &BindingPattern<'_>, out: &mut Vec<AstIdentifier>) {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "collect_binding_identifiers_test.rs"]
+mod collect_binding_identifiers_test;
