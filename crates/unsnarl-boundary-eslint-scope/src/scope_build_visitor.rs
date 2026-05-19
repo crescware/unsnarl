@@ -23,8 +23,8 @@
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
     Class, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter,
-    Function, IdentifierReference, SwitchCase, SwitchStatement, UpdateExpression,
-    VariableDeclarator,
+    Function, IdentifierReference, JSXAttribute, JSXIdentifier, JSXMemberExpression, SwitchCase,
+    SwitchStatement, UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -347,6 +347,63 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             AstType::Identifier,
         );
         oxc_ast_visit::walk::walk_binding_identifier(self, it);
+    }
+
+    fn visit_jsx_attribute(&mut self, it: &JSXAttribute<'a>) {
+        // `classify/is_skip_context` treats `JSXAttribute.name` as a
+        // skip slot; push the key so the JSXIdentifier child sees it
+        // as its parent slot.
+        let kind = AstKind::JSXAttribute(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("name"));
+        self.visit_jsx_attribute_name(&it.name);
+        self.key_stack.pop();
+        if let Some(value) = it.value.as_ref() {
+            self.key_stack.push(Some("value"));
+            self.visit_jsx_attribute_value(value);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
+    fn visit_jsx_member_expression(&mut self, it: &JSXMemberExpression<'a>) {
+        // `classify/is_skip_context` treats `JSXMemberExpression.property`
+        // as a skip slot; push the `"property"` key so the JSXIdentifier
+        // child sees it. `"object"` is pushed for symmetry / for analyzer
+        // helpers that consume the path later.
+        let kind = AstKind::JSXMemberExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("object"));
+        self.visit_jsx_member_expression_object(&it.object);
+        self.key_stack.pop();
+        self.key_stack.push(Some("property"));
+        self.visit_jsx_identifier(&it.property);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_jsx_identifier(&mut self, it: &JSXIdentifier<'a>) {
+        // TS `handleEnter` routes both `Identifier` and `JSXIdentifier`
+        // through `handleIdentifierReference`; the reference row that
+        // gets created (and the def.node on the resulting implicit
+        // global) carries the JSXIdentifier shape. The Rust port keeps
+        // a per-AST-type dispatch, so we route here with
+        // `AstType::JSXIdentifier`.
+        let parent = self.parent_kind();
+        let key = self.current_key();
+        handle_identifier_reference(
+            self.state,
+            self.visitor,
+            parent.as_ref(),
+            key,
+            &self.path,
+            it.name.as_str(),
+            it.span,
+            AstType::JSXIdentifier,
+        );
+        oxc_ast_visit::walk::walk_jsx_identifier(self, it);
     }
 }
 

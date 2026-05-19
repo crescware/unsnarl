@@ -279,7 +279,9 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_hashbang(hashbang);
         }
         self.visit_directives(&it.directives);
+        self.key_stack.push(Some("body"));
         self.visit_statements(&it.body);
+        self.key_stack.pop();
         self.pop_path();
     }
 
@@ -287,7 +289,9 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         let kind = AstKind::BlockStatement(self.alloc(it));
         self.fire_scope(it.span, &kind);
         self.push_path(kind, None);
+        self.key_stack.push(Some("body"));
         oxc_ast_visit::walk::walk_block_statement(self, it);
+        self.key_stack.pop();
         self.pop_path();
     }
 
