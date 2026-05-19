@@ -1,11 +1,12 @@
-//! Tests for the [`analyze`] skeleton (Step 8.5).
+//! Tests for the [`analyze`] entry function.
 //!
-//! Step 9 will port the full `ts/src/boundary/eslint-scope/*.test.ts` suite
-//! here. For the skeleton, we only verify that the entry function is
-//! callable from a freshly parsed [`ParsedSource`] and panics with the
-//! documented `todo!()` payload — i.e. the parser → scope-builder hand-off
-//! type-checks today and the `ParsedSource` API surface
-//! (`program` / `source_type` / `raw`) is necessary and sufficient.
+//! Step 8.5 only verified that `analyze` panicked with a documented
+//! `todo!()` payload. Step 9's first commit replaces that placeholder
+//! with a real seeded `ScopeBuilderState`, so the test is updated to
+//! assert that `analyze` now completes for a trivial parsed source.
+//! Later commits will move from "completes without panicking" to
+//! observable IR assertions (Step 9.8 ports the TS `*.test.ts` suite
+//! in full).
 //!
 //! [`ParsedSource`]: crate::parser::ParsedSource
 
@@ -20,8 +21,7 @@ struct NoopVisitor;
 impl AnalysisVisitor for NoopVisitor {}
 
 #[test]
-#[should_panic(expected = "Step 9")]
-fn analyze_entry_is_reachable_from_parsed_source() {
+fn analyze_completes_for_trivial_source() {
     let allocator = Allocator::default();
     let code = "const x = 1;\n";
     let parsed = OxcParser
