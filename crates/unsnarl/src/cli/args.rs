@@ -2,6 +2,8 @@
 //! `ts/src/cli/args/build-command.ts` and the per-option files alongside
 //! it.
 
+use std::path::{Path, PathBuf};
+
 use clap::Parser;
 use serde::Serialize;
 use unsnarl_ir::NestingDepth;
@@ -37,7 +39,7 @@ use parse_generation_count::{parse_generation_count, parse_nesting_depth};
 #[serde(rename_all = "camelCase")]
 pub struct Args {
     /// Input file
-    pub file: Option<String>,
+    pub file: Option<PathBuf>,
 
     /// Emitter format (mermaid, ir, json, markdown, stats)
     #[arg(
@@ -175,11 +177,11 @@ pub struct Args {
         value_name = "dir",
         conflicts_with = "out_file"
     )]
-    pub out_dir: Option<String>,
+    pub out_dir: Option<PathBuf>,
 
     /// Write output to <path> (full file path, no auto-naming)
     #[arg(long = "out-file", value_name = "path")]
-    pub out_file: Option<String>,
+    pub out_file: Option<PathBuf>,
 
     /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C` (or the
     /// positional input file when no roots are given). Populated by
@@ -277,9 +279,9 @@ impl Args {
                 ));
             }
             let input_path = if self.stdin {
-                ""
+                Path::new("")
             } else {
-                self.file.as_deref().unwrap_or("")
+                self.file.as_deref().unwrap_or_else(|| Path::new(""))
             };
             self.derived_basename = Some(derive_output_basename(
                 &self.roots,

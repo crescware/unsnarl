@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use super::*;
 
 use unsnarl_ir::SourceLine;
@@ -47,37 +49,50 @@ mod root_tokenization {
 
     #[test]
     fn kind_name_uses_identifier() {
-        let actual = derive_output_basename(&[name("value")], None, None, None, "");
+        let actual = derive_output_basename(&[name("value")], None, None, None, Path::new(""));
         assert_eq!(actual, "value");
     }
 
     #[test]
     fn kind_line_is_l_n() {
-        let actual = derive_output_basename(&[line(42)], None, None, None, "");
+        let actual = derive_output_basename(&[line(42)], None, None, None, Path::new(""));
         assert_eq!(actual, "l42");
     }
 
     #[test]
     fn kind_line_name_is_l_n_dash_id_with_single_hyphen() {
-        let actual = derive_output_basename(&[line_name(42, "render")], None, None, None, "");
+        let actual =
+            derive_output_basename(&[line_name(42, "render")], None, None, None, Path::new(""));
         assert_eq!(actual, "l42-render");
     }
 
     #[test]
     fn kind_range_is_l_n_dash_m() {
-        let actual = derive_output_basename(&[range(10, 12)], None, None, None, "");
+        let actual = derive_output_basename(&[range(10, 12)], None, None, None, Path::new(""));
         assert_eq!(actual, "l10-12");
     }
 
     #[test]
     fn kind_range_name_is_l_n_dash_m_dash_id() {
-        let actual = derive_output_basename(&[range_name(10, 12, "render")], None, None, None, "");
+        let actual = derive_output_basename(
+            &[range_name(10, 12, "render")],
+            None,
+            None,
+            None,
+            Path::new(""),
+        );
         assert_eq!(actual, "l10-12-render");
     }
 
     #[test]
     fn multiple_roots_joined_with_plus() {
-        let actual = derive_output_basename(&[name("value"), name("foo")], None, None, None, "");
+        let actual = derive_output_basename(
+            &[name("value"), name("foo")],
+            None,
+            None,
+            None,
+            Path::new(""),
+        );
         assert_eq!(actual, "value+foo");
     }
 
@@ -88,7 +103,7 @@ mod root_tokenization {
             None,
             None,
             None,
-            "",
+            Path::new(""),
         );
         assert_eq!(actual, "l42-render+foo");
     }
@@ -99,28 +114,43 @@ mod radius_suffix_inclusion {
 
     #[test]
     fn no_radius_flag_yields_no_suffix() {
-        let actual = derive_output_basename(&[name("value")], None, None, None, "");
+        let actual = derive_output_basename(&[name("value")], None, None, None, Path::new(""));
         assert_eq!(actual, "value");
     }
 
     #[test]
     fn descendants_only_yields_a_n() {
-        let actual =
-            derive_output_basename(&[name("value")], Some(GenerationCount(1)), None, None, "");
+        let actual = derive_output_basename(
+            &[name("value")],
+            Some(GenerationCount(1)),
+            None,
+            None,
+            Path::new(""),
+        );
         assert_eq!(actual, "value-a1");
     }
 
     #[test]
     fn ancestors_only_yields_b_n() {
-        let actual =
-            derive_output_basename(&[name("param")], None, Some(GenerationCount(2)), None, "");
+        let actual = derive_output_basename(
+            &[name("param")],
+            None,
+            Some(GenerationCount(2)),
+            None,
+            Path::new(""),
+        );
         assert_eq!(actual, "param-b2");
     }
 
     #[test]
     fn context_only_yields_c_n() {
-        let actual =
-            derive_output_basename(&[range(10, 12)], None, None, Some(GenerationCount(2)), "");
+        let actual = derive_output_basename(
+            &[range(10, 12)],
+            None,
+            None,
+            Some(GenerationCount(2)),
+            Path::new(""),
+        );
         assert_eq!(actual, "l10-12-c2");
     }
 
@@ -131,7 +161,7 @@ mod radius_suffix_inclusion {
             Some(GenerationCount(1)),
             Some(GenerationCount(2)),
             None,
-            "",
+            Path::new(""),
         );
         assert_eq!(actual, "v-a1-b2");
     }
@@ -143,7 +173,7 @@ mod radius_suffix_inclusion {
             None,
             Some(GenerationCount(2)),
             Some(GenerationCount(3)),
-            "",
+            Path::new(""),
         );
         assert_eq!(actual, "v-b2-c3");
     }
@@ -155,7 +185,7 @@ mod radius_suffix_inclusion {
             Some(GenerationCount(7)),
             None,
             Some(GenerationCount(3)),
-            "",
+            Path::new(""),
         );
         assert_eq!(actual, "v-a7-c3");
     }
@@ -167,7 +197,7 @@ mod radius_suffix_inclusion {
             Some(GenerationCount(1)),
             Some(GenerationCount(2)),
             Some(GenerationCount(3)),
-            "",
+            Path::new(""),
         );
         assert_eq!(actual, "v-a1-b2");
     }
@@ -178,43 +208,43 @@ mod input_file_fallback {
 
     #[test]
     fn strips_ts_extension() {
-        let actual = derive_output_basename(&[], None, None, None, "foo.ts");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("foo.ts"));
         assert_eq!(actual, "foo");
     }
 
     #[test]
     fn preserves_camel_case_basename() {
-        let actual = derive_output_basename(&[], None, None, None, "fooBar.ts");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("fooBar.ts"));
         assert_eq!(actual, "fooBar");
     }
 
     #[test]
     fn preserves_kebab_case_basename() {
-        let actual = derive_output_basename(&[], None, None, None, "foo-bar.ts");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("foo-bar.ts"));
         assert_eq!(actual, "foo-bar");
     }
 
     #[test]
     fn strips_tsx_extension() {
-        let actual = derive_output_basename(&[], None, None, None, "Component.tsx");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("Component.tsx"));
         assert_eq!(actual, "Component");
     }
 
     #[test]
     fn strips_only_the_last_extension() {
-        let actual = derive_output_basename(&[], None, None, None, "foo.test.ts");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("foo.test.ts"));
         assert_eq!(actual, "foo.test");
     }
 
     #[test]
     fn no_extension_keeps_full_basename() {
-        let actual = derive_output_basename(&[], None, None, None, "Makefile");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("Makefile"));
         assert_eq!(actual, "Makefile");
     }
 
     #[test]
     fn strips_path_components() {
-        let actual = derive_output_basename(&[], None, None, None, "src/deep/foo.ts");
+        let actual = derive_output_basename(&[], None, None, None, Path::new("src/deep/foo.ts"));
         assert_eq!(actual, "foo");
     }
 }

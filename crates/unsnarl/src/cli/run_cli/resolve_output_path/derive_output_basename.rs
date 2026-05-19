@@ -10,7 +10,7 @@ pub fn derive_output_basename(
     descendants: Option<GenerationCount>,
     ancestors: Option<GenerationCount>,
     context: Option<GenerationCount>,
-    input_path: &str,
+    input_path: &Path,
 ) -> String {
     if !roots.is_empty() {
         let root_token = roots
@@ -22,9 +22,9 @@ pub fn derive_output_basename(
         return format!("{root_token}{suffix}");
     }
 
-    match Path::new(input_path).file_stem().and_then(|s| s.to_str()) {
+    match input_path.file_stem().and_then(|s| s.to_str()) {
         Some(stem) => stem.to_string(),
-        None => input_path.to_string(),
+        None => input_path.to_string_lossy().into_owned(),
     }
 }
 

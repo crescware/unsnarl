@@ -1,3 +1,5 @@
+use std::path::Path;
+
 use super::*;
 use clap::error::ErrorKind;
 use unsnarl_ir::{NestingDepth, SourceLine};
@@ -14,7 +16,7 @@ fn parse_err_exit_code(argv: &[&str]) -> i32 {
 #[test]
 fn defaults_match_ts_commander() {
     let args = parse(&["uns", "input.ts"]);
-    assert_eq!(args.file.as_deref(), Some("input.ts"));
+    assert_eq!(args.file.as_deref(), Some(Path::new("input.ts")));
     assert_eq!(args.format, CliFormat::Mermaid);
     assert!(args.pretty_json);
     assert!(args.mermaid_renderer.is_none());
@@ -177,7 +179,7 @@ fn highlight_absent_is_absent_variant() {
 #[test]
 fn highlight_present_without_value_at_end() {
     let args = parse(&["uns", "x.ts", "-H"]);
-    assert_eq!(args.file.as_deref(), Some("x.ts"));
+    assert_eq!(args.file.as_deref(), Some(Path::new("x.ts")));
     assert_eq!(args.highlight, Highlight::NoValue);
 }
 
@@ -191,7 +193,7 @@ fn highlight_with_inline_value_via_equals() {
             raw: "foo".to_string(),
         }]),
     );
-    assert_eq!(args.file.as_deref(), Some("x.ts"));
+    assert_eq!(args.file.as_deref(), Some(Path::new("x.ts")));
 }
 
 #[test]
@@ -290,7 +292,7 @@ fn depth_flags_reject_decimal_with_exit_2() {
 #[test]
 fn out_dir_alone_accepted() {
     let args = parse(&["uns", "-o", "build/", "x.ts"]);
-    assert_eq!(args.out_dir.as_deref(), Some("build/"));
+    assert_eq!(args.out_dir.as_deref(), Some(Path::new("build/")));
     assert!(args.out_file.is_none());
 }
 
@@ -298,7 +300,7 @@ fn out_dir_alone_accepted() {
 fn out_file_alone_accepted() {
     let args = parse(&["uns", "--out-file", "build/graph.mmd", "x.ts"]);
     assert!(args.out_dir.is_none());
-    assert_eq!(args.out_file.as_deref(), Some("build/graph.mmd"));
+    assert_eq!(args.out_file.as_deref(), Some(Path::new("build/graph.mmd")));
 }
 
 #[test]
@@ -381,7 +383,7 @@ fn stdin_with_out_dir_and_roots_is_accepted_and_derives_root_basename() {
 fn stdin_with_out_file_is_accepted_without_roots() {
     let args = parse(&["uns", "--stdin", "--out-file", "build/graph.mmd"]);
     assert!(args.derived_basename.is_none());
-    assert_eq!(args.out_file.as_deref(), Some("build/graph.mmd"));
+    assert_eq!(args.out_file.as_deref(), Some(Path::new("build/graph.mmd")));
 }
 
 #[test]
