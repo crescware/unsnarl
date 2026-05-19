@@ -4,4 +4,7 @@
 //! This invariant is physically enforced by the absence of those entries in
 //! `Cargo.toml`.
 //!
-//! Placeholder skeleton; populated in Step 8 (parser) and Step 9 (scope-builder).
+//! Step 8 has populated the parser wrapper (`parser` module); the
+//! scope-builder will be added in Step 9.
+
+pub mod parser;

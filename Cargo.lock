@@ -722,6 +722,7 @@ version = "0.3.0-beta.0"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
+ "oxc_diagnostics",
  "oxc_index",
  "oxc_parser",
  "oxc_span",
