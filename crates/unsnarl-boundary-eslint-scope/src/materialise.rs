@@ -45,6 +45,12 @@ pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
         | AstKind::ComputedMemberExpression(_)
         | AstKind::PrivateFieldExpression(_) => AstType::MemberExpression,
         AstKind::BindingRestElement(_) | AstKind::FormalParameterRest(_) => AstType::RestElement,
+        // oxc separates the function body wrapper (`FunctionBody`)
+        // from the standalone `BlockStatement`, but the npm
+        // `oxc-parser` emits both as `BlockStatement` (ESTree's
+        // shape). Mirror the TS spelling so downstream consumers see
+        // the function body as a BlockStatement parent.
+        AstKind::FunctionBody(_) => AstType::BlockStatement,
         AstKind::IdentifierName(_)
         | AstKind::IdentifierReference(_)
         | AstKind::BindingIdentifier(_)
