@@ -32,15 +32,18 @@ pub struct Span {
     pub offset: SourceOffset,
 }
 
-/// Mirrors `spanFromOffset` in `ts/src/util/span.ts`: walks the raw
-/// source up to `offset` (clamped to its byte length), counts line
-/// breaks, and materialises a `Span` triple. `offset` is in bytes; the
-/// returned `column` is the byte distance from the last `\n` (or from
-/// the start of the file). The TS source treats characters as JS
-/// UTF-16 code units, so consumers that need column-accuracy across
-/// non-ASCII spans must already ensure offsets land on character
-/// boundaries; the Rust port preserves the same byte-oriented
-/// behavior.
+/// Mirrors `spanFromOffset` in `ts/src/util/span.ts`. The TS reference
+/// reads source via `fs.readFileSync(..., "utf8")` and consumes
+/// offsets produced by the npm `oxc-parser` package, both of which
+/// operate in UTF-16 code units (JavaScript string indices). The Rust
+/// pipeline consumes UTF-8 byte offsets from the `oxc_parser` crate;
+/// this function converts those byte offsets into UTF-16 code-unit
+/// offsets so the emitted IR matches the TS output byte-for-byte even
+/// in sources containing non-ASCII characters.
+///
+/// `offset` is a UTF-8 byte offset into `raw`. The returned `offset`
+/// and `column` are both in UTF-16 code units; `line` counts `\n`
+/// occurrences (which are ASCII in either encoding).
 pub fn span_from_offset(raw: &str, offset: usize) -> Span {
     let bytes = raw.as_bytes();
     let limit = offset.min(bytes.len());
@@ -52,11 +55,17 @@ pub fn span_from_offset(raw: &str, offset: usize) -> Span {
             last_newline = Some(i);
         }
     }
-    let column = u32::try_from(offset - last_newline.map(|n| n + 1).unwrap_or(0)).unwrap_or(0);
-    let offset_u32 = u32::try_from(offset).unwrap_or(u32::MAX);
+    let line_start_byte = last_newline.map(|n| n + 1).unwrap_or(0);
+    let overshoot = offset.saturating_sub(bytes.len());
+    let column_utf16 = raw[line_start_byte..limit].encode_utf16().count() + overshoot;
+    let offset_utf16 = raw[..limit].encode_utf16().count() + overshoot;
     Span {
         line: SourceLine(line),
-        column: SourceColumn(column),
-        offset: SourceOffset(offset_u32),
+        column: SourceColumn(u32::try_from(column_utf16).unwrap_or(0)),
+        offset: SourceOffset(u32::try_from(offset_utf16).unwrap_or(u32::MAX)),
     }
 }
+
+#[cfg(test)]
+#[path = "span_test.rs"]
+mod span_test;

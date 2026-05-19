@@ -6,10 +6,18 @@
 //! into one `ScopeBuildVisitor` (each TS module's `case` arm is now
 //! a `visit_*` override on this struct).
 
+use oxc_allocator::Allocator;
+use unsnarl_ir::ids::{ReferenceId, ScopeId};
+use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;
+use unsnarl_oxc_parity::AstType;
 
+use crate::analyze::{analyze, AnalyzeOptions};
+use crate::parser::{default_source_type_for, OxcParser, ParseOptions};
+use crate::state::ScopeBuilderState;
 use crate::testing::analyze_source;
+use crate::visitor::AnalysisVisitor;
 
 #[test]
 fn walker_descends_through_nested_blocks_and_pops_correctly() {
@@ -50,4 +58,83 @@ fn eslint_compat_module_scope_chain_terminates_at_module_root() {
     let r = analyze_source("export const x = 1;\n", Language::Ts);
     // Module root has no upper.
     assert!(r.arena.scopes[r.global_scope].upper.is_none());
+}
+
+#[test]
+fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
+    // Parity regression: the npm `oxc-parser` package's visitorKeys
+    // list `["declaration", "specifiers", "source", "attributes"]` for
+    // `ExportNamedDeclaration`, so the TS reference fires `on_scope`
+    // for an `export class Foo {}` inner class scope with `key =
+    // Some("declaration")`. Without an explicit override, oxc's
+    // auto-generated walker leaks whatever the surrounding
+    // statement-list pushed (typically `Some("body")` from
+    // `Program.body`).
+    #[derive(Default)]
+    struct Capture {
+        rows: Vec<(AstType, Option<AstType>, Option<String>)>,
+    }
+    impl AnalysisVisitor for Capture {
+        fn on_scope(
+            &mut self,
+            scope_id: ScopeId,
+            parent: Option<&AstNode>,
+            key: Option<&str>,
+            _path: &[AstNode],
+            state: &ScopeBuilderState,
+        ) {
+            let block_type = state.arena.scopes[scope_id].block.r#type.clone();
+            self.rows.push((
+                block_type,
+                parent.map(|p| p.r#type.clone()),
+                key.map(str::to_string),
+            ));
+        }
+        fn on_reference(
+            &mut self,
+            _ref_id: ReferenceId,
+            _parent: Option<&AstNode>,
+            _key: Option<&str>,
+            _path: &[AstNode],
+            _scope_id: ScopeId,
+            _state: &ScopeBuilderState,
+        ) {
+        }
+    }
+
+    let allocator = Allocator::default();
+    let parsed = OxcParser
+        .parse(
+            &allocator,
+            "export class Foo {}\n",
+            &ParseOptions {
+                language: Language::Ts,
+                source_path: "input.ts".to_string(),
+                source_type: default_source_type_for(Language::Ts),
+            },
+        )
+        .expect("parse");
+    let mut visitor = Capture::default();
+    analyze(
+        &parsed.program,
+        &AnalyzeOptions {
+            source_type: parsed.source_type,
+            raw: parsed.raw,
+        },
+        &mut visitor,
+    );
+    let class_row = visitor
+        .rows
+        .iter()
+        .find(|(block_type, _, _)| matches!(block_type, AstType::ClassDeclaration))
+        .expect("class scope must fire on_scope");
+    assert!(
+        matches!(class_row.1, Some(AstType::ExportNamedDeclaration)),
+        "class scope's parent must be ExportNamedDeclaration"
+    );
+    assert_eq!(
+        class_row.2.as_deref(),
+        Some("declaration"),
+        "class scope's slot key must be \"declaration\", not the inherited \"body\""
+    );
 }
