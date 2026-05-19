@@ -76,6 +76,13 @@ pub fn run_analysis<'a>(
     }
 
     let mut annotations = AnnotationsImpl::new();
+    // The boundary stamps the normalised hashbang/directive/body
+    // offset onto the global scope's `block.span.start` (see
+    // `analyze::analyze`). Forward the same value to the side-table
+    // walk so `block_context_of` / `find_predicate_container` see
+    // `Program.span.start == normalised_start` instead of the raw
+    // oxc value of `0`.
+    let program_normalised_start = result.arena.scopes[result.global_scope].block.span.start;
     let mut walker = BuildAnalysisVisitor::new(
         raw,
         &result.arena,
@@ -83,6 +90,7 @@ pub fn run_analysis<'a>(
         &nesting_depths,
         &span_to_scope,
         &span_to_ref,
+        program_normalised_start,
     );
     walker.visit_program(program);
 

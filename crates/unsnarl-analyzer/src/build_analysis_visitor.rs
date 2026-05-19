@@ -90,6 +90,13 @@ pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
     span_to_ref: &'arena HashMap<(u32, u32), ReferenceId>,
     key_stack: Vec<Option<&'static str>>,
     path: Vec<PathFrame<'a>>,
+    /// Normalised `Program.span.start` matching the boundary's
+    /// hashbang/directive/body offset. Used when materialising
+    /// `AstNode { Program, span }` so downstream consumers
+    /// (`block_context_of`, `find_predicate_container`, ...) see
+    /// the same start offset the boundary stamped onto the global
+    /// scope's `block`. See `analyze::analyze` for the source.
+    program_normalised_start: u32,
 }
 
 impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
@@ -100,6 +107,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         nesting_depths: &'arena HashMap<u32, NestingDepths>,
         span_to_scope: &'arena HashMap<(u32, u32), ScopeId>,
         span_to_ref: &'arena HashMap<(u32, u32), ReferenceId>,
+        program_normalised_start: u32,
     ) -> Self {
         Self {
             raw,
@@ -110,7 +118,16 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             span_to_ref,
             key_stack: Vec::new(),
             path: Vec::new(),
+            program_normalised_start,
         }
+    }
+
+    fn ast_node_of_kind(&self, kind: &AstKind<'a>) -> AstNode {
+        let mut node = ast_node_of(kind);
+        if matches!(kind, AstKind::Program(_)) {
+            node.span = oxc_span::Span::new(self.program_normalised_start, node.span.end);
+        }
+        node
     }
 
     fn current_key(&self) -> Option<&'static str> {
@@ -121,7 +138,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         self.path
             .iter()
             .map(|f| PathEntry {
-                node: ast_node_of(&f.kind),
+                node: self.ast_node_of_kind(&f.kind),
                 key: f.key,
                 arrow_body: f.arrow_body,
             })
@@ -129,7 +146,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
     }
 
     fn parent_ast_node(&self) -> Option<AstNode> {
-        self.path.last().map(|f| ast_node_of(&f.kind))
+        self.path.last().map(|f| self.ast_node_of_kind(&f.kind))
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches
