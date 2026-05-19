@@ -1,3 +1,7 @@
 [tools]
 node = "24.15.0"
 rust = "1.95.0"
+
+[tasks."check:no-allow-dead-code"]
+description = "Fail if any `#[allow(dead_code)]` / `#[expect(dead_code)]` is present in the Rust source tree."
+run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
