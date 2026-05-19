@@ -788,6 +788,15 @@ dependencies = [
  "oxc_index",
  "oxc_span",
  "serde",
+ "serde_json",
+ "unsnarl-oxc-parity",
+]
+
+[[package]]
+name = "unsnarl-oxc-parity"
+version = "0.3.0-beta.0"
+dependencies = [
+ "serde",
 ]
 
 [[package]]
