@@ -15,7 +15,9 @@
 //! → `Property`) are flattened here so downstream consumers see the
 //! ESTree-style spelling the IR contract uses.
 
-use oxc_ast::ast::{ClassType, FunctionType, MethodDefinitionType, PropertyDefinitionType};
+use oxc_ast::ast::{
+    ClassType, Expression, FunctionType, MethodDefinitionType, PropertyDefinitionType,
+};
 use oxc_ast::AstKind;
 use oxc_span::GetSpan;
 
@@ -79,6 +81,64 @@ pub(crate) fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
 
 pub(crate) fn materialise_path(path: &[PathEntry<'_>]) -> Vec<AstNode> {
     path.iter().map(|p| ast_node_of(&p.node)).collect()
+}
+
+/// Convert an `oxc_ast::Expression` to the boundary's lifetime-free
+/// `AstNode` shape.
+///
+/// Mirrors the ESTree-style `node.type` strings the TS port consumes
+/// (e.g. all numeric / string / boolean / null / regexp / bigint
+/// literals collapse to `AstType::Literal`; member expressions and
+/// private-in expressions collapse to their ESTree counterparts).
+pub(crate) fn ast_node_of_expression(expr: &Expression<'_>) -> AstNode {
+    let (ty, span) = match expr {
+        Expression::BooleanLiteral(n) => (AstType::Literal, n.span),
+        Expression::NullLiteral(n) => (AstType::Literal, n.span),
+        Expression::NumericLiteral(n) => (AstType::Literal, n.span),
+        Expression::BigIntLiteral(n) => (AstType::Literal, n.span),
+        Expression::RegExpLiteral(n) => (AstType::Literal, n.span),
+        Expression::StringLiteral(n) => (AstType::Literal, n.span),
+        Expression::TemplateLiteral(n) => (AstType::TemplateLiteral, n.span),
+        Expression::Identifier(n) => (AstType::Identifier, n.span),
+        Expression::MetaProperty(n) => (AstType::MetaProperty, n.span),
+        Expression::Super(n) => (AstType::Super, n.span),
+        Expression::ArrayExpression(n) => (AstType::ArrayExpression, n.span),
+        Expression::ArrowFunctionExpression(n) => (AstType::ArrowFunctionExpression, n.span),
+        Expression::AssignmentExpression(n) => (AstType::AssignmentExpression, n.span),
+        Expression::AwaitExpression(n) => (AstType::AwaitExpression, n.span),
+        Expression::BinaryExpression(n) => (AstType::BinaryExpression, n.span),
+        Expression::CallExpression(n) => (AstType::CallExpression, n.span),
+        Expression::ChainExpression(n) => (AstType::ChainExpression, n.span),
+        Expression::ClassExpression(n) => (AstType::ClassExpression, n.span),
+        Expression::ConditionalExpression(n) => (AstType::ConditionalExpression, n.span),
+        Expression::FunctionExpression(n) => (AstType::FunctionExpression, n.span),
+        Expression::ImportExpression(n) => (AstType::ImportExpression, n.span),
+        Expression::LogicalExpression(n) => (AstType::LogicalExpression, n.span),
+        Expression::NewExpression(n) => (AstType::NewExpression, n.span),
+        Expression::ObjectExpression(n) => (AstType::ObjectExpression, n.span),
+        Expression::ParenthesizedExpression(n) => (AstType::ParenthesizedExpression, n.span),
+        Expression::SequenceExpression(n) => (AstType::SequenceExpression, n.span),
+        Expression::TaggedTemplateExpression(n) => (AstType::TaggedTemplateExpression, n.span),
+        Expression::ThisExpression(n) => (AstType::ThisExpression, n.span),
+        Expression::UnaryExpression(n) => (AstType::UnaryExpression, n.span),
+        Expression::UpdateExpression(n) => (AstType::UpdateExpression, n.span),
+        Expression::YieldExpression(n) => (AstType::YieldExpression, n.span),
+        // `PrivateInExpression` (e.g. `#field in obj`) is rendered as
+        // a `BinaryExpression` in ESTree-compatible output.
+        Expression::PrivateInExpression(n) => (AstType::BinaryExpression, n.span),
+        Expression::JSXElement(n) => (AstType::JSXElement, n.span),
+        Expression::JSXFragment(n) => (AstType::JSXFragment, n.span),
+        Expression::TSAsExpression(n) => (AstType::TSAsExpression, n.span),
+        Expression::TSSatisfiesExpression(n) => (AstType::TSSatisfiesExpression, n.span),
+        Expression::TSTypeAssertion(n) => (AstType::TSTypeAssertion, n.span),
+        Expression::TSNonNullExpression(n) => (AstType::TSNonNullExpression, n.span),
+        Expression::TSInstantiationExpression(n) => (AstType::TSInstantiationExpression, n.span),
+        Expression::ComputedMemberExpression(n) => (AstType::MemberExpression, n.span),
+        Expression::StaticMemberExpression(n) => (AstType::MemberExpression, n.span),
+        Expression::PrivateFieldExpression(n) => (AstType::MemberExpression, n.span),
+        Expression::V8IntrinsicExpression(n) => (AstType::V8IntrinsicExpression, n.span),
+    };
+    AstNode { r#type: ty, span }
 }
 
 #[cfg(test)]

@@ -769,11 +769,16 @@ dependencies = [
 name = "unsnarl-emitter-ir"
 version = "0.3.0-beta.0"
 dependencies = [
+ "oxc_allocator",
+ "oxc_ast",
  "serde",
  "serde_json",
+ "unsnarl-analyzer",
  "unsnarl-annotations",
+ "unsnarl-boundary-eslint-scope",
  "unsnarl-emitter",
  "unsnarl-ir",
+ "unsnarl-oxc-parity",
 ]
 
 [[package]]

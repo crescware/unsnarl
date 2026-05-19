@@ -21,6 +21,7 @@ use unsnarl_ir::primitive::{AstIdentifier, AstNode};
 use unsnarl_ir::scope::{DefinitionData, ScopeData, VariableData};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::{DefinitionType, IrArena};
+use unsnarl_oxc_parity::VariableDeclarationKind;
 
 use crate::diagnostic_collector::DiagnosticCollector;
 
@@ -156,6 +157,23 @@ pub(crate) fn pop_scope(state: &mut ScopeBuilderState) {
 /// `identifier` is consumed twice on the TS side (`variable.identifiers`
 /// and `def.name`); Rust requires an explicit clone, which is the
 /// derive-policy justification for `AstIdentifier: Clone`.
+/// Per-definition extras the serializer reads but the
+/// `(node, parent)` materialisation drops. Defaults to all-`None` so
+/// callsites that build simple defs (function names, class names,
+/// parameters, catch-clause bindings, implicit globals) need not
+/// mention these fields explicitly.
+///
+/// The fields mirror the same-named `DefinitionData` slots; see
+/// `unsnarl_ir::scope::definition` for the variant-by-variant
+/// invariants.
+#[derive(Default)]
+pub(crate) struct DefinitionExtras {
+    pub init: Option<AstNode>,
+    pub declaration_kind: Option<VariableDeclarationKind>,
+    pub import_source: Option<String>,
+    pub imported_name: Option<String>,
+}
+
 pub(crate) fn declare_variable(
     state: &mut ScopeBuilderState,
     scope: ScopeId,
@@ -163,6 +181,26 @@ pub(crate) fn declare_variable(
     def_type: DefinitionType,
     def_node: AstNode,
     parent: Option<AstNode>,
+) -> VariableId {
+    declare_variable_with_extras(
+        state,
+        scope,
+        identifier,
+        def_type,
+        def_node,
+        parent,
+        DefinitionExtras::default(),
+    )
+}
+
+pub(crate) fn declare_variable_with_extras(
+    state: &mut ScopeBuilderState,
+    scope: ScopeId,
+    identifier: AstIdentifier,
+    def_type: DefinitionType,
+    def_node: AstNode,
+    parent: Option<AstNode>,
+    extras: DefinitionExtras,
 ) -> VariableId {
     let name = identifier.name().to_string();
     let variable_id = match state.arena.scopes[scope].set().get(&name).copied() {
@@ -188,6 +226,10 @@ pub(crate) fn declare_variable(
         name: identifier,
         node: def_node,
         parent,
+        init: extras.init,
+        declaration_kind: extras.declaration_kind,
+        import_source: extras.import_source,
+        imported_name: extras.imported_name,
     });
     state.arena.variables[variable_id].defs.push(def_id);
     variable_id

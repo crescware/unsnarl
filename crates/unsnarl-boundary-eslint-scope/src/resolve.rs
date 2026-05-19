@@ -112,6 +112,10 @@ fn declare_implicit_global(
         name: ident_copy,
         node: ident_node,
         parent: None,
+        init: None,
+        declaration_kind: None,
+        import_source: None,
+        imported_name: None,
     });
     state.arena.variables[var_id].defs.push(def_id);
     var_id

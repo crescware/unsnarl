@@ -25,9 +25,38 @@ pub struct SourceLine(pub u32);
 #[serde(transparent)]
 pub struct SourceColumn(pub u32);
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct Span {
     pub line: SourceLine,
     pub column: SourceColumn,
     pub offset: SourceOffset,
+}
+
+/// Mirrors `spanFromOffset` in `ts/src/util/span.ts`: walks the raw
+/// source up to `offset` (clamped to its byte length), counts line
+/// breaks, and materialises a `Span` triple. `offset` is in bytes; the
+/// returned `column` is the byte distance from the last `\n` (or from
+/// the start of the file). The TS source treats characters as JS
+/// UTF-16 code units, so consumers that need column-accuracy across
+/// non-ASCII spans must already ensure offsets land on character
+/// boundaries; the Rust port preserves the same byte-oriented
+/// behavior.
+pub fn span_from_offset(raw: &str, offset: usize) -> Span {
+    let bytes = raw.as_bytes();
+    let limit = offset.min(bytes.len());
+    let mut line: u32 = 1;
+    let mut last_newline: Option<usize> = None;
+    for (i, b) in bytes[..limit].iter().enumerate() {
+        if *b == b'\n' {
+            line += 1;
+            last_newline = Some(i);
+        }
+    }
+    let column = u32::try_from(offset - last_newline.map(|n| n + 1).unwrap_or(0)).unwrap_or(0);
+    let offset_u32 = u32::try_from(offset).unwrap_or(u32::MAX);
+    Span {
+        line: SourceLine(line),
+        column: SourceColumn(column),
+        offset: SourceOffset(offset_u32),
+    }
 }

@@ -6,7 +6,7 @@ use unsnarl_oxc_parity::PredicateContainerType;
 
 use crate::primitive::SourceOffset;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct PredicateContainer {
     pub r#type: PredicateContainerType,
     pub offset: SourceOffset,

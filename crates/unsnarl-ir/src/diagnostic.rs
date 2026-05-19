@@ -9,7 +9,7 @@ use serde::Serialize;
 use crate::diagnostic_kind::DiagnosticKind;
 use crate::primitive::Span;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct Diagnostic {
     pub kind: DiagnosticKind,
     pub message: String,

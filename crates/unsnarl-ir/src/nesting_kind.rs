@@ -32,7 +32,7 @@ pub enum NestingKind {
 #[serde(transparent)]
 pub struct NestingDepth(pub u32);
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub struct NestingDepths {
     pub function: NestingDepth,
     pub r#if: NestingDepth,

@@ -2,7 +2,7 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 #[serde(transparent)]
 pub struct SerializedVariableId(String);
 
