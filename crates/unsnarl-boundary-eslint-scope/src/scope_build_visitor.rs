@@ -25,7 +25,8 @@ use oxc_ast::ast::{
     Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement,
     FormalParameter, Function, IdentifierName, IdentifierReference, ImportAttribute,
     ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier,
-    JSXMemberExpression, MetaProperty, SwitchCase, SwitchStatement, UpdateExpression,
+    JSXMemberExpression, MetaProperty, SwitchCase, SwitchStatement, TSAsExpression,
+    TSInstantiationExpression, TSSatisfiesExpression, TSTypeAssertion, UpdateExpression,
     VariableDeclarator,
 };
 use oxc_ast::AstKind;
@@ -497,6 +498,79 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.visit_with_clause(with_clause);
             self.key_stack.pop();
         }
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_as_expression(&mut self, it: &TSAsExpression<'a>) {
+        // `x as T` -- oxc's auto-generated walker descends into
+        // `type_annotation` without recording the parent-slot key, so
+        // `is_type_only_subtree` never observes
+        // `key = Some("typeAnnotation")` for the inner type subtree and
+        // any `Identifier` inside (e.g. the `const` of `as const`,
+        // or a named type like `as UnsnarlPlugin`) is mis-handled as a
+        // runtime reference. The TS pipeline's `handleEnter`
+        // dispatcher receives the npm `oxc-parser` visitorKey list
+        // `["expression", "typeAnnotation"]` and routes the type slot
+        // through `isTypeOnlySubtree`. Push the same key so the type
+        // subtree increments `type_only_depth` and downstream
+        // identifier-reference creation short-circuits.
+        let kind = AstKind::TSAsExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_satisfies_expression(&mut self, it: &TSSatisfiesExpression<'a>) {
+        // `x satisfies T` -- same `typeAnnotation`-key omission as
+        // `TSAsExpression` (see `visit_ts_as_expression`).
+        let kind = AstKind::TSSatisfiesExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_type_assertion(&mut self, it: &TSTypeAssertion<'a>) {
+        // `<T>x` (legacy TS cast) -- same `typeAnnotation`-key
+        // omission as `TSAsExpression` (see `visit_ts_as_expression`).
+        let kind = AstKind::TSTypeAssertion(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_instantiation_expression(&mut self, it: &TSInstantiationExpression<'a>) {
+        // `f<T>` -- the type-argument slot keys off `typeArguments` in
+        // the TS pipeline's `isTypeOnlySubtree` lookup, so push that
+        // key around the `type_arguments` visit. Without it, an
+        // identifier inside the type-argument list would be mis-tagged
+        // as a runtime reference.
+        let kind = AstKind::TSInstantiationExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeArguments"));
+        self.visit_ts_type_parameter_instantiation(&it.type_arguments);
+        self.key_stack.pop();
         self.leave_node(kind);
     }
 

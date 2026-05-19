@@ -10,7 +10,7 @@ use oxc_allocator::Allocator;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope_type::ScopeType;
-use unsnarl_ir::Language;
+use unsnarl_ir::{IrArena, Language};
 use unsnarl_oxc_parity::AstType;
 
 use crate::analyze::{analyze, AnalyzeOptions};
@@ -18,6 +18,22 @@ use crate::parser::{default_source_type_for, OxcParser, ParseOptions};
 use crate::state::ScopeBuilderState;
 use crate::testing::analyze_source;
 use crate::visitor::AnalysisVisitor;
+
+fn variable_names(arena: &IrArena) -> Vec<String> {
+    arena
+        .variables
+        .iter()
+        .map(|v| v.name().to_string())
+        .collect()
+}
+
+fn reference_identifier_names(arena: &IrArena) -> Vec<String> {
+    arena
+        .references
+        .iter()
+        .map(|r| r.identifier.name().to_string())
+        .collect()
+}
 
 #[test]
 fn walker_descends_through_nested_blocks_and_pops_correctly() {
@@ -136,5 +152,86 @@ fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
         class_row.2.as_deref(),
         Some("declaration"),
         "class scope's slot key must be \"declaration\", not the inherited \"body\""
+    );
+}
+
+#[test]
+fn ts_as_const_does_not_register_const_as_runtime_reference() {
+    // Parity regression: oxc's auto-generated `walk_ts_as_expression`
+    // descends into `type_annotation` without recording the
+    // `typeAnnotation` slot key, so the `const` identifier inside
+    // `as const` (a TS literal-type marker, not a runtime binding)
+    // would slip through `is_type_only_subtree` and be classified as
+    // a global implicit reference. After the fix the type subtree is
+    // entered with `key = Some("typeAnnotation")`, `type_only_depth`
+    // increments, and the identifier is skipped entirely.
+    let r = analyze_source("export const X = { a: 1 } as const;\n", Language::Ts);
+    assert!(
+        !variable_names(&r.arena).iter().any(|n| n == "const"),
+        "`as const` must not register a `const` variable; got {:?}",
+        variable_names(&r.arena)
+    );
+    assert!(
+        !reference_identifier_names(&r.arena)
+            .iter()
+            .any(|n| n == "const"),
+        "`as const` must not register a `const` reference; got {:?}",
+        reference_identifier_names(&r.arena)
+    );
+}
+
+#[test]
+fn ts_as_named_type_does_not_register_type_name_as_runtime_reference() {
+    // `as UnsnarlPlugin` -- the type name is a TS-only reference and
+    // must not appear in `arena.references`.
+    let r = analyze_source(
+        "type T = number;\nconst x: unknown = 0;\nconst y = x as T;\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "T"),
+        "`as T` must not register `T` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn ts_satisfies_does_not_register_type_name_as_runtime_reference() {
+    let r = analyze_source(
+        "type T = { a: number };\nconst y = { a: 1 } satisfies T;\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "T"),
+        "`satisfies T` must not register `T` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn ts_legacy_type_assertion_does_not_register_type_name_as_runtime_reference() {
+    let r = analyze_source(
+        "type T = number;\nconst x: unknown = 0;\nconst y = <T>x;\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "T"),
+        "`<T>x` must not register `T` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn ts_instantiation_expression_does_not_register_type_argument_as_runtime_reference() {
+    // `f<T>` -- the type arguments are TS-only and must not appear
+    // in `arena.references`.
+    let r = analyze_source(
+        "type T = number;\nfunction f<U>(x: U): U { return x; }\nconst g = f<T>;\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "T"),
+        "`f<T>` must not register the type argument `T` as a runtime reference; got {refs:?}"
     );
 }
