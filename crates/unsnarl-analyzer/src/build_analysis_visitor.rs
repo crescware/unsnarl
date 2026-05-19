@@ -262,23 +262,17 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 
 impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
     fn visit_program(&mut self, it: &Program<'a>) {
+        // The TS pipeline never assigns a `ScopeAnnotation` to the
+        // global/module scope -- `onScope` is only invoked from the
+        // boundary's per-block `enter-*` helpers, and the global scope
+        // is constructed by the `ScopeManager` ctor without going
+        // through any of them. Consumers read the default zero-valued
+        // annotation back via `Annotations.ofScope` (the same shape
+        // `AnnotationsImpl::empty_scope_annotation` returns here).
+        // Mirror that: walk the program tree to populate child scopes
+        // and reference rows, but do NOT call `fire_scope` on the
+        // Program node.
         let kind = AstKind::Program(self.alloc(it));
-        // Match the normalised Program span the boundary stamps on
-        // the global scope's `block` -- start at the first directive /
-        // body node offset (the TS `oxc-parser` shape, which skips
-        // leading comments AND the hashbang line), end at
-        // `program.span.end`. Using `it.span` here would key into
-        // `span_to_scope` with the oxc-Rust native span and miss the
-        // global scope when the source has leading comments.
-        let start = it
-            .directives
-            .first()
-            .map(|d| d.span.start)
-            .or_else(|| it.body.first().map(|s| oxc_span::GetSpan::span(s).start))
-            .or_else(|| it.hashbang.as_ref().map(|h| h.span.end))
-            .unwrap_or(it.span.start);
-        let program_span = Span::new(start, it.span.end);
-        self.fire_scope(program_span, &kind);
         self.push_path(kind, None);
         self.visit_span(&it.span);
         if let Some(hashbang) = it.hashbang.as_ref() {
