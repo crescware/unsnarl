@@ -204,8 +204,10 @@ impl<'a> Visit<'a> for NestingDepthVisitor {
             AstKind::WhileStatement(s) => s.span,
             AstKind::DoWhileStatement(s) => s.span,
             AstKind::SwitchStatement(s) => s.span,
+            AstKind::SwitchCase(c) => c.span,
             AstKind::TryStatement(s) => s.span,
             AstKind::CatchClause(c) => c.span,
+            AstKind::Class(c) => c.span,
             _ => {
                 self.enter_stack.push(inc);
                 self.parent_types.push(Self::parent_kind_of(&kind));

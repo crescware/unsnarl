@@ -501,9 +501,11 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         self.key_stack.push(Some("discriminant"));
         self.visit_expression(&it.discriminant);
         self.key_stack.pop();
+        self.key_stack.push(Some("cases"));
         for case in &it.cases {
             self.visit_switch_case(case);
         }
+        self.key_stack.pop();
         self.pop_path();
     }
 
