@@ -109,7 +109,7 @@ impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
 impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     fn enter_node(&mut self, kind: AstKind<'a>) {
         let key = self.current_key();
-        let ty = ast_type_of(&kind);
+        let ty = ast_type_for_skip(&kind);
         if is_type_only_subtree(&ty, key) {
             self.type_only_depth += 1;
         }
@@ -118,7 +118,7 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
 
     fn leave_node(&mut self, kind: AstKind<'a>) {
         let entry_key = self.path.last().and_then(|e| e.key);
-        let ty = ast_type_of(&kind);
+        let ty = ast_type_for_skip(&kind);
         if is_type_only_subtree(&ty, entry_key) {
             self.type_only_depth = self.type_only_depth.saturating_sub(1);
         }
@@ -142,6 +142,19 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_function(&mut self, it: &Function<'a>, flags: ScopeFlags) {
+        // `declare function f(): void;` is a type-only declaration
+        // (oxc tags it as `FunctionType::TSDeclareFunction`); the TS
+        // pipeline's `handleEnter` returns "skip" before reaching the
+        // function-scope enter, so no scope / variable is created.
+        // Mirror that here -- still push the path entry so
+        // `type_only_depth` is maintained for any descendants, but
+        // don't enter a function scope.
+        if matches!(it.r#type, oxc_ast::ast::FunctionType::TSDeclareFunction) {
+            let kind = AstKind::Function(self.alloc(it));
+            self.enter_node(kind);
+            self.leave_node(kind);
+            return;
+        }
         let scope_id = enter_function(self.state, it, self.raw);
         self.fire_on_scope(scope_id);
         let kind = AstKind::Function(self.alloc(it));
@@ -470,6 +483,24 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             );
         }
         oxc_ast_visit::walk::walk_jsx_identifier(self, it);
+    }
+}
+
+/// `ast_type_of` collapses TypeScript-only Function / MethodDefinition /
+/// PropertyDefinition flavours into their value counterparts
+/// (`FunctionDeclaration`, `MethodDefinition`, `PropertyDefinition`) so
+/// downstream IR consumers see a uniform ESTree shape, but the
+/// type-only skip in `enter_node` needs the un-collapsed type
+/// (`TSDeclareFunction`, `TSAbstractMethodDefinition`, ...) to decide
+/// whether to enter the subtree.
+fn ast_type_for_skip(kind: &AstKind<'_>) -> AstType {
+    match kind {
+        AstKind::Function(f)
+            if matches!(f.r#type, oxc_ast::ast::FunctionType::TSDeclareFunction) =>
+        {
+            AstType::TSDeclareFunction
+        }
+        _ => ast_type_of(kind),
     }
 }
 

@@ -20,6 +20,16 @@ pub(crate) fn handle_function_declaration(
     scope: ScopeId,
     function: &Function<'_>,
 ) {
+    // `declare function f(): void;` is a type-only declaration; skip
+    // hoisting so the IR matches the TS pipeline (which never reaches
+    // this code path because `handleEnter` returns "skip" on
+    // `TSDeclareFunction`).
+    if matches!(
+        function.r#type,
+        oxc_ast::ast::FunctionType::TSDeclareFunction
+    ) {
+        return;
+    }
     let Some(id) = function.id.as_ref() else {
         return;
     };
