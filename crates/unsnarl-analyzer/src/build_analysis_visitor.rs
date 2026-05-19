@@ -372,7 +372,25 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_ts_type_annotation(return_type);
         }
         self.key_stack.push(Some("body"));
-        self.visit_function_body(&it.body);
+        if it.expression {
+            // Expression-body arrow: oxc wraps the expression in a
+            // synthetic `FunctionBody { [ExpressionStatement(expr)] }`,
+            // but the TS pipeline (npm `oxc-parser`) ESTree-fies it
+            // back to `ArrowFunctionExpression.body: Expression`.
+            // Walk the inner expression directly so subsequent scope /
+            // reference rows see `parent = ArrowFunctionExpression,
+            // key = "body"` (matching TS) instead of inheriting the
+            // synthetic `ExpressionStatement.expression` slot.
+            if let Some(oxc_ast::ast::Statement::ExpressionStatement(es)) =
+                it.body.statements.first()
+            {
+                self.visit_expression(&es.expression);
+            } else {
+                self.visit_function_body(&it.body);
+            }
+        } else {
+            self.visit_function_body(&it.body);
+        }
         self.key_stack.pop();
         self.pop_path();
     }
