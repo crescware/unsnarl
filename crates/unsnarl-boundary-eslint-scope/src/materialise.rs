@@ -26,7 +26,7 @@ use unsnarl_oxc_parity::{as_ast_type, AstType};
 
 use crate::walk::PathEntry;
 
-pub(crate) fn ast_type_of(kind: &AstKind<'_>) -> AstType {
+pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
     match kind {
         AstKind::Function(f) => match f.r#type {
             FunctionType::FunctionDeclaration | FunctionType::TSDeclareFunction => {
@@ -72,7 +72,7 @@ pub(crate) fn ast_type_of(kind: &AstKind<'_>) -> AstType {
     }
 }
 
-pub(crate) fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
+pub fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
     AstNode {
         r#type: ast_type_of(kind),
         span: kind.span(),
@@ -90,7 +90,7 @@ pub(crate) fn materialise_path(path: &[PathEntry<'_>]) -> Vec<AstNode> {
 /// (e.g. all numeric / string / boolean / null / regexp / bigint
 /// literals collapse to `AstType::Literal`; member expressions and
 /// private-in expressions collapse to their ESTree counterparts).
-pub(crate) fn ast_node_of_expression(expr: &Expression<'_>) -> AstNode {
+pub fn ast_node_of_expression(expr: &Expression<'_>) -> AstNode {
     let (ty, span) = match expr {
         Expression::BooleanLiteral(n) => (AstType::Literal, n.span),
         Expression::NullLiteral(n) => (AstType::Literal, n.span),

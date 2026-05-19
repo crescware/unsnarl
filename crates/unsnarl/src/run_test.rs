@@ -24,9 +24,23 @@ fn mermaid_format_routes_to_mermaid_emitter() {
 }
 
 #[test]
-fn ir_format_routes_to_ir_emitter() {
-    let out = capture(&["uns", "-f", "ir", "x.ts"]);
-    assert_eq!(first_line(&out), "Not implemented yet: ir emitter");
+fn ir_format_emits_ir_json_for_a_real_file() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture(&["uns", "-f", "ir", &path]);
+    let value: serde_json::Value =
+        serde_json::from_str(out.trim_end()).expect("ir emitter output should be JSON");
+    assert_eq!(value["version"], 1);
+    assert_eq!(value["source"]["language"], "ts");
 }
 
 #[test]
@@ -54,13 +68,15 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 }
 
 #[test]
-fn emitter_output_includes_parsed_args_json_after_label() {
-    let out = capture(&["uns", "-f", "ir", "x.ts"]);
+fn stub_emitter_output_includes_parsed_args_json_after_label() {
+    // `json` is still a stub; the legacy "Not implemented yet" line +
+    // CLI args JSON shape lives on through the unimplemented formats.
+    let out = capture(&["uns", "-f", "json", "x.ts"]);
     let (label, rest) = out.split_once('\n').expect("label line");
-    assert_eq!(label, "Not implemented yet: ir emitter");
+    assert_eq!(label, "Not implemented yet: json emitter");
     let value: serde_json::Value =
         serde_json::from_str(rest.trim_end()).expect("rest should be JSON");
-    assert_eq!(value["format"], "ir");
+    assert_eq!(value["format"], "json");
     assert_eq!(value["file"], "x.ts");
 }
 
