@@ -45,16 +45,18 @@ fn labeled_statement_label_is_skipped() {
 
 #[test]
 fn jsx_closing_element_name_is_skipped() {
-    // `<Foo>{bar}</Foo>` — the opening element name `Foo` is an
-    // `IdentifierReference` and fires `visit_identifier_reference`;
-    // the closing element name `Foo` is also an `IdentifierReference`
-    // but must be skipped by the `JSXClosingElement` arm so the
-    // identifier is recorded exactly once, not twice.
+    // `const Foo = () => null; <Foo>{bar}</Foo>;` produces exactly
+    // two `Foo` references: the init write reference for `const Foo`
+    // (the `let x = 1` shape -- a `BindingIdentifier` in a
+    // `VariableDeclarator.id` with an `init`) and the JSX opening
+    // element's read reference. The JSX *closing* element name must
+    // be skipped by the `JSXClosingElement` arm; if it were not,
+    // the count would jump to three.
     let r = analyze_source("const Foo = () => null; <Foo>{bar}</Foo>;\n", Language::Tsx);
     let foo_refs = ref_names(&r).iter().filter(|n| *n == "Foo").count();
     assert_eq!(
-        foo_refs, 1,
-        "JSXClosingElement name must be skipped so `Foo` is referenced exactly once"
+        foo_refs, 2,
+        "JSXClosingElement name must be skipped so `Foo` is referenced exactly twice (init write + opening read)"
     );
     assert!(
         ref_names(&r).iter().any(|n| n == "bar"),

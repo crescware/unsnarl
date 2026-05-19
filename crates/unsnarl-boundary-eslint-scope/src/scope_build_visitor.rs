@@ -21,9 +21,10 @@
 //!   children) inherit `walk_*` defaults.
 
 use oxc_ast::ast::{
-    ArrowFunctionExpression, AssignmentExpression, BlockStatement, CatchClause, Class,
-    ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter, Function,
-    IdentifierReference, SwitchCase, SwitchStatement, UpdateExpression, VariableDeclarator,
+    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
+    Class, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter,
+    Function, IdentifierReference, SwitchCase, SwitchStatement, UpdateExpression,
+    VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -322,6 +323,30 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             AstType::Identifier,
         );
         oxc_ast_visit::walk::walk_identifier_reference(self, it);
+    }
+
+    fn visit_binding_identifier(&mut self, it: &BindingIdentifier<'a>) {
+        // The TS port routes every `Identifier`-typed node through
+        // `handleIdentifierReference` and lets `classifyIdentifier`
+        // decide whether the slot is a plain binding (no reference),
+        // a write reference with `init = true` (`let x = 1`'s `x`),
+        // or a pattern-step binding -- see
+        // `ts/src/boundary/eslint-scope/handle-enter.ts`. The Rust
+        // port dispatches per oxc AST type, so we route
+        // `BindingIdentifier` here using the same classification path.
+        let parent = self.parent_kind();
+        let key = self.current_key();
+        handle_identifier_reference(
+            self.state,
+            self.visitor,
+            parent.as_ref(),
+            key,
+            &self.path,
+            it.name.as_str(),
+            it.span,
+            AstType::Identifier,
+        );
+        oxc_ast_visit::walk::walk_binding_identifier(self, it);
     }
 }
 

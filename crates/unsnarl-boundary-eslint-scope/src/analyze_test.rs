@@ -48,6 +48,44 @@ fn module_source_seeds_module_scope_with_no_upper() {
 }
 
 #[test]
+fn root_block_span_skips_leading_comments() {
+    // The npm `oxc-parser` package the TS pipeline consumes reports
+    // `Program.start` at the first body / directive / hashbang offset
+    // (skipping leading comments); the Rust `oxc_parser` crate emits
+    // `Program.span.start = 0`. `analyze` is responsible for
+    // normalising the divergence onto the TS-side shape.
+    //
+    // Source layout: `// leading comment` is bytes 0..18, the `\n`
+    // sits at byte 18, and `const x = 1;` starts at byte 19, which is
+    // also where the only body element begins.
+    let allocator = oxc_allocator::Allocator::default();
+    let code = "// leading comment\nconst x = 1;\n";
+    let parsed = OxcParser
+        .parse(
+            &allocator,
+            code,
+            &ParseOptions {
+                language: Language::Ts,
+                source_path: "input.ts".to_string(),
+                source_type: default_source_type_for(Language::Ts),
+            },
+        )
+        .unwrap();
+    let mut visitor = NoopVisitor;
+    let r = analyze(
+        &parsed.program,
+        &AnalyzeOptions {
+            source_type: parsed.source_type,
+            raw: parsed.raw,
+        },
+        &mut visitor,
+    );
+    let block = &r.arena.scopes[r.global_scope].block;
+    assert_eq!(block.span.start, 19);
+    assert_eq!(block.span.end, parsed.program.span.end);
+}
+
+#[test]
 fn script_source_seeds_global_scope() {
     let allocator = oxc_allocator::Allocator::default();
     let parsed = OxcParser
