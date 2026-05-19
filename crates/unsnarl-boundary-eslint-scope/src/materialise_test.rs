@@ -23,16 +23,6 @@ use crate::parser::{default_source_type_for, OxcParser, ParseOptions};
 use crate::visitor::AnalysisVisitor;
 use crate::ScopeBuilderState;
 
-fn ast_type_label(ty: &AstType) -> &'static str {
-    match ty {
-        AstType::UnknownAstType => "UnknownAstType",
-        AstType::Identifier => "Identifier",
-        AstType::ExpressionStatement => "ExpressionStatement",
-        AstType::Program => "Program",
-        _ => "other",
-    }
-}
-
 #[test]
 fn private_in_expression_falls_back_to_unknown_ast_type_on_path() {
     // `#x in o` puts a `PrivateInExpression` on the walker's path
@@ -149,8 +139,4 @@ fn known_ast_type_on_path_does_not_collapse_to_unknown() {
         !visitor.any_unknown,
         "ordinary identifier paths must not hit the UnknownAstType fallback"
     );
-    // The label helper is only used to keep the diagnostic readable
-    // when the assertion above ever flips. Touch it here so it
-    // doesn't get flagged as dead.
-    let _ = ast_type_label(&AstType::UnknownAstType);
 }

@@ -84,56 +84,15 @@ pub(crate) fn find_first_descendant_scope(
     root: ScopeId,
     target: ScopeType,
 ) -> Option<ScopeId> {
-    if scope_type_matches(&arena.scopes[root].r#type, &target) {
+    if arena.scopes[root].r#type == target {
         return Some(root);
     }
-    for &child in arena.scopes[root].child_scopes.clone().iter() {
-        if let Some(hit) = find_first_descendant_scope(arena, child, scope_type_copy(&target)) {
+    for &child in &arena.scopes[root].child_scopes {
+        if let Some(hit) = find_first_descendant_scope(arena, child, target) {
             return Some(hit);
         }
     }
     None
-}
-
-fn scope_type_copy(t: &ScopeType) -> ScopeType {
-    match t {
-        ScopeType::Block => ScopeType::Block,
-        ScopeType::Catch => ScopeType::Catch,
-        ScopeType::Class => ScopeType::Class,
-        ScopeType::ClassFieldInitializer => ScopeType::ClassFieldInitializer,
-        ScopeType::ClassStaticBlock => ScopeType::ClassStaticBlock,
-        ScopeType::For => ScopeType::For,
-        ScopeType::Function => ScopeType::Function,
-        ScopeType::FunctionExpressionName => ScopeType::FunctionExpressionName,
-        ScopeType::Global => ScopeType::Global,
-        ScopeType::Module => ScopeType::Module,
-        ScopeType::Switch => ScopeType::Switch,
-        ScopeType::With => ScopeType::With,
-    }
-}
-
-fn scope_type_matches(a: &ScopeType, b: &ScopeType) -> bool {
-    matches!(
-        (a, b),
-        (ScopeType::Block, ScopeType::Block)
-            | (ScopeType::Catch, ScopeType::Catch)
-            | (ScopeType::Class, ScopeType::Class)
-            | (
-                ScopeType::ClassFieldInitializer,
-                ScopeType::ClassFieldInitializer
-            )
-            | (ScopeType::ClassStaticBlock, ScopeType::ClassStaticBlock)
-            | (ScopeType::For, ScopeType::For)
-            | (ScopeType::Function, ScopeType::Function)
-            | (
-                ScopeType::FunctionExpressionName,
-                ScopeType::FunctionExpressionName
-            )
-            | (ScopeType::Global, ScopeType::Global)
-            | (ScopeType::Module, ScopeType::Module)
-            | (ScopeType::Switch, ScopeType::Switch)
-            | (ScopeType::With, ScopeType::With)
-    )
 }
 
 pub(crate) fn variable_has_def_of(arena: &IrArena, name: &str, kind: DefinitionType) -> bool {
@@ -142,21 +101,5 @@ pub(crate) fn variable_has_def_of(arena: &IrArena, name: &str, kind: DefinitionT
         .iter()
         .filter(|v| v.name() == name)
         .flat_map(|v| v.defs.iter())
-        .any(|&d| def_type_matches(&arena.definitions[d].r#type, &kind))
-}
-
-fn def_type_matches(a: &DefinitionType, b: &DefinitionType) -> bool {
-    matches!(
-        (a, b),
-        (DefinitionType::CatchClause, DefinitionType::CatchClause)
-            | (DefinitionType::ClassName, DefinitionType::ClassName)
-            | (DefinitionType::FunctionName, DefinitionType::FunctionName)
-            | (
-                DefinitionType::ImplicitGlobalVariable,
-                DefinitionType::ImplicitGlobalVariable
-            )
-            | (DefinitionType::ImportBinding, DefinitionType::ImportBinding)
-            | (DefinitionType::Parameter, DefinitionType::Parameter)
-            | (DefinitionType::Variable, DefinitionType::Variable)
-    )
+        .any(|&d| arena.definitions[d].r#type == kind)
 }

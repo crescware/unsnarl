@@ -84,10 +84,12 @@ fn declare_implicit_global(
     name: &str,
     ref_id: ReferenceId,
 ) -> VariableId {
+    // Invariant: `bind_reference` calls this only when
+    // `resolve_in_scope_chain` returned `None`, and that walk always
+    // reaches the global scope (every scope's `upper` chain terminates
+    // at `global_scope`). So `global.set()` is guaranteed not to
+    // contain `name` here; no early-return lookup is needed.
     let global = state.global_scope;
-    if let Some(&existing) = state.arena.scopes[global].set().get(name) {
-        return existing;
-    }
     let ident_copy = state.arena.references[ref_id].identifier.clone();
     let var_id = state.arena.variables.push(VariableData::new(
         name.to_string(),

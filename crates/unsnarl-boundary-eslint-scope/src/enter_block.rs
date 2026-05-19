@@ -7,11 +7,10 @@
 //! the typed `BlockStatement<'_>` whose `body: Vec<Statement<'_>>` is
 //! structurally guaranteed.
 //!
-//! The `visitor.onScope?.(...)` callback is intentionally not invoked
-//! yet — `AnalysisVisitor::on_scope` is added in a follow-up commit
-//! (Step 9.7). Once it lands, the `state` / `parent` / `key` / `path`
-//! arguments will be threaded through here exactly as TS threads them
-//! through `enter_block`.
+//! The TS `visitor.onScope?.(...)` callback is dispatched on the
+//! Rust side from `ScopeBuildVisitor::fire_on_scope` (in
+//! `scope_build_visitor.rs`) once the helper has pushed the scope,
+//! so this module is responsible only for pushing and hoisting.
 
 use oxc_ast::ast::BlockStatement;
 

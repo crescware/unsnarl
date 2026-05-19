@@ -2,8 +2,10 @@
 //!
 //! Mirrors `enterSwitch` in
 //! `ts/src/boundary/eslint-scope/enter-switch.ts`. The Rust port
-//! shrinks to a single `push_scope` call — the TS callback hook is
-//! deferred until `AnalysisVisitor::on_scope` is added in Step 9.7.
+//! shrinks to a single `push_scope` call; the TS `onScope` callback
+//! is dispatched on the Rust side from
+//! `ScopeBuildVisitor::fire_on_scope` (in `scope_build_visitor.rs`)
+//! once this helper has pushed the scope.
 
 use oxc_ast::ast::SwitchStatement;
 
