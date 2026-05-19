@@ -719,9 +719,17 @@ dependencies = [
 name = "unsnarl-analyzer"
 version = "0.3.0-beta.0"
 dependencies = [
+ "oxc_allocator",
+ "oxc_ast",
+ "oxc_ast_visit",
+ "oxc_parser",
+ "oxc_span",
+ "oxc_syntax",
+ "serde_json",
  "unsnarl-annotations",
  "unsnarl-boundary-eslint-scope",
  "unsnarl-ir",
+ "unsnarl-oxc-parity",
 ]
 
 [[package]]

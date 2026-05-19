@@ -19,7 +19,7 @@ use oxc_ast::ast::BindingPattern;
 use unsnarl_ir::primitive::AstIdentifier;
 use unsnarl_oxc_parity::AstType;
 
-pub(crate) fn collect_binding_identifiers(pattern: &BindingPattern<'_>) -> Vec<AstIdentifier> {
+pub fn collect_binding_identifiers(pattern: &BindingPattern<'_>) -> Vec<AstIdentifier> {
     let mut out = Vec::new();
     collect(pattern, &mut out);
     out
