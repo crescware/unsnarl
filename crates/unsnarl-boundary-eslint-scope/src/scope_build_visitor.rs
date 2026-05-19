@@ -30,7 +30,7 @@ use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_ir::ids::ScopeId;
-use unsnarl_oxc_parity::AstType;
+use unsnarl_oxc_parity::{is_type_only_subtree, AstType};
 
 use crate::enter_block::enter_block;
 use crate::enter_catch::enter_catch;
@@ -40,7 +40,7 @@ use crate::enter_function::{enter_arrow_function_expression, enter_function};
 use crate::enter_switch::enter_switch;
 use crate::enter_switch_case::enter_switch_case;
 use crate::handle_identifier_reference::handle_identifier_reference;
-use crate::materialise::{ast_node_of, materialise_path};
+use crate::materialise::{ast_node_of, ast_type_of, materialise_path};
 use crate::skip_block_scope::skip_block_scope;
 use crate::state::{pop_scope, ScopeBuilderState};
 use crate::visitor::AnalysisVisitor;
@@ -52,6 +52,15 @@ pub(crate) struct ScopeBuildVisitor<'a, 'v> {
     pub(crate) raw: &'v str,
     pub(crate) key_stack: Vec<Option<&'static str>>,
     pub(crate) path: Vec<PathEntry<'a>>,
+    /// Count of currently-active TypeScript type-only subtrees
+    /// containing the cursor. The TS `handleEnter` dispatcher returns
+    /// `"skip"` for type-only nodes (`TSInterfaceDeclaration`,
+    /// `typeAnnotation` slot, ...) so the walker never descends into
+    /// them; oxc_ast_visit has no "skip" return, so we instead walk
+    /// the subtree normally but short-circuit
+    /// `handle_identifier_reference` while this counter is positive.
+    /// See `unsnarl_oxc_parity::is_type_only_subtree` for the membership.
+    pub(crate) type_only_depth: u32,
 }
 
 impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
@@ -66,6 +75,7 @@ impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
             raw,
             key_stack: Vec::new(),
             path: Vec::new(),
+            type_only_depth: 0,
         }
     }
 
@@ -99,10 +109,19 @@ impl<'a, 'v> ScopeBuildVisitor<'a, 'v> {
 impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     fn enter_node(&mut self, kind: AstKind<'a>) {
         let key = self.current_key();
+        let ty = ast_type_of(&kind);
+        if is_type_only_subtree(&ty, key) {
+            self.type_only_depth += 1;
+        }
         self.path.push(PathEntry { node: kind, key });
     }
 
-    fn leave_node(&mut self, _kind: AstKind<'a>) {
+    fn leave_node(&mut self, kind: AstKind<'a>) {
+        let entry_key = self.path.last().and_then(|e| e.key);
+        let ty = ast_type_of(&kind);
+        if is_type_only_subtree(&ty, entry_key) {
+            self.type_only_depth = self.type_only_depth.saturating_sub(1);
+        }
         self.path.pop();
     }
 
@@ -209,7 +228,33 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     fn visit_class(&mut self, it: &Class<'a>) {
         let scope_id = enter_class(self.state, it);
         self.fire_on_scope(scope_id);
-        oxc_ast_visit::walk::walk_class(self, it);
+        let kind = AstKind::Class(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.visit_decorators(&it.decorators);
+        if let Some(id) = it.id.as_ref() {
+            self.key_stack.push(Some("id"));
+            self.visit_binding_identifier(id);
+            self.key_stack.pop();
+        }
+        if let Some(type_parameters) = it.type_parameters.as_deref() {
+            self.visit_ts_type_parameter_declaration(type_parameters);
+        }
+        if let Some(super_class) = it.super_class.as_ref() {
+            self.key_stack.push(Some("superClass"));
+            self.visit_expression(super_class);
+            self.key_stack.pop();
+        }
+        if let Some(super_type_arguments) = it.super_type_arguments.as_deref() {
+            self.visit_ts_type_parameter_instantiation(super_type_arguments);
+        }
+        for ts_class_implements in &it.implements {
+            self.visit_ts_class_implements(ts_class_implements);
+        }
+        self.key_stack.push(Some("body"));
+        self.visit_class_body(&it.body);
+        self.key_stack.pop();
+        self.leave_node(kind);
         pop_scope(self.state);
     }
 
@@ -310,18 +355,35 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_identifier_reference(&mut self, it: &IdentifierReference<'a>) {
-        let parent = self.parent_kind();
-        let key = self.current_key();
-        handle_identifier_reference(
-            self.state,
-            self.visitor,
-            parent.as_ref(),
-            key,
-            &self.path,
-            it.name.as_str(),
-            it.span,
-            AstType::Identifier,
-        );
+        if self.type_only_depth == 0 {
+            let parent = self.parent_kind();
+            let key = self.current_key();
+            // oxc represents JSX object / element-name identifiers as
+            // plain `IdentifierReference` nodes (per the JSXElementName /
+            // JSXMemberExpressionObject enums), but the TS npm
+            // `oxc-parser` emits them as `JSXIdentifier`. Normalise the
+            // type so the resulting reference / implicit-global
+            // Definition row carries the JSXIdentifier shape the TS
+            // pipeline records.
+            let ast_type = if matches!(
+                parent,
+                Some(AstKind::JSXMemberExpression(_)) | Some(AstKind::JSXOpeningElement(_))
+            ) {
+                AstType::JSXIdentifier
+            } else {
+                AstType::Identifier
+            };
+            handle_identifier_reference(
+                self.state,
+                self.visitor,
+                parent.as_ref(),
+                key,
+                &self.path,
+                it.name.as_str(),
+                it.span,
+                ast_type,
+            );
+        }
         oxc_ast_visit::walk::walk_identifier_reference(self, it);
     }
 
@@ -334,18 +396,20 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         // `ts/src/boundary/eslint-scope/handle-enter.ts`. The Rust
         // port dispatches per oxc AST type, so we route
         // `BindingIdentifier` here using the same classification path.
-        let parent = self.parent_kind();
-        let key = self.current_key();
-        handle_identifier_reference(
-            self.state,
-            self.visitor,
-            parent.as_ref(),
-            key,
-            &self.path,
-            it.name.as_str(),
-            it.span,
-            AstType::Identifier,
-        );
+        if self.type_only_depth == 0 {
+            let parent = self.parent_kind();
+            let key = self.current_key();
+            handle_identifier_reference(
+                self.state,
+                self.visitor,
+                parent.as_ref(),
+                key,
+                &self.path,
+                it.name.as_str(),
+                it.span,
+                AstType::Identifier,
+            );
+        }
         oxc_ast_visit::walk::walk_binding_identifier(self, it);
     }
 
@@ -391,18 +455,20 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         // global) carries the JSXIdentifier shape. The Rust port keeps
         // a per-AST-type dispatch, so we route here with
         // `AstType::JSXIdentifier`.
-        let parent = self.parent_kind();
-        let key = self.current_key();
-        handle_identifier_reference(
-            self.state,
-            self.visitor,
-            parent.as_ref(),
-            key,
-            &self.path,
-            it.name.as_str(),
-            it.span,
-            AstType::JSXIdentifier,
-        );
+        if self.type_only_depth == 0 {
+            let parent = self.parent_kind();
+            let key = self.current_key();
+            handle_identifier_reference(
+                self.state,
+                self.visitor,
+                parent.as_ref(),
+                key,
+                &self.path,
+                it.name.as_str(),
+                it.span,
+                AstType::JSXIdentifier,
+            );
+        }
         oxc_ast_visit::walk::walk_jsx_identifier(self, it);
     }
 }

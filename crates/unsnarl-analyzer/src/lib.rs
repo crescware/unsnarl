@@ -32,7 +32,6 @@ pub mod owner;
 pub mod path_entry;
 pub mod reference_call_receiver;
 pub mod run_analysis;
-pub mod skip_types;
 
 #[cfg(test)]
 pub(crate) mod testing;
@@ -62,4 +61,3 @@ pub use owner::{
 pub use path_entry::{ArrowBodyInfo, PathEntry};
 pub use reference_call_receiver::reference_call_receiver_flags;
 pub use run_analysis::run_analysis;
-pub use skip_types::is_type_only_subtree;
