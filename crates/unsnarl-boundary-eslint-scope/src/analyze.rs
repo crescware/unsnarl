@@ -12,9 +12,12 @@ use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
 
+use oxc_ast_visit::Visit;
+
 use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::hoist_into::hoist_into;
 use crate::parser::SourceType;
+use crate::scope_build_visitor::ScopeBuildVisitor;
 use crate::state::{finish, ScopeBuilderState};
 use crate::visitor::AnalysisVisitor;
 
@@ -49,6 +52,8 @@ pub fn analyze<'a>(
     let mut state = ScopeBuilderState::new(root_kind, root_block);
     let global_scope = state.global_scope;
     hoist_into(&mut state, program, global_scope, options.raw);
+    let mut walker = ScopeBuildVisitor::new(&mut state, options.raw);
+    walker.visit_program(program);
     let (_arena, _global_scope, _diagnostics) = finish(state);
     EslintScopeAnalysisResult {}
 }

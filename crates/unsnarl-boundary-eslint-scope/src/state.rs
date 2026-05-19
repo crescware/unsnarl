@@ -27,6 +27,7 @@ use crate::diagnostic_collector::DiagnosticCollector;
 pub struct ScopeBuilderState {
     pub(crate) arena: IrArena,
     pub(crate) global_scope: ScopeId,
+    pub(crate) stack: Vec<ScopeId>,
     pub(crate) diagnostics: DiagnosticCollector,
 }
 
@@ -35,11 +36,11 @@ impl ScopeBuilderState {
     ///
     /// Mirrors `ScopeManager`'s constructor in `manager.ts`: a single
     /// `ScopeImpl` is created as the global / module scope with no
-    /// `upper`, and the stack / `allScopes` are seeded with that scope.
-    /// The Rust port differs only in that the stack of live scope IDs
-    /// is kept as `Vec<ScopeId>` (added alongside `push_scope` in a
-    /// later commit); the seed scope itself is recorded as
-    /// `global_scope` here.
+    /// `upper`, and `stack` / `allScopes` are seeded with that scope.
+    /// The Rust port collapses `allScopes` into the arena
+    /// (`IndexVec<ScopeId, ScopeData>` already enumerates every
+    /// allocated scope, so a second container would duplicate the
+    /// information) and keeps a `Vec<ScopeId>` for `stack`.
     pub(crate) fn new(root_kind: ScopeType, block: AstNode) -> Self {
         let mut arena = IrArena {
             scopes: IndexVec::new(),
@@ -65,9 +66,79 @@ impl ScopeBuilderState {
         Self {
             arena,
             global_scope,
+            stack: vec![global_scope],
             diagnostics: DiagnosticCollector::new(),
         }
     }
+}
+
+/// The currently active scope on the build stack.
+///
+/// Mirrors `ScopeManager#current` in `manager.ts`. Returns the top of
+/// `stack`; panics if the stack is empty, which would mean the root
+/// scope was somehow popped — a builder bug, not user input.
+pub(crate) fn current_scope(state: &ScopeBuilderState) -> ScopeId {
+    *state
+        .stack
+        .last()
+        .expect("ScopeBuilderState.stack must not be empty")
+}
+
+/// Allocate a new scope, attach it to the current scope as a child,
+/// and push it onto the stack.
+///
+/// Mirrors `ScopeManager#push` in `manager.ts` together with the side
+/// effects of `ScopeImpl`'s constructor: the parent gains an entry in
+/// its `child_scopes`, the new scope inherits the parent's
+/// `is_strict`, and `variable_scope` is fixed to either the new scope
+/// (for `Function` / `Module` / `Global`) or the parent's
+/// `variable_scope`.
+///
+/// Returns the freshly allocated `ScopeId`, which is also now the
+/// stack top (so a follow-up [`current_scope`] returns it).
+pub(crate) fn push_scope(state: &mut ScopeBuilderState, ty: ScopeType, block: AstNode) -> ScopeId {
+    let parent = current_scope(state);
+    let parent_is_strict = state.arena.scopes[parent].is_strict;
+    let parent_variable_scope = state.arena.scopes[parent].variable_scope;
+    let is_self_variable_scope = matches!(
+        ty,
+        ScopeType::Function | ScopeType::Module | ScopeType::Global
+    );
+    let placeholder = ScopeId::from_usize(0);
+    let new_id = state.arena.scopes.push(ScopeData::new(
+        ty,
+        parent_is_strict,
+        Some(parent),
+        Vec::new(),
+        placeholder,
+        block,
+        Vec::new(),
+        Vec::new(),
+        Vec::new(),
+        false,
+    ));
+    let variable_scope = if is_self_variable_scope {
+        new_id
+    } else {
+        parent_variable_scope
+    };
+    state.arena.scopes[new_id].variable_scope = variable_scope;
+    state.arena.scopes[parent].child_scopes.push(new_id);
+    state.stack.push(new_id);
+    new_id
+}
+
+/// Pop the current scope off the build stack.
+///
+/// Mirrors `ScopeManager#pop` in `manager.ts`. Panics if popping
+/// would leave the stack empty — the root scope must remain
+/// throughout the build.
+pub(crate) fn pop_scope(state: &mut ScopeBuilderState) {
+    assert!(
+        state.stack.len() > 1,
+        "cannot pop the root scope from the build stack"
+    );
+    state.stack.pop();
 }
 
 /// Declare a variable inside a scope, mirroring `declareVariable` in
