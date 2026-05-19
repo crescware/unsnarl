@@ -273,6 +273,38 @@ fn ts_legacy_type_assertion_does_not_register_type_name_as_runtime_reference() {
 }
 
 #[test]
+fn property_definition_type_annotation_does_not_register_named_type_as_runtime_reference() {
+    // `class C { items: Diagnostic[] = []; }` -- `Diagnostic` is a
+    // TS-only type reference and must not appear in
+    // `arena.references`. This matches the parity-bench failures in
+    // `src/util/diagnostic.ts` / `src/parser/parse-error.ts` where
+    // class property type annotations were leaking their named types
+    // as extra runtime references.
+    let r = analyze_source(
+        "type Diagnostic = { message: string };\nclass C {\n  items: Diagnostic[] = [];\n}\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "Diagnostic"),
+        "class property type annotation must not register `Diagnostic` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn accessor_property_type_annotation_does_not_register_named_type_as_runtime_reference() {
+    let r = analyze_source(
+        "type Tag = string;\nclass C {\n  accessor name: Tag = \"x\";\n}\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "Tag"),
+        "accessor-property type annotation must not register `Tag` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
 fn call_expression_type_argument_is_not_registered_as_runtime_reference() {
     // `f<Tag>(x)` -- the `Tag` is a TS-only type argument and must
     // not appear in `arena.references`.

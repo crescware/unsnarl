@@ -21,14 +21,14 @@
 //!   children) inherit `walk_*` defaults.
 
 use oxc_ast::ast::{
-    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
-    CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement,
-    ForOfStatement, ForStatement, FormalParameter, Function, IdentifierName, IdentifierReference,
-    ImportAttribute, ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier,
-    JSXAttribute, JSXIdentifier, JSXMemberExpression, JSXOpeningElement, MetaProperty,
-    NewExpression, SwitchCase, SwitchStatement, TSAsExpression, TSInstantiationExpression,
-    TSSatisfiesExpression, TSTypeAssertion, TaggedTemplateExpression, UpdateExpression,
-    VariableDeclarator,
+    AccessorProperty, ArrowFunctionExpression, AssignmentExpression, BindingIdentifier,
+    BlockStatement, CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier,
+    ForInStatement, ForOfStatement, ForStatement, FormalParameter, Function, IdentifierName,
+    IdentifierReference, ImportAttribute, ImportDefaultSpecifier, ImportNamespaceSpecifier,
+    ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression, JSXOpeningElement,
+    MetaProperty, NewExpression, PropertyDefinition, SwitchCase, SwitchStatement, TSAsExpression,
+    TSInstantiationExpression, TSSatisfiesExpression, TSTypeAssertion, TaggedTemplateExpression,
+    UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -330,6 +330,64 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.key_stack.pop();
         self.leave_node(kind);
         pop_scope(self.state);
+    }
+
+    fn visit_property_definition(&mut self, it: &PropertyDefinition<'a>) {
+        // `class { items: Diagnostic[] = [] }` -- the property's
+        // `type_annotation` is a TS-only subtree. oxc's auto-generated
+        // walker descends into it without recording the parent-slot
+        // key, so identifiers inside (a named type like `Diagnostic`)
+        // leak through `is_type_only_subtree` and emit extra
+        // `Reference` rows. The TS pipeline keys this slot off the
+        // npm `oxc-parser` visitor list (`typeAnnotation`); mirror
+        // that here. Decorators / key / value remain runtime slots
+        // and keep their own keys.
+        let kind = AstKind::PropertyDefinition(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
+        }
+        if let Some(value) = &it.value {
+            self.key_stack.push(Some("value"));
+            self.visit_expression(value);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
+    fn visit_accessor_property(&mut self, it: &AccessorProperty<'a>) {
+        // `class { accessor name: T }` -- same `typeAnnotation`-key
+        // omission as `PropertyDefinition` (see
+        // `visit_property_definition`).
+        let kind = AstKind::AccessorProperty(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
+        }
+        if let Some(value) = &it.value {
+            self.key_stack.push(Some("value"));
+            self.visit_expression(value);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
     }
 
     fn visit_catch_clause(&mut self, it: &CatchClause<'a>) {
