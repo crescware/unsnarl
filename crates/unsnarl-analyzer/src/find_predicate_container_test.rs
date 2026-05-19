@@ -2,9 +2,26 @@ use unsnarl_ir::reference::PredicateContainer;
 use unsnarl_ir::SourceOffset;
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
+use crate::path_entry::PathEntry;
 use crate::testing::{ast_node, entry};
 
-use super::find_predicate_container;
+/// ASCII-source wrapper: the existing tests construct synthetic
+/// `AstNode`s whose `span.start` values are simple integers, and the
+/// raw-source argument only matters for the UTF-8 → UTF-16 conversion
+/// in `find_predicate_container`. Passing an empty `raw` keeps every
+/// in-range byte offset 1:1 with its UTF-16 equivalent (the
+/// implementation falls through to the `overshoot` path, which adds
+/// the byte offset back unchanged). New tests that exercise the
+/// conversion path should call `super::find_predicate_container`
+/// directly with a non-trivial `raw`.
+fn find_predicate_container(
+    parent_type: Option<&AstType>,
+    parent_offset: Option<u32>,
+    key: Option<&str>,
+    path: &[PathEntry],
+) -> Option<PredicateContainer> {
+    super::find_predicate_container(parent_type, parent_offset, key, path, "")
+}
 
 fn expect_container(
     actual: Option<PredicateContainer>,
@@ -294,4 +311,40 @@ fn falls_back_to_parent_start_for_for_in_when_path_empty() {
             find_predicate_container(Some(&AstType::ForInStatement), Some(77), Some(key), &[]);
         expect_container(res, PredicateContainerType::ForInStatement, 77);
     }
+}
+
+#[test]
+fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
+    // `entry.node.span.start` arrives in UTF-8 bytes from `oxc_parser`.
+    // With a leading em-dash (`—`, 3 UTF-8 bytes / 1 UTF-16 code unit),
+    // the byte offset of `if` is 7 (after `// —\n`), but its UTF-16
+    // offset is 5. The serialized `PredicateContainer.offset` must
+    // match the TS reference (UTF-16); this asserts the conversion
+    // happens inside `find_predicate_container` for both the
+    // path-walk branch and the parent-offset fallback.
+    let raw = "// —\nif (a) {}\n";
+    let if_stmt = ast_node(AstType::IfStatement, 7);
+    let test_expr = ast_node(AstType::BinaryExpression, 11);
+    let path = vec![
+        entry(ast_node(AstType::Program, 0), None),
+        entry(if_stmt, Some("body")),
+        entry(test_expr, Some("test")),
+    ];
+    let from_path = super::find_predicate_container(
+        Some(&AstType::BinaryExpression),
+        Some(11),
+        Some("left"),
+        &path,
+        raw,
+    );
+    expect_container(from_path, PredicateContainerType::IfStatement, 5);
+
+    let from_parent_fallback = super::find_predicate_container(
+        Some(&AstType::IfStatement),
+        Some(7),
+        Some("test"),
+        &[],
+        raw,
+    );
+    expect_container(from_parent_fallback, PredicateContainerType::IfStatement, 5);
 }
