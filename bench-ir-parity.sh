@@ -4,10 +4,9 @@
 # implementation (`ts/dist/index.js`).
 #
 # Iterates every `.ts` / `.tsx` file under `ts/src`, runs both
-# implementations with `-f ir`, captures combined stdout+stderr (the
-# Rust binary currently writes IR to stderr — see
-# `crates/unsnarl/src/run.rs`), and compares the byte streams with
-# `cmp`.
+# implementations with `-f ir`, and compares the IR (stdout) byte
+# stream with `cmp`. Stderr from each implementation is captured
+# separately so it never pollutes the comparison.
 #
 # Per-file wall-clock times in milliseconds are recorded for each
 # implementation. Defaults to writing all artifacts under
@@ -21,9 +20,10 @@
 # Outputs (under the work dir):
 #   summary.txt         human-readable totals
 #   timings.tsv         file<TAB>rust_ms<TAB>ts_ms<TAB>match
-#   fail_list.txt       paths whose outputs differ
+#   fail_list.txt       paths whose stdouts differ
 #   diff/<safe>.diff    unified diff (TS vs Rust) for each mismatch
-#   rust/, ts/          raw IR outputs (mismatches only; matches are deleted)
+#   rust/, ts/          raw IR stdouts (mismatches only; matches are deleted)
+#   stderr/             non-empty stderr from either implementation
 
 set -u
 zmodload zsh/datetime
@@ -36,7 +36,7 @@ TS_BIN=(node "${TS_ROOT}/dist/index.js")
 
 WORK="${1:-${REPO_ROOT}/target/parity-bench}"
 rm -rf "$WORK"
-mkdir -p "$WORK/rust" "$WORK/ts" "$WORK/diff"
+mkdir -p "$WORK/rust" "$WORK/ts" "$WORK/diff" "$WORK/stderr"
 
 if [[ ! -x "$RUST_BIN" ]]; then
     print -u 2 -- "missing $RUST_BIN — run \`mise run build\` first"
@@ -78,17 +78,23 @@ for rel in $FILES; do
     r_out="$WORK/rust/${safe}.out"
     t_out="$WORK/ts/${safe}.out"
 
+    r_err="$WORK/stderr/${safe}.rust.err"
+    t_err="$WORK/stderr/${safe}.ts.err"
+
     s=$EPOCHREALTIME
-    "$RUST_BIN" -f ir "$rel" >"$r_out" 2>&1
+    "$RUST_BIN" -f ir "$rel" >"$r_out" 2>"$r_err"
     r_rc=$?
     e=$EPOCHREALTIME
     rust_ms=$(( int(((e - s) * 1000.0) + 0.5) ))
 
     s=$EPOCHREALTIME
-    "${TS_BIN[@]}" -f ir "$rel" >"$t_out" 2>&1
+    "${TS_BIN[@]}" -f ir "$rel" >"$t_out" 2>"$t_err"
     t_rc=$?
     e=$EPOCHREALTIME
     ts_ms=$(( int(((e - s) * 1000.0) + 0.5) ))
+
+    [[ ! -s "$r_err" ]] && rm -f "$r_err"
+    [[ ! -s "$t_err" ]] && rm -f "$t_err"
 
     (( r_rc != 0 )) && (( RUST_ERR++ ))
     (( t_rc != 0 )) && (( TS_ERR++ ))

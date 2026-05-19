@@ -1,10 +1,22 @@
 use super::*;
 
-fn capture(argv: &[&str]) -> String {
+/// Run the CLI and return `(stdout, stderr)` as strings.
+fn capture(argv: &[&str]) -> (String, String) {
     let args = Args::try_parse_from(argv).expect("argv should parse");
-    let mut buf = Vec::new();
-    run_to(&args, &mut buf);
-    String::from_utf8(buf).expect("output should be valid UTF-8")
+    let mut out = Vec::new();
+    let mut err = Vec::new();
+    run_to(&args, &mut out, &mut err);
+    (
+        String::from_utf8(out).expect("stdout should be valid UTF-8"),
+        String::from_utf8(err).expect("stderr should be valid UTF-8"),
+    )
+}
+
+/// Convenience wrapper that asserts stderr is empty and returns stdout.
+fn capture_stdout(argv: &[&str]) -> String {
+    let (out, err) = capture(argv);
+    assert_eq!(err, "", "expected empty stderr, got: {err}");
+    out
 }
 
 fn first_line(out: &str) -> &str {
@@ -13,13 +25,13 @@ fn first_line(out: &str) -> &str {
 
 #[test]
 fn default_format_routes_to_mermaid_emitter() {
-    let out = capture(&["uns", "x.ts"]);
+    let out = capture_stdout(&["uns", "x.ts"]);
     assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
 }
 
 #[test]
 fn mermaid_format_routes_to_mermaid_emitter() {
-    let out = capture(&["uns", "-f", "mermaid", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "mermaid", "x.ts"]);
     assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
 }
 
@@ -36,7 +48,7 @@ fn ir_format_emits_ir_json_for_a_real_file() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    let out = capture(&["uns", "-f", "ir", &path]);
+    let out = capture_stdout(&["uns", "-f", "ir", &path]);
     let value: serde_json::Value =
         serde_json::from_str(out.trim_end()).expect("ir emitter output should be JSON");
     assert_eq!(value["version"], 1);
@@ -45,19 +57,19 @@ fn ir_format_emits_ir_json_for_a_real_file() {
 
 #[test]
 fn json_format_routes_to_json_emitter() {
-    let out = capture(&["uns", "-f", "json", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "json", "x.ts"]);
     assert_eq!(first_line(&out), "Not implemented yet: json emitter");
 }
 
 #[test]
 fn markdown_format_routes_to_markdown_emitter() {
-    let out = capture(&["uns", "-f", "markdown", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "markdown", "x.ts"]);
     assert_eq!(first_line(&out), "Not implemented yet: markdown emitter");
 }
 
 #[test]
 fn stats_format_routes_to_stats_emitter() {
-    let out = capture(&["uns", "-f", "stats", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "stats", "x.ts"]);
     assert_eq!(first_line(&out), "Not implemented yet: stats emitter");
 }
 
@@ -71,7 +83,7 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 fn stub_emitter_output_includes_parsed_args_json_after_label() {
     // `json` is still a stub; the legacy "Not implemented yet" line +
     // CLI args JSON shape lives on through the unimplemented formats.
-    let out = capture(&["uns", "-f", "json", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "json", "x.ts"]);
     let (label, rest) = out.split_once('\n').expect("label line");
     assert_eq!(label, "Not implemented yet: json emitter");
     let value: serde_json::Value =
@@ -81,17 +93,20 @@ fn stub_emitter_output_includes_parsed_args_json_after_label() {
 }
 
 #[test]
-fn out_flag_notice_is_emitted_when_out_dir_basename_has_an_extension() {
-    let out = capture(&["uns", "-o", "graph.mmd", "x.ts"]);
-    let first = first_line(&out);
+fn out_flag_notice_is_emitted_to_stderr_when_out_dir_basename_has_an_extension() {
+    let (out, err) = capture(&["uns", "-o", "graph.mmd", "x.ts"]);
     assert_eq!(
-        first,
+        first_line(&err),
         "uns: notice: -o 'graph.mmd' is treated as a directory name; use --out-file to write to that path as a file."
     );
+    // The emitter output still lands on stdout; the notice does not
+    // pollute it.
+    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
 }
 
 #[test]
 fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
-    let out = capture(&["uns", "-o", "build", "x.ts"]);
+    let (out, err) = capture(&["uns", "-o", "build", "x.ts"]);
+    assert_eq!(err, "");
     assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
 }

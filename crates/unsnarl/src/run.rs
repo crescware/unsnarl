@@ -7,17 +7,20 @@ use crate::cli::run_cli::emit_out_flag_notice;
 use crate::pipeline::{emit_ir_text, language_for_path};
 
 pub fn run(args: &Args) {
-    let mut stderr = io::stderr().lock();
-    run_to(args, &mut stderr);
+    let stdout = io::stdout();
+    let stderr = io::stderr();
+    let mut out = stdout.lock();
+    let mut err = stderr.lock();
+    run_to(args, &mut out, &mut err);
 }
 
-pub(crate) fn run_to(args: &Args, out: &mut dyn Write) {
-    emit_out_flag_notice(args.out_dir.as_deref(), out);
+pub(crate) fn run_to(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    emit_out_flag_notice(args.out_dir.as_deref(), err);
     let handler = select_handler(&args.format);
-    handler(args, out);
+    handler(args, out, err);
 }
 
-type Handler = fn(&Args, &mut dyn Write);
+type Handler = fn(&Args, &mut dyn Write, &mut dyn Write);
 
 fn select_handler(format: &CliFormat) -> Handler {
     match format {
@@ -29,33 +32,33 @@ fn select_handler(format: &CliFormat) -> Handler {
     }
 }
 
-fn emit_mermaid(args: &Args, out: &mut dyn Write) {
+fn emit_mermaid(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
     emit_stub("mermaid emitter", args, out);
 }
 
-fn emit_ir(args: &Args, out: &mut dyn Write) {
-    let Some((code, source_path, language)) = read_source(args, out) else {
+fn emit_ir(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
     match emit_ir_text(&code, &source_path, language, args.pretty_json) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write ir output");
         }
-        Err(err) => {
-            writeln!(out, "uns: error: {err}").expect("write ir error");
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").expect("write ir error");
         }
     }
 }
 
-fn emit_json(args: &Args, out: &mut dyn Write) {
+fn emit_json(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
     emit_stub("json emitter", args, out);
 }
 
-fn emit_markdown(args: &Args, out: &mut dyn Write) {
+fn emit_markdown(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
     emit_stub("markdown emitter", args, out);
 }
 
-fn emit_stats(args: &Args, out: &mut dyn Write) {
+fn emit_stats(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
     emit_stub("stats emitter", args, out);
 }
 
@@ -68,13 +71,13 @@ fn emit_stub(label: &str, args: &Args, out: &mut dyn Write) {
 /// Pull the source to feed the pipeline plus the path / language pair
 /// the emitter records inside `SerializedSource`. Mirrors the
 /// `--stdin` / file argument split in `ts/src/cli/`. Returns `None`
-/// and writes a CLI-style error to `out` when neither input is
+/// and writes a CLI-style error to `err` when neither input is
 /// available (the same behaviour as the TS commander layer).
-fn read_source(args: &Args, out: &mut dyn Write) -> Option<(String, String, unsnarl_ir::Language)> {
+fn read_source(args: &Args, err: &mut dyn Write) -> Option<(String, String, unsnarl_ir::Language)> {
     if args.stdin {
         let mut buf = String::new();
-        if let Err(err) = io::stdin().read_to_string(&mut buf) {
-            writeln!(out, "uns: error: failed to read stdin: {err}").ok();
+        if let Err(e) = io::stdin().read_to_string(&mut buf) {
+            writeln!(err, "uns: error: failed to read stdin: {e}").ok();
             return None;
         }
         let language = match args.stdin_lang {
@@ -87,7 +90,7 @@ fn read_source(args: &Args, out: &mut dyn Write) -> Option<(String, String, unsn
     }
     let Some(file) = args.file.as_ref() else {
         writeln!(
-            out,
+            err,
             "uns: error: no input file (pass a positional path or --stdin)"
         )
         .ok();
@@ -95,8 +98,8 @@ fn read_source(args: &Args, out: &mut dyn Write) -> Option<(String, String, unsn
     };
     let code = match fs::read_to_string(file) {
         Ok(c) => c,
-        Err(err) => {
-            writeln!(out, "uns: error: failed to read {}: {err}", file.display()).ok();
+        Err(e) => {
+            writeln!(err, "uns: error: failed to read {}: {e}", file.display()).ok();
             return None;
         }
     };
@@ -106,7 +109,7 @@ fn read_source(args: &Args, out: &mut dyn Write) -> Option<(String, String, unsn
             .extension()
             .and_then(|s| s.to_str())
             .unwrap_or("(none)");
-        writeln!(out, "uns: error: unsupported language extension: {ext}").ok();
+        writeln!(err, "uns: error: unsupported language extension: {ext}").ok();
         return None;
     };
     Some((code, source_path, language))
