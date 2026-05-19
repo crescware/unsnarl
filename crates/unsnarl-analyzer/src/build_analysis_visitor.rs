@@ -25,10 +25,11 @@ use std::collections::HashMap;
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
-    ExpressionStatement, ForInStatement, ForOfStatement, ForStatement, Function,
-    IdentifierReference, IfStatement, JSXIdentifier, NewExpression, PrivateFieldExpression,
-    Program, ReturnStatement, StaticMemberExpression, SwitchCase, SwitchStatement, ThrowStatement,
-    TryStatement, UpdateExpression, VariableDeclarator, WhileStatement,
+    ExpressionStatement, ForInStatement, ForOfStatement, ForStatement, Function, IdentifierName,
+    IdentifierReference, IfStatement, ImportAttribute, JSXIdentifier, MetaProperty, NewExpression,
+    PrivateFieldExpression, Program, ReturnStatement, StaticMemberExpression, SwitchCase,
+    SwitchStatement, ThrowStatement, TryStatement, UpdateExpression, VariableDeclarator,
+    WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
@@ -744,6 +745,43 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         let kind = AstKind::JSXIdentifier(self.alloc(it));
         self.push_path(kind, None);
         oxc_ast_visit::walk::walk_jsx_identifier(self, it);
+        self.pop_path();
+    }
+
+    fn visit_identifier_name(&mut self, it: &IdentifierName<'a>) {
+        // The boundary fires reference rows for `IdentifierName` only
+        // when the parent is one of the ESTree-referential containers
+        // (`MetaProperty`, `ImportAttribute`). `fire_reference` is a
+        // no-op when no arena row carries this span, so unconditional
+        // dispatch is safe — only the containers below produce a
+        // matching `span_to_ref` entry.
+        self.fire_reference(it.span);
+        oxc_ast_visit::walk::walk_identifier_name(self, it);
+    }
+
+    fn visit_meta_property(&mut self, it: &MetaProperty<'a>) {
+        let kind = AstKind::MetaProperty(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("meta"));
+        self.visit_identifier_name(&it.meta);
+        self.key_stack.pop();
+        self.key_stack.push(Some("property"));
+        self.visit_identifier_name(&it.property);
+        self.key_stack.pop();
+        self.pop_path();
+    }
+
+    fn visit_import_attribute(&mut self, it: &ImportAttribute<'a>) {
+        let kind = AstKind::ImportAttribute(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("key"));
+        self.visit_import_attribute_key(&it.key);
+        self.key_stack.pop();
+        self.key_stack.push(Some("value"));
+        self.visit_string_literal(&it.value);
+        self.key_stack.pop();
         self.pop_path();
     }
 

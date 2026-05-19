@@ -23,9 +23,9 @@
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
     Class, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter,
-    Function, IdentifierReference, ImportDefaultSpecifier, ImportNamespaceSpecifier,
-    ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression, SwitchCase, SwitchStatement,
-    UpdateExpression, VariableDeclarator,
+    Function, IdentifierName, IdentifierReference, ImportAttribute, ImportDefaultSpecifier,
+    ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression,
+    MetaProperty, SwitchCase, SwitchStatement, UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -540,6 +540,81 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.visit_jsx_identifier(&it.property);
         self.key_stack.pop();
         self.leave_node(kind);
+    }
+
+    fn visit_meta_property(&mut self, it: &MetaProperty<'a>) {
+        // TS ESTree represents `new.target` / `import.meta` as
+        // `MetaProperty { meta: Identifier, property: Identifier }`,
+        // and the TS pipeline routes both identifiers through
+        // `handleIdentifierReference`, which `classify_ordinary_reference`
+        // turns into a read reference (resolving to an implicit
+        // global). oxc keeps them as `IdentifierName`, so push the
+        // slot keys here and rely on the dedicated
+        // `visit_identifier_name` override below to fire the
+        // reference.
+        let kind = AstKind::MetaProperty(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("meta"));
+        self.visit_identifier_name(&it.meta);
+        self.key_stack.pop();
+        self.key_stack.push(Some("property"));
+        self.visit_identifier_name(&it.property);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_import_attribute(&mut self, it: &ImportAttribute<'a>) {
+        // `import x from "y" with { type: "json" }` — TS ESTree
+        // flattens the attribute key into a plain `Identifier`, so the
+        // TS pipeline emits a read reference for `type` (resolving to
+        // an implicit global). Push the slot key so the dedicated
+        // `visit_identifier_name` override below can fire it.
+        let kind = AstKind::ImportAttribute(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("key"));
+        self.visit_import_attribute_key(&it.key);
+        self.key_stack.pop();
+        self.key_stack.push(Some("value"));
+        self.visit_string_literal(&it.value);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_identifier_name(&mut self, it: &IdentifierName<'a>) {
+        // oxc keeps `IdentifierName` separate from `IdentifierReference`
+        // (estree-style `Identifier`); most callers (member-property
+        // slots, object-property keys, ...) are non-referential and
+        // need no work here. The handful of slots where TS ESTree
+        // emits an `Identifier` that the TS pipeline classifies as a
+        // reference are routed in through the
+        // `visit_meta_property` / `visit_import_attribute` overrides
+        // above, which push the appropriate slot key before reaching
+        // this method. Fire only when the parent matches one of those
+        // referential containers; otherwise fall through to the
+        // default walk.
+        if self.type_only_depth == 0 {
+            let parent = self.parent_kind();
+            let key = self.current_key();
+            let route_as_reference = matches!(
+                parent,
+                Some(AstKind::MetaProperty(_)) | Some(AstKind::ImportAttribute(_))
+            );
+            if route_as_reference {
+                handle_identifier_reference(
+                    self.state,
+                    self.visitor,
+                    parent.as_ref(),
+                    key,
+                    &self.path,
+                    it.name.as_str(),
+                    it.span,
+                    AstType::Identifier,
+                );
+            }
+        }
+        oxc_ast_visit::walk::walk_identifier_name(self, it);
     }
 
     fn visit_jsx_identifier(&mut self, it: &JSXIdentifier<'a>) {
