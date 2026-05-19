@@ -33,5 +33,7 @@ pub(crate) mod scope_build_visitor;
 pub(crate) mod skip_block_scope;
 pub(crate) mod span_util;
 pub(crate) mod state;
+#[cfg(test)]
+pub(crate) mod testing;
 pub mod visitor;
 pub(crate) mod walk;
