@@ -4,4 +4,12 @@
 //! This invariant is physically enforced by the absence of those entries in
 //! `Cargo.toml`.
 //!
-//! Placeholder skeleton; populated in Step 8 (parser) and Step 9 (scope-builder).
+//! Step 8 populated the parser wrapper (`parser` module). Step 8.5 added the
+//! scope-builder entry skeleton (`analyze` / `analysis_result` / `visitor`
+//! modules) so the parser API surface can be reviewed against an actual
+//! consumer; the body of `analyze` is deferred to Step 9.
+
+pub mod analysis_result;
+pub mod analyze;
+pub mod parser;
+pub mod visitor;
