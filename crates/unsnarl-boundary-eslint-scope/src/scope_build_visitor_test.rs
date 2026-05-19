@@ -273,6 +273,25 @@ fn ts_legacy_type_assertion_does_not_register_type_name_as_runtime_reference() {
 }
 
 #[test]
+fn rest_parameter_type_annotation_does_not_register_named_type_as_runtime_reference() {
+    // `function f(...nodes: VisualNode[])` -- the rest parameter's
+    // `type_annotation` slot is TS-only; the inner `VisualNode` must
+    // not appear in `arena.references`. This matches the parity-bench
+    // failure in `src/emitter/mermaid/collect-import-sources.test.ts`
+    // where `function asMap(...nodes: readonly VisualNode[])`
+    // produced an extra reference row.
+    let r = analyze_source(
+        "type VisualNode = { id: string };\nfunction f(...nodes: readonly VisualNode[]) { return nodes.length; }\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "VisualNode"),
+        "rest parameter type annotation must not register `VisualNode` as a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
 fn property_definition_type_annotation_does_not_register_named_type_as_runtime_reference() {
     // `class C { items: Diagnostic[] = []; }` -- `Diagnostic` is a
     // TS-only type reference and must not appear in

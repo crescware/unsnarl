@@ -23,12 +23,12 @@
 use oxc_ast::ast::{
     AccessorProperty, ArrowFunctionExpression, AssignmentExpression, BindingIdentifier,
     BlockStatement, CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier,
-    ForInStatement, ForOfStatement, ForStatement, FormalParameter, Function, IdentifierName,
-    IdentifierReference, ImportAttribute, ImportDefaultSpecifier, ImportNamespaceSpecifier,
-    ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression, JSXOpeningElement,
-    MetaProperty, NewExpression, PropertyDefinition, SwitchCase, SwitchStatement, TSAsExpression,
-    TSInstantiationExpression, TSSatisfiesExpression, TSTypeAssertion, TaggedTemplateExpression,
-    UpdateExpression, VariableDeclarator,
+    ForInStatement, ForOfStatement, ForStatement, FormalParameter, FormalParameterRest, Function,
+    IdentifierName, IdentifierReference, ImportAttribute, ImportDefaultSpecifier,
+    ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression,
+    JSXOpeningElement, MetaProperty, NewExpression, PropertyDefinition, SwitchCase,
+    SwitchStatement, TSAsExpression, TSInstantiationExpression, TSSatisfiesExpression,
+    TSTypeAssertion, TaggedTemplateExpression, UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -288,6 +288,29 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             // expression parent and still classify as references.
             self.key_stack.push(Some("initializer"));
             self.visit_expression(initializer);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
+    fn visit_formal_parameter_rest(&mut self, it: &FormalParameterRest<'a>) {
+        // `function f(...rest: T[])` -- the rest parameter's
+        // `type_annotation` is a TS-only subtree. oxc's auto-generated
+        // walker descends into it without recording the parent-slot
+        // key, so identifiers inside (a named type like `VisualNode`)
+        // leak through `is_type_only_subtree` and emit extra
+        // `Reference` rows. Mirror the TS pipeline by pushing
+        // `"typeAnnotation"` around the slot.
+        let kind = AstKind::FormalParameterRest(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.visit_binding_rest_element(&it.rest);
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
             self.key_stack.pop();
         }
         self.leave_node(kind);
