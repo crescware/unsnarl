@@ -21,12 +21,13 @@
 //!   children) inherit `walk_*` defaults.
 
 use oxc_ast::ast::{
-    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
-    Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement,
-    FormalParameter, Function, IdentifierName, IdentifierReference, ImportAttribute,
-    ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier,
-    JSXMemberExpression, MetaProperty, SwitchCase, SwitchStatement, TSAsExpression,
-    TSInstantiationExpression, TSSatisfiesExpression, TSTypeAssertion, UpdateExpression,
+    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
+    CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement,
+    ForOfStatement, ForStatement, FormalParameter, Function, IdentifierName, IdentifierReference,
+    ImportAttribute, ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier,
+    JSXAttribute, JSXIdentifier, JSXMemberExpression, JSXOpeningElement, MetaProperty,
+    NewExpression, SwitchCase, SwitchStatement, TSAsExpression, TSInstantiationExpression,
+    TSSatisfiesExpression, TSTypeAssertion, TaggedTemplateExpression, UpdateExpression,
     VariableDeclarator,
 };
 use oxc_ast::AstKind;
@@ -583,6 +584,92 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.key_stack.pop();
         self.key_stack.push(Some("typeArguments"));
         self.visit_ts_type_parameter_instantiation(&it.type_arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_call_expression(&mut self, it: &CallExpression<'a>) {
+        // `f<T>(arg)` -- the type arguments slot is TS-only. oxc's
+        // auto-generated walker descends into `type_arguments` without
+        // recording the parent-slot key, so an identifier inside (a
+        // named type like `f<UserModel>(...)`) would slip through
+        // `is_type_only_subtree` and be classified as a runtime
+        // reference. The TS pipeline keys this slot off the npm
+        // `oxc-parser` visitor list (`typeArguments`); mirror that
+        // here.
+        let kind = AstKind::CallExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("callee"));
+        self.visit_expression(&it.callee);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("arguments"));
+        self.visit_arguments(&it.arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_new_expression(&mut self, it: &NewExpression<'a>) {
+        // `new Foo<T>(arg)` -- same `typeArguments`-key omission as
+        // `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::NewExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("callee"));
+        self.visit_expression(&it.callee);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("arguments"));
+        self.visit_arguments(&it.arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_tagged_template_expression(&mut self, it: &TaggedTemplateExpression<'a>) {
+        // `` tag<T>`literal` `` -- same `typeArguments`-key omission
+        // as `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::TaggedTemplateExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("tag"));
+        self.visit_expression(&it.tag);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("quasi"));
+        self.visit_template_literal(&it.quasi);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_jsx_opening_element(&mut self, it: &JSXOpeningElement<'a>) {
+        // `<Foo<T> .../>` -- same `typeArguments`-key omission as
+        // `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::JSXOpeningElement(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("name"));
+        self.visit_jsx_element_name(&it.name);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("attributes"));
+        self.visit_jsx_attribute_items(&it.attributes);
         self.key_stack.pop();
         self.leave_node(kind);
     }

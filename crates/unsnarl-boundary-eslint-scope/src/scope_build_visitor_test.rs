@@ -273,6 +273,67 @@ fn ts_legacy_type_assertion_does_not_register_type_name_as_runtime_reference() {
 }
 
 #[test]
+fn call_expression_type_argument_is_not_registered_as_runtime_reference() {
+    // `f<Tag>(x)` -- the `Tag` is a TS-only type argument and must
+    // not appear in `arena.references`.
+    let r = analyze_source(
+        "type Tag = number;\nfunction f<U>(x: U): U { return x; }\nconst y = f<Tag>(1);\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "Tag"),
+        "`f<Tag>(x)`'s type argument must not become a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn new_expression_type_argument_is_not_registered_as_runtime_reference() {
+    // `new Set<Item>(arr)` -- same as above for the `new` form. This
+    // matches the parity-bench failure shape in
+    // `src/visual-graph/prune/name-query-excluded.ts`, where the
+    // generic type argument on a `new Set<NodeKind>` call was being
+    // mis-emitted as an extra `Reference` row.
+    let r = analyze_source(
+        "type Item = number;\nconst s = new Set<Item>([1, 2]);\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "Item"),
+        "`new Set<Item>(...)`'s type argument must not become a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn tagged_template_type_argument_is_not_registered_as_runtime_reference() {
+    let r = analyze_source(
+        "type T = number;\ndeclare function tag<U>(s: TemplateStringsArray): U;\nconst v = tag<T>`hello`;\n",
+        Language::Ts,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "T"),
+        "tag<T>`...`'s type argument must not become a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
+fn jsx_opening_element_type_argument_is_not_registered_as_runtime_reference() {
+    // `<Foo<Item>/>` -- TSX generic-component invocation. The `Item`
+    // type argument must not become a runtime reference.
+    let r = analyze_source(
+        "type Item = number;\nfunction Foo<U>(_p: { x: U }) { return null; }\nconst node = <Foo<Item> x={1} />;\n",
+        Language::Tsx,
+    );
+    let refs = reference_identifier_names(&r.arena);
+    assert!(
+        !refs.iter().any(|n| n == "Item"),
+        "`<Foo<Item>/>`'s type argument must not become a runtime reference; got {refs:?}"
+    );
+}
+
+#[test]
 fn ts_instantiation_expression_does_not_register_type_argument_as_runtime_reference() {
     // `f<T>` -- the type arguments are TS-only and must not appear
     // in `arena.references`.
