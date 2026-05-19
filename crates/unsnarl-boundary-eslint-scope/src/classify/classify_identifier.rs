@@ -47,6 +47,22 @@ pub(crate) fn classify_identifier(
         }
         return ClassifyResult::Binding;
     }
+    // oxc represents `function f(a = b)` as
+    // `FormalParameter { pattern: a, initializer: b }`, while the TS
+    // pipeline sees `AssignmentPattern { left: a, right: b }`. The TS
+    // classify walk routes `b` through `is_pattern_step`
+    // (AssignmentPattern is a pattern step) plus
+    // `find_binding_root_context`, which terminates at
+    // `Function@params` and returns `param`. The resulting outcome is
+    // `Binding` -- the identifier is skipped, no reference row is
+    // created. Mirror that directly here for the immediate-child
+    // initializer slot: identifiers nested deeper inside an
+    // expression (e.g. `a + b` in `c = a + b`) reach this point with
+    // a different `parent` (BinaryExpression, MemberExpression, ...)
+    // and still fall through to `classify_ordinary_reference`.
+    if matches!(parent, AstKind::FormalParameter(_)) && key == Some("initializer") {
+        return ClassifyResult::Binding;
+    }
     if let Some(last_idx) = path.len().checked_sub(1) {
         if is_pattern_step(parent, path, last_idx) {
             match find_binding_root_context(parent, key, path) {

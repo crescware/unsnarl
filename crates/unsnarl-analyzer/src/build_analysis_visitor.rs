@@ -39,11 +39,11 @@ use oxc_syntax::scope::ScopeFlags;
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_boundary_eslint_scope::materialise::ast_node_of;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::AstNode;
+use unsnarl_ir::primitive::{span_from_offset, AstNode};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
-use unsnarl_ir::{IrArena, ReferenceId, ScopeId, SourceOffset};
+use unsnarl_ir::{IrArena, ReferenceId, ScopeId};
 use unsnarl_oxc_parity::AstType;
 
 use crate::annotations_impl::AnnotationsImpl;
@@ -178,10 +178,11 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                 .as_ref()
                 .map(|expr| format_case_test(expr, self.raw));
             let block_context = parent_node.as_ref().zip(key).map(|(parent, k)| {
+                let parent_offset = span_from_offset(self.raw, parent.span.start as usize).offset;
                 BlockContext::CaseClause(CaseClauseBlockContext::new(
                     parent.r#type.clone(),
                     k.to_string(),
-                    SourceOffset(parent.span.start),
+                    parent_offset,
                     case_test,
                 ))
             });
@@ -191,7 +192,8 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         } else if matches!(scope_type, ScopeType::Function) {
             (None, false, false)
         } else {
-            let block_context = block_context_of(parent_node.as_ref(), key, &path_entries);
+            let block_context =
+                block_context_of(parent_node.as_ref(), key, &path_entries, self.raw);
             (block_context, false, false)
         };
         self.annotations.set_scope(
@@ -240,8 +242,13 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             }
         };
         let flags = reference_call_receiver_flags(parent_type.as_ref(), key);
-        let predicate_container =
-            find_predicate_container(parent_type.as_ref(), parent_offset, key, &path_entries);
+        let predicate_container = find_predicate_container(
+            parent_type.as_ref(),
+            parent_offset,
+            key,
+            &path_entries,
+            self.raw,
+        );
         let completion = find_completion(&path_entries);
         let jsx_element = find_jsx_element_span(&path_entries);
         let expression_statement_container =

@@ -7,16 +7,31 @@
 //! Rust IR every identifier carries a span, so we use the head
 //! identifier's span, then the first def's name span, then `0` as a
 //! final fallback when the variable has no identifiers AND no defs.
+//!
+//! The npm `oxc-parser` package emits offsets in UTF-16 code units
+//! (JavaScript string indices) so TS `head.start` is already in that
+//! unit. The Rust `oxc_parser` crate emits offsets in UTF-8 bytes;
+//! this function converts that byte offset to UTF-16 code units via
+//! `span_from_offset` so the serialized variable ID
+//! (`scope#N:name@offset`) matches the TS implementation byte-for-byte
+//! in sources containing non-ASCII characters (e.g. an arrow `→` or
+//! em-dash `—` in a docstring before the declaration).
 
+use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::{IrArena, VariableId};
 
-pub fn pick_variable_offset(arena: &IrArena, variable: VariableId) -> u32 {
+pub fn pick_variable_offset(arena: &IrArena, variable: VariableId, raw: &str) -> u32 {
     let v = &arena.variables[variable];
-    if let Some(head) = v.identifiers.first() {
-        return head.span.start;
-    }
-    if let Some(&def_id) = v.defs.first() {
-        return arena.definitions[def_id].name.span.start;
-    }
-    0
+    let byte_offset = if let Some(head) = v.identifiers.first() {
+        head.span.start
+    } else if let Some(&def_id) = v.defs.first() {
+        arena.definitions[def_id].name.span.start
+    } else {
+        return 0;
+    };
+    span_from_offset(raw, byte_offset as usize).offset.0
 }
+
+#[cfg(test)]
+#[path = "pick_variable_offset_test.rs"]
+mod pick_variable_offset_test;

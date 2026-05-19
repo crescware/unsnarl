@@ -21,12 +21,14 @@
 //!   children) inherit `walk_*` defaults.
 
 use oxc_ast::ast::{
-    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
-    Class, ExportNamedDeclaration, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement,
-    FormalParameter, Function, IdentifierName, IdentifierReference, ImportAttribute,
-    ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier,
-    JSXMemberExpression, MetaProperty, SwitchCase, SwitchStatement, UpdateExpression,
-    VariableDeclarator,
+    AccessorProperty, ArrowFunctionExpression, AssignmentExpression, BindingIdentifier,
+    BlockStatement, CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier,
+    ForInStatement, ForOfStatement, ForStatement, FormalParameter, FormalParameterRest, Function,
+    IdentifierName, IdentifierReference, ImportAttribute, ImportDefaultSpecifier,
+    ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression,
+    JSXOpeningElement, MetaProperty, NewExpression, PropertyDefinition, SwitchCase,
+    SwitchStatement, TSAsExpression, TSInstantiationExpression, TSSatisfiesExpression,
+    TSTypeAssertion, TaggedTemplateExpression, UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -273,7 +275,43 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.key_stack.pop();
         }
         if let Some(initializer) = it.initializer.as_deref() {
+            // oxc routes `function f(a = b)` as
+            // `FormalParameter { pattern: a, initializer: b }`, while
+            // the TS pipeline sees `AssignmentPattern { left: a,
+            // right: b }`. To mirror TS's classify outcome -- where
+            // `b` is the direct child of `AssignmentPattern` and
+            // `find_binding_root_context` walks `AssignmentPattern`
+            // (a pattern step) up to `Function@params` and returns
+            // `param` -- push an `"initializer"` key so the slot is
+            // recognizable. Identifiers nested inside an expression
+            // (e.g. `a + b` in `c = a + b`) keep their immediate
+            // expression parent and still classify as references.
+            self.key_stack.push(Some("initializer"));
             self.visit_expression(initializer);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
+    fn visit_formal_parameter_rest(&mut self, it: &FormalParameterRest<'a>) {
+        // `function f(...rest: T[])` -- the rest parameter's
+        // `type_annotation` is a TS-only subtree. oxc's auto-generated
+        // walker descends into it without recording the parent-slot
+        // key, so identifiers inside (a named type like `VisualNode`)
+        // leak through `is_type_only_subtree` and emit extra
+        // `Reference` rows. Mirror the TS pipeline by pushing
+        // `"typeAnnotation"` around the slot.
+        let kind = AstKind::FormalParameterRest(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.visit_binding_rest_element(&it.rest);
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
         }
         self.leave_node(kind);
     }
@@ -315,6 +353,64 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.key_stack.pop();
         self.leave_node(kind);
         pop_scope(self.state);
+    }
+
+    fn visit_property_definition(&mut self, it: &PropertyDefinition<'a>) {
+        // `class { items: Diagnostic[] = [] }` -- the property's
+        // `type_annotation` is a TS-only subtree. oxc's auto-generated
+        // walker descends into it without recording the parent-slot
+        // key, so identifiers inside (a named type like `Diagnostic`)
+        // leak through `is_type_only_subtree` and emit extra
+        // `Reference` rows. The TS pipeline keys this slot off the
+        // npm `oxc-parser` visitor list (`typeAnnotation`); mirror
+        // that here. Decorators / key / value remain runtime slots
+        // and keep their own keys.
+        let kind = AstKind::PropertyDefinition(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
+        }
+        if let Some(value) = &it.value {
+            self.key_stack.push(Some("value"));
+            self.visit_expression(value);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
+    fn visit_accessor_property(&mut self, it: &AccessorProperty<'a>) {
+        // `class { accessor name: T }` -- same `typeAnnotation`-key
+        // omission as `PropertyDefinition` (see
+        // `visit_property_definition`).
+        let kind = AstKind::AccessorProperty(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("decorators"));
+        self.visit_decorators(&it.decorators);
+        self.key_stack.pop();
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        if let Some(type_annotation) = it.type_annotation.as_deref() {
+            self.key_stack.push(Some("typeAnnotation"));
+            self.visit_ts_type_annotation(type_annotation);
+            self.key_stack.pop();
+        }
+        if let Some(value) = &it.value {
+            self.key_stack.push(Some("value"));
+            self.visit_expression(value);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
     }
 
     fn visit_catch_clause(&mut self, it: &CatchClause<'a>) {
@@ -497,6 +593,165 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
             self.visit_with_clause(with_clause);
             self.key_stack.pop();
         }
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_as_expression(&mut self, it: &TSAsExpression<'a>) {
+        // `x as T` -- oxc's auto-generated walker descends into
+        // `type_annotation` without recording the parent-slot key, so
+        // `is_type_only_subtree` never observes
+        // `key = Some("typeAnnotation")` for the inner type subtree and
+        // any `Identifier` inside (e.g. the `const` of `as const`,
+        // or a named type like `as UnsnarlPlugin`) is mis-handled as a
+        // runtime reference. The TS pipeline's `handleEnter`
+        // dispatcher receives the npm `oxc-parser` visitorKey list
+        // `["expression", "typeAnnotation"]` and routes the type slot
+        // through `isTypeOnlySubtree`. Push the same key so the type
+        // subtree increments `type_only_depth` and downstream
+        // identifier-reference creation short-circuits.
+        let kind = AstKind::TSAsExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_satisfies_expression(&mut self, it: &TSSatisfiesExpression<'a>) {
+        // `x satisfies T` -- same `typeAnnotation`-key omission as
+        // `TSAsExpression` (see `visit_ts_as_expression`).
+        let kind = AstKind::TSSatisfiesExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_type_assertion(&mut self, it: &TSTypeAssertion<'a>) {
+        // `<T>x` (legacy TS cast) -- same `typeAnnotation`-key
+        // omission as `TSAsExpression` (see `visit_ts_as_expression`).
+        let kind = AstKind::TSTypeAssertion(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("typeAnnotation"));
+        self.visit_ts_type(&it.type_annotation);
+        self.key_stack.pop();
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_ts_instantiation_expression(&mut self, it: &TSInstantiationExpression<'a>) {
+        // `f<T>` -- the type-argument slot keys off `typeArguments` in
+        // the TS pipeline's `isTypeOnlySubtree` lookup, so push that
+        // key around the `type_arguments` visit. Without it, an
+        // identifier inside the type-argument list would be mis-tagged
+        // as a runtime reference.
+        let kind = AstKind::TSInstantiationExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expression"));
+        self.visit_expression(&it.expression);
+        self.key_stack.pop();
+        self.key_stack.push(Some("typeArguments"));
+        self.visit_ts_type_parameter_instantiation(&it.type_arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_call_expression(&mut self, it: &CallExpression<'a>) {
+        // `f<T>(arg)` -- the type arguments slot is TS-only. oxc's
+        // auto-generated walker descends into `type_arguments` without
+        // recording the parent-slot key, so an identifier inside (a
+        // named type like `f<UserModel>(...)`) would slip through
+        // `is_type_only_subtree` and be classified as a runtime
+        // reference. The TS pipeline keys this slot off the npm
+        // `oxc-parser` visitor list (`typeArguments`); mirror that
+        // here.
+        let kind = AstKind::CallExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("callee"));
+        self.visit_expression(&it.callee);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("arguments"));
+        self.visit_arguments(&it.arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_new_expression(&mut self, it: &NewExpression<'a>) {
+        // `new Foo<T>(arg)` -- same `typeArguments`-key omission as
+        // `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::NewExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("callee"));
+        self.visit_expression(&it.callee);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("arguments"));
+        self.visit_arguments(&it.arguments);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_tagged_template_expression(&mut self, it: &TaggedTemplateExpression<'a>) {
+        // `` tag<T>`literal` `` -- same `typeArguments`-key omission
+        // as `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::TaggedTemplateExpression(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("tag"));
+        self.visit_expression(&it.tag);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("quasi"));
+        self.visit_template_literal(&it.quasi);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_jsx_opening_element(&mut self, it: &JSXOpeningElement<'a>) {
+        // `<Foo<T> .../>` -- same `typeArguments`-key omission as
+        // `CallExpression` (see `visit_call_expression`).
+        let kind = AstKind::JSXOpeningElement(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("name"));
+        self.visit_jsx_element_name(&it.name);
+        self.key_stack.pop();
+        if let Some(type_arguments) = it.type_arguments.as_deref() {
+            self.key_stack.push(Some("typeArguments"));
+            self.visit_ts_type_parameter_instantiation(type_arguments);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("attributes"));
+        self.visit_jsx_attribute_items(&it.attributes);
+        self.key_stack.pop();
         self.leave_node(kind);
     }
 

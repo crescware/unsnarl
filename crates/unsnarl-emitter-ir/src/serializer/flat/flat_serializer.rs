@@ -65,7 +65,7 @@ impl IRSerializer for FlatSerializer {
                 let Some(sid) = scope_ids.get(&s) else {
                     continue;
                 };
-                let offset = pick_variable_offset(arena, v);
+                let offset = pick_variable_offset(arena, v, raw);
                 let name = arena.variables[v].name();
                 let id = SerializedVariableId::new(format!("{}:{}@{}", sid_str(sid), name, offset));
                 variable_ids.insert(v, id);
