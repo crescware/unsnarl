@@ -136,15 +136,6 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
 
 fn main() {
     let args = Arguments::from_args();
-    // The IR pipeline is not yet byte-identical to the TS 0.2.0
-    // baselines (Step 12 is in progress; see issue #121). Gate
-    // execution behind `UNSNARL_PARITY=1` so `cargo test --workspace`
-    // remains green while the remaining classify / annotation gaps
-    // are closed. Removing the gate is part of Step 12's exit
-    // criteria.
-    if std::env::var_os("UNSNARL_PARITY").is_none() {
-        libtest_mimic::run(&args, Vec::<Trial>::new()).exit();
-    }
     let cases = collect_fixtures();
     let trials: Vec<Trial> = cases
         .into_iter()
