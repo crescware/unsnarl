@@ -8,8 +8,10 @@ repository.workspace = true
 
 [dependencies]
 unsnarl-ir = { workspace = true }
+unsnarl-oxc-parity = { workspace = true }
 oxc_parser = { workspace = true }
 oxc_ast = { workspace = true }
+oxc_ast_visit = { workspace = true }
 oxc_allocator = { workspace = true }
 oxc_span = { workspace = true }
 oxc_diagnostics = { workspace = true }
