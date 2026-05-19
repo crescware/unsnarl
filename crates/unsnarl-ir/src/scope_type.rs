@@ -6,7 +6,7 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Serialize)]
 #[serde(rename_all = "kebab-case")]
 pub enum ScopeType {
     Block,

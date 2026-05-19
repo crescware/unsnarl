@@ -315,6 +315,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "oxc_ast_visit"
+version = "0.128.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cf96f11ef5a8152aadd004616f4a91405cedab5e081f9fc816bcc02019d5f8db"
+dependencies = [
+ "oxc_allocator",
+ "oxc_ast",
+ "oxc_span",
+ "oxc_syntax",
+]
+
+[[package]]
 name = "oxc_data_structures"
 version = "0.128.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -726,11 +738,14 @@ version = "0.3.0-beta.0"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
+ "oxc_ast_visit",
  "oxc_diagnostics",
  "oxc_index",
  "oxc_parser",
  "oxc_span",
+ "oxc_syntax",
  "unsnarl-ir",
+ "unsnarl-oxc-parity",
 ]
 
 [[package]]

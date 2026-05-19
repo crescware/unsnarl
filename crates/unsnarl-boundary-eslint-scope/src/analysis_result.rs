@@ -1,11 +1,17 @@
 //! Result type returned by [`crate::analyze::analyze`].
 //!
 //! Mirrors `EslintScopeAnalysisResult` in
-//! `ts/src/boundary/eslint-scope/analysis-result.ts`. The body is left
-//! intentionally empty in Step 8.5; Step 9 will populate it once the
-//! scope-builder body is implemented and the `IrArena` / `ScopeId`
-//! exposure shape is decided.
+//! `ts/src/boundary/eslint-scope/analysis-result.ts`. The TS port
+//! exposes only `globalScope: Scope` because TS scopes carry their
+//! arena identity through `Scope` references. The Rust port exposes
+//! the arena explicitly so downstream crates can walk `ScopeData` /
+//! `VariableData` / `ReferenceData` / `DefinitionData` via the
+//! `IndexVec<*Id, _>` rows.
+
+use unsnarl_ir::ids::ScopeId;
+use unsnarl_ir::IrArena;
 
 pub struct EslintScopeAnalysisResult {
-    // Step 9: e.g. `pub global_scope: ScopeId,` (and/or the arena itself).
+    pub arena: IrArena,
+    pub global_scope: ScopeId,
 }

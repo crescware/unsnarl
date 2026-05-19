@@ -54,7 +54,7 @@ pub use variable_declaration_kind::VariableDeclarationKind;
 
 pub const UNKNOWN_AST_TYPE: &str = "UnknownAstType";
 
-#[derive(Serialize)]
+#[derive(Clone, Serialize)]
 pub enum AstType {
     AccessorProperty,
     ArrayExpression,

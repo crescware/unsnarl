@@ -2,7 +2,7 @@
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Clone, Copy, PartialEq, Eq, Serialize)]
 pub enum DefinitionType {
     CatchClause,
     ClassName,
