@@ -1,9 +1,8 @@
 use super::*;
 
-use unsnarl_ast_type::AstType;
+use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
 use crate::primitive::Span;
-use crate::variable_declaration_kind::VariableDeclarationKind;
 
 fn name() -> DefinitionName {
     DefinitionName::new(

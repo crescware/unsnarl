@@ -7,7 +7,7 @@
 
 use serde::Serialize;
 
-use unsnarl_ast_type::AstType;
+use unsnarl_oxc_parity::AstType;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]

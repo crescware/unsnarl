@@ -2,7 +2,7 @@
 
 use serde::Serialize;
 
-use crate::predicate_container_type::PredicateContainerType;
+use unsnarl_oxc_parity::PredicateContainerType;
 
 #[derive(Serialize)]
 pub struct PredicateContainer {

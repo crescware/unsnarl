@@ -1,20 +1,47 @@
-//! AST node `type` discriminator.
+//! oxc-mirrored value sets.
 //!
-//! The variant set must match `oxc_ast` value-for-value, so this
-//! crate is the single place where that parity is maintained. Other
-//! crates (the IR, the boundary that drives the parser, the analyzer,
-//! ...) depend on this crate rather than redeclaring the discriminator;
-//! keeping AstType out of `unsnarl-ir` prevents the IR contract from
-//! silently absorbing oxc upgrades.
+//! Each item in this crate is a value set whose membership and
+//! spelling must match `oxc_ast` (or, transitively, ECMA strings
+//! that `oxc_ast` echoes verbatim) value-for-value. Concentrating
+//! that responsibility here keeps the IR contract crate
+//! (`unsnarl-ir`) from silently absorbing oxc upgrades: if oxc
+//! renames or adds a value, the change driver is an oxc upgrade
+//! against this crate, not an IR contract redesign.
 //!
-//! The variant list folds together two groups: types the parser
-//! actually emits, and a tail of nodes `oxc_ast` declares but no
-//! public `parse` input can produce in practice (`Hashbang`,
-//! `TSJSDocUnknownType`, `V8IntrinsicExpression`). Downstream
-//! serialization treats them identically, so they share one enum.
-//! `UnknownAstType` is the sentinel for any value we don't recognise.
+//! Membership criterion: a type lives here iff (a) its values come
+//! from oxc-emitted strings (directly, or via ECMA spellings that
+//! oxc echoes), and (b) the value set is meaningful as a curated
+//! Rust enum at type level (so downstream `match` can be
+//! exhaustive). Items that are merely "a subset of `AstType`
+//! checked at construction" do not need a re-declared enum here;
+//! they can stay at the IR site as `AstType` plus `assert!`.
+//!
+//! Current contents:
+//!
+//! * [`AstType`]: the full `type` discriminator. Folds together
+//!   parser-emitted variants and a tail of nodes `oxc_ast`
+//!   declares but no public `parse` input can produce in practice
+//!   (`Hashbang`, `TSJSDocUnknownType`, `V8IntrinsicExpression`);
+//!   downstream serialization treats them identically.
+//!   [`UnknownAstType`](AstType::UnknownAstType) is the sentinel
+//!   for any value we don't recognise.
+//! * [`VariableDeclarationKind`]: `var` / `let` / `const` read
+//!   directly off `VariableDeclaration.kind`.
+//! * [`PredicateContainerType`]: the seven predicate-owning
+//!   statement types; a curated subset of `AstType` values exposed
+//!   as its own enum because downstream code matches on it
+//!   exhaustively.
+//!
+//! Other crates (the IR, the boundary, the analyzer, ...) depend
+//! on this crate rather than redeclaring these types.
 
 use serde::Serialize;
+
+pub mod predicate_container_type;
+pub mod variable_declaration_kind;
+
+pub use predicate_container_type::PredicateContainerType;
+pub use variable_declaration_kind::VariableDeclarationKind;
 
 pub const UNKNOWN_AST_TYPE: &str = "UnknownAstType";
 

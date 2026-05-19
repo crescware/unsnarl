@@ -9,7 +9,7 @@ use crate::scope_type::ScopeType;
 use crate::serialized::reference_id::SerializedReferenceId;
 use crate::serialized::scope_id::SerializedScopeId;
 use crate::serialized::variable_id::SerializedVariableId;
-use unsnarl_ast_type::AstType;
+use unsnarl_oxc_parity::AstType;
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]

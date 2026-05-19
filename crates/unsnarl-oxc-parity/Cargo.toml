@@ -1,5 +1,5 @@
 [package]
-name = "unsnarl-ast-type"
+name = "unsnarl-oxc-parity"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true

@@ -10,11 +10,10 @@
 
 use serde::Serialize;
 
-use unsnarl_ast_type::AstType;
+use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
 use crate::import_kind::ImportKind;
 use crate::primitive::Span;
-use crate::variable_declaration_kind::VariableDeclarationKind;
 
 #[derive(Serialize)]
 pub struct DefinitionName {

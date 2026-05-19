@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/unsnarl-ast-type",
+    "crates/unsnarl-oxc-parity",
     "crates/unsnarl-ir",
     "crates/unsnarl-annotations",
     "crates/unsnarl-boundary-eslint-scope",
@@ -27,7 +27,7 @@ license = "MIT"
 repository = "https://github.com/crescware/unsnarl"
 
 [workspace.dependencies]
-unsnarl-ast-type = { path = "crates/unsnarl-ast-type" }
+unsnarl-oxc-parity = { path = "crates/unsnarl-oxc-parity" }
 unsnarl-ir = { path = "crates/unsnarl-ir" }
 unsnarl-annotations = { path = "crates/unsnarl-annotations" }
 unsnarl-boundary-eslint-scope = { path = "crates/unsnarl-boundary-eslint-scope" }
