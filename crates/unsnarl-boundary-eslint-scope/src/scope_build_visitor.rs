@@ -23,8 +23,9 @@
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement, CatchClause,
     Class, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement, FormalParameter,
-    Function, IdentifierReference, JSXAttribute, JSXIdentifier, JSXMemberExpression, SwitchCase,
-    SwitchStatement, UpdateExpression, VariableDeclarator,
+    Function, IdentifierReference, ImportDefaultSpecifier, ImportNamespaceSpecifier,
+    ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression, SwitchCase, SwitchStatement,
+    UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -350,6 +351,44 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.visit_span(&it.span);
         self.key_stack.push(Some("argument"));
         self.visit_simple_assignment_target(&it.argument);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_import_specifier(&mut self, it: &ImportSpecifier<'a>) {
+        // `classify/is_direct_binding` requires `key == Some("local")`
+        // on `ImportSpecifier` to recognise the local-binding slot,
+        // and `is_skip_context` requires `key == Some("imported")` to
+        // skip the imported-name slot (which can be a JSXIdentifier
+        // shape in some module-export grammars).
+        let kind = AstKind::ImportSpecifier(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("imported"));
+        self.visit_module_export_name(&it.imported);
+        self.key_stack.pop();
+        self.key_stack.push(Some("local"));
+        self.visit_binding_identifier(&it.local);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_import_default_specifier(&mut self, it: &ImportDefaultSpecifier<'a>) {
+        let kind = AstKind::ImportDefaultSpecifier(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("local"));
+        self.visit_binding_identifier(&it.local);
+        self.key_stack.pop();
+        self.leave_node(kind);
+    }
+
+    fn visit_import_namespace_specifier(&mut self, it: &ImportNamespaceSpecifier<'a>) {
+        let kind = AstKind::ImportNamespaceSpecifier(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("local"));
+        self.visit_binding_identifier(&it.local);
         self.key_stack.pop();
         self.leave_node(kind);
     }
