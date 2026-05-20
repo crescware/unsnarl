@@ -1,14 +1,15 @@
-//! IR parity harness.
+//! Parity harness.
 //!
 //! Walks `ts/integration/fixtures/**` for directories that contain
-//! `input.{ts,tsx,js,jsx,mjs,cjs}` plus an `expected.ir.json` sibling
-//! and dynamically generates one `libtest-mimic` test per fixture.
+//! `input.{ts,tsx,js,jsx,mjs,cjs}` plus one of the `expected.*`
+//! sibling baselines and dynamically generates one `libtest-mimic`
+//! test per (fixture, baseline) pair.
 //!
-//! Each test feeds the input through `unsnarl::pipeline::emit_ir_text`
-//! (the in-process IR pipeline, parse -> analyse -> serialize -> emit)
-//! and compares the rendered text to `expected.ir.json` via
-//! `pretty_assertions::StrComparison`. The TS 0.2.0 baselines under
-//! `expected.ir.json` are treated as the source of truth; the
+//! Each test feeds the input through the matching in-process
+//! pipeline helper (`emit_ir_text` for `expected.ir.json`,
+//! `emit_json_text` for `expected.json`) and compares the rendered
+//! text to the on-disk baseline via `pretty_assertions::StrComparison`.
+//! The TS baselines are treated as the source of truth; the
 //! `expected.*` files are never written back from Rust.
 
 use std::fs;
@@ -17,7 +18,7 @@ use std::path::{Path, PathBuf};
 use libtest_mimic::{Arguments, Failed, Trial};
 use pretty_assertions::StrComparison;
 
-use unsnarl::pipeline::{emit_ir_text, language_for_path};
+use unsnarl::pipeline::{emit_ir_text, emit_json_text, language_for_path};
 
 fn workspace_root() -> PathBuf {
     let manifest_dir = env!("CARGO_MANIFEST_DIR");
@@ -52,13 +53,39 @@ fn find_input_file(dir: &Path) -> Option<PathBuf> {
     None
 }
 
-/// One IR baseline test case (fixture root with `input.*` +
-/// `expected.ir.json`).
+/// Which baseline a [`FixtureCase`] checks against.
+#[derive(Clone, Copy)]
+enum Baseline {
+    /// `expected.ir.json` (Step 12 baseline).
+    Ir,
+    /// `expected.json` (Step 13 visual-graph JSON baseline).
+    Json,
+}
+
+impl Baseline {
+    fn file_name(self) -> &'static str {
+        match self {
+            Self::Ir => "expected.ir.json",
+            Self::Json => "expected.json",
+        }
+    }
+
+    fn test_suffix(self) -> &'static str {
+        match self {
+            Self::Ir => "ir",
+            Self::Json => "json",
+        }
+    }
+}
+
+/// One fixture × one baseline test case (fixture root with
+/// `input.*` + the matching `expected.*` baseline).
 struct FixtureCase {
     name: String,
     input: PathBuf,
     expected: PathBuf,
     rel_source_path: String,
+    baseline: Baseline,
 }
 
 fn collect_fixtures() -> Vec<FixtureCase> {
@@ -76,33 +103,37 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
     let entries: Vec<_> = entries.flatten().collect();
     // First, check whether this directory itself is a fixture root.
     if let Some(input) = find_input_file(dir) {
-        let expected = dir.join("expected.ir.json");
-        if expected.is_file() {
-            let name = dir
-                .strip_prefix(root)
-                .unwrap_or(dir)
-                .to_string_lossy()
-                .replace('\\', "/")
-                .to_string();
-            // Source path the IR records: relative to the `ts/` dir
-            // (matches the `relative(PROJECT_ROOT, ...)` shape from
-            // `ts/integration/fixture-snapshot.ts`, where PROJECT_ROOT
-            // is `ts/`).
-            let ts_root = root
-                .parent()
-                .and_then(Path::parent)
-                .expect("fixtures live under ts/integration/fixtures");
-            let rel = input
-                .strip_prefix(ts_root)
-                .unwrap_or(&input)
-                .to_string_lossy()
-                .replace('\\', "/")
-                .to_string();
+        let rel_name = dir
+            .strip_prefix(root)
+            .unwrap_or(dir)
+            .to_string_lossy()
+            .replace('\\', "/")
+            .to_string();
+        // Source path the IR records: relative to the `ts/` dir
+        // (matches the `relative(PROJECT_ROOT, ...)` shape from
+        // `ts/integration/fixture-snapshot.ts`, where PROJECT_ROOT
+        // is `ts/`).
+        let ts_root = root
+            .parent()
+            .and_then(Path::parent)
+            .expect("fixtures live under ts/integration/fixtures");
+        let rel_source = input
+            .strip_prefix(ts_root)
+            .unwrap_or(&input)
+            .to_string_lossy()
+            .replace('\\', "/")
+            .to_string();
+        for baseline in [Baseline::Ir, Baseline::Json] {
+            let expected = dir.join(baseline.file_name());
+            if !expected.is_file() {
+                continue;
+            }
             out.push(FixtureCase {
-                name,
-                input,
+                name: format!("{rel_name}::{}", baseline.test_suffix()),
+                input: input.clone(),
                 expected,
-                rel_source_path: rel,
+                rel_source_path: rel_source.clone(),
+                baseline,
             });
         }
     }
@@ -122,11 +153,16 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
     let language = language_for_path(case.rel_source_path.as_str()).ok_or_else(|| {
         Failed::from(format!("unsupported language for {}", case.rel_source_path))
     })?;
-    let actual = emit_ir_text(&code, &case.rel_source_path, language, true)
-        .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?;
+    let actual = match case.baseline {
+        Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true)
+            .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?,
+        Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true)
+            .map_err(|e| Failed::from(format!("emit_json_text failed: {e:?}")))?,
+    };
     if actual != expected {
         return Err(Failed::from(format!(
-            "IR mismatch for {}\n{}",
+            "{} mismatch for {}\n{}",
+            case.baseline.test_suffix(),
             case.name,
             StrComparison::new(&expected, &actual)
         )));

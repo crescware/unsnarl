@@ -263,7 +263,15 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
 }
 
 fn emit_let_chain_edges(state: &mut BuildState, ctx: &BuilderContext<'_>) {
-    for ops in ctx.write_ops_by_variable.values() {
+    // TS iterates `Map.values()` in insertion order (mirrors
+    // `ir.variables` order, which is the source-order seed for
+    // `write_ops_by_variable`). Rust's `HashMap` has no such
+    // guarantee; walking `ir.variables` here keeps the rendered
+    // edge order stable against the TS baseline.
+    for v in &ctx.ir.variables {
+        let Some(ops) = ctx.write_ops_by_variable.get(v.id.value()) else {
+            continue;
+        };
         if ops.is_empty() {
             continue;
         }
