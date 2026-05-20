@@ -1,0 +1,13 @@
+//! Emits one `<id><shape>["<label>"]` line for a node.
+//!
+//! Mirrors `ts/src/emitter/mermaid/emit-node.ts`.
+
+use unsnarl_visual_graph::visual_node::VisualNode;
+
+use crate::node_syntax::node_syntax;
+use crate::render_state::RenderState;
+
+pub fn emit_node(state: &mut RenderState<'_>, node: &VisualNode, indent: &str) {
+    let line = format!("{indent}{}{}", node.id(), node_syntax(node, state.debug));
+    state.lines.push(line);
+}
