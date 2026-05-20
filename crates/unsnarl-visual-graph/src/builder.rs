@@ -6,6 +6,7 @@
 //! point [`build_visual_graph::build_visual_graph`] lands once the
 //! supporting leaves and composites are populated.
 
+pub mod arena;
 pub mod branch_container_key;
 pub mod branch_scope_of;
 pub mod control_subgraph_kind_of;
