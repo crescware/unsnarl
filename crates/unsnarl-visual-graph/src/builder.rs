@@ -10,6 +10,8 @@ pub mod arena;
 pub mod branch_container_key;
 pub mod branch_merged_origins;
 pub mod branch_scope_of;
+pub mod build_children;
+pub mod build_scope;
 pub mod context;
 pub mod control_subgraph_kind_of;
 pub mod describe_subgraph;

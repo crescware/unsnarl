@@ -29,7 +29,7 @@ use super::subgraph_scope_id::subgraph_scope_id;
 pub fn describe_subgraph(
     scope: &SerializedScope,
     subgraph_owner_var: &HashMap<String, String>,
-    variable_map: &HashMap<String, &SerializedVariable>,
+    variable_map: &HashMap<&str, &SerializedVariable>,
 ) -> VisualSubgraph {
     let id = subgraph_scope_id(scope);
     let end_line = Some(scope.block.end_span.line.0);
@@ -38,7 +38,7 @@ pub fn describe_subgraph(
         let owner_var_id = subgraph_owner_var.get(scope.id.value()).cloned();
         let owner_var = owner_var_id
             .as_ref()
-            .and_then(|id| variable_map.get(id).copied());
+            .and_then(|id| variable_map.get(id.as_str()).copied());
         let start_line = owner_var
             .and_then(|v| v.identifiers.first())
             .map(|s| s.line.0)
