@@ -24,5 +24,8 @@
   "publishConfig": {
     "access": "public",
     "tag": "rc"
+  },
+  "scripts": {
+    "prepack": "mise run npm:build-darwin-arm64"
   }
 }
