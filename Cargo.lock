@@ -988,7 +988,10 @@ dependencies = [
 name = "unsnarl-emitter-markdown"
 version = "0.3.0-beta.2"
 dependencies = [
+ "unsnarl-analyzer",
+ "unsnarl-emitter",
  "unsnarl-emitter-mermaid",
+ "unsnarl-ir",
 ]
 
 [[package]]

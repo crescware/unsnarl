@@ -20,7 +20,9 @@ use pretty_assertions::StrComparison;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::DARK_THEME;
 
-use unsnarl::pipeline::{emit_ir_text, emit_json_text, emit_mermaid_text, language_for_path};
+use unsnarl::pipeline::{
+    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, language_for_path,
+};
 
 fn workspace_root() -> PathBuf {
     let manifest_dir = env!("CARGO_MANIFEST_DIR");
@@ -67,6 +69,10 @@ enum Baseline {
     /// `--debug` off) so the test bytes match the same defaults
     /// the TS port records on disk.
     Mermaid,
+    /// `preview.md` (Step 15 markdown baseline). Same CLI defaults
+    /// as `Mermaid` — the markdown emitter embeds the mermaid render
+    /// inside a fenced ```mermaid block.
+    Markdown,
 }
 
 impl Baseline {
@@ -75,6 +81,7 @@ impl Baseline {
             Self::Ir => "expected.ir.json",
             Self::Json => "expected.json",
             Self::Mermaid => "expected.mermaid",
+            Self::Markdown => "preview.md",
         }
     }
 
@@ -83,6 +90,7 @@ impl Baseline {
             Self::Ir => "ir",
             Self::Json => "json",
             Self::Mermaid => "mermaid",
+            Self::Markdown => "markdown",
         }
     }
 }
@@ -132,7 +140,12 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
             .to_string_lossy()
             .replace('\\', "/")
             .to_string();
-        for baseline in [Baseline::Ir, Baseline::Json, Baseline::Mermaid] {
+        for baseline in [
+            Baseline::Ir,
+            Baseline::Json,
+            Baseline::Mermaid,
+            Baseline::Markdown,
+        ] {
             let expected = dir.join(baseline.file_name());
             if !expected.is_file() {
                 continue;
@@ -176,6 +189,15 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
             false,
         )
         .map_err(|e| Failed::from(format!("emit_mermaid_text failed: {e:?}")))?,
+        Baseline::Markdown => emit_markdown_text(
+            &code,
+            &case.rel_source_path,
+            language,
+            MermaidStrategy::Elk,
+            &DARK_THEME,
+            false,
+        )
+        .map_err(|e| Failed::from(format!("emit_markdown_text failed: {e:?}")))?,
     };
     if actual != expected {
         return Err(Failed::from(format!(

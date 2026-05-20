@@ -7,7 +7,9 @@ use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
 
 use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
 use crate::cli::run_cli::emit_out_flag_notice;
-use crate::pipeline::{emit_ir_text, emit_json_text, emit_mermaid_text, language_for_path};
+use crate::pipeline::{
+    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, language_for_path,
+};
 
 pub fn run(args: &Args) {
     let stdout = io::stdout();
@@ -96,8 +98,21 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_markdown(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
-    emit_stub("markdown emitter", args, out);
+fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    let Some((code, source_path, language)) = read_source(args, err) else {
+        return;
+    };
+    let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
+    let theme = color_theme_for(&args.color_theme);
+    match emit_markdown_text(&code, &source_path, language, strategy, theme, args.debug) {
+        Ok(text) => {
+            out.write_all(text.as_bytes())
+                .expect("write markdown output");
+        }
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").expect("write markdown error");
+        }
+    }
 }
 
 fn emit_stats(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {

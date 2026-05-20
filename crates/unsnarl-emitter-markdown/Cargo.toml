@@ -7,4 +7,7 @@ license.workspace = true
 repository.workspace = true
 
 [dependencies]
+unsnarl-emitter = { workspace = true }
 unsnarl-emitter-mermaid = { workspace = true }
+unsnarl-analyzer = { workspace = true }
+unsnarl-ir = { workspace = true }

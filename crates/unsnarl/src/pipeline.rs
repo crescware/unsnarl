@@ -16,6 +16,7 @@ use unsnarl_boundary_eslint_scope::parser::{
 use unsnarl_emitter::{EmitOptions, Emitter, IRSerializer, SerializeContext, SerializeSourceMeta};
 use unsnarl_emitter_ir::{FlatSerializer, IrEmitter};
 use unsnarl_emitter_json::JsonEmitter;
+use unsnarl_emitter_markdown::MarkdownEmitter;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::ColorTheme;
 use unsnarl_emitter_mermaid::MermaidEmitter;
@@ -113,6 +114,35 @@ pub fn emit_mermaid_text(
     debug: bool,
 ) -> Result<String, ParseError> {
     let emitter = MermaidEmitter::new(strategy, theme);
+    emit_text_with(
+        code,
+        source_path,
+        language,
+        &emitter,
+        &EmitOptions {
+            pretty_json: false,
+            debug,
+        },
+    )
+}
+
+/// Same as [`emit_ir_text`] but routes the parsed IR through
+/// [`MarkdownEmitter`]. The markdown emitter composes a configured
+/// [`MermaidEmitter`] so the caller picks the renderer / theme on
+/// behalf of the embedded `## Mermaid` block — matching the TS
+/// `createConfiguredEmitterRegistry` wiring where `MarkdownEmitter`
+/// receives the same `MermaidEmitter` instance that `-f mermaid`
+/// uses directly.
+pub fn emit_markdown_text(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    strategy: MermaidStrategy,
+    theme: &'static ColorTheme,
+    debug: bool,
+) -> Result<String, ParseError> {
+    let mermaid = MermaidEmitter::new(strategy, theme);
+    let emitter = MarkdownEmitter::new(mermaid);
     emit_text_with(
         code,
         source_path,
