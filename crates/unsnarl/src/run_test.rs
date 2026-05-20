@@ -56,9 +56,26 @@ fn ir_format_emits_ir_json_for_a_real_file() {
 }
 
 #[test]
-fn json_format_routes_to_json_emitter() {
-    let out = capture_stdout(&["uns", "-f", "json", "x.ts"]);
-    assert_eq!(first_line(&out), "Not implemented yet: json emitter");
+fn json_format_emits_visual_graph_json_for_a_real_file() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "json", &path]);
+    let value: serde_json::Value =
+        serde_json::from_str(out.trim_end()).expect("json emitter output should be JSON");
+    assert_eq!(value["version"], 1);
+    assert_eq!(value["source"]["language"], "ts");
+    assert_eq!(value["direction"], "RL");
+    assert!(value["elements"].is_array(), "elements should be an array");
+    assert!(value["edges"].is_array(), "edges should be an array");
 }
 
 #[test]
@@ -81,14 +98,14 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 
 #[test]
 fn stub_emitter_output_includes_parsed_args_json_after_label() {
-    // `json` is still a stub; the legacy "Not implemented yet" line +
-    // CLI args JSON shape lives on through the unimplemented formats.
-    let out = capture_stdout(&["uns", "-f", "json", "x.ts"]);
+    // `mermaid` is still a stub; the legacy "Not implemented yet" line
+    // + CLI args JSON shape lives on through the unimplemented formats.
+    let out = capture_stdout(&["uns", "-f", "mermaid", "x.ts"]);
     let (label, rest) = out.split_once('\n').expect("label line");
-    assert_eq!(label, "Not implemented yet: json emitter");
+    assert_eq!(label, "Not implemented yet: mermaid emitter");
     let value: serde_json::Value =
         serde_json::from_str(rest.trim_end()).expect("rest should be JSON");
-    assert_eq!(value["format"], "json");
+    assert_eq!(value["format"], "mermaid");
     assert_eq!(value["file"], "x.ts");
 }
 

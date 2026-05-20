@@ -15,6 +15,7 @@ use unsnarl_boundary_eslint_scope::parser::{
 };
 use unsnarl_emitter::{EmitOptions, Emitter, IRSerializer, SerializeContext, SerializeSourceMeta};
 use unsnarl_emitter_ir::{FlatSerializer, IrEmitter};
+use unsnarl_emitter_json::JsonEmitter;
 use unsnarl_ir::Language;
 
 /// Map a path's extension to a [`Language`]. Mirrors
@@ -62,6 +63,29 @@ pub fn emit_ir_text(
     language: Language,
     pretty_json: bool,
 ) -> Result<String, ParseError> {
+    emit_text_with(code, source_path, language, pretty_json, &IrEmitter)
+}
+
+/// Same as [`emit_ir_text`] but routes the parsed IR through
+/// [`JsonEmitter`], which builds a `VisualGraph` and serialises it
+/// as JSON. Used by the `-f json` CLI handler and the parity
+/// harness's `expected.json` comparison.
+pub fn emit_json_text(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    pretty_json: bool,
+) -> Result<String, ParseError> {
+    emit_text_with(code, source_path, language, pretty_json, &JsonEmitter)
+}
+
+fn emit_text_with(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    pretty_json: bool,
+    emitter: &dyn Emitter,
+) -> Result<String, ParseError> {
     let source_type = source_type_from_path(source_path, language);
     let allocator = Allocator::default();
     let parser = OxcParser;
@@ -88,7 +112,6 @@ pub fn emit_ir_text(
         raw: analyzed.raw,
     };
     let serialized = serializer.serialize(&ctx);
-    let emitter = IrEmitter;
     let options = EmitOptions { pretty_json };
     Ok(emitter.emit(&serialized, &options))
 }
