@@ -25,14 +25,68 @@ fn first_line(out: &str) -> &str {
 
 #[test]
 fn default_format_routes_to_mermaid_emitter() {
-    let out = capture_stdout(&["uns", "x.ts"]);
-    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", &path]);
+    // The default (`-f mermaid`) emits the elk preamble first, then
+    // `flowchart RL`. Asserting on the first two lines is enough to
+    // distinguish the real emitter from the legacy stub output.
+    let mut lines = out.lines();
+    assert_eq!(
+        lines.next().expect("preamble line"),
+        r#"%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%"#
+    );
+    assert_eq!(lines.next().expect("flowchart line"), "flowchart RL");
 }
 
 #[test]
 fn mermaid_format_routes_to_mermaid_emitter() {
-    let out = capture_stdout(&["uns", "-f", "mermaid", "x.ts"]);
-    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "mermaid", &path]);
+    let mut lines = out.lines();
+    assert_eq!(
+        lines.next().expect("preamble line"),
+        r#"%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%"#
+    );
+    assert_eq!(lines.next().expect("flowchart line"), "flowchart RL");
+}
+
+#[test]
+fn mermaid_dagre_renderer_omits_the_elk_init_directive() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "mermaid", "--mermaid-renderer", "dagre", &path]);
+    // dagre carries no preamble lines, so the very first emitted
+    // line is `flowchart RL`.
+    assert_eq!(out.lines().next().expect("flowchart line"), "flowchart RL");
 }
 
 #[test]
@@ -98,32 +152,35 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 
 #[test]
 fn stub_emitter_output_includes_parsed_args_json_after_label() {
-    // `mermaid` is still a stub; the legacy "Not implemented yet" line
+    // `markdown` is still a stub; the legacy "Not implemented yet" line
     // + CLI args JSON shape lives on through the unimplemented formats.
-    let out = capture_stdout(&["uns", "-f", "mermaid", "x.ts"]);
+    let out = capture_stdout(&["uns", "-f", "markdown", "x.ts"]);
     let (label, rest) = out.split_once('\n').expect("label line");
-    assert_eq!(label, "Not implemented yet: mermaid emitter");
+    assert_eq!(label, "Not implemented yet: markdown emitter");
     let value: serde_json::Value =
         serde_json::from_str(rest.trim_end()).expect("rest should be JSON");
-    assert_eq!(value["format"], "mermaid");
+    assert_eq!(value["format"], "markdown");
     assert_eq!(value["file"], "x.ts");
 }
 
 #[test]
 fn out_flag_notice_is_emitted_to_stderr_when_out_dir_basename_has_an_extension() {
-    let (out, err) = capture(&["uns", "-o", "graph.mmd", "x.ts"]);
+    // Pair the `-o graph.mmd` notice with `-f markdown` so the test
+    // does not need a real input file -- the notice fires during arg
+    // finalize, before the unimplemented emitter prints its stub body.
+    let (out, err) = capture(&["uns", "-f", "markdown", "-o", "graph.mmd", "x.ts"]);
     assert_eq!(
         first_line(&err),
         "uns: notice: -o 'graph.mmd' is treated as a directory name; use --out-file to write to that path as a file."
     );
     // The emitter output still lands on stdout; the notice does not
     // pollute it.
-    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
+    assert_eq!(first_line(&out), "Not implemented yet: markdown emitter");
 }
 
 #[test]
 fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
-    let (out, err) = capture(&["uns", "-o", "build", "x.ts"]);
+    let (out, err) = capture(&["uns", "-f", "markdown", "-o", "build", "x.ts"]);
     assert_eq!(err, "");
-    assert_eq!(first_line(&out), "Not implemented yet: mermaid emitter");
+    assert_eq!(first_line(&out), "Not implemented yet: markdown emitter");
 }

@@ -2,9 +2,12 @@ use std::fs;
 use std::io::{self, Read, Write};
 use std::path::Path;
 
-use crate::cli::args::{Args, CliFormat, CliLanguage};
+use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
+use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
+
+use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
 use crate::cli::run_cli::emit_out_flag_notice;
-use crate::pipeline::{emit_ir_text, emit_json_text, language_for_path};
+use crate::pipeline::{emit_ir_text, emit_json_text, emit_mermaid_text, language_for_path};
 
 pub fn run(args: &Args) {
     let stdout = io::stdout();
@@ -32,8 +35,37 @@ fn select_handler(format: &CliFormat) -> Handler {
     }
 }
 
-fn emit_mermaid(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
-    emit_stub("mermaid emitter", args, out);
+fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    let Some((code, source_path, language)) = read_source(args, err) else {
+        return;
+    };
+    let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
+    let theme = color_theme_for(&args.color_theme);
+    match emit_mermaid_text(&code, &source_path, language, strategy, theme, args.debug) {
+        Ok(text) => {
+            out.write_all(text.as_bytes())
+                .expect("write mermaid output");
+        }
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").expect("write mermaid error");
+        }
+    }
+}
+
+/// Default to elk when the flag is omitted. Matches the TS pipeline
+/// default at `ts/src/cli/args/cli-mermaid-renderer.ts`.
+fn mermaid_strategy_for(cli: Option<&CliMermaidRenderer>) -> MermaidStrategy {
+    match cli {
+        Some(CliMermaidRenderer::Dagre) => MermaidStrategy::Dagre,
+        Some(CliMermaidRenderer::Elk) | None => MermaidStrategy::Elk,
+    }
+}
+
+fn color_theme_for(cli: &CliColorTheme) -> &'static ColorTheme {
+    match cli {
+        CliColorTheme::Dark => &DARK_THEME,
+        CliColorTheme::Light => &LIGHT_THEME,
+    }
 }
 
 fn emit_ir(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
