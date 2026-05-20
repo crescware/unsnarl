@@ -55,9 +55,10 @@ pub fn make_variable_node(v: &SerializedVariable) -> VisualNode {
                 imported_name: d.imported_name().to_string(),
             },
         ),
-        SerializedDefinition::ImportBindingDefault(_) => {
-            common(BindingNodeKind::DefaultImportBinding, BindingExtras::None {})
-        }
+        SerializedDefinition::ImportBindingDefault(_) => common(
+            BindingNodeKind::DefaultImportBinding,
+            BindingExtras::None {},
+        ),
         SerializedDefinition::ImportBindingNamespace(_) => common(
             BindingNodeKind::NamespaceImportBinding,
             BindingExtras::None {},

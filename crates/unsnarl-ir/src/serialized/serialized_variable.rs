@@ -45,4 +45,8 @@ impl SerializedVariable {
             defs,
         }
     }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
 }

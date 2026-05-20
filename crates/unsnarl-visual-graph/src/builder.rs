@@ -9,6 +9,7 @@
 pub mod branch_container_key;
 pub mod branch_scope_of;
 pub mod control_subgraph_kind_of;
+pub mod describe_subgraph;
 pub mod edge_label_of_ref;
 pub mod enclosing_function_var;
 pub mod expression_statement_node_id;
@@ -26,6 +27,7 @@ pub mod is_function_subgraph;
 pub mod last_write_op_in_scope_before;
 pub mod line_for_offset;
 pub mod loop_test_node_id;
+pub mod make_variable_node;
 pub mod module_root_id;
 pub mod nesting_kind_of;
 pub mod node_id;
