@@ -26,6 +26,10 @@ run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
 description = "Build the `uns` CLI binary in release mode. Output: target/release/uns."
 run = "cargo build --release -p unsnarl"
 
+[tasks."npm:build-darwin-arm64"]
+description = "Build the aarch64-apple-darwin release of `uns` and stage it into npm/unsnarl-darwin-arm64/bin/uns (gitignored) before `npm pack` / `npm publish`."
+run = "cargo build --release --target aarch64-apple-darwin -p unsnarl && mkdir -p npm/unsnarl-darwin-arm64/bin && cp target/aarch64-apple-darwin/release/uns npm/unsnarl-darwin-arm64/bin/uns && chmod +x npm/unsnarl-darwin-arm64/bin/uns"
+
 [tasks."parity"]
 description = "Run the parity harness against ts/integration/fixtures/**/expected.ir.json (Step 12 baseline)."
 run = "cargo test --workspace --test parity"
