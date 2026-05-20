@@ -42,9 +42,15 @@ impl Emitter for StatsEmitter {
         Self::EXTENSION
     }
 
-    fn emit(&self, ir: &SerializedIR, _opts: &EmitOptions) -> String {
-        let graph = build_visual_graph(ir, &BuildVisualGraphOptions::default());
-        render_stats(&graph)
+    fn emit(&self, ir: &SerializedIR, opts: &EmitOptions) -> String {
+        let built;
+        let graph = if let Some(pruned) = &opts.pruned_graph {
+            pruned
+        } else {
+            built = build_visual_graph(ir, &BuildVisualGraphOptions::default());
+            &built
+        };
+        render_stats(graph)
     }
 }
 

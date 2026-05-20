@@ -20,6 +20,7 @@ pub mod boundary_edge_direction;
 pub mod builder;
 pub mod direction;
 pub mod node_kind;
+pub mod prune;
 pub mod subgraph_kind;
 pub mod visual_boundary_edge;
 pub mod visual_edge;

@@ -7,22 +7,16 @@
 //! render, and assembles the `# <path>` / `## Notice` / `## Input` /
 //! `## Query` / `## Mermaid` sections. The Rust port keeps the same
 //! composition and section order.
-//!
-//! `EmitOptions` in this workspace does not yet carry `resolutions`,
-//! `prunedGraph`, `depths`, or `highlight` (those fields land in
-//! Steps 17–19 alongside their feature implementations), so the
-//! `## Notice` block here only surfaces var-detected diagnostics and
-//! the `## Query` block is skipped entirely. The TS emitter's
-//! corresponding code paths come back online when the option fields
-//! land.
 
 use unsnarl_analyzer::format_var_diagnostic;
 use unsnarl_emitter::{EmitOptions, Emitter};
 use unsnarl_emitter_mermaid::MermaidEmitter;
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::serialized::SerializedIR;
+use unsnarl_visual_graph::prune::format_resolution_notice;
 
 use crate::code_fence_lang::code_fence_lang;
+use crate::format_pruning_query::format_pruning_query;
 
 pub struct MarkdownEmitter {
     mermaid: MermaidEmitter,
@@ -58,15 +52,19 @@ impl Emitter for MarkdownEmitter {
 
         let mut lines: Vec<String> = vec![format!("# {}", ir.source.path), String::new()];
 
+        let resolutions = opts.resolutions.as_deref().unwrap_or(&[]);
         let var_diagnostics: Vec<&_> = ir
             .diagnostics
             .iter()
             .filter(|d| matches!(d.kind, DiagnosticKind::VarDetected))
             .collect();
-        if !var_diagnostics.is_empty() {
+        if !resolutions.is_empty() || !var_diagnostics.is_empty() {
             lines.push("## Notice".to_string());
             lines.push(String::new());
             lines.push("```".to_string());
+            for resolution in resolutions {
+                lines.extend(format_resolution_notice(resolution));
+            }
             for diagnostic in &var_diagnostics {
                 lines.extend(format_var_diagnostic(diagnostic));
             }
@@ -80,6 +78,16 @@ impl Emitter for MarkdownEmitter {
         lines.push(raw);
         lines.push("```".to_string());
         lines.push(String::new());
+
+        let pruning = opts.pruned_graph.as_ref().and_then(|g| g.pruning.as_ref());
+        if let Some(p) = pruning {
+            lines.push("## Query".to_string());
+            lines.push(String::new());
+            lines.push("```sh".to_string());
+            lines.push(format_pruning_query(p));
+            lines.push("```".to_string());
+            lines.push(String::new());
+        }
 
         lines.push("## Mermaid".to_string());
         lines.push(String::new());

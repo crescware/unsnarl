@@ -7,6 +7,7 @@ use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
 
 use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
 use crate::cli::run_cli::emit_out_flag_notice;
+use crate::pipeline::prune::PruningRunOptions;
 use crate::pipeline::{
     emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
     language_for_path,
@@ -44,7 +45,16 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     };
     let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
     let theme = color_theme_for(&args.color_theme);
-    match emit_mermaid_text(&code, &source_path, language, strategy, theme, args.debug) {
+    let pruning = pruning_from_args(args);
+    match emit_mermaid_text(
+        &code,
+        &source_path,
+        language,
+        strategy,
+        theme,
+        args.debug,
+        pruning.as_ref(),
+    ) {
         Ok(text) => {
             out.write_all(text.as_bytes())
                 .expect("write mermaid output");
@@ -52,6 +62,82 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         Err(e) => {
             writeln!(err, "uns: error: {e}").expect("write mermaid error");
         }
+    }
+}
+
+/// Default generations used when the user gives `-r/--roots` but no
+/// `-A`/`-B`/`-C`. Mirrors `DEFAULT_GENERATIONS` in
+/// `ts/src/cli/args/default-generations.ts`.
+const DEFAULT_GENERATIONS: u32 = 10;
+
+/// Translate the CLI's `-r/-A/-B/-C` flags into the pipeline's
+/// [`PruningRunOptions`]. Mirrors `resolveGenerations` in
+/// `ts/src/cli/run-cli/resolve-generations.ts`. Returns `None` when
+/// no `-r` queries are present so the pipeline skips the prune step
+/// entirely (matching the TS guard `pruning ?? null`).
+fn pruning_from_args(args: &Args) -> Option<PruningRunOptions> {
+    if args.roots.is_empty() {
+        return None;
+    }
+    let no_flag = args.descendants.is_none() && args.ancestors.is_none() && args.context.is_none();
+    // grep -A/-B semantics: an explicit -A says "I asked for
+    // descendants only," so the unspecified side falls to 0 instead
+    // of the symmetric DEFAULT. -C still fills in for whichever
+    // side is unspecified.
+    let fallback = if no_flag {
+        DEFAULT_GENERATIONS
+    } else {
+        args.context.map(|g| g.0).unwrap_or(0)
+    };
+    let descendants = args.descendants.map(|g| g.0).unwrap_or(fallback);
+    let ancestors = args.ancestors.map(|g| g.0).unwrap_or(fallback);
+    let roots: Vec<_> = args.roots.iter().map(clone_parsed_root_query).collect();
+    Some(PruningRunOptions {
+        roots,
+        descendants,
+        ancestors,
+    })
+}
+
+fn clone_parsed_root_query(
+    q: &unsnarl_root_query::ParsedRootQuery,
+) -> unsnarl_root_query::ParsedRootQuery {
+    use unsnarl_root_query::ParsedRootQuery;
+    match q {
+        ParsedRootQuery::Line { line, raw } => ParsedRootQuery::Line {
+            line: *line,
+            raw: raw.clone(),
+        },
+        ParsedRootQuery::LineName { line, name, raw } => ParsedRootQuery::LineName {
+            line: *line,
+            name: name.clone(),
+            raw: raw.clone(),
+        },
+        ParsedRootQuery::Range { start, end, raw } => ParsedRootQuery::Range {
+            start: *start,
+            end: *end,
+            raw: raw.clone(),
+        },
+        ParsedRootQuery::RangeName {
+            start,
+            end,
+            name,
+            raw,
+        } => ParsedRootQuery::RangeName {
+            start: *start,
+            end: *end,
+            name: name.clone(),
+            raw: raw.clone(),
+        },
+        ParsedRootQuery::Name { name, raw } => ParsedRootQuery::Name {
+            name: name.clone(),
+            raw: raw.clone(),
+        },
+        ParsedRootQuery::LineOrName { line, name, raw } => ParsedRootQuery::LineOrName {
+            line: *line,
+            name: name.clone(),
+            raw: raw.clone(),
+        },
     }
 }
 
@@ -89,7 +175,14 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
-    match emit_json_text(&code, &source_path, language, args.pretty_json) {
+    let pruning = pruning_from_args(args);
+    match emit_json_text(
+        &code,
+        &source_path,
+        language,
+        args.pretty_json,
+        pruning.as_ref(),
+    ) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write json output");
         }
@@ -105,7 +198,16 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     };
     let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
     let theme = color_theme_for(&args.color_theme);
-    match emit_markdown_text(&code, &source_path, language, strategy, theme, args.debug) {
+    let pruning = pruning_from_args(args);
+    match emit_markdown_text(
+        &code,
+        &source_path,
+        language,
+        strategy,
+        theme,
+        args.debug,
+        pruning.as_ref(),
+    ) {
         Ok(text) => {
             out.write_all(text.as_bytes())
                 .expect("write markdown output");
@@ -120,7 +222,8 @@ fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
-    match emit_stats_text(&code, &source_path, language) {
+    let pruning = pruning_from_args(args);
+    match emit_stats_text(&code, &source_path, language, pruning.as_ref()) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write stats output");
         }
