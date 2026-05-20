@@ -11,4 +11,8 @@ impl SerializedReferenceId {
         assert!(!value.is_empty(), "SerializedReferenceId must be non-empty");
         Self(value)
     }
+
+    pub fn value(&self) -> &str {
+        &self.0
+    }
 }

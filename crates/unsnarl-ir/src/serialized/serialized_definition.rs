@@ -26,6 +26,14 @@ impl DefinitionName {
         assert!(!name.is_empty(), "DefinitionName.name must be non-empty");
         Self { name, span }
     }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn span(&self) -> &Span {
+        &self.span
+    }
 }
 
 #[derive(Serialize)]
@@ -66,6 +74,26 @@ impl VariableDef {
             init,
             declaration_kind,
         }
+    }
+
+    pub fn name(&self) -> &DefinitionName {
+        &self.name
+    }
+
+    pub fn node(&self) -> &DefinitionNode {
+        &self.node
+    }
+
+    pub fn parent(&self) -> Option<&DefinitionNode> {
+        self.parent.as_ref()
+    }
+
+    pub fn init(&self) -> Option<&DefinitionNode> {
+        self.init.as_ref()
+    }
+
+    pub fn declaration_kind(&self) -> &VariableDeclarationKind {
+        &self.declaration_kind
     }
 }
 
@@ -134,6 +162,26 @@ impl ImportBindingNamedDef {
     pub fn import_kind(&self) -> ImportKind {
         ImportKind::Named
     }
+
+    pub fn name(&self) -> &DefinitionName {
+        &self.name
+    }
+
+    pub fn node(&self) -> &DefinitionNode {
+        &self.node
+    }
+
+    pub fn parent(&self) -> Option<&DefinitionNode> {
+        self.parent.as_ref()
+    }
+
+    pub fn imported_name(&self) -> &str {
+        &self.imported_name
+    }
+
+    pub fn import_source(&self) -> &str {
+        &self.import_source
+    }
 }
 
 #[derive(Serialize)]
@@ -171,6 +219,22 @@ impl ImportBindingDefaultDef {
     pub fn import_kind(&self) -> ImportKind {
         ImportKind::Default
     }
+
+    pub fn name(&self) -> &DefinitionName {
+        &self.name
+    }
+
+    pub fn node(&self) -> &DefinitionNode {
+        &self.node
+    }
+
+    pub fn parent(&self) -> Option<&DefinitionNode> {
+        self.parent.as_ref()
+    }
+
+    pub fn import_source(&self) -> &str {
+        &self.import_source
+    }
 }
 
 #[derive(Serialize)]
@@ -207,6 +271,22 @@ impl ImportBindingNamespaceDef {
 
     pub fn import_kind(&self) -> ImportKind {
         ImportKind::Namespace
+    }
+
+    pub fn name(&self) -> &DefinitionName {
+        &self.name
+    }
+
+    pub fn node(&self) -> &DefinitionNode {
+        &self.node
+    }
+
+    pub fn parent(&self) -> Option<&DefinitionNode> {
+        self.parent.as_ref()
+    }
+
+    pub fn import_source(&self) -> &str {
+        &self.import_source
     }
 }
 
