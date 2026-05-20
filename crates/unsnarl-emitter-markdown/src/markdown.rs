@@ -16,6 +16,7 @@ use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_visual_graph::prune::format_resolution_notice;
 
 use crate::code_fence_lang::code_fence_lang;
+use crate::format_depth_query::format_depth_query;
 use crate::format_pruning_query::format_pruning_query;
 
 pub struct MarkdownEmitter {
@@ -80,11 +81,19 @@ impl Emitter for MarkdownEmitter {
         lines.push(String::new());
 
         let pruning = opts.pruned_graph.as_ref().and_then(|g| g.pruning.as_ref());
-        if let Some(p) = pruning {
+        let depth_query = format_depth_query(opts.depths.as_ref());
+        if pruning.is_some() || depth_query.is_some() {
+            let mut parts: Vec<String> = Vec::new();
+            if let Some(p) = pruning {
+                parts.push(format_pruning_query(p));
+            }
+            if let Some(q) = depth_query {
+                parts.push(q);
+            }
             lines.push("## Query".to_string());
             lines.push(String::new());
             lines.push("```sh".to_string());
-            lines.push(format_pruning_query(p));
+            lines.push(parts.join(" "));
             lines.push("```".to_string());
             lines.push(String::new());
         }

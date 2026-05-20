@@ -37,3 +37,7 @@ fn nesting_depth_for(
         NestingKind::Block => d.block,
     }
 }
+
+#[cfg(test)]
+#[path = "is_collapsed_test.rs"]
+mod is_collapsed_test;

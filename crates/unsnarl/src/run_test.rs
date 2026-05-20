@@ -1,4 +1,5 @@
 use super::*;
+use unsnarl_ir::NestingDepth;
 
 /// Run the CLI and return `(stdout, stderr)` as strings.
 fn capture(argv: &[&str]) -> (String, String) {
@@ -306,6 +307,110 @@ fn pruning_from_args_preserves_root_query_order_and_raw_tokens() {
         })
         .collect();
     assert_eq!(raws, vec!["1", "foo", "2-3"]);
+}
+
+// `depths_from_args` mirrors `resolveDepths` in
+// `ts/src/cli/run-cli/normalize-cli-options.ts`. The cases below
+// cover the same precedence rules (--depth seeds both axes, then
+// --depth-function / --depth-block override their halves) plus the
+// no-flag default.
+
+#[test]
+fn depths_from_args_no_flag_seeds_default_depth_across_every_kind() {
+    let args = parse_with(&["uns", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, DEFAULT_DEPTH);
+    assert_eq!(d.r#if, DEFAULT_DEPTH);
+    assert_eq!(d.r#for, DEFAULT_DEPTH);
+    assert_eq!(d.r#while, DEFAULT_DEPTH);
+    assert_eq!(d.switch, DEFAULT_DEPTH);
+    assert_eq!(d.try_catch_finally, DEFAULT_DEPTH);
+    assert_eq!(d.block, DEFAULT_DEPTH);
+}
+
+#[test]
+fn depths_from_args_dash_depth_seeds_both_axes() {
+    let args = parse_with(&["uns", "--depth", "3", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(3));
+    assert_eq!(d.r#if, NestingDepth(3));
+    assert_eq!(d.block, NestingDepth(3));
+}
+
+#[test]
+fn depths_from_args_depth_function_overrides_only_function() {
+    let args = parse_with(&["uns", "--depth", "5", "--depth-function", "1", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(1));
+    assert_eq!(d.r#if, NestingDepth(5));
+    assert_eq!(d.block, NestingDepth(5));
+}
+
+#[test]
+fn depths_from_args_depth_block_overrides_only_block_kinds() {
+    let args = parse_with(&["uns", "--depth", "5", "--depth-block", "1", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(5));
+    assert_eq!(d.r#if, NestingDepth(1));
+    assert_eq!(d.r#for, NestingDepth(1));
+    assert_eq!(d.r#while, NestingDepth(1));
+    assert_eq!(d.switch, NestingDepth(1));
+    assert_eq!(d.try_catch_finally, NestingDepth(1));
+    assert_eq!(d.block, NestingDepth(1));
+}
+
+#[test]
+fn depths_from_args_depth_function_only_keeps_block_at_default() {
+    let args = parse_with(&["uns", "--depth-function", "2", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(2));
+    assert_eq!(d.r#if, DEFAULT_DEPTH);
+    assert_eq!(d.block, DEFAULT_DEPTH);
+}
+
+#[test]
+fn depths_from_args_depth_block_only_keeps_function_at_default() {
+    let args = parse_with(&["uns", "--depth-block", "2", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, DEFAULT_DEPTH);
+    assert_eq!(d.r#if, NestingDepth(2));
+    assert_eq!(d.block, NestingDepth(2));
+}
+
+#[test]
+fn depths_from_args_depth_zero_is_explicit_not_falsy() {
+    let args = parse_with(&["uns", "--depth", "0", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(0));
+    assert_eq!(d.block, NestingDepth(0));
+}
+
+#[test]
+fn run_to_with_dash_depth_collapses_deep_function_in_markdown_query_block() {
+    // End-to-end: parse argv with `--depth 1`, dispatch through
+    // `run_to` against a tempfile that contains a function body, and
+    // verify the markdown emitter rendered the depth flag in the
+    // `## Query` section. This is the seam that bench-parity does
+    // not exercise (it never passes `--depth*`).
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "function outer() {{\n  function inner() {{}}\n}}").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "markdown", "--depth", "1", &path]);
+    // Markdown emitter renders the chosen depth via formatDepthQuery
+    // in the `## Query` block when at least one kind diverges from
+    // DEFAULT_DEPTH.
+    assert!(
+        out.contains("--depth 1"),
+        "expected --depth 1 in Query block, got:\n{out}"
+    );
 }
 
 #[test]
