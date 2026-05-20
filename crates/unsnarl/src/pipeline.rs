@@ -25,10 +25,12 @@ use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::ColorTheme;
 use unsnarl_emitter_mermaid::MermaidEmitter;
 use unsnarl_emitter_stats::StatsEmitter;
+use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
 use unsnarl_plugin::UnsnarlPlugin;
+use unsnarl_root_query::ParsedRootQuery;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
 use unsnarl_visual_graph::highlight::{collect_highlight_ids, HighlightRunOptions};
@@ -94,6 +96,28 @@ pub fn source_type_from_path(path: &str, language: Language) -> SourceType {
     default_source_type_for(language)
 }
 
+/// Detailed result of a pipeline run.
+///
+/// Mirrors `ts/src/pipeline/runner/pipeline-run-details.ts`. The IR
+/// path leaves `pruning` / `resolutions` at `None` (matching the TS
+/// `runDetailed` branch where `emitter.format === "ir"`).
+pub struct PipelineRunDetails {
+    pub text: String,
+    pub pruning: Option<Vec<PrunePerQueryDetail>>,
+    pub resolutions: Option<Vec<RootQueryResolution>>,
+    pub diagnostics: Vec<Diagnostic>,
+}
+
+/// Per-query match count surfaced by `runDetailed`. Mirrors the
+/// `pruning[].{query, matched}` shape in
+/// `ts/src/pipeline/runner/pipeline-run-details.ts`: `query` is the
+/// raw token the user typed (after `-r` parsing), `matched` is the
+/// number of nodes the prune walk treated as roots for that query.
+pub struct PrunePerQueryDetail {
+    pub query: String,
+    pub matched: u32,
+}
+
 /// Run the full parse -> analyse -> serialize -> emit pipeline for the
 /// `ir` format and return the rendered text.
 ///
@@ -107,12 +131,25 @@ pub fn emit_ir_text(
     pretty_json: bool,
     plugins: &[&dyn UnsnarlPlugin],
 ) -> Result<String, ParseError> {
-    emit_text_with(
-        code,
-        source_path,
-        language,
-        &IrEmitter,
-        plugins,
+    emit_ir_detailed(code, source_path, language, pretty_json, plugins).map(|d| d.text)
+}
+
+/// Detailed variant of [`emit_ir_text`]. Returns the rendered text
+/// together with the analyser diagnostics so the CLI orchestration
+/// can emit `var`-detected warnings on stderr (mirrors the IR branch
+/// of `runDetailed` in `ts/src/pipeline/pipeline.ts`, which returns
+/// `{ text, pruning: null, resolutions: null, diagnostics }`).
+pub fn emit_ir_detailed(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    pretty_json: bool,
+    plugins: &[&dyn UnsnarlPlugin],
+) -> Result<PipelineRunDetails, ParseError> {
+    let serialized = apply_plugins(serialize_ir(code, source_path, language)?, plugins);
+    let diagnostics = serialized.diagnostics.clone();
+    let text = IrEmitter.emit(
+        &serialized,
         &EmitOptions {
             pretty_json,
             debug: false,
@@ -122,7 +159,13 @@ pub fn emit_ir_text(
             highlight_ids: None,
             highlight: None,
         },
-    )
+    );
+    Ok(PipelineRunDetails {
+        text,
+        pruning: None,
+        resolutions: None,
+        diagnostics,
+    })
 }
 
 /// Same as [`emit_ir_text`] but routes the parsed IR through
@@ -136,6 +179,18 @@ pub fn emit_json_text(
     pretty_json: bool,
     run: PipelineRunOptions<'_>,
 ) -> Result<String, ParseError> {
+    emit_json_detailed(code, source_path, language, pretty_json, run).map(|d| d.text)
+}
+
+/// Detailed variant of [`emit_json_text`]. Returns text + warnings
+/// for the CLI orchestration to surface on stderr.
+pub fn emit_json_detailed(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    pretty_json: bool,
+    run: PipelineRunOptions<'_>,
+) -> Result<PipelineRunDetails, ParseError> {
     emit_pruning_aware_with(
         code,
         source_path,
@@ -162,6 +217,19 @@ pub fn emit_mermaid_text(
     debug: bool,
     run: PipelineRunOptions<'_>,
 ) -> Result<String, ParseError> {
+    emit_mermaid_detailed(code, source_path, language, strategy, theme, debug, run).map(|d| d.text)
+}
+
+/// Detailed variant of [`emit_mermaid_text`].
+pub fn emit_mermaid_detailed(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    strategy: MermaidStrategy,
+    theme: &'static ColorTheme,
+    debug: bool,
+    run: PipelineRunOptions<'_>,
+) -> Result<PipelineRunDetails, ParseError> {
     let emitter = MermaidEmitter::new(strategy, theme);
     emit_pruning_aware_with(
         code,
@@ -192,6 +260,19 @@ pub fn emit_markdown_text(
     debug: bool,
     run: PipelineRunOptions<'_>,
 ) -> Result<String, ParseError> {
+    emit_markdown_detailed(code, source_path, language, strategy, theme, debug, run).map(|d| d.text)
+}
+
+/// Detailed variant of [`emit_markdown_text`].
+pub fn emit_markdown_detailed(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    strategy: MermaidStrategy,
+    theme: &'static ColorTheme,
+    debug: bool,
+    run: PipelineRunOptions<'_>,
+) -> Result<PipelineRunDetails, ParseError> {
     let mermaid = MermaidEmitter::new(strategy, theme);
     let emitter = MarkdownEmitter::new(mermaid);
     emit_pruning_aware_with(
@@ -217,6 +298,16 @@ pub fn emit_stats_text(
     language: Language,
     run: PipelineRunOptions<'_>,
 ) -> Result<String, ParseError> {
+    emit_stats_detailed(code, source_path, language, run).map(|d| d.text)
+}
+
+/// Detailed variant of [`emit_stats_text`].
+pub fn emit_stats_detailed(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    run: PipelineRunOptions<'_>,
+) -> Result<PipelineRunDetails, ParseError> {
     emit_pruning_aware_with(
         code,
         source_path,
@@ -238,12 +329,14 @@ struct EmitOptionsBase {
 
 /// Output of the pre-emit visual-graph orchestration: the pruned
 /// graph (when `-r` was given), the `LineOrName` disambiguation log,
-/// the highlight id list (when `-H` was given), and the kept-as-given
-/// highlight request so the markdown emitter can reconstruct `-H` in
-/// the Query block.
+/// the per-query match counts (so `emit-pruning-warnings` can flag
+/// `matched === 0` queries), the highlight id list (when `-H` was
+/// given), and the kept-as-given highlight request so the markdown
+/// emitter can reconstruct `-H` in the Query block.
 struct PreparedEmit {
     pruned_graph: Option<VisualGraph>,
     resolutions: Option<Vec<RootQueryResolution>>,
+    per_query: Option<Vec<PrunePerQueryDetail>>,
     highlight_ids: Option<Vec<String>>,
     highlight: Option<HighlightRunOptions>,
 }
@@ -270,6 +363,7 @@ fn prepare_emit(
 
     let mut pruned_graph: Option<VisualGraph> = None;
     let mut resolutions_out: Option<Vec<RootQueryResolution>> = None;
+    let mut per_query_out: Option<Vec<PrunePerQueryDetail>> = None;
     let mut prune_root_ids: Option<Vec<String>> = None;
     if let Some(p) = pruning {
         if !p.roots.is_empty() {
@@ -281,6 +375,16 @@ fn prepare_emit(
                     descendants: p.descendants,
                     ancestors: p.ancestors,
                 },
+            );
+            per_query_out = Some(
+                result
+                    .per_query
+                    .iter()
+                    .map(|m| PrunePerQueryDetail {
+                        query: raw_root_query(&m.query).to_string(),
+                        matched: m.matched,
+                    })
+                    .collect(),
             );
             prune_root_ids = Some(result.root_ids);
             pruned_graph = Some(result.graph);
@@ -308,8 +412,24 @@ fn prepare_emit(
     PreparedEmit {
         pruned_graph,
         resolutions: resolutions_out,
+        per_query: per_query_out,
         highlight_ids,
         highlight: highlight.cloned(),
+    }
+}
+
+/// Extract the user-typed token from a [`ParsedRootQuery`]. Mirrors
+/// the `query.raw` field the TS `runDetailed` reads when building
+/// `pruning[].query`. Every `ParsedRootQuery` variant carries the
+/// raw string so this is just a structural projection.
+fn raw_root_query(q: &ParsedRootQuery) -> &str {
+    match q {
+        ParsedRootQuery::Line { raw, .. }
+        | ParsedRootQuery::LineName { raw, .. }
+        | ParsedRootQuery::Range { raw, .. }
+        | ParsedRootQuery::RangeName { raw, .. }
+        | ParsedRootQuery::Name { raw, .. }
+        | ParsedRootQuery::LineOrName { raw, .. } => raw,
     }
 }
 
@@ -320,8 +440,9 @@ fn emit_pruning_aware_with(
     emitter: &dyn Emitter,
     run: PipelineRunOptions<'_>,
     base_opts: EmitOptionsBase,
-) -> Result<String, ParseError> {
+) -> Result<PipelineRunDetails, ParseError> {
     let serialized = apply_plugins(serialize_ir(code, source_path, language)?, run.plugins);
+    let diagnostics = serialized.diagnostics.clone();
     let needs_visual =
         run.pruning.map(|p| !p.roots.is_empty()).unwrap_or(false) || run.highlight.is_some();
     let prepared = if needs_visual {
@@ -330,11 +451,14 @@ fn emit_pruning_aware_with(
         PreparedEmit {
             pruned_graph: None,
             resolutions: None,
+            per_query: None,
             highlight_ids: None,
             highlight: None,
         }
     };
-    Ok(emitter.emit(
+    let resolutions_for_details = prepared.resolutions.clone();
+    let per_query_for_details = prepared.per_query;
+    let text = emitter.emit(
         &serialized,
         &EmitOptions {
             pretty_json: base_opts.pretty_json,
@@ -345,7 +469,13 @@ fn emit_pruning_aware_with(
             highlight_ids: prepared.highlight_ids,
             highlight: prepared.highlight,
         },
-    ))
+    );
+    Ok(PipelineRunDetails {
+        text,
+        pruning: per_query_for_details,
+        resolutions: resolutions_for_details,
+        diagnostics,
+    })
 }
 
 fn serialize_ir(
@@ -379,16 +509,4 @@ fn serialize_ir(
         raw: analyzed.raw,
     };
     Ok(serializer.serialize(&ctx))
-}
-
-fn emit_text_with(
-    code: &str,
-    source_path: &str,
-    language: Language,
-    emitter: &dyn Emitter,
-    plugins: &[&dyn UnsnarlPlugin],
-    options: &EmitOptions,
-) -> Result<String, ParseError> {
-    let serialized = apply_plugins(serialize_ir(code, source_path, language)?, plugins);
-    Ok(emitter.emit(&serialized, options))
 }

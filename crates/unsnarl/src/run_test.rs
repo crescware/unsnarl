@@ -1,16 +1,24 @@
 use super::*;
 use unsnarl_ir::NestingDepth;
 
-/// Run the CLI and return `(stdout, stderr)` as strings.
-fn capture(argv: &[&str]) -> (String, String) {
+/// Run the CLI and return `(exit_code, stdout, stderr)`.
+fn capture_with_exit(argv: &[&str]) -> (u8, String, String) {
     let args = Args::try_parse_from(argv).expect("argv should parse");
+    let mut stdin: &[u8] = b"";
     let mut out = Vec::new();
     let mut err = Vec::new();
-    run_to(&args, &mut out, &mut err);
+    let code = run_to(&args, &mut stdin, &mut out, &mut err);
     (
+        code,
         String::from_utf8(out).expect("stdout should be valid UTF-8"),
         String::from_utf8(err).expect("stderr should be valid UTF-8"),
     )
+}
+
+/// Run the CLI and return `(stdout, stderr)` as strings.
+fn capture(argv: &[&str]) -> (String, String) {
+    let (_code, out, err) = capture_with_exit(argv);
+    (out, err)
 }
 
 /// Convenience wrapper that asserts stderr is empty and returns stdout.
@@ -181,6 +189,159 @@ fn stats_format_routes_to_stats_emitter() {
 fn unknown_format_is_rejected_by_clap_before_dispatch() {
     let err = Args::try_parse_from(["uns", "-f", "bogus", "x.ts"]).unwrap_err();
     assert_eq!(err.exit_code(), 2);
+}
+
+#[test]
+fn missing_input_with_out_dir_only_returns_exit_2_with_no_input_file_message() {
+    // `uns -o build` (no stdin, no file, no -r): Args::finalize accepts
+    // it (basename derivation tolerates empty input), but the runtime
+    // `calc_source` rejects it before the pipeline runs, mirroring
+    // TS `calcSource` and Step 6 (#115) の伏線回収。
+    let (code, out, err) = capture_with_exit(&["uns", "-f", "ir", "-o", "build"]);
+    assert_eq!(code, 2, "expected exit 2, got: {code}");
+    assert!(out.is_empty(), "expected empty stdout, got: {out}");
+    assert!(
+        err.starts_with("error: no input file (use --stdin or pass a path)\n"),
+        "expected calc-source error on first stderr line, got: {err}"
+    );
+}
+
+#[test]
+fn missing_input_without_any_flag_returns_exit_2() {
+    let (code, out, err) = capture_with_exit(&["uns"]);
+    assert_eq!(code, 2, "expected exit 2, got: {code}");
+    assert!(out.is_empty(), "expected empty stdout, got: {out}");
+    assert!(
+        err.starts_with("error: no input file (use --stdin or pass a path)\n"),
+        "expected calc-source error on first stderr line, got: {err}"
+    );
+}
+
+#[test]
+fn stdin_input_routes_through_pipeline_with_declared_lang() {
+    // `--stdin --stdin-lang tsx`: the orchestration labels the
+    // source path `stdin.tsx` so the emitted IR carries a stable,
+    // lang-aware path. Mirrors TS `buildRunOpts.sourcePath` for
+    // the stdin branch.
+    let args = Args::try_parse_from(["uns", "-f", "ir", "--stdin", "--stdin-lang", "tsx"])
+        .expect("argv should parse");
+    let mut stdin: &[u8] = b"const x = 1;\n";
+    let mut out = Vec::new();
+    let mut err = Vec::new();
+    let code = run_to(&args, &mut stdin, &mut out, &mut err);
+    assert_eq!(
+        code,
+        0,
+        "expected exit 0, stderr: {}",
+        String::from_utf8_lossy(&err)
+    );
+    let stdout = String::from_utf8(out).expect("stdout valid utf-8");
+    let value: serde_json::Value =
+        serde_json::from_str(stdout.trim_end()).expect("ir emitter output should be JSON");
+    assert_eq!(value["source"]["language"], "tsx");
+    assert_eq!(value["source"]["path"], "stdin.tsx");
+}
+
+#[test]
+fn out_file_writes_to_disk_instead_of_stdout() {
+    // `--out-file <path>` lands the emitted text on disk; stdout
+    // stays empty. Mirrors `writeOutput` in
+    // `ts/src/cli/run-cli/write-output.ts`.
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let input = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out_dir = tempfile::tempdir().expect("tempdir");
+    let out_file = out_dir.path().join("graph.ir.json");
+    let out_file_str = out_file.to_str().expect("out_file path utf-8").to_string();
+    let (code, out, err) =
+        capture_with_exit(&["uns", "-f", "ir", "--out-file", &out_file_str, &input]);
+    assert_eq!(code, 0, "expected exit 0, stderr: {err}");
+    assert!(out.is_empty(), "expected empty stdout, got: {out}");
+    assert!(out_file.is_file(), "expected output file to exist");
+    let written = std::fs::read_to_string(&out_file).expect("output file readable");
+    let value: serde_json::Value =
+        serde_json::from_str(written.trim_end()).expect("ir output should be JSON");
+    assert_eq!(value["version"], 1);
+}
+
+#[test]
+fn out_dir_writes_to_auto_named_file_with_emitter_extension() {
+    // `-o <dir>` auto-names the file `<basename>.<ext>`. The
+    // basename comes from the input file stem; the extension comes
+    // from the active emitter (`json` here).
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .prefix("input-")
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let input_path = tmp.path().to_path_buf();
+    let input = input_path
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out_dir = tempfile::tempdir().expect("tempdir");
+    let out_dir_str = out_dir
+        .path()
+        .to_str()
+        .expect("out_dir path utf-8")
+        .to_string();
+    let stem = input_path
+        .file_stem()
+        .and_then(|s| s.to_str())
+        .expect("stem")
+        .to_string();
+    let (code, out, err) = capture_with_exit(&["uns", "-f", "json", "-o", &out_dir_str, &input]);
+    assert_eq!(code, 0, "expected exit 0, stderr: {err}");
+    assert!(out.is_empty(), "expected empty stdout, got: {out}");
+    let expected_path = out_dir.path().join(format!("{stem}.json"));
+    assert!(
+        expected_path.is_file(),
+        "expected auto-named output at {}",
+        expected_path.display()
+    );
+}
+
+#[test]
+fn pruning_zero_match_query_emits_stderr_warning() {
+    // `-r doesnotexist` produces a 0-match per-query entry, which
+    // the orchestration surfaces as the `query '...' matched 0
+    // roots` line. Mirrors `emitPruningWarnings` in
+    // `ts/src/cli/run-cli/emit-pruning-warnings.ts`.
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const a = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let (code, _out, err) = capture_with_exit(&["uns", "-f", "ir", "-r", "doesnotexist", &path]);
+    // pruning is skipped for `-f ir`, so no warning expected.
+    assert_eq!(code, 0, "expected exit 0, stderr: {err}");
+    assert!(
+        !err.contains("matched 0 roots"),
+        "expected no pruning warning for -f ir, got: {err}"
+    );
+
+    let (code, _out, err) = capture_with_exit(&["uns", "-f", "json", "-r", "doesnotexist", &path]);
+    assert_eq!(code, 0, "expected exit 0, stderr: {err}");
+    assert!(
+        err.contains("uns: warning: query 'doesnotexist' matched 0 roots"),
+        "expected pruning warning in stderr, got: {err}"
+    );
 }
 
 #[test]
