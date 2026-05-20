@@ -8,4 +8,3 @@ repository.workspace = true
 
 [dependencies]
 unsnarl-ir = { workspace = true }
-unsnarl-annotations = { workspace = true }

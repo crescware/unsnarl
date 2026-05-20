@@ -7,6 +7,7 @@
 //! plumbing comes in later steps (#122 onward).
 
 pub mod highlight;
+pub mod plugin;
 pub mod prune;
 
 use std::path::Path;
@@ -27,6 +28,7 @@ use unsnarl_emitter_stats::StatsEmitter;
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
+use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
 use unsnarl_visual_graph::highlight::{collect_highlight_ids, HighlightRunOptions};
@@ -35,6 +37,7 @@ use unsnarl_visual_graph::prune::{
 };
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 
+use crate::pipeline::plugin::apply_plugins;
 use crate::pipeline::prune::PruningRunOptions;
 
 /// Per-emit run knobs that grow as later Steps wire new transforms
@@ -48,6 +51,14 @@ pub struct PipelineRunOptions<'a> {
     pub pruning: Option<&'a PruningRunOptions>,
     pub depths: Option<&'a NestingDepths>,
     pub highlight: Option<&'a HighlightRunOptions>,
+    /// Activated plugins to fold over the serialized IR. Mirrors
+    /// `PipelineConfig.plugins` in
+    /// `ts/src/pipeline/runner/pipeline-config.ts` + `runDetailed`'s
+    /// reduce step in `ts/src/pipeline/pipeline.ts`. The slice is
+    /// `&[&dyn UnsnarlPlugin]` so callers can pass the activated set
+    /// returned by [`plugin::activate`] without taking ownership of
+    /// the trait objects.
+    pub plugins: &'a [&'a dyn UnsnarlPlugin],
 }
 
 /// Map a path's extension to a [`Language`]. Mirrors
@@ -94,12 +105,14 @@ pub fn emit_ir_text(
     source_path: &str,
     language: Language,
     pretty_json: bool,
+    plugins: &[&dyn UnsnarlPlugin],
 ) -> Result<String, ParseError> {
     emit_text_with(
         code,
         source_path,
         language,
         &IrEmitter,
+        plugins,
         &EmitOptions {
             pretty_json,
             debug: false,
@@ -308,7 +321,7 @@ fn emit_pruning_aware_with(
     run: PipelineRunOptions<'_>,
     base_opts: EmitOptionsBase,
 ) -> Result<String, ParseError> {
-    let serialized = serialize_ir(code, source_path, language)?;
+    let serialized = apply_plugins(serialize_ir(code, source_path, language)?, run.plugins);
     let needs_visual =
         run.pruning.map(|p| !p.roots.is_empty()).unwrap_or(false) || run.highlight.is_some();
     let prepared = if needs_visual {
@@ -373,8 +386,9 @@ fn emit_text_with(
     source_path: &str,
     language: Language,
     emitter: &dyn Emitter,
+    plugins: &[&dyn UnsnarlPlugin],
     options: &EmitOptions,
 ) -> Result<String, ParseError> {
-    let serialized = serialize_ir(code, source_path, language)?;
+    let serialized = apply_plugins(serialize_ir(code, source_path, language)?, plugins);
     Ok(emitter.emit(&serialized, options))
 }

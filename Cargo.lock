@@ -1038,7 +1038,6 @@ dependencies = [
 name = "unsnarl-plugin"
 version = "0.3.0-beta.4"
 dependencies = [
- "unsnarl-annotations",
  "unsnarl-ir",
 ]
 
@@ -1046,8 +1045,8 @@ dependencies = [
 name = "unsnarl-plugin-react"
 version = "0.3.0-beta.4"
 dependencies = [
- "unsnarl-annotations",
  "unsnarl-ir",
+ "unsnarl-oxc-parity",
  "unsnarl-plugin",
 ]
 
