@@ -9,6 +9,7 @@
 //! Steps 18–19.
 
 use unsnarl_ir::nesting_kind::NestingDepths;
+use unsnarl_visual_graph::highlight::HighlightRunOptions;
 use unsnarl_visual_graph::prune::RootQueryResolution;
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 
@@ -40,4 +41,22 @@ pub struct EmitOptions {
     /// emitter additionally surfaces the chosen depths in its
     /// `## Query` block via `formatDepthQuery`.
     pub depths: Option<NestingDepths>,
+    /// Ordered list of `VisualNode` ids the renderer should paint as
+    /// "highlighted". `None` means "no highlight". An empty list means
+    /// "highlight requested but matched nothing"; the renderer treats
+    /// that the same as `None` but the distinction lets the pipeline
+    /// produce a stderr warning upstream. Mirrors `opts.highlightIds`
+    /// in the TS port, where the underlying `ReadonlySet<string>`
+    /// iterates in insertion order; the mermaid renderer's inline
+    /// `style` block depends on that order to reproduce the TS
+    /// baselines byte-for-byte.
+    pub highlight_ids: Option<Vec<String>>,
+    /// Original highlight request, propagated so emitters that surface
+    /// the CLI form (currently markdown) can reconstruct `-H` /
+    /// `--highlight <queries>` in the rendered Query block. `None`
+    /// means the highlight flag was not given. Independent from
+    /// [`Self::highlight_ids`] because that one can be empty even when
+    /// the request was non-empty (the query missed every node in the
+    /// pruned graph).
+    pub highlight: Option<HighlightRunOptions>,
 }

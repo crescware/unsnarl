@@ -6,13 +6,18 @@
 //! which is why we don't try to define a "highlightNode" class -- a
 //! class would lose to anything mermaid applied earlier in the
 //! diagram source.
-
-use std::collections::HashSet;
+//!
+//! `highlight_ids` is a slice (not a `HashSet`) because the iteration
+//! order of the emitted `style` rows must reproduce the TS port
+//! byte-for-byte. The TS port iterates a `ReadonlySet<string>` that
+//! was populated by `collectHighlightIds` in element-tree walk order;
+//! Rust's `HashSet` has unspecified iteration order, so we keep the
+//! id list ordered upstream and pass it through unchanged.
 
 use crate::theme::ColorTheme;
 
 pub fn render_highlight(
-    highlight_ids: &HashSet<String>,
+    highlight_ids: &[String],
     highlight_edge_indices: &[usize],
     theme: &ColorTheme,
     lines: &mut Vec<String>,

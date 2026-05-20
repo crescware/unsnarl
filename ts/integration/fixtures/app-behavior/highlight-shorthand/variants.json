@@ -1,0 +1,25 @@
+{
+  "variants": [
+    {
+      "kind": "highlight",
+      "slug": "name-a",
+      "highlight": { "mode": "queries", "raw": "a" }
+    },
+    {
+      "kind": "pruned-highlight",
+      "slug": "roots-a-c1",
+      "roots": "a",
+      "descendants": 1,
+      "ancestors": 1,
+      "highlight": { "mode": "roots" }
+    },
+    {
+      "kind": "pruned-highlight",
+      "slug": "roots-a-c1-highlight-a",
+      "roots": "a",
+      "descendants": 1,
+      "ancestors": 1,
+      "highlight": { "mode": "queries", "raw": "a" }
+    }
+  ]
+}

@@ -1,7 +1,7 @@
 use serde::Serialize;
 use unsnarl_ir::SourceLine;
 
-#[derive(Debug, PartialEq, Eq, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Serialize)]
 #[serde(tag = "kind", rename_all = "kebab-case")]
 pub enum ParsedRootQuery {
     Line {
