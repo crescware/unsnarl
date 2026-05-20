@@ -39,7 +39,7 @@
 //
 // Exit code: 0 if every file matched byte-for-byte, 1 otherwise.
 
-// Script lives at `scripts/bench-ir-parity.ts`; the repo root is two
+// Script lives at `scripts/bench-parity.ts`; the repo root is two
 // `/`s up.
 const SCRIPT_PATH = new URL(import.meta.url).pathname;
 const REPO_ROOT = SCRIPT_PATH.split("/").slice(0, -2).join("/");
@@ -54,7 +54,7 @@ const TS_BIN = `${TS_ROOT}/dist/index.js`;
 const FORMAT = (Deno.args[0] ?? "ir").toLowerCase();
 if (FORMAT !== "ir" && FORMAT !== "json" && FORMAT !== "mermaid") {
   console.error(
-    `bench-ir-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', or 'mermaid')`,
+    `bench-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', or 'mermaid')`,
   );
   Deno.exit(2);
 }
