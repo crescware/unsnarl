@@ -17,6 +17,7 @@
 //! - Step 19: highlight.
 
 pub mod boundary_edge_direction;
+pub mod builder;
 pub mod direction;
 pub mod node_kind;
 pub mod subgraph_kind;
