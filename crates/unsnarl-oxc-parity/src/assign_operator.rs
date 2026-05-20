@@ -50,3 +50,29 @@ pub enum AssignOperator {
     #[serde(rename = "??=")]
     NullishAssign,
 }
+
+impl AssignOperator {
+    /// Source spelling of the operator (`"="`, `"+="`, ...). Used by
+    /// `render_head_expression` to format the operator inside a
+    /// rendered assignment label.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Assign => "=",
+            Self::AddAssign => "+=",
+            Self::SubAssign => "-=",
+            Self::MulAssign => "*=",
+            Self::DivAssign => "/=",
+            Self::RemAssign => "%=",
+            Self::ExpAssign => "**=",
+            Self::ShlAssign => "<<=",
+            Self::ShrAssign => ">>=",
+            Self::UnsignedShrAssign => ">>>=",
+            Self::BitAndAssign => "&=",
+            Self::BitOrAssign => "|=",
+            Self::BitXorAssign => "^=",
+            Self::LogicalAndAssign => "&&=",
+            Self::LogicalOrAssign => "||=",
+            Self::NullishAssign => "??=",
+        }
+    }
+}

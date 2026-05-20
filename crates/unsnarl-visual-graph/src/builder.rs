@@ -34,6 +34,7 @@ pub mod owner_target_id;
 pub mod predicate_target_id;
 pub mod previous_fallthrough_case;
 pub mod push_edge;
+pub mod render_head_expression;
 pub mod ret_use_node_id;
 pub mod return_subgraph_id;
 pub mod sanitize;
