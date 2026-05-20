@@ -7,7 +7,7 @@ use unsnarl_ir::serialized::SerializedScope;
 pub fn is_ancestor_scope(
     ancestor_id: &str,
     descendant_id: &str,
-    scope_map: &HashMap<String, &SerializedScope>,
+    scope_map: &HashMap<&str, &SerializedScope>,
 ) -> bool {
     let mut cur = scope_map.get(descendant_id).copied();
     while let Some(scope) = cur {
