@@ -8,6 +8,7 @@
 
 pub mod arena;
 pub mod branch_container_key;
+pub mod branch_merged_origins;
 pub mod branch_scope_of;
 pub mod context;
 pub mod control_subgraph_kind_of;
@@ -44,6 +45,7 @@ pub mod owner_target_id;
 pub mod predicate_target_id;
 pub mod previous_fallthrough_case;
 pub mod push_edge;
+pub mod read_origins;
 pub mod render_head_expression;
 pub mod ret_use_node_id;
 pub mod return_subgraph_id;
