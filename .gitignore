@@ -6,3 +6,4 @@ dist/
 target/
 *.profraw
 *.profdata
+npm/*/bin/uns
