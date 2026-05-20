@@ -23,16 +23,25 @@
 // `-f markdown` matches the on-disk `preview.md` baselines.
 //
 // Usage:
-//   mise run bench:ir-parity                           # ir, default work dir
-//   mise run bench:ir-parity       -- path/to/dir      # ir, custom work dir
-//   mise run bench:json-parity                         # json, default work dir
-//   mise run bench:json-parity     -- path/to/dir      # json, custom work dir
-//   mise run bench:mermaid-parity                      # mermaid, default work dir
-//   mise run bench:mermaid-parity  -- path/to/dir      # mermaid, custom work dir
-//   mise run bench:markdown-parity                     # markdown, default work dir
-//   mise run bench:markdown-parity -- path/to/dir      # markdown, custom work dir
-//   mise run bench:stats-parity                        # stats, default work dir
-//   mise run bench:stats-parity    -- path/to/dir      # stats, custom work dir
+//   mise run bench:ir-parity                           # ir, baseline (no extra flags)
+//   mise run bench:json-parity                         # json, baseline
+//   mise run bench:mermaid-parity                      # mermaid, baseline
+//   mise run bench:markdown-parity                     # markdown, baseline
+//   mise run bench:stats-parity                        # stats, baseline
+//
+//   deno run ... scripts/bench-parity.ts <fmt> <variant> [work_dir]
+//
+//   <variant> is one of:
+//     baseline   -f <fmt> <file>                   (no extra flags)
+//     r-a-1      -f <fmt> -r <mid> -A 1 <file>     (descendants radius)
+//     r-b-1      -f <fmt> -r <mid> -B 1 <file>     (ancestors radius)
+//     r-c-1      -f <fmt> -r <mid> -C 1 <file>     (symmetric context)
+//     h-mid      -f <fmt> -H <mid> <file>          (highlight)
+//     depth-1    -f <fmt> --depth 1 <file>         (depth collapse)
+//
+//   where `<mid>` is `max(1, floor(line_count / 2))` per input file.
+//   The full <format> x <variant> matrix is exposed as
+//   `mise run bench:variant-parity-all`.
 //
 // Outputs (under the work dir):
 //   summary.txt         human-readable totals + "smallest diffs first" preview
@@ -70,11 +79,38 @@ if (
   );
   Deno.exit(2);
 }
-// Second positional arg overrides the work dir. The default work
-// dir is suffixed by format so `bench:ir-parity`,
-// `bench:json-parity`, and `bench:mermaid-parity` write into
-// separate trees.
-const WORK = Deno.args[1] ?? `${REPO_ROOT}/target/parity-bench-${FORMAT}`;
+
+// Second positional arg picks the CLI-flag variant. `baseline`
+// preserves the original behaviour (no extra flags beyond
+// `-f <FORMAT>`); the other variants exercise the prune / highlight
+// / depth flag surface by computing a per-file `mid` line number
+// (`max(1, floor(lines / 2))`) and feeding it to the matching
+// CLI option, so the dogfooding sweep covers the full CLI surface
+// rather than only the default-args code path.
+const VARIANT = (Deno.args[1] ?? "baseline").toLowerCase();
+const ALL_VARIANTS = [
+  "baseline",
+  "r-a-1",
+  "r-b-1",
+  "r-c-1",
+  "h-mid",
+  "depth-1",
+] as const;
+if (!ALL_VARIANTS.includes(VARIANT as (typeof ALL_VARIANTS)[number])) {
+  console.error(
+    `bench-parity: unsupported variant '${VARIANT}' (expected one of ${ALL_VARIANTS.join(", ")})`,
+  );
+  Deno.exit(2);
+}
+
+// Third positional arg overrides the work dir. The default work
+// dir is suffixed by format + variant so concurrent sweeps for
+// different flag combinations write into separate trees.
+const WORK_DEFAULT =
+  VARIANT === "baseline"
+    ? `${REPO_ROOT}/target/parity-bench-${FORMAT}`
+    : `${REPO_ROOT}/target/parity-bench-${FORMAT}-${VARIANT}`;
+const WORK = Deno.args[2] ?? WORK_DEFAULT;
 
 function ensureFile(path: string, hint: string) {
   try {
@@ -112,6 +148,52 @@ const files = [...walk(`${TS_ROOT}/src`)]
   .map((abs) => abs.slice(TS_ROOT.length + 1))
   .sort();
 const total = files.length;
+
+/**
+ * Per-file `mid` line number used by the prune / highlight variants.
+ * `max(1, floor(lines / 2))` so single-line / empty files still feed
+ * a valid 1-based line number to `-r` / `-H` rather than `0`.
+ * Counts the number of newline characters and adds one to recover
+ * the line count for files without a trailing newline; an empty
+ * file collapses to `mid = 1`.
+ */
+function midLineFor(absPath: string): number {
+  const text = Deno.readTextFileSync(absPath);
+  if (text.length === 0) return 1;
+  let lines = 1;
+  for (let i = 0; i < text.length; i++) {
+    if (text.charCodeAt(i) === 10) lines++;
+  }
+  // A file ending in `\n` overcounts by one because the trailing
+  // newline does not start a new line of content.
+  if (text.charCodeAt(text.length - 1) === 10) lines--;
+  return Math.max(1, Math.floor(lines / 2));
+}
+
+/**
+ * Build the variant-specific CLI flags for one file. The format
+ * flag (`-f <FORMAT>`) and the positional input path are added by
+ * the caller; this function only contributes the flags that vary
+ * across variants.
+ */
+function variantFlagsFor(absPath: string): string[] {
+  switch (VARIANT) {
+    case "baseline":
+      return [];
+    case "r-a-1":
+      return ["-r", String(midLineFor(absPath)), "-A", "1"];
+    case "r-b-1":
+      return ["-r", String(midLineFor(absPath)), "-B", "1"];
+    case "r-c-1":
+      return ["-r", String(midLineFor(absPath)), "-C", "1"];
+    case "h-mid":
+      return ["-H", String(midLineFor(absPath))];
+    case "depth-1":
+      return ["--depth", "1"];
+    default:
+      throw new Error(`unreachable variant: ${VARIANT}`);
+  }
+}
 
 function shQuote(s: string): string {
   return `'${s.replaceAll("'", "'\\''")}'`;
@@ -185,8 +267,17 @@ for (const rel of files) {
   const rErr = `${WORK}/stderr/${safe}.rust.err`;
   const tErr = `${WORK}/stderr/${safe}.ts.err`;
 
-  const r = await runToFiles([RUST_BIN, "-f", FORMAT, rel], rOut, rErr);
-  const t = await runToFiles(["node", TS_BIN, "-f", FORMAT, rel], tOut, tErr);
+  const extra = variantFlagsFor(`${TS_ROOT}/${rel}`);
+  const r = await runToFiles(
+    [RUST_BIN, "-f", FORMAT, ...extra, rel],
+    rOut,
+    rErr,
+  );
+  const t = await runToFiles(
+    ["node", TS_BIN, "-f", FORMAT, ...extra, rel],
+    tOut,
+    tErr,
+  );
 
   // Mirror the .sh harness: empty stderr files are pruned so the
   // `stderr/` directory only contains rows that actually said
@@ -273,6 +364,7 @@ const status = fail === 0 ? "PASS" : "FAIL";
 
 const summaryLines: string[] = [
   `format=${FORMAT}`,
+  `variant=${VARIANT}`,
   `status=${status}`,
   `files_total=${total}`,
   `files_pass=${pass}`,
