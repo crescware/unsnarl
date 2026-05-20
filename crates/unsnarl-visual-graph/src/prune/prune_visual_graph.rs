@@ -35,7 +35,7 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
         return PruneResult {
             graph: clone_graph(graph),
             per_query: Vec::new(),
-            root_ids: HashSet::new(),
+            root_ids: Vec::new(),
         };
     }
 
@@ -47,13 +47,19 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
             matched: 0,
         })
         .collect();
-    let mut root_ids: HashSet<String> = HashSet::new();
+    // Two parallel containers: a Vec preserves the
+    // `iterate_visual_nodes` walk order (which the TS port's
+    // `ReadonlySet<string>` reproduces via insertion-order iteration),
+    // while the HashSet keeps lookups O(1) during the subgraph sweep
+    // and during BFS.
+    let mut root_ids: Vec<String> = Vec::new();
+    let mut root_ids_set: HashSet<String> = HashSet::new();
 
     iterate_visual_nodes(&graph.elements, &mut |node| {
         for (i, q) in options.roots.iter().enumerate() {
             if node_matches_query(node, q) {
-                if root_ids.insert(node.id().to_string()) {
-                    // newly matched id contributes to its query's count
+                if root_ids_set.insert(node.id().to_string()) {
+                    root_ids.push(node.id().to_string());
                 }
                 per_query[i].matched += 1;
             }
@@ -72,11 +78,10 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
             }
             let mut added: u32 = 0;
             for id in collect_node_ids(sg.elements()) {
-                if root_ids.contains(&id) {
-                    continue;
+                if root_ids_set.insert(id.clone()) {
+                    root_ids.push(id);
+                    added += 1;
                 }
-                root_ids.insert(id);
-                added += 1;
             }
             if added > 0 {
                 per_query[i].matched += added;
@@ -90,9 +95,9 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
     // boundaryEdges so renderers can hint at "more context exists in
     // this direction" without pulling the next generation of nodes
     // into the diagram.
-    let inner_d = bfs(&root_ids, &adj.out_edges, options.descendants as i32);
-    let inner_a = bfs(&root_ids, &adj.in_edges, options.ancestors as i32);
-    let mut reachable: HashSet<String> = root_ids
+    let inner_d = bfs(&root_ids_set, &adj.out_edges, options.descendants as i32);
+    let inner_a = bfs(&root_ids_set, &adj.in_edges, options.ancestors as i32);
+    let mut reachable: HashSet<String> = root_ids_set
         .iter()
         .chain(inner_d.iter())
         .chain(inner_a.iter())

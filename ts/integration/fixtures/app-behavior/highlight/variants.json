@@ -1,0 +1,43 @@
+{
+  "variants": [
+    {
+      "kind": "highlight",
+      "slug": "name-a",
+      "highlight": { "mode": "queries", "raw": "a" }
+    },
+    {
+      "kind": "highlight",
+      "slug": "line-8",
+      "highlight": { "mode": "queries", "raw": "8" }
+    },
+    {
+      "kind": "highlight",
+      "slug": "miss",
+      "highlight": { "mode": "queries", "raw": "zzz" }
+    },
+    {
+      "kind": "pruned-highlight",
+      "slug": "roots-b-c1",
+      "roots": "b",
+      "descendants": 1,
+      "ancestors": 1,
+      "highlight": { "mode": "roots" }
+    },
+    {
+      "kind": "pruned-highlight",
+      "slug": "roots-b-c1-highlight-c",
+      "roots": "b",
+      "descendants": 1,
+      "ancestors": 1,
+      "highlight": { "mode": "queries", "raw": "c" }
+    },
+    {
+      "kind": "pruned-highlight",
+      "slug": "roots-b-c1-highlight-outside",
+      "roots": "b",
+      "descendants": 1,
+      "ancestors": 1,
+      "highlight": { "mode": "queries", "raw": "seed" }
+    }
+  ]
+}

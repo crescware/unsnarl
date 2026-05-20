@@ -993,6 +993,7 @@ dependencies = [
  "unsnarl-emitter",
  "unsnarl-emitter-mermaid",
  "unsnarl-ir",
+ "unsnarl-root-query",
  "unsnarl-visual-graph",
 ]
 

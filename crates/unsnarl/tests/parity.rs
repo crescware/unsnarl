@@ -12,19 +12,20 @@
 //! The TS baselines are treated as the source of truth; the
 //! `expected.*` files are never written back from Rust.
 //!
-//! ## Pruning / depth variants
+//! ## Pruning / depth / highlight variants
 //!
 //! Some fixtures additionally carry sibling `pruned-<slug>/`,
-//! `depth-<slug>/`, or `pruned-depth-<slug>/` directories whose
-//! expected baselines reflect a pruned, depth-collapsed, or combined
-//! visual graph. The TS test-snapshot setup
+//! `depth-<slug>/`, `pruned-depth-<slug>/`, `highlight-<slug>/`, or
+//! `pruned-highlight-<slug>/` directories whose expected baselines
+//! reflect a pruned, depth-collapsed, highlighted, or combined visual
+//! graph. The TS test-snapshot setup
 //! (`ts/integration/fixture-snapshot.ts` invoked from `index.test.ts`)
-//! declares the underlying pruning / depth options inline. The Rust
-//! harness reads the same options from an adjacent `variants.json`
-//! manifest in the fixture root (one entry per variant slug) and
-//! runs the pipeline with the matching
-//! [`PruningRunOptions`] / [`NestingDepths`] so the variant
-//! baselines stay covered.
+//! declares the underlying pruning / depth / highlight options inline.
+//! The Rust harness reads the same options from an adjacent
+//! `variants.json` manifest in the fixture root (one entry per
+//! variant slug) and runs the pipeline with the matching
+//! [`PruningRunOptions`] / [`NestingDepths`] / [`HighlightRunOptions`]
+//! so the variant baselines stay covered.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -35,6 +36,7 @@ use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::DARK_THEME;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
+use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
 use unsnarl::pipeline::prune::PruningRunOptions;
 use unsnarl::pipeline::{
@@ -131,6 +133,7 @@ struct FixtureCase {
     baseline: Baseline,
     pruning: Option<PruningRunOptions>,
     depths: Option<NestingDepths>,
+    highlight: Option<HighlightRunOptions>,
 }
 
 fn collect_fixtures() -> Vec<FixtureCase> {
@@ -187,6 +190,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                 baseline,
                 pruning: None,
                 depths: None,
+                highlight: None,
             });
         }
         // Generate variant cases from a sibling `variants.json`
@@ -213,6 +217,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                 }
                 let pruning = variant.pruning();
                 let depths = variant.depths.clone();
+                let highlight = variant.highlight();
                 out.push(FixtureCase {
                     name: format!(
                         "{rel_name}/{}::{}",
@@ -225,6 +230,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                     baseline,
                     pruning,
                     depths,
+                    highlight,
                 });
             }
         }
@@ -240,10 +246,11 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
 /// Per-fixture variant declared in `variants.json`.
 ///
 /// One entry per variant sibling directory. Mirrors the `pruning` /
-/// `depths` args of `fixtureSnapshot` in
+/// `depths` / `highlight` args of `fixtureSnapshot` in
 /// `ts/integration/fixture-snapshot.ts`. `kind` selects whether the
-/// variant directory is `pruned-<slug>/`, `depth-<slug>/`, or
-/// `pruned-depth-<slug>/`; the field defaults to `pruned` for
+/// variant directory is `pruned-<slug>/`, `depth-<slug>/`,
+/// `pruned-depth-<slug>/`, `highlight-<slug>/`, or
+/// `pruned-highlight-<slug>/`; the field defaults to `pruned` for
 /// backward compatibility with the original manifests (which only
 /// described pruning variants).
 #[derive(Clone, Copy)]
@@ -251,6 +258,8 @@ enum VariantKind {
     Pruned,
     Depth,
     PrunedDepth,
+    Highlight,
+    PrunedHighlight,
 }
 
 impl VariantKind {
@@ -259,8 +268,11 @@ impl VariantKind {
             "pruned" => Ok(Self::Pruned),
             "depth" => Ok(Self::Depth),
             "pruned-depth" => Ok(Self::PrunedDepth),
+            "highlight" => Ok(Self::Highlight),
+            "pruned-highlight" => Ok(Self::PrunedHighlight),
             other => Err(format!(
-                "unknown variant kind '{other}' (expected 'pruned', 'depth', or 'pruned-depth')"
+                "unknown variant kind '{other}' (expected 'pruned', 'depth', \
+                 'pruned-depth', 'highlight', or 'pruned-highlight')"
             )),
         }
     }
@@ -270,12 +282,32 @@ impl VariantKind {
             Self::Pruned => "pruned",
             Self::Depth => "depth",
             Self::PrunedDepth => "pruned-depth",
+            Self::Highlight => "highlight",
+            Self::PrunedHighlight => "pruned-highlight",
         }
     }
 
     fn needs_pruning(self) -> bool {
-        matches!(self, Self::Pruned | Self::PrunedDepth)
+        matches!(
+            self,
+            Self::Pruned | Self::PrunedDepth | Self::PrunedHighlight
+        )
     }
+
+    fn needs_highlight(self) -> bool {
+        matches!(self, Self::Highlight | Self::PrunedHighlight)
+    }
+}
+
+/// `highlight` field on a variant. Mirrors `FixtureHighlight` in
+/// `ts/integration/fixture-snapshot.ts`:
+/// - `Roots` -> `-H` with no inline value (the highlight follows
+///   `pruning.roots`; only meaningful alongside a pruned variant).
+/// - `Queries(raw)` -> `-H <raw>`. The raw string is fed verbatim to
+///   `parse_root_queries`, matching the grammar the CLI accepts.
+enum HighlightSpec {
+    Roots,
+    Queries(String),
 }
 
 struct VariantSpec {
@@ -285,6 +317,7 @@ struct VariantSpec {
     descendants: Option<u32>,
     ancestors: Option<u32>,
     depths: Option<NestingDepths>,
+    highlight: Option<HighlightSpec>,
 }
 
 impl VariantSpec {
@@ -316,6 +349,22 @@ impl VariantSpec {
             }),
         })
     }
+
+    fn highlight(&self) -> Option<HighlightRunOptions> {
+        let spec = self.highlight.as_ref()?;
+        Some(match spec {
+            HighlightSpec::Roots => HighlightRunOptions::Roots,
+            HighlightSpec::Queries(raw) => {
+                let queries: Vec<ParsedRootQuery> = parse_root_queries(raw).unwrap_or_else(|e| {
+                    panic!(
+                        "variant {}: parse_root_queries({}) failed: {e}",
+                        self.slug, raw
+                    )
+                });
+                HighlightRunOptions::Queries(queries)
+            }
+        })
+    }
 }
 
 fn read_variants(dir: &Path) -> Vec<VariantSpec> {
@@ -328,15 +377,15 @@ fn read_variants(dir: &Path) -> Vec<VariantSpec> {
             "failed to parse {}: {e}\nThe manifest must be a JSON object \
              {{\"variants\": [{{\"kind\": ..., \"slug\": ..., \
              \"roots\": ..., \"descendants\": ..., \"ancestors\": ..., \
-             \"depths\": ...}}, ...]}}.",
+             \"depths\": ..., \"highlight\": ...}}, ...]}}.",
             manifest.display()
         )
     })
 }
 
 /// Minimal JSON manifest parser. The schema is fixed (`variants[]`
-/// of `{kind?, slug, roots?, descendants?, ancestors?, depths?}`) so
-/// a hand-written parser avoids pulling `serde` into the dev-dep
+/// of `{kind?, slug, roots?, descendants?, ancestors?, depths?, highlight?}`)
+/// so a hand-written parser avoids pulling `serde` into the dev-dep
 /// surface beyond the `serde_json::Value` already in use.
 fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
     let value: serde_json::Value = serde_json::from_str(text).map_err(|e| e.to_string())?;
@@ -367,6 +416,10 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
             Some(d) => Some(parse_depths(slug, d)?),
             None => None,
         };
+        let highlight = match v.get("highlight") {
+            Some(h) => Some(parse_highlight(slug, h)?),
+            None => None,
+        };
         if kind.needs_pruning() && (roots.is_none() || descendants.is_none() || ancestors.is_none())
         {
             return Err(format!(
@@ -380,6 +433,12 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
                 kind.dir_prefix()
             ));
         }
+        if kind.needs_highlight() && highlight.is_none() {
+            return Err(format!(
+                "variant {slug}: kind '{}' requires 'highlight'",
+                kind.dir_prefix()
+            ));
+        }
         out.push(VariantSpec {
             kind,
             slug: slug.to_string(),
@@ -387,9 +446,51 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
             descendants,
             ancestors,
             depths,
+            highlight,
         });
     }
     Ok(out)
+}
+
+/// Parse the `highlight` field. Two shapes are accepted, matching the
+/// TS `FixtureHighlight` union: `{"mode": "roots"}` for the `-H`
+/// no-value form (the highlight follows `pruning.roots`), and
+/// `{"mode": "queries", "raw": "<raw>"}` for `-H <raw>`. The raw
+/// string is fed verbatim to `parse_root_queries` so multi-token
+/// strings (`"a,L7"`) round-trip unchanged.
+fn parse_highlight(slug: &str, v: &serde_json::Value) -> Result<HighlightSpec, String> {
+    let obj = v
+        .as_object()
+        .ok_or_else(|| format!("variant {slug}: 'highlight' must be an object"))?;
+    let mode = obj
+        .get("mode")
+        .and_then(|m| m.as_str())
+        .ok_or_else(|| format!("variant {slug}: 'highlight.mode' is required"))?;
+    match mode {
+        "roots" => {
+            if obj.len() != 1 {
+                return Err(format!(
+                    "variant {slug}: 'highlight.mode' is 'roots'; no other keys are allowed"
+                ));
+            }
+            Ok(HighlightSpec::Roots)
+        }
+        "queries" => {
+            let raw = obj.get("raw").and_then(|r| r.as_str()).ok_or_else(|| {
+                format!("variant {slug}: 'highlight.raw' is required when mode is 'queries'")
+            })?;
+            if obj.len() != 2 {
+                return Err(format!(
+                    "variant {slug}: 'highlight' has unexpected keys; allowed shapes are \
+                     {{\"mode\": \"roots\"}} or {{\"mode\": \"queries\", \"raw\": \"...\"}}"
+                ));
+            }
+            Ok(HighlightSpec::Queries(raw.to_string()))
+        }
+        other => Err(format!(
+            "variant {slug}: 'highlight.mode' is '{other}' (expected 'roots' or 'queries')"
+        )),
+    }
 }
 
 /// Parse the `depths` field. Supports either a uniform shorthand
@@ -473,6 +574,7 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
     let run = PipelineRunOptions {
         pruning: case.pruning.as_ref(),
         depths: case.depths.as_ref(),
+        highlight: case.highlight.as_ref(),
     };
     let actual = match case.baseline {
         Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true)

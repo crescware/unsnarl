@@ -6,8 +6,11 @@ use unsnarl_emitter::DEFAULT_DEPTH;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
 use unsnarl_ir::nesting_kind::NestingDepths;
+use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
-use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
+use crate::cli::args::{
+    Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer, Highlight,
+};
 use crate::cli::run_cli::emit_out_flag_notice;
 use crate::pipeline::prune::PruningRunOptions;
 use crate::pipeline::{
@@ -49,9 +52,11 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let theme = color_theme_for(&args.color_theme);
     let pruning = pruning_from_args(args);
     let depths = depths_from_args(args);
+    let highlight = highlight_from_args(args);
     let run = PipelineRunOptions {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
+        highlight: highlight.as_ref(),
     };
     match emit_mermaid_text(
         &code,
@@ -95,6 +100,19 @@ fn depths_from_args(args: &Args) -> NestingDepths {
         switch: block,
         try_catch_finally: block,
         block,
+    }
+}
+
+/// Translate the CLI's `-H` / `--highlight` flag into the pipeline's
+/// [`HighlightRunOptions`]. Mirrors the TS `buildRunOpts` mapping:
+/// `Highlight::Absent` -> `None`, `Highlight::NoValue` -> `Roots`
+/// (the highlight follows `-r/--roots`), `Highlight::Value(queries)`
+/// -> `Queries(queries)`.
+fn highlight_from_args(args: &Args) -> Option<HighlightRunOptions> {
+    match &args.highlight {
+        Highlight::Absent => None,
+        Highlight::NoValue => Some(HighlightRunOptions::Roots),
+        Highlight::Value(queries) => Some(HighlightRunOptions::Queries(queries.clone())),
     }
 }
 
@@ -205,9 +223,11 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     };
     let pruning = pruning_from_args(args);
     let depths = depths_from_args(args);
+    let highlight = highlight_from_args(args);
     let run = PipelineRunOptions {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
+        highlight: highlight.as_ref(),
     };
     match emit_json_text(&code, &source_path, language, args.pretty_json, run) {
         Ok(text) => {
@@ -227,9 +247,11 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let theme = color_theme_for(&args.color_theme);
     let pruning = pruning_from_args(args);
     let depths = depths_from_args(args);
+    let highlight = highlight_from_args(args);
     let run = PipelineRunOptions {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
+        highlight: highlight.as_ref(),
     };
     match emit_markdown_text(
         &code,
@@ -256,9 +278,11 @@ fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     };
     let pruning = pruning_from_args(args);
     let depths = depths_from_args(args);
+    let highlight = highlight_from_args(args);
     let run = PipelineRunOptions {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
+        highlight: highlight.as_ref(),
     };
     match emit_stats_text(&code, &source_path, language, run) {
         Ok(text) => {

@@ -6,6 +6,7 @@
 //! result with [`IrEmitter`]. Visual-graph / pruning / highlight
 //! plumbing comes in later steps (#122 onward).
 
+pub mod highlight;
 pub mod prune;
 
 use std::path::Path;
@@ -28,6 +29,7 @@ use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
+use unsnarl_visual_graph::highlight::{collect_highlight_ids, HighlightRunOptions};
 use unsnarl_visual_graph::prune::{
     prune_visual_graph, resolve_ambiguous_queries, PruneOptions, RootQueryResolution,
 };
@@ -45,6 +47,7 @@ use crate::pipeline::prune::PruningRunOptions;
 pub struct PipelineRunOptions<'a> {
     pub pruning: Option<&'a PruningRunOptions>,
     pub depths: Option<&'a NestingDepths>,
+    pub highlight: Option<&'a HighlightRunOptions>,
 }
 
 /// Map a path's extension to a [`Language`]. Mirrors
@@ -103,6 +106,8 @@ pub fn emit_ir_text(
             pruned_graph: None,
             resolutions: None,
             depths: None,
+            highlight_ids: None,
+            highlight: None,
         },
     )
 }
@@ -218,34 +223,81 @@ struct EmitOptionsBase {
     debug: bool,
 }
 
-/// Build a pruned [`VisualGraph`] (plus the `LineOrName`
-/// disambiguation log) ready to hand to an emitter via
-/// [`EmitOptions::pruned_graph`] / [`EmitOptions::resolutions`].
+/// Output of the pre-emit visual-graph orchestration: the pruned
+/// graph (when `-r` was given), the `LineOrName` disambiguation log,
+/// the highlight id list (when `-H` was given), and the kept-as-given
+/// highlight request so the markdown emitter can reconstruct `-H` in
+/// the Query block.
+struct PreparedEmit {
+    pruned_graph: Option<VisualGraph>,
+    resolutions: Option<Vec<RootQueryResolution>>,
+    highlight_ids: Option<Vec<String>>,
+    highlight: Option<HighlightRunOptions>,
+}
+
+/// Build the visual graph once and run pruning / highlight on it.
 ///
-/// Mirrors `runDetailed`'s pruning block in
-/// `ts/src/pipeline/runner/pipeline-runner.ts`: build the base graph,
-/// rewrite any `LineOrName` queries, prune.
-fn prepare_pruning(
+/// Mirrors `runDetailed`'s pruning + highlight block in
+/// `ts/src/pipeline/pipeline.ts`. Pruning runs first (since `-H` in
+/// roots mode follows the prune walk's root ids); highlight then
+/// resolves against the working graph — the pruned one when pruning
+/// is active, the base one otherwise.
+fn prepare_emit(
     ir: &SerializedIR,
-    pruning: &PruningRunOptions,
+    pruning: Option<&PruningRunOptions>,
     depths: Option<&NestingDepths>,
-) -> (VisualGraph, Vec<RootQueryResolution>) {
+    highlight: Option<&HighlightRunOptions>,
+) -> PreparedEmit {
     let base = build_visual_graph(
         ir,
         &BuildVisualGraphOptions {
             depths: depths.cloned(),
         },
     );
-    let resolved = resolve_ambiguous_queries(&base, &pruning.roots);
-    let result = prune_visual_graph(
-        &base,
-        &PruneOptions {
-            roots: resolved.resolved,
-            descendants: pruning.descendants,
-            ancestors: pruning.ancestors,
-        },
-    );
-    (result.graph, resolved.resolutions)
+
+    let mut pruned_graph: Option<VisualGraph> = None;
+    let mut resolutions_out: Option<Vec<RootQueryResolution>> = None;
+    let mut prune_root_ids: Option<Vec<String>> = None;
+    if let Some(p) = pruning {
+        if !p.roots.is_empty() {
+            let resolved = resolve_ambiguous_queries(&base, &p.roots);
+            let result = prune_visual_graph(
+                &base,
+                &PruneOptions {
+                    roots: resolved.resolved,
+                    descendants: p.descendants,
+                    ancestors: p.ancestors,
+                },
+            );
+            prune_root_ids = Some(result.root_ids);
+            pruned_graph = Some(result.graph);
+            resolutions_out = Some(resolved.resolutions);
+        }
+    }
+
+    let highlight_ids = highlight.map(|h| match h {
+        // Roots mode mirrors `-r`'s match set verbatim, so it inherits
+        // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
+        // and `-r counter -H` exclude the same use-site kinds). When
+        // `-r` was not given the prune root set is empty — paint
+        // nothing.
+        HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
+        // Queries mode (`-H <raw>`) uses the looser highlight matcher
+        // so explicit highlight queries paint every occurrence of the
+        // identifier.
+        HighlightRunOptions::Queries(queries) => {
+            let working = pruned_graph.as_ref().unwrap_or(&base);
+            let resolved = resolve_ambiguous_queries(working, queries);
+            collect_highlight_ids(working, &resolved.resolved)
+        }
+    });
+
+    PreparedEmit {
+        pruned_graph,
+        resolutions: resolutions_out,
+        highlight_ids,
+        highlight: highlight.cloned(),
+    }
 }
 
 fn emit_pruning_aware_with(
@@ -257,21 +309,28 @@ fn emit_pruning_aware_with(
     base_opts: EmitOptionsBase,
 ) -> Result<String, ParseError> {
     let serialized = serialize_ir(code, source_path, language)?;
-    let (pruned_graph, resolutions) = match run.pruning {
-        Some(p) if !p.roots.is_empty() => {
-            let (g, r) = prepare_pruning(&serialized, p, run.depths);
-            (Some(g), Some(r))
+    let needs_visual =
+        run.pruning.map(|p| !p.roots.is_empty()).unwrap_or(false) || run.highlight.is_some();
+    let prepared = if needs_visual {
+        prepare_emit(&serialized, run.pruning, run.depths, run.highlight)
+    } else {
+        PreparedEmit {
+            pruned_graph: None,
+            resolutions: None,
+            highlight_ids: None,
+            highlight: None,
         }
-        _ => (None, None),
     };
     Ok(emitter.emit(
         &serialized,
         &EmitOptions {
             pretty_json: base_opts.pretty_json,
             debug: base_opts.debug,
-            pruned_graph,
-            resolutions,
+            pruned_graph: prepared.pruned_graph,
+            resolutions: prepared.resolutions,
             depths: run.depths.cloned(),
+            highlight_ids: prepared.highlight_ids,
+            highlight: prepared.highlight,
         },
     ))
 }

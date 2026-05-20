@@ -20,12 +20,14 @@ use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 use unsnarl_visual_graph::visual_node::VisualNode;
 
+use crate::collect_highlight_edge_indices::collect_highlight_edge_indices;
 use crate::collect_import_sources::collect_import_sources;
 use crate::collect_nodes_into::collect_nodes_into;
 use crate::collect_wrapped_owner_ids::collect_wrapped_owner_ids;
 use crate::push_edge_lines::push_edge_lines;
 use crate::render_boundary_edges::render_boundary_edges;
 use crate::render_class_defs::render_class_defs;
+use crate::render_highlight::render_highlight;
 use crate::render_pruning_comment::render_pruning_comment;
 use crate::render_state::RenderState;
 use crate::render_synthetic_node_block::render_synthetic_node_block;
@@ -81,7 +83,13 @@ impl Emitter for MermaidEmitter {
             );
             &built
         };
-        render_mermaid(graph, self.strategy, self.theme, opts.debug)
+        render_mermaid(
+            graph,
+            self.strategy,
+            self.theme,
+            opts.debug,
+            opts.highlight_ids.as_deref(),
+        )
     }
 }
 
@@ -90,6 +98,7 @@ fn render_mermaid(
     strategy: MermaidStrategy,
     theme: &'static ColorTheme,
     debug: bool,
+    highlight_ids: Option<&[String]>,
 ) -> String {
     // The strategy decides which renderer-specific lines (e.g. the
     // elk init directive) and which empty-subgraph patches are
@@ -173,6 +182,17 @@ fn render_mermaid(
         state.theme,
         &mut state.lines,
     );
+
+    if let Some(ids) = highlight_ids {
+        let id_lookup: HashSet<String> = ids.iter().cloned().collect();
+        let edge_indices = collect_highlight_edge_indices(
+            &body_edges,
+            &import_edges,
+            &graph.boundary_edges,
+            &id_lookup,
+        );
+        render_highlight(ids, &edge_indices, state.theme, &mut state.lines);
+    }
 
     for l in strategy.trailer_lines(&state.placeholder_ids, state.theme) {
         state.lines.push(l);
