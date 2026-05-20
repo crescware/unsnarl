@@ -207,3 +207,132 @@ fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
         "expected no -o notice, got stderr: {err}"
     );
 }
+
+// `pruning_from_args` mirrors `resolveGenerations` in
+// `ts/src/cli/run-cli/resolve-generations.ts`. The cases below port
+// `ts/src/cli/run-cli/resolve-generations.test.ts` 1:1 plus the
+// no-roots guard (TS expresses that guard in `runDetailed`; here it
+// is folded into `pruning_from_args` so the parity is verified at
+// the same seam).
+//
+// `parse_with` builds an `Args` from a synthetic argv so we exercise
+// the same clap parser the binary uses (including the `-r` query
+// parser and the `-A/-B/-C` value parsers).
+
+fn parse_with(argv: &[&str]) -> Args {
+    Args::try_parse_from(argv).expect("argv should parse")
+}
+
+#[test]
+fn pruning_from_args_returns_none_when_no_roots_are_given() {
+    let args = parse_with(&["uns", "x.ts"]);
+    assert!(pruning_from_args(&args).is_none());
+}
+
+#[test]
+fn pruning_from_args_no_radius_flag_yields_symmetric_default_generations() {
+    let args = parse_with(&["uns", "-r", "render", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, DEFAULT_GENERATIONS);
+    assert_eq!(p.ancestors, DEFAULT_GENERATIONS);
+}
+
+#[test]
+fn pruning_from_args_only_a_falls_other_side_to_zero() {
+    let args = parse_with(&["uns", "-r", "render", "-A", "3", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 3);
+    assert_eq!(p.ancestors, 0);
+}
+
+#[test]
+fn pruning_from_args_only_b_falls_other_side_to_zero() {
+    let args = parse_with(&["uns", "-r", "render", "-B", "4", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 0);
+    assert_eq!(p.ancestors, 4);
+}
+
+#[test]
+fn pruning_from_args_only_c_applies_to_both_sides() {
+    let args = parse_with(&["uns", "-r", "render", "-C", "5", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 5);
+    assert_eq!(p.ancestors, 5);
+}
+
+#[test]
+fn pruning_from_args_c_plus_a_only_lets_b_inherit_context() {
+    let args = parse_with(&["uns", "-r", "render", "-A", "1", "-C", "5", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 1);
+    assert_eq!(p.ancestors, 5);
+}
+
+#[test]
+fn pruning_from_args_explicit_a_and_b_make_c_irrelevant() {
+    let args = parse_with(&[
+        "uns", "-r", "render", "-A", "1", "-B", "2", "-C", "99", "x.ts",
+    ]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 1);
+    assert_eq!(p.ancestors, 2);
+}
+
+#[test]
+fn pruning_from_args_zero_is_explicit_not_falsy() {
+    // `-A 0` says "no descendants generations"; the unspecified `-B`
+    // still falls to 0 per the grep-style asymmetric rule.
+    let args = parse_with(&["uns", "-r", "render", "-A", "0", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    assert_eq!(p.descendants, 0);
+    assert_eq!(p.ancestors, 0);
+}
+
+#[test]
+fn pruning_from_args_preserves_root_query_order_and_raw_tokens() {
+    let args = parse_with(&["uns", "-r", "1,foo", "-r", "2-3", "x.ts"]);
+    let p = pruning_from_args(&args).expect("pruning options");
+    let raws: Vec<&str> = p
+        .roots
+        .iter()
+        .map(|q| match q {
+            unsnarl_root_query::ParsedRootQuery::Line { raw, .. }
+            | unsnarl_root_query::ParsedRootQuery::LineName { raw, .. }
+            | unsnarl_root_query::ParsedRootQuery::Range { raw, .. }
+            | unsnarl_root_query::ParsedRootQuery::RangeName { raw, .. }
+            | unsnarl_root_query::ParsedRootQuery::Name { raw, .. }
+            | unsnarl_root_query::ParsedRootQuery::LineOrName { raw, .. } => raw.as_str(),
+        })
+        .collect();
+    assert_eq!(raws, vec!["1", "foo", "2-3"]);
+}
+
+#[test]
+fn run_to_with_dash_r_emits_pruning_summary_in_mermaid_output() {
+    // End-to-end: parse argv with `-r`, dispatch through `run_to`,
+    // verify the mermaid emitter rendered the pruning summary comment
+    // the CLI is wired to produce. This is the seam that bench-parity
+    // does not exercise (it never passes `-r`).
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const a = 1;\nconst b = a;\nconst c = b;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "mermaid", "-r", "a", "-C", "1", &path]);
+    // The mermaid emitter prefixes the diagram with a `%% pruning
+    // roots <summary> ancestors=<N> descendants=<M>` comment when
+    // `VisualGraph.pruning` is populated. Confirming the summary line
+    // is enough to prove that prune-from-CLI plumbing fired and the
+    // pruned graph reached the emitter.
+    assert!(
+        out.contains("%% pruning roots a=1 ancestors=1 descendants=1"),
+        "expected pruning summary line, got:\n{out}"
+    );
+}

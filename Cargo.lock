@@ -953,6 +953,7 @@ version = "0.3.0-beta.4"
 dependencies = [
  "unsnarl-annotations",
  "unsnarl-ir",
+ "unsnarl-visual-graph",
 ]
 
 [[package]]
@@ -992,6 +993,7 @@ dependencies = [
  "unsnarl-emitter",
  "unsnarl-emitter-mermaid",
  "unsnarl-ir",
+ "unsnarl-visual-graph",
 ]
 
 [[package]]

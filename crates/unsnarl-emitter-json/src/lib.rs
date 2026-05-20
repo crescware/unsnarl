@@ -41,11 +41,17 @@ impl Emitter for JsonEmitter {
     }
 
     fn emit(&self, ir: &SerializedIR, opts: &EmitOptions) -> String {
-        let graph = build_visual_graph(ir, &BuildVisualGraphOptions::default());
-        let text = if opts.pretty_json {
-            serde_json::to_string_pretty(&graph).expect("VisualGraph is serializable")
+        let built;
+        let graph = if let Some(pruned) = &opts.pruned_graph {
+            pruned
         } else {
-            serde_json::to_string(&graph).expect("VisualGraph is serializable")
+            built = build_visual_graph(ir, &BuildVisualGraphOptions::default());
+            &built
+        };
+        let text = if opts.pretty_json {
+            serde_json::to_string_pretty(graph).expect("VisualGraph is serializable")
+        } else {
+            serde_json::to_string(graph).expect("VisualGraph is serializable")
         };
         format!("{text}\n")
     }

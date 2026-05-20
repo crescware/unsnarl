@@ -6,6 +6,8 @@
 //! result with [`IrEmitter`]. Visual-graph / pruning / highlight
 //! plumbing comes in later steps (#122 onward).
 
+pub mod prune;
+
 use std::path::Path;
 
 use oxc_allocator::Allocator;
@@ -21,7 +23,16 @@ use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::ColorTheme;
 use unsnarl_emitter_mermaid::MermaidEmitter;
 use unsnarl_emitter_stats::StatsEmitter;
+use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
+use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
+use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
+use unsnarl_visual_graph::prune::{
+    prune_visual_graph, resolve_ambiguous_queries, PruneOptions, RootQueryResolution,
+};
+use unsnarl_visual_graph::visual_graph::VisualGraph;
+
+use crate::pipeline::prune::PruningRunOptions;
 
 /// Map a path's extension to a [`Language`]. Mirrors
 /// `fixtureLanguageFromExt` in `ts/integration/fixture-snapshot.ts`.
@@ -76,6 +87,8 @@ pub fn emit_ir_text(
         &EmitOptions {
             pretty_json,
             debug: false,
+            pruned_graph: None,
+            resolutions: None,
         },
     )
 }
@@ -89,13 +102,15 @@ pub fn emit_json_text(
     source_path: &str,
     language: Language,
     pretty_json: bool,
+    pruning: Option<&PruningRunOptions>,
 ) -> Result<String, ParseError> {
-    emit_text_with(
+    emit_pruning_aware_with(
         code,
         source_path,
         language,
         &JsonEmitter,
-        &EmitOptions {
+        pruning,
+        EmitOptionsBase {
             pretty_json,
             debug: false,
         },
@@ -113,14 +128,16 @@ pub fn emit_mermaid_text(
     strategy: MermaidStrategy,
     theme: &'static ColorTheme,
     debug: bool,
+    pruning: Option<&PruningRunOptions>,
 ) -> Result<String, ParseError> {
     let emitter = MermaidEmitter::new(strategy, theme);
-    emit_text_with(
+    emit_pruning_aware_with(
         code,
         source_path,
         language,
         &emitter,
-        &EmitOptions {
+        pruning,
+        EmitOptionsBase {
             pretty_json: false,
             debug,
         },
@@ -141,15 +158,17 @@ pub fn emit_markdown_text(
     strategy: MermaidStrategy,
     theme: &'static ColorTheme,
     debug: bool,
+    pruning: Option<&PruningRunOptions>,
 ) -> Result<String, ParseError> {
     let mermaid = MermaidEmitter::new(strategy, theme);
     let emitter = MarkdownEmitter::new(mermaid);
-    emit_text_with(
+    emit_pruning_aware_with(
         code,
         source_path,
         language,
         &emitter,
-        &EmitOptions {
+        pruning,
+        EmitOptionsBase {
             pretty_json: false,
             debug,
         },
@@ -164,26 +183,83 @@ pub fn emit_stats_text(
     code: &str,
     source_path: &str,
     language: Language,
+    pruning: Option<&PruningRunOptions>,
 ) -> Result<String, ParseError> {
-    emit_text_with(
+    emit_pruning_aware_with(
         code,
         source_path,
         language,
         &StatsEmitter,
-        &EmitOptions {
+        pruning,
+        EmitOptionsBase {
             pretty_json: false,
             debug: false,
         },
     )
 }
 
-fn emit_text_with(
+#[derive(Clone, Copy)]
+struct EmitOptionsBase {
+    pretty_json: bool,
+    debug: bool,
+}
+
+/// Build a pruned [`VisualGraph`] (plus the `LineOrName`
+/// disambiguation log) ready to hand to an emitter via
+/// [`EmitOptions::pruned_graph`] / [`EmitOptions::resolutions`].
+///
+/// Mirrors `runDetailed`'s pruning block in
+/// `ts/src/pipeline/runner/pipeline-runner.ts`: build the base graph,
+/// rewrite any `LineOrName` queries, prune.
+fn prepare_pruning(
+    ir: &SerializedIR,
+    pruning: &PruningRunOptions,
+) -> (VisualGraph, Vec<RootQueryResolution>) {
+    let base = build_visual_graph(ir, &BuildVisualGraphOptions::default());
+    let resolved = resolve_ambiguous_queries(&base, &pruning.roots);
+    let result = prune_visual_graph(
+        &base,
+        &PruneOptions {
+            roots: resolved.resolved,
+            descendants: pruning.descendants,
+            ancestors: pruning.ancestors,
+        },
+    );
+    (result.graph, resolved.resolutions)
+}
+
+fn emit_pruning_aware_with(
     code: &str,
     source_path: &str,
     language: Language,
     emitter: &dyn Emitter,
-    options: &EmitOptions,
+    pruning: Option<&PruningRunOptions>,
+    base_opts: EmitOptionsBase,
 ) -> Result<String, ParseError> {
+    let serialized = serialize_ir(code, source_path, language)?;
+    let (pruned_graph, resolutions) = match pruning {
+        Some(p) if !p.roots.is_empty() => {
+            let (g, r) = prepare_pruning(&serialized, p);
+            (Some(g), Some(r))
+        }
+        _ => (None, None),
+    };
+    Ok(emitter.emit(
+        &serialized,
+        &EmitOptions {
+            pretty_json: base_opts.pretty_json,
+            debug: base_opts.debug,
+            pruned_graph,
+            resolutions,
+        },
+    ))
+}
+
+fn serialize_ir(
+    code: &str,
+    source_path: &str,
+    language: Language,
+) -> Result<SerializedIR, ParseError> {
     let source_type = source_type_from_path(source_path, language);
     let allocator = Allocator::default();
     let parser = OxcParser;
@@ -209,6 +285,16 @@ fn emit_text_with(
         diagnostics: &analyzed.diagnostics,
         raw: analyzed.raw,
     };
-    let serialized = serializer.serialize(&ctx);
+    Ok(serializer.serialize(&ctx))
+}
+
+fn emit_text_with(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    emitter: &dyn Emitter,
+    options: &EmitOptions,
+) -> Result<String, ParseError> {
+    let serialized = serialize_ir(code, source_path, language)?;
     Ok(emitter.emit(&serialized, options))
 }
