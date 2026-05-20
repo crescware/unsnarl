@@ -42,3 +42,30 @@ pub enum SubgraphKind {
     #[serde(rename = "block")]
     Block,
 }
+
+impl SubgraphKind {
+    /// The bare variant name as it appears in the on-disk JSON
+    /// (`"function"`, `"if-else-container"`, ...). Used by the
+    /// mermaid emitter's `--debug` mode to splice the kind name
+    /// into the rendered label.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::Function => "function",
+            Self::Class => "class",
+            Self::Switch => "switch",
+            Self::Case => "case",
+            Self::If => "if",
+            Self::Else => "else",
+            Self::IfElseContainer => "if-else-container",
+            Self::Try => "try",
+            Self::Catch => "catch",
+            Self::Finally => "finally",
+            Self::For => "for",
+            Self::While => "while",
+            Self::DoWhile => "do-while",
+            Self::Return => "return",
+            Self::Throw => "throw",
+            Self::Block => "block",
+        }
+    }
+}

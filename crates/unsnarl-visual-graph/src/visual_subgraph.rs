@@ -186,6 +186,110 @@ impl VisualSubgraph {
             Self::Control(s) => s.end_line = end_line,
         }
     }
+
+    /// Returns the logical [`SubgraphKind`] discriminator.
+    ///
+    /// Mirrors the TS code paths that branch on `sg.kind`. The two
+    /// underlying shapes (owned / control) carry their own subset
+    /// enums to preserve JSON field order; this projects them back
+    /// onto a single flat [`SubgraphKind`] so consumers can match
+    /// in one switch.
+    pub fn kind(&self) -> crate::subgraph_kind::SubgraphKind {
+        use crate::subgraph_kind::SubgraphKind;
+        match self {
+            Self::Owned(s) => match s.kind {
+                OwnedSubgraphKind::Function => SubgraphKind::Function,
+                OwnedSubgraphKind::Class => SubgraphKind::Class,
+                OwnedSubgraphKind::Return => SubgraphKind::Return,
+                OwnedSubgraphKind::Throw => SubgraphKind::Throw,
+                OwnedSubgraphKind::IfElseContainer => SubgraphKind::IfElseContainer,
+            },
+            Self::Control(s) => match s.kind {
+                ControlSubgraphKind::Case => SubgraphKind::Case,
+                ControlSubgraphKind::Switch => SubgraphKind::Switch,
+                ControlSubgraphKind::If => SubgraphKind::If,
+                ControlSubgraphKind::Else => SubgraphKind::Else,
+                ControlSubgraphKind::Try => SubgraphKind::Try,
+                ControlSubgraphKind::Catch => SubgraphKind::Catch,
+                ControlSubgraphKind::Finally => SubgraphKind::Finally,
+                ControlSubgraphKind::For => SubgraphKind::For,
+                ControlSubgraphKind::While => SubgraphKind::While,
+                ControlSubgraphKind::DoWhile => SubgraphKind::DoWhile,
+                ControlSubgraphKind::Block => SubgraphKind::Block,
+            },
+        }
+    }
+
+    pub fn direction(&self) -> Direction {
+        match self {
+            Self::Owned(s) => s.direction,
+            Self::Control(s) => s.direction,
+        }
+    }
+
+    /// `ownerNodeId` from the original TS shape, present only on
+    /// `Function` subgraphs (the FunctionDeclaration's node id when
+    /// the function is named, `None` for anonymous functions).
+    pub fn owner_node_id(&self) -> Option<&str> {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::Function { owner_node_id, .. } => owner_node_id.as_deref(),
+                _ => None,
+            },
+            Self::Control(_) => None,
+        }
+    }
+
+    /// `ownerName` from the original TS shape, present only on
+    /// `Function` subgraphs. The TS field is the empty string when
+    /// the owner is anonymous; that is preserved here verbatim so
+    /// the mermaid emitter's fallback to `nodeMap` lookup matches.
+    pub fn owner_name(&self) -> Option<&str> {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::Function { owner_name, .. } => Some(owner_name.as_str()),
+                _ => None,
+            },
+            Self::Control(_) => None,
+        }
+    }
+
+    /// `className` from the original TS shape, present only on
+    /// `Class` subgraphs.
+    pub fn class_name(&self) -> Option<&str> {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::Class { class_name } => class_name.as_deref(),
+                _ => None,
+            },
+            Self::Control(_) => None,
+        }
+    }
+
+    /// `caseTest` from the original TS shape, present only on
+    /// `Case` subgraphs. `None` here corresponds to the default
+    /// case (TS records this as `null`).
+    pub fn case_test(&self) -> Option<&str> {
+        match self {
+            Self::Control(s) => match &s.extras {
+                ControlExtras::Case { case_test } => case_test.as_deref(),
+                _ => None,
+            },
+            Self::Owned(_) => None,
+        }
+    }
+
+    /// `hasElse` from the original TS shape, present only on
+    /// `IfElseContainer` subgraphs.
+    pub fn has_else(&self) -> bool {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::IfElseContainer { has_else } => *has_else,
+                _ => false,
+            },
+            Self::Control(_) => false,
+        }
+    }
 }
 
 #[cfg(test)]
