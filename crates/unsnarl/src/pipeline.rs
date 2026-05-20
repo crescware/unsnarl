@@ -16,6 +16,9 @@ use unsnarl_boundary_eslint_scope::parser::{
 use unsnarl_emitter::{EmitOptions, Emitter, IRSerializer, SerializeContext, SerializeSourceMeta};
 use unsnarl_emitter_ir::{FlatSerializer, IrEmitter};
 use unsnarl_emitter_json::JsonEmitter;
+use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
+use unsnarl_emitter_mermaid::theme::ColorTheme;
+use unsnarl_emitter_mermaid::MermaidEmitter;
 use unsnarl_ir::Language;
 
 /// Map a path's extension to a [`Language`]. Mirrors
@@ -63,7 +66,16 @@ pub fn emit_ir_text(
     language: Language,
     pretty_json: bool,
 ) -> Result<String, ParseError> {
-    emit_text_with(code, source_path, language, pretty_json, &IrEmitter)
+    emit_text_with(
+        code,
+        source_path,
+        language,
+        &IrEmitter,
+        &EmitOptions {
+            pretty_json,
+            debug: false,
+        },
+    )
 }
 
 /// Same as [`emit_ir_text`] but routes the parsed IR through
@@ -76,15 +88,49 @@ pub fn emit_json_text(
     language: Language,
     pretty_json: bool,
 ) -> Result<String, ParseError> {
-    emit_text_with(code, source_path, language, pretty_json, &JsonEmitter)
+    emit_text_with(
+        code,
+        source_path,
+        language,
+        &JsonEmitter,
+        &EmitOptions {
+            pretty_json,
+            debug: false,
+        },
+    )
+}
+
+/// Same as [`emit_ir_text`] but routes the parsed IR through
+/// [`MermaidEmitter`]. The strategy / theme decisions are made by
+/// the caller (CLI flags `--mermaid-renderer` / `--color-theme`)
+/// rather than baked into the pipeline.
+pub fn emit_mermaid_text(
+    code: &str,
+    source_path: &str,
+    language: Language,
+    strategy: MermaidStrategy,
+    theme: &'static ColorTheme,
+    debug: bool,
+) -> Result<String, ParseError> {
+    let emitter = MermaidEmitter::new(strategy, theme);
+    emit_text_with(
+        code,
+        source_path,
+        language,
+        &emitter,
+        &EmitOptions {
+            pretty_json: false,
+            debug,
+        },
+    )
 }
 
 fn emit_text_with(
     code: &str,
     source_path: &str,
     language: Language,
-    pretty_json: bool,
     emitter: &dyn Emitter,
+    options: &EmitOptions,
 ) -> Result<String, ParseError> {
     let source_type = source_type_from_path(source_path, language);
     let allocator = Allocator::default();
@@ -112,6 +158,5 @@ fn emit_text_with(
         raw: analyzed.raw,
     };
     let serialized = serializer.serialize(&ctx);
-    let options = EmitOptions { pretty_json };
-    Ok(emitter.emit(&serialized, &options))
+    Ok(emitter.emit(&serialized, options))
 }

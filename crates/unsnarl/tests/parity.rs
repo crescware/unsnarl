@@ -17,8 +17,10 @@ use std::path::{Path, PathBuf};
 
 use libtest_mimic::{Arguments, Failed, Trial};
 use pretty_assertions::StrComparison;
+use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
+use unsnarl_emitter_mermaid::theme::DARK_THEME;
 
-use unsnarl::pipeline::{emit_ir_text, emit_json_text, language_for_path};
+use unsnarl::pipeline::{emit_ir_text, emit_json_text, emit_mermaid_text, language_for_path};
 
 fn workspace_root() -> PathBuf {
     let manifest_dir = env!("CARGO_MANIFEST_DIR");
@@ -60,6 +62,11 @@ enum Baseline {
     Ir,
     /// `expected.json` (Step 13 visual-graph JSON baseline).
     Json,
+    /// `expected.mermaid` (Step 14 mermaid baseline). The harness
+    /// renders with the CLI defaults (elk strategy + dark theme,
+    /// `--debug` off) so the test bytes match the same defaults
+    /// the TS port records on disk.
+    Mermaid,
 }
 
 impl Baseline {
@@ -67,6 +74,7 @@ impl Baseline {
         match self {
             Self::Ir => "expected.ir.json",
             Self::Json => "expected.json",
+            Self::Mermaid => "expected.mermaid",
         }
     }
 
@@ -74,6 +82,7 @@ impl Baseline {
         match self {
             Self::Ir => "ir",
             Self::Json => "json",
+            Self::Mermaid => "mermaid",
         }
     }
 }
@@ -123,7 +132,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
             .to_string_lossy()
             .replace('\\', "/")
             .to_string();
-        for baseline in [Baseline::Ir, Baseline::Json] {
+        for baseline in [Baseline::Ir, Baseline::Json, Baseline::Mermaid] {
             let expected = dir.join(baseline.file_name());
             if !expected.is_file() {
                 continue;
@@ -158,6 +167,15 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
             .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?,
         Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true)
             .map_err(|e| Failed::from(format!("emit_json_text failed: {e:?}")))?,
+        Baseline::Mermaid => emit_mermaid_text(
+            &code,
+            &case.rel_source_path,
+            language,
+            MermaidStrategy::Elk,
+            &DARK_THEME,
+            false,
+        )
+        .map_err(|e| Failed::from(format!("emit_mermaid_text failed: {e:?}")))?,
     };
     if actual != expected {
         return Err(Failed::from(format!(

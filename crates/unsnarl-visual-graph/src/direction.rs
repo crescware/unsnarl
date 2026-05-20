@@ -14,3 +14,17 @@ pub enum Direction {
     TB,
     BT,
 }
+
+impl Direction {
+    /// The bare Mermaid keyword form (`RL` / `LR` / `TB` / `BT`).
+    /// Used when emitters need to splice the direction into a
+    /// `flowchart <dir>` or `direction <dir>` line.
+    pub fn as_str(self) -> &'static str {
+        match self {
+            Self::RL => "RL",
+            Self::LR => "LR",
+            Self::TB => "TB",
+            Self::BT => "BT",
+        }
+    }
+}
