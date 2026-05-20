@@ -12,20 +12,31 @@
 //! The TS baselines are treated as the source of truth; the
 //! `expected.*` files are never written back from Rust.
 //!
-//! ## Pruning / depth / highlight variants
+//! ## Pruning / depth / highlight / plugin variants
 //!
 //! Some fixtures additionally carry sibling `pruned-<slug>/`,
-//! `depth-<slug>/`, `pruned-depth-<slug>/`, `highlight-<slug>/`, or
-//! `pruned-highlight-<slug>/` directories whose expected baselines
-//! reflect a pruned, depth-collapsed, highlighted, or combined visual
-//! graph. The TS test-snapshot setup
-//! (`ts/integration/fixture-snapshot.ts` invoked from `index.test.ts`)
-//! declares the underlying pruning / depth / highlight options inline.
-//! The Rust harness reads the same options from an adjacent
-//! `variants.json` manifest in the fixture root (one entry per
-//! variant slug) and runs the pipeline with the matching
-//! [`PruningRunOptions`] / [`NestingDepths`] / [`HighlightRunOptions`]
-//! so the variant baselines stay covered.
+//! `depth-<slug>/`, `pruned-depth-<slug>/`, `highlight-<slug>/`,
+//! `pruned-highlight-<slug>/`, or `plugin-<slug>/` directories
+//! whose expected baselines reflect a pruned, depth-collapsed,
+//! highlighted, plugin-applied, or combined visual graph. The TS
+//! test-snapshot setup (`ts/integration/fixture-snapshot.ts`
+//! invoked from `index.test.ts`) declares the underlying pruning /
+//! depth / highlight / plugin options inline.
+//!
+//! The Rust harness reads the same options from a `variants.json`
+//! manifest at the mirrored path under
+//! `crates/unsnarl/tests/fixture-variants/`. The `ts/` tree is the
+//! archived TS port and accepts no new files; manifests therefore
+//! live outside it. Each manifest entry yields a
+//! [`PruningRunOptions`] / [`NestingDepths`] /
+//! [`HighlightRunOptions`] tuple that the harness runs the pipeline
+//! against before comparing the variant's baseline.
+//!
+//! `plugin-<slug>/` variants do **not** use a manifest. They are
+//! auto-discovered by scanning the fixture root for `plugin-*`
+//! sibling subdirectories and resolving `<slug>` directly against
+//! the default plugin registry (slug = post-strip plugin short
+//! name, e.g. `plugin-react` → activate `react`).
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -35,9 +46,11 @@ use pretty_assertions::StrComparison;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::DARK_THEME;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
+use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
 use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
+use unsnarl::pipeline::plugin::default_registry;
 use unsnarl::pipeline::prune::PruningRunOptions;
 use unsnarl::pipeline::{
     emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
@@ -55,6 +68,16 @@ fn workspace_root() -> PathBuf {
 
 fn fixtures_root() -> PathBuf {
     workspace_root().join("ts/integration/fixtures")
+}
+
+/// Root of the per-fixture `variants.json` manifests consumed by
+/// this harness. Lives outside `ts/` because the TS tree is the
+/// archived port — no new files are added under it. Layout mirrors
+/// the fixture tree exactly: a fixture at
+/// `ts/integration/fixtures/<rel>` reads its manifest from
+/// `crates/unsnarl/tests/fixture-variants/<rel>/variants.json`.
+fn fixture_variants_root() -> PathBuf {
+    workspace_root().join("crates/unsnarl/tests/fixture-variants")
 }
 
 fn find_input_file(dir: &Path) -> Option<PathBuf> {
@@ -123,8 +146,9 @@ impl Baseline {
 
 /// One fixture × one baseline test case (fixture root with
 /// `input.*` + the matching `expected.*` baseline). When `pruning`
-/// / `depths` are `Some`, the pipeline is run with those options
-/// before comparing against the variant's baseline.
+/// / `depths` / `highlight` are `Some`, or `plugins` is non-empty,
+/// the pipeline is run with those options before comparing against
+/// the variant's baseline.
 struct FixtureCase {
     name: String,
     input: PathBuf,
@@ -134,6 +158,9 @@ struct FixtureCase {
     pruning: Option<PruningRunOptions>,
     depths: Option<NestingDepths>,
     highlight: Option<HighlightRunOptions>,
+    /// Post-strip plugin short names to activate via the default
+    /// pipeline registry. Empty for baseline / non-plugin variants.
+    plugins: Vec<String>,
 }
 
 fn collect_fixtures() -> Vec<FixtureCase> {
@@ -142,6 +169,30 @@ fn collect_fixtures() -> Vec<FixtureCase> {
     visit_dir(&root, &root, &mut out);
     out.sort_by(|a, b| a.name.cmp(&b.name));
     out
+}
+
+/// Scan `dir` for `plugin-<slug>` sibling subdirectories and
+/// return the slugs in stable (sorted) order. The slug is the
+/// directory name with the `plugin-` prefix stripped — the same
+/// post-strip plugin short name the CLI produces from
+/// `--plugin <name>`.
+fn discover_plugin_slugs(dir: &Path) -> Vec<String> {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return Vec::new();
+    };
+    let mut slugs: Vec<String> = entries
+        .flatten()
+        .filter_map(|entry| {
+            if !entry.path().is_dir() {
+                return None;
+            }
+            let name = entry.file_name();
+            let name = name.to_string_lossy();
+            name.strip_prefix("plugin-").map(|s| s.to_string())
+        })
+        .collect();
+    slugs.sort();
+    slugs
 }
 
 fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
@@ -191,16 +242,19 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                 pruning: None,
                 depths: None,
                 highlight: None,
+                plugins: Vec::new(),
             });
         }
-        // Generate variant cases from a sibling `variants.json`
-        // manifest, if one is present. Each variant entry pulls in
-        // every baseline that exists under the variant directory.
-        // The baseline list intentionally excludes `Ir`: pruning /
-        // depth only narrow the downstream `VisualGraph`, so the IR
-        // snapshot matches the baseline and the TS side does not
-        // record a per-variant IR fixture either.
-        for variant in read_variants(dir) {
+        // Generate variant cases from a `variants.json` manifest
+        // at the mirrored path under
+        // `crates/unsnarl/tests/fixture-variants/`. Each variant
+        // entry pulls in every baseline that exists under the
+        // variant directory. The baseline list intentionally
+        // excludes `Ir`: pruning / depth / highlight only narrow
+        // the downstream `VisualGraph`, so the IR snapshot matches
+        // the parent baseline and the TS side does not record a
+        // per-variant IR fixture either.
+        for variant in read_variants(root, dir) {
             let variant_dir = dir.join(variant.dir_name());
             if !variant_dir.is_dir() {
                 continue;
@@ -231,6 +285,47 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                     pruning,
                     depths,
                     highlight,
+                    plugins: Vec::new(),
+                });
+            }
+        }
+        // Plugin variants are auto-discovered: any sibling subdir
+        // named `plugin-<slug>` resolves `<slug>` against the
+        // bundled plugin set (the same names the CLI's
+        // `collect_plugins` accepts after stripping the
+        // `unsnarl-plugin-` prefix). No manifest entry is needed —
+        // the slug uniquely identifies which plugin to activate.
+        //
+        // Unlike pruning / depth / highlight variants the IR
+        // baseline IS per-variant because plugin transforms reshape
+        // the IR itself; the TS side records a per-variant
+        // `expected.ir.json` for the same reason.
+        for plugin_slug in discover_plugin_slugs(dir) {
+            let variant_dir = dir.join(format!("plugin-{plugin_slug}"));
+            for baseline in [
+                Baseline::Ir,
+                Baseline::Json,
+                Baseline::Mermaid,
+                Baseline::Markdown,
+                Baseline::Stats,
+            ] {
+                let expected = variant_dir.join(baseline.file_name());
+                if !expected.is_file() {
+                    continue;
+                }
+                out.push(FixtureCase {
+                    name: format!(
+                        "{rel_name}/plugin-{plugin_slug}::{}",
+                        baseline.test_suffix()
+                    ),
+                    input: input.clone(),
+                    expected,
+                    rel_source_path: rel_source.clone(),
+                    baseline,
+                    pruning: None,
+                    depths: None,
+                    highlight: None,
+                    plugins: vec![plugin_slug.clone()],
                 });
             }
         }
@@ -253,6 +348,15 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
 /// `pruned-highlight-<slug>/`; the field defaults to `pruned` for
 /// backward compatibility with the original manifests (which only
 /// described pruning variants).
+///
+/// `plugin-<slug>/` variants are deliberately **not** part of this
+/// enum: their only parameter is the plugin name to activate, the
+/// slug already encodes that (slug = post-strip plugin short name),
+/// and the CLI const at
+/// `crates/unsnarl/src/cli/args/collect_plugins.rs` already
+/// validates the membership. Plugin variants are auto-discovered
+/// by scanning for `plugin-<slug>/` subdirs and resolving `<slug>`
+/// against the default registry — no manifest entry is needed.
 #[derive(Clone, Copy)]
 enum VariantKind {
     Pruned,
@@ -367,8 +471,12 @@ impl VariantSpec {
     }
 }
 
-fn read_variants(dir: &Path) -> Vec<VariantSpec> {
-    let manifest = dir.join("variants.json");
+fn read_variants(root: &Path, dir: &Path) -> Vec<VariantSpec> {
+    let rel = match dir.strip_prefix(root) {
+        Ok(r) => r,
+        Err(_) => return Vec::new(),
+    };
+    let manifest = fixture_variants_root().join(rel).join("variants.json");
     let Ok(text) = fs::read_to_string(&manifest) else {
         return Vec::new();
     };
@@ -571,13 +679,18 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
     let language = language_for_path(case.rel_source_path.as_str()).ok_or_else(|| {
         Failed::from(format!("unsupported language for {}", case.rel_source_path))
     })?;
+    let registry = default_registry();
+    let plugins: Vec<&dyn UnsnarlPlugin> = registry
+        .activate_all(&case.plugins)
+        .map_err(|e| Failed::from(format!("activate plugins: {e}")))?;
     let run = PipelineRunOptions {
         pruning: case.pruning.as_ref(),
         depths: case.depths.as_ref(),
         highlight: case.highlight.as_ref(),
+        plugins: &plugins,
     };
     let actual = match case.baseline {
-        Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true)
+        Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true, &plugins)
             .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?,
         Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true, run)
             .map_err(|e| Failed::from(format!("emit_json_text failed: {e:?}")))?,

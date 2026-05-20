@@ -6,12 +6,14 @@ use unsnarl_emitter::DEFAULT_DEPTH;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
 use unsnarl_ir::nesting_kind::NestingDepths;
+use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
 use crate::cli::args::{
     Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer, Highlight,
 };
 use crate::cli::run_cli::emit_out_flag_notice;
+use crate::pipeline::plugin::default_registry;
 use crate::pipeline::prune::PruningRunOptions;
 use crate::pipeline::{
     emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
@@ -28,11 +30,19 @@ pub fn run(args: &Args) {
 
 pub(crate) fn run_to(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     emit_out_flag_notice(args.out_dir.as_deref(), err);
+    let registry = default_registry();
+    let plugins: Vec<&dyn UnsnarlPlugin> = match registry.activate_all(&args.plugins) {
+        Ok(v) => v,
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").ok();
+            return;
+        }
+    };
     let handler = select_handler(&args.format);
-    handler(args, out, err);
+    handler(args, &plugins, out, err);
 }
 
-type Handler = fn(&Args, &mut dyn Write, &mut dyn Write);
+type Handler = fn(&Args, &[&dyn UnsnarlPlugin], &mut dyn Write, &mut dyn Write);
 
 fn select_handler(format: &CliFormat) -> Handler {
     match format {
@@ -44,7 +54,12 @@ fn select_handler(format: &CliFormat) -> Handler {
     }
 }
 
-fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+fn emit_mermaid(
+    args: &Args,
+    plugins: &[&dyn UnsnarlPlugin],
+    out: &mut dyn Write,
+    err: &mut dyn Write,
+) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
@@ -57,6 +72,7 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
         highlight: highlight.as_ref(),
+        plugins,
     };
     match emit_mermaid_text(
         &code,
@@ -203,11 +219,11 @@ fn color_theme_for(cli: &CliColorTheme) -> &'static ColorTheme {
     }
 }
 
-fn emit_ir(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+fn emit_ir(args: &Args, plugins: &[&dyn UnsnarlPlugin], out: &mut dyn Write, err: &mut dyn Write) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
-    match emit_ir_text(&code, &source_path, language, args.pretty_json) {
+    match emit_ir_text(&code, &source_path, language, args.pretty_json, plugins) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write ir output");
         }
@@ -217,7 +233,12 @@ fn emit_ir(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+fn emit_json(
+    args: &Args,
+    plugins: &[&dyn UnsnarlPlugin],
+    out: &mut dyn Write,
+    err: &mut dyn Write,
+) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
@@ -228,6 +249,7 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
         highlight: highlight.as_ref(),
+        plugins,
     };
     match emit_json_text(&code, &source_path, language, args.pretty_json, run) {
         Ok(text) => {
@@ -239,7 +261,12 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+fn emit_markdown(
+    args: &Args,
+    plugins: &[&dyn UnsnarlPlugin],
+    out: &mut dyn Write,
+    err: &mut dyn Write,
+) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
@@ -252,6 +279,7 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
         highlight: highlight.as_ref(),
+        plugins,
     };
     match emit_markdown_text(
         &code,
@@ -272,7 +300,12 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+fn emit_stats(
+    args: &Args,
+    plugins: &[&dyn UnsnarlPlugin],
+    out: &mut dyn Write,
+    err: &mut dyn Write,
+) {
     let Some((code, source_path, language)) = read_source(args, err) else {
         return;
     };
@@ -283,6 +316,7 @@ fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         pruning: pruning.as_ref(),
         depths: Some(&depths),
         highlight: highlight.as_ref(),
+        plugins,
     };
     match emit_stats_text(&code, &source_path, language, run) {
         Ok(text) => {

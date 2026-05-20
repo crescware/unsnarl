@@ -92,6 +92,13 @@ impl VariableDef {
         self.init.as_ref()
     }
 
+    /// Replace the `init` field. Used by `unsnarl-plugin-react` to
+    /// peel `useCallback(...)` so the variable's init points at the
+    /// inner function expression instead of the call.
+    pub fn set_init(&mut self, init: Option<DefinitionNode>) {
+        self.init = init;
+    }
+
     pub fn declaration_kind(&self) -> &VariableDeclarationKind {
         &self.declaration_kind
     }
