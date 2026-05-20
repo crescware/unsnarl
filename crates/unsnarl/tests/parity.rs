@@ -12,16 +12,19 @@
 //! The TS baselines are treated as the source of truth; the
 //! `expected.*` files are never written back from Rust.
 //!
-//! ## Pruning variants
+//! ## Pruning / depth variants
 //!
-//! Some fixtures additionally carry sibling `pruned-<slug>/`
-//! directories whose expected baselines reflect a pruned visual
-//! graph. The TS test-snapshot setup (`ts/integration/fixture-snapshot.ts`
-//! invoked from `index.test.ts`) declares the underlying pruning
-//! options inline. The Rust harness reads the same options from an
-//! adjacent `variants.json` manifest in the fixture root (one entry
-//! per `pruned-*` slug) and runs the pipeline with the matching
-//! [`PruningRunOptions`] so the pruned baselines stay covered.
+//! Some fixtures additionally carry sibling `pruned-<slug>/`,
+//! `depth-<slug>/`, or `pruned-depth-<slug>/` directories whose
+//! expected baselines reflect a pruned, depth-collapsed, or combined
+//! visual graph. The TS test-snapshot setup
+//! (`ts/integration/fixture-snapshot.ts` invoked from `index.test.ts`)
+//! declares the underlying pruning / depth options inline. The Rust
+//! harness reads the same options from an adjacent `variants.json`
+//! manifest in the fixture root (one entry per variant slug) and
+//! runs the pipeline with the matching
+//! [`PruningRunOptions`] / [`NestingDepths`] so the variant
+//! baselines stay covered.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -30,12 +33,13 @@ use libtest_mimic::{Arguments, Failed, Trial};
 use pretty_assertions::StrComparison;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::DARK_THEME;
+use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
 
 use unsnarl::pipeline::prune::PruningRunOptions;
 use unsnarl::pipeline::{
     emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
-    language_for_path,
+    language_for_path, PipelineRunOptions,
 };
 
 fn workspace_root() -> PathBuf {
@@ -117,8 +121,8 @@ impl Baseline {
 
 /// One fixture × one baseline test case (fixture root with
 /// `input.*` + the matching `expected.*` baseline). When `pruning`
-/// is `Some`, the pipeline is run with those options before
-/// comparing against the variant's pruned baseline.
+/// / `depths` are `Some`, the pipeline is run with those options
+/// before comparing against the variant's baseline.
 struct FixtureCase {
     name: String,
     input: PathBuf,
@@ -126,6 +130,7 @@ struct FixtureCase {
     rel_source_path: String,
     baseline: Baseline,
     pruning: Option<PruningRunOptions>,
+    depths: Option<NestingDepths>,
 }
 
 fn collect_fixtures() -> Vec<FixtureCase> {
@@ -181,17 +186,18 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                 rel_source_path: rel_source.clone(),
                 baseline,
                 pruning: None,
+                depths: None,
             });
         }
         // Generate variant cases from a sibling `variants.json`
         // manifest, if one is present. Each variant entry pulls in
-        // every baseline that exists under `pruned-<slug>/`. The
-        // baseline list intentionally excludes `Ir`: pruning only
-        // narrows the downstream `VisualGraph`, so the IR snapshot
-        // matches the baseline and the TS side does not record a
-        // per-variant IR fixture either.
+        // every baseline that exists under the variant directory.
+        // The baseline list intentionally excludes `Ir`: pruning /
+        // depth only narrow the downstream `VisualGraph`, so the IR
+        // snapshot matches the baseline and the TS side does not
+        // record a per-variant IR fixture either.
         for variant in read_variants(dir) {
-            let variant_dir = dir.join(format!("pruned-{}", variant.slug));
+            let variant_dir = dir.join(variant.dir_name());
             if !variant_dir.is_dir() {
                 continue;
             }
@@ -205,18 +211,20 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
                 if !expected.is_file() {
                     continue;
                 }
-                let pruning = build_pruning(&variant);
+                let pruning = variant.pruning();
+                let depths = variant.depths.clone();
                 out.push(FixtureCase {
                     name: format!(
-                        "{rel_name}/pruned-{}::{}",
-                        variant.slug,
+                        "{rel_name}/{}::{}",
+                        variant.dir_name(),
                         baseline.test_suffix()
                     ),
                     input: input.clone(),
                     expected,
                     rel_source_path: rel_source.clone(),
                     baseline,
-                    pruning: Some(pruning),
+                    pruning,
+                    depths,
                 });
             }
         }
@@ -229,16 +237,85 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
     }
 }
 
-/// Per-fixture pruning variant declared in `variants.json`.
+/// Per-fixture variant declared in `variants.json`.
 ///
-/// One entry per `pruned-<slug>/` sibling directory. Mirrors the
-/// `pruning` arg of `fixtureSnapshot` in
-/// `ts/integration/fixture-snapshot.ts`.
+/// One entry per variant sibling directory. Mirrors the `pruning` /
+/// `depths` args of `fixtureSnapshot` in
+/// `ts/integration/fixture-snapshot.ts`. `kind` selects whether the
+/// variant directory is `pruned-<slug>/`, `depth-<slug>/`, or
+/// `pruned-depth-<slug>/`; the field defaults to `pruned` for
+/// backward compatibility with the original manifests (which only
+/// described pruning variants).
+#[derive(Clone, Copy)]
+enum VariantKind {
+    Pruned,
+    Depth,
+    PrunedDepth,
+}
+
+impl VariantKind {
+    fn parse(s: &str) -> Result<Self, String> {
+        match s {
+            "pruned" => Ok(Self::Pruned),
+            "depth" => Ok(Self::Depth),
+            "pruned-depth" => Ok(Self::PrunedDepth),
+            other => Err(format!(
+                "unknown variant kind '{other}' (expected 'pruned', 'depth', or 'pruned-depth')"
+            )),
+        }
+    }
+
+    fn dir_prefix(self) -> &'static str {
+        match self {
+            Self::Pruned => "pruned",
+            Self::Depth => "depth",
+            Self::PrunedDepth => "pruned-depth",
+        }
+    }
+
+    fn needs_pruning(self) -> bool {
+        matches!(self, Self::Pruned | Self::PrunedDepth)
+    }
+}
+
 struct VariantSpec {
+    kind: VariantKind,
     slug: String,
-    roots: String,
-    descendants: u32,
-    ancestors: u32,
+    roots: Option<String>,
+    descendants: Option<u32>,
+    ancestors: Option<u32>,
+    depths: Option<NestingDepths>,
+}
+
+impl VariantSpec {
+    fn dir_name(&self) -> String {
+        format!("{}-{}", self.kind.dir_prefix(), self.slug)
+    }
+
+    fn pruning(&self) -> Option<PruningRunOptions> {
+        if !self.kind.needs_pruning() {
+            return None;
+        }
+        let roots = self
+            .roots
+            .as_deref()
+            .unwrap_or_else(|| panic!("variant {}: missing 'roots' for kind 'pruned'", self.slug));
+        let queries: Vec<ParsedRootQuery> = parse_root_queries(roots).unwrap_or_else(|e| {
+            panic!(
+                "variant {}: parse_root_queries({}) failed: {e}",
+                self.slug, roots
+            )
+        });
+        Some(PruningRunOptions {
+            roots: queries,
+            descendants: self.descendants.unwrap_or_else(|| {
+                panic!("variant {}: missing 'descendants'", self.slug);
+            }),
+            ancestors: self.ancestors.unwrap_or_else(|| {
+                panic!("variant {}: missing 'ancestors'", self.slug);
+            }),
+        })
+    }
 }
 
 fn read_variants(dir: &Path) -> Vec<VariantSpec> {
@@ -249,16 +326,18 @@ fn read_variants(dir: &Path) -> Vec<VariantSpec> {
     parse_variants_json(&text).unwrap_or_else(|e| {
         panic!(
             "failed to parse {}: {e}\nThe manifest must be a JSON object \
-             {{\"variants\": [{{\"slug\": ..., \"roots\": ..., \
-             \"descendants\": ..., \"ancestors\": ...}}, ...]}}.",
+             {{\"variants\": [{{\"kind\": ..., \"slug\": ..., \
+             \"roots\": ..., \"descendants\": ..., \"ancestors\": ..., \
+             \"depths\": ...}}, ...]}}.",
             manifest.display()
         )
     })
 }
 
 /// Minimal JSON manifest parser. The schema is fixed (`variants[]`
-/// of `{slug, roots, descendants, ancestors}`) so a hand-written
-/// parser avoids pulling `serde` into the dev-dep surface.
+/// of `{kind?, slug, roots?, descendants?, ancestors?, depths?}`) so
+/// a hand-written parser avoids pulling `serde` into the dev-dep
+/// surface beyond the `serde_json::Value` already in use.
 fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
     let value: serde_json::Value = serde_json::from_str(text).map_err(|e| e.to_string())?;
     let arr = value
@@ -271,41 +350,116 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
             .get("slug")
             .and_then(|s| s.as_str())
             .ok_or_else(|| "missing 'slug'".to_string())?;
-        let roots = v
-            .get("roots")
-            .and_then(|s| s.as_str())
-            .ok_or_else(|| format!("variant {slug}: missing 'roots'"))?;
+        let kind = match v.get("kind").and_then(|s| s.as_str()) {
+            Some(k) => VariantKind::parse(k).map_err(|e| format!("variant {slug}: {e}"))?,
+            None => VariantKind::Pruned,
+        };
+        let roots = v.get("roots").and_then(|s| s.as_str()).map(str::to_string);
         let descendants = v
             .get("descendants")
             .and_then(|n| n.as_u64())
-            .ok_or_else(|| format!("variant {slug}: missing 'descendants'"))?
-            as u32;
-        let ancestors =
-            v.get("ancestors")
-                .and_then(|n| n.as_u64())
-                .ok_or_else(|| format!("variant {slug}: missing 'ancestors'"))? as u32;
+            .map(|n| n as u32);
+        let ancestors = v
+            .get("ancestors")
+            .and_then(|n| n.as_u64())
+            .map(|n| n as u32);
+        let depths = match v.get("depths") {
+            Some(d) => Some(parse_depths(slug, d)?),
+            None => None,
+        };
+        if kind.needs_pruning() && (roots.is_none() || descendants.is_none() || ancestors.is_none())
+        {
+            return Err(format!(
+                "variant {slug}: kind '{}' requires 'roots', 'descendants', and 'ancestors'",
+                kind.dir_prefix()
+            ));
+        }
+        if matches!(kind, VariantKind::Depth | VariantKind::PrunedDepth) && depths.is_none() {
+            return Err(format!(
+                "variant {slug}: kind '{}' requires 'depths'",
+                kind.dir_prefix()
+            ));
+        }
         out.push(VariantSpec {
+            kind,
             slug: slug.to_string(),
-            roots: roots.to_string(),
+            roots,
             descendants,
             ancestors,
+            depths,
         });
     }
     Ok(out)
 }
 
-fn build_pruning(v: &VariantSpec) -> PruningRunOptions {
-    let queries: Vec<ParsedRootQuery> = parse_root_queries(&v.roots).unwrap_or_else(|e| {
-        panic!(
-            "variant {}: parse_root_queries({}) failed: {e}",
-            v.slug, v.roots
-        )
-    });
-    PruningRunOptions {
-        roots: queries,
-        descendants: v.descendants,
-        ancestors: v.ancestors,
+/// Parse the `depths` field. Supports either a uniform shorthand
+/// (`{"uniform": N}`), a function-vs-block split
+/// (`{"function": N, "block": N}` — matches the CLI flag surface),
+/// or a fully per-kind object listing every `NestingKind`. Other
+/// shapes are rejected so a typo cannot silently leak default
+/// values into a test case.
+fn parse_depths(slug: &str, v: &serde_json::Value) -> Result<NestingDepths, String> {
+    let obj = v
+        .as_object()
+        .ok_or_else(|| format!("variant {slug}: 'depths' must be an object"))?;
+    let to_depth = |key: &str, n: &serde_json::Value| -> Result<NestingDepth, String> {
+        let n = n.as_u64().ok_or_else(|| {
+            format!("variant {slug}: 'depths.{key}' must be a non-negative integer")
+        })?;
+        Ok(NestingDepth(n as u32))
+    };
+    if let Some(n) = obj.get("uniform") {
+        let value = to_depth("uniform", n)?;
+        return Ok(NestingDepths::uniform(value));
     }
+    if obj.contains_key("function") && obj.contains_key("block") && obj.len() == 2 {
+        let function = to_depth("function", &obj["function"])?;
+        let block = to_depth("block", &obj["block"])?;
+        return Ok(NestingDepths {
+            function,
+            r#if: block,
+            r#for: block,
+            r#while: block,
+            switch: block,
+            try_catch_finally: block,
+            block,
+        });
+    }
+    let mut depths = NestingDepths::uniform(NestingDepth(0));
+    let expected_keys = [
+        "function",
+        "if",
+        "for",
+        "while",
+        "switch",
+        "try-catch-finally",
+        "block",
+    ];
+    for key in expected_keys {
+        let n = obj.get(key).ok_or_else(|| {
+            format!("variant {slug}: 'depths.{key}' is required for per-kind form")
+        })?;
+        let value = to_depth(key, n)?;
+        match key {
+            "function" => depths.function = value,
+            "if" => depths.r#if = value,
+            "for" => depths.r#for = value,
+            "while" => depths.r#while = value,
+            "switch" => depths.switch = value,
+            "try-catch-finally" => depths.try_catch_finally = value,
+            "block" => depths.block = value,
+            _ => unreachable!(),
+        }
+    }
+    if obj.len() != expected_keys.len() {
+        return Err(format!(
+            "variant {slug}: 'depths' object has unexpected keys; \
+             allowed shapes are {{\"uniform\": N}}, \
+             {{\"function\": N, \"block\": N}}, \
+             or a full per-kind object listing every NestingKind"
+        ));
+    }
+    Ok(depths)
 }
 
 fn run_case(case: &FixtureCase) -> Result<(), Failed> {
@@ -316,11 +470,14 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
     let language = language_for_path(case.rel_source_path.as_str()).ok_or_else(|| {
         Failed::from(format!("unsupported language for {}", case.rel_source_path))
     })?;
-    let pruning = case.pruning.as_ref();
+    let run = PipelineRunOptions {
+        pruning: case.pruning.as_ref(),
+        depths: case.depths.as_ref(),
+    };
     let actual = match case.baseline {
         Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true)
             .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?,
-        Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true, pruning)
+        Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true, run)
             .map_err(|e| Failed::from(format!("emit_json_text failed: {e:?}")))?,
         Baseline::Mermaid => emit_mermaid_text(
             &code,
@@ -329,7 +486,7 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
             MermaidStrategy::Elk,
             &DARK_THEME,
             false,
-            pruning,
+            run,
         )
         .map_err(|e| Failed::from(format!("emit_mermaid_text failed: {e:?}")))?,
         Baseline::Markdown => emit_markdown_text(
@@ -339,10 +496,10 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
             MermaidStrategy::Elk,
             &DARK_THEME,
             false,
-            pruning,
+            run,
         )
         .map_err(|e| Failed::from(format!("emit_markdown_text failed: {e:?}")))?,
-        Baseline::Stats => emit_stats_text(&code, &case.rel_source_path, language, pruning)
+        Baseline::Stats => emit_stats_text(&code, &case.rel_source_path, language, run)
             .map_err(|e| Failed::from(format!("emit_stats_text failed: {e:?}")))?,
     };
     if actual != expected {

@@ -2,15 +2,17 @@ use std::fs;
 use std::io::{self, Read, Write};
 use std::path::Path;
 
+use unsnarl_emitter::DEFAULT_DEPTH;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
+use unsnarl_ir::nesting_kind::NestingDepths;
 
 use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
 use crate::cli::run_cli::emit_out_flag_notice;
 use crate::pipeline::prune::PruningRunOptions;
 use crate::pipeline::{
     emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
-    language_for_path,
+    language_for_path, PipelineRunOptions,
 };
 
 pub fn run(args: &Args) {
@@ -46,6 +48,11 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
     let theme = color_theme_for(&args.color_theme);
     let pruning = pruning_from_args(args);
+    let depths = depths_from_args(args);
+    let run = PipelineRunOptions {
+        pruning: pruning.as_ref(),
+        depths: Some(&depths),
+    };
     match emit_mermaid_text(
         &code,
         &source_path,
@@ -53,7 +60,7 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         strategy,
         theme,
         args.debug,
-        pruning.as_ref(),
+        run,
     ) {
         Ok(text) => {
             out.write_all(text.as_bytes())
@@ -69,6 +76,27 @@ fn emit_mermaid(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
 /// `-A`/`-B`/`-C`. Mirrors `DEFAULT_GENERATIONS` in
 /// `ts/src/cli/args/default-generations.ts`.
 const DEFAULT_GENERATIONS: u32 = 10;
+
+/// Translate the CLI's `--depth` / `--depth-function` / `--depth-block`
+/// flags into a [`NestingDepths`]. Mirrors `resolveDepths` in
+/// `ts/src/cli/run-cli/normalize-cli-options.ts`: `--depth <N>` seeds
+/// both axes, then `--depth-function` / `--depth-block` override
+/// their respective halves. Unset fields fall back to
+/// [`DEFAULT_DEPTH`].
+fn depths_from_args(args: &Args) -> NestingDepths {
+    let general = args.depth.unwrap_or(DEFAULT_DEPTH);
+    let function = args.depth_function.unwrap_or(general);
+    let block = args.depth_block.unwrap_or(general);
+    NestingDepths {
+        function,
+        r#if: block,
+        r#for: block,
+        r#while: block,
+        switch: block,
+        try_catch_finally: block,
+        block,
+    }
+}
 
 /// Translate the CLI's `-r/-A/-B/-C` flags into the pipeline's
 /// [`PruningRunOptions`]. Mirrors `resolveGenerations` in
@@ -176,13 +204,12 @@ fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         return;
     };
     let pruning = pruning_from_args(args);
-    match emit_json_text(
-        &code,
-        &source_path,
-        language,
-        args.pretty_json,
-        pruning.as_ref(),
-    ) {
+    let depths = depths_from_args(args);
+    let run = PipelineRunOptions {
+        pruning: pruning.as_ref(),
+        depths: Some(&depths),
+    };
+    match emit_json_text(&code, &source_path, language, args.pretty_json, run) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write json output");
         }
@@ -199,6 +226,11 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
     let theme = color_theme_for(&args.color_theme);
     let pruning = pruning_from_args(args);
+    let depths = depths_from_args(args);
+    let run = PipelineRunOptions {
+        pruning: pruning.as_ref(),
+        depths: Some(&depths),
+    };
     match emit_markdown_text(
         &code,
         &source_path,
@@ -206,7 +238,7 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         strategy,
         theme,
         args.debug,
-        pruning.as_ref(),
+        run,
     ) {
         Ok(text) => {
             out.write_all(text.as_bytes())
@@ -223,7 +255,12 @@ fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
         return;
     };
     let pruning = pruning_from_args(args);
-    match emit_stats_text(&code, &source_path, language, pruning.as_ref()) {
+    let depths = depths_from_args(args);
+    let run = PipelineRunOptions {
+        pruning: pruning.as_ref(),
+        depths: Some(&depths),
+    };
+    match emit_stats_text(&code, &source_path, language, run) {
         Ok(text) => {
             out.write_all(text.as_bytes()).expect("write stats output");
         }

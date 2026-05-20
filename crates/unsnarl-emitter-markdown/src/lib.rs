@@ -9,6 +9,7 @@
 //! corresponding option fields.
 
 pub mod code_fence_lang;
+pub mod format_depth_query;
 pub mod format_pruning_query;
 pub mod markdown;
 

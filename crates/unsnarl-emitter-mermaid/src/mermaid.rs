@@ -73,7 +73,12 @@ impl Emitter for MermaidEmitter {
         let graph = if let Some(pruned) = &opts.pruned_graph {
             pruned
         } else {
-            built = build_visual_graph(ir, &BuildVisualGraphOptions::default());
+            built = build_visual_graph(
+                ir,
+                &BuildVisualGraphOptions {
+                    depths: opts.depths.clone(),
+                },
+            );
             &built
         };
         render_mermaid(graph, self.strategy, self.theme, opts.debug)

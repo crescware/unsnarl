@@ -8,6 +8,7 @@
 //! field; pruning lands in Step 17, depth / highlight follow in
 //! Steps 18–19.
 
+use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_visual_graph::prune::RootQueryResolution;
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 
@@ -31,4 +32,12 @@ pub struct EmitOptions {
     /// in the `## Notice` block (and by the CLI's stderr emitter
     /// once Step 21 lands).
     pub resolutions: Option<Vec<RootQueryResolution>>,
+    /// Per-`NestingKind` depth ceiling applied at visual-graph build
+    /// time. `None` keeps every scope rendered (the TS default when
+    /// no `--depth*` flag is given); `Some` collapses scopes whose
+    /// recorded `nestingDepths[kind]` strictly exceed the matching
+    /// threshold. Mirrors `opts.depths` in the TS port: the markdown
+    /// emitter additionally surfaces the chosen depths in its
+    /// `## Query` block via `formatDepthQuery`.
+    pub depths: Option<NestingDepths>,
 }

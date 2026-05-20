@@ -1,0 +1,12 @@
+{
+  "variants": [
+    {
+      "kind": "pruned-depth",
+      "slug": "inner-A2-B1-d1",
+      "roots": "inner",
+      "descendants": 2,
+      "ancestors": 1,
+      "depths": { "uniform": 1 }
+    }
+  ]
+}

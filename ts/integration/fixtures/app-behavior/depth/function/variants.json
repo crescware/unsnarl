@@ -1,0 +1,9 @@
+{
+  "variants": [
+    { "kind": "depth", "slug": "1", "depths": { "uniform": 1 } },
+    { "kind": "depth", "slug": "2", "depths": { "uniform": 2 } },
+    { "kind": "depth", "slug": "5", "depths": { "uniform": 5 } },
+    { "kind": "depth", "slug": "6", "depths": { "uniform": 6 } },
+    { "kind": "depth", "slug": "10", "depths": { "uniform": 10 } }
+  ]
+}
