@@ -1054,8 +1054,11 @@ dependencies = [
 name = "unsnarl-visual-graph"
 version = "0.3.0-beta.0"
 dependencies = [
+ "serde",
+ "serde_json",
  "unsnarl-annotations",
  "unsnarl-ir",
+ "unsnarl-oxc-parity",
  "unsnarl-root-query",
 ]
 
