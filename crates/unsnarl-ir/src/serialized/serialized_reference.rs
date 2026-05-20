@@ -23,6 +23,14 @@ impl SerializedReferenceIdentifier {
         );
         Self { name, span }
     }
+
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    pub fn span(&self) -> &Span {
+        &self.span
+    }
 }
 
 /// 4-bool flag block. The internal IR's `flags` bitmask covers only
