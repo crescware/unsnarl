@@ -55,6 +55,11 @@ description = "Run `-f markdown` (CLI defaults: elk strategy + dark theme; markd
 depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity.ts markdown"
 
+[tasks."bench:stats-parity"]
+description = "Run `-f stats` against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench-stats/."
+depends = ["build"]
+run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity.ts stats"
+
 [tasks."cov"]
 description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Pass a filename regex as the first arg to filter rows (e.g. `mise run cov -- build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
 run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/cov.ts"

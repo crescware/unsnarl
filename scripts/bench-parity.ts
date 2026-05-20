@@ -2,7 +2,8 @@
 // Byte-for-byte parity + per-file timing between the Rust
 // implementation (`target/release/uns`) and the TypeScript
 // implementation (`ts/dist/index.js`) for the selected emitter
-// format (`-f ir`, `-f json`, `-f mermaid`, or `-f markdown`).
+// format (`-f ir`, `-f json`, `-f mermaid`, `-f markdown`, or
+// `-f stats`).
 //
 // Iterates every `.ts` / `.tsx` file under `ts/src`, runs both
 // implementations with the chosen format, and compares the emitter
@@ -30,6 +31,8 @@
 //   mise run bench:mermaid-parity  -- path/to/dir      # mermaid, custom work dir
 //   mise run bench:markdown-parity                     # markdown, default work dir
 //   mise run bench:markdown-parity -- path/to/dir      # markdown, custom work dir
+//   mise run bench:stats-parity                        # stats, default work dir
+//   mise run bench:stats-parity    -- path/to/dir      # stats, custom work dir
 //
 // Outputs (under the work dir):
 //   summary.txt         human-readable totals + "smallest diffs first" preview
@@ -59,10 +62,11 @@ if (
   FORMAT !== "ir" &&
   FORMAT !== "json" &&
   FORMAT !== "mermaid" &&
-  FORMAT !== "markdown"
+  FORMAT !== "markdown" &&
+  FORMAT !== "stats"
 ) {
   console.error(
-    `bench-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', 'mermaid', or 'markdown')`,
+    `bench-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', 'mermaid', 'markdown', or 'stats')`,
   );
   Deno.exit(2);
 }
