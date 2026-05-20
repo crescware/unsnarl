@@ -2,7 +2,7 @@
 // Byte-for-byte parity + per-file timing between the Rust
 // implementation (`target/release/uns`) and the TypeScript
 // implementation (`ts/dist/index.js`) for the selected emitter
-// format (`-f ir`, `-f json`, or `-f mermaid`).
+// format (`-f ir`, `-f json`, `-f mermaid`, or `-f markdown`).
 //
 // Iterates every `.ts` / `.tsx` file under `ts/src`, runs both
 // implementations with the chosen format, and compares the emitter
@@ -15,18 +15,21 @@
 // clobber each other (and so the whole tree stays git-ignored
 // alongside the Cargo target directory).
 //
-// For the mermaid format both implementations are launched with
-// the CLI defaults (`--mermaid-renderer elk`, `--color-theme dark`,
-// `--debug` off), so passing only `-f mermaid` matches the on-disk
-// `expected.mermaid` baselines.
+// For the mermaid and markdown formats both implementations are
+// launched with the CLI defaults (`--mermaid-renderer elk`,
+// `--color-theme dark`, `--debug` off); the markdown emitter wraps
+// that same mermaid render in `## Mermaid` so passing only
+// `-f markdown` matches the on-disk `preview.md` baselines.
 //
 // Usage:
-//   mise run bench:ir-parity                          # ir, default work dir
-//   mise run bench:ir-parity      -- path/to/dir      # ir, custom work dir
-//   mise run bench:json-parity                        # json, default work dir
-//   mise run bench:json-parity    -- path/to/dir      # json, custom work dir
-//   mise run bench:mermaid-parity                     # mermaid, default work dir
-//   mise run bench:mermaid-parity -- path/to/dir      # mermaid, custom work dir
+//   mise run bench:ir-parity                           # ir, default work dir
+//   mise run bench:ir-parity       -- path/to/dir      # ir, custom work dir
+//   mise run bench:json-parity                         # json, default work dir
+//   mise run bench:json-parity     -- path/to/dir      # json, custom work dir
+//   mise run bench:mermaid-parity                      # mermaid, default work dir
+//   mise run bench:mermaid-parity  -- path/to/dir      # mermaid, custom work dir
+//   mise run bench:markdown-parity                     # markdown, default work dir
+//   mise run bench:markdown-parity -- path/to/dir      # markdown, custom work dir
 //
 // Outputs (under the work dir):
 //   summary.txt         human-readable totals + "smallest diffs first" preview
@@ -52,9 +55,14 @@ const TS_BIN = `${TS_ROOT}/dist/index.js`;
 // behaviour the previous version of this script had survives any
 // caller that still invokes it without an explicit format.
 const FORMAT = (Deno.args[0] ?? "ir").toLowerCase();
-if (FORMAT !== "ir" && FORMAT !== "json" && FORMAT !== "mermaid") {
+if (
+  FORMAT !== "ir" &&
+  FORMAT !== "json" &&
+  FORMAT !== "mermaid" &&
+  FORMAT !== "markdown"
+) {
   console.error(
-    `bench-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', or 'mermaid')`,
+    `bench-parity: unsupported format '${FORMAT}' (expected 'ir', 'json', 'mermaid', or 'markdown')`,
   );
   Deno.exit(2);
 }
