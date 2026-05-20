@@ -60,6 +60,16 @@ description = "Run `-f stats` against every ts/src/**/*.ts(x), compare Rust vs T
 depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity.ts stats"
 
+[tasks."bench:variant-parity"]
+description = "Single-shot CLI-variant parity sweep. Usage: `mise run bench:variant-parity -- <format> <variant>` (format = ir|json|mermaid|markdown|stats; variant = baseline|r-a-1|r-b-1|r-c-1|h-mid|depth-1). Output: target/parity-bench-<format>-<variant>/."
+depends = ["build"]
+run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity.ts"
+
+[tasks."bench:variant-parity-all"]
+description = "Run the full 5-format x 6-variant matrix (30 sweeps) against ts/src/**/*.ts(x). Sweeps run sequentially; the aggregator never stops on failure. Exit 0 only when every sweep matched byte-for-byte."
+depends = ["build"]
+run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity-all.ts"
+
 [tasks."cov"]
 description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Pass a filename regex as the first arg to filter rows (e.g. `mise run cov -- build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
 run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/cov.ts"
