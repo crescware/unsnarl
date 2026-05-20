@@ -8,6 +8,7 @@ repository.workspace = true
 
 [dependencies]
 unsnarl-emitter = { workspace = true }
+unsnarl-ir = { workspace = true }
 unsnarl-visual-graph = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

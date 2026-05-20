@@ -4,7 +4,7 @@ use std::path::Path;
 
 use crate::cli::args::{Args, CliFormat, CliLanguage};
 use crate::cli::run_cli::emit_out_flag_notice;
-use crate::pipeline::{emit_ir_text, language_for_path};
+use crate::pipeline::{emit_ir_text, emit_json_text, language_for_path};
 
 pub fn run(args: &Args) {
     let stdout = io::stdout();
@@ -50,8 +50,18 @@ fn emit_ir(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_json(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
-    emit_stub("json emitter", args, out);
+fn emit_json(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    let Some((code, source_path, language)) = read_source(args, err) else {
+        return;
+    };
+    match emit_json_text(&code, &source_path, language, args.pretty_json) {
+        Ok(text) => {
+            out.write_all(text.as_bytes()).expect("write json output");
+        }
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").expect("write json error");
+        }
+    }
 }
 
 fn emit_markdown(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {

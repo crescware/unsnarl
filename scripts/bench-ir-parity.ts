@@ -1,21 +1,25 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
-// Byte-for-byte parity + per-file timing for `uns -f ir` between the
-// Rust implementation (`target/release/uns`) and the TypeScript
-// implementation (`ts/dist/index.js`).
+// Byte-for-byte parity + per-file timing between the Rust
+// implementation (`target/release/uns`) and the TypeScript
+// implementation (`ts/dist/index.js`) for the selected emitter
+// format (`-f ir` or `-f json`).
 //
 // Iterates every `.ts` / `.tsx` file under `ts/src`, runs both
-// implementations with `-f ir`, and compares the IR (stdout) byte
-// stream. Stderr from each implementation is captured separately so
-// it never pollutes the comparison.
+// implementations with the chosen format, and compares the emitter
+// output (stdout) byte stream. Stderr from each implementation is
+// captured separately so it never pollutes the comparison.
 //
 // Per-file wall-clock times in milliseconds are recorded for each
 // implementation. Defaults to writing all artifacts under
-// `target/parity-bench/` so they are git-ignored alongside the Cargo
-// target directory.
+// `target/parity-bench-<format>/` so the ir and json runs do not
+// clobber each other (and so the whole tree stays git-ignored
+// alongside the Cargo target directory).
 //
 // Usage:
-//   mise run bench:ir-parity                    # default work dir
-//   mise run bench:ir-parity -- path/to/dir     # custom work dir
+//   mise run bench:ir-parity                       # ir, default work dir
+//   mise run bench:ir-parity   -- path/to/dir      # ir, custom work dir
+//   mise run bench:json-parity                     # json, default work dir
+//   mise run bench:json-parity -- path/to/dir      # json, custom work dir
 //
 // Outputs (under the work dir):
 //   summary.txt         human-readable totals + "smallest diffs first" preview
@@ -23,7 +27,7 @@
 //   fail_list.txt       paths whose stdouts differ
 //   failures.tsv        file<TAB>diff_line_count, sorted ascending
 //   diff/<safe>.diff    unified diff (TS vs Rust) for each mismatch
-//   rust/, ts/          raw IR stdouts (mismatches only; matches are deleted)
+//   rust/, ts/          raw emitter stdouts (mismatches only; matches are deleted)
 //   stderr/             non-empty stderr from either implementation
 //
 // Exit code: 0 if every file matched byte-for-byte, 1 otherwise.
@@ -37,7 +41,20 @@ const TS_ROOT = `${REPO_ROOT}/ts`;
 const RUST_BIN = `${REPO_ROOT}/target/release/uns`;
 const TS_BIN = `${TS_ROOT}/dist/index.js`;
 
-const WORK = Deno.args[0] ?? `${REPO_ROOT}/target/parity-bench`;
+// First positional arg picks the emitter; defaults to `ir` so the
+// behaviour the previous version of this script had survives any
+// caller that still invokes it without an explicit format.
+const FORMAT = (Deno.args[0] ?? "ir").toLowerCase();
+if (FORMAT !== "ir" && FORMAT !== "json") {
+  console.error(
+    `bench-ir-parity: unsupported format '${FORMAT}' (expected 'ir' or 'json')`,
+  );
+  Deno.exit(2);
+}
+// Second positional arg overrides the work dir. The default work
+// dir is suffixed by format so `bench:ir-parity` and
+// `bench:json-parity` write into separate trees.
+const WORK = Deno.args[1] ?? `${REPO_ROOT}/target/parity-bench-${FORMAT}`;
 
 function ensureFile(path: string, hint: string) {
   try {
@@ -148,8 +165,8 @@ for (const rel of files) {
   const rErr = `${WORK}/stderr/${safe}.rust.err`;
   const tErr = `${WORK}/stderr/${safe}.ts.err`;
 
-  const r = await runToFiles([RUST_BIN, "-f", "ir", rel], rOut, rErr);
-  const t = await runToFiles(["node", TS_BIN, "-f", "ir", rel], tOut, tErr);
+  const r = await runToFiles([RUST_BIN, "-f", FORMAT, rel], rOut, rErr);
+  const t = await runToFiles(["node", TS_BIN, "-f", FORMAT, rel], tOut, tErr);
 
   // Mirror the .sh harness: empty stderr files are pruned so the
   // `stderr/` directory only contains rows that actually said
@@ -235,6 +252,7 @@ const denom = total > 0 ? total : 1;
 const status = fail === 0 ? "PASS" : "FAIL";
 
 const summaryLines: string[] = [
+  `format=${FORMAT}`,
   `status=${status}`,
   `files_total=${total}`,
   `files_pass=${pass}`,

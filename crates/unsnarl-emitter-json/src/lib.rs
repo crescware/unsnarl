@@ -1,1 +1,52 @@
-//! VisualGraph JSON emitter. Populated in Step 13.
+//! `JsonEmitter`: renders a `SerializedIR` as a JSON-encoded
+//! `VisualGraph`.
+//!
+//! Mirrors `JsonEmitter` in `ts/src/emitter/json/json.ts`. The
+//! visual-graph build runs once per emit; the resulting `VisualGraph`
+//! is serialized with `serde_json::to_string_pretty` when
+//! `pretty_json` is true, otherwise with the compact form. The
+//! returned text always ends in a trailing newline (matches the TS
+//! `${text}\n`).
+
+use unsnarl_emitter::{EmitOptions, Emitter};
+use unsnarl_ir::serialized::SerializedIR;
+use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
+use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
+
+pub struct JsonEmitter;
+
+impl JsonEmitter {
+    pub const FORMAT: &'static str = "json";
+    pub const CONTENT_TYPE: &'static str = "application/json";
+    pub const EXTENSION: &'static str = "json";
+}
+
+impl Default for JsonEmitter {
+    fn default() -> Self {
+        Self
+    }
+}
+
+impl Emitter for JsonEmitter {
+    fn format(&self) -> &'static str {
+        Self::FORMAT
+    }
+
+    fn content_type(&self) -> &'static str {
+        Self::CONTENT_TYPE
+    }
+
+    fn extension(&self) -> &'static str {
+        Self::EXTENSION
+    }
+
+    fn emit(&self, ir: &SerializedIR, opts: &EmitOptions) -> String {
+        let graph = build_visual_graph(ir, &BuildVisualGraphOptions::default());
+        let text = if opts.pretty_json {
+            serde_json::to_string_pretty(&graph).expect("VisualGraph is serializable")
+        } else {
+            serde_json::to_string(&graph).expect("VisualGraph is serializable")
+        };
+        format!("{text}\n")
+    }
+}

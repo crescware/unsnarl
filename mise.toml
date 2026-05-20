@@ -36,9 +36,14 @@ depends = ["build"]
 run = "./target/release/uns -f ir"
 
 [tasks."bench:ir-parity"]
-description = "Run `-f ir` against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench/."
+description = "Run `-f ir` against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench-ir/."
 depends = ["build"]
-run = "deno run --allow-read --allow-write --allow-run scripts/bench-ir-parity.ts"
+run = "deno run --allow-read --allow-write --allow-run scripts/bench-ir-parity.ts ir"
+
+[tasks."bench:json-parity"]
+description = "Run `-f json` (visual-graph JSON) against every ts/src/**/*.ts(x), compare Rust vs TS byte-for-byte, and record per-file wall-clock timings under target/parity-bench-json/."
+depends = ["build"]
+run = "deno run --allow-read --allow-write --allow-run scripts/bench-ir-parity.ts json"
 
 [tasks."cov"]
 description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Pass a filename regex as the first arg to filter rows (e.g. `mise run cov -- build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."

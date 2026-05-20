@@ -9,4 +9,9 @@ repository.workspace = true
 [dependencies]
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
+unsnarl-oxc-parity = { workspace = true }
 unsnarl-root-query = { workspace = true }
+serde = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

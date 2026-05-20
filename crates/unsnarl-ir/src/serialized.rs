@@ -14,7 +14,7 @@ pub use reference_id::SerializedReferenceId;
 pub use scope_id::SerializedScopeId;
 pub use serialized_definition::{
     DefinitionName, DefinitionNode, ImportBindingDefaultDef, ImportBindingNamedDef,
-    ImportBindingNamespaceDef, SerializedDefinition, SimpleDef, VariableDef,
+    ImportBindingNamespaceDef, SerializedDefinition, SimpleDef, SimpleDefType, VariableDef,
 };
 pub use serialized_expression_statement_head::{SerializedHeadExpression, SerializedHeadOperand};
 pub use serialized_ir::{SerializedIR, SerializedSource};

@@ -17,3 +17,15 @@ pub enum UpdateOperator {
     #[serde(rename = "--")]
     Decrement,
 }
+
+impl UpdateOperator {
+    /// Source spelling of the operator (`"++"` / `"--"`). Used by
+    /// `render_head_expression` to format the operator inside a
+    /// rendered update label.
+    pub fn as_str(&self) -> &'static str {
+        match self {
+            Self::Increment => "++",
+            Self::Decrement => "--",
+        }
+    }
+}

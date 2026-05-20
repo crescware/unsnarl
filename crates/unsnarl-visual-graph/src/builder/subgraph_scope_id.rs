@@ -1,0 +1,8 @@
+//! Mirrors `ts/src/visual-graph/builder/subgraph-scope-id.ts`.
+
+use super::sanitize::sanitize;
+use unsnarl_ir::serialized::SerializedScope;
+
+pub fn subgraph_scope_id(scope: &SerializedScope) -> String {
+    format!("s_{}", sanitize(scope.id.value()))
+}
