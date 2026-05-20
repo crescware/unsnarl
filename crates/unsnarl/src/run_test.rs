@@ -19,10 +19,6 @@ fn capture_stdout(argv: &[&str]) -> String {
     out
 }
 
-fn first_line(out: &str) -> &str {
-    out.lines().next().expect("at least one line")
-}
-
 #[test]
 fn default_format_routes_to_mermaid_emitter() {
     use std::io::Write;
@@ -157,8 +153,27 @@ fn markdown_format_routes_to_markdown_emitter() {
 
 #[test]
 fn stats_format_routes_to_stats_emitter() {
-    let out = capture_stdout(&["uns", "-f", "stats", "x.ts"]);
-    assert_eq!(first_line(&out), "Not implemented yet: stats emitter");
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "let x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&["uns", "-f", "stats", &path]);
+    // The stats emitter writes a TSV row per node followed by a
+    // `<N> total` summary; asserting on the trailing "total" line
+    // is enough to distinguish the real emitter from the legacy
+    // stub output.
+    let last = out.lines().last().expect("at least one line");
+    assert!(
+        last.ends_with(" total"),
+        "expected trailing total row, got: {last}"
+    );
 }
 
 #[test]
@@ -168,36 +183,27 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 }
 
 #[test]
-fn stub_emitter_output_includes_parsed_args_json_after_label() {
-    // `stats` is still a stub; the legacy "Not implemented yet" line
-    // + CLI args JSON shape lives on through the unimplemented formats.
-    let out = capture_stdout(&["uns", "-f", "stats", "x.ts"]);
-    let (label, rest) = out.split_once('\n').expect("label line");
-    assert_eq!(label, "Not implemented yet: stats emitter");
-    let value: serde_json::Value =
-        serde_json::from_str(rest.trim_end()).expect("rest should be JSON");
-    assert_eq!(value["format"], "stats");
-    assert_eq!(value["file"], "x.ts");
-}
-
-#[test]
 fn out_flag_notice_is_emitted_to_stderr_when_out_dir_basename_has_an_extension() {
-    // Pair the `-o graph.mmd` notice with `-f stats` so the test
-    // does not need a real input file -- the notice fires during arg
-    // finalize, before the unimplemented emitter prints its stub body.
-    let (out, err) = capture(&["uns", "-f", "stats", "-o", "graph.mmd", "x.ts"]);
+    // `-o graph.mmd` triggers the notice during arg finalize, before
+    // any emitter runs. Pair it with an unreadable input path so the
+    // emitter exits early via its `read_source` error branch -- the
+    // notice still has to surface on stderr regardless.
+    let (_out, err) = capture(&["uns", "-f", "stats", "-o", "graph.mmd", "x.ts"]);
+    let first_err_line = err.lines().next().expect("at least one stderr line");
     assert_eq!(
-        first_line(&err),
+        first_err_line,
         "uns: notice: -o 'graph.mmd' is treated as a directory name; use --out-file to write to that path as a file."
     );
-    // The emitter output still lands on stdout; the notice does not
-    // pollute it.
-    assert_eq!(first_line(&out), "Not implemented yet: stats emitter");
 }
 
 #[test]
 fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
-    let (out, err) = capture(&["uns", "-f", "stats", "-o", "build", "x.ts"]);
-    assert_eq!(err, "");
-    assert_eq!(first_line(&out), "Not implemented yet: stats emitter");
+    // No notice in stderr means only the emitter's own error (the
+    // input file does not exist) survives. Assert that the notice
+    // line is absent rather than insisting on a fully empty stderr.
+    let (_out, err) = capture(&["uns", "-f", "stats", "-o", "build", "x.ts"]);
+    assert!(
+        !err.contains("uns: notice:"),
+        "expected no -o notice, got stderr: {err}"
+    );
 }

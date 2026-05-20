@@ -8,7 +8,8 @@ use unsnarl_emitter_mermaid::theme::{ColorTheme, DARK_THEME, LIGHT_THEME};
 use crate::cli::args::{Args, CliColorTheme, CliFormat, CliLanguage, CliMermaidRenderer};
 use crate::cli::run_cli::emit_out_flag_notice;
 use crate::pipeline::{
-    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, language_for_path,
+    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
+    language_for_path,
 };
 
 pub fn run(args: &Args) {
@@ -115,14 +116,18 @@ fn emit_markdown(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
     }
 }
 
-fn emit_stats(args: &Args, out: &mut dyn Write, _err: &mut dyn Write) {
-    emit_stub("stats emitter", args, out);
-}
-
-fn emit_stub(label: &str, args: &Args, out: &mut dyn Write) {
-    let json = serde_json::to_string_pretty(args).expect("serialize CLI args");
-    writeln!(out, "Not implemented yet: {label}").expect("write stub label");
-    writeln!(out, "{json}").expect("write CLI args JSON");
+fn emit_stats(args: &Args, out: &mut dyn Write, err: &mut dyn Write) {
+    let Some((code, source_path, language)) = read_source(args, err) else {
+        return;
+    };
+    match emit_stats_text(&code, &source_path, language) {
+        Ok(text) => {
+            out.write_all(text.as_bytes()).expect("write stats output");
+        }
+        Err(e) => {
+            writeln!(err, "uns: error: {e}").expect("write stats error");
+        }
+    }
 }
 
 /// Pull the source to feed the pipeline plus the path / language pair

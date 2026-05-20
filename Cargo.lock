@@ -1008,9 +1008,9 @@ dependencies = [
 name = "unsnarl-emitter-stats"
 version = "0.3.0-beta.3"
 dependencies = [
- "unsnarl-annotations",
  "unsnarl-emitter",
  "unsnarl-ir",
+ "unsnarl-visual-graph",
 ]
 
 [[package]]

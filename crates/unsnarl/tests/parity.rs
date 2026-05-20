@@ -21,7 +21,8 @@ use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::DARK_THEME;
 
 use unsnarl::pipeline::{
-    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, language_for_path,
+    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
+    language_for_path,
 };
 
 fn workspace_root() -> PathBuf {
@@ -73,6 +74,10 @@ enum Baseline {
     /// as `Mermaid` — the markdown emitter embeds the mermaid render
     /// inside a fenced ```mermaid block.
     Markdown,
+    /// `expected.stats` (Step 16 stats baseline). One TSV row per
+    /// visual-graph node followed by a `<N> total` summary; the
+    /// emitter has no CLI knobs to thread.
+    Stats,
 }
 
 impl Baseline {
@@ -82,6 +87,7 @@ impl Baseline {
             Self::Json => "expected.json",
             Self::Mermaid => "expected.mermaid",
             Self::Markdown => "preview.md",
+            Self::Stats => "expected.stats",
         }
     }
 
@@ -91,6 +97,7 @@ impl Baseline {
             Self::Json => "json",
             Self::Mermaid => "mermaid",
             Self::Markdown => "markdown",
+            Self::Stats => "stats",
         }
     }
 }
@@ -145,6 +152,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
             Baseline::Json,
             Baseline::Mermaid,
             Baseline::Markdown,
+            Baseline::Stats,
         ] {
             let expected = dir.join(baseline.file_name());
             if !expected.is_file() {
@@ -198,6 +206,8 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
             false,
         )
         .map_err(|e| Failed::from(format!("emit_markdown_text failed: {e:?}")))?,
+        Baseline::Stats => emit_stats_text(&code, &case.rel_source_path, language)
+            .map_err(|e| Failed::from(format!("emit_stats_text failed: {e:?}")))?,
     };
     if actual != expected {
         return Err(Failed::from(format!(

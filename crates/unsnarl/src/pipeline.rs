@@ -20,6 +20,7 @@ use unsnarl_emitter_markdown::MarkdownEmitter;
 use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
 use unsnarl_emitter_mermaid::theme::ColorTheme;
 use unsnarl_emitter_mermaid::MermaidEmitter;
+use unsnarl_emitter_stats::StatsEmitter;
 use unsnarl_ir::Language;
 
 /// Map a path's extension to a [`Language`]. Mirrors
@@ -151,6 +152,27 @@ pub fn emit_markdown_text(
         &EmitOptions {
             pretty_json: false,
             debug,
+        },
+    )
+}
+
+/// Same as [`emit_ir_text`] but routes the parsed IR through
+/// [`StatsEmitter`], which builds a `VisualGraph` and renders a
+/// wc-like TSV table of per-node edge counts. Used by the `-f stats`
+/// CLI handler and the parity harness's `expected.stats` comparison.
+pub fn emit_stats_text(
+    code: &str,
+    source_path: &str,
+    language: Language,
+) -> Result<String, ParseError> {
+    emit_text_with(
+        code,
+        source_path,
+        language,
+        &StatsEmitter,
+        &EmitOptions {
+            pretty_json: false,
+            debug: false,
         },
     )
 }
