@@ -1,0 +1,22 @@
+{
+  "variants": [
+    { "slug": "r10", "roots": "10", "descendants": 10, "ancestors": 10 },
+    { "slug": "r10-a1", "roots": "10", "descendants": 1, "ancestors": 0 },
+    { "slug": "r10-b1", "roots": "10", "descendants": 0, "ancestors": 1 },
+    { "slug": "r10-11", "roots": "10-11", "descendants": 10, "ancestors": 10 },
+    { "slug": "r10-11-a1", "roots": "10-11", "descendants": 1, "ancestors": 0 },
+    { "slug": "r10-11-b1", "roots": "10-11", "descendants": 0, "ancestors": 1 },
+    { "slug": "r10-12", "roots": "10-12", "descendants": 10, "ancestors": 10 },
+    { "slug": "r10-12-a1", "roots": "10-12", "descendants": 1, "ancestors": 0 },
+    { "slug": "r10-12-b1", "roots": "10-12", "descendants": 0, "ancestors": 1 },
+    { "slug": "r19", "roots": "19", "descendants": 10, "ancestors": 10 },
+    { "slug": "r19-a1", "roots": "19", "descendants": 1, "ancestors": 0 },
+    { "slug": "r19-b1", "roots": "19", "descendants": 0, "ancestors": 1 },
+    { "slug": "r23", "roots": "23", "descendants": 10, "ancestors": 10 },
+    { "slug": "r23-a1", "roots": "23", "descendants": 1, "ancestors": 0 },
+    { "slug": "r23-b1", "roots": "23", "descendants": 0, "ancestors": 1 },
+    { "slug": "r24", "roots": "24", "descendants": 10, "ancestors": 10 },
+    { "slug": "r24-a1", "roots": "24", "descendants": 1, "ancestors": 0 },
+    { "slug": "r24-b1", "roots": "24", "descendants": 0, "ancestors": 1 }
+  ]
+}

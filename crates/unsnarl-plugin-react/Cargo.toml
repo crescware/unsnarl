@@ -1,0 +1,12 @@
+[package]
+name = "unsnarl-plugin-react"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+unsnarl-ir = { workspace = true }
+unsnarl-oxc-parity = { workspace = true }
+unsnarl-plugin = { workspace = true }

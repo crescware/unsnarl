@@ -1,0 +1,8 @@
+{
+  "variants": [
+    { "slug": "a-c1", "roots": "a", "descendants": 1, "ancestors": 1 },
+    { "slug": "e-c1", "roots": "e", "descendants": 1, "ancestors": 1 },
+    { "slug": "c-a1", "roots": "c", "descendants": 1, "ancestors": 0 },
+    { "slug": "c-b1", "roots": "c", "descendants": 0, "ancestors": 1 }
+  ]
+}

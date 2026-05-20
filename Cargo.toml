@@ -1,0 +1,60 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/unsnarl-oxc-parity",
+    "crates/unsnarl-ir",
+    "crates/unsnarl-annotations",
+    "crates/unsnarl-boundary-eslint-scope",
+    "crates/unsnarl-analyzer",
+    "crates/unsnarl-root-query",
+    "crates/unsnarl-visual-graph",
+    "crates/unsnarl-emitter",
+    "crates/unsnarl-emitter-ir",
+    "crates/unsnarl-emitter-json",
+    "crates/unsnarl-emitter-mermaid",
+    "crates/unsnarl-emitter-markdown",
+    "crates/unsnarl-emitter-stats",
+    "crates/unsnarl-plugin",
+    "crates/unsnarl-plugin-react",
+    "crates/unsnarl",
+    "crates/no-allow-dead-code",
+]
+
+[workspace.package]
+version = "0.3.0-beta.4"
+edition = "2021"
+rust-version = "1.95.0"
+license = "MIT"
+repository = "https://github.com/crescware/unsnarl"
+
+[workspace.dependencies]
+unsnarl-oxc-parity = { path = "crates/unsnarl-oxc-parity" }
+unsnarl-ir = { path = "crates/unsnarl-ir" }
+unsnarl-annotations = { path = "crates/unsnarl-annotations" }
+unsnarl-boundary-eslint-scope = { path = "crates/unsnarl-boundary-eslint-scope" }
+unsnarl-analyzer = { path = "crates/unsnarl-analyzer" }
+unsnarl-root-query = { path = "crates/unsnarl-root-query" }
+unsnarl-visual-graph = { path = "crates/unsnarl-visual-graph" }
+unsnarl-emitter = { path = "crates/unsnarl-emitter" }
+unsnarl-emitter-ir = { path = "crates/unsnarl-emitter-ir" }
+unsnarl-emitter-json = { path = "crates/unsnarl-emitter-json" }
+unsnarl-emitter-mermaid = { path = "crates/unsnarl-emitter-mermaid" }
+unsnarl-emitter-markdown = { path = "crates/unsnarl-emitter-markdown" }
+unsnarl-emitter-stats = { path = "crates/unsnarl-emitter-stats" }
+unsnarl-plugin = { path = "crates/unsnarl-plugin" }
+unsnarl-plugin-react = { path = "crates/unsnarl-plugin-react" }
+
+oxc_parser = "=0.128.0"
+oxc_ast = "=0.128.0"
+oxc_ast_visit = "=0.128.0"
+oxc_syntax = "=0.128.0"
+oxc_allocator = "=0.128.0"
+oxc_span = "=0.128.0"
+oxc_diagnostics = "=0.128.0"
+oxc_index = { version = "=4.1.0", features = ["nonmax", "serde"] }
+
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+clap = { version = "4", features = ["derive"] }
+libtest-mimic = "0.8.2"
+pretty_assertions = "1"

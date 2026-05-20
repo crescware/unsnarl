@@ -1,0 +1,17 @@
+//! Predicate selecting nodes that are emitted in the trailing
+//! "synthetic node" block rather than at the top of the diagram.
+//!
+//! Mirrors `ts/src/emitter/mermaid/renders-in-synthetic-block.ts`.
+
+use unsnarl_visual_graph::node_kind::NodeKind;
+use unsnarl_visual_graph::visual_node::VisualNode;
+
+pub fn renders_in_synthetic_block(n: &VisualNode) -> bool {
+    matches!(
+        n.kind(),
+        NodeKind::SyntheticModuleSink
+            | NodeKind::SyntheticModuleSource
+            | NodeKind::SyntheticImportIntermediate
+            | NodeKind::SyntheticExpressionStatement
+    )
+}

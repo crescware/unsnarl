@@ -1,0 +1,15 @@
+[package]
+name = "unsnarl-emitter-markdown"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+unsnarl-emitter = { workspace = true }
+unsnarl-emitter-mermaid = { workspace = true }
+unsnarl-analyzer = { workspace = true }
+unsnarl-ir = { workspace = true }
+unsnarl-root-query = { workspace = true }
+unsnarl-visual-graph = { workspace = true }

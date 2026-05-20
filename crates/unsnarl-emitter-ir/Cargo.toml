@@ -1,0 +1,23 @@
+[package]
+name = "unsnarl-emitter-ir"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+
+[dependencies]
+unsnarl-ir = { workspace = true }
+unsnarl-annotations = { workspace = true }
+unsnarl-emitter = { workspace = true }
+unsnarl-oxc-parity = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }
+
+[dev-dependencies]
+unsnarl-boundary-eslint-scope = { workspace = true }
+unsnarl-analyzer = { workspace = true }
+oxc_allocator = { workspace = true }
+oxc_ast = { workspace = true }
+oxc_index = { workspace = true }
+oxc_span = { workspace = true }

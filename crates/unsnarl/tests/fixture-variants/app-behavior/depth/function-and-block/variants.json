@@ -1,0 +1,19 @@
+{
+  "variants": [
+    {
+      "kind": "depth",
+      "slug": "fn1-block10",
+      "depths": { "function": 1, "block": 10 }
+    },
+    {
+      "kind": "depth",
+      "slug": "fn10-block1",
+      "depths": { "function": 10, "block": 1 }
+    },
+    {
+      "kind": "depth",
+      "slug": "fn2-block2",
+      "depths": { "uniform": 2 }
+    }
+  ]
+}
