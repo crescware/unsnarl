@@ -23,6 +23,13 @@
 // `--dry-run` to both publish invocations and skip the trailing
 // `npm view` verification.
 //
+// Each `npm` subprocess is launched via `.spawn()` with stdin /
+// stdout / stderr explicitly inherited. `Deno.Command#output()`
+// does not pass the parent's stdin through, so npm would see a
+// non-TTY stdin and bail out of the passkey / WebAuthn 2FA polling
+// flow with `code EOTP` instead of waiting for the browser
+// authentication to complete.
+//
 // Usage (via mise):
 //   mise run npm:publish
 //   mise run npm:publish -- --dry-run
@@ -62,12 +69,14 @@ async function npmPublish(
   const args = ["publish", "--tag", tag];
   if (dryRun) args.push("--dry-run");
   console.error(`[${label}] npm ${args.join(" ")}`);
-  const { success } = await new Deno.Command("npm", {
+  const child = new Deno.Command("npm", {
     args,
     cwd,
+    stdin: "inherit",
     stdout: "inherit",
     stderr: "inherit",
-  }).output();
+  }).spawn();
+  const { success } = await child.status;
   if (!success) {
     console.error(`npm publish failed in ${cwd}`);
     Deno.exit(1);
@@ -88,11 +97,13 @@ await npmPublish(ROOT_DIR, `${rootPkg.name}@${rootPkg.version}`, rootTag);
 if (!dryRun) {
   console.error("");
   console.error("--- npm view unsnarl dist-tags ---");
-  const { success } = await new Deno.Command("npm", {
+  const child = new Deno.Command("npm", {
     args: ["view", "unsnarl", "dist-tags"],
+    stdin: "inherit",
     stdout: "inherit",
     stderr: "inherit",
-  }).output();
+  }).spawn();
+  const { success } = await child.status;
   if (!success) {
     console.error("npm view failed");
     Deno.exit(1);
