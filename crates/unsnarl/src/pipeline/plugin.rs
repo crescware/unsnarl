@@ -43,3 +43,7 @@ pub fn apply_plugins(
     }
     ir
 }
+
+#[cfg(test)]
+#[path = "plugin_test.rs"]
+mod plugin_test;
