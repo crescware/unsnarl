@@ -54,6 +54,7 @@ fn for_var_head_emits_var_detected_diagnostic() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,
@@ -94,6 +95,7 @@ fn for_of_using_head_is_skipped_by_declare_for_left() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,

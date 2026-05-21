@@ -48,6 +48,7 @@ fn var_declaration_emits_var_detected_diagnostic() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,
@@ -95,6 +96,7 @@ fn using_declaration_is_skipped_by_hoist_pass() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,

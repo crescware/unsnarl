@@ -56,7 +56,8 @@ use crate::find_jsx_element_span::find_jsx_element_span;
 use crate::find_predicate_container::find_predicate_container;
 use crate::format_case_test::format_case_test;
 use crate::owner::{
-    all_binding_variables, assignment_target_variables, locate_reference_owner_slot, OwnerLookup,
+    all_binding_variables, locate_reference_owner_slot, walk_assignment_target_identifiers,
+    OwnerLookup,
 };
 use crate::path_entry::{ArrowBodyInfo, PathEntry};
 use crate::reference_call_receiver::reference_call_receiver_flags;
@@ -235,7 +236,36 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                 let kind = &self.path[path_index].kind;
                 match kind {
                     AstKind::AssignmentExpression(ae) => {
-                        assignment_target_variables(&ae.left, scope, self.arena)
+                        // For AssignmentExpression targets, owners must
+                        // mirror what TS sees at the moment the inner
+                        // reference fires inline with scope-build. TS
+                        // calls `resolveInScopeChain(scope, name)` for
+                        // each identifier in the target, which by
+                        // construction returns the same binding as the
+                        // reference's own `.resolved` field (both
+                        // calls use the same scope.set state). The
+                        // Rust pipeline runs analysis as a separate
+                        // pass after scope.set is fully populated, so
+                        // a fresh `resolve_in_scope_chain` call here
+                        // would also pick up `var` bindings hoisted
+                        // from later sibling blocks that weren't
+                        // visible at binding time, diverging from TS.
+                        // Reuse each identifier's reference.resolved
+                        // value instead.
+                        let mut out = Vec::new();
+                        walk_assignment_target_identifiers(&ae.left, &mut |id| {
+                            let Some(&ident_ref_id) =
+                                self.span_to_ref.get(&(id.span.start, id.span.end))
+                            else {
+                                return;
+                            };
+                            if let Some(resolved) = self.arena.references[ident_ref_id].resolved {
+                                if !out.contains(&resolved) {
+                                    out.push(resolved);
+                                }
+                            }
+                        });
+                        out
                     }
                     _ => Vec::new(),
                 }
