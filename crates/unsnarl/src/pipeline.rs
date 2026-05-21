@@ -510,3 +510,7 @@ fn serialize_ir(
     };
     Ok(serializer.serialize(&ctx))
 }
+
+#[cfg(test)]
+#[path = "pipeline_test.rs"]
+mod pipeline_test;

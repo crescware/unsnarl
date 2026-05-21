@@ -175,3 +175,40 @@ fn throws_parse_error_on_syntactically_invalid_source() {
     assert!(!captured.errors().is_empty());
     assert!(captured.message().contains("broken.ts"));
 }
+
+// Ports `ts/src/pipeline/parse/default-source-type-for.test.ts`.
+// `default_source_type_for` lives next to the parser in the
+// boundary crate (not under `pipeline/parse/`) because it pairs
+// directly with `OxcParser::parse`; the tests are pinned here so
+// the function's sibling test file owns its behaviour.
+#[test]
+fn default_source_type_for_maps_js_to_script_nodejs_default() {
+    assert!(matches!(
+        default_source_type_for(Language::Js),
+        SourceType::Script
+    ));
+}
+
+#[test]
+fn default_source_type_for_maps_ts_to_module() {
+    assert!(matches!(
+        default_source_type_for(Language::Ts),
+        SourceType::Module
+    ));
+}
+
+#[test]
+fn default_source_type_for_maps_tsx_to_module() {
+    assert!(matches!(
+        default_source_type_for(Language::Tsx),
+        SourceType::Module
+    ));
+}
+
+#[test]
+fn default_source_type_for_maps_jsx_to_module() {
+    assert!(matches!(
+        default_source_type_for(Language::Jsx),
+        SourceType::Module
+    ));
+}
