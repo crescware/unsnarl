@@ -2,7 +2,13 @@
 //!
 //! Mirrors `IrEmitter` in `ts/src/emitter/ir/ir.ts`. The output is
 //! `JSON.stringify(ir, null, 2)\n` when `pretty_json` is true, and
-//! `JSON.stringify(ir)\n` otherwise.
+//! `JSON.stringify(ir)\n` otherwise. The two serialisations live in
+//! sibling files under `ir/` so the coverage report can show parity
+//! exercising only the pretty path (the CLI never sets
+//! `pretty_json = false`).
+
+mod serialize_compact;
+mod serialize_pretty;
 
 use unsnarl_emitter::{EmitOptions, Emitter};
 use unsnarl_ir::serialized::SerializedIR;
@@ -36,9 +42,9 @@ impl Emitter for IrEmitter {
 
     fn emit(&self, ir: &SerializedIR, opts: &EmitOptions) -> String {
         let text = if opts.pretty_json {
-            serde_json::to_string_pretty(ir).expect("SerializedIR is serializable")
+            serialize_pretty::serialize(ir)
         } else {
-            serde_json::to_string(ir).expect("SerializedIR is serializable")
+            serialize_compact::serialize(ir)
         };
         format!("{text}\n")
     }
