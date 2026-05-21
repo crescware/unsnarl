@@ -39,7 +39,7 @@ description = "Shortcut for `mise run npm:publish -- --dry-run`. Runs both publi
 run = "deno run --allow-read --allow-run scripts/npm-publish.ts --dry-run"
 
 [tasks."bump"]
-description = "Align every version field (Cargo.toml [workspace.package].version, package.json version + optionalDependencies.unsnarl-darwin-arm64, npm/unsnarl-darwin-arm64/package.json version) to the version passed as the argument, then regenerate Cargo.lock. Usage: `mise run bump -- 0.3.0-rc.2`. This is the only sanctioned way to set the project version; it does NOT auto-increment, it just aligns everything to the argument."
+description = "Align every version field (Cargo.toml [workspace.package].version, package.json version + optionalDependencies.unsnarl-darwin-arm64, npm/unsnarl-darwin-arm64/package.json version) AND both publishConfig.tag fields (root + sub-package) to match the version passed as the argument, then regenerate Cargo.lock. The publishConfig.tag is derived from the semver pre-release id: no prerelease -> `latest`, `-rc.*` -> `rc`, anything else (e.g. `-beta.*`, `-alpha.*`) -> `beta`. Usage: `mise run bump -- 0.3.0-rc.2`. This is the only sanctioned way to set the project version; it does NOT auto-increment, it just aligns everything to the argument."
 run = "deno run --allow-read --allow-write --allow-run scripts/bump-version.ts"
 
 [tasks."parity"]

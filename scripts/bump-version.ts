@@ -4,16 +4,27 @@
 // regenerate Cargo.lock by running `cargo build -p unsnarl`.
 //
 // This is the only sanctioned way to set the project version.
-// Editing by hand is error-prone because four fields must be kept
+// Editing by hand is error-prone because six fields must be kept
 // consistent in lockstep:
 //   - Cargo.toml `[workspace.package].version`
 //   - package.json `version`
 //   - package.json `optionalDependencies["unsnarl-darwin-arm64"]`
 //   - npm/unsnarl-darwin-arm64/package.json `version`
+//   - package.json `publishConfig.tag`
+//   - npm/unsnarl-darwin-arm64/package.json `publishConfig.tag`
 //
-// The script sets all four to the argument verbatim; it does NOT
-// derive "the next version" from semver rules. Pass the exact
-// version string you want everywhere.
+// The script sets the version fields to the argument verbatim; it
+// does NOT derive "the next version" from semver rules. The two
+// `publishConfig.tag` fields are derived from the argument's
+// semver pre-release identifier:
+//   - no pre-release ("0.3.0")              -> "latest"
+//   - pre-release starting with "rc"        -> "rc"
+//   - any other pre-release ("beta"/"alpha"
+//     /"canary"/...)                        -> "beta"
+// This mirrors the published surface of `npm-publish.ts`, which
+// reads `publishConfig.tag` from each package and passes it via
+// `npm publish --tag <value>` (npm 11.12.x silently ignores
+// publishConfig.tag otherwise).
 //
 // Usage (via mise):
 //   mise run bump -- 0.3.0-rc.2
@@ -88,6 +99,31 @@ replaceOnce(
   /"version": "[^"]+"/,
   `"version": "${target}"`,
 );
+
+// publishConfig.tag — derive from the semver pre-release identifier.
+// Rule: no pre-release -> "latest"; pre-release starts with "rc" ->
+// "rc"; otherwise -> "beta" (covers "beta"/"alpha"/"canary"/etc.
+// uniformly so a stray prerelease never accidentally publishes to
+// `latest`).
+const preReleaseId = target.includes("-")
+  ? target.split("-", 2)[1].split(".", 1)[0]
+  : null;
+const tag = preReleaseId === null
+  ? "latest"
+  : preReleaseId === "rc"
+  ? "rc"
+  : "beta";
+
+for (const pkgJson of [
+  "package.json",
+  "npm/unsnarl-darwin-arm64/package.json",
+]) {
+  replaceOnce(
+    pkgJson,
+    /("publishConfig":\s*\{[^}]*?"tag":\s*)"[^"]+"/s,
+    `$1"${tag}"`,
+  );
+}
 
 console.error("");
 console.error("Regenerating Cargo.lock via `cargo build -p unsnarl`...");
