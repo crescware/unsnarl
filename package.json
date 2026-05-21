@@ -32,7 +32,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "tag": "rc"
+    "tag": "latest"
   },
   "optionalDependencies": {
     "unsnarl-darwin-arm64": "0.3.0"
