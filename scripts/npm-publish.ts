@@ -1,4 +1,4 @@
-#!/usr/bin/env -S deno run --allow-read --allow-run --allow-env
+#!/usr/bin/env -S deno run --allow-read --allow-run
 // Publish unsnarl + unsnarl-darwin-arm64 to npm in the right order.
 //
 // The dist-tag for each package is read from its own package.json's
@@ -19,10 +19,6 @@
 // `prepack` lifecycle hook fires and rebuilds the native binary
 // via `mise run npm:build-darwin-arm64`.
 //
-// For 2FA, pass `NPM_OTP=<code>` as an env var. Without it, npm
-// will prompt interactively per package, which forces typing the
-// code twice (once per publish) inside the OTP window.
-//
 // Pass `--dry-run` (after `--` when invoked via mise) to forward
 // `--dry-run` to both publish invocations and skip the trailing
 // `npm view` verification.
@@ -30,7 +26,6 @@
 // Usage (via mise):
 //   mise run npm:publish
 //   mise run npm:publish -- --dry-run
-//   NPM_OTP=123456 mise run npm:publish
 
 // Script lives at `scripts/npm-publish.ts`; the repo root is two
 // `/`s up.
@@ -39,7 +34,6 @@ const REPO_ROOT = SCRIPT_PATH.split("/").slice(0, -2).join("/");
 Deno.chdir(REPO_ROOT);
 
 const dryRun = Deno.args.includes("--dry-run");
-const otp = Deno.env.get("NPM_OTP") ?? "";
 
 interface Pkg {
   name?: string;
@@ -60,14 +54,14 @@ function tagOf(pkg: Pkg, pkgJsonPath: string): string {
   return tag;
 }
 
-async function npmPublish(cwd: string, label: string, tag: string): Promise<void> {
+async function npmPublish(
+  cwd: string,
+  label: string,
+  tag: string,
+): Promise<void> {
   const args = ["publish", "--tag", tag];
   if (dryRun) args.push("--dry-run");
-  if (otp) args.push(`--otp=${otp}`);
-  const printable = args.map((a) =>
-    a.startsWith("--otp=") ? "--otp=***" : a,
-  ).join(" ");
-  console.error(`[${label}] npm ${printable}`);
+  console.error(`[${label}] npm ${args.join(" ")}`);
   const { success } = await new Deno.Command("npm", {
     args,
     cwd,
