@@ -142,3 +142,7 @@ fn render_stats(graph: &VisualGraph) -> String {
     out.push('\n');
     out
 }
+
+#[cfg(test)]
+#[path = "stats_test.rs"]
+mod stats_test;

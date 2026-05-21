@@ -16,3 +16,7 @@ pub fn format_label(path: &str, n: &VisualNode) -> String {
         name = n.name()
     )
 }
+
+#[cfg(test)]
+#[path = "format_label_test.rs"]
+mod format_label_test;

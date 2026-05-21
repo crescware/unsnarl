@@ -22,3 +22,7 @@ fn walk<'a>(elements: &'a [VisualElement], out: &mut Vec<&'a VisualNode>) {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "collect_nodes_test.rs"]
+mod collect_nodes_test;
