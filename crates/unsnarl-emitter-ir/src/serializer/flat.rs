@@ -7,7 +7,8 @@
 pub mod collect_scopes_in_order;
 pub mod flat_serializer;
 pub mod has_declaring_def;
-pub mod offset_of;
+pub mod offset_of_identifier;
+pub mod offset_of_node;
 pub mod pick_variable_offset;
 pub mod serialize_definition;
 pub mod serialize_expression_statement_head;

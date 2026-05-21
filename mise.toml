@@ -87,5 +87,5 @@ depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity-all.ts"
 
 [tasks."cov"]
-description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Pass a filename regex as the first arg to filter rows (e.g. `mise run cov -- build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
+description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Use `-- --filter <regex>` to filter report rows by filename, and forward any other args (e.g. `--test parity`, `-p unsnarl-analyzer`) verbatim to both the build and run phases of `cargo test --workspace` (e.g. `mise run cov -- --test parity`, `mise run cov -- --filter build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
 run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/cov.ts"

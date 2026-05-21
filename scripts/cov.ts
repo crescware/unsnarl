@@ -19,8 +19,17 @@
 //   rustup component add llvm-tools-preview
 //
 // Usage (via mise):
-//   mise run cov                              # full workspace report
-//   mise run cov -- build_analysis_visitor.rs # filter rows by filename regex
+//   mise run cov                                          # full workspace report
+//   mise run cov -- --filter build_analysis_visitor.rs    # filter rows by filename regex
+//   mise run cov -- --test parity                         # restrict to the `parity` integration test target
+//   mise run cov -- --filter visual_graph -- --test parity
+//                                                         # combine: parity-only run, rows filtered to visual_graph
+//
+// Argument convention:
+//   --filter <regex>   Filename regex applied to the final llvm-cov report rows.
+//   Anything else      Forwarded verbatim to both `cargo test --workspace --no-run`
+//                      and the subsequent `cargo test --workspace` run (e.g.
+//                      `--test parity`, `-p unsnarl-analyzer`, `--lib`, ...).
 
 // Script lives at `scripts/cov.ts`; the repo root is two `/`s up.
 const SCRIPT_PATH = new URL(import.meta.url).pathname;
@@ -97,7 +106,29 @@ function listInstrumentedTestObjects(): string[] {
   return out;
 }
 
-const filter = Deno.args[0] ?? "";
+function parseArgs(argv: string[]): { filter: string; cargoExtra: string[] } {
+  let filter = "";
+  const cargoExtra: string[] = [];
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--filter") {
+      const next = argv[i + 1];
+      if (next === undefined) {
+        console.error("--filter requires a regex argument");
+        Deno.exit(2);
+      }
+      filter = next;
+      i++;
+    } else if (a.startsWith("--filter=")) {
+      filter = a.slice("--filter=".length);
+    } else {
+      cargoExtra.push(a);
+    }
+  }
+  return { filter, cargoExtra };
+}
+
+const { filter, cargoExtra } = parseArgs(Deno.args);
 const { profdata, llvmcov } = await locateLlvmTools();
 
 rmrf(WORK);
@@ -116,7 +147,7 @@ const subprocessEnv = {
 console.error("[1/3] building instrumented test binaries...");
 {
   const { success } = await new Deno.Command("cargo", {
-    args: ["test", "--workspace", "--no-run"],
+    args: ["test", "--workspace", "--no-run", ...cargoExtra],
     env: subprocessEnv,
     stdout: "null",
     stderr: "inherit",
@@ -134,7 +165,7 @@ console.error("[2/3] running tests...");
   // and let the merge / report step decide whether there is
   // anything to summarise.
   await new Deno.Command("cargo", {
-    args: ["test", "--workspace", "--quiet"],
+    args: ["test", "--workspace", "--quiet", ...cargoExtra],
     env: subprocessEnv,
     stdout: "null",
     stderr: "null",

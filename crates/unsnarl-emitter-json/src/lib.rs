@@ -3,10 +3,15 @@
 //!
 //! Mirrors `JsonEmitter` in `ts/src/emitter/json/json.ts`. The
 //! visual-graph build runs once per emit; the resulting `VisualGraph`
-//! is serialized with `serde_json::to_string_pretty` when
-//! `pretty_json` is true, otherwise with the compact form. The
-//! returned text always ends in a trailing newline (matches the TS
-//! `${text}\n`).
+//! is serialized with `serialize_pretty::serialize` when
+//! `pretty_json` is true, otherwise with `serialize_compact::serialize`.
+//! The two serialisations live in sibling files so the coverage
+//! report can show parity exercising only the pretty path (the CLI
+//! never sets `pretty_json = false`). The returned text always ends
+//! in a trailing newline (matches the TS `${text}\n`).
+
+mod serialize_compact;
+mod serialize_pretty;
 
 use unsnarl_emitter::{EmitOptions, Emitter};
 use unsnarl_ir::serialized::SerializedIR;
@@ -54,9 +59,9 @@ impl Emitter for JsonEmitter {
             &built
         };
         let text = if opts.pretty_json {
-            serde_json::to_string_pretty(graph).expect("VisualGraph is serializable")
+            serialize_pretty::serialize(graph)
         } else {
-            serde_json::to_string(graph).expect("VisualGraph is serializable")
+            serialize_compact::serialize(graph)
         };
         format!("{text}\n")
     }
