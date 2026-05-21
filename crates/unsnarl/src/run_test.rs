@@ -547,6 +547,24 @@ fn depths_from_args_depth_zero_is_explicit_not_falsy() {
 }
 
 #[test]
+fn depths_from_args_depth_function_and_depth_block_without_depth() {
+    // Mirrors the "--depth-function and --depth-block together (no
+    // --depth)" case from
+    // `ts/src/cli/run-cli/normalize-cli-options-depth.test.ts`:
+    // each axis takes its own override, the other kinds inherit the
+    // matching axis, and neither side falls back to DEFAULT_DEPTH.
+    let args = parse_with(&["uns", "--depth-function", "2", "--depth-block", "5", "x.ts"]);
+    let d = depths_from_args(&args);
+    assert_eq!(d.function, NestingDepth(2));
+    assert_eq!(d.r#if, NestingDepth(5));
+    assert_eq!(d.r#for, NestingDepth(5));
+    assert_eq!(d.r#while, NestingDepth(5));
+    assert_eq!(d.switch, NestingDepth(5));
+    assert_eq!(d.try_catch_finally, NestingDepth(5));
+    assert_eq!(d.block, NestingDepth(5));
+}
+
+#[test]
 fn run_to_with_dash_depth_collapses_deep_function_in_markdown_query_block() {
     // End-to-end: parse argv with `--depth 1`, dispatch through
     // `run_to` against a tempfile that contains a function body, and
@@ -624,4 +642,307 @@ fn color_theme_for_light_resolves_to_light_theme() {
         theme,
         &unsnarl_emitter_mermaid::theme::LIGHT_THEME
     ));
+}
+
+// Integration cases ported from `ts/src/cli/run-cli/run-cli.test.ts`.
+// The TS test captures `process.stdout` / `process.stderr`; the Rust
+// counterpart calls `run_to` directly with in-memory writers via the
+// `capture_with_exit` helper at the top of this file. Cases already
+// covered by other tests above (`--help`, `--color-theme neon` error,
+// `-o/--out-file` conflict, `--plugin` unknown rejection at clap
+// parse time) are intentionally not duplicated here.
+
+#[test]
+fn run_to_color_theme_omitted_matches_color_theme_dark() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "function f() {{ return 1; }}").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let dark = capture_stdout(&["uns", "-f", "mermaid", "--color-theme", "dark", &path]);
+    let omitted = capture_stdout(&["uns", "-f", "mermaid", &path]);
+    assert_eq!(omitted, dark);
+    // Sanity check: nest palette actually fires for this input.
+    assert!(
+        dark.contains("classDef nestL1 "),
+        "expected nestL1 classDef in dark output, got:\n{dark}"
+    );
+}
+
+#[test]
+fn run_to_color_theme_light_differs_from_dark() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "function f() {{ return 1; }}").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let dark = capture_stdout(&["uns", "-f", "mermaid", "--color-theme", "dark", &path]);
+    let light = capture_stdout(&["uns", "-f", "mermaid", "--color-theme", "light", &path]);
+    // Both themes emit nestL1, but the body of that classDef differs.
+    assert!(dark.contains("classDef nestL1 "));
+    assert!(light.contains("classDef nestL1 "));
+    assert_ne!(dark, light);
+}
+
+#[test]
+fn run_to_debug_appends_node_kind_to_mermaid_labels() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const a = 1;\nconst b = a;\nconsole.log(b);").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let no_debug = capture_stdout(&["uns", "-f", "mermaid", &path]);
+    let debug = capture_stdout(&["uns", "-f", "mermaid", "--debug", &path]);
+    assert!(
+        !no_debug.contains("<br/>ConstBinding"),
+        "expected no NODE_KIND label without --debug, got:\n{no_debug}"
+    );
+    assert!(
+        debug.contains("\"a<br/>L1<br/>ConstBinding\""),
+        "expected a's debug label, got:\n{debug}"
+    );
+    assert!(
+        debug.contains("\"b<br/>L2<br/>ConstBinding\""),
+        "expected b's debug label, got:\n{debug}"
+    );
+}
+
+#[test]
+fn run_to_parse_error_returns_exit_1() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let (code, _out, err) = capture_with_exit(&["uns", &path]);
+    assert_eq!(code, 1, "expected exit 1, stderr: {err}");
+    assert!(
+        err.contains("parse error"),
+        "expected parse error message in stderr, got: {err}"
+    );
+}
+
+#[test]
+fn run_to_out_dir_overwrites_existing_file() {
+    use std::io::Write;
+    let tmp = tempfile::tempdir().expect("tempdir");
+    let input_path = tmp.path().join("overwrite.ts");
+    {
+        let mut f = std::fs::File::create(&input_path).expect("create input");
+        writeln!(f, "const a = 1;").expect("write");
+    }
+    let input = input_path.to_str().expect("input path utf-8").to_string();
+    let out_dir = tmp.path().join("overwrite-out");
+    let out_dir_str = out_dir.to_str().expect("out_dir path utf-8").to_string();
+    let (code1, _, _) = capture_with_exit(&["uns", "-f", "mermaid", "-o", &out_dir_str, &input]);
+    assert_eq!(code1, 0);
+    let target = out_dir.join("overwrite.mmd");
+    let before = std::fs::read_to_string(&target).expect("first output readable");
+
+    // Rewrite input to a non-trivial change so the emitted text
+    // differs.
+    {
+        let mut f = std::fs::File::create(&input_path).expect("rewrite input");
+        writeln!(f, "const a = 1;\nconst b = a;").expect("rewrite");
+    }
+    let (code2, _, _) = capture_with_exit(&["uns", "-f", "mermaid", "-o", &out_dir_str, &input]);
+    assert_eq!(code2, 0);
+    let after = std::fs::read_to_string(&target).expect("second output readable");
+    assert_ne!(after, before, "second run should overwrite the file");
+}
+
+#[test]
+fn run_to_out_dir_without_roots_falls_back_to_input_filename() {
+    use std::io::Write;
+    let tmp = tempfile::tempdir().expect("tempdir");
+    let input_path = tmp.path().join("fooBar.ts");
+    {
+        let mut f = std::fs::File::create(&input_path).expect("create input");
+        writeln!(f, "const a = 1;").expect("write");
+    }
+    let input = input_path.to_str().expect("input path utf-8").to_string();
+    let out_dir = tmp.path().join("no-roots-out");
+    let out_dir_str = out_dir.to_str().expect("out_dir path utf-8").to_string();
+    let (code, _, err) = capture_with_exit(&["uns", "-f", "mermaid", "-o", &out_dir_str, &input]);
+    assert_eq!(code, 0, "stderr: {err}");
+    let expected = out_dir.join("fooBar.mmd");
+    assert!(
+        expected.is_file(),
+        "expected auto-named output at {}",
+        expected.display()
+    );
+}
+
+#[test]
+fn run_to_plugin_react_drops_use_callback_import() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".tsx")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(
+        tmp,
+        "import {{ useCallback }} from \"react\";\n\nconst Comp = () => {{\n  const a = useCallback(() => 1, []);\n  return <button>{{a()}}</button>;\n}};"
+    )
+    .expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    let out = capture_stdout(&[
+        "uns",
+        "--plugin",
+        "react",
+        "-f",
+        "ir",
+        "--no-pretty-json",
+        &path,
+    ]);
+    let ir: serde_json::Value = serde_json::from_str(out.trim_end()).expect("ir json");
+    let variables = ir["variables"].as_array().expect("variables array");
+    for v in variables {
+        assert_ne!(
+            v["name"].as_str(),
+            Some("useCallback"),
+            "useCallback should be dropped by the react plugin"
+        );
+    }
+    let references = ir["references"].as_array().expect("references array");
+    for r in references {
+        assert_ne!(
+            r["identifier"]["name"].as_str(),
+            Some("useCallback"),
+            "useCallback references should be dropped"
+        );
+    }
+}
+
+#[test]
+fn run_to_highlight_short_alone_highlights_roots_match() {
+    // `-H` without a value follows `-r/--roots`: every prune-root
+    // visual node gets a `style ... fill:<color>` line, and every
+    // edge touching one gets a `linkStyle ... stroke:<color>` line.
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(
+        tmp,
+        "const a = 1;\nconst b = a;\nconst c = b;\nconst d = c;"
+    )
+    .expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    // Mirrors the TS argv literally:
+    //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H"]
+    let out = capture_stdout(&[
+        "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H",
+    ]);
+    let style_re = regex::Regex::new(r"style n_[A-Za-z0-9_]+ fill:#facc15").expect("style regex");
+    let link_re = regex::Regex::new(r"linkStyle [0-9,]+ stroke:#facc15").expect("link regex");
+    assert!(
+        style_re.is_match(&out),
+        "expected at least one style fill directive, got:\n{out}"
+    );
+    assert!(
+        link_re.is_match(&out),
+        "expected at least one linkStyle stroke directive, got:\n{out}"
+    );
+}
+
+#[test]
+fn run_to_highlight_with_queries_targets_supplied_queries_not_roots() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const a = 1;\nconst b = a;\nconst c = b;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    // Mirrors the TS argv literally:
+    //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a"]
+    let out = capture_stdout(&[
+        "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a",
+    ]);
+    let id_re = regex::Regex::new(r"n_[A-Za-z0-9_]*_a_[0-9]+").expect("id regex");
+    let style_lines: Vec<&str> = out
+        .lines()
+        .filter(|l| l.contains("style ") && l.contains("fill:#facc15"))
+        .collect();
+    assert!(
+        !style_lines.is_empty(),
+        "expected at least one style line, got:\n{out}"
+    );
+    for line in &style_lines {
+        assert!(
+            id_re.is_match(line),
+            "highlighted node id should encode the source name 'a', got: {line}"
+        );
+    }
+}
+
+#[test]
+fn run_to_highlight_long_form_matches_short_form() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    writeln!(tmp, "const a = 1;\nconst b = a;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+    // Mirrors the TS argv literally:
+    //   short: [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "-H"]
+    //   long:  [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "--highlight"]
+    let short = capture_stdout(&[
+        "uns", &path, "--format", "mermaid", "-r", "a", "-C", "1", "-H",
+    ]);
+    let long = capture_stdout(&[
+        "uns",
+        &path,
+        "--format",
+        "mermaid",
+        "-r",
+        "a",
+        "-C",
+        "1",
+        "--highlight",
+    ]);
+    assert_eq!(short, long);
 }
