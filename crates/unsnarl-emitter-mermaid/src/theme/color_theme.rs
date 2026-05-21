@@ -44,3 +44,7 @@ pub struct ColorTheme {
     pub nest_palette: &'static [NestPaletteEntry],
     pub highlight: HighlightColors,
 }
+
+#[cfg(test)]
+#[path = "color_theme_test.rs"]
+mod color_theme_test;

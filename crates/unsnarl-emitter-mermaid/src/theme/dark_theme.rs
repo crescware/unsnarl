@@ -54,3 +54,7 @@ pub static DARK_THEME: ColorTheme = ColorTheme {
         edge_stroke_width: "2px",
     },
 };
+
+#[cfg(test)]
+#[path = "dark_theme_test.rs"]
+mod dark_theme_test;
