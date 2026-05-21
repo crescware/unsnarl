@@ -60,3 +60,7 @@ fn serialize_head_operand(operand: &HeadOperand, raw: &str) -> SerializedHeadOpe
         end_span: span_from_offset(raw, operand.end_offset.0 as usize),
     }
 }
+
+#[cfg(test)]
+#[path = "serialize_expression_statement_head_test.rs"]
+mod serialize_expression_statement_head_test;

@@ -15,3 +15,7 @@ pub fn offset_of_node(node: &AstNode) -> u32 {
 pub fn offset_of_identifier(node: &AstIdentifier) -> u32 {
     node.span.start
 }
+
+#[cfg(test)]
+#[path = "offset_of_test.rs"]
+mod offset_of_test;
