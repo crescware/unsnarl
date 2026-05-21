@@ -66,3 +66,6 @@ pub mod throw_use_node_id;
 pub mod visible_ancestor_subgraph;
 pub mod write_op;
 pub mod write_op_node_id;
+
+#[cfg(test)]
+pub(crate) mod testing;

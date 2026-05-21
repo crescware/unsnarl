@@ -25,3 +25,7 @@ pub fn owner_target_id(
     last.map(|o| write_op_node_id(&o.ref_id))
         .unwrap_or_else(|| node_id(owner_var_id))
 }
+
+#[cfg(test)]
+#[path = "owner_target_id_test.rs"]
+mod owner_target_id_test;

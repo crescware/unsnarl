@@ -41,3 +41,7 @@ fn kind_from_block_context(ctx: Option<&BlockContext>) -> Option<ControlSubgraph
         _ => Some(ControlSubgraphKind::Block),
     }
 }
+
+#[cfg(test)]
+#[path = "control_subgraph_kind_of_test.rs"]
+mod control_subgraph_kind_of_test;

@@ -25,3 +25,7 @@ pub fn push_edge(
         label: label.to_string(),
     });
 }
+
+#[cfg(test)]
+#[path = "push_edge_test.rs"]
+mod push_edge_test;

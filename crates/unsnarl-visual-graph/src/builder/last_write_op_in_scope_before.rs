@@ -29,3 +29,7 @@ pub fn last_write_op_in_scope_before<'a>(
     }
     last
 }
+
+#[cfg(test)]
+#[path = "last_write_op_in_scope_before_test.rs"]
+mod last_write_op_in_scope_before_test;

@@ -27,3 +27,7 @@ pub fn state_at(
     last.map(|o| o.ref_id.clone())
         .unwrap_or_else(|| var_id.to_string())
 }
+
+#[cfg(test)]
+#[path = "state_at_test.rs"]
+mod state_at_test;

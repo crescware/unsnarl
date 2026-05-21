@@ -135,3 +135,7 @@ pub fn attach_loop_test_anchor(
         _ => {}
     }
 }
+
+#[cfg(test)]
+#[path = "loop_test_anchor_test.rs"]
+mod loop_test_anchor_test;

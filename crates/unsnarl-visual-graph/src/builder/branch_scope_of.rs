@@ -20,3 +20,7 @@ pub fn branch_scope_of(
     }
     None
 }
+
+#[cfg(test)]
+#[path = "branch_scope_of_test.rs"]
+mod branch_scope_of_test;

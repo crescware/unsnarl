@@ -13,3 +13,7 @@ pub fn do_while_test_node_id(parent_scope_id: &str, offset: u32) -> String {
 pub fn for_test_node_id(parent_scope_id: &str, offset: u32) -> String {
     format!("for_test_{}_{}", sanitize(parent_scope_id), offset)
 }
+
+#[cfg(test)]
+#[path = "loop_test_node_id_test.rs"]
+mod loop_test_node_id_test;

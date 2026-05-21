@@ -25,3 +25,7 @@ pub fn set_predecessor_of(
     }
     node_id(&op.var_id)
 }
+
+#[cfg(test)]
+#[path = "set_predecessor_of_test.rs"]
+mod set_predecessor_of_test;

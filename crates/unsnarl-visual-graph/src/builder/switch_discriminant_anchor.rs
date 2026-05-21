@@ -59,3 +59,7 @@ pub fn attach_switch_discriminant_anchor(
         .switch_discriminant_anchor_by_offset
         .insert(offset, id);
 }
+
+#[cfg(test)]
+#[path = "switch_discriminant_anchor_test.rs"]
+mod switch_discriminant_anchor_test;

@@ -19,3 +19,7 @@ pub fn find_enclosing_subgraph_scope(
     }
     None
 }
+
+#[cfg(test)]
+#[path = "find_enclosing_subgraph_scope_test.rs"]
+mod find_enclosing_subgraph_scope_test;
