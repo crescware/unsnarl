@@ -27,9 +27,9 @@ use oxc_ast::ast::{
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
     ExportNamedDeclaration, ExpressionStatement, ForInStatement, ForOfStatement, ForStatement,
     Function, IdentifierName, IdentifierReference, IfStatement, ImportAttribute, JSXIdentifier,
-    MetaProperty, NewExpression, PrivateFieldExpression, Program, ReturnStatement,
-    StaticMemberExpression, SwitchCase, SwitchStatement, ThrowStatement, TryStatement,
-    UpdateExpression, VariableDeclarator, WhileStatement,
+    LabeledStatement, MetaProperty, NewExpression, PrivateFieldExpression, Program,
+    ReturnStatement, SequenceExpression, StaticMemberExpression, SwitchCase, SwitchStatement,
+    ThrowStatement, TryStatement, UpdateExpression, VariableDeclarator, WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
@@ -785,6 +785,42 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         self.visit_span(&it.span);
         self.key_stack.push(Some("argument"));
         self.visit_expression(&it.argument);
+        self.key_stack.pop();
+        self.pop_path();
+    }
+
+    fn visit_labeled_statement(&mut self, it: &LabeledStatement<'a>) {
+        // Parity fix: oxc's auto-generated `walk_labeled_statement`
+        // does not push the per-child key onto `key_stack`, so a
+        // BlockStatement nested directly under a LabeledStatement
+        // body inherits whatever key was in scope on entry --
+        // typically `"consequent"` from an outer IfStatement, even
+        // though the TS AST spells this slot `"body"`. The IR's
+        // `scope.blockContext.key` must mirror the TS slot label, so
+        // override the visit explicitly.
+        let kind = AstKind::LabeledStatement(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.visit_label_identifier(&it.label);
+        self.key_stack.push(Some("body"));
+        self.visit_statement(&it.body);
+        self.key_stack.pop();
+        self.pop_path();
+    }
+
+    fn visit_sequence_expression(&mut self, it: &SequenceExpression<'a>) {
+        // Parity fix: same shape as `visit_labeled_statement` -- the
+        // auto-generated walker leaves the surrounding key in place
+        // (frequently `"argument"` from an enclosing
+        // ReturnStatement / ThrowStatement / UpdateExpression),
+        // while the TS AST spells the child slot `"expressions"`.
+        let kind = AstKind::SequenceExpression(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("expressions"));
+        for expr in &it.expressions {
+            self.visit_expression(expr);
+        }
         self.key_stack.pop();
         self.pop_path();
     }

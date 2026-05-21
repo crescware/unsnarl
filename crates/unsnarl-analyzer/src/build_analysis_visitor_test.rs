@@ -113,3 +113,76 @@ fn assignment_target_owners_match_reference_resolved_when_var_hoisted_from_later
          from the later for-block"
     );
 }
+
+#[test]
+fn block_inside_labeled_statement_reports_body_slot_key() {
+    // Parity regression: when a BlockStatement is the body of a
+    // LabeledStatement, the block scope's `blockContext.key` used to
+    // come out as `"consequent"` (the slot label inherited from
+    // whatever ambient parent was on the visitor's key stack --
+    // typically an enclosing IfStatement). The TS AST spells this
+    // slot `"body"` and the IR must match.
+    let source = "if (true) outer: { let x = 1; }\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let block_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Block))
+        .map(|(id, _)| id)
+        .expect("a block scope must exist for `{ let x = 1; }`");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(block_scope)
+        .block_context
+        .as_ref()
+        .expect("the block scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "LabeledStatement");
+    assert_eq!(
+        bc["key"], "body",
+        "the block's blockContext.key must mirror the TS AST slot \
+         label `body`, not the auto-walker's `consequent` carryover"
+    );
+}
+
+#[test]
+fn class_inside_sequence_expression_reports_expressions_slot_key() {
+    // Parity regression: when a ClassExpression participates in a
+    // comma-separated SequenceExpression, the class scope's
+    // `blockContext.key` used to come out as `"argument"` (carried
+    // over from an enclosing argument-shaped parent in the walker's
+    // key stack). The TS AST spells the slot `"expressions"`.
+    let source = "(class A {}, class B {});\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let class_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Class))
+        .map(|(id, _)| id)
+        .expect("a class scope must exist for the leading `class A {}`");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(class_scope)
+        .block_context
+        .as_ref()
+        .expect("the class scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "SequenceExpression");
+    assert_eq!(
+        bc["key"], "expressions",
+        "the class's blockContext.key must mirror the TS AST slot \
+         label `expressions`, not the auto-walker's `argument` carryover"
+    );
+}
