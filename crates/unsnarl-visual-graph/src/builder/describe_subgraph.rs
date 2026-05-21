@@ -109,3 +109,7 @@ pub fn describe_subgraph(
         extras,
     })
 }
+
+#[cfg(test)]
+#[path = "describe_subgraph_test.rs"]
+mod describe_subgraph_test;

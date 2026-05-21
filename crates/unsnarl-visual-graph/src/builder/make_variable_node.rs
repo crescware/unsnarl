@@ -98,3 +98,7 @@ fn name_span_line(def: &SerializedDefinition) -> u32 {
     };
     def_name.span().line.0
 }
+
+#[cfg(test)]
+#[path = "make_variable_node_test.rs"]
+mod make_variable_node_test;

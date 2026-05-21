@@ -21,3 +21,7 @@ pub fn is_ancestor_scope(
     }
     false
 }
+
+#[cfg(test)]
+#[path = "is_ancestor_scope_test.rs"]
+mod is_ancestor_scope_test;

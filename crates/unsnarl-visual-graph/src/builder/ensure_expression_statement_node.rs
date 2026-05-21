@@ -58,3 +58,7 @@ pub fn ensure_expression_statement_node(
         .insert(id.clone(), r.from.value().to_string());
     Some(id)
 }
+
+#[cfg(test)]
+#[path = "ensure_expression_statement_node_test.rs"]
+mod ensure_expression_statement_node_test;

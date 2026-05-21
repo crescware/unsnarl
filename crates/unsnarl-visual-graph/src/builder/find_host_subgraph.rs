@@ -33,3 +33,7 @@ pub fn find_host_subgraph(
     let fn_var = enclosing_fn_var_id?;
     state.function_subgraph_by_fn.get(fn_var).copied()
 }
+
+#[cfg(test)]
+#[path = "find_host_subgraph_test.rs"]
+mod find_host_subgraph_test;

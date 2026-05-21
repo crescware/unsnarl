@@ -9,3 +9,7 @@ use super::is_function_subgraph::is_function_subgraph;
 pub fn should_subgraph(scope: &SerializedScope) -> bool {
     is_function_subgraph(scope) || is_class_subgraph(scope) || is_control_subgraph(scope)
 }
+
+#[cfg(test)]
+#[path = "should_subgraph_test.rs"]
+mod should_subgraph_test;

@@ -44,3 +44,7 @@ fn nesting_kind_from_block_context(ctx: &BlockContext) -> NestingKind {
         _ => NestingKind::Block,
     }
 }
+
+#[cfg(test)]
+#[path = "nesting_kind_of_test.rs"]
+mod nesting_kind_of_test;

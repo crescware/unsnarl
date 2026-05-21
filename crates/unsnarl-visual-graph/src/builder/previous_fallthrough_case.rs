@@ -28,3 +28,7 @@ pub fn previous_fallthrough_case<'a>(
         None
     }
 }
+
+#[cfg(test)]
+#[path = "previous_fallthrough_case_test.rs"]
+mod previous_fallthrough_case_test;

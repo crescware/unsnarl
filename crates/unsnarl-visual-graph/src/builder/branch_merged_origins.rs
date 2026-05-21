@@ -114,3 +114,7 @@ pub fn branch_merged_origins(
     }
     merged
 }
+
+#[cfg(test)]
+#[path = "branch_merged_origins_test.rs"]
+mod branch_merged_origins_test;

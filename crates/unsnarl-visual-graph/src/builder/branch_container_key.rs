@@ -45,3 +45,7 @@ pub fn branch_container_key(scope: &SerializedScope) -> Option<String> {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "branch_container_key_test.rs"]
+mod branch_container_key_test;

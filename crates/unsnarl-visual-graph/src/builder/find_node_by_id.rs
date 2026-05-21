@@ -27,3 +27,7 @@ pub fn find_node_by_id<'a>(
     }
     None
 }
+
+#[cfg(test)]
+#[path = "find_node_by_id_test.rs"]
+mod find_node_by_id_test;

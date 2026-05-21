@@ -40,3 +40,7 @@ pub fn predicate_target_id(
     };
     map.get(&offset).cloned()
 }
+
+#[cfg(test)]
+#[path = "predicate_target_id_test.rs"]
+mod predicate_target_id_test;

@@ -47,3 +47,7 @@ pub fn resolve_read_target_id(
         SerializedCompletion::Normal => MODULE_ROOT_ID.to_string(),
     }
 }
+
+#[cfg(test)]
+#[path = "resolve_read_target_id_test.rs"]
+mod resolve_read_target_id_test;

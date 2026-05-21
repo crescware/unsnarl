@@ -143,3 +143,7 @@ pub fn build_scope(
         attach_switch_discriminant_anchor(arena, state, scope, sg);
     }
 }
+
+#[cfg(test)]
+#[path = "build_scope_test.rs"]
+mod build_scope_test;
