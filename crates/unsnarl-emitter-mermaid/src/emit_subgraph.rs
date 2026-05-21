@@ -46,3 +46,7 @@ pub fn emit_subgraph(state: &mut RenderState<'_>, sg: &VisualSubgraph, indent: &
     }
     emit_plain_subgraph(state, sg, indent, depth);
 }
+
+#[cfg(test)]
+#[path = "emit_subgraph_test.rs"]
+mod emit_subgraph_test;

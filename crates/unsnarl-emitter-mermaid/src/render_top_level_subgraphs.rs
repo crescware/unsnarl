@@ -18,3 +18,7 @@ pub fn render_top_level_subgraphs(state: &mut RenderState<'_>, graph: &VisualGra
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_top_level_subgraphs_test.rs"]
+mod render_top_level_subgraphs_test;

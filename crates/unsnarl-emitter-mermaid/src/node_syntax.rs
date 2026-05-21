@@ -25,3 +25,7 @@ pub fn node_syntax(n: &VisualNode, debug: bool) -> String {
         _ => format!(r#"["{label}"]"#),
     }
 }
+
+#[cfg(test)]
+#[path = "node_syntax_test.rs"]
+mod node_syntax_test;

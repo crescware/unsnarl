@@ -80,3 +80,7 @@ fn base_label(sg: &VisualSubgraph, node_map: &HashMap<String, &VisualNode>) -> S
         SubgraphKind::Block => format!("block {range}"),
     }
 }
+
+#[cfg(test)]
+#[path = "subgraph_label_test.rs"]
+mod subgraph_label_test;

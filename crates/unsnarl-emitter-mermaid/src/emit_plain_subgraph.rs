@@ -60,3 +60,7 @@ pub fn emit_plain_subgraph(
     }
     state.lines.push(format!("{indent}end"));
 }
+
+#[cfg(test)]
+#[path = "emit_plain_subgraph_test.rs"]
+mod emit_plain_subgraph_test;

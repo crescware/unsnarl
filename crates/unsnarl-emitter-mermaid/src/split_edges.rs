@@ -23,3 +23,7 @@ pub fn split_edges<'a>(
     }
     (body, imports)
 }
+
+#[cfg(test)]
+#[path = "split_edges_test.rs"]
+mod split_edges_test;

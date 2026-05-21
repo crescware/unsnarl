@@ -23,3 +23,7 @@ pub fn collect_nodes_into<'a>(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "collect_nodes_into_test.rs"]
+mod collect_nodes_into_test;

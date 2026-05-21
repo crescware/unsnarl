@@ -57,3 +57,7 @@ fn base_label(n: &VisualNode) -> String {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "node_label_test.rs"]
+mod node_label_test;

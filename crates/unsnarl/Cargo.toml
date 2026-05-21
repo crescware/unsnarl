@@ -38,6 +38,7 @@ serde_json = { workspace = true }
 tempfile = "3"
 libtest-mimic = { workspace = true }
 pretty_assertions = { workspace = true }
+regex = { workspace = true }
 
 [[test]]
 name = "parity"

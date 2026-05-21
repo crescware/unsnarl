@@ -1,0 +1,218 @@
+//! Mirrors `ts/src/emitter/mermaid/node-head.test.ts`.
+
+use unsnarl_oxc_parity::VariableDeclarationKind;
+use unsnarl_visual_graph::visual_node::{
+    BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,
+    SyntheticVisualNode, VisualNode,
+};
+
+use super::node_head;
+use crate::testing::{
+    base_const_binding, base_import_binding_default, base_import_binding_named,
+    base_import_binding_namespace, base_let_binding, base_simple_binding, base_simple_synthetic,
+    base_var_binding, base_write_op,
+};
+
+#[test]
+fn jsx_element_wraps_the_escaped_name_in_angle_brackets_ignoring_kind() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        kind: BindingNodeKind::FunctionDeclaration,
+        extras: BindingExtras::None {},
+        name: "Foo".to_string(),
+        is_jsx_element: true,
+        ..base_const_binding()
+    });
+    assert_eq!(node_head(&n), "&lt;Foo&gt;");
+}
+
+#[test]
+fn function_declaration_formats_as_name_with_parens() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "foo".to_string(),
+        ..base_simple_binding(BindingNodeKind::FunctionDeclaration)
+    });
+    assert_eq!(node_head(&n), "foo()");
+}
+
+#[test]
+fn class_declaration_formats_as_class_name() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "Foo".to_string(),
+        ..base_simple_binding(BindingNodeKind::ClassDeclaration)
+    });
+    assert_eq!(node_head(&n), "class Foo");
+}
+
+#[test]
+fn catch_parameter_formats_as_catch_name() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "err".to_string(),
+        ..base_simple_binding(BindingNodeKind::CatchParameter)
+    });
+    assert_eq!(node_head(&n), "catch err");
+}
+
+#[test]
+fn synthetic_implicit_global_formats_as_global_name() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "global1".to_string(),
+        ..base_simple_binding(BindingNodeKind::SyntheticImplicitGlobal)
+    });
+    assert_eq!(node_head(&n), "global global1");
+}
+
+#[test]
+fn synthetic_module_source_formats_as_module_name() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "./mod".to_string(),
+        ..base_simple_synthetic(SyntheticNodeKind::SyntheticModuleSource)
+    });
+    assert_eq!(node_head(&n), "module ./mod");
+}
+
+#[test]
+fn synthetic_import_intermediate_formats_as_import_name() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "named".to_string(),
+        ..base_simple_synthetic(SyntheticNodeKind::SyntheticImportIntermediate)
+    });
+    assert_eq!(node_head(&n), "import named");
+}
+
+#[test]
+fn synthetic_expression_statement_uses_name_only() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "console.log()".to_string(),
+        ..base_simple_synthetic(SyntheticNodeKind::SyntheticExpressionStatement)
+    });
+    assert_eq!(node_head(&n), "console.log()");
+}
+
+#[test]
+fn renamed_named_import_keeps_the_local_name_only() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "renamed".to_string(),
+        ..base_import_binding_named("original")
+    });
+    assert_eq!(node_head(&n), "renamed");
+}
+
+#[test]
+fn non_renamed_named_import_gets_import_prefix() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "foo".to_string(),
+        ..base_import_binding_named("foo")
+    });
+    assert_eq!(node_head(&n), "import foo");
+}
+
+#[test]
+fn default_import_gets_import_prefix() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "Foo".to_string(),
+        ..base_import_binding_default()
+    });
+    assert_eq!(node_head(&n), "import Foo");
+}
+
+#[test]
+fn namespace_import_gets_import_prefix() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "ns".to_string(),
+        ..base_import_binding_namespace()
+    });
+    assert_eq!(node_head(&n), "import ns");
+}
+
+#[test]
+fn write_op_with_declaration_kind_let_prepends_let() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "x".to_string(),
+        extras: SyntheticExtras::WriteOp {
+            declaration_kind: Some(VariableDeclarationKind::Let),
+        },
+        ..base_write_op()
+    });
+    assert_eq!(node_head(&n), "let x");
+}
+
+#[test]
+fn write_op_with_declaration_kind_const_has_no_prefix() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "x".to_string(),
+        extras: SyntheticExtras::WriteOp {
+            declaration_kind: Some(VariableDeclarationKind::Const),
+        },
+        ..base_write_op()
+    });
+    assert_eq!(node_head(&n), "x");
+}
+
+#[test]
+fn write_op_without_declaration_kind_has_no_prefix() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "x".to_string(),
+        ..base_write_op()
+    });
+    assert_eq!(node_head(&n), "x");
+}
+
+#[test]
+fn const_binding_initialized_with_a_function_uses_paren_format() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "f".to_string(),
+        extras: BindingExtras::Variable {
+            init_is_function: true,
+        },
+        ..base_const_binding()
+    });
+    assert_eq!(node_head(&n), "f()");
+}
+
+#[test]
+fn let_binding_prepends_let() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "x".to_string(),
+        ..base_let_binding()
+    });
+    assert_eq!(node_head(&n), "let x");
+}
+
+#[test]
+fn const_binding_has_no_prefix() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "x".to_string(),
+        ..base_const_binding()
+    });
+    assert_eq!(node_head(&n), "x");
+}
+
+#[test]
+fn var_declared_var_binding_prepends_var() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "x".to_string(),
+        ..base_var_binding()
+    });
+    assert_eq!(node_head(&n), "var x");
+}
+
+#[test]
+fn init_is_function_wins_over_the_var_prefix() {
+    let n = VisualNode::Binding(BindingVisualNode {
+        name: "f".to_string(),
+        extras: BindingExtras::Variable {
+            init_is_function: true,
+        },
+        ..base_var_binding()
+    });
+    assert_eq!(node_head(&n), "f()");
+}
+
+#[test]
+fn return_use_falls_through_to_the_default_formatting() {
+    let n = VisualNode::Synthetic(SyntheticVisualNode {
+        name: "x".to_string(),
+        ..base_simple_synthetic(SyntheticNodeKind::ReturnArgumentReference)
+    });
+    assert_eq!(node_head(&n), "x");
+}

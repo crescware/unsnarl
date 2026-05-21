@@ -12,3 +12,7 @@ pub fn line_range_label(sg: &VisualSubgraph) -> String {
         _ => format!("L{line}"),
     }
 }
+
+#[cfg(test)]
+#[path = "line_range_label_test.rs"]
+mod line_range_label_test;
