@@ -186,3 +186,42 @@ fn class_inside_sequence_expression_reports_expressions_slot_key() {
          label `expressions`, not the auto-walker's `argument` carryover"
     );
 }
+
+#[test]
+fn export_default_declaration_routes_declaration_slot_key_into_block_context() {
+    // Parity regression: when a class / function is the
+    // `declaration` slot of an `export default`, the inner scope's
+    // `blockContext.key` used to come out as `"body"` (carried over
+    // from the surrounding `Program.body` statement-list slot)
+    // because oxc's auto-generated `walk_export_default_declaration`
+    // does not push a per-child key. The TS AST spells this slot
+    // `"declaration"` and the IR must match -- same family of bug
+    // as `export class Foo {}` for ExportNamedDeclaration.
+    let source = "export default class Foo {}\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let class_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Class))
+        .map(|(id, _)| id)
+        .expect("a class scope must exist for `export default class Foo {}`");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(class_scope)
+        .block_context
+        .as_ref()
+        .expect("the class scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "ExportDefaultDeclaration");
+    assert_eq!(
+        bc["key"], "declaration",
+        "the class's blockContext.key must mirror the TS AST slot \
+         label `declaration`, not the auto-walker's `body` carryover"
+    );
+}
