@@ -28,3 +28,7 @@ pub fn state_ref_id(ref_id: &str, var_id: &str, ctx: &BuilderContext<'_>) -> Str
         write_op_node_id(&state_ref)
     }
 }
+
+#[cfg(test)]
+#[path = "state_ref_id_test.rs"]
+mod state_ref_id_test;

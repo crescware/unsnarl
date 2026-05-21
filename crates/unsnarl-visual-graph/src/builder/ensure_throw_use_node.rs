@@ -104,3 +104,7 @@ pub fn ensure_throw_use_node(
     }
     Some(id)
 }
+
+#[cfg(test)]
+#[path = "ensure_throw_use_node_test.rs"]
+mod ensure_throw_use_node_test;

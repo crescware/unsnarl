@@ -234,3 +234,7 @@ pub fn build_children(
         i = j;
     }
 }
+
+#[cfg(test)]
+#[path = "build_children_test.rs"]
+mod build_children_test;

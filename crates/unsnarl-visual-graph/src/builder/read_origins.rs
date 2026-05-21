@@ -159,3 +159,7 @@ fn dedup_preserve_order(input: Vec<String>) -> Vec<String> {
     }
     out
 }
+
+#[cfg(test)]
+#[path = "read_origins_test.rs"]
+mod read_origins_test;

@@ -7,19 +7,31 @@
 //!
 //! Gated behind `#[cfg(test)]`; not part of the crate's public API.
 
+use std::collections::HashMap;
+
+use unsnarl_ir::language::Language;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
 use unsnarl_ir::reference::predicate_container::PredicateContainer;
-use unsnarl_ir::scope::block_context::{BlockContext, OtherBlockContext};
+use unsnarl_ir::scope::block_context::{BlockContext, CaseClauseBlockContext, OtherBlockContext};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::reference_id::SerializedReferenceId;
 use unsnarl_ir::serialized::scope_id::SerializedScopeId;
+use unsnarl_ir::serialized::serialized_definition::{
+    DefinitionName, DefinitionNode, SerializedDefinition, SimpleDef, SimpleDefType, VariableDef,
+};
+use unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION;
 use unsnarl_ir::serialized::serialized_reference::{
-    SerializedCompletion, SerializedFlags, SerializedReference, SerializedReferenceIdentifier,
+    SerializedCompletion, SerializedFlags, SerializedJsxElement, SerializedReference,
+    SerializedReferenceIdentifier,
 };
 use unsnarl_ir::serialized::serialized_scope::{SerializedBlock, SerializedScope};
-use unsnarl_oxc_parity::{AstType, PredicateContainerType};
+use unsnarl_ir::serialized::serialized_variable::SerializedVariable;
+use unsnarl_ir::serialized::variable_id::SerializedVariableId;
+use unsnarl_ir::serialized::{SerializedIR, SerializedSource};
+use unsnarl_oxc_parity::{AstType, PredicateContainerType, VariableDeclarationKind};
 
+use super::context::BuilderContext;
 use super::write_op::WriteOp;
 
 /// Build a `Span` at the given 0-based offset on line 1.
@@ -95,6 +107,25 @@ pub(crate) fn other_block_context(
     ))
 }
 
+/// Build a [`CaseClauseBlockContext`] and wrap as
+/// [`BlockContext::CaseClause`]. Mirrors
+/// `baseCaseClauseBlockContext()` in
+/// `ts/.../testing/make-block-context.ts` when no overrides are
+/// applied; pass an explicit `case_test` to model a concrete case.
+pub(crate) fn case_clause_block_context(
+    parent_type: AstType,
+    key: &str,
+    parent_span_offset: u32,
+    case_test: Option<&str>,
+) -> BlockContext {
+    BlockContext::CaseClause(CaseClauseBlockContext::new(
+        parent_type,
+        key.to_string(),
+        SourceOffset(parent_span_offset),
+        case_test.map(|s| s.to_string()),
+    ))
+}
+
 /// Mirrors `baseWriteOp()` from `testing/make-write-op.ts`. All
 /// fields are pre-set to the TS defaults; callers mutate the
 /// fields they care about for each fixture.
@@ -142,5 +173,157 @@ pub(crate) fn predicate_container(
     PredicateContainer {
         r#type,
         offset: SourceOffset(offset),
+    }
+}
+
+/// Mirrors the TS `span(offset, line, column = offset)` shorthand
+/// used by `testing/span.ts`. `column` defaults to `offset` because
+/// the TS form does so.
+pub(crate) fn span_offset_line(offset: u32, line: u32) -> Span {
+    span_at(line, offset, offset)
+}
+
+/// Build a [`DefinitionName`] with a non-empty name at the supplied
+/// span. Mirrors the TS `COMMON.name` field in `testing/make-def.ts`.
+pub(crate) fn definition_name(name: &str, span: Span) -> DefinitionName {
+    DefinitionName::new(name.to_string(), span)
+}
+
+/// Build a [`DefinitionNode`] with the supplied AST type / span.
+pub(crate) fn definition_node(r#type: AstType, span: Span) -> DefinitionNode {
+    DefinitionNode { r#type, span }
+}
+
+/// Mirrors `baseDef(declarationKind)` from `testing/make-def.ts`.
+/// Returns a `Variable` definition for `x` at offset 0, no `init`.
+pub(crate) fn base_def(declaration_kind: VariableDeclarationKind) -> SerializedDefinition {
+    SerializedDefinition::Variable(VariableDef::new(
+        definition_name("x", span(0)),
+        definition_node(AstType::Identifier, span(0)),
+        None,
+        None,
+        declaration_kind,
+    ))
+}
+
+/// Mirrors `baseSimpleDef(type)` from `testing/make-def.ts` — the
+/// 5 "no-extra-fields" variants reuse the `x`-at-offset-0 common
+/// shape.
+pub(crate) fn base_simple_def(r#type: SimpleDefType) -> SerializedDefinition {
+    SerializedDefinition::Simple(SimpleDef {
+        name: definition_name("x", span(0)),
+        node: definition_node(AstType::Identifier, span(0)),
+        parent: None,
+        r#type,
+    })
+}
+
+/// Wrap a string as a `SerializedVariableId`.
+pub(crate) fn variable_id(value: &str) -> SerializedVariableId {
+    SerializedVariableId::new(value.to_string())
+}
+
+/// Wrap a string as a `SerializedReferenceId`.
+pub(crate) fn reference_id(value: &str) -> SerializedReferenceId {
+    SerializedReferenceId::new(value.to_string())
+}
+
+/// Mirrors `baseVariable()` from `testing/make-variable.ts`. Builds
+/// a `Let`-declared variable named `x` in scope `s` with one
+/// identifier span at offset 0.
+pub(crate) fn base_serialized_variable() -> SerializedVariable {
+    SerializedVariable::new(
+        variable_id("v"),
+        "x".to_string(),
+        scope_id("s"),
+        vec![span(0)],
+        Vec::new(),
+        vec![base_def(VariableDeclarationKind::Let)],
+    )
+}
+
+/// Mirrors `normalCompletion()` from `testing/completion.ts`.
+pub(crate) fn normal_completion() -> SerializedCompletion {
+    SerializedCompletion::Normal
+}
+
+/// Mirrors `returnCompletion(startOffset, endOffset, startLine?, endLine?)`
+/// from `testing/completion.ts`.
+pub(crate) fn return_completion(
+    start_offset: u32,
+    end_offset: u32,
+    start_line: u32,
+    end_line: u32,
+) -> SerializedCompletion {
+    SerializedCompletion::Return {
+        start_span: span_offset_line(start_offset, start_line),
+        end_span: span_offset_line(end_offset, end_line),
+    }
+}
+
+/// Mirrors `throwCompletion(...)` from `testing/completion.ts`.
+pub(crate) fn throw_completion(
+    start_offset: u32,
+    end_offset: u32,
+    start_line: u32,
+    end_line: u32,
+) -> SerializedCompletion {
+    SerializedCompletion::Throw {
+        start_span: span_offset_line(start_offset, start_line),
+        end_span: span_offset_line(end_offset, end_line),
+    }
+}
+
+/// Mirrors `jsxContainer(startOffset, endOffset, startLine?, endLine?)`
+/// from `testing/jsx-container.ts`.
+pub(crate) fn jsx_container(
+    start_offset: u32,
+    end_offset: u32,
+    start_line: u32,
+    end_line: u32,
+) -> SerializedJsxElement {
+    SerializedJsxElement {
+        start_span: span_offset_line(start_offset, start_line),
+        end_span: span_offset_line(end_offset, end_line),
+    }
+}
+
+/// Build an empty [`SerializedIR`] (no scopes / variables /
+/// references / diagnostics) backed by a `Ts` source at `x.ts`.
+/// Mirrors the empty literal repeated in every TS `makeCtx` helper.
+pub(crate) fn empty_serialized_ir() -> SerializedIR {
+    SerializedIR {
+        version: SERIALIZED_IR_VERSION,
+        source: SerializedSource {
+            path: "x.ts".to_string(),
+            language: Language::Ts,
+        },
+        raw: String::new(),
+        scopes: Vec::new(),
+        variables: Vec::new(),
+        references: Vec::new(),
+        unused_variable_ids: Vec::new(),
+        diagnostics: Vec::new(),
+    }
+}
+
+/// Build a [`BuilderContext`] whose `variable_map` and `scope_map`
+/// are derived from `ir.variables` / `ir.scopes`. Every other side
+/// table is empty; callers mutate the fields they care about for
+/// each fixture. Mirrors the `makeCtx` helper repeated across the
+/// TS sibling tests.
+pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
+    let variable_map = ir.variables.iter().map(|v| (v.id.value(), v)).collect();
+    let scope_map = ir.scopes.iter().map(|s| (s.id.value(), s)).collect();
+    BuilderContext {
+        ir,
+        variable_map,
+        scope_map,
+        subgraph_owner_var: HashMap::new(),
+        write_ops_by_variable: HashMap::new(),
+        write_ops_by_scope: HashMap::new(),
+        write_op_by_ref: HashMap::new(),
+        sorted_cases_by_container: HashMap::new(),
+        depths: None,
     }
 }
