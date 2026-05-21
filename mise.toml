@@ -35,8 +35,12 @@ description = "Pack unsnarl + unsnarl-darwin-arm64 tarballs into target/npm-pack
 run = "rm -rf target/npm-pack && mkdir -p target/npm-pack && (cd npm/unsnarl-darwin-arm64 && npm pack --pack-destination ../../target/npm-pack) && npm pack --pack-destination target/npm-pack"
 
 [tasks."npm:publish"]
-description = "Publish unsnarl-darwin-arm64 then unsnarl to npm. Each package's dist-tag is taken from its own publishConfig.tag and passed via --tag (npm 11.12.x silently ignores publishConfig.tag otherwise). Pass `-- --dry-run` to dry-run both publishes."
+description = "Publish unsnarl-darwin-arm64 then unsnarl to npm. Each package's dist-tag is taken from its own publishConfig.tag and passed via --tag (npm 11.12.x silently ignores publishConfig.tag otherwise). Pass `-- --dry-run` to dry-run both publishes, or use the `npm:publish:dry-run` task."
 run = "deno run --allow-read --allow-run scripts/npm-publish.ts"
+
+[tasks."npm:publish:dry-run"]
+description = "Shortcut for `mise run npm:publish -- --dry-run`. Runs both publishes in dry-run mode; nothing is actually pushed to npm."
+run = "deno run --allow-read --allow-run scripts/npm-publish.ts --dry-run"
 
 [tasks."parity"]
 description = "Run the parity harness against ts/integration/fixtures/**/expected.ir.json (Step 12 baseline)."
