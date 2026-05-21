@@ -1,0 +1,31 @@
+{
+  "name": "unsnarl-darwin-arm64",
+  "version": "0.3.0-rc.0",
+  "description": "Prebuilt unsnarl CLI binary for darwin-arm64.",
+  "homepage": "https://github.com/crescware/unsnarl#readme",
+  "bugs": {
+    "url": "https://github.com/crescware/unsnarl/issues"
+  },
+  "license": "MIT",
+  "author": "Crescware Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crescware/unsnarl.git"
+  },
+  "os": [
+    "darwin"
+  ],
+  "cpu": [
+    "arm64"
+  ],
+  "files": [
+    "bin"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "rc"
+  },
+  "scripts": {
+    "prepack": "mise run npm:build-darwin-arm64"
+  }
+}

@@ -1,0 +1,40 @@
+{
+  "name": "unsnarl",
+  "version": "0.3.0-rc.0",
+  "description": "Single-file ECMAScript / TypeScript scope and reference analyzer that emits a Mermaid flowchart and a deterministic IR (JSON).",
+  "keywords": [
+    "analyzer",
+    "ast",
+    "cli",
+    "ecmascript",
+    "ir",
+    "mermaid",
+    "scope",
+    "scope-manager",
+    "static-analysis",
+    "typescript"
+  ],
+  "homepage": "https://github.com/crescware/unsnarl#readme",
+  "bugs": {
+    "url": "https://github.com/crescware/unsnarl/issues"
+  },
+  "license": "MIT",
+  "author": "Crescware Inc.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/crescware/unsnarl.git"
+  },
+  "bin": {
+    "uns": "bin/uns"
+  },
+  "files": [
+    "bin"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "rc"
+  },
+  "optionalDependencies": {
+    "unsnarl-darwin-arm64": "0.3.0-rc.0"
+  }
+}

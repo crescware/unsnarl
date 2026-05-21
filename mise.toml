@@ -26,6 +26,18 @@ run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
 description = "Build the `uns` CLI binary in release mode. Output: target/release/uns."
 run = "cargo build --release -p unsnarl"
 
+[tasks."npm:build-darwin-arm64"]
+description = "Build the aarch64-apple-darwin release of `uns` and stage it into npm/unsnarl-darwin-arm64/bin/uns (gitignored). Triggered automatically by the `prepack` hook during `npm publish`."
+run = "cargo build --release --target aarch64-apple-darwin -p unsnarl && mkdir -p npm/unsnarl-darwin-arm64/bin && cp target/aarch64-apple-darwin/release/uns npm/unsnarl-darwin-arm64/bin/uns && chmod +x npm/unsnarl-darwin-arm64/bin/uns"
+
+[tasks."npm:publish"]
+description = "Publish unsnarl-darwin-arm64 then unsnarl to npm. Each package's dist-tag is taken from its own publishConfig.tag and passed via --tag (npm 11.12.x silently ignores publishConfig.tag otherwise). Pass `-- --dry-run` to dry-run both publishes, or use the `npm:publish:dry-run` task."
+run = "deno run --allow-read --allow-run scripts/npm-publish.ts"
+
+[tasks."npm:publish:dry-run"]
+description = "Shortcut for `mise run npm:publish -- --dry-run`. Runs both publishes in dry-run mode; nothing is actually pushed to npm."
+run = "deno run --allow-read --allow-run scripts/npm-publish.ts --dry-run"
+
 [tasks."parity"]
 description = "Run the parity harness against ts/integration/fixtures/**/expected.ir.json (Step 12 baseline)."
 run = "cargo test --workspace --test parity"
