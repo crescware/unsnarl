@@ -263,3 +263,35 @@ fn export_named_with_from_creates_implicit_global_reference_for_local_name() {
     assert_eq!(reference.identifier.name(), "Lexer");
     assert_eq!(reference.identifier.span.start, 9);
 }
+
+#[test]
+fn export_all_with_alias_creates_implicit_global_reference_for_exported_name() {
+    // Parity regression: `export * as default from './base.js'`
+    // surfaces in npm `oxc-parser` as
+    // `ExportAllDeclaration.exported.type = "Identifier"`, and the
+    // TS pipeline routes that identifier through
+    // `handleIdentifierReference` -- producing an implicit-global
+    // `default` plus one read reference. The Rust `oxc_parser` crate
+    // represents the slot as
+    // `ExportAllDeclaration.exported: Option<ModuleExportName>`, and
+    // for `default` (and for any plain-Identifier alias) the variant
+    // is `ModuleExportName::IdentifierName`, which previously walked
+    // through `visit_identifier_name` without firing the reference.
+    let source = "export * as default from './base.js'\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let default_var = analyzed
+        .arena
+        .variables
+        .iter()
+        .find(|v| v.name() == "default")
+        .expect("an implicit-global `default` variable must exist for the export-all alias");
+
+    assert!(
+        !default_var.references.is_empty(),
+        "the implicit-global `default` must carry at least one reference"
+    );
+}
