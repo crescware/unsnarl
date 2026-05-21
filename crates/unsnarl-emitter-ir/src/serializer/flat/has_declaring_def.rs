@@ -12,3 +12,7 @@ pub fn has_declaring_def(arena: &IrArena, variable: VariableId) -> bool {
         .iter()
         .any(|&id| arena.definitions[id].r#type != DefinitionType::ImplicitGlobalVariable)
 }
+
+#[cfg(test)]
+#[path = "has_declaring_def_test.rs"]
+mod has_declaring_def_test;

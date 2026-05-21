@@ -17,3 +17,7 @@ fn visit(arena: &IrArena, scope: ScopeId, out: &mut Vec<ScopeId>) {
         visit(arena, child, out);
     }
 }
+
+#[cfg(test)]
+#[path = "collect_scopes_in_order_test.rs"]
+mod collect_scopes_in_order_test;
