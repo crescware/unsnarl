@@ -113,6 +113,33 @@ fn preserves_an_explicitly_requested_source_type_regardless_of_the_language_exte
 }
 
 #[test]
+fn parses_js_with_top_level_await_when_analysis_source_type_is_script() {
+    // Parity regression: `ts/src/parser/oxc-parser.ts` calls
+    // `parseSync(..., { sourceType: "module" })` unconditionally, so
+    // top-level `await` parses cleanly even when the analysis-level
+    // SourceType is Script. CLI shebang files like
+    // `vite/bin/vite.js` and `oxlint/dist/cli.js` rely on this --
+    // they ship as `.js` (analysis-level Script) but use top-level
+    // `await` and ES module syntax, and `unsnarl@0.2.0` parses them
+    // without error. The Rust parser must do the same.
+    let allocator = Allocator::default();
+    let code = "import { x } from 'node:fs';\nconst y = await x();\n";
+    let parsed = parser()
+        .parse(
+            &allocator,
+            code,
+            &ParseOptions {
+                language: Language::Js,
+                source_path: "input.js".to_string(),
+                source_type: SourceType::Script,
+            },
+        )
+        .expect("top-level await must parse cleanly even when SourceType is Script");
+    assert!(matches!(parsed.source_type, SourceType::Script));
+    assert_eq!(parsed.program.body.len(), 2);
+}
+
+#[test]
 fn synthesizes_a_filename_with_the_correct_extension_when_source_path_has_none() {
     let allocator = Allocator::default();
     let code = "const x = 1;\n";

@@ -186,3 +186,224 @@ fn class_inside_sequence_expression_reports_expressions_slot_key() {
          label `expressions`, not the auto-walker's `argument` carryover"
     );
 }
+
+#[test]
+fn export_default_declaration_routes_declaration_slot_key_into_block_context() {
+    // Parity regression: when a class / function is the
+    // `declaration` slot of an `export default`, the inner scope's
+    // `blockContext.key` used to come out as `"body"` (carried over
+    // from the surrounding `Program.body` statement-list slot)
+    // because oxc's auto-generated `walk_export_default_declaration`
+    // does not push a per-child key. The TS AST spells this slot
+    // `"declaration"` and the IR must match -- same family of bug
+    // as `export class Foo {}` for ExportNamedDeclaration.
+    let source = "export default class Foo {}\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let class_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Class))
+        .map(|(id, _)| id)
+        .expect("a class scope must exist for `export default class Foo {}`");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(class_scope)
+        .block_context
+        .as_ref()
+        .expect("the class scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "ExportDefaultDeclaration");
+    assert_eq!(
+        bc["key"], "declaration",
+        "the class's blockContext.key must mirror the TS AST slot \
+         label `declaration`, not the auto-walker's `body` carryover"
+    );
+}
+
+#[test]
+fn export_named_with_from_creates_implicit_global_reference_for_local_name() {
+    // Parity regression: `export { Lexer } from './Lexer.js'`
+    // surfaces in npm `oxc-parser` as `ExportSpecifier.local.type =
+    // "Identifier"`, and the TS pipeline routes that identifier
+    // through `handleIdentifierReference`, producing a read
+    // reference that resolves to an implicit-global `Lexer` in the
+    // module scope. The Rust `oxc_parser` crate keeps the same slot
+    // as `ModuleExportName::IdentifierName` for re-exports (and
+    // anywhere the local name is a reserved word like `default`),
+    // so the analyzer used to walk past it without firing the
+    // reference. The boundary's `visit_identifier_name` now routes
+    // these slots through `handle_identifier_reference` so the IR
+    // stays byte-identical to TS.
+    let source = "export { Lexer } from './Lexer.js'\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let lexer_var = analyzed
+        .arena
+        .variables
+        .iter()
+        .find(|v| v.name() == "Lexer")
+        .expect("an implicit-global `Lexer` variable must be created for the re-export local name");
+
+    assert!(
+        !lexer_var.references.is_empty(),
+        "the implicit-global `Lexer` must carry at least one reference"
+    );
+
+    let ref_id = lexer_var.references[0];
+    let reference = &analyzed.arena.references[ref_id];
+    assert_eq!(reference.identifier.name(), "Lexer");
+    assert_eq!(reference.identifier.span.start, 9);
+}
+
+#[test]
+fn export_all_with_alias_creates_implicit_global_reference_for_exported_name() {
+    // Parity regression: `export * as default from './base.js'`
+    // surfaces in npm `oxc-parser` as
+    // `ExportAllDeclaration.exported.type = "Identifier"`, and the
+    // TS pipeline routes that identifier through
+    // `handleIdentifierReference` -- producing an implicit-global
+    // `default` plus one read reference. The Rust `oxc_parser` crate
+    // represents the slot as
+    // `ExportAllDeclaration.exported: Option<ModuleExportName>`, and
+    // for `default` (and for any plain-Identifier alias) the variant
+    // is `ModuleExportName::IdentifierName`, which previously walked
+    // through `visit_identifier_name` without firing the reference.
+    let source = "export * as default from './base.js'\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let default_var = analyzed
+        .arena
+        .variables
+        .iter()
+        .find(|v| v.name() == "default")
+        .expect("an implicit-global `default` variable must exist for the export-all alias");
+
+    assert!(
+        !default_var.references.is_empty(),
+        "the implicit-global `default` must carry at least one reference"
+    );
+}
+
+#[test]
+fn private_field_assignment_head_renders_as_member_not_raw() {
+    // Parity regression: `this.#prop = rhs` (and `obj.#prop = rhs`)
+    // surfaced in npm `oxc-parser` as `MemberExpression(object,
+    // PrivateIdentifier("prop"))` with `computed: false`. The TS
+    // head-builder reads `property.name` directly without checking
+    // the property's node type, so the resulting
+    // `expressionStatementContainer.head` is
+    // `{ kind: assign, left: { kind: member, property: "prop" }, ... }`.
+    // The Rust `oxc_parser` crate keeps PrivateFieldExpression
+    // separate from StaticMemberExpression in three head-building
+    // arms (`Expression`, `AssignmentTarget`,
+    // `SimpleAssignmentTarget`); each of those used to bail to
+    // `None`, which then collapsed the whole assignment head to
+    // `kind: raw`. Mirror the TS flattening.
+    // `x` is the inner reference whose container annotation we
+    // inspect. The surrounding ExpressionStatement is `obj.#o = x;`,
+    // so the container's head must classify the whole statement as
+    // an assign with the private-field left-hand side flattened to a
+    // member shape. (Using a bare identifier `obj` instead of `this`
+    // because the head builder does not reduce `ThisExpression` and
+    // would otherwise collapse the left operand to `Elided` -- a
+    // separate parity gap that surfaces only when both sides of an
+    // assignment collapse.)
+    let source = "class C { #o = 1; foo(obj, x) { obj.#o = x; } }\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let x_read_ref_id = analyzed
+        .arena
+        .references
+        .iter_enumerated()
+        .find(|(_, r)| {
+            r.identifier.name() == "x"
+                && (r.flags & ReferenceFlags::READ).0 != 0
+                && (r.flags & ReferenceFlags::WRITE).0 == 0
+        })
+        .map(|(id, _)| id)
+        .expect("a read reference for `x` must exist on the RHS of `this.#o = x;`");
+
+    let container = analyzed
+        .annotations
+        .of_reference(x_read_ref_id)
+        .expression_statement_container
+        .as_ref()
+        .expect("`this.#o = x;` is an ExpressionStatement, so the container must be present");
+
+    use unsnarl_ir::reference::expression_statement_head::HeadExpression;
+    let HeadExpression::Assign { left, .. } = &container.head else {
+        panic!(
+            "expected the head of `this.#o = 2;` to be HeadExpression::Assign, got {:?}",
+            std::mem::discriminant(&container.head)
+        );
+    };
+    let HeadExpression::Member { property, .. } = &left.head else {
+        panic!(
+            "expected the assign's left-hand side to be HeadExpression::Member, got {:?}",
+            std::mem::discriminant(&left.head)
+        );
+    };
+    assert_eq!(
+        property, "o",
+        "the private field name must be flattened to the bare identifier (no leading `#`) to match TS"
+    );
+}
+
+#[test]
+fn function_inside_object_property_value_slot_reports_value_block_context_key() {
+    // Parity regression: when a function / class expression is the
+    // `value` slot of an `ObjectProperty` (e.g. `{ key: function ()
+    // {} }`) and the enclosing expression is wrapped in a call
+    // argument list, the function scope's `blockContext.key` used
+    // to come out as `"arguments"` -- carried over from
+    // `CallExpression.arguments` -- instead of TS's `"value"`. oxc's
+    // auto-generated `walk_object_property` does not push a per-child
+    // slot key, so the surrounding label leaks through.
+    // Use a class expression rather than a function expression
+    // because the analyzer's `block_context_of` only emits a block
+    // context for scope types that have one (class scopes do;
+    // function scopes are gated on richer body shapes than an empty
+    // function expression produces).
+    let source = "callMe({ key: class {} });\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let class_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Class))
+        .map(|(id, _)| id)
+        .expect("a class scope must exist for the value-slot class expression");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(class_scope)
+        .block_context
+        .as_ref()
+        .expect("the class scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "Property");
+    assert_eq!(
+        bc["key"], "value",
+        "the class's blockContext.key must mirror the TS AST slot \
+         label `value`, not the auto-walker's `arguments` carryover"
+    );
+}

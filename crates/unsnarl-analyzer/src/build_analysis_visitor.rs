@@ -25,11 +25,12 @@ use std::collections::HashMap;
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
-    ExportNamedDeclaration, ExpressionStatement, ForInStatement, ForOfStatement, ForStatement,
-    Function, IdentifierName, IdentifierReference, IfStatement, ImportAttribute, JSXIdentifier,
-    LabeledStatement, MetaProperty, NewExpression, PrivateFieldExpression, Program,
-    ReturnStatement, SequenceExpression, StaticMemberExpression, SwitchCase, SwitchStatement,
-    ThrowStatement, TryStatement, UpdateExpression, VariableDeclarator, WhileStatement,
+    ExportDefaultDeclaration, ExportNamedDeclaration, ExpressionStatement, ForInStatement,
+    ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference, IfStatement,
+    ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression, ObjectProperty,
+    PrivateFieldExpression, Program, ReturnStatement, SequenceExpression, StaticMemberExpression,
+    SwitchCase, SwitchStatement, ThrowStatement, TryStatement, UpdateExpression,
+    VariableDeclarator, WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
@@ -472,6 +473,50 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_with_clause(with_clause);
             self.key_stack.pop();
         }
+        self.pop_path();
+    }
+
+    fn visit_object_property(&mut self, it: &ObjectProperty<'a>) {
+        // Same family as `visit_export_named_declaration`: oxc's
+        // auto-generated walker walks the inner `key` / `value`
+        // slots without pushing their per-child key onto
+        // `key_stack`, so a function / class expression that lands in
+        // `value` (e.g. `{ key: function () {} }` inside a call
+        // argument) inherits whatever surrounding label was in scope
+        // -- frequently `"arguments"` from an enclosing
+        // `CallExpression.arguments` -- and surfaces in the IR as
+        // `{ parentType: "Property", key: "arguments" }` instead of
+        // the TS reference's `key: "value"`.
+        let kind = AstKind::ObjectProperty(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        self.key_stack.push(Some("value"));
+        self.visit_expression(&it.value);
+        self.key_stack.pop();
+        self.pop_path();
+    }
+
+    fn visit_export_default_declaration(&mut self, it: &ExportDefaultDeclaration<'a>) {
+        // Same family as `visit_export_named_declaration`: oxc's
+        // auto-generated walker visits the inner declaration without
+        // pushing the slot label `"declaration"` onto `key_stack`, so
+        // the declaration's child scope (a function / class scope)
+        // inherits `"body"` from the surrounding `Program.body` slot
+        // and surfaces in the IR as
+        // `{ parentType: "ExportDefaultDeclaration", key: "body" }`
+        // instead of the TS reference's `key: "declaration"`. The
+        // `exported` field is metadata only (always the literal name
+        // "default" for a default export) and is not walked by the
+        // npm `oxc-parser`'s visitorKeys list either.
+        let kind = AstKind::ExportDefaultDeclaration(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("declaration"));
+        self.visit_export_default_declaration_kind(&it.declaration);
+        self.key_stack.pop();
         self.pop_path();
     }
 

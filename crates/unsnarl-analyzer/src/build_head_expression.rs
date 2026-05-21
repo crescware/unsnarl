@@ -47,7 +47,23 @@ fn try_build(node: &Expression<'_>) -> Option<HeadExpression> {
             Some(HeadExpression::member(object_head, prop.to_string()))
         }
         Expression::ComputedMemberExpression(_) => None,
-        Expression::PrivateFieldExpression(_) => None,
+        Expression::PrivateFieldExpression(m) => {
+            // npm `oxc-parser` flattens `obj.#prop` into a regular
+            // MemberExpression with `property = PrivateIdentifier {
+            // name: "prop" }` and `computed: false`. The TS
+            // head-builder reads `property.name` directly without
+            // checking the property's node type, so the resulting
+            // head is `{ kind: member, object, property: "prop" }`
+            // -- identical shape to a non-private `obj.prop`. The
+            // Rust `oxc_parser` crate keeps PrivateFieldExpression
+            // separate, so mirror the same flattening here.
+            let object_head = try_build(&m.object)?;
+            let prop = m.field.name.as_str();
+            if prop.is_empty() {
+                return None;
+            }
+            Some(HeadExpression::member(object_head, prop.to_string()))
+        }
         Expression::CallExpression(call) => {
             let callee_head = try_build_callee(&call.callee)?;
             Some(HeadExpression::Call {
@@ -127,8 +143,20 @@ fn try_build_assignment_target(
             }
             Some(HeadExpression::member(object_head, prop.to_string()))
         }
+        AT::PrivateFieldExpression(m) => {
+            // Same flattening as the expression-position arm: TS
+            // sees `obj.#prop = rhs` as `MemberExpression(obj,
+            // PrivateIdentifier("prop"))` on the left, builds
+            // `{kind: member, property: "prop"}` for it, and emits
+            // the surrounding assignment in the head IR.
+            let object_head = try_build(&m.object)?;
+            let prop = m.field.name.as_str();
+            if prop.is_empty() {
+                return None;
+            }
+            Some(HeadExpression::member(object_head, prop.to_string()))
+        }
         AT::ComputedMemberExpression(_)
-        | AT::PrivateFieldExpression(_)
         | AT::TSAsExpression(_)
         | AT::TSSatisfiesExpression(_)
         | AT::TSNonNullExpression(_)
@@ -157,8 +185,18 @@ fn try_build_simple_assignment_target(
             }
             Some(HeadExpression::member(object_head, prop.to_string()))
         }
+        SAT::PrivateFieldExpression(m) => {
+            // Same flattening as the AssignmentTarget arm above:
+            // UpdateExpression's argument is a SimpleAssignmentTarget,
+            // and TS reduces `++obj.#prop` to a member head shape.
+            let object_head = try_build(&m.object)?;
+            let prop = m.field.name.as_str();
+            if prop.is_empty() {
+                return None;
+            }
+            Some(HeadExpression::member(object_head, prop.to_string()))
+        }
         SAT::ComputedMemberExpression(_)
-        | SAT::PrivateFieldExpression(_)
         | SAT::TSAsExpression(_)
         | SAT::TSSatisfiesExpression(_)
         | SAT::TSNonNullExpression(_)

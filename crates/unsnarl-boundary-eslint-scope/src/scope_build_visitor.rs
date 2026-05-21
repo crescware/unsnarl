@@ -22,13 +22,14 @@
 
 use oxc_ast::ast::{
     AccessorProperty, ArrowFunctionExpression, AssignmentExpression, BindingIdentifier,
-    BlockStatement, CallExpression, CatchClause, Class, ExportNamedDeclaration, ExportSpecifier,
-    ForInStatement, ForOfStatement, ForStatement, FormalParameter, FormalParameterRest, Function,
-    IdentifierName, IdentifierReference, ImportAttribute, ImportDefaultSpecifier,
-    ImportNamespaceSpecifier, ImportSpecifier, JSXAttribute, JSXIdentifier, JSXMemberExpression,
-    JSXOpeningElement, MetaProperty, NewExpression, PropertyDefinition, SwitchCase,
-    SwitchStatement, TSAsExpression, TSInstantiationExpression, TSSatisfiesExpression,
-    TSTypeAssertion, TaggedTemplateExpression, UpdateExpression, VariableDeclarator,
+    BlockStatement, CallExpression, CatchClause, Class, ExportAllDeclaration,
+    ExportNamedDeclaration, ExportSpecifier, ForInStatement, ForOfStatement, ForStatement,
+    FormalParameter, FormalParameterRest, Function, IdentifierName, IdentifierReference,
+    ImportAttribute, ImportDefaultSpecifier, ImportNamespaceSpecifier, ImportSpecifier,
+    JSXAttribute, JSXIdentifier, JSXMemberExpression, JSXOpeningElement, MetaProperty,
+    NewExpression, PropertyDefinition, SwitchCase, SwitchStatement, TSAsExpression,
+    TSInstantiationExpression, TSSatisfiesExpression, TSTypeAssertion, TaggedTemplateExpression,
+    UpdateExpression, VariableDeclarator,
 };
 use oxc_ast::AstKind;
 use oxc_syntax::scope::ScopeFlags;
@@ -755,6 +756,37 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         self.leave_node(kind);
     }
 
+    fn visit_export_all_declaration(&mut self, it: &ExportAllDeclaration<'a>) {
+        // `export * as default from './base.js'` -- TS treats the
+        // `exported` slot as a regular `Identifier` reference that
+        // resolves to an implicit global. oxc represents the slot as
+        // `Option<ModuleExportName>` and the `Identifier` shape is
+        // `ModuleExportName::IdentifierName`, so the per-slot routing
+        // for `IdentifierName` (in `visit_identifier_name` below)
+        // needs the `(parent = ExportAllDeclaration, key =
+        // "exported")` ancestor pair to be present on `key_stack`.
+        // Push it explicitly here -- oxc's auto-generated walker
+        // would otherwise leave whatever surrounding label was in
+        // scope on entry.
+        let kind = AstKind::ExportAllDeclaration(self.alloc(it));
+        self.enter_node(kind);
+        self.visit_span(&it.span);
+        if let Some(exported) = &it.exported {
+            self.key_stack.push(Some("exported"));
+            self.visit_module_export_name(exported);
+            self.key_stack.pop();
+        }
+        self.key_stack.push(Some("source"));
+        self.visit_string_literal(&it.source);
+        self.key_stack.pop();
+        if let Some(with_clause) = &it.with_clause {
+            self.key_stack.push(Some("attributes"));
+            self.visit_with_clause(with_clause);
+            self.key_stack.pop();
+        }
+        self.leave_node(kind);
+    }
+
     fn visit_export_specifier(&mut self, it: &ExportSpecifier<'a>) {
         let kind = AstKind::ExportSpecifier(self.alloc(it));
         self.enter_node(kind);
@@ -909,18 +941,32 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
         // need no work here. The handful of slots where TS ESTree
         // emits an `Identifier` that the TS pipeline classifies as a
         // reference are routed in through the
-        // `visit_meta_property` / `visit_import_attribute` overrides
-        // above, which push the appropriate slot key before reaching
-        // this method. Fire only when the parent matches one of those
-        // referential containers; otherwise fall through to the
-        // default walk.
+        // `visit_meta_property` / `visit_import_attribute` /
+        // `visit_export_specifier` parents, which push the
+        // appropriate slot key before reaching this method.
+        //
+        // ExportSpecifier.local: npm `oxc-parser` reports
+        // `local.type = "Identifier"` for every `export { X }` /
+        // `export { X } from 'src'` shape, and the TS pipeline
+        // creates a read reference for that identifier (resolving to
+        // an implicit global when the surface form is a re-export
+        // from another module). The Rust `oxc_parser` crate
+        // distinguishes here: `export { foo }` -> IdentifierReference
+        // (already handled by `visit_identifier_reference`), but
+        // `export { Lexer } from './Lexer.js'` and `export { default
+        // } from 'X'` -> IdentifierName, which reaches this method
+        // instead. Fire the reference here so the IR stays in lock
+        // step with the TS baseline.
         if self.type_only_depth == 0 {
             let parent = self.parent_kind();
             let key = self.current_key();
             let route_as_reference = matches!(
                 parent,
                 Some(AstKind::MetaProperty(_)) | Some(AstKind::ImportAttribute(_))
-            );
+            ) || (matches!(parent, Some(AstKind::ExportSpecifier(_)))
+                && key == Some("local"))
+                || (matches!(parent, Some(AstKind::ExportAllDeclaration(_)))
+                    && key == Some("exported"));
             if route_as_reference {
                 handle_identifier_reference(
                     self.state,

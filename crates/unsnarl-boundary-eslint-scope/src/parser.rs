@@ -168,17 +168,22 @@ impl OxcParser {
     }
 }
 
-fn oxc_source_type_for(language: Language, source_type: SourceType) -> OxcSourceType {
-    let base = match language {
+fn oxc_source_type_for(language: Language, _source_type: SourceType) -> OxcSourceType {
+    // Mirror the TS pipeline: `ts/src/parser/oxc-parser.ts` always
+    // calls `parseSync(..., { sourceType: "module" })` regardless of
+    // the analysis-level `SourceType` -- so module-only syntax
+    // (top-level `await`, `import` / `export`) parses cleanly even
+    // when the surrounding analysis treats the file as a Script. The
+    // analysis-level distinction is preserved on `ParsedSource` and
+    // propagated downstream to `analyze`, which still picks `global`
+    // vs `module` for the root scope from that field.
+    match language {
         Language::Ts => OxcSourceType::ts(),
         Language::Tsx => OxcSourceType::tsx(),
         Language::Js => OxcSourceType::mjs(),
         Language::Jsx => OxcSourceType::jsx(),
-    };
-    match source_type {
-        SourceType::Module => base.with_module(true),
-        SourceType::Script => base.with_script(true),
     }
+    .with_module(true)
 }
 
 #[cfg(test)]
