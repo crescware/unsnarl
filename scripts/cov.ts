@@ -91,17 +91,35 @@ function listProfraws(): string[] {
 }
 
 function listInstrumentedTestObjects(): string[] {
-  const deps = `${BUILD_DIR}/debug/deps`;
+  // Collect every instrumented executable Cargo built for this
+  // workspace under `cov-build/debug/`:
+  //   - `debug/deps/`: the per-target test binaries (one per
+  //     `cargo test` target) plus their dep .rmeta / .d files.
+  //   - `debug/` itself: workspace `[[bin]]` binaries (e.g.
+  //     `target/cov-build/debug/uns`) that `tests/cli_parity.rs`
+  //     spawns as subprocesses. Without these in the `-object`
+  //     set, the profraw they emit during the e2e sweep would
+  //     merge cleanly but render as 0% in the final report.
+  const candidates = [`${BUILD_DIR}/debug/deps`, `${BUILD_DIR}/debug`];
   const out: string[] = [];
-  for (const e of Deno.readDirSync(deps)) {
-    if (!e.isFile) continue;
-    if (e.name.endsWith(".d") || e.name.endsWith(".dSYM")) continue;
-    const path = `${deps}/${e.name}`;
-    const s = Deno.statSync(path);
-    // Skip non-executables; on macOS the depfiles and rmeta artefacts
-    // share this directory with the actual test binaries.
-    if (((s.mode ?? 0) & 0o111) === 0) continue;
-    out.push("-object", path);
+  for (const dir of candidates) {
+    let entries: Deno.DirEntry[];
+    try {
+      entries = [...Deno.readDirSync(dir)];
+    } catch (e) {
+      if (e instanceof Deno.errors.NotFound) continue;
+      throw e;
+    }
+    for (const e of entries) {
+      if (!e.isFile) continue;
+      if (e.name.endsWith(".d") || e.name.endsWith(".dSYM")) continue;
+      const path = `${dir}/${e.name}`;
+      const s = Deno.statSync(path);
+      // Skip non-executables; on macOS the depfiles and rmeta artefacts
+      // share these directories with the actual binaries.
+      if (((s.mode ?? 0) & 0o111) === 0) continue;
+      out.push("-object", path);
+    }
   }
   return out;
 }
