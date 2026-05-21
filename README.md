@@ -8,17 +8,28 @@ npm i -g unsnarl
 uns path/to/your-file.ts
 ```
 
-unsnarl parses a single source file with [oxc-parser], builds a
-[scope-manager]-compatible scope tree (`Scope` / `Variable` /
-`Reference` / `Definition`), classifies each identifier reference as
-read / write / call, detects unused declarations, and serializes the
-result.
+The npm package ships a Node.js shim that dispatches to a prebuilt
+platform binary via `optionalDependencies`. Only `darwin-arm64` is
+published as of this release; on any other platform the shim prints a
+"no prebuilt binary available" message. Build from source on
+unsupported platforms (or to track `main`):
+
+```sh
+cargo build --release -p unsnarl
+./target/release/uns path/to/your-file.ts
+```
+
+unsnarl parses a single source file with [oxc][oxc] (`oxc_parser`),
+builds a [scope-manager][scope-manager]-compatible scope tree
+(`Scope` / `Variable` / `Reference` / `Definition`), classifies each
+identifier reference as read / write / call, detects unused
+declarations, and serializes the result.
 
 It does **not** cross file boundaries. TypeScript-only constructs
 (`interface`, `type`, `enum`, `namespace`, type annotations) and class
 member declarations are intentionally out of scope.
 
-[oxc-parser]: https://www.npmjs.com/package/oxc-parser
+[oxc]: https://oxc.rs/
 [scope-manager]: https://eslint.org/docs/latest/extend/scope-manager-interface
 
 ## CLI
@@ -258,34 +269,64 @@ is left in place.
 
 ## Setup
 
+unsnarl is a Cargo workspace targeting Rust 1.95+. The Rust toolchain
+(plus the Deno + Node runtimes used by helper scripts and the npm
+publish flow) is pinned through [mise](https://mise.jdx.dev/):
+
 ```sh
 mise install
-corepack enable
-pnpm install
+cargo build --release -p unsnarl
+```
+
+The release binary lands at `target/release/uns`.
+
+A TypeScript reference implementation lives under `ts/` and is kept
+building so the Rust output can be compared against it byte-for-byte by
+the parity benches. See `ts/CLAUDE.md` for that subtree's own
+verification command.
+
+Project-wide conventions (file naming, sibling test files, dead-code
+policy, derive policy) are documented under `docs/`.
+
+## Verification
+
+The project-defined check that must pass before any change is committed:
+
+```sh
+cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
 ```
 
 ## Scripts
 
-| Command            | Description                              |
-| ------------------ | ---------------------------------------- |
-| `pnpm check`       | Run all checks (types, lint, knip, test) |
-| `pnpm check:types` | Type check                               |
-| `pnpm check:lint`  | Lint and format check                    |
-| `pnpm check:knip`  | Unused files/exports check               |
-| `pnpm test`        | Run tests                                |
-| `pnpm format`      | Fix lint and format                      |
-| `pnpm build`       | Compile to `dist/` via tsgo              |
+Workspace tasks are defined in `mise.toml` and invoked via
+`mise run <name>` (or `mise run <name> -- <args>` to forward arguments):
 
-After `pnpm build` the CLI is at `dist/index.js`. Use `pnpm pack`
-to produce a distributable tarball.
+| Task                       | Description                                                                                                                |
+| -------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `build`                    | Release-build the `uns` CLI binary to `target/release/uns`.                                                                |
+| `parity`                   | Run the parity harness against `ts/integration/fixtures/**/expected.ir.json`.                                              |
+| `emit:ir`                  | Convenience runner for `uns -f ir` on the forwarded arguments.                                                             |
+| `bench:ir-parity`          | Run `-f ir` against every `ts/src/**/*.ts(x)` and compare Rust vs TS byte-for-byte; per-file timings under `target/`.      |
+| `bench:json-parity`        | Same sweep for `-f json` (visual-graph JSON).                                                                              |
+| `bench:mermaid-parity`     | Same sweep for `-f mermaid` (CLI defaults: elk + dark theme).                                                              |
+| `bench:markdown-parity`    | Same sweep for `-f markdown` (same mermaid render wrapped in markdown).                                                    |
+| `bench:stats-parity`       | Same sweep for `-f stats`.                                                                                                 |
+| `bench:variant-parity`     | Single-shot variant sweep: `mise run bench:variant-parity -- <format> <variant>`.                                          |
+| `bench:variant-parity-all` | Full 5-format × 6-variant matrix (30 sweeps).                                                                              |
+| `cov`                      | Build with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under `target/coverage/`. |
+| `check:no-allow-dead-code` | Scan the source tree for forbidden `#[allow(dead_code)]` / `#[expect(dead_code)]` attributes (see `docs/dead-code-policy.md`). |
+| `bump`                     | Align every version field (Cargo + npm) AND both `publishConfig.tag` entries to the argument: `mise run bump -- 0.3.1`. The tag is derived from the semver pre-release id (no prerelease → `latest`, `-rc.*` → `rc`, anything else → `beta`). |
+| `npm:build-darwin-arm64`   | Cross-compile the `aarch64-apple-darwin` release and stage it into `npm/unsnarl-darwin-arm64/bin/uns`. Triggered by the npm `prepack` hook. |
+| `npm:publish`              | Publish `unsnarl-darwin-arm64` then `unsnarl` to npm. Each package's dist-tag is read from its own `publishConfig.tag` and passed via `--tag`. |
+| `npm:publish:dry-run`      | Shortcut for `npm:publish -- --dry-run`.                                                                                   |
 
 ## Stack
 
-- **Runtime**: Node.js 24 (via [mise](https://mise.jdx.dev/))
-- **Package manager**: pnpm (via corepack)
-- **Language**: TypeScript with [`@typescript/native-preview`](https://www.npmjs.com/package/@typescript/native-preview)
-- **Parser**: [oxc-parser](https://oxc.rs/docs/guide/usage/parser)
-- **Test**: [Vitest](https://vitest.dev/)
-- **Lint**: [oxlint](https://oxc.rs/docs/guide/usage/linter)
-- **Format**: [oxfmt](https://github.com/nicolo-ribaudo/oxfmt)
-- **Unused code**: [Knip](https://knip.dev/)
+- **Language**: Rust (edition 2021, MSRV 1.95).
+- **Workspace**: 17 crates under `crates/`; the CLI binary `uns` is produced by `crates/unsnarl`.
+- **Parser / AST**: [oxc][oxc] (`oxc_parser` / `oxc_ast` / `oxc_ast_visit`).
+- **CLI**: [`clap`](https://docs.rs/clap).
+- **Task runner**: [mise](https://mise.jdx.dev/) pins the toolchain and exposes the workspace tasks above.
+- **Helper scripts**: Deno TypeScript modules under `scripts/`.
+- **Reference implementation**: TypeScript port under `ts/`, kept in lockstep for IR-byte parity.
+- **Lint / format / test**: `cargo clippy -D warnings`, `cargo fmt`, `cargo test --workspace`.
