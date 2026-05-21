@@ -76,3 +76,7 @@ fn emit_nest_class_defs(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_class_defs_test.rs"]
+mod render_class_defs_test;

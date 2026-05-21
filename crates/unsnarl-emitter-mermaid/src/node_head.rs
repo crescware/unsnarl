@@ -72,3 +72,7 @@ pub fn node_head(n: &VisualNode) -> String {
         NodeKind::SyntheticBeyondDepth => "...".to_string(),
     }
 }
+
+#[cfg(test)]
+#[path = "node_head_test.rs"]
+mod node_head_test;

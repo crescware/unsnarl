@@ -19,3 +19,7 @@ pub fn render_synthetic_node_block(state: &mut RenderState<'_>, graph: &VisualGr
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_synthetic_node_block_test.rs"]
+mod render_synthetic_node_block_test;

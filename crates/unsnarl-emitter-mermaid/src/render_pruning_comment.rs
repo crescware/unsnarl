@@ -34,3 +34,7 @@ pub fn render_pruning_comment(graph: &VisualGraph, lines: &mut Vec<String>) {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_pruning_comment_test.rs"]
+mod render_pruning_comment_test;

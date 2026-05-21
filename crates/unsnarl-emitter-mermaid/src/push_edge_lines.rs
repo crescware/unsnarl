@@ -47,3 +47,7 @@ fn touches_beyond_depth(e: &VisualEdge, node_map: Option<&HashMap<String, &Visua
         .unwrap_or(false);
     from_is_stub || to_is_stub
 }
+
+#[cfg(test)]
+#[path = "push_edge_lines_test.rs"]
+mod push_edge_lines_test;

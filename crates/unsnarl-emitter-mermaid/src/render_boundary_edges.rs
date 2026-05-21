@@ -47,3 +47,7 @@ pub fn render_boundary_edges(
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_boundary_edges_test.rs"]
+mod render_boundary_edges_test;

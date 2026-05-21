@@ -20,3 +20,7 @@ pub fn collect_import_sources(node_map: &HashMap<String, &VisualNode>) -> HashSe
     }
     out
 }
+
+#[cfg(test)]
+#[path = "collect_import_sources_test.rs"]
+mod collect_import_sources_test;

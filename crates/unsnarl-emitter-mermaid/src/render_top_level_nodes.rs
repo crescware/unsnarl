@@ -20,3 +20,7 @@ pub fn render_top_level_nodes(state: &mut RenderState<'_>, graph: &VisualGraph) 
         }
     }
 }
+
+#[cfg(test)]
+#[path = "render_top_level_nodes_test.rs"]
+mod render_top_level_nodes_test;

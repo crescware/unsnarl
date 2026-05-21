@@ -35,4 +35,7 @@ pub mod strategy;
 pub mod subgraph_label;
 pub mod theme;
 
+#[cfg(test)]
+pub(crate) mod testing;
+
 pub use mermaid::MermaidEmitter;

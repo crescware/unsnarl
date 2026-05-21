@@ -45,3 +45,7 @@ pub fn collect_highlight_edge_indices(
     }
     out
 }
+
+#[cfg(test)]
+#[path = "collect_highlight_edge_indices_test.rs"]
+mod collect_highlight_edge_indices_test;

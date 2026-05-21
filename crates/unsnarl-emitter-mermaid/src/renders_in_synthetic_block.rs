@@ -15,3 +15,7 @@ pub fn renders_in_synthetic_block(n: &VisualNode) -> bool {
             | NodeKind::SyntheticExpressionStatement
     )
 }
+
+#[cfg(test)]
+#[path = "renders_in_synthetic_block_test.rs"]
+mod renders_in_synthetic_block_test;

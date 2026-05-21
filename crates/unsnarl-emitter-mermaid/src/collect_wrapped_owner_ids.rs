@@ -24,3 +24,7 @@ pub fn collect_wrapped_owner_ids(elements: &[VisualElement], out: &mut HashSet<S
         collect_wrapped_owner_ids(s.elements(), out);
     }
 }
+
+#[cfg(test)]
+#[path = "collect_wrapped_owner_ids_test.rs"]
+mod collect_wrapped_owner_ids_test;

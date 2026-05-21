@@ -44,3 +44,7 @@ pub fn render_highlight(
         ));
     }
 }
+
+#[cfg(test)]
+#[path = "render_highlight_test.rs"]
+mod render_highlight_test;
