@@ -602,3 +602,26 @@ fn run_to_with_dash_r_emits_pruning_summary_in_mermaid_output() {
         "expected pruning summary line, got:\n{out}"
     );
 }
+
+// Ports `ts/src/emitter/mermaid/theme/color-themes.test.ts`. The
+// `COLOR_THEMES` table on the TS side maps `CLI_COLOR_THEME` to the
+// concrete theme; the Rust equivalent is the `color_theme_for`
+// dispatch in `run.rs`. Pin the two arms here so a future variant
+// surfaces a missing arm.
+#[test]
+fn color_theme_for_dark_resolves_to_dark_theme() {
+    let theme = color_theme_for(&CliColorTheme::Dark);
+    assert!(std::ptr::eq(
+        theme,
+        &unsnarl_emitter_mermaid::theme::DARK_THEME
+    ));
+}
+
+#[test]
+fn color_theme_for_light_resolves_to_light_theme() {
+    let theme = color_theme_for(&CliColorTheme::Light);
+    assert!(std::ptr::eq(
+        theme,
+        &unsnarl_emitter_mermaid::theme::LIGHT_THEME
+    ));
+}

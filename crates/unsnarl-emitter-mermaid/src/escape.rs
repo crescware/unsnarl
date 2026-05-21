@@ -20,3 +20,7 @@ pub fn escape(value: &str) -> String {
     }
     out
 }
+
+#[cfg(test)]
+#[path = "escape_test.rs"]
+mod escape_test;

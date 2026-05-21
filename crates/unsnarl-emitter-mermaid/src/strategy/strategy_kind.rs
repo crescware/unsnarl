@@ -92,3 +92,7 @@ impl MermaidStrategy {
         }
     }
 }
+
+#[cfg(test)]
+#[path = "strategy_kind_test.rs"]
+mod strategy_kind_test;

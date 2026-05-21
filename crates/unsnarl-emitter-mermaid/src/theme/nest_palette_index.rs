@@ -15,3 +15,7 @@ pub fn nest_palette_index(depth: u32, palette_length: usize) -> usize {
     }
     ((depth as usize) - 1) % palette_length
 }
+
+#[cfg(test)]
+#[path = "nest_palette_index_test.rs"]
+mod nest_palette_index_test;

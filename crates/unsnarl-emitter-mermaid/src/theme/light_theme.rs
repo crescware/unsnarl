@@ -54,3 +54,7 @@ pub static LIGHT_THEME: ColorTheme = ColorTheme {
         edge_stroke_width: "2px",
     },
 };
+
+#[cfg(test)]
+#[path = "light_theme_test.rs"]
+mod light_theme_test;
