@@ -225,3 +225,41 @@ fn export_default_declaration_routes_declaration_slot_key_into_block_context() {
          label `declaration`, not the auto-walker's `body` carryover"
     );
 }
+
+#[test]
+fn export_named_with_from_creates_implicit_global_reference_for_local_name() {
+    // Parity regression: `export { Lexer } from './Lexer.js'`
+    // surfaces in npm `oxc-parser` as `ExportSpecifier.local.type =
+    // "Identifier"`, and the TS pipeline routes that identifier
+    // through `handleIdentifierReference`, producing a read
+    // reference that resolves to an implicit-global `Lexer` in the
+    // module scope. The Rust `oxc_parser` crate keeps the same slot
+    // as `ModuleExportName::IdentifierName` for re-exports (and
+    // anywhere the local name is a reserved word like `default`),
+    // so the analyzer used to walk past it without firing the
+    // reference. The boundary's `visit_identifier_name` now routes
+    // these slots through `handle_identifier_reference` so the IR
+    // stays byte-identical to TS.
+    let source = "export { Lexer } from './Lexer.js'\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let lexer_var = analyzed
+        .arena
+        .variables
+        .iter()
+        .find(|v| v.name() == "Lexer")
+        .expect("an implicit-global `Lexer` variable must be created for the re-export local name");
+
+    assert!(
+        !lexer_var.references.is_empty(),
+        "the implicit-global `Lexer` must carry at least one reference"
+    );
+
+    let ref_id = lexer_var.references[0];
+    let reference = &analyzed.arena.references[ref_id];
+    assert_eq!(reference.identifier.name(), "Lexer");
+    assert_eq!(reference.identifier.span.start, 9);
+}
