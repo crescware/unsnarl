@@ -295,3 +295,71 @@ fn export_all_with_alias_creates_implicit_global_reference_for_exported_name() {
         "the implicit-global `default` must carry at least one reference"
     );
 }
+
+#[test]
+fn private_field_assignment_head_renders_as_member_not_raw() {
+    // Parity regression: `this.#prop = rhs` (and `obj.#prop = rhs`)
+    // surfaced in npm `oxc-parser` as `MemberExpression(object,
+    // PrivateIdentifier("prop"))` with `computed: false`. The TS
+    // head-builder reads `property.name` directly without checking
+    // the property's node type, so the resulting
+    // `expressionStatementContainer.head` is
+    // `{ kind: assign, left: { kind: member, property: "prop" }, ... }`.
+    // The Rust `oxc_parser` crate keeps PrivateFieldExpression
+    // separate from StaticMemberExpression in three head-building
+    // arms (`Expression`, `AssignmentTarget`,
+    // `SimpleAssignmentTarget`); each of those used to bail to
+    // `None`, which then collapsed the whole assignment head to
+    // `kind: raw`. Mirror the TS flattening.
+    // `x` is the inner reference whose container annotation we
+    // inspect. The surrounding ExpressionStatement is `obj.#o = x;`,
+    // so the container's head must classify the whole statement as
+    // an assign with the private-field left-hand side flattened to a
+    // member shape. (Using a bare identifier `obj` instead of `this`
+    // because the head builder does not reduce `ThisExpression` and
+    // would otherwise collapse the left operand to `Elided` -- a
+    // separate parity gap that surfaces only when both sides of an
+    // assignment collapse.)
+    let source = "class C { #o = 1; foo(obj, x) { obj.#o = x; } }\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Module, Language::Ts, source);
+
+    let x_read_ref_id = analyzed
+        .arena
+        .references
+        .iter_enumerated()
+        .find(|(_, r)| {
+            r.identifier.name() == "x"
+                && (r.flags & ReferenceFlags::READ).0 != 0
+                && (r.flags & ReferenceFlags::WRITE).0 == 0
+        })
+        .map(|(id, _)| id)
+        .expect("a read reference for `x` must exist on the RHS of `this.#o = x;`");
+
+    let container = analyzed
+        .annotations
+        .of_reference(x_read_ref_id)
+        .expression_statement_container
+        .as_ref()
+        .expect("`this.#o = x;` is an ExpressionStatement, so the container must be present");
+
+    use unsnarl_ir::reference::expression_statement_head::HeadExpression;
+    let HeadExpression::Assign { left, .. } = &container.head else {
+        panic!(
+            "expected the head of `this.#o = 2;` to be HeadExpression::Assign, got {:?}",
+            std::mem::discriminant(&container.head)
+        );
+    };
+    let HeadExpression::Member { property, .. } = &left.head else {
+        panic!(
+            "expected the assign's left-hand side to be HeadExpression::Member, got {:?}",
+            std::mem::discriminant(&left.head)
+        );
+    };
+    assert_eq!(
+        property, "o",
+        "the private field name must be flattened to the bare identifier (no leading `#`) to match TS"
+    );
+}
