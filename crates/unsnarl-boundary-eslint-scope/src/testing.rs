@@ -52,6 +52,7 @@ pub(crate) fn analyze_source(code: &str, language: Language) -> EslintScopeAnaly
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language,
             raw: parsed.raw,
         },
         &mut visitor,

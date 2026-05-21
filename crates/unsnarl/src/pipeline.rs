@@ -495,7 +495,7 @@ fn serialize_ir(
             source_type,
         },
     )?;
-    let analyzed = run_analysis(&parsed.program, parsed.source_type, parsed.raw);
+    let analyzed = run_analysis(&parsed.program, parsed.source_type, language, parsed.raw);
     let serializer = FlatSerializer;
     let ctx = SerializeContext {
         arena: &analyzed.arena,

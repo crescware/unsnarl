@@ -33,6 +33,7 @@ fn analyze_completes_for_trivial_source() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,
@@ -76,6 +77,7 @@ fn root_block_span_skips_leading_comments() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,
@@ -104,6 +106,7 @@ fn script_source_seeds_global_scope() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,

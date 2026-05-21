@@ -35,6 +35,7 @@ use unsnarl_boundary_eslint_scope::visitor::AnalysisVisitor;
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};
 use unsnarl_ir::IrArena;
+use unsnarl_ir::Language;
 use unsnarl_oxc_parity::AstType;
 
 use crate::analyzed_source::AnalyzedSource;
@@ -46,6 +47,7 @@ use crate::is_unused::is_unused;
 pub fn run_analysis<'a>(
     program: &Program<'a>,
     source_type: SourceType,
+    language: Language,
     raw: &'a str,
 ) -> AnalyzedSource<'a> {
     let nesting_depths = compute_nesting_depths(program);
@@ -53,7 +55,11 @@ pub fn run_analysis<'a>(
     let mut collector = DiagnosticCollector::default();
     let result = analyze(
         program,
-        &AnalyzeOptions { source_type, raw },
+        &AnalyzeOptions {
+            source_type,
+            language,
+            raw,
+        },
         &mut collector,
     );
     let diagnostics = collector.diagnostics;

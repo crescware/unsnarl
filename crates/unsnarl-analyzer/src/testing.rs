@@ -113,6 +113,7 @@ pub(crate) fn parse_and_analyze_ts<'a>(
         &program,
         &AnalyzeOptions {
             source_type: boundary_source_type,
+            language: unsnarl_ir::Language::Ts,
             raw: source,
         },
         &mut visitor,

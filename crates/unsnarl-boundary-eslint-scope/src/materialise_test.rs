@@ -74,6 +74,7 @@ fn private_in_expression_falls_back_to_unknown_ast_type_on_path() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,
@@ -131,6 +132,7 @@ fn known_ast_type_on_path_does_not_collapse_to_unknown() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,

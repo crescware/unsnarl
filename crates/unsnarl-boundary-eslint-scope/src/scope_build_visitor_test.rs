@@ -135,6 +135,7 @@ fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
         &parsed.program,
         &AnalyzeOptions {
             source_type: parsed.source_type,
+            language: parsed.language,
             raw: parsed.raw,
         },
         &mut visitor,

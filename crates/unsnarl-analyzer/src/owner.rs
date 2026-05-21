@@ -20,5 +20,7 @@
 pub mod all_binding_variables;
 pub mod find_reference_owners;
 
-pub use all_binding_variables::{all_binding_variables, assignment_target_variables};
+pub use all_binding_variables::{
+    all_binding_variables, assignment_target_variables, walk_assignment_target_identifiers,
+};
 pub use find_reference_owners::{locate_reference_owner_slot, OwnerLookup};

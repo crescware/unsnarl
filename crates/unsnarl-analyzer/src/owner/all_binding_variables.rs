@@ -18,6 +18,7 @@
 
 use oxc_ast::ast::{
     AssignmentTarget, AssignmentTargetMaybeDefault, AssignmentTargetProperty, BindingPattern,
+    IdentifierReference,
 };
 
 use unsnarl_boundary_eslint_scope::declare::collect_binding_identifiers;
@@ -47,44 +48,63 @@ pub fn assignment_target_variables(
     scope: ScopeId,
     arena: &IrArena,
 ) -> Vec<VariableId> {
-    let mut names: Vec<String> = Vec::new();
-    collect_assignment_target_names(target, &mut names);
     let mut out: Vec<VariableId> = Vec::new();
-    for name in names {
-        if let Some(id) = resolve_in_scope_chain(arena, scope, &name) {
-            if !out.contains(&id) {
-                out.push(id);
+    walk_assignment_target_identifiers(target, &mut |id| {
+        if let Some(var_id) = resolve_in_scope_chain(arena, scope, id.name.as_str()) {
+            if !out.contains(&var_id) {
+                out.push(var_id);
             }
         }
-    }
+    });
     out
 }
 
-fn collect_assignment_target_names(target: &AssignmentTarget<'_>, out: &mut Vec<String>) {
+/// Walk every identifier reachable from an `AssignmentTarget`,
+/// invoking `f` once per occurrence in source order.
+///
+/// The traversal mirrors the TS `findReferenceOwners /
+/// allBindingVariables` shape: identifiers nested under
+/// destructuring patterns, defaulted slots, rest targets and
+/// shorthand property bindings are all visited. Member expressions
+/// and TS-only wrappers in target position contribute no bindings
+/// and are skipped.
+///
+/// `oxc_ast` spells the identifier slot two different ways: the
+/// `AssignmentTargetIdentifier` variants wrap a
+/// `Box<IdentifierReference>`, while shorthand property bindings
+/// hold the same `IdentifierReference` directly. The callback
+/// receives `&IdentifierReference` in every arm so the shape stays
+/// uniform.
+///
+/// Used both by [`assignment_target_variables`] (which resolves
+/// each name against the live scope chain) and by the analysis-pass
+/// `BuildAnalysisVisitor` (which uses each identifier's span to
+/// look up the existing reference's resolved binding instead).
+pub fn walk_assignment_target_identifiers(
+    target: &AssignmentTarget<'_>,
+    f: &mut dyn FnMut(&IdentifierReference<'_>),
+) {
     use AssignmentTarget as AT;
     match target {
         AT::AssignmentTargetIdentifier(id) => {
-            out.push(id.name.as_str().to_string());
+            f(id.as_ref());
         }
         AT::ArrayAssignmentTarget(arr) => {
             for el in arr.elements.iter().flatten() {
-                collect_maybe_default(el, out);
+                walk_maybe_default(el, f);
             }
             if let Some(rest) = arr.rest.as_deref() {
-                collect_assignment_target_names(&rest.target, out);
+                walk_assignment_target_identifiers(&rest.target, f);
             }
         }
         AT::ObjectAssignmentTarget(obj) => {
             for prop in &obj.properties {
-                collect_property(prop, out);
+                walk_property(prop, f);
             }
             if let Some(rest) = obj.rest.as_deref() {
-                collect_assignment_target_names(&rest.target, out);
+                walk_assignment_target_identifiers(&rest.target, f);
             }
         }
-        // Member expressions and TS wrappers in target position do not
-        // introduce new bindings; mirror the TS behavior of falling
-        // through with no contributions.
         AT::ComputedMemberExpression(_)
         | AT::StaticMemberExpression(_)
         | AT::PrivateFieldExpression(_)
@@ -95,29 +115,32 @@ fn collect_assignment_target_names(target: &AssignmentTarget<'_>, out: &mut Vec<
     }
 }
 
-fn collect_maybe_default(node: &AssignmentTargetMaybeDefault<'_>, out: &mut Vec<String>) {
+fn walk_maybe_default(
+    node: &AssignmentTargetMaybeDefault<'_>,
+    f: &mut dyn FnMut(&IdentifierReference<'_>),
+) {
     use AssignmentTargetMaybeDefault as M;
     match node {
         M::AssignmentTargetWithDefault(wd) => {
-            collect_assignment_target_names(&wd.binding, out);
+            walk_assignment_target_identifiers(&wd.binding, f);
         }
         M::AssignmentTargetIdentifier(id) => {
-            out.push(id.name.as_str().to_string());
+            f(id.as_ref());
         }
         M::ArrayAssignmentTarget(arr) => {
             for el in arr.elements.iter().flatten() {
-                collect_maybe_default(el, out);
+                walk_maybe_default(el, f);
             }
             if let Some(rest) = arr.rest.as_deref() {
-                collect_assignment_target_names(&rest.target, out);
+                walk_assignment_target_identifiers(&rest.target, f);
             }
         }
         M::ObjectAssignmentTarget(obj) => {
             for prop in &obj.properties {
-                collect_property(prop, out);
+                walk_property(prop, f);
             }
             if let Some(rest) = obj.rest.as_deref() {
-                collect_assignment_target_names(&rest.target, out);
+                walk_assignment_target_identifiers(&rest.target, f);
             }
         }
         M::ComputedMemberExpression(_)
@@ -130,16 +153,16 @@ fn collect_maybe_default(node: &AssignmentTargetMaybeDefault<'_>, out: &mut Vec<
     }
 }
 
-fn collect_property(prop: &AssignmentTargetProperty<'_>, out: &mut Vec<String>) {
+fn walk_property(prop: &AssignmentTargetProperty<'_>, f: &mut dyn FnMut(&IdentifierReference<'_>)) {
     match prop {
         AssignmentTargetProperty::AssignmentTargetPropertyIdentifier(id) => {
             // The shorthand `{ foo }` and `{ foo = init }` forms: the
             // binding *is* the property key. The `init` slot here is
             // the default value, not a binding.
-            out.push(id.binding.name.as_str().to_string());
+            f(&id.binding);
         }
         AssignmentTargetProperty::AssignmentTargetPropertyProperty(p) => {
-            collect_maybe_default(&p.binding, out);
+            walk_maybe_default(&p.binding, f);
         }
     }
 }
