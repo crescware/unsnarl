@@ -15,7 +15,7 @@ use unsnarl_ir::{ReferenceId, ScopeId, VariableId};
 
 use crate::serializer::flat::collect_scopes_in_order::collect_scopes_in_order;
 use crate::serializer::flat::has_declaring_def::has_declaring_def;
-use crate::serializer::flat::offset_of::offset_of_identifier;
+use crate::serializer::flat::offset_of_identifier::offset_of_identifier;
 use crate::serializer::flat::pick_variable_offset::pick_variable_offset;
 use crate::serializer::flat::serialize_reference::serialize_reference;
 use crate::serializer::flat::serialize_scope::serialize_scope;
