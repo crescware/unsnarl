@@ -314,7 +314,7 @@ checksum = "f8ca58f447f06ed17d5fc4043ce1b10dd205e060fb3ce5b979b8ed8e59ff3f79"
 
 [[package]]
 name = "no-allow-dead-code"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 
 [[package]]
 name = "nonmax"
@@ -880,7 +880,7 @@ checksum = "ebc1c04c71510c7f702b52b7c350734c9ff1295c464a03335b00bb84fc54f853"
 
 [[package]]
 name = "unsnarl"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "clap",
  "libtest-mimic",
@@ -907,7 +907,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-analyzer"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
@@ -924,7 +924,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-annotations"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -933,7 +933,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-boundary-eslint-scope"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
@@ -949,7 +949,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-annotations",
  "unsnarl-ir",
@@ -958,7 +958,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter-ir"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "oxc_allocator",
  "oxc_ast",
@@ -976,7 +976,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter-json"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "serde",
  "serde_json",
@@ -987,7 +987,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter-markdown"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-analyzer",
  "unsnarl-emitter",
@@ -999,7 +999,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter-mermaid"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-emitter",
  "unsnarl-ir",
@@ -1009,7 +1009,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-emitter-stats"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-emitter",
  "unsnarl-ir",
@@ -1018,7 +1018,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-ir"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "oxc_index",
  "oxc_span",
@@ -1029,21 +1029,21 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-oxc-parity"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "serde",
 ]
 
 [[package]]
 name = "unsnarl-plugin"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-ir",
 ]
 
 [[package]]
 name = "unsnarl-plugin-react"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "unsnarl-ir",
  "unsnarl-oxc-parity",
@@ -1052,7 +1052,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-root-query"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "serde",
  "unsnarl-ir",
@@ -1060,7 +1060,7 @@ dependencies = [
 
 [[package]]
 name = "unsnarl-visual-graph"
-version = "0.3.0-rc.1"
+version = "0.3.0-rc.2"
 dependencies = [
  "serde",
  "serde_json",
