@@ -27,7 +27,7 @@ use oxc_ast::ast::{
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
     ExportDefaultDeclaration, ExportNamedDeclaration, ExpressionStatement, ForInStatement,
     ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference, IfStatement,
-    ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression,
+    ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression, ObjectProperty,
     PrivateFieldExpression, Program, ReturnStatement, SequenceExpression, StaticMemberExpression,
     SwitchCase, SwitchStatement, ThrowStatement, TryStatement, UpdateExpression,
     VariableDeclarator, WhileStatement,
@@ -473,6 +473,29 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_with_clause(with_clause);
             self.key_stack.pop();
         }
+        self.pop_path();
+    }
+
+    fn visit_object_property(&mut self, it: &ObjectProperty<'a>) {
+        // Same family as `visit_export_named_declaration`: oxc's
+        // auto-generated walker walks the inner `key` / `value`
+        // slots without pushing their per-child key onto
+        // `key_stack`, so a function / class expression that lands in
+        // `value` (e.g. `{ key: function () {} }` inside a call
+        // argument) inherits whatever surrounding label was in scope
+        // -- frequently `"arguments"` from an enclosing
+        // `CallExpression.arguments` -- and surfaces in the IR as
+        // `{ parentType: "Property", key: "arguments" }` instead of
+        // the TS reference's `key: "value"`.
+        let kind = AstKind::ObjectProperty(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("key"));
+        self.visit_property_key(&it.key);
+        self.key_stack.pop();
+        self.key_stack.push(Some("value"));
+        self.visit_expression(&it.value);
+        self.key_stack.pop();
         self.pop_path();
     }
 

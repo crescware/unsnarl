@@ -363,3 +363,47 @@ fn private_field_assignment_head_renders_as_member_not_raw() {
         "the private field name must be flattened to the bare identifier (no leading `#`) to match TS"
     );
 }
+
+#[test]
+fn function_inside_object_property_value_slot_reports_value_block_context_key() {
+    // Parity regression: when a function / class expression is the
+    // `value` slot of an `ObjectProperty` (e.g. `{ key: function ()
+    // {} }`) and the enclosing expression is wrapped in a call
+    // argument list, the function scope's `blockContext.key` used
+    // to come out as `"arguments"` -- carried over from
+    // `CallExpression.arguments` -- instead of TS's `"value"`. oxc's
+    // auto-generated `walk_object_property` does not push a per-child
+    // slot key, so the surrounding label leaks through.
+    // Use a class expression rather than a function expression
+    // because the analyzer's `block_context_of` only emits a block
+    // context for scope types that have one (class scopes do;
+    // function scopes are gated on richer body shapes than an empty
+    // function expression produces).
+    let source = "callMe({ key: class {} });\n";
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let class_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Class))
+        .map(|(id, _)| id)
+        .expect("a class scope must exist for the value-slot class expression");
+
+    let block_context = analyzed
+        .annotations
+        .of_scope(class_scope)
+        .block_context
+        .as_ref()
+        .expect("the class scope must carry a block_context");
+    let bc = serde_json::to_value(block_context).expect("BlockContext serialises to JSON");
+    assert_eq!(bc["parentType"], "Property");
+    assert_eq!(
+        bc["key"], "value",
+        "the class's blockContext.key must mirror the TS AST slot \
+         label `value`, not the auto-walker's `arguments` carryover"
+    );
+}
