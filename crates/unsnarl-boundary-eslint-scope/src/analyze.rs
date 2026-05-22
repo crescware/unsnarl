@@ -15,6 +15,7 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::hoist_into::hoist_into;
+use crate::oxc_semantic_probe::probe as oxc_semantic_probe;
 use crate::parser::SourceType;
 use crate::scope_build_visitor::ScopeBuildVisitor;
 use crate::state::{finish, ScopeBuilderState};
@@ -87,6 +88,7 @@ pub fn analyze<'a>(
     for diag in &diagnostics {
         visitor.on_diagnostic(diag);
     }
+    oxc_semantic_probe(program);
     EslintScopeAnalysisResult {
         arena,
         global_scope,

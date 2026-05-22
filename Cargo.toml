@@ -47,6 +47,7 @@ unsnarl-plugin-react = { path = "crates/unsnarl-plugin-react" }
 oxc_parser = "=0.128.0"
 oxc_ast = "=0.128.0"
 oxc_ast_visit = "=0.128.0"
+oxc_semantic = "=0.128.0"
 oxc_syntax = "=0.128.0"
 oxc_allocator = "=0.128.0"
 oxc_span = "=0.128.0"
