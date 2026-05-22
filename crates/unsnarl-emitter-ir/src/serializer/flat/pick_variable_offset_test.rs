@@ -1,7 +1,7 @@
 use oxc_index::IndexVec;
 use oxc_span::Span;
 
-use unsnarl_ir::primitive::AstIdentifier;
+use unsnarl_ir::primitive::{AstIdentifier, SourceIndex};
 use unsnarl_ir::scope::{DefinitionData, VariableData};
 use unsnarl_ir::{DefinitionType, IrArena, ScopeId};
 use unsnarl_oxc_parity::AstType;
@@ -42,7 +42,10 @@ fn ascii_source_returns_byte_offset_unchanged() {
         Vec::new(),
         Vec::new(),
     ));
-    assert_eq!(pick_variable_offset(&arena, var_id, raw), 6);
+    assert_eq!(
+        pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
+        6
+    );
 }
 
 #[test]
@@ -61,7 +64,10 @@ fn non_ascii_before_head_identifier_shifts_offset_to_utf16_units() {
         Vec::new(),
         Vec::new(),
     ));
-    assert_eq!(pick_variable_offset(&arena, var_id, raw), 11);
+    assert_eq!(
+        pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
+        11
+    );
 }
 
 #[test]
@@ -93,7 +99,10 @@ fn falls_back_to_first_def_name_when_identifiers_is_empty() {
         Vec::new(),
         vec![def_id],
     ));
-    assert_eq!(pick_variable_offset(&arena, var_id, raw), 11);
+    assert_eq!(
+        pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
+        11
+    );
 }
 
 #[test]
@@ -107,5 +116,8 @@ fn returns_zero_when_variable_has_no_identifiers_and_no_defs() {
         Vec::new(),
         Vec::new(),
     ));
-    assert_eq!(pick_variable_offset(&arena, var_id, raw), 0);
+    assert_eq!(
+        pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
+        0
+    );
 }

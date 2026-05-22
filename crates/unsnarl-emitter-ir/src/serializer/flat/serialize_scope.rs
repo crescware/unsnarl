@@ -5,7 +5,7 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
 use unsnarl_annotations::Annotations;
-use unsnarl_ir::primitive::span_from_offset;
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::{
     SerializedBlock, SerializedReferenceId, SerializedScope, SerializedScopeId,
     SerializedVariableId,
@@ -73,7 +73,7 @@ pub fn serialize_scope(
     variable_ids: &HashMap<VariableId, SerializedVariableId>,
     reference_ids: &HashMap<ReferenceId, SerializedReferenceId>,
     annotations: &dyn Annotations,
-    raw: &str,
+    index: &SourceIndex<'_>,
 ) -> SerializedScope {
     let t = Instant::now();
     let s = &arena.scopes[scope];
@@ -101,8 +101,8 @@ pub fn serialize_scope(
     let block_end_offset = s.block.span.end as usize;
     let block = SerializedBlock {
         r#type: s.block.r#type.clone(),
-        span: span_of_node(&s.block, raw),
-        end_span: span_from_offset(raw, block_end_offset),
+        span: span_of_node(&s.block, index),
+        end_span: index.span_at(block_end_offset),
     };
     record(&T_BLOCK_NS, t);
 

@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use std::time::{Duration, Instant};
 
 use unsnarl_emitter::{IRSerializer, SerializeContext};
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION;
 use unsnarl_ir::serialized::{
     SerializedIR, SerializedReferenceId, SerializedScopeId, SerializedSource, SerializedVariableId,
@@ -45,6 +46,12 @@ impl IRSerializer for FlatSerializer {
         let arena = ctx.arena;
         let raw = ctx.raw;
         let annotations = ctx.annotations;
+
+        let index = {
+            let _span =
+                tracing::info_span!("flat::build_source_index", bytes = raw.len()).entered();
+            SourceIndex::build(raw)
+        };
 
         let scopes = {
             let _span = tracing::info_span!("flat::collect_scopes").entered();
@@ -91,7 +98,7 @@ impl IRSerializer for FlatSerializer {
                         continue;
                     };
                     let t = Instant::now();
-                    let offset = pick_variable_offset(arena, v, raw);
+                    let offset = pick_variable_offset(arena, v, &index);
                     t_pick_offset += t.elapsed();
                     let t = Instant::now();
                     let name = arena.variables[v].name();
@@ -164,7 +171,7 @@ impl IRSerializer for FlatSerializer {
                         &variable_ids,
                         &reference_ids,
                         annotations,
-                        raw,
+                        &index,
                     )
                 })
                 .collect();
@@ -195,7 +202,7 @@ impl IRSerializer for FlatSerializer {
             let out: Vec<_> = ordered_variables
                 .iter()
                 .map(|&v| {
-                    serialize_variable(arena, v, &scope_ids, &variable_ids, &reference_ids, raw)
+                    serialize_variable(arena, v, &scope_ids, &variable_ids, &reference_ids, &index)
                 })
                 .collect();
             let st = take_serialize_variable_stats();
@@ -232,7 +239,7 @@ impl IRSerializer for FlatSerializer {
                         &variable_ids,
                         &reference_ids,
                         annotations,
-                        raw,
+                        &index,
                     )
                 })
                 .collect();
