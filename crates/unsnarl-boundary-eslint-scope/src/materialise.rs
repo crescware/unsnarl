@@ -1,11 +1,10 @@
 //! Convert internal `AstKind<'a>` walker state into the
 //! lifetime-free `AstNode` form exposed to `AnalysisVisitor`.
 //!
-//! Per issue #118 comment 4 judgment C, the walker keeps
-//! `Vec<PathEntry<'a>>` internally so classify routines can read
-//! structural fields off the typed AST, but `AnalysisVisitor`
-//! callbacks receive `&[AstNode]` (`type` + `span` only) so the
-//! `'a` lifetime stays inside the boundary crate.
+//! The walker keeps `Vec<PathEntry<'a>>` internally so classify
+//! routines can read structural fields off the typed AST, but
+//! `AnalysisVisitor` callbacks receive `&[AstNode]` (`type` + `span`
+//! only) so the `'a` lifetime stays inside the boundary crate.
 //!
 //! The `AstType` reported here mirrors what the TS layer's
 //! `asAstType()` would produce for the equivalent unnormalised
