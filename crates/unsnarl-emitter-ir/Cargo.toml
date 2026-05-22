@@ -13,6 +13,7 @@ unsnarl-emitter = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
+tracing = { workspace = true }
 
 [dev-dependencies]
 unsnarl-boundary-eslint-scope = { workspace = true }
