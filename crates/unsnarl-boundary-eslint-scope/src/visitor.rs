@@ -6,9 +6,9 @@
 //! lifetime past the trait surface.
 //!
 //! All three callbacks default to a no-op so consumers can implement
-//! only the slots they care about (e.g. the Step 11
-//! `build-analysis-visitor` will hook `on_reference` and
-//! `on_diagnostic` but ignore `on_scope`).
+//! only the slots they care about (e.g. the analyzer's
+//! `BuildAnalysisVisitor` hooks `on_reference` and `on_diagnostic`
+//! but ignores `on_scope`).
 
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};

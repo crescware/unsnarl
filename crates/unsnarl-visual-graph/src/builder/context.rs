@@ -14,9 +14,7 @@ use unsnarl_ir::serialized::{SerializedIR, SerializedScope, SerializedVariable};
 
 use super::write_op::WriteOp;
 
-/// Optional knobs the caller hands to `build_visual_graph`. Today
-/// only `depths` is wired (Step 18); other knobs land here as the
-/// later steps come on.
+/// Optional knobs the caller hands to `build_visual_graph`.
 #[derive(Default, Clone)]
 pub struct BuildVisualGraphOptions {
     pub depths: Option<NestingDepths>,
@@ -52,8 +50,8 @@ pub struct BuilderContext<'a> {
     /// look like `switch:<parentScope>:<offset>`; the value lets
     /// fallthrough handling pick the textual "last case".
     pub sorted_cases_by_container: HashMap<String, Vec<&'a SerializedScope>>,
-    /// Depth ceiling for the pruning pass (Step 18). `None` at
-    /// Step 13 — `is_collapsed` returns false for every scope and
-    /// the full graph is rendered.
+    /// Depth ceiling for the pruning pass. `None` means
+    /// `is_collapsed` returns false for every scope and the full
+    /// graph is rendered.
     pub depths: Option<NestingDepths>,
 }

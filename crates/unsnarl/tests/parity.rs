@@ -100,22 +100,21 @@ fn find_input_file(dir: &Path) -> Option<PathBuf> {
 /// Which baseline a [`FixtureCase`] checks against.
 #[derive(Clone, Copy)]
 enum Baseline {
-    /// `expected.ir.json` (Step 12 baseline).
+    /// `expected.ir.json` baseline.
     Ir,
-    /// `expected.json` (Step 13 visual-graph JSON baseline).
+    /// `expected.json` baseline (visual-graph JSON).
     Json,
-    /// `expected.mermaid` (Step 14 mermaid baseline). The harness
-    /// renders with the CLI defaults (elk strategy + dark theme,
-    /// `--debug` off) so the test bytes match the same defaults
-    /// the TS port records on disk.
+    /// `expected.mermaid` baseline. The harness renders with the
+    /// CLI defaults (elk strategy + dark theme, `--debug` off) so
+    /// the test bytes match the on-disk baselines.
     Mermaid,
-    /// `preview.md` (Step 15 markdown baseline). Same CLI defaults
-    /// as `Mermaid` — the markdown emitter embeds the mermaid render
-    /// inside a fenced ```mermaid block.
+    /// `preview.md` baseline. Same CLI defaults as `Mermaid` — the
+    /// markdown emitter embeds the mermaid render inside a fenced
+    /// ```mermaid block.
     Markdown,
-    /// `expected.stats` (Step 16 stats baseline). One TSV row per
-    /// visual-graph node followed by a `<N> total` summary; the
-    /// emitter has no CLI knobs to thread.
+    /// `expected.stats` baseline. One TSV row per visual-graph node
+    /// followed by a `<N> total` summary; the emitter has no CLI
+    /// knobs to thread.
     Stats,
 }
 

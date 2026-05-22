@@ -193,10 +193,9 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 
 #[test]
 fn missing_input_with_out_dir_only_returns_exit_2_with_no_input_file_message() {
-    // `uns -o build` (no stdin, no file, no -r): Args::finalize accepts
-    // it (basename derivation tolerates empty input), but the runtime
-    // `calc_source` rejects it before the pipeline runs, mirroring
-    // TS `calcSource` and Step 6 (#115) の伏線回収。
+    // `uns -o build` (no stdin, no file, no -r): `Args::finalize`
+    // accepts it (basename derivation tolerates empty input), but
+    // `calc_source` rejects it at runtime before the pipeline runs.
     let (code, out, err) = capture_with_exit(&["uns", "-f", "ir", "-o", "build"]);
     assert_eq!(code, 2, "expected exit 2, got: {code}");
     assert!(out.is_empty(), "expected empty stdout, got: {out}");

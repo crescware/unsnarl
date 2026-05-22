@@ -1,10 +1,8 @@
 //! Unit tests for `find_jsx_element_span` driving the path-walking
 //! logic directly.
 //!
-//! TS-side `jsx-element-span.test.ts` is an integration test routed
-//! through `runAnalysis` (pipeline, Step 21); the parity harness will
-//! cover the same fixtures end-to-end once Step 12 lands. Until then
-//! we cover only the decision function itself.
+//! These cover the decision function in isolation. Integration
+//! coverage of the same fixtures lives in the parity harness.
 
 use unsnarl_oxc_parity::AstType;
 

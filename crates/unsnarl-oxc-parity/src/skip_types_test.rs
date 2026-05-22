@@ -1,12 +1,9 @@
 //! Unit tests for `is_type_only_subtree`.
 //!
-//! TS-side `skip-types.test.ts` is an integration test driven through
-//! `runAnalysis` (a pipeline-layer helper not available until Step 21),
-//! so it cannot be mirrored verbatim here. The pipeline-level
-//! behaviour those tests assert (type aliases, interface bodies, enum
-//! bodies, etc. are not visited as values) is recovered once Step 21
-//! lands and the parity harness covers the same fixtures end-to-end.
-//! Until then we cover only the decision function itself.
+//! These cover the decision function in isolation. Integration
+//! behaviour — type aliases, interface bodies, enum bodies, etc. not
+//! being visited as values — is exercised end-to-end by the parity
+//! harness.
 
 use crate::AstType;
 

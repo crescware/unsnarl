@@ -25,8 +25,7 @@ pub struct EmitOptions {
     pub pruned_graph: Option<VisualGraph>,
     /// `LineOrName` disambiguator log produced by
     /// `resolve_ambiguous_queries`. Surfaced by the markdown emitter
-    /// in the `## Notice` block (and by the CLI's stderr emitter
-    /// once Step 21 lands).
+    /// in the `## Notice` block and by the CLI's stderr emitter.
     pub resolutions: Option<Vec<RootQueryResolution>>,
     /// Per-`NestingKind` depth ceiling applied at visual-graph build
     /// time. `None` keeps every scope rendered (the TS default when

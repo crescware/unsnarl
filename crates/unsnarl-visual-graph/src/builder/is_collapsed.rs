@@ -1,10 +1,8 @@
 //! Returns `true` when the supplied depth ceiling is below the
 //! scope's recorded nesting count for the same kind, which is the
-//! signal Step 18's depth control uses to drop the scope's body
-//! from the rendered graph. Step 13 always passes `None` for
-//! `depths`, so this always returns `false`; the wiring is kept
-//! here so the helpers downstream can be authored once and
-//! Step 18 only needs to flip the option on.
+//! signal the depth-control pass uses to drop the scope's body from
+//! the rendered graph. `None` for `depths` means "no ceiling" and
+//! the function returns `false` for every scope.
 
 use unsnarl_ir::nesting_kind::{NestingDepths, NestingKind};
 use unsnarl_ir::serialized::SerializedScope;
