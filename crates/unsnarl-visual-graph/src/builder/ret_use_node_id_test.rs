@@ -1,5 +1,4 @@
-//! Sibling tests for [`ret_use_node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/ret-use-node-id.test.ts`.
+//! Sibling tests for [`ret_use_node_id`].
 
 use super::ret_use_node_id;
 

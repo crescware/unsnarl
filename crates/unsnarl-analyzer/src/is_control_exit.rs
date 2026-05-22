@@ -1,10 +1,8 @@
 //! Whether a statement definitely transfers control out of the
 //! containing case clause.
 //!
-//! Mirrors `ts/src/analyzer/is-control-exit.ts`. The TS `isAstNode`
-//! predicate guarding dynamic property access is absorbed into Rust's
-//! type system: matching on `oxc_ast::Statement` variants gives the
-//! same guarantee at compile time.
+//! Matching on `oxc_ast::Statement` variants gives compile-time
+//! exhaustiveness over the relevant statement shapes.
 
 use oxc_ast::ast::Statement;
 

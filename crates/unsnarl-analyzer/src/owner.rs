@@ -1,6 +1,4 @@
-//! Owner-resolution helpers.
-//!
-//! Mirrors `ts/src/analyzer/owner/`. Three pieces:
+//! Owner-resolution helpers. Three pieces:
 //!
 //! * [`all_binding_variables`] — flattens a `BindingPattern` (used at
 //!   `VariableDeclarator.id` sites) into the list of `VariableId`s it

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/return-subgraph-id.ts`.
-
 use super::sanitize::sanitize;
 
 pub fn return_subgraph_id(var_id: &str, container_key: &str) -> String {

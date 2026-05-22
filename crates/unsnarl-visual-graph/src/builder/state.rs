@@ -1,21 +1,14 @@
-//! Mirrors `ts/src/visual-graph/builder/build-state.ts`.
-//!
-//! The TS shape stores live `VisualSubgraph` references inside its
-//! maps. The Rust port stores [`SubgraphIdx`] handles into a
+//! Subgraph-keyed maps store [`SubgraphIdx`] handles into a
 //! [`BuildArena`](super::arena::BuildArena) so the same subgraph can
 //! be looked up from many sites without juggling overlapping `&mut`
 //! references. The string-id maps (`if_test_anchor_by_offset`,
 //! `expression_statement_by_offset`, `beyond_depth_stub_by_parent`,
-//! ...) still carry plain `String` node ids because their consumers
+//! ...) carry plain `String` node ids because their consumers
 //! (`predicate_target_id`, `ensure_*`, edge redirection) want the
 //! id directly rather than another arena handle.
 //!
-//! TS marks several maps optional ("optional so unit-test fixtures
-//! can omit it; build-visual-graph always populates it"). The Rust
-//! port keeps them as required `HashMap`/`HashSet` because the
-//! call-site that mattered for TS unit tests (`buildVisualGraph`)
-//! always populated them and Rust gains nothing from the extra
-//! `Option` indirection.
+//! Every map / set is kept non-optional because `build_visual_graph`
+//! always populates them at the call site that matters.
 
 use std::collections::{HashMap, HashSet};
 
@@ -98,9 +91,8 @@ pub struct BuildState {
     /// `from -->|label| to` key set. `push_edge` checks this before
     /// minting a fresh `VisualEdge`.
     pub emitted_edges: HashSet<String>,
-    /// Owned `VisualEdge` list. Mirrors the TS `state.edges` /
-    /// `graph.edges` alias; the Rust builder copies this into
-    /// `VisualGraph.edges` at the end.
+    /// Owned `VisualEdge` list. Copied into `VisualGraph.edges` at
+    /// the end of the build.
     pub edges: Vec<VisualEdge>,
     /// `descendant scope id → root collapsed scope id`. Identifies
     /// whether an endpoint scope (or any ancestor) was collapsed by

@@ -1,11 +1,9 @@
-//! Mirrors `ts/src/emitter/stats/stats.test.ts`. The TS suite drives
-//! the emitter through the full parse → analyse → serialise →
-//! buildVisualGraph pipeline; here we construct the `VisualGraph`
-//! directly so the test stays inside the `unsnarl-emitter-stats`
-//! crate (which intentionally does not depend on the parser /
-//! analyzer crates). `render_stats` is the private renderer that
-//! `StatsEmitter::emit` delegates to once it has a graph in hand,
-//! so calling it lets the tests pin the same observable behaviour.
+//! Constructs the `VisualGraph` directly so the test stays inside
+//! the `unsnarl-emitter-stats` crate (which intentionally does not
+//! depend on the parser / analyzer crates). `render_stats` is the
+//! private renderer that `StatsEmitter::emit` delegates to once it
+//! has a graph in hand, so calling it lets the tests pin the same
+//! observable behaviour.
 
 use unsnarl_emitter::Emitter;
 use unsnarl_ir::language::Language;

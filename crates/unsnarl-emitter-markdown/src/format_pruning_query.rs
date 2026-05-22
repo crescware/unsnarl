@@ -1,7 +1,5 @@
 //! `formatPruningQuery`: render the `-r ROOTS -C/-A/-B N` form for
 //! the markdown `## Query` section.
-//!
-//! Mirrors `ts/src/emitter/markdown/format-pruning-query.ts`.
 
 use unsnarl_visual_graph::visual_graph_pruning::VisualGraphPruning;
 

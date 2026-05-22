@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/ensure-expression-statement-node.ts`.
-//!
 //! For a reference whose container is an ExpressionStatement, emit a
 //! single synthetic node that stands in for the whole statement and
 //! return its id. Subsequent references that share the same

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/owner-target-id.ts`.
-
 use std::collections::HashMap;
 
 use super::node_id::node_id;

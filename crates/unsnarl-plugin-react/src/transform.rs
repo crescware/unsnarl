@@ -1,15 +1,12 @@
 //! IR transform: peel `useCallback` / `useMemo` so the wrapped
 //! callback's body shows up as a normal function in the IR.
 //!
-//! Mirrors the body of `transform()` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. The helper
-//! functions in this module map 1:1 to the TS helpers
-//! (`collectHookImports`, `groupChildScopes`, `collectInitTargets`,
-//! ...); see each submodule for the per-step commentary.
+//! The helpers (`collect_hook_imports`, `group_child_scopes`,
+//! `collect_init_targets`, ...) each carry their own per-step
+//! commentary.
 //!
-//! The transform takes ownership of the [`SerializedIR`] (matching
-//! the TS `plugin.transform(ir): SerializedIR` shape that spreads a
-//! new IR) and returns the rewritten value. Steps:
+//! The transform takes ownership of the [`SerializedIR`] and
+//! returns the rewritten value. Steps:
 //!
 //! 1. Collect `react` hook imports (`useCallback` / `useMemo`).
 //! 2. Index every scope by its parent (`upper`).

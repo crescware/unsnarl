@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/collect-nodes-into.test.ts`.
-
 use std::collections::HashMap;
 
 use unsnarl_visual_graph::visual_element::VisualElement;

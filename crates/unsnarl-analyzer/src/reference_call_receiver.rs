@@ -1,8 +1,7 @@
 //! Compute `call` / `receiver` flags for a reference.
 //!
-//! Mirrors `ts/src/analyzer/reference-call-receiver.ts`. The flags
-//! report whether a reference appears as the callee of a call /
-//! `new`, or as the object of a member expression.
+//! The flags report whether a reference appears as the callee of a
+//! call / `new`, or as the object of a member expression.
 
 use unsnarl_annotations::ReferenceAnnotationFlags;
 use unsnarl_oxc_parity::AstType;

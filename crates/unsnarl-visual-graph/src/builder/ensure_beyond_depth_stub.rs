@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/ensure-beyond-depth-stub.ts`.
-//!
 //! Return (creating on first call) the single BeyondDepth stub
 //! associated with a visible ancestor subgraph. Multiple anonymous
 //! collapsed children of the same surviving outer container funnel

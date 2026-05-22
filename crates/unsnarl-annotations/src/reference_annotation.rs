@@ -22,8 +22,7 @@
 //! pipeline-emitted counterpart inside `SerializedFlags`.
 //!
 //! `owners` holds `VariableId` rather than borrowed `&Variable`
-//! values to keep the IR `'a`-free (Step 7 decision, #116:
-//! "Lifetime: IR は lifetime-free").
+//! values to keep the IR `'a`-free.
 
 use serde::Serialize;
 

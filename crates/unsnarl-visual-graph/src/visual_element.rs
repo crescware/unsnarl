@@ -1,9 +1,7 @@
 //! `VisualElement`: union of [`VisualNode`] and [`VisualSubgraph`].
 //!
-//! Mirrors `ts/src/visual-graph/visual-element.ts`. The TS form is
-//! a string-tagged union via the `type` field carried on each
-//! variant; in Rust the wrapping enum is untagged because the
-//! variants already serialize their own `type` discriminator.
+//! The wrapping enum is untagged because the variants already
+//! serialize their own `type` discriminator.
 
 use serde::Serialize;
 

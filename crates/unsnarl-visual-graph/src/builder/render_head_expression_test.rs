@@ -1,6 +1,6 @@
-//! Sibling tests for [`render_head_expression`]. Cases mirror the
-//! shapes the TS reference renders: identifier, member, call,
-//! new, await, assign, update (prefix + postfix), elided, raw.
+//! Sibling tests for [`render_head_expression`], covering every
+//! head shape: identifier, member, call, new, await, assign, update
+//! (prefix + postfix), elided, raw.
 
 use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
 use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};

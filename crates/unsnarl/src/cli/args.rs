@@ -1,6 +1,4 @@
-//! `uns` CLI argument definitions. Mirrors the TS commander source at
-//! `ts/src/cli/args/build-command.ts` and the per-option files alongside
-//! it.
+//! `uns` CLI argument definitions.
 
 use std::path::{Path, PathBuf};
 
@@ -33,7 +31,7 @@ use parse_generation_count::{parse_generation_count, parse_nesting_depth};
     name = "unsnarl",
     bin_name = "uns",
     version,
-    about = "Generate visual graphs from JS/TS source",
+    about = "Generate visual graphs from JavaScript / TypeScript source",
     disable_version_flag = true
 )]
 #[serde(rename_all = "camelCase")]
@@ -99,8 +97,7 @@ pub struct Args {
 
     /// Highlight matching nodes and adjacent edges (defaults to the -r/--roots queries).
     ///
-    /// Tri-state mirroring the TS commander result type
-    /// `RawHighlight = false | true | readonly ParsedRootQuery[]`:
+    /// Tri-state:
     /// - `None`          : flag absent
     /// - `Some(None)`    : flag given with no value (follow `-r/--roots`)
     /// - `Some(Some(s))` : flag given with inline value (parsed by `finalize`)
@@ -113,9 +110,7 @@ pub struct Args {
     #[serde(skip)]
     raw_highlight: Option<Option<String>>,
 
-    /// Parsed `-H` / `--highlight` value, mirroring the TS commander
-    /// `RawHighlight = false | true | readonly ParsedRootQuery[]` form.
-    /// Populated by `finalize`.
+    /// Parsed `-H` / `--highlight` value. Populated by `finalize`.
     #[arg(skip)]
     pub highlight: Highlight,
 
@@ -185,9 +180,8 @@ pub struct Args {
 
     /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C` (or the
     /// positional input file when no roots are given). Populated by
-    /// `finalize` when `-o` / `--out-dir` is set; otherwise `None`. Mirrors
-    /// the TS `deriveOutputBasename` result that resolveOutputPath would
-    /// pass to the emitter for the `<dir>/<basename>.<ext>` filename.
+    /// `finalize` when `-o` / `--out-dir` is set; otherwise `None`. Feeds
+    /// the emitter's `<dir>/<basename>.<ext>` filename.
     #[arg(skip)]
     pub derived_basename: Option<String>,
 
@@ -209,9 +203,8 @@ pub struct Args {
     #[serde(skip)]
     plugin_occurrences: Vec<Vec<String>>,
 
-    /// Flattened-and-deduped plugin list, mirroring the output of TS
-    /// commander's `collectPlugins` accumulator. Populated by `finalize`
-    /// after clap parsing.
+    /// Flattened-and-deduped plugin list folded from
+    /// `plugin_occurrences`. Populated by `finalize` after clap parsing.
     #[arg(skip)]
     pub plugins: Vec<String>,
 

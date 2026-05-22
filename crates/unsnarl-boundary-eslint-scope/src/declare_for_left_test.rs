@@ -1,5 +1,4 @@
-//! Sibling tests for `declare_for_left.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/declare-for-left.test.ts`.
+//! Sibling tests for `declare_for_left.rs`.
 
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::scope_type::ScopeType;

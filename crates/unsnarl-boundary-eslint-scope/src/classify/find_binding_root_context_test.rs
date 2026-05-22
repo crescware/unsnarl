@@ -1,5 +1,4 @@
-//! Sibling tests for `find_binding_root_context.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/find-binding-root-context.test.ts`.
+//! Sibling tests for `find_binding_root_context.rs`.
 
 use unsnarl_ir::Language;
 

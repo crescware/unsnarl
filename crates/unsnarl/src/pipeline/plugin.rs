@@ -1,12 +1,9 @@
 //! Pipeline-level plugin activation.
 //!
-//! Mirrors `ts/src/pipeline/plugin/` + the `resolvePlugin`
-//! resolution layer in `ts/src/cli/run-cli/resolve-plugin.ts`. The
-//! TS port discovers bundled plugins via dynamic `import()` at the
-//! CLI boundary; the Rust port can't do that across crates, so this
-//! module builds a [`PluginRegistry`] up front that knows the
-//! bundled plugins by short name and lets the pipeline activate the
-//! `--plugin` list before transforming the IR.
+//! Because plugins cannot be discovered through dynamic `import()`
+//! across crates, this module builds a [`PluginRegistry`] up front
+//! that knows the bundled plugins by short name and lets the
+//! pipeline activate the `--plugin` list before transforming the IR.
 
 use unsnarl_plugin::{PluginActivateError, PluginRegistry, UnsnarlPlugin};
 
@@ -21,9 +18,7 @@ pub fn default_registry() -> PluginRegistry {
 }
 
 /// Resolve a list of post-strip plugin names into trait-object
-/// references the pipeline can fold over. Mirrors the
-/// `Promise.all(normalized.plugins.map(resolvePlugin))` step in
-/// `ts/src/cli/run-cli/run-cli.ts`.
+/// references the pipeline can fold over.
 pub fn activate<'a>(
     registry: &'a PluginRegistry,
     names: &[String],
@@ -31,9 +26,8 @@ pub fn activate<'a>(
     registry.activate_all(names)
 }
 
-/// Fold a list of activated plugins over `ir`. Mirrors the TS
-/// `config.plugins.reduce((acc, p) => p.transform(acc), serialized)`
-/// step in `ts/src/pipeline/pipeline.ts`.
+/// Fold a list of activated plugins over `ir`, threading the IR
+/// through each `transform` in turn.
 pub fn apply_plugins(
     mut ir: unsnarl_ir::serialized::SerializedIR,
     plugins: &[&dyn UnsnarlPlugin],

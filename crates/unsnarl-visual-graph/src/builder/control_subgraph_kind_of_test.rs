@@ -1,5 +1,4 @@
-//! Sibling tests for [`control_subgraph_kind_of`]. Cases mirror
-//! `ts/src/visual-graph/builder/control-subgraph-kind-of.test.ts`.
+//! Sibling tests for [`control_subgraph_kind_of`].
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;

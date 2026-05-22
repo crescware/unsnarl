@@ -1,7 +1,4 @@
 //! Serialize a `ScopeData` into a `SerializedScope`.
-//!
-//! Mirrors `serializeScope` in
-//! `ts/src/serializer/flat/serialize-scope.ts`.
 
 use std::collections::HashMap;
 

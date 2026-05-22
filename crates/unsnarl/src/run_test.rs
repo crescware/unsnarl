@@ -193,10 +193,9 @@ fn unknown_format_is_rejected_by_clap_before_dispatch() {
 
 #[test]
 fn missing_input_with_out_dir_only_returns_exit_2_with_no_input_file_message() {
-    // `uns -o build` (no stdin, no file, no -r): Args::finalize accepts
-    // it (basename derivation tolerates empty input), but the runtime
-    // `calc_source` rejects it before the pipeline runs, mirroring
-    // TS `calcSource` and Step 6 (#115) の伏線回収。
+    // `uns -o build` (no stdin, no file, no -r): `Args::finalize`
+    // accepts it (basename derivation tolerates empty input), but
+    // `calc_source` rejects it at runtime before the pipeline runs.
     let (code, out, err) = capture_with_exit(&["uns", "-f", "ir", "-o", "build"]);
     assert_eq!(code, 2, "expected exit 2, got: {code}");
     assert!(out.is_empty(), "expected empty stdout, got: {out}");
@@ -221,8 +220,7 @@ fn missing_input_without_any_flag_returns_exit_2() {
 fn stdin_input_routes_through_pipeline_with_declared_lang() {
     // `--stdin --stdin-lang tsx`: the orchestration labels the
     // source path `stdin.tsx` so the emitted IR carries a stable,
-    // lang-aware path. Mirrors TS `buildRunOpts.sourcePath` for
-    // the stdin branch.
+    // lang-aware path for the stdin branch.
     let args = Args::try_parse_from(["uns", "-f", "ir", "--stdin", "--stdin-lang", "tsx"])
         .expect("argv should parse");
     let mut stdin: &[u8] = b"const x = 1;\n";
@@ -245,8 +243,7 @@ fn stdin_input_routes_through_pipeline_with_declared_lang() {
 #[test]
 fn out_file_writes_to_disk_instead_of_stdout() {
     // `--out-file <path>` lands the emitted text on disk; stdout
-    // stays empty. Mirrors `writeOutput` in
-    // `ts/src/cli/run-cli/write-output.ts`.
+    // stays empty.
     use std::io::Write;
     let mut tmp = tempfile::Builder::new()
         .suffix(".ts")
@@ -315,8 +312,7 @@ fn out_dir_writes_to_auto_named_file_with_emitter_extension() {
 fn pruning_zero_match_query_emits_stderr_warning() {
     // `-r doesnotexist` produces a 0-match per-query entry, which
     // the orchestration surfaces as the `query '...' matched 0
-    // roots` line. Mirrors `emitPruningWarnings` in
-    // `ts/src/cli/run-cli/emit-pruning-warnings.ts`.
+    // roots` line.
     use std::io::Write;
     let mut tmp = tempfile::Builder::new()
         .suffix(".ts")
@@ -370,12 +366,9 @@ fn out_flag_notice_is_not_emitted_for_extensionless_out_dir() {
     );
 }
 
-// `pruning_from_args` mirrors `resolveGenerations` in
-// `ts/src/cli/run-cli/resolve-generations.ts`. The cases below port
-// `ts/src/cli/run-cli/resolve-generations.test.ts` 1:1 plus the
-// no-roots guard (TS expresses that guard in `runDetailed`; here it
-// is folded into `pruning_from_args` so the parity is verified at
-// the same seam).
+// Exercises `pruning_from_args`. The no-roots guard is folded into
+// `pruning_from_args` itself rather than the runner, so it is
+// covered at the same seam.
 //
 // `parse_with` builds an `Args` from a synthetic argv so we exercise
 // the same clap parser the binary uses (including the `-r` query
@@ -470,11 +463,9 @@ fn pruning_from_args_preserves_root_query_order_and_raw_tokens() {
     assert_eq!(raws, vec!["1", "foo", "2-3"]);
 }
 
-// `depths_from_args` mirrors `resolveDepths` in
-// `ts/src/cli/run-cli/normalize-cli-options.ts`. The cases below
-// cover the same precedence rules (--depth seeds both axes, then
-// --depth-function / --depth-block override their halves) plus the
-// no-flag default.
+// Exercises `depths_from_args`. The cases below cover the
+// precedence rules (--depth seeds both axes, then --depth-function
+// / --depth-block override their halves) plus the no-flag default.
 
 #[test]
 fn depths_from_args_no_flag_seeds_default_depth_across_every_kind() {
@@ -548,9 +539,7 @@ fn depths_from_args_depth_zero_is_explicit_not_falsy() {
 
 #[test]
 fn depths_from_args_depth_function_and_depth_block_without_depth() {
-    // Mirrors the "--depth-function and --depth-block together (no
-    // --depth)" case from
-    // `ts/src/cli/run-cli/normalize-cli-options-depth.test.ts`:
+    // "--depth-function and --depth-block together (no --depth)":
     // each axis takes its own override, the other kinds inherit the
     // matching axis, and neither side falls back to DEFAULT_DEPTH.
     let args = parse_with(&["uns", "--depth-function", "2", "--depth-block", "5", "x.ts"]);
@@ -621,11 +610,8 @@ fn run_to_with_dash_r_emits_pruning_summary_in_mermaid_output() {
     );
 }
 
-// Ports `ts/src/emitter/mermaid/theme/color-themes.test.ts`. The
-// `COLOR_THEMES` table on the TS side maps `CLI_COLOR_THEME` to the
-// concrete theme; the Rust equivalent is the `color_theme_for`
-// dispatch in `run.rs`. Pin the two arms here so a future variant
-// surfaces a missing arm.
+// Pins the two arms of the `color_theme_for` dispatch in `run.rs`
+// so a future variant surfaces a missing arm.
 #[test]
 fn color_theme_for_dark_resolves_to_dark_theme() {
     let theme = color_theme_for(&CliColorTheme::Dark);
@@ -644,13 +630,12 @@ fn color_theme_for_light_resolves_to_light_theme() {
     ));
 }
 
-// Integration cases ported from `ts/src/cli/run-cli/run-cli.test.ts`.
-// The TS test captures `process.stdout` / `process.stderr`; the Rust
-// counterpart calls `run_to` directly with in-memory writers via the
-// `capture_with_exit` helper at the top of this file. Cases already
-// covered by other tests above (`--help`, `--color-theme neon` error,
-// `-o/--out-file` conflict, `--plugin` unknown rejection at clap
-// parse time) are intentionally not duplicated here.
+// Integration cases for the CLI entry point. Calls `run_to`
+// directly with in-memory writers via the `capture_with_exit` helper
+// at the top of this file. Cases already covered by other tests
+// above (`--help`, `--color-theme neon` error, `-o/--out-file`
+// conflict, `--plugin` unknown rejection at clap parse time) are
+// intentionally not duplicated here.
 
 #[test]
 fn run_to_color_theme_omitted_matches_color_theme_dark() {
@@ -862,7 +847,7 @@ fn run_to_highlight_short_alone_highlights_roots_match() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H"]
     let out = capture_stdout(&[
         "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H",
@@ -892,7 +877,7 @@ fn run_to_highlight_with_queries_targets_supplied_queries_not_roots() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a"]
     let out = capture_stdout(&[
         "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a",
@@ -927,7 +912,7 @@ fn run_to_highlight_long_form_matches_short_form() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   short: [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "-H"]
     //   long:  [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "--highlight"]
     let short = capture_stdout(&[

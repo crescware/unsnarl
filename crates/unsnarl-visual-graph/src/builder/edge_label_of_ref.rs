@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/edge-label-of-ref.ts`.
-//!
 //! Builds the edge label off a reference's flag block: emits
 //! `"read"` / `"write"` / `"call"` joined by `,` for any flags
 //! set, falling back to `"ref"` when none are.

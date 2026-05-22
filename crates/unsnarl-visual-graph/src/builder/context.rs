@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/context.ts`.
-//!
 //! Immutable side tables threaded through every builder helper:
 //! variable / scope lookup maps borrowed from the `SerializedIR`,
 //! plus the precomputed `WriteOp` indices that drive edge emission.
@@ -16,9 +14,7 @@ use unsnarl_ir::serialized::{SerializedIR, SerializedScope, SerializedVariable};
 
 use super::write_op::WriteOp;
 
-/// Optional knobs the caller hands to `build_visual_graph`. Today
-/// only `depths` is wired (Step 18); other knobs land here as the
-/// later steps come on.
+/// Optional knobs the caller hands to `build_visual_graph`.
 #[derive(Default, Clone)]
 pub struct BuildVisualGraphOptions {
     pub depths: Option<NestingDepths>,
@@ -42,20 +38,17 @@ pub struct BuilderContext<'a> {
     /// fresh; no zero-copy benefit here.
     pub subgraph_owner_var: HashMap<String, String>,
     /// `variable id → Write `WriteOp`s in identifier-offset order`.
-    /// Mirrors `writeOpsByVariable` in TS.
     pub write_ops_by_variable: HashMap<String, Vec<WriteOp>>,
     /// `scope id → Write `WriteOp`s declared in that scope`.
-    /// Mirrors `writeOpsByScope` in TS.
     pub write_ops_by_scope: HashMap<String, Vec<WriteOp>>,
     /// `reference id → WriteOp` for direct ref-to-op lookup.
-    /// Mirrors `writeOpByRef` in TS.
     pub write_op_by_ref: HashMap<String, WriteOp>,
     /// `branch-container key → cases sorted by source order`. Keys
     /// look like `switch:<parentScope>:<offset>`; the value lets
     /// fallthrough handling pick the textual "last case".
     pub sorted_cases_by_container: HashMap<String, Vec<&'a SerializedScope>>,
-    /// Depth ceiling for the pruning pass (Step 18). `None` at
-    /// Step 13 — `is_collapsed` returns false for every scope and
-    /// the full graph is rendered.
+    /// Depth ceiling for the pruning pass. `None` means
+    /// `is_collapsed` returns false for every scope and the full
+    /// graph is rendered.
     pub depths: Option<NestingDepths>,
 }

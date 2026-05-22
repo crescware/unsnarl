@@ -1,10 +1,8 @@
 //! Hoist a function declaration into the enclosing scope.
 //!
-//! Mirrors `handleFunctionDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-function-declaration.ts`.
-//! TS reads `node["id"]` and skips when it is not an identifier; the
-//! Rust port matches on `Function.id: Option<BindingIdentifier>`,
-//! which encodes the same skip condition at the type level.
+//! Pattern-matches on `Function.id: Option<BindingIdentifier>` —
+//! when the id is absent (anonymous `FunctionExpression`), no
+//! hoisting happens.
 
 use oxc_ast::ast::Function;
 
@@ -20,10 +18,8 @@ pub(crate) fn handle_function_declaration(
     scope: ScopeId,
     function: &Function<'_>,
 ) {
-    // `declare function f(): void;` is a type-only declaration; skip
-    // hoisting so the IR matches the TS pipeline (which never reaches
-    // this code path because `handleEnter` returns "skip" on
-    // `TSDeclareFunction`).
+    // `declare function f(): void;` is a type-only declaration; no
+    // variable should be hoisted for it.
     if matches!(
         function.r#type,
         oxc_ast::ast::FunctionType::TSDeclareFunction

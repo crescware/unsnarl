@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/branch-container-key.ts`.
-//!
 //! Computes a string key that groups every branch of a single
 //! `if` / `switch` / `try` statement under a stable hashable
 //! identifier. The key blends the parent scope id with the

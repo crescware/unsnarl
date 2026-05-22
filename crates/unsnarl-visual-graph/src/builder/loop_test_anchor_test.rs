@@ -1,8 +1,7 @@
-//! Sibling tests for [`attach_loop_test_anchor`]. Cases mirror
-//! `ts/src/visual-graph/builder/loop-test-anchor.test.ts`. The Rust
-//! signature takes `arena, state, scope, sg` (vs TS `scope, sg,
-//! state`) because the anchor body is interned into the arena;
-//! assertions therefore read the node back through `arena.node()`.
+//! Sibling tests for [`attach_loop_test_anchor`]. The signature
+//! takes `(arena, state, scope, sg)` because the anchor body is
+//! interned into the arena; assertions therefore read the node back
+//! through `arena.node()`.
 
 use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
 use unsnarl_ir::scope_type::ScopeType;

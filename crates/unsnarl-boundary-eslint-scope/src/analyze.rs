@@ -1,11 +1,9 @@
 //! Entry point for the eslint-scope-compatible scope-builder.
 //!
-//! Mirrors `analyze` in `ts/src/boundary/eslint-scope/analyze.ts`.
-//! The body now runs end-to-end: seed the root scope, hoist the
-//! program-level declarations, drive the walker via
-//! [`ScopeBuildVisitor`], flush accumulated diagnostics into the
-//! supplied visitor, and finally drain the build state into an
-//! [`EslintScopeAnalysisResult`].
+//! Seeds the root scope, hoists the program-level declarations,
+//! drives the walker via [`ScopeBuildVisitor`], flushes accumulated
+//! diagnostics into the supplied visitor, and finally drains the
+//! build state into an [`EslintScopeAnalysisResult`].
 
 use oxc_ast::ast::Program;
 use oxc_ast_visit::Visit;
@@ -24,11 +22,8 @@ use crate::visitor::AnalysisVisitor;
 
 /// Options accepted by [`analyze`].
 ///
-/// Mirrors the `AnalyzeOptions` type alias in
-/// `ts/src/boundary/eslint-scope/analyze.ts`. The shape (`source_type` +
-/// `raw`) corresponds 1:1 to the [`ParsedSource`] fields that
-/// `runAnalysis` actually consumes on the TS side; this colocation is
-/// the YAGNI-evidence Step 8.5 was carved out to surface.
+/// The `(source_type, raw)` shape carries exactly the
+/// [`ParsedSource`] fields that the scope-builder actually consumes.
 ///
 /// [`ParsedSource`]: crate::parser::ParsedSource
 pub struct AnalyzeOptions<'a> {
@@ -57,13 +52,13 @@ pub fn analyze<'a>(
     //     comments and hashbangs are part of the program span.
     //
     // The Rust `oxc_parser` crate emits `Program.span.start = 0` in
-    // every case, so we have to apply the TS-only normalisation
-    // ourselves. The cytoscape.min.js parity gap (the file leads with
-    // a multi-line block comment) surfaced this: under the old
-    // unconditional "skip to body[0].start" rule, the Rust IR
-    // reported `Program.span.start = 1138` while TS reported `0`.
-    let needs_ts_style_skip = matches!(options.language, Language::Ts | Language::Tsx);
-    let normalised_start = if needs_ts_style_skip {
+    // every case, so the TypeScript-only normalisation is applied here
+    // when the unconditional "skip to body[0].start" rule would be
+    // wrong (e.g. cytoscape.min.js, which leads with a multi-line
+    // block comment whose start is 0 and whose first body statement
+    // begins at 1138).
+    let needs_typescript_skip = matches!(options.language, Language::Ts | Language::Tsx);
+    let normalised_start = if needs_typescript_skip {
         program
             .directives
             .first()

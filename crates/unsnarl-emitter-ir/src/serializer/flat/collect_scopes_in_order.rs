@@ -1,7 +1,4 @@
 //! Pre-order DFS over the scope tree starting at `root`.
-//!
-//! Mirrors `collectScopesInOrder` in
-//! `ts/src/serializer/flat/collect-scopes-in-order.ts`.
 
 use unsnarl_ir::{IrArena, ScopeId};
 

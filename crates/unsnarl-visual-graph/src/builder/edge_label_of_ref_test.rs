@@ -1,6 +1,5 @@
-//! Sibling tests for [`edge_label_of_ref`]. The TS side has a
-//! corresponding test file; these cases lock the same flag
-//! combinations.
+//! Sibling tests for [`edge_label_of_ref`]. Cases lock the
+//! read / write / call / receiver flag combinations.
 
 use super::edge_label_of_ref;
 use unsnarl_ir::primitive::Span;

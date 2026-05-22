@@ -1,11 +1,9 @@
-//! Sibling tests for `reference.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/reference.test.ts`.
+//! Sibling tests for `reference.rs`.
 //!
-//! The TS `reference(flags, init)` factory is exercised inside
-//! `classify_*` paths. The Rust port keeps the function for parity
-//! with the TS source layout; its observable effect is the flag
-//! shape on `ReferenceData`, which we check here via a couple of
-//! representative scenarios.
+//! `reference(flags, init)` is a thin factory exercised inside the
+//! `classify_*` paths; its observable effect is the flag shape on
+//! `ReferenceData`. These tests pin a couple of representative
+//! scenarios.
 
 use unsnarl_ir::reference::reference_flags::ReferenceFlags;
 use unsnarl_ir::Language;

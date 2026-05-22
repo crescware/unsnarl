@@ -1,11 +1,8 @@
-//! Wrapper around `oxc_parser::Parser`, mirroring `ts/src/parser/oxc-parser.ts`.
+//! Wrapper around `oxc_parser::Parser`.
 //!
-//! `ParseOptions`, `ParsedSource`, and `SourceType` originate from
-//! `ts/src/pipeline/parse/` on the TS side. They are colocated here for now
-//! because `OxcParser`'s signatures reference them, and the pipeline crate
-//! does not yet exist in the Rust workspace. When `ts/src/pipeline/parse/`
-//! is migrated, the contract types may move out of this module; the
-//! `OxcParser` wrapper itself stays in the boundary crate so that the
+//! `ParseOptions`, `ParsedSource`, and `SourceType` live here
+//! alongside `OxcParser` because the parser's signatures reference
+//! them. The wrapper itself stays in the boundary crate so the
 //! `&'a Program<'a>` lifetime does not leak outside it.
 
 use oxc_allocator::Allocator;
@@ -16,8 +13,6 @@ use oxc_span::SourceType as OxcSourceType;
 use unsnarl_ir::Language;
 
 /// ECMAScript goal symbol for the parsed source.
-///
-/// Mirrors `SOURCE_TYPE` in `ts/src/pipeline/parse/source-type.ts`.
 #[derive(Clone, Copy)]
 pub enum SourceType {
     Script,
@@ -25,8 +20,6 @@ pub enum SourceType {
 }
 
 /// Options passed to [`OxcParser::parse`].
-///
-/// Mirrors `ParseOptions` in `ts/src/pipeline/parse/parse-options.ts`.
 pub struct ParseOptions {
     pub language: Language,
     pub source_path: String,
@@ -35,16 +28,13 @@ pub struct ParseOptions {
 
 /// Successful parse result.
 ///
-/// Mirrors `ParsedSource` in `ts/src/pipeline/parse/parsed-source.ts` with one
-/// field omission: `source_path` is present on the TS type but never read by
-/// any downstream consumer (`pipeline.ts` re-reads `opts.sourcePath` directly
-/// rather than via the parsed value). `language` is carried because the
-/// scope-builder normalises `Program.span.start` differently for TS-flavored
-/// (`Ts`/`Tsx`) versus JS-flavored (`Js`/`Jsx`) inputs to match the npm
-/// `oxc-parser` package's per-language behavior.
+/// `language` is carried because the scope-builder normalises
+/// `Program.span.start` differently for TypeScript-flavored
+/// (`Ts`/`Tsx`) versus JavaScript-flavored (`Js`/`Jsx`) inputs.
 ///
-/// The `program` field carries the arena lifetime `'a` so this type — and any
-/// downstream consumer — must stay within the boundary crate.
+/// The `program` field carries the arena lifetime `'a` so this type
+/// — and any downstream consumer — must stay within the boundary
+/// crate.
 pub struct ParsedSource<'a> {
     pub program: Program<'a>,
     pub source_type: SourceType,
@@ -53,8 +43,6 @@ pub struct ParsedSource<'a> {
 }
 
 /// One fatal-severity diagnostic surfaced by [`OxcParser::parse`].
-///
-/// Mirrors the anonymous detail object in `ts/src/parser/parse-error.ts`.
 #[derive(Debug)]
 pub struct ParseErrorDetail {
     pub message: String,
@@ -64,8 +52,6 @@ pub struct ParseErrorDetail {
 
 /// Error returned by [`OxcParser::parse`] when the parser emits one or more
 /// fatal-severity diagnostics.
-///
-/// Mirrors `ParseError` in `ts/src/parser/parse-error.ts`.
 #[derive(Debug)]
 pub struct ParseError {
     message: String,
@@ -94,10 +80,9 @@ impl std::fmt::Display for ParseError {
 
 impl std::error::Error for ParseError {}
 
-/// Default `SourceType` for a language, mirroring `defaultSourceTypeFor` in
-/// `ts/src/pipeline/parse/default-source-type-for.ts`. `.js` files default to
-/// `Script` (Node.js' default for bare `.js`); every other language defaults
-/// to `Module`.
+/// Default `SourceType` for a language: `.js` files default to
+/// `Script` (Node.js' default for bare `.js`); every other language
+/// defaults to `Module`.
 pub fn default_source_type_for(language: Language) -> SourceType {
     match language {
         Language::Js => SourceType::Script,
@@ -105,8 +90,7 @@ pub fn default_source_type_for(language: Language) -> SourceType {
     }
 }
 
-/// Wrapper around `oxc_parser::Parser` that mirrors the TS `OxcParser`
-/// (`ts/src/parser/oxc-parser.ts`).
+/// Wrapper around `oxc_parser::Parser`.
 pub struct OxcParser;
 
 impl OxcParser {
@@ -169,14 +153,13 @@ impl OxcParser {
 }
 
 fn oxc_source_type_for(language: Language, _source_type: SourceType) -> OxcSourceType {
-    // Mirror the TS pipeline: `ts/src/parser/oxc-parser.ts` always
-    // calls `parseSync(..., { sourceType: "module" })` regardless of
-    // the analysis-level `SourceType` -- so module-only syntax
+    // Always parse with `with_module(true)` regardless of the
+    // analysis-level `SourceType` -- so module-only syntax
     // (top-level `await`, `import` / `export`) parses cleanly even
-    // when the surrounding analysis treats the file as a Script. The
-    // analysis-level distinction is preserved on `ParsedSource` and
-    // propagated downstream to `analyze`, which still picks `global`
-    // vs `module` for the root scope from that field.
+    // when the surrounding analysis treats the file as a Script.
+    // The analysis-level distinction is preserved on `ParsedSource`
+    // and propagated downstream to `analyze`, which still picks
+    // `global` vs `module` for the root scope from that field.
     match language {
         Language::Ts => OxcSourceType::ts(),
         Language::Tsx => OxcSourceType::tsx(),

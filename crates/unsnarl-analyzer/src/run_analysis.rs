@@ -1,6 +1,5 @@
 //! Pipeline entry that turns a parsed source into an [`AnalyzedSource`].
 //!
-//! Mirrors `runAnalysis` in `ts/src/pipeline/analyze/run-analysis.ts`.
 //! Three phases run end-to-end:
 //!
 //! 1. Compute the per-offset `NestingDepths` table.
@@ -13,14 +12,9 @@
 //!    iterate the arena directly to fill the per-variable `is_unused`
 //!    flag.
 //!
-//! The TS port runs side-table population inline with the scope-build
-//! walk because the materialised path the boundary callback exposes
-//! (`PathEntry { node, key }`) is still rich enough on the TS side —
-//! the TS structural typing lets analyzer functions read fields off
-//! the original AST node through that handle. The Rust port keeps the
-//! IR strictly lifetime-free (`AstNode = { type, span }` only), so
-//! several analyzer functions need a separate walk that retains
-//! `AstKind<'a>` handles in their ancestor chain. See
+//! The IR is kept strictly lifetime-free (`AstNode = { type, span }`
+//! only), so several analyzer functions need a separate walk that
+//! retains `AstKind<'a>` handles in their ancestor chain. See
 //! [`BuildAnalysisVisitor`]'s module doc for the per-function
 //! breakdown.
 

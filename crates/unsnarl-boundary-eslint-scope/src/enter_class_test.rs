@@ -1,5 +1,4 @@
-//! Sibling tests for `enter_class.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/enter-class.test.ts`.
+//! Sibling tests for `enter_class.rs`.
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::DefinitionType;

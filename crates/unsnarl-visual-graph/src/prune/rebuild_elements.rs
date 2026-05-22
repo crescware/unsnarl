@@ -1,8 +1,6 @@
 //! Rebuild a `VisualElement` tree keeping only nodes whose id is in
 //! the supplied keep-set; drop subgraphs whose descendants have all
 //! been removed.
-//!
-//! Mirrors `ts/src/visual-graph/prune/rebuild-elements.ts`.
 
 use std::collections::HashSet;
 

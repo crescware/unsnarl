@@ -1,6 +1,5 @@
 //! Resolve the output path the emitted text should land on.
 //!
-//! Mirrors `ts/src/cli/run-cli/resolve-output-path/resolve-output-path.ts`.
 //! `--out-file <path>` is returned verbatim. `--out-dir <dir>`
 //! combines the pre-derived basename (computed by `Args::finalize`
 //! from `-r` tokens or the input file stem) with the active

@@ -1,9 +1,7 @@
-//! Sibling tests for [`predicate_target_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/predicate-target-id.test.ts`. The
-//! Rust implementation takes the per-kind anchor maps via
-//! [`PredicateAnchorMaps`] rather than the full `BuildState` shape
-//! used by TS, so each test builds the wrapper from local
-//! [`HashMap`]s.
+//! Sibling tests for [`predicate_target_id`]. The implementation
+//! takes the per-kind anchor maps via [`PredicateAnchorMaps`]
+//! rather than the full `BuildState` shape, so each test builds
+//! the wrapper from local [`HashMap`]s.
 
 use std::collections::HashMap;
 

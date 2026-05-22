@@ -1,6 +1,4 @@
 //! `SerializeContext`: the bundle of inputs passed to `IRSerializer::serialize`.
-//!
-//! Mirrors `SerializeContext` in `ts/src/pipeline/serialize/serialize-context.ts`.
 
 use unsnarl_annotations::Annotations;
 use unsnarl_ir::diagnostic::Diagnostic;

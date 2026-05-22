@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/render-head-expression.ts`.
-//!
 //! Renders the structural head mini-AST to a compact one-line
 //! display label. `Raw` segments fall back to slicing the original
 //! source so non-recognised shapes appear verbatim. `Elided`

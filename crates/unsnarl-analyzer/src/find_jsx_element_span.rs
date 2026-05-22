@@ -1,10 +1,10 @@
 //! Wrapping JSXElement span lookup for a reference.
 //!
-//! Mirrors `ts/src/analyzer/jsx-element-span.ts`. Walks the ancestor
-//! chain leaf -> root, skipping `JSXMemberExpression` segments; when
-//! the immediate ancestor is a `JSXOpeningElement` and the one above
-//! it is a `JSXElement`, returns the element's span. Anything else
-//! short-circuits to `None`.
+//! Walks the ancestor chain leaf -> root, skipping
+//! `JSXMemberExpression` segments; when the immediate ancestor is a
+//! `JSXOpeningElement` and the one above it is a `JSXElement`,
+//! returns the element's span. Anything else short-circuits to
+//! `None`.
 
 use unsnarl_ir::reference::JsxElementContainer;
 use unsnarl_ir::SourceOffset;

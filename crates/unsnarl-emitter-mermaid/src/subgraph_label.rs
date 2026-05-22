@@ -1,7 +1,5 @@
 //! Builds the human-readable label for a subgraph (e.g.
 //! `foo()<br/>L3-12`).
-//!
-//! Mirrors `ts/src/emitter/mermaid/subgraph-label.ts`.
 
 use std::collections::HashMap;
 

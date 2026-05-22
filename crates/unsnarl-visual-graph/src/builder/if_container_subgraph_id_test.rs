@@ -1,5 +1,4 @@
-//! Sibling tests for [`if_container_subgraph_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/if-container-subgraph-id.test.ts`.
+//! Sibling tests for [`if_container_subgraph_id`].
 
 use super::if_container_subgraph_id;
 

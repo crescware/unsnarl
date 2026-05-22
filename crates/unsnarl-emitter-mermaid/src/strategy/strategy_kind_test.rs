@@ -1,7 +1,5 @@
-//! Mirrors `ts/src/emitter/mermaid/strategy/dagre-strategy.test.ts`
-//! and `ts/src/emitter/mermaid/strategy/elk-strategy.test.ts`. The
-//! TS port keeps each strategy as its own object; the Rust port
-//! collapses them into a single enum, so both suites land here.
+//! Both dagre and elk strategy suites land here because they share
+//! a single enum.
 
 use crate::theme::{DARK_THEME, LIGHT_THEME};
 

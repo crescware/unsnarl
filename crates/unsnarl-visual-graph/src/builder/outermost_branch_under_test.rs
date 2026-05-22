@@ -1,5 +1,4 @@
-//! Sibling tests for [`outermost_branch_under`]. Cases mirror
-//! `ts/src/visual-graph/builder/outermost-branch-under.test.ts`.
+//! Sibling tests for [`outermost_branch_under`].
 
 use std::collections::HashMap;
 

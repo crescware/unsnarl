@@ -1,11 +1,9 @@
 //! Push a `For` scope and declare the head bindings.
 //!
-//! Mirrors `enterFor` in `ts/src/boundary/eslint-scope/enter-for.ts`.
-//! The TS port handles all three for-statement variants
-//! (`for` / `for-in` / `for-of`) through one `NodeLike` entry; the
-//! Rust port exposes three variant-specific helpers that share the
-//! `push_scope` + `declare_for_left` shape, so each caller passes the
-//! statically-typed head node it already has.
+//! Three variant-specific helpers (one per for-statement shape:
+//! `for` / `for-in` / `for-of`) share the `push_scope` +
+//! `declare_for_left` body so each caller passes the statically-
+//! typed head node it already has.
 
 use oxc_ast::ast::{
     ForInStatement, ForOfStatement, ForStatement, ForStatementInit, ForStatementLeft,

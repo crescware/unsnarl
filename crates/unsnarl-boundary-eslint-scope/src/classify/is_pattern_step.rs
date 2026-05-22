@@ -1,12 +1,11 @@
 //! Is this ancestor part of a destructuring pattern chain?
 //!
-//! Mirrors `isPatternStep` in `classify/is-pattern-step.ts`. The TS
-//! port checks `node.type` against `ObjectPattern` / `ArrayPattern` /
-//! `RestElement` / `AssignmentPattern`, plus the special case where
-//! `Property` lives inside an `ObjectPattern` (i.e. a destructuring
-//! property, not an object-literal property).
+//! Membership: `ObjectPattern` / `ArrayPattern` / `RestElement` /
+//! `AssignmentPattern`, plus the special case where `Property` lives
+//! inside an `ObjectPattern` (i.e. a destructuring property, not an
+//! object-literal property).
 //!
-//! The Rust port matches the same set, with two notes:
+//! oxc-specific notes:
 //!
 //! - oxc splits `RestElement` into `BindingRestElement` (binding
 //!   patterns) / `FormalParameterRest` (function rest parameters);
@@ -26,8 +25,8 @@ pub(crate) fn is_pattern_step(node: &AstKind<'_>, path: &[PathEntry<'_>], i: usi
         | AstKind::ArrayPattern(_)
         | AstKind::BindingRestElement(_)
         | AstKind::AssignmentPattern(_) => true,
-        // oxc-specific: TS folds `Function.params -> Pattern[]` into a
-        // flat array, but oxc routes each rest parameter through
+        // oxc-specific: ESTree models `Function.params` as a flat
+        // `Pattern[]`, but oxc routes each rest parameter through
         // `FormalParameters.rest -> FormalParameterRest ->
         // BindingRestElement`. Treat the two wrapper nodes as
         // transparent pattern steps so `find_binding_root_context`
@@ -36,11 +35,11 @@ pub(crate) fn is_pattern_step(node: &AstKind<'_>, path: &[PathEntry<'_>], i: usi
         // oxc-specific: destructuring on the LHS of an assignment
         // expression (`[a, b] = ...` / `({ a } = ...)`) uses a
         // dedicated `AssignmentTarget*` family of nodes instead of
-        // reusing the `BindingPattern` family. The TS npm `oxc-parser`
-        // ESTree-fies them back into `ArrayPattern` / `ObjectPattern`
-        // / `AssignmentPattern` / `RestElement`, so the TS classify
-        // sees them as regular pattern steps. Mirror that here by
-        // treating the assignment-target variants as pattern steps.
+        // reusing the `BindingPattern` family. In ESTree the same
+        // nodes appear as `ArrayPattern` / `ObjectPattern` /
+        // `AssignmentPattern` / `RestElement`, all of which are
+        // pattern steps; treat the assignment-target variants as
+        // pattern steps too.
         AstKind::ArrayAssignmentTarget(_)
         | AstKind::ObjectAssignmentTarget(_)
         | AstKind::AssignmentTargetWithDefault(_)

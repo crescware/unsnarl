@@ -1,6 +1,5 @@
 //! Per-node matcher for a single highlight query.
 //!
-//! Mirrors `ts/src/visual-graph/highlight/node-matches-highlight-query.ts`.
 //! Highlight reuses the `-r/--roots` query grammar but intentionally
 //! diverges on matching semantics: pruning applies `NAME_QUERY_EXCLUDED`
 //! on bare name queries (so `-r counter` does not drag every assignment /

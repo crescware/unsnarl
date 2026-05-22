@@ -1,5 +1,4 @@
-//! Sibling tests for [`branch_merged_origins`]. Cases mirror
-//! `ts/src/visual-graph/builder/branch-merged-origins.test.ts`.
+//! Sibling tests for [`branch_merged_origins`].
 
 use std::collections::HashSet;
 

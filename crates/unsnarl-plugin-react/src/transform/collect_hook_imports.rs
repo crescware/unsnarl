@@ -1,10 +1,8 @@
 //! Collect every variable that imports a tracked React hook.
 //!
-//! Mirrors `collectHookImports` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Walks every
-//! `SerializedVariable`, keeps the ones whose first definition is
-//! a `ImportBinding` (named) sourced from `"react"` with an
-//! `importedName` matching one of [`HOOK_USE_CALLBACK`] /
+//! Walks every `SerializedVariable`, keeps the ones whose first
+//! definition is a `ImportBinding` (named) sourced from `"react"`
+//! with an `importedName` matching one of [`HOOK_USE_CALLBACK`] /
 //! [`HOOK_USE_MEMO`], and yields a map keyed by the variable id's
 //! string value.
 

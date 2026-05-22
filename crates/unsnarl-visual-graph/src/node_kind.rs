@@ -1,9 +1,9 @@
 //! `NodeKind`: tag on `VisualNode` distinguishing every shape of node
 //! the builder emits.
 //!
-//! Mirrors `ts/src/visual-graph/node-kind.ts`. The values double as
-//! the on-disk JSON tags, so they serialize to the same identifiers
-//! (`"VarBinding"`, `"SyntheticIfStatementTest"`, etc.).
+//! The values double as the on-disk JSON tags, so they serialize to
+//! the same identifiers (`"VarBinding"`,
+//! `"SyntheticIfStatementTest"`, etc.).
 
 use serde::Serialize;
 

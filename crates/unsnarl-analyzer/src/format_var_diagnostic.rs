@@ -1,8 +1,7 @@
 //! Lines the var-detected diagnostic consists of.
 //!
-//! Mirrors `ts/src/analyzer/format-var-diagnostic.ts`. The same
-//! wording is shared between the stderr emitter and the markdown
-//! Notice section so both stay in lock-step.
+//! The same wording is shared between the stderr emitter and the
+//! markdown Notice section so both stay in lock-step.
 
 use unsnarl_ir::diagnostic::Diagnostic;
 

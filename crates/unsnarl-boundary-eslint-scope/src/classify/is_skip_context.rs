@@ -1,16 +1,12 @@
-//! Slots where an identifier is purely structural (an estree
+//! Slots where an identifier is purely structural (an ESTree
 //! property name, a label, etc.) and must not be treated as a
 //! reference.
 //!
-//! Mirrors `isSkipContext` in `classify/is-skip-context.ts`. The TS
-//! port uses string equality on `node.type`; the Rust port matches
-//! on `AstKind` variants. `MemberExpression` is split into
-//! `Static` / `Computed` / `PrivateField` variants in oxc; the
-//! `"property"` skip rule applies only to the *static* form (the
-//! TS `!isComputed(parent)` check).
-//!
-//! `ObjectProperty` covers what the TS `AST_TYPE.Property` arm
-//! checks for; oxc renames the AST node so the type name differs.
+//! `MemberExpression` is split into `Static` / `Computed` /
+//! `PrivateField` variants in oxc; the `"property"` skip rule
+//! applies only to the *static* form (the computed form keeps the
+//! property as a real expression). `ObjectProperty` is oxc's name
+//! for the ESTree `Property` node.
 
 use oxc_ast::AstKind;
 

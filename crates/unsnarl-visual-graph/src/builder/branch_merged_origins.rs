@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/branch-merged-origins.ts`.
-//!
 //! Given an outer branch (an if/case/try arm), collect every
 //! reachable last-write op by recursing into branch containers
 //! nested inside it. Without this recursion, a `case 0` whose body

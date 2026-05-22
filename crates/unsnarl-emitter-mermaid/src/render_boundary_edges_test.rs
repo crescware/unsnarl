@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/render-boundary-edges.test.ts`.
-
 use unsnarl_visual_graph::boundary_edge_direction::{
     BoundaryEdgeDirectionIn, BoundaryEdgeDirectionOut,
 };

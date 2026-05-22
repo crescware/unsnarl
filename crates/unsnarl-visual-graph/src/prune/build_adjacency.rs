@@ -1,6 +1,4 @@
 //! Build forward / reverse adjacency maps from a `VisualEdge` list.
-//!
-//! Mirrors `ts/src/visual-graph/prune/build-adjacency.ts`.
 
 use std::collections::HashMap;
 

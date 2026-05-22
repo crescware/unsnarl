@@ -1,14 +1,11 @@
 //! Push a `Function` scope and seed its bindings.
 //!
-//! Mirrors `enterFunction` in
-//! `ts/src/boundary/eslint-scope/enter-function.ts`. TS handles
 //! `FunctionDeclaration` / `FunctionExpression` /
-//! `ArrowFunctionExpression` through one entry; in Rust they split
-//! between `oxc_ast::ast::Function` (the first two) and
-//! `oxc_ast::ast::ArrowFunctionExpression`, so this module exposes
-//! two helpers (`enter_function` / `enter_arrow_function_expression`)
-//! that share the same body apart from `declare_implicit_arguments`,
-//! which arrows must not call.
+//! `ArrowFunctionExpression` split between `oxc_ast::ast::Function`
+//! (the first two) and `oxc_ast::ast::ArrowFunctionExpression`, so
+//! this module exposes two helpers (`enter_function` /
+//! `enter_arrow_function_expression`) that share the same body apart
+//! from `declare_implicit_arguments`, which arrows must not call.
 
 use oxc_ast::ast::{ArrowFunctionExpression, Function, FunctionType};
 

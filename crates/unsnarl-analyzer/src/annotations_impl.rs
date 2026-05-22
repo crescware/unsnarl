@@ -1,14 +1,9 @@
 //! Concrete implementation of the [`Annotations`] lookup trait.
 //!
-//! Mirrors `ts/src/analyzer/annotations-impl.ts`. The TS side keys
-//! the three side-tables by object reference (`Map<Reference,
-//! ReferenceAnnotation>`); the Rust port keys by arena ID instead
-//! (Step 7 / #116 moved cross-entity linkage to `*Id` newtypes, and
-//! Step 10 / #119 fixed the trait surface accordingly).
+//! Keys the three side-tables by arena ID.
 //!
-//! "Missing entries return zero-value defaults" — the TS source
-//! exposes this guarantee in a comment, and `Annotations`' doc
-//! restates it as a contract for each implementor. This impl
+//! "Missing entries return zero-value defaults" — `Annotations`' doc
+//! states this as a contract for each implementor. This impl
 //! materialises the defaults once at construction time and hands
 //! out references to them on miss; the alternative ("build a fresh
 //! default per call") would force the trait to return owned values,

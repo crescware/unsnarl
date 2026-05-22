@@ -1,5 +1,4 @@
-//! Sibling tests for `collect_binding_identifiers.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/declare/collect-binding-identifiers.test.ts`.
+//! Sibling tests for `collect_binding_identifiers.rs`.
 
 use unsnarl_ir::Language;
 

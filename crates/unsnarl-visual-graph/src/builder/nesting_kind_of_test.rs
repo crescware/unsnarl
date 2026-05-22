@@ -1,5 +1,4 @@
-//! Sibling tests for [`nesting_kind_of`]. Cases mirror
-//! `ts/src/visual-graph/builder/nesting-kind-of.test.ts`.
+//! Sibling tests for [`nesting_kind_of`].
 
 use unsnarl_ir::nesting_kind::NestingKind;
 use unsnarl_ir::scope_type::ScopeType;

@@ -1,6 +1,4 @@
 //! The built-in light color theme.
-//!
-//! Mirrors `ts/src/emitter/mermaid/theme/light-theme.ts`.
 
 use super::color_theme::{
     BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,

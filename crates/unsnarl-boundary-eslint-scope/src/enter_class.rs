@@ -1,16 +1,9 @@
 //! Push a `Class` scope and declare the inner class name.
 //!
-//! Mirrors `enterClass` in
-//! `ts/src/boundary/eslint-scope/enter-class.ts`. The TS port reads
-//! `node["id"]` defensively because `NodeLike` does not pin the
-//! shape; the Rust port matches on `Class.id: Option<BindingIdentifier>`
-//! directly.
-//!
-//! The TS comment on the original notes that the *outer* class name
-//! for `ClassDeclaration` is already added by the hoisting pass
-//! (`hoisting/handle_class_declaration.rs`) before the walker
-//! reaches the class node. This helper only declares the *inner*
-//! `ClassName` binding that lives inside the new class scope.
+//! The *outer* class name for `ClassDeclaration` is already added by
+//! the hoisting pass (`hoisting/handle_class_declaration.rs`) before
+//! the walker reaches the class node. This helper only declares the
+//! *inner* `ClassName` binding that lives inside the new class scope.
 
 use oxc_ast::ast::{Class, ClassType};
 

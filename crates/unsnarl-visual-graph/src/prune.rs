@@ -2,8 +2,7 @@
 //! and a `Vec<ParsedRootQuery>` (plus descendants / ancestors radii)
 //! into a narrowed graph.
 //!
-//! Mirrors `ts/src/visual-graph/prune/`. The module is split one
-//! function per file to match the TS layout. Public entry points:
+//! The module is split one function per file. Public entry points:
 //!
 //! - [`prune_visual_graph::prune_visual_graph`] — main orchestrator.
 //! - [`resolve_ambiguous_queries::resolve_ambiguous_queries`] —

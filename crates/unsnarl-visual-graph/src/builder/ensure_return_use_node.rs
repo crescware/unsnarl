@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/ensure-return-use-node.ts`.
-//!
 //! For a reference that completes via `return`, ensure a wrapping
 //! Return subgraph and a return-use node inside it, returning the
 //! node id. Returns `None` when the reference's completion is not

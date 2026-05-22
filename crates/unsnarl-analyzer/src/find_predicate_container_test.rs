@@ -318,10 +318,10 @@ fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
     // `entry.node.span.start` arrives in UTF-8 bytes from `oxc_parser`.
     // With a leading em-dash (`—`, 3 UTF-8 bytes / 1 UTF-16 code unit),
     // the byte offset of `if` is 7 (after `// —\n`), but its UTF-16
-    // offset is 5. The serialized `PredicateContainer.offset` must
-    // match the TS reference (UTF-16); this asserts the conversion
-    // happens inside `find_predicate_container` for both the
-    // path-walk branch and the parent-offset fallback.
+    // offset is 5. The serialised `PredicateContainer.offset` must
+    // be in UTF-16 code units per the IR contract; this asserts the
+    // conversion happens inside `find_predicate_container` for both
+    // the path-walk branch and the parent-offset fallback.
     let raw = "// —\nif (a) {}\n";
     let if_stmt = ast_node(AstType::IfStatement, 7);
     let test_expr = ast_node(AstType::BinaryExpression, 11);

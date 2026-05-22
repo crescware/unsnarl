@@ -116,9 +116,7 @@ fn handle_parse_error(e: &ParseError, err: &mut dyn Write) -> u8 {
 }
 
 /// Build the active emitter from `args.format` + renderer / theme.
-/// Mirrors `createConfiguredEmitterRegistry` in
-/// `ts/src/pipeline/create-configured-emitter-registry.ts` for the
-/// single emitter the CLI dispatches to per run.
+/// Returns the single emitter the CLI dispatches to per run.
 fn build_emitter(args: &Args) -> Box<dyn Emitter> {
     let strategy = mermaid_strategy_for(args.mermaid_renderer.as_ref());
     let theme = color_theme_for(&args.color_theme);
@@ -176,16 +174,13 @@ fn dispatch_pipeline(
 }
 
 /// Default generations used when the user gives `-r/--roots` but no
-/// `-A`/`-B`/`-C`. Mirrors `DEFAULT_GENERATIONS` in
-/// `ts/src/cli/args/default-generations.ts`.
+/// `-A`/`-B`/`-C`.
 const DEFAULT_GENERATIONS: u32 = 10;
 
 /// Translate the CLI's `--depth` / `--depth-function` / `--depth-block`
-/// flags into a [`NestingDepths`]. Mirrors `resolveDepths` in
-/// `ts/src/cli/run-cli/normalize-cli-options.ts`: `--depth <N>` seeds
-/// both axes, then `--depth-function` / `--depth-block` override
-/// their respective halves. Unset fields fall back to
-/// [`DEFAULT_DEPTH`].
+/// flags into a [`NestingDepths`]. `--depth <N>` seeds both axes,
+/// then `--depth-function` / `--depth-block` override their
+/// respective halves. Unset fields fall back to [`DEFAULT_DEPTH`].
 fn depths_from_args(args: &Args) -> NestingDepths {
     let general = args.depth.unwrap_or(DEFAULT_DEPTH);
     let function = args.depth_function.unwrap_or(general);
@@ -202,10 +197,9 @@ fn depths_from_args(args: &Args) -> NestingDepths {
 }
 
 /// Translate the CLI's `-H` / `--highlight` flag into the pipeline's
-/// [`HighlightRunOptions`]. Mirrors the TS `buildRunOpts` mapping:
-/// `Highlight::Absent` -> `None`, `Highlight::NoValue` -> `Roots`
-/// (the highlight follows `-r/--roots`), `Highlight::Value(queries)`
-/// -> `Queries(queries)`.
+/// [`HighlightRunOptions`]: `Highlight::Absent` -> `None`,
+/// `Highlight::NoValue` -> `Roots` (the highlight follows
+/// `-r/--roots`), `Highlight::Value(queries)` -> `Queries(queries)`.
 fn highlight_from_args(args: &Args) -> Option<HighlightRunOptions> {
     match &args.highlight {
         Highlight::Absent => None,
@@ -215,10 +209,8 @@ fn highlight_from_args(args: &Args) -> Option<HighlightRunOptions> {
 }
 
 /// Translate the CLI's `-r/-A/-B/-C` flags into the pipeline's
-/// [`PruningRunOptions`]. Mirrors `resolveGenerations` in
-/// `ts/src/cli/run-cli/resolve-generations.ts`. Returns `None` when
-/// no `-r` queries are present so the pipeline skips the prune step
-/// entirely (matching the TS guard `pruning ?? null`).
+/// [`PruningRunOptions`]. Returns `None` when no `-r` queries are
+/// present so the pipeline skips the prune step entirely.
 fn pruning_from_args(args: &Args) -> Option<PruningRunOptions> {
     if args.roots.is_empty() {
         return None;
@@ -285,8 +277,7 @@ fn clone_parsed_root_query(
     }
 }
 
-/// Default to elk when the flag is omitted. Matches the TS pipeline
-/// default at `ts/src/cli/args/cli-mermaid-renderer.ts`.
+/// Default to elk when the flag is omitted.
 fn mermaid_strategy_for(cli: Option<&CliMermaidRenderer>) -> MermaidStrategy {
     match cli {
         Some(CliMermaidRenderer::Dagre) => MermaidStrategy::Dagre,
@@ -303,11 +294,9 @@ fn color_theme_for(cli: &CliColorTheme) -> &'static ColorTheme {
 
 /// Materialise the source bytes the pipeline runs against, together
 /// with the path / language pair the emitter records inside
-/// `SerializedSource`. Mirrors `buildRunOpts` in
-/// `ts/src/cli/run-cli/build-run-opts.ts`: stdin contents are
-/// labelled `stdin.<lang>` so the IR carries a stable, lang-aware
-/// path; file inputs map to the on-disk path and the extension
-/// drives language detection.
+/// `SerializedSource`. Stdin contents are labelled `stdin.<lang>` so
+/// the IR carries a stable, lang-aware path; file inputs map to the
+/// on-disk path and the extension drives language detection.
 fn read_source_text(
     src: &ExecuteSource,
     err: &mut dyn Write,

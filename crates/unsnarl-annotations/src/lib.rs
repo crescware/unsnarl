@@ -1,6 +1,5 @@
 //! IR side-table contract: per-entity annotations produced by the
-//! analyzer (populated in Step 11, #120) and consumed by the
-//! serializers.
+//! analyzer and consumed by the serializers.
 //!
 //! `Annotations` is the lookup trait, keyed by arena IDs against
 //! `IrArena`. The row types are `ScopeAnnotation` /
@@ -9,7 +8,7 @@
 //! `NestingDepths` deliberately stays in `unsnarl-ir::nesting_kind`
 //! rather than being redefined here, because `SerializedScope`
 //! embeds it directly and `unsnarl-ir` is below this crate in the
-//! dependency graph (#116 / #119). `ScopeAnnotation` imports it.
+//! dependency graph. `ScopeAnnotation` imports it.
 //!
 //! `Serialize` is derived only where the in-memory shape matches the
 //! pipeline output shape: `ScopeAnnotation`, `VariableAnnotation`,

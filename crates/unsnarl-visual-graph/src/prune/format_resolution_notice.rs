@@ -1,7 +1,5 @@
 //! Format a three-line resolution notice shared by stderr output and
 //! the markdown Notice section.
-//!
-//! Mirrors `ts/src/visual-graph/prune/format-resolution-notice.ts`.
 
 use crate::prune::root_query_resolution::{ResolvedAs, RootQueryResolution};
 

@@ -1,10 +1,9 @@
-//! Mirrors `ts/src/emitter/mermaid/mermaid.test.ts`.
-//!
-//! `mermaid.test.ts` drives the full parse → analyse → serialise → emit
-//! pipeline. The `unsnarl-emitter-mermaid` crate itself does not depend
-//! on parser or analyser, so the integration test lives here in
-//! `crates/unsnarl/tests/` (same pattern as `flat_serializer.rs`),
-//! reusing `emit_mermaid_text` for the public driver entry point.
+//! End-to-end mermaid emitter test driving the full parse → analyse
+//! → serialise → emit pipeline. The `unsnarl-emitter-mermaid` crate
+//! itself does not depend on parser or analyser, so the integration
+//! test lives here in `crates/unsnarl/tests/` (same pattern as
+//! `flat_serializer.rs`), reusing `emit_mermaid_text` for the public
+//! driver entry point.
 
 use regex::Regex;
 use unsnarl::pipeline::{emit_mermaid_text, PipelineRunOptions};

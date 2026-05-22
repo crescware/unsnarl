@@ -2,23 +2,19 @@
 //! collects after stripping the `unsnarl-plugin-` prefix) to a
 //! concrete [`UnsnarlPlugin`] instance.
 //!
-//! Mirrors the TS resolution layer at
-//! `ts/src/cli/run-cli/resolve-plugin.ts`. The TS port resolves
-//! `--plugin <name>` by dynamic-importing
-//! `../../plugins/unsnarl-plugin-<name>/index.js`; the Rust port
-//! cannot do that across crates, so the consumer (the `unsnarl`
-//! crate's pipeline-side plugin module) builds a registry up front
-//! by registering each bundled plugin under its short name. The
-//! registry then resolves the post-strip CLI name list into a
-//! `Vec<&dyn UnsnarlPlugin>` for the pipeline to fold over.
+//! Because plugin types cannot be dynamic-imported across crates,
+//! the consumer (the `unsnarl` crate's pipeline-side plugin module)
+//! builds a registry up front by registering each bundled plugin
+//! under its short name. The registry then resolves the post-strip
+//! CLI name list into a `Vec<&dyn UnsnarlPlugin>` for the pipeline
+//! to fold over.
 
 use std::fmt;
 
 use crate::unsnarl_plugin::UnsnarlPlugin;
 
 /// Error returned when [`PluginRegistry::activate_all`] is asked to
-/// activate a plugin that has not been registered. Mirrors the
-/// `CliUsageError` from `resolve-plugin.ts`:
+/// activate a plugin that has not been registered. Renders as:
 /// `Plugin 'unsnarl-plugin-<name>' is not bundled with this unsnarl build.`
 #[derive(Debug)]
 pub struct PluginActivateError {
@@ -77,8 +73,7 @@ impl PluginRegistry {
 
     /// Resolve a list of short names into the matching plugin
     /// instances, preserving the input order. Fails on the first
-    /// unknown name. Mirrors the per-name `resolvePlugin` call site
-    /// in `ts/src/cli/run-cli/run-cli.ts` (`Promise.all(... .map(resolvePlugin))`).
+    /// unknown name.
     pub fn activate_all(
         &self,
         names: &[String],

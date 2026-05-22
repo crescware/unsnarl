@@ -1,7 +1,6 @@
 //! Walks an element tree and collects every Function subgraph's
 //! owner-node id into the supplied set.
 //!
-//! Mirrors `ts/src/emitter/mermaid/collect-wrapped-owner-ids.ts`.
 //! Owner ids of Function subgraphs are absorbed into a wrapper
 //! subgraph alongside the body, so they must NOT also be emitted
 //! as a sibling node at their declaring scope.

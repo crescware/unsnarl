@@ -1,11 +1,9 @@
 //! Predicate: which [`NodeKind`](crate::node_kind::NodeKind) values are
 //! eligible as `-r` root candidates.
 //!
-//! Mirrors `ts/src/visual-graph/prune/root-candidate-kinds.ts`. The
-//! TS version exposes this as a `ReadonlySet<NodeKind>` literal; the
-//! Rust port exposes the predicate as a free function so callers do
-//! not pay for a static `HashSet` allocation per process and the
-//! match doubles as an exhaustiveness check.
+//! Exposed as a free function (rather than a static set) so callers
+//! do not pay for a process-wide `HashSet` allocation and the match
+//! doubles as an exhaustiveness check.
 
 use crate::node_kind::NodeKind;
 

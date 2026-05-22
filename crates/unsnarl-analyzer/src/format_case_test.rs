@@ -1,10 +1,9 @@
 //! Pretty-print a switch-case test expression.
 //!
-//! Mirrors `ts/src/analyzer/format-case-test.ts`. Returns the raw
-//! source slice when the expression's span is in-bounds and at most
-//! [`CASE_TEST_MAX_LENGTH`] bytes long; otherwise falls back to a
-//! type-specific rendering (`Identifier` name, `Literal` value) or
-//! the `"<expr>"` placeholder.
+//! Returns the raw source slice when the expression's span is
+//! in-bounds and at most [`CASE_TEST_MAX_LENGTH`] bytes long;
+//! otherwise falls back to a type-specific rendering (`Identifier`
+//! name, `Literal` value) or the `"<expr>"` placeholder.
 
 use oxc_ast::ast::Expression;
 use oxc_span::GetSpan;

@@ -1,10 +1,8 @@
 //! Locate the inner `() => ...` / `function () {}` scope of a hook
 //! call.
 //!
-//! Mirrors `findInnerFunctionScope` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Iterates the
-//! supplied sibling scope list (all scopes whose `upper` is the
-//! wrapped variable's scope) and keeps the
+//! Iterates the supplied sibling scope list (all scopes whose
+//! `upper` is the wrapped variable's scope) and keeps the
 //! `ArrowFunctionExpression` / `FunctionExpression` scope with the
 //! smallest `block.span.offset` strictly greater than the
 //! `CallExpression` start.

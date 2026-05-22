@@ -1,11 +1,9 @@
 //! Test-only fixture helpers shared across the mermaid emitter's
 //! sibling `_test.rs` files.
 //!
-//! Mirrors the family of `ts/src/emitter/mermaid/testing/make-*.ts`
-//! files. The TS port keeps one helper per file; the Rust port
-//! collapses them into a single module because the helpers are
-//! consumed only by sibling unit tests and the inline grouping keeps
-//! the file count low.
+//! Helpers are grouped into a single module rather than one file
+//! per helper because they are consumed only by sibling unit tests
+//! and the inline grouping keeps the file count low.
 //!
 //! Each `base_*` constructor returns the concrete struct (rather than
 //! the wrapping enum) so callers can pin individual fields with
@@ -34,8 +32,7 @@ use crate::theme::DARK_THEME;
 
 // ---- Nodes ----------------------------------------------------------------
 
-/// `ConstBinding` variant. Mirrors `baseNode()` in
-/// `ts/.../testing/make-node.ts`.
+/// `ConstBinding` variant.
 pub fn base_const_binding() -> BindingVisualNode {
     BindingVisualNode {
         r#type: NodeTypeTag::Node,
@@ -85,10 +82,9 @@ pub fn base_write_op() -> SyntheticVisualNode {
     }
 }
 
-/// Base shape for synthetic kinds with no extras tail. The TS port's
-/// `baseSimpleNode` mixes binding and synthetic kinds because the
-/// TS `VisualNode` union is flat; the Rust port splits them across
-/// two struct shapes, so the helper splits accordingly.
+/// Base shape for synthetic kinds with no extras tail. Mirrors the
+/// split between `BindingVisualNode` and `SyntheticVisualNode`; the
+/// binding counterpart is `base_simple_binding` above.
 pub fn base_simple_synthetic(kind: SyntheticNodeKind) -> SyntheticVisualNode {
     SyntheticVisualNode {
         r#type: NodeTypeTag::Node,
@@ -141,8 +137,7 @@ pub fn base_import_binding_namespace() -> BindingVisualNode {
 
 // ---- Subgraphs ------------------------------------------------------------
 
-/// `Function` subgraph (owned shape). Mirrors `baseSubgraph()` in
-/// `ts/.../testing/make-subgraph.ts`.
+/// `Function` subgraph (owned shape).
 pub fn base_function_subgraph() -> OwnedVisualSubgraph {
     OwnedVisualSubgraph {
         r#type: SubgraphTypeTag::Subgraph,

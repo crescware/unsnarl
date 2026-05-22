@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/should-subgraph.ts`.
-
 use unsnarl_ir::serialized::SerializedScope;
 
 use super::is_class_subgraph::is_class_subgraph;

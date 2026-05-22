@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/line-range-label.test.ts`.
-
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
 
 use super::line_range_label;

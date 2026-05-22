@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/subgraph-scope-id.ts`.
-
 use super::sanitize::sanitize;
 use unsnarl_ir::serialized::SerializedScope;
 

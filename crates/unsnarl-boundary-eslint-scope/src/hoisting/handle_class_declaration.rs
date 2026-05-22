@@ -1,10 +1,8 @@
 //! Hoist a class declaration into the enclosing scope.
 //!
-//! Mirrors `handleClassDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-class-declaration.ts`.
-//! TS reads `node["id"]` and skips when it is not an identifier; the
-//! Rust port pattern-matches on `Class.id: Option<BindingIdentifier>`,
-//! which encodes the same skip condition at the type level.
+//! Pattern-matches on `Class.id: Option<BindingIdentifier>` — when
+//! the id is absent (anonymous `ClassExpression`), no hoisting
+//! happens.
 
 use oxc_ast::ast::Class;
 

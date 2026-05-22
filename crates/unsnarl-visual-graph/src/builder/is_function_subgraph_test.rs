@@ -1,5 +1,4 @@
-//! Sibling tests for [`is_function_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/is-function-subgraph.test.ts`.
+//! Sibling tests for [`is_function_subgraph`].
 
 use unsnarl_ir::scope_type::ScopeType;
 

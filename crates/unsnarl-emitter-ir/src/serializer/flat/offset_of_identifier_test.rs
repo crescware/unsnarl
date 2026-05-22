@@ -1,9 +1,5 @@
-//! Mirrors `ts/src/serializer/flat/offset-of.test.ts` for the
-//! `AstIdentifier` arm of `offsetOf`. The TS test pinned three cases:
-//! `node.start` defined, `node.start` absent (fell back to 0), and
-//! `node.start === 0` preserved. In the Rust IR the span is always
-//! present, so the "absent" case collapses into the same code path
-//! as the explicit zero — the two tests that still carry distinct
+//! Exercises the `AstIdentifier` arm of `offset_of`. Since the IR
+//! span is always present, the only two cases that carry distinct
 //! meaning are "non-zero start round-trips" and "start of 0 is
 //! preserved verbatim".
 

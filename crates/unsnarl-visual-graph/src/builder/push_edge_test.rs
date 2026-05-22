@@ -1,7 +1,5 @@
-//! Sibling tests for [`push_edge`]. Cases mirror
-//! `ts/src/visual-graph/builder/push-edge.test.ts`. The Rust
-//! signature takes `(emitted, edges, from, label, to)` instead of
-//! the TS `(state, ...)` shape, so each test owns the two
+//! Sibling tests for [`push_edge`]. The signature takes
+//! `(emitted, edges, from, label, to)`, so each test owns the two
 //! deduplication structures directly.
 
 use std::collections::HashSet;

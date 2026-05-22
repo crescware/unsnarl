@@ -1,8 +1,6 @@
 //! Emits the `subgraph ... end` block for a subgraph that is not
 //! wrapped together with an owner node (or for the body half of a
 //! wrapped function).
-//!
-//! Mirrors `ts/src/emitter/mermaid/emit-plain-subgraph.ts`.
 
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;

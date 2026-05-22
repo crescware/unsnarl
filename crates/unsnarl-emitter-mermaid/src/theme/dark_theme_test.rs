@@ -1,6 +1,5 @@
-//! Mirrors `ts/src/emitter/mermaid/theme/dark-theme.test.ts`. Pins
-//! the per-slot literals of the built-in dark theme so an accidental
-//! rename / re-tint surfaces here.
+//! Pins the per-slot literals of the built-in dark theme so an
+//! accidental rename / re-tint surfaces here.
 
 use super::DARK_THEME;
 

@@ -1,18 +1,14 @@
 //! Numeric `value_parser`s for the non-negative-integer CLI flags.
 //!
-//! 1:1 port of `ts/src/cli/args/parse-generation-count.ts`: accept the
-//! input only when it matches `/^\d+$/`, then parse as base-10
-//! integer. TS returns `null` on rejection and lets the option's
-//! `argParser` convert that into `InvalidArgumentError`; clap performs
-//! the same rejection here by surfacing the `Err` arm to its parser.
+//! Accept the input only when it matches `/^\d+$/`, then parse as a
+//! base-10 integer. clap converts a rejecting `Err` into a usage
+//! error.
 //!
-//! The TS side used one shared parser for `-A` / `-B` / `-C` /
-//! `--depth*`. The Rust side splits into two parsers so that the
-//! field types stay typed: `-A` / `-B` / `-C` produce
-//! `GenerationCount` (graph-traversal distance), `--depth*` produce
-//! `NestingDepth` (lexical scope depth). The two share a private
-//! digit-only `u32` helper, so the validation behaviour is
-//! identical.
+//! Two parsers exist so the field types stay typed: `-A` / `-B` /
+//! `-C` produce `GenerationCount` (graph-traversal distance);
+//! `--depth*` produce `NestingDepth` (lexical scope depth). They
+//! share a private digit-only `u32` helper, so the validation
+//! behaviour is identical.
 
 use unsnarl_ir::NestingDepth;
 use unsnarl_root_query::GenerationCount;

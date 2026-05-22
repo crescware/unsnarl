@@ -1,5 +1,4 @@
-//! Sibling tests for [`state_at`]. Cases mirror
-//! `ts/src/visual-graph/builder/state-at.test.ts`.
+//! Sibling tests for [`state_at`].
 
 use std::collections::HashMap;
 

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/emit-node.test.ts`.
-
 use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
 
 use super::emit_node;

@@ -1,5 +1,4 @@
-//! Sibling tests for [`attach_switch_discriminant_anchor`]. Cases
-//! mirror `ts/src/visual-graph/builder/switch-discriminant-anchor.test.ts`.
+//! Sibling tests for [`attach_switch_discriminant_anchor`].
 
 use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
 use unsnarl_ir::scope_type::ScopeType;

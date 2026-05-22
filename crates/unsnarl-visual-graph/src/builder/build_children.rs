@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/build-children.ts`.
-//!
 //! Walks `parent_scope.child_scopes` and dispatches each child to
 //! [`build_scope`]. Branches of a single `if`/`else if`/`else`
 //! chain — siblings whose `branch_container_key` starts with

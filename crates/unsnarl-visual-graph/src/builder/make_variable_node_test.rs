@@ -1,5 +1,4 @@
-//! Sibling tests for [`make_variable_node`]. Cases mirror
-//! `ts/src/visual-graph/builder/make-variable-node.test.ts`.
+//! Sibling tests for [`make_variable_node`].
 
 use unsnarl_ir::serialized::serialized_definition::{
     ImportBindingDefaultDef, ImportBindingNamedDef, SerializedDefinition, SimpleDefType,

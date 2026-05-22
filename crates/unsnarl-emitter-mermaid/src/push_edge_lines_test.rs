@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/push-edge-lines.test.ts`.
-
 use unsnarl_visual_graph::visual_edge::VisualEdge;
 
 use super::push_edge_lines;

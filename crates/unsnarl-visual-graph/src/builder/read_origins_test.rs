@@ -1,5 +1,4 @@
-//! Sibling tests for [`read_origins`]. Cases mirror
-//! `ts/src/visual-graph/builder/read-origins.test.ts`.
+//! Sibling tests for [`read_origins`].
 
 use std::collections::HashSet;
 

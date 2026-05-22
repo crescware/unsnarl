@@ -1,10 +1,8 @@
 //! Walk variables and capture the binding ids that need wrapping
 //! plus the `init` replacements for `useCallback`.
 //!
-//! Mirrors `collectInitTargets` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. For every
-//! variable whose first def is `Variable` with an `init` of type
-//! `CallExpression`, it:
+//! For every variable whose first def is `Variable` with an `init`
+//! of type `CallExpression`, it:
 //! 1. Checks the call resolves to a tracked hook import via
 //!    [`find_hook_callee_kind`].
 //! 2. Locates the inner function scope via

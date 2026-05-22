@@ -1,18 +1,16 @@
 //! Emits inline `style` rows for highlighted nodes plus a single
 //! `linkStyle` row for any edges that touch them.
 //!
-//! Mirrors `ts/src/emitter/mermaid/render-highlight.ts`. Inline
-//! `style` wins against `classDef` declarations applied via `class`,
-//! which is why we don't try to define a "highlightNode" class -- a
-//! class would lose to anything mermaid applied earlier in the
-//! diagram source.
+//! Inline `style` wins against `classDef` declarations applied via
+//! `class`, which is why we don't try to define a "highlightNode"
+//! class -- a class would lose to anything mermaid applied earlier
+//! in the diagram source.
 //!
-//! `highlight_ids` is a slice (not a `HashSet`) because the iteration
-//! order of the emitted `style` rows must reproduce the TS port
-//! byte-for-byte. The TS port iterates a `ReadonlySet<string>` that
-//! was populated by `collectHighlightIds` in element-tree walk order;
-//! Rust's `HashSet` has unspecified iteration order, so we keep the
-//! id list ordered upstream and pass it through unchanged.
+//! `highlight_ids` is a slice (not a `HashSet`) because the emitted
+//! `style` rows must be in element-tree walk order. The upstream
+//! `collect_highlight_ids` already produces ids in that order;
+//! `HashSet` has unspecified iteration order so it cannot be used
+//! to carry them through.
 
 use crate::theme::ColorTheme;
 

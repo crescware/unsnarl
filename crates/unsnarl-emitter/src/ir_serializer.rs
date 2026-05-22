@@ -1,6 +1,4 @@
 //! `IRSerializer` trait: produces a `SerializedIR` from analyzed source.
-//!
-//! Mirrors `IRSerializer` in `ts/src/pipeline/serialize/ir-serializer.ts`.
 
 use unsnarl_ir::serialized::SerializedIR;
 

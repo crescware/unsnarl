@@ -1,5 +1,4 @@
-//! Sibling tests for `declare_implicit_arguments.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/declare/declare-implicit-arguments.test.ts`.
+//! Sibling tests for `declare_implicit_arguments.rs`.
 
 use unsnarl_ir::Language;
 

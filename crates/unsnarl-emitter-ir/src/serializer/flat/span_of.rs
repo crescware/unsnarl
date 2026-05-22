@@ -1,8 +1,7 @@
 //! `AstNode` / `AstIdentifier` → `Span` (line / column / offset).
 //!
-//! Mirrors `spanOf` in `ts/src/serializer/flat/span-of.ts`. The TS
-//! source falls back to `node.start ?? 0`; the Rust IR span is always
-//! present so we read it directly.
+//! The IR span is always present, so this reads `span.start`
+//! directly.
 
 use unsnarl_ir::primitive::{span_from_offset, AstIdentifier, AstNode, Span};
 

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/build-scope.ts`.
-//!
 //! Per-scope render dispatcher: if the scope is gated below the
 //! depth ceiling its subtree is recorded as collapsed and the
 //! visible anchor (owner variable or a BeyondDepth stub) is

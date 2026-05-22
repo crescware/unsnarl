@@ -1,5 +1,4 @@
-//! Sibling tests for `enter_switch_case.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/enter-switch-case.test.ts`.
+//! Sibling tests for `enter_switch_case.rs`.
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;

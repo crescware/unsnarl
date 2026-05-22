@@ -1,6 +1,5 @@
 //! Sibling tests for [`while_test_node_id`], [`do_while_test_node_id`],
-//! and [`for_test_node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/loop-test-node-id.test.ts`.
+//! and [`for_test_node_id`].
 
 use super::{do_while_test_node_id, for_test_node_id, while_test_node_id};
 

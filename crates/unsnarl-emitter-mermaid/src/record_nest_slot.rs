@@ -1,11 +1,11 @@
 //! Appends a subgraph id to its 1-based depth's palette slot in
 //! `RenderState.nest_class_map`.
 //!
-//! Mirrors `ts/src/emitter/mermaid/record-nest-slot.ts`. Idempotent
-//! on empty palettes (no-op when the theme defines an empty nest
-//! palette, which is invalid but defended against to keep the
-//! renderer robust). Used by both the function-wrapper and the
-//! plain-subgraph paths so they share the same depth bookkeeping.
+//! Idempotent on empty palettes (no-op when the theme defines an
+//! empty nest palette, which is invalid but defended against to
+//! keep the renderer robust). Used by both the function-wrapper
+//! and the plain-subgraph paths so they share the same depth
+//! bookkeeping.
 
 use crate::render_state::RenderState;
 use crate::theme::nest_palette_index;

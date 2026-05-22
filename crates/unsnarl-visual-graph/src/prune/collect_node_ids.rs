@@ -1,6 +1,4 @@
 //! Collect every node id (subgraph ids excluded) in document order.
-//!
-//! Mirrors `ts/src/visual-graph/prune/collect-node-ids.ts`.
 
 use crate::visual_element::VisualElement;
 

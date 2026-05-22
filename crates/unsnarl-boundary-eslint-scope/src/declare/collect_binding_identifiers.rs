@@ -1,18 +1,11 @@
 //! Flatten a `BindingPattern` into the list of bound identifiers.
 //!
-//! Mirrors `collectBindingIdentifiers` in
-//! `ts/src/boundary/eslint-scope/declare/collect-binding-identifiers.ts`.
-//! The TS port walks an unnormalised `AstNode` and switches on
-//! `node.type` strings; the Rust port walks the typed
-//! `oxc_ast::ast::BindingPattern` enum directly. The recursion shape
-//! is identical: identifiers are pushed in-order, and
-//! `ObjectPattern` / `ArrayPattern` / `AssignmentPattern` /
-//! `RestElement` recurse into their sub-patterns. The TS implementation
-//! has a `RestElement` arm at the top level even though
-//! `RestElement` is not a `BindingPattern` shape in the TS AST; the
-//! Rust port handles rest elements as part of the `ObjectPattern` /
-//! `ArrayPattern` arms, where they appear in the oxc_ast types
-//! (`ObjectPattern.rest` / `ArrayPattern.rest`).
+//! Walks the typed `oxc_ast::ast::BindingPattern` enum directly:
+//! identifiers are pushed in-order, and `ObjectPattern` /
+//! `ArrayPattern` / `AssignmentPattern` recurse into their
+//! sub-patterns. Rest elements are reached through the
+//! `ObjectPattern.rest` / `ArrayPattern.rest` slots, not as a
+//! top-level pattern arm.
 
 use oxc_ast::ast::BindingPattern;
 

@@ -1,11 +1,10 @@
-//! Sibling tests for `analyze.rs`, mirroring the entry point of the
+//! Sibling tests for `analyze.rs`, the entry point of the
 //! eslint-scope-compatible scope-builder.
 //!
 //! Per-feature observations live in the sibling `*_test.rs` files
 //! next to each implementation module (`enter_*`, `classify/*`,
 //! `hoisting/*`, etc.). This file keeps the entry-level smoke and
-//! shape tests plus the integration cases ported from
-//! `ts/src/boundary/eslint-scope/eslint-compat.test.ts`.
+//! shape tests plus the eslint-compatibility integration cases.
 
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::primitive::SourceLine;
@@ -57,11 +56,11 @@ fn module_source_seeds_module_scope_with_no_upper() {
 
 #[test]
 fn root_block_span_skips_leading_comments() {
-    // The npm `oxc-parser` package the TS pipeline consumes reports
-    // `Program.start` at the first body / directive / hashbang offset
-    // (skipping leading comments); the Rust `oxc_parser` crate emits
-    // `Program.span.start = 0`. `analyze` is responsible for
-    // normalising the divergence onto the TS-side shape.
+    // The IR contract spells `Program.start` as the first body /
+    // directive / hashbang offset (i.e. leading comments are
+    // skipped). The Rust `oxc_parser` crate emits
+    // `Program.span.start = 0` for the same input; `analyze` is
+    // responsible for normalising onto the contract shape.
     //
     // Source layout: `// leading comment` is bytes 0..18, the `\n`
     // sits at byte 18, and `const x = 1;` starts at byte 19, which is
@@ -122,12 +121,11 @@ fn script_source_seeds_global_scope() {
     assert!(matches!(global.r#type, ScopeType::Global));
 }
 
-// Integration cases ported from
-// `ts/src/boundary/eslint-scope/eslint-compat.test.ts`. The TS file
-// drives `runAnalysis(parsed)`; the Rust counterpart drives
-// [`analyze`] through the `analyze_source*` helpers. Each case
-// observes the resulting scope tree / variable / definition shape and
-// asserts the same invariants the TS test asserts on `Scope` / `Variable`.
+// Integration cases pinning eslint-scope compatibility. Drives
+// [`analyze`] through the `analyze_source*` helpers; each case
+// observes the resulting scope tree / variable / definition shape
+// and asserts the invariants eslint-scope itself asserts on
+// `Scope` / `Variable`.
 
 #[test]
 fn module_scope_collects_const_and_let_as_variable_defs() {

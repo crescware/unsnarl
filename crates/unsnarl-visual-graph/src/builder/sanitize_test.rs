@@ -1,5 +1,4 @@
-//! Sibling tests for [`sanitize`]. Cases mirror
-//! `ts/src/visual-graph/builder/sanitize.test.ts`.
+//! Sibling tests for [`sanitize`].
 
 use super::sanitize;
 

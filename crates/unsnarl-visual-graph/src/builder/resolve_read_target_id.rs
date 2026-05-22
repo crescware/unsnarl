@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/resolve-read-target-id.ts`.
-//!
 //! Pick the destination node id for a read edge:
 //!
 //! - When the reference participates in an ExpressionStatement

@@ -1,8 +1,5 @@
-//! `FlatSerializer`: TS-compatible `IRSerializer` implementation that
-//! emits string-id-based scopes, variables, and references.
-//!
-//! Mirrors `FlatSerializer` in
-//! `ts/src/serializer/flat/flat-serializer.ts`.
+//! `FlatSerializer`: `IRSerializer` implementation that emits
+//! string-id-based scopes, variables, and references.
 
 use std::collections::HashMap;
 

@@ -276,10 +276,11 @@ fn reports_unrecognized_token() {
     }
 }
 
-// `u32::from_str` accepts a leading `+`, so without an explicit byte-level
-// guard `+5`, `+5-3`, `+5:foo` would all be silently accepted as line / range
-// / line-name forms. The TS grammar pins them to `^[0-9]+$`, so pin the Rust
-// port the same way.
+// `u32::from_str` accepts a leading `+`, so without an explicit
+// byte-level guard `+5`, `+5-3`, `+5:foo` would all be silently
+// accepted as line / range / line-name forms. The endpoint grammar
+// pins them to `^[0-9]+$`, so reject any byte that is not an ASCII
+// digit before delegating to `u32::from_str`.
 #[test]
 fn rejects_leading_plus_in_numeric_forms() {
     for input in ["+5", "+5:foo", "+5-3", "+5:", "+5-"] {

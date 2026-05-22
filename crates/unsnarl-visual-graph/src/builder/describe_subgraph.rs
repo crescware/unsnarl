@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/describe-subgraph.ts`.
-//!
 //! Constructs the `VisualSubgraph` value for a given scope.
 //! Function / Class take the "owned" path (kind early, elements
 //! last); Return / Throw share that shape but are created by the

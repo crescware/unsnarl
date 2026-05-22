@@ -1,16 +1,12 @@
 //! Hoist each binding inside a `var` / `let` / `const` declaration.
 //!
-//! Mirrors `handleVariableDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-variable-declaration.ts`.
-//!
 //! Behaviour:
 //!
-//! 1. Bail out for anything other than `var` / `let` / `const`. The
-//!    TS port silently ignores `using` / `await using`; the Rust port
-//!    matches that by falling through the `_` arm.
+//! 1. Bail out for anything other than `var` / `let` / `const`;
+//!    `using` / `await using` declarations fall through the `_` arm.
 //! 2. For `var`, emit a `var-detected` diagnostic so downstream
 //!    consumers can render the offending site as a node-only entry
-//!    (no edges) — the same UX choice the TS layer made.
+//!    (no edges).
 //! 3. The hoisting target depends on the kind: `var` hoists to the
 //!    enclosing function / module / global scope
 //!    (`scope.variable_scope`), `let` / `const` bind in the lexical

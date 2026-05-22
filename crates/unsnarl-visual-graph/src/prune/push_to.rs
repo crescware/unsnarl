@@ -1,6 +1,4 @@
 //! Append-or-create helper for `Map<String, Vec<String>>`.
-//!
-//! Mirrors `ts/src/visual-graph/prune/push-to.ts`.
 
 use std::collections::HashMap;
 

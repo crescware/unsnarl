@@ -1,10 +1,8 @@
 //! Per-AST-shape classify helpers for identifier references.
 //!
-//! Mirrors `ts/src/boundary/eslint-scope/classify/`. The TS layer
-//! switches on `node.type` strings; the Rust port matches on
-//! `AstKind<'a>` variants directly, so all helpers consume the
-//! structural form that `classify-identifier` and friends originally
-//! read off the unnormalised `NodeLike`.
+//! The helpers match on `AstKind<'a>` variants directly to operate
+//! on the structural AST form rather than on stringly-typed `type`
+//! tags.
 
 pub(crate) mod classify_identifier;
 pub(crate) mod classify_ordinary_reference;

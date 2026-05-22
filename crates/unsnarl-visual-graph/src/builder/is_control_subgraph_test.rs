@@ -1,5 +1,4 @@
-//! Sibling tests for [`is_control_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/is-control-subgraph.test.ts`.
+//! Sibling tests for [`is_control_subgraph`].
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
@@ -93,7 +92,7 @@ fn block_in_do_while_body_is_control_subgraph() {
 #[test]
 fn plain_block_without_block_context_is_control_subgraph() {
     // A bare block scope (no `blockContext`) still renders as the
-    // generic 'block' subgraph in both TS and Rust.
+    // generic 'block' subgraph.
     let mut scope = base_serialized_scope("s");
     scope.r#type = ScopeType::Block;
     assert!(is_control_subgraph(&scope));

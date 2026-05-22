@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/enclosing-function-var.ts`.
-
 use std::collections::HashMap;
 
 use unsnarl_ir::serialized::SerializedScope;

@@ -1,13 +1,11 @@
 //! Pipeline / CLI carrier for `-H` (no value) vs `-H <queries>` modes.
 //!
-//! Mirrors `ts/src/pipeline/highlight/highlight-run-options.ts`. The TS
-//! type lives under `pipeline/highlight/`, but in the Rust workspace
-//! the emitter crates (mermaid, markdown) need to reach it through
-//! [`crate::EmitOptions`] equivalents, so the canonical home is here
-//! alongside the other small data carriers
-//! (`VisualGraphPruning`, `RootQueryResolution`). `unsnarl::pipeline::highlight`
-//! re-exports it so the TS-path-driven imports remain spelled the same
-//! way at the pipeline boundary.
+//! The canonical home is here alongside the other small data
+//! carriers (`VisualGraphPruning`, `RootQueryResolution`) so the
+//! emitter crates (mermaid, markdown) can reach it through
+//! [`crate::EmitOptions`] equivalents.
+//! `unsnarl::pipeline::highlight` re-exports it for callers that
+//! want a pipeline-side import path.
 //!
 //! `Roots` reuses the queries from the `pruning.roots` set (so
 //! `-H` alone follows whatever `-r` selects). `Queries` carries its

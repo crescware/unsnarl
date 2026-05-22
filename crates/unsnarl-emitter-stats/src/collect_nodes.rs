@@ -1,9 +1,6 @@
 //! Walks an element tree and collects every [`VisualNode`] in
-//! preorder.
-//!
-//! Mirrors `ts/src/emitter/stats/collect-nodes.ts`. The walk order
-//! matches the TS recursion so the downstream line-only sort can
-//! lean on a stable sort to preserve same-line source order.
+//! preorder so the downstream line-only sort can lean on a stable
+//! sort to preserve same-line source order.
 
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_node::VisualNode;

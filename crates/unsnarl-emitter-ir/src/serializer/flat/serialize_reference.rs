@@ -1,7 +1,4 @@
 //! Serialize a `ReferenceData` into a `SerializedReference`.
-//!
-//! Mirrors `serializeReference` in
-//! `ts/src/serializer/flat/serialize-reference.ts`.
 
 use std::collections::HashMap;
 

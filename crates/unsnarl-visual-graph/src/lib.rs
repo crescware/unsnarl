@@ -3,18 +3,13 @@
 //! The data types are the on-disk shape of `-f json`: a `version` /
 //! `source` / `direction` header, an `elements` tree of nodes and
 //! subgraphs, an `edges` list, and pruning side-bands. The
-//! [`build_visual_graph`] entry point (when populated) walks an
-//! analyzed `SerializedIR` and produces a `VisualGraph` ready to
-//! serialize via `serde_json`.
+//! [`build_visual_graph`] entry point walks an analyzed
+//! `SerializedIR` and produces a `VisualGraph` ready to serialize via
+//! `serde_json`.
 //!
-//! Step status (per the #108 plan):
-//!
-//! - Step 13: builder + base graph (this crate's primary focus).
-//! - Step 17: prune. The `boundary_edge_direction` module is
-//!   already hosted here so [`VisualBoundaryEdge`] does not have a
-//!   forward dependency on a prune module that does not yet exist.
-//! - Step 18: depth control inside the builder.
-//! - Step 19: highlight.
+//! The `boundary_edge_direction` module lives at the crate root
+//! rather than under `prune/` so [`VisualBoundaryEdge`] does not
+//! create a base-level forward dependency on the prune submodule.
 
 pub mod boundary_edge_direction;
 pub mod builder;

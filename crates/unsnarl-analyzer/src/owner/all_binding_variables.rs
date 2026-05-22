@@ -1,16 +1,14 @@
 //! Resolve a binding pattern (or assignment-target pattern) against
 //! the live scope chain.
 //!
-//! Mirrors `ts/src/analyzer/owner/all-binding-variables.ts`. The TS
-//! port takes an unnormalised `AstNode` and dispatches dynamically;
-//! the Rust port splits along the static type:
+//! The two shapes are split along the static type:
 //!
 //! * [`all_binding_variables`] for `BindingPattern` (the
 //!   `VariableDeclarator.id` shape).
 //! * [`assignment_target_variables`] for `AssignmentTarget` (the
 //!   `AssignmentExpression.left` shape, which oxc_ast spells with a
-//!   different enum even though the TS code treats it as the same
-//!   pattern grammar).
+//!   different enum even though the underlying pattern grammar is
+//!   the same).
 //!
 //! Both helpers collect identifier names from the pattern, resolve
 //! each name through [`resolve_in_scope_chain`], and dedupe the
@@ -62,12 +60,11 @@ pub fn assignment_target_variables(
 /// Walk every identifier reachable from an `AssignmentTarget`,
 /// invoking `f` once per occurrence in source order.
 ///
-/// The traversal mirrors the TS `findReferenceOwners /
-/// allBindingVariables` shape: identifiers nested under
-/// destructuring patterns, defaulted slots, rest targets and
-/// shorthand property bindings are all visited. Member expressions
-/// and TS-only wrappers in target position contribute no bindings
-/// and are skipped.
+/// Identifiers nested under destructuring patterns, defaulted slots,
+/// rest targets and shorthand property bindings are all visited.
+/// Member expressions and TypeScript-only wrappers (`as`, `satisfies`,
+/// `!`, `<T>` casts) in target position contribute no bindings and
+/// are skipped.
 ///
 /// `oxc_ast` spells the identifier slot two different ways: the
 /// `AssignmentTargetIdentifier` variants wrap a

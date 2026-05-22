@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/visible-ancestor-subgraph.ts`.
-//!
 //! Walk `scope.upper` upward until a surviving subgraph is found
 //! and return its handle. Collapsed ancestors are skipped (they
 //! never recorded a subgraph in `state.subgraph_by_scope`). Returns

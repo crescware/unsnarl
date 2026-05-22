@@ -1,12 +1,11 @@
 //! Side-table row for `VariableData`.
 //!
-//! Field order matches the source interface (`isUnused`). The
-//! pipeline does not serialize this struct directly; the flat
-//! serializer reads `is_unused` to decide whether to filter the
-//! variable out of `SerializedVariable` emission. The `Serialize`
-//! derive is in place so the on-disk field name matches the TS
-//! shape and the field-order invariant is checked by the sibling
-//! test.
+//! Field order is fixed (`isUnused`). The pipeline does not
+//! serialise this struct directly; the flat serialiser reads
+//! `is_unused` to decide whether to filter the variable out of
+//! `SerializedVariable` emission. The `Serialize` derive is in
+//! place so the on-disk field name follows the IR contract and the
+//! field-order invariant is checked by the sibling test.
 
 use serde::Serialize;
 

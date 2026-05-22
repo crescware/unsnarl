@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/set-predecessor-of.ts`.
-
 use std::collections::HashMap;
 
 use unsnarl_ir::serialized::SerializedScope;

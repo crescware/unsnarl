@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/state-ref-id.ts`.
-//!
 //! Resolve the *state* of `varId` at the moment ref `refId` reads
 //! it: a Write op's node id when one exists for the ref itself,
 //! the most recent preceding write otherwise, or the variable

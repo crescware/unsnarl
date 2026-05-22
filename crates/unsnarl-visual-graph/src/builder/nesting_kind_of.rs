@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/nesting-kind-of.ts`.
-//!
 //! Categorises a scope by the `NestingKind` it counts against —
 //! the bucket the depth control machinery uses to decide whether
 //! the scope collapses past the depth threshold.

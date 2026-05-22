@@ -1,9 +1,8 @@
 //! `VisualGraphPruning`: summary block that pruning attaches to
 //! `VisualGraph.pruning`.
 //!
-//! Mirrors `ts/src/visual-graph/visual-graph-pruning.ts`. Step 13
-//! never populates this — `pruning` is always `null` in the base
-//! graph. Pruning fills it in Step 17.
+//! The base visual-graph build leaves `pruning` at `None`; only the
+//! pruning pass populates it.
 
 use serde::Serialize;
 

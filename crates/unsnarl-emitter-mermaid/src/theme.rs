@@ -1,8 +1,7 @@
 //! Color themes for the mermaid emitter.
 //!
-//! Mirrors `ts/src/emitter/mermaid/theme/`. The two built-in themes
-//! ([`DARK_THEME`], [`LIGHT_THEME`]) cover the
-//! `--color-theme dark` / `--color-theme light` CLI choices; the
+//! The two built-in themes ([`DARK_THEME`], [`LIGHT_THEME`]) cover
+//! the `--color-theme dark` / `--color-theme light` CLI choices; the
 //! mapping from CLI value to theme lives in the `unsnarl` crate so
 //! this crate does not depend on the CLI layer.
 

@@ -1,10 +1,7 @@
 //! Walker that fills the per-entity side-table annotations after the
 //! eslint-scope-compatible scope build.
 //!
-//! Mirrors `buildAnalysisVisitor` in
-//! `ts/src/pipeline/analyze/build-analysis-visitor.ts`. The TS port plugs
-//! into the scope-build walk via `AnalysisVisitor` callbacks; the Rust
-//! port runs a separate `oxc_ast_visit::Visit` pass after `analyze`
+//! Runs a separate `oxc_ast_visit::Visit` pass after `analyze`
 //! returns because several analyzer functions need full `AstKind`
 //! handles (`expression_statement_container`, `find_reference_owners`,
 //! `case_falls_through`, `case_exits_function`, `format_case_test`) or
@@ -238,21 +235,16 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                 match kind {
                     AstKind::AssignmentExpression(ae) => {
                         // For AssignmentExpression targets, owners must
-                        // mirror what TS sees at the moment the inner
-                        // reference fires inline with scope-build. TS
-                        // calls `resolveInScopeChain(scope, name)` for
-                        // each identifier in the target, which by
-                        // construction returns the same binding as the
-                        // reference's own `.resolved` field (both
-                        // calls use the same scope.set state). The
-                        // Rust pipeline runs analysis as a separate
-                        // pass after scope.set is fully populated, so
-                        // a fresh `resolve_in_scope_chain` call here
-                        // would also pick up `var` bindings hoisted
-                        // from later sibling blocks that weren't
-                        // visible at binding time, diverging from TS.
-                        // Reuse each identifier's reference.resolved
-                        // value instead.
+                        // resolve as they would inline with scope-build,
+                        // i.e. against `scope.set` at the moment the
+                        // inner reference fires. Analysis runs as a
+                        // separate pass after `scope.set` is fully
+                        // populated, so a fresh `resolve_in_scope_chain`
+                        // call here would pick up `var` bindings
+                        // hoisted from later sibling blocks that
+                        // weren't visible at binding time. Reuse each
+                        // identifier's `reference.resolved` value
+                        // instead.
                         let mut out = Vec::new();
                         walk_assignment_target_identifiers(&ae.left, &mut |id| {
                             let Some(&ident_ref_id) =
@@ -329,16 +321,15 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 
 impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
     fn visit_program(&mut self, it: &Program<'a>) {
-        // The TS pipeline never assigns a `ScopeAnnotation` to the
-        // global/module scope -- `onScope` is only invoked from the
-        // boundary's per-block `enter-*` helpers, and the global scope
-        // is constructed by the `ScopeManager` ctor without going
-        // through any of them. Consumers read the default zero-valued
-        // annotation back via `Annotations.ofScope` (the same shape
+        // The global / module scope must not carry a `ScopeAnnotation`:
+        // `on_scope` is only invoked from the boundary's per-block
+        // `enter_*` helpers, and the global scope is constructed by
+        // the scope manager without going through any of them.
+        // Consumers read the default zero-valued annotation back via
+        // `Annotations::of_scope` (the same shape
         // `AnnotationsImpl::empty_scope_annotation` returns here).
-        // Mirror that: walk the program tree to populate child scopes
-        // and reference rows, but do NOT call `fire_scope` on the
-        // Program node.
+        // Walk the program tree to populate child scopes and reference
+        // rows, but do NOT call `fire_scope` on the Program node.
         let kind = AstKind::Program(self.alloc(it));
         self.push_path(kind, None);
         self.visit_span(&it.span);
@@ -414,12 +405,12 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         if it.expression {
             // Expression-body arrow: oxc wraps the expression in a
             // synthetic `FunctionBody { [ExpressionStatement(expr)] }`,
-            // but the TS pipeline (npm `oxc-parser`) ESTree-fies it
-            // back to `ArrowFunctionExpression.body: Expression`.
-            // Walk the inner expression directly so subsequent scope /
+            // but the IR expects the ESTree shape
+            // `ArrowFunctionExpression.body: Expression`. Walk the
+            // inner expression directly so subsequent scope /
             // reference rows see `parent = ArrowFunctionExpression,
-            // key = "body"` (matching TS) instead of inheriting the
-            // synthetic `ExpressionStatement.expression` slot.
+            // key = "body"` instead of inheriting the synthetic
+            // `ExpressionStatement.expression` slot.
             if let Some(oxc_ast::ast::Statement::ExpressionStatement(es)) =
                 it.body.statements.first()
             {
@@ -447,10 +438,10 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         // the current slot label. Without this override the inner
         // declaration (class / function / variable) inherits whatever
         // the surrounding statement list pushed -- typically `"body"`
-        // from `Program.body` -- which surfaces in the IR as
+        // from `Program.body` -- and would surface in the IR as
         // `{ parentType: "ExportNamedDeclaration", key: "body" }`
-        // instead of the TS reference's `key: "declaration"`. Match
-        // npm `oxc-parser`'s visitorKey list
+        // instead of the expected `key: "declaration"`. Push the
+        // ESTree visitorKey list
         // `["declaration", "specifiers", "source", "attributes"]`.
         let kind = AstKind::ExportNamedDeclaration(self.alloc(it));
         self.push_path(kind, None);
@@ -484,9 +475,9 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         // `value` (e.g. `{ key: function () {} }` inside a call
         // argument) inherits whatever surrounding label was in scope
         // -- frequently `"arguments"` from an enclosing
-        // `CallExpression.arguments` -- and surfaces in the IR as
+        // `CallExpression.arguments` -- and would surface in the IR as
         // `{ parentType: "Property", key: "arguments" }` instead of
-        // the TS reference's `key: "value"`.
+        // the expected `key: "value"`.
         let kind = AstKind::ObjectProperty(self.alloc(it));
         self.push_path(kind, None);
         self.visit_span(&it.span);
@@ -505,12 +496,12 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         // pushing the slot label `"declaration"` onto `key_stack`, so
         // the declaration's child scope (a function / class scope)
         // inherits `"body"` from the surrounding `Program.body` slot
-        // and surfaces in the IR as
+        // and would surface in the IR as
         // `{ parentType: "ExportDefaultDeclaration", key: "body" }`
-        // instead of the TS reference's `key: "declaration"`. The
+        // instead of the expected `key: "declaration"`. The
         // `exported` field is metadata only (always the literal name
-        // "default" for a default export) and is not walked by the
-        // npm `oxc-parser`'s visitorKeys list either.
+        // "default" for a default export) and is not in the ESTree
+        // visitorKey list either.
         let kind = AstKind::ExportDefaultDeclaration(self.alloc(it));
         self.push_path(kind, None);
         self.visit_span(&it.span);
@@ -840,9 +831,9 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         // BlockStatement nested directly under a LabeledStatement
         // body inherits whatever key was in scope on entry --
         // typically `"consequent"` from an outer IfStatement, even
-        // though the TS AST spells this slot `"body"`. The IR's
-        // `scope.blockContext.key` must mirror the TS slot label, so
-        // override the visit explicitly.
+        // though the ESTree slot label is `"body"`. The IR's
+        // `scope.blockContext.key` must carry the ESTree slot label,
+        // so override the visit explicitly.
         let kind = AstKind::LabeledStatement(self.alloc(it));
         self.push_path(kind, None);
         self.visit_span(&it.span);
@@ -858,7 +849,7 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         // auto-generated walker leaves the surrounding key in place
         // (frequently `"argument"` from an enclosing
         // ReturnStatement / ThrowStatement / UpdateExpression),
-        // while the TS AST spells the child slot `"expressions"`.
+        // while the ESTree slot label is `"expressions"`.
         let kind = AstKind::SequenceExpression(self.alloc(it));
         self.push_path(kind, None);
         self.visit_span(&it.span);
@@ -958,7 +949,7 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
 
 /// oxc represents the body of an expression-arrow (`() => expr`) as
 /// a `FunctionBody { statements: [ExpressionStatement { expression:
-/// expr }] }` synthetic wrapper, while the TS npm `oxc-parser` keeps
+/// expr }] }` synthetic wrapper, while the ESTree shape keeps
 /// `ArrowFunctionExpression.body = Expression` directly. The IR
 /// emitter must NOT report that synthetic ExpressionStatement as the
 /// reference's `expressionStatementContainer`, so flag it here based

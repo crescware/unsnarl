@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/build-visual-graph.ts`.
-//!
 //! Entry point for the visual-graph build. Constructs the
 //! `BuilderContext` side tables off the analysed `SerializedIR`,
 //! walks the module / global root scope through `build_scope`,
@@ -263,11 +261,10 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
 }
 
 fn emit_let_chain_edges(state: &mut BuildState, ctx: &BuilderContext<'_>) {
-    // TS iterates `Map.values()` in insertion order (mirrors
-    // `ir.variables` order, which is the source-order seed for
-    // `write_ops_by_variable`). Rust's `HashMap` has no such
-    // guarantee; walking `ir.variables` here keeps the rendered
-    // edge order stable against the TS baseline.
+    // `write_ops_by_variable` is seeded in `ir.variables` source
+    // order. `HashMap` iteration order is not stable; walking
+    // `ir.variables` here keeps the rendered edge order stable
+    // against the IR parity baselines.
     for v in &ctx.ir.variables {
         let Some(ops) = ctx.write_ops_by_variable.get(v.id.value()) else {
             continue;

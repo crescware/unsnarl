@@ -1,10 +1,8 @@
 //! Decide which hook-import variables to drop.
 //!
-//! Mirrors `collectVarsToRemove` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. A hook import
-//! (`useCallback` / `useMemo`) is dropped iff every reference to
-//! it was inside a wrapped binding's body, leaving no surviving
-//! references after `collect_refs_to_remove` runs.
+//! A hook import (`useCallback` / `useMemo`) is dropped iff every
+//! reference to it was inside a wrapped binding's body, leaving no
+//! surviving references after `collect_refs_to_remove` runs.
 
 use std::collections::{HashMap, HashSet};
 

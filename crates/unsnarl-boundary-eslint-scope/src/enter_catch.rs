@@ -1,13 +1,10 @@
 //! Push a `Catch` scope, declare the caught parameter, and hoist
 //! the catch body's declarations.
 //!
-//! Mirrors `enterCatch` in
-//! `ts/src/boundary/eslint-scope/enter-catch.ts`. The TS port reads
-//! `node["param"]` and walks its bindings; the Rust port reads
-//! `CatchClause.param: Option<CatchParameter>` and walks
-//! `CatchParameter.pattern: BindingPattern<'_>`. The body of the
-//! catch is `Box<BlockStatement>` in oxc (vs. plain `BlockStatement`
-//! in TS), so we hoist `body.body`.
+//! Reads `CatchClause.param: Option<CatchParameter>` and walks
+//! `CatchParameter.pattern: BindingPattern<'_>`. The body is a
+//! `Box<BlockStatement>` in oxc, so the hoisting pass walks
+//! `body.body`.
 
 use oxc_ast::ast::CatchClause;
 

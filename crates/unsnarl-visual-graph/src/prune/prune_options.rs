@@ -1,8 +1,7 @@
 //! Inputs and outputs for [`prune_visual_graph`](super::prune_visual_graph).
 //!
-//! Mirrors `ts/src/visual-graph/prune/prune-options.ts`. `PruneOptions`
-//! carries the resolved (post-`resolve_ambiguous_queries`) query list
-//! plus the descendants/ancestors radii from the CLI's
+//! `PruneOptions` carries the resolved (post-`resolve_ambiguous_queries`)
+//! query list plus the descendants / ancestors radii from the CLI's
 //! `-A` / `-B` / `-C` flags.
 
 use unsnarl_root_query::ParsedRootQuery;
@@ -29,10 +28,10 @@ pub struct PruneResult {
     /// BFS descendants/ancestors are NOT included. Returned in
     /// `iterate_visual_nodes` walk order with duplicates removed so
     /// downstream consumers (notably `-H` in roots mode, which feeds
-    /// the mermaid renderer's `style` block) reproduce the TS port's
-    /// `ReadonlySet<string>` insertion-order iteration. Exposed so
-    /// `-H` in roots mode can paint the same id list the user
-    /// pinpointed via `-r`, inheriting the same use-site exclusions
-    /// that pruning applies on a bare name query.
+    /// the mermaid renderer's `style` block) iterate in a stable
+    /// insertion order. Exposed so `-H` in roots mode can paint the
+    /// same id list the user pinpointed via `-r`, inheriting the
+    /// same use-site exclusions that pruning applies on a bare name
+    /// query.
     pub root_ids: Vec<String>,
 }

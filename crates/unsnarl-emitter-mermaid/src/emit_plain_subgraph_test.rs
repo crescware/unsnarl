@@ -1,11 +1,7 @@
-//! Mirrors `ts/src/emitter/mermaid/emit-plain-subgraph.test.ts`.
-//!
-//! The TS suite uses a per-test mock strategy to assert the
-//! placeholder behavior. The Rust port has only two concrete
-//! `MermaidStrategy` variants (Dagre / Elk) and no open extension
-//! point, so the placeholder-emission tests pin against `Elk` (which
-//! always emits a placeholder) and `Dagre` (which always returns
-//! `None`).
+//! `MermaidStrategy` has two concrete variants (Dagre / Elk) and no
+//! open extension point, so the placeholder-emission tests pin
+//! against `Elk` (which always emits a placeholder) and `Dagre`
+//! (which always returns `None`).
 
 use unsnarl_visual_graph::direction::Direction;
 use unsnarl_visual_graph::visual_element::VisualElement;

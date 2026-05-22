@@ -1,5 +1,4 @@
-//! Sibling tests for `handle_identifier_reference.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/handle-identifier-reference.test.ts`.
+//! Sibling tests for `handle_identifier_reference.rs`.
 
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;

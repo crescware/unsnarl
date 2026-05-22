@@ -1,4 +1,3 @@
-//! Mirrors `ts/src/serializer/flat/serialize-expression-statement-head.test.ts`.
 //! Pins the rules:
 //!   - Pure-recursive shapes (Identifier / Member / Call / New /
 //!     Await) round-trip verbatim.

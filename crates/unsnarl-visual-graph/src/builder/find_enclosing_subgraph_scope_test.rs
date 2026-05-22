@@ -1,5 +1,4 @@
-//! Sibling tests for [`find_enclosing_subgraph_scope`]. Cases mirror
-//! `ts/src/visual-graph/builder/find-enclosing-subgraph-scope.test.ts`.
+//! Sibling tests for [`find_enclosing_subgraph_scope`].
 
 use std::collections::HashMap;
 

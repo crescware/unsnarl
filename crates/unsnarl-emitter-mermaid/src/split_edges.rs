@@ -1,8 +1,7 @@
 //! Splits the edge list into the body bucket and the import bucket.
 //!
-//! Mirrors `ts/src/emitter/mermaid/split-edges.ts`. The TS port
-//! returns an object with two arrays; the Rust port returns a
-//! tuple so callers destructure with the same one-line pattern.
+//! Returns a `(body, imports)` tuple so callers destructure with a
+//! one-line pattern.
 
 use std::collections::HashSet;
 

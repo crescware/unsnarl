@@ -67,10 +67,10 @@ fn assignment_target_owners_match_reference_resolved_when_var_hoisted_from_later
     // the analysis pass runs the boundary has already hoisted every
     // `var` into the function scope's `set`, so the call returns the
     // local binding -- but at the moment the corresponding reference
-    // fires on the TS side (inline with scope-build), only the
-    // hoistings encountered SO FAR are visible, so TS resolves to the
-    // outer (implicit-global) binding instead. The Rust analyzer must
-    // mirror what TS sees at reference-binding time, which is exactly
+    // fires inline with scope-build, only the hoistings encountered
+    // SO FAR are visible, and the reference resolves to the outer
+    // (implicit-global) binding instead. The analyzer must report
+    // what was visible at reference-binding time, which is exactly
     // the value already stored on the reference's `.resolved` field.
     //
     // In the input below, `y = 1` at the top of `f` writes through
@@ -120,8 +120,8 @@ fn block_inside_labeled_statement_reports_body_slot_key() {
     // LabeledStatement, the block scope's `blockContext.key` used to
     // come out as `"consequent"` (the slot label inherited from
     // whatever ambient parent was on the visitor's key stack --
-    // typically an enclosing IfStatement). The TS AST spells this
-    // slot `"body"` and the IR must match.
+    // typically an enclosing IfStatement). The ESTree slot label is
+    // `"body"` and the IR must match.
     let source = "if (true) outer: { let x = 1; }\n";
     let allocator = Allocator::default();
     let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
@@ -146,7 +146,7 @@ fn block_inside_labeled_statement_reports_body_slot_key() {
     assert_eq!(bc["parentType"], "LabeledStatement");
     assert_eq!(
         bc["key"], "body",
-        "the block's blockContext.key must mirror the TS AST slot \
+        "the block's blockContext.key must carry the ESTree slot \
          label `body`, not the auto-walker's `consequent` carryover"
     );
 }
@@ -157,7 +157,7 @@ fn class_inside_sequence_expression_reports_expressions_slot_key() {
     // comma-separated SequenceExpression, the class scope's
     // `blockContext.key` used to come out as `"argument"` (carried
     // over from an enclosing argument-shaped parent in the walker's
-    // key stack). The TS AST spells the slot `"expressions"`.
+    // key stack). The ESTree slot label is `"expressions"`.
     let source = "(class A {}, class B {});\n";
     let allocator = Allocator::default();
     let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
@@ -182,7 +182,7 @@ fn class_inside_sequence_expression_reports_expressions_slot_key() {
     assert_eq!(bc["parentType"], "SequenceExpression");
     assert_eq!(
         bc["key"], "expressions",
-        "the class's blockContext.key must mirror the TS AST slot \
+        "the class's blockContext.key must carry the ESTree slot \
          label `expressions`, not the auto-walker's `argument` carryover"
     );
 }
@@ -194,7 +194,7 @@ fn export_default_declaration_routes_declaration_slot_key_into_block_context() {
     // `blockContext.key` used to come out as `"body"` (carried over
     // from the surrounding `Program.body` statement-list slot)
     // because oxc's auto-generated `walk_export_default_declaration`
-    // does not push a per-child key. The TS AST spells this slot
+    // does not push a per-child key. The ESTree slot label is
     // `"declaration"` and the IR must match -- same family of bug
     // as `export class Foo {}` for ExportNamedDeclaration.
     let source = "export default class Foo {}\n";
@@ -221,25 +221,21 @@ fn export_default_declaration_routes_declaration_slot_key_into_block_context() {
     assert_eq!(bc["parentType"], "ExportDefaultDeclaration");
     assert_eq!(
         bc["key"], "declaration",
-        "the class's blockContext.key must mirror the TS AST slot \
+        "the class's blockContext.key must carry the ESTree slot \
          label `declaration`, not the auto-walker's `body` carryover"
     );
 }
 
 #[test]
 fn export_named_with_from_creates_implicit_global_reference_for_local_name() {
-    // Parity regression: `export { Lexer } from './Lexer.js'`
-    // surfaces in npm `oxc-parser` as `ExportSpecifier.local.type =
-    // "Identifier"`, and the TS pipeline routes that identifier
-    // through `handleIdentifierReference`, producing a read
-    // reference that resolves to an implicit-global `Lexer` in the
-    // module scope. The Rust `oxc_parser` crate keeps the same slot
-    // as `ModuleExportName::IdentifierName` for re-exports (and
-    // anywhere the local name is a reserved word like `default`),
-    // so the analyzer used to walk past it without firing the
-    // reference. The boundary's `visit_identifier_name` now routes
-    // these slots through `handle_identifier_reference` so the IR
-    // stays byte-identical to TS.
+    // Parity regression: `export { Lexer } from './Lexer.js'` is
+    // expected to produce a read reference for `Lexer` resolving to
+    // an implicit-global in the module scope. The Rust `oxc_parser`
+    // crate represents the slot as `ModuleExportName::IdentifierName`
+    // for re-exports (and anywhere the local name is a reserved word
+    // like `default`), so the analyzer used to walk past it without
+    // firing the reference. The boundary's `visit_identifier_name`
+    // now routes these slots through `handle_identifier_reference`.
     let source = "export { Lexer } from './Lexer.js'\n";
     let allocator = Allocator::default();
     let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
@@ -266,12 +262,9 @@ fn export_named_with_from_creates_implicit_global_reference_for_local_name() {
 
 #[test]
 fn export_all_with_alias_creates_implicit_global_reference_for_exported_name() {
-    // Parity regression: `export * as default from './base.js'`
-    // surfaces in npm `oxc-parser` as
-    // `ExportAllDeclaration.exported.type = "Identifier"`, and the
-    // TS pipeline routes that identifier through
-    // `handleIdentifierReference` -- producing an implicit-global
-    // `default` plus one read reference. The Rust `oxc_parser` crate
+    // Parity regression: `export * as default from './base.js'` is
+    // expected to produce an implicit-global `default` plus one read
+    // reference for the alias identifier. The Rust `oxc_parser` crate
     // represents the slot as
     // `ExportAllDeclaration.exported: Option<ModuleExportName>`, and
     // for `default` (and for any plain-Identifier alias) the variant
@@ -298,19 +291,16 @@ fn export_all_with_alias_creates_implicit_global_reference_for_exported_name() {
 
 #[test]
 fn private_field_assignment_head_renders_as_member_not_raw() {
-    // Parity regression: `this.#prop = rhs` (and `obj.#prop = rhs`)
-    // surfaced in npm `oxc-parser` as `MemberExpression(object,
-    // PrivateIdentifier("prop"))` with `computed: false`. The TS
-    // head-builder reads `property.name` directly without checking
-    // the property's node type, so the resulting
-    // `expressionStatementContainer.head` is
-    // `{ kind: assign, left: { kind: member, property: "prop" }, ... }`.
-    // The Rust `oxc_parser` crate keeps PrivateFieldExpression
-    // separate from StaticMemberExpression in three head-building
-    // arms (`Expression`, `AssignmentTarget`,
+    // Parity regression: the head expression for `this.#prop = rhs`
+    // (and `obj.#prop = rhs`) must come out as
+    // `{ kind: assign, left: { kind: member, property: "prop" }, ... }`,
+    // i.e. the private field is flattened to a member shape carrying
+    // the bare name. The Rust `oxc_parser` crate keeps
+    // PrivateFieldExpression separate from StaticMemberExpression in
+    // three head-building arms (`Expression`, `AssignmentTarget`,
     // `SimpleAssignmentTarget`); each of those used to bail to
     // `None`, which then collapsed the whole assignment head to
-    // `kind: raw`. Mirror the TS flattening.
+    // `kind: raw`. Flatten the private-field shape in each arm.
     // `x` is the inner reference whose container annotation we
     // inspect. The surrounding ExpressionStatement is `obj.#o = x;`,
     // so the container's head must classify the whole statement as
@@ -360,7 +350,7 @@ fn private_field_assignment_head_renders_as_member_not_raw() {
     };
     assert_eq!(
         property, "o",
-        "the private field name must be flattened to the bare identifier (no leading `#`) to match TS"
+        "the private field name must be flattened to the bare identifier (no leading `#`) in the head expression"
     );
 }
 
@@ -371,9 +361,10 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
     // {} }`) and the enclosing expression is wrapped in a call
     // argument list, the function scope's `blockContext.key` used
     // to come out as `"arguments"` -- carried over from
-    // `CallExpression.arguments` -- instead of TS's `"value"`. oxc's
-    // auto-generated `walk_object_property` does not push a per-child
-    // slot key, so the surrounding label leaks through.
+    // `CallExpression.arguments` -- instead of the expected
+    // `"value"`. oxc's auto-generated `walk_object_property` does not
+    // push a per-child slot key, so the surrounding label leaks
+    // through.
     // Use a class expression rather than a function expression
     // because the analyzer's `block_context_of` only emits a block
     // context for scope types that have one (class scopes do;
@@ -403,7 +394,7 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
     assert_eq!(bc["parentType"], "Property");
     assert_eq!(
         bc["key"], "value",
-        "the class's blockContext.key must mirror the TS AST slot \
+        "the class's blockContext.key must carry the ESTree slot \
          label `value`, not the auto-walker's `arguments` carryover"
     );
 }

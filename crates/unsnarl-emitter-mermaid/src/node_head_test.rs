@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/node-head.test.ts`.
-
 use unsnarl_oxc_parity::VariableDeclarationKind;
 use unsnarl_visual_graph::visual_node::{
     BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,

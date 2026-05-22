@@ -1,13 +1,13 @@
 //! Build-time state owned by the scope-builder.
 //!
-//! `ScopeBuilderState` is the Rust-side analogue of the TS
-//! `ScopeManager` (`manager.ts`) plus the build-only mutable state that
-//! TS keeps split across `ScopeImpl` / `VariableImpl` /
-//! `ReferenceImpl` constructors. The contract types in `unsnarl-ir`
-//! (`ScopeData`, `VariableData`, `ReferenceData`, `DefinitionData`) are
-//! immutable from the analyzer's perspective once `finish` runs; while
-//! the build is in progress we own them through `IrArena` so the
-//! borrow checker permits the per-step mutations.
+//! `ScopeBuilderState` carries the eslint-scope-style mutable
+//! state (scope manager handle, scope / variable / reference
+//! arenas, the active stack, and the diagnostic collector). The
+//! contract types in `unsnarl-ir` (`ScopeData`, `VariableData`,
+//! `ReferenceData`, `DefinitionData`) are immutable from the
+//! analyzer's perspective once `finish` runs; while the build is
+//! in progress we own them through `IrArena` so the borrow
+//! checker permits the per-step mutations.
 //!
 //! `ScopeBuilderState` is reachable from outside the crate only via
 //! callback arguments to `AnalysisVisitor`; the fields are therefore
@@ -35,13 +35,10 @@ pub struct ScopeBuilderState {
 impl ScopeBuilderState {
     /// Build a fresh state seeded with the root scope.
     ///
-    /// Mirrors `ScopeManager`'s constructor in `manager.ts`: a single
-    /// `ScopeImpl` is created as the global / module scope with no
-    /// `upper`, and `stack` / `allScopes` are seeded with that scope.
-    /// The Rust port collapses `allScopes` into the arena
-    /// (`IndexVec<ScopeId, ScopeData>` already enumerates every
-    /// allocated scope, so a second container would duplicate the
-    /// information) and keeps a `Vec<ScopeId>` for `stack`.
+    /// Allocates a single root scope (global / module) with no
+    /// `upper` and seeds the active `stack` with it. The arena's
+    /// `IndexVec<ScopeId, ScopeData>` enumerates every allocated
+    /// scope, so no separate `allScopes` container is needed.
     pub(crate) fn new(root_kind: ScopeType, block: AstNode) -> Self {
         let mut arena = IrArena {
             scopes: IndexVec::new(),
@@ -142,21 +139,19 @@ pub(crate) fn pop_scope(state: &mut ScopeBuilderState) {
     state.stack.pop();
 }
 
-/// Declare a variable inside a scope, mirroring `declareVariable` in
-/// `ts/src/boundary/eslint-scope/declare/declare-variable.ts`.
+/// Declare a variable inside a scope.
 ///
 /// Looks up the binding by name in the target scope's `set`; if no
 /// variable with that name exists yet, allocates a fresh
 /// `VariableData` in the arena, registers it on the scope (`set` +
 /// `variables`), and proceeds. Then records `identifier` on the
-/// variable's `identifiers` list (the TS `variable.identifiers.push`)
-/// and pushes a `DefinitionData` carrying the same identifier plus
-/// `def_type` / `def_node` / `parent` (the TS object literal pushed to
-/// `variable.defs`).
+/// variable's `identifiers` list and pushes a `DefinitionData`
+/// carrying the same identifier plus `def_type` / `def_node` /
+/// `parent`.
 ///
-/// `identifier` is consumed twice on the TS side (`variable.identifiers`
-/// and `def.name`); Rust requires an explicit clone, which is the
-/// derive-policy justification for `AstIdentifier: Clone`.
+/// `identifier` is consumed twice (once in `variable.identifiers`,
+/// once in `def.name`); the explicit clone is the derive-policy
+/// justification for `AstIdentifier: Clone`.
 /// Per-definition extras the serializer reads but the
 /// `(node, parent)` materialisation drops. Defaults to all-`None` so
 /// callsites that build simple defs (function names, class names,
@@ -238,12 +233,9 @@ pub(crate) fn declare_variable_with_extras(
 /// Drain the build state into a `(IrArena, ScopeId, Vec<Diagnostic>)`
 /// triple.
 ///
-/// The TS side has no separate `finish` step (`manager.globalScope`
-/// is returned directly inside `analyze`, and `visitor.onDiagnostic`
-/// is fed from `diagnostics.list()` at the very end). The Rust side
-/// keeps the build-only state behind `ScopeBuilderState` and unwraps
-/// it here so the immutable arena + the collected diagnostics are the
-/// only things that leave the boundary crate.
+/// `ScopeBuilderState` is unwrapped here so the immutable arena and
+/// the collected diagnostics are the only things that leave the
+/// boundary crate; `analyze` calls this in its tail.
 pub(crate) fn finish(state: ScopeBuilderState) -> (IrArena, ScopeId, Vec<Diagnostic>) {
     (
         state.arena,

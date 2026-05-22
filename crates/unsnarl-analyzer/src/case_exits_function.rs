@@ -1,11 +1,11 @@
 //! Whether a switch-case consequent definitely exits the surrounding
 //! function (via `return` or `throw`).
 //!
-//! Mirrors `ts/src/analyzer/case-exits-function.ts`. The empty
-//! consequent answers `false` (no statement is reachable, so the
-//! clause cannot exit the function on its own). A non-empty consequent
-//! exits the function only when [`abrupt_completion_type_of`] reports
-//! a non-empty set consisting solely of `Return` / `Throw`.
+//! The empty consequent answers `false` (no statement is reachable,
+//! so the clause cannot exit the function on its own). A non-empty
+//! consequent exits the function only when
+//! [`abrupt_completion_type_of`] reports a non-empty set consisting
+//! solely of `Return` / `Throw`.
 
 use oxc_ast::ast::Statement;
 

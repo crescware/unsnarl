@@ -1,17 +1,6 @@
 //! Public [`UnsnarlPlugin`] entrypoint for the React plugin.
 //!
-//! Mirrors the default export of
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. The TS literal:
-//!
-//! ```ts
-//! const plugin: UnsnarlPlugin = {
-//!   meta: { name: "unsnarl-plugin-react" },
-//!   transform(ir) { ... },
-//! };
-//! export default plugin;
-//! ```
-//!
-//! becomes a unit struct implementing [`UnsnarlPlugin`] plus a free
+//! Exposes a unit struct implementing [`UnsnarlPlugin`] plus a free
 //! [`plugin`] function returning a `Box<dyn UnsnarlPlugin>` ready to
 //! be registered with [`unsnarl_plugin::PluginRegistry`].
 
@@ -20,7 +9,7 @@ use unsnarl_plugin::UnsnarlPlugin;
 
 use crate::transform::transform_ir;
 
-/// Canonical plugin name. Matches the TS `meta.name`.
+/// Canonical plugin name.
 pub const PLUGIN_NAME: &str = "unsnarl-plugin-react";
 
 pub struct UnsnarlPluginReact;

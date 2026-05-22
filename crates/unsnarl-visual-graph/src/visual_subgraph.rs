@@ -1,22 +1,20 @@
 //! `VisualSubgraph`: a container element in the visual graph.
 //!
-//! Mirrors `ts/src/visual-graph/visual-subgraph.ts` together with
-//! the construction sites under `ts/src/visual-graph/builder/`. As
-//! with [`VisualNode`](crate::visual_node::VisualNode), the on-disk
-//! JSON field order varies by construction site:
+//! As with [`VisualNode`](crate::visual_node::VisualNode), the
+//! on-disk JSON field order varies by construction site:
 //!
-//! - `describeSubgraph` ("owned") path for Function / Class /
-//!   Return / Throw subgraphs and `build-children`'s manually-built
-//!   IfElseContainer write `{ type, id, kind, line, endLine,
-//!   direction, ...extras, elements }`.
-//! - `describeSubgraph` ("control" common-spread) path for Case /
-//!   Switch / If / Else / Try / Catch / Finally / For / While /
-//!   DoWhile / Block writes `{ type, id, line, endLine, direction,
-//!   elements, kind, ...extras }`.
+//! - `describe_subgraph` ("owned") path for Function / Class /
+//!   Return / Throw subgraphs and `build_children`'s manually-built
+//!   IfElseContainer writes
+//!   `{ type, id, kind, line, end_line, direction, ...extras, elements }`.
+//! - `describe_subgraph` ("control" common-spread) path for
+//!   Case / Switch / If / Else / Try / Catch / Finally / For /
+//!   While / DoWhile / Block writes
+//!   `{ type, id, line, end_line, direction, elements, kind, ...extras }`.
 //!
-//! Two struct shapes mirror that split. They are wrapped in a
-//! single untagged [`VisualSubgraph`] enum so the rest of the
-//! builder can hold a uniform element kind.
+//! Two struct shapes match the split, wrapped in a single untagged
+//! [`VisualSubgraph`] enum so the rest of the builder can hold a
+//! uniform element kind.
 
 use serde::Serialize;
 
@@ -189,11 +187,10 @@ impl VisualSubgraph {
 
     /// Returns the logical [`SubgraphKind`] discriminator.
     ///
-    /// Mirrors the TS code paths that branch on `sg.kind`. The two
-    /// underlying shapes (owned / control) carry their own subset
-    /// enums to preserve JSON field order; this projects them back
-    /// onto a single flat [`SubgraphKind`] so consumers can match
-    /// in one switch.
+    /// The two underlying shapes (owned / control) carry their own
+    /// subset enums to preserve JSON field order; this projects them
+    /// back onto a single flat [`SubgraphKind`] so consumers can
+    /// match in one switch.
     pub fn kind(&self) -> crate::subgraph_kind::SubgraphKind {
         use crate::subgraph_kind::SubgraphKind;
         match self {
@@ -227,9 +224,9 @@ impl VisualSubgraph {
         }
     }
 
-    /// `ownerNodeId` from the original TS shape, present only on
-    /// `Function` subgraphs (the FunctionDeclaration's node id when
-    /// the function is named, `None` for anonymous functions).
+    /// `ownerNodeId` (JSON field), present only on `Function`
+    /// subgraphs (the FunctionDeclaration's node id when the
+    /// function is named, `None` for anonymous functions).
     pub fn owner_node_id(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
@@ -240,10 +237,10 @@ impl VisualSubgraph {
         }
     }
 
-    /// `ownerName` from the original TS shape, present only on
-    /// `Function` subgraphs. The TS field is the empty string when
+    /// `ownerName` (JSON field), present only on `Function`
+    /// subgraphs. The field is serialised as the empty string when
     /// the owner is anonymous; that is preserved here verbatim so
-    /// the mermaid emitter's fallback to `nodeMap` lookup matches.
+    /// the mermaid emitter's fallback to `node_map` lookup matches.
     pub fn owner_name(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
@@ -254,8 +251,7 @@ impl VisualSubgraph {
         }
     }
 
-    /// `className` from the original TS shape, present only on
-    /// `Class` subgraphs.
+    /// `className` (JSON field), present only on `Class` subgraphs.
     pub fn class_name(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
@@ -266,9 +262,9 @@ impl VisualSubgraph {
         }
     }
 
-    /// `caseTest` from the original TS shape, present only on
-    /// `Case` subgraphs. `None` here corresponds to the default
-    /// case (TS records this as `null`).
+    /// `caseTest` (JSON field), present only on `Case` subgraphs.
+    /// `None` here corresponds to the default case (serialised as
+    /// `null`).
     pub fn case_test(&self) -> Option<&str> {
         match self {
             Self::Control(s) => match &s.extras {
@@ -279,8 +275,8 @@ impl VisualSubgraph {
         }
     }
 
-    /// `hasElse` from the original TS shape, present only on
-    /// `IfElseContainer` subgraphs.
+    /// `hasElse` (JSON field), present only on `IfElseContainer`
+    /// subgraphs.
     pub fn has_else(&self) -> bool {
         match self {
             Self::Owned(s) => match &s.extras {

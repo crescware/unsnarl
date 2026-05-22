@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/control-subgraph-kind-of.ts`.
-
 use unsnarl_ir::scope::block_context::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::SerializedScope;
@@ -20,7 +18,7 @@ pub fn control_subgraph_kind_of(scope: &SerializedScope) -> Option<ControlSubgra
 fn kind_from_block_context(ctx: Option<&BlockContext>) -> Option<ControlSubgraphKind> {
     let Some(ctx) = ctx else {
         // A Block scope without a recognised parent context still
-        // renders as a generic block (mirrors the TS fallthrough).
+        // renders as a generic block (fallthrough).
         return Some(ControlSubgraphKind::Block);
     };
     let key = ctx.key();

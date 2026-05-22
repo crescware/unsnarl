@@ -1,9 +1,7 @@
 //! Shared test fixtures for sibling tests under
-//! `crates/unsnarl-visual-graph/src/builder/`. Mirrors the
-//! `ts/src/visual-graph/builder/testing/` helpers (`make-scope.ts`
-//! et al.) so the Rust tests can express each test case as a
-//! field-by-field override of a known base, rather than rebuilding
-//! the full struct in every test.
+//! `crates/unsnarl-visual-graph/src/builder/`. Lets each test case
+//! express itself as a field-by-field override of a known base,
+//! rather than rebuilding the full struct in every test.
 //!
 //! Gated behind `#[cfg(test)]`; not part of the crate's public API.
 
@@ -51,17 +49,16 @@ pub(crate) fn span_at(line: u32, column: u32, offset: u32) -> Span {
 /// Wrap a string as a `SerializedScopeId`.
 ///
 /// The wrapper asserts non-empty, so callers that need a literal
-/// `""` scope id (rare, but the TS suite exercises it for a few
-/// formatter helpers) build a `SerializedScope` directly instead.
+/// `""` scope id (rare, exercised by a few formatter helpers) build
+/// a `SerializedScope` directly instead.
 pub(crate) fn scope_id(value: &str) -> SerializedScopeId {
     SerializedScopeId::new(value.to_string())
 }
 
-/// Mirrors `baseScope()` from
-/// `ts/src/visual-graph/builder/testing/make-scope.ts`. Returns a
-/// `Block` scope with empty variables / references / children, a
-/// 1-character body span, and zeroed nesting depths. Tests override
-/// individual fields by binding the result and mutating, e.g.
+/// Returns a `Block` scope with empty variables / references /
+/// children, a 1-character body span, and zeroed nesting depths.
+/// Tests override individual fields by binding the result and
+/// mutating, e.g.
 ///
 /// ```ignore
 /// let mut s = base_serialized_scope("scope1");
@@ -108,10 +105,9 @@ pub(crate) fn other_block_context(
 }
 
 /// Build a [`CaseClauseBlockContext`] and wrap as
-/// [`BlockContext::CaseClause`]. Mirrors
-/// `baseCaseClauseBlockContext()` in
-/// `ts/.../testing/make-block-context.ts` when no overrides are
-/// applied; pass an explicit `case_test` to model a concrete case.
+/// [`BlockContext::CaseClause`]. Defaults represent a "no-overrides"
+/// case clause; pass an explicit `case_test` to model a concrete
+/// case.
 pub(crate) fn case_clause_block_context(
     parent_type: AstType,
     key: &str,
@@ -126,9 +122,9 @@ pub(crate) fn case_clause_block_context(
     ))
 }
 
-/// Mirrors `baseWriteOp()` from `testing/make-write-op.ts`. All
-/// fields are pre-set to the TS defaults; callers mutate the
-/// fields they care about for each fixture.
+/// Returns a baseline `WriteOp` with placeholder strings and zeroed
+/// offsets; callers mutate the fields they care about for each
+/// fixture.
 pub(crate) fn base_write_op() -> WriteOp {
     WriteOp {
         ref_id: "r".to_string(),
@@ -140,9 +136,9 @@ pub(crate) fn base_write_op() -> WriteOp {
     }
 }
 
-/// Mirrors `baseRef()` from `testing/make-ref.ts`. Returns a
-/// reference rooted in scope `s`, identifier `x` at offset 0, with
-/// no completion / predicate / jsx / expression-statement payload.
+/// Returns a baseline `SerializedReference` rooted in scope `s`,
+/// identifier `x` at offset 0, with no completion / predicate / jsx /
+/// expression-statement payload.
 pub(crate) fn base_serialized_reference() -> SerializedReference {
     SerializedReference {
         id: SerializedReferenceId::new("r".to_string()),
@@ -164,8 +160,7 @@ pub(crate) fn base_serialized_reference() -> SerializedReference {
     }
 }
 
-/// Mirrors `predicateContainer(type, offset)` from
-/// `testing/predicate-container.ts`.
+/// Build a [`PredicateContainer`] at the supplied offset.
 pub(crate) fn predicate_container(
     r#type: PredicateContainerType,
     offset: u32,
@@ -176,15 +171,14 @@ pub(crate) fn predicate_container(
     }
 }
 
-/// Mirrors the TS `span(offset, line, column = offset)` shorthand
-/// used by `testing/span.ts`. `column` defaults to `offset` because
-/// the TS form does so.
+/// Build a [`Span`] from `(offset, line)`; the column equals the
+/// offset by convention.
 pub(crate) fn span_offset_line(offset: u32, line: u32) -> Span {
     span_at(line, offset, offset)
 }
 
 /// Build a [`DefinitionName`] with a non-empty name at the supplied
-/// span. Mirrors the TS `COMMON.name` field in `testing/make-def.ts`.
+/// span.
 pub(crate) fn definition_name(name: &str, span: Span) -> DefinitionName {
     DefinitionName::new(name.to_string(), span)
 }
@@ -194,8 +188,8 @@ pub(crate) fn definition_node(r#type: AstType, span: Span) -> DefinitionNode {
     DefinitionNode { r#type, span }
 }
 
-/// Mirrors `baseDef(declarationKind)` from `testing/make-def.ts`.
-/// Returns a `Variable` definition for `x` at offset 0, no `init`.
+/// Returns a baseline `Variable` definition for `x` at offset 0,
+/// with no `init`.
 pub(crate) fn base_def(declaration_kind: VariableDeclarationKind) -> SerializedDefinition {
     SerializedDefinition::Variable(VariableDef::new(
         definition_name("x", span(0)),
@@ -206,9 +200,8 @@ pub(crate) fn base_def(declaration_kind: VariableDeclarationKind) -> SerializedD
     ))
 }
 
-/// Mirrors `baseSimpleDef(type)` from `testing/make-def.ts` — the
-/// 5 "no-extra-fields" variants reuse the `x`-at-offset-0 common
-/// shape.
+/// Returns a baseline `Simple` definition; the 5 "no-extra-fields"
+/// variants reuse the `x`-at-offset-0 common shape.
 pub(crate) fn base_simple_def(r#type: SimpleDefType) -> SerializedDefinition {
     SerializedDefinition::Simple(SimpleDef {
         name: definition_name("x", span(0)),
@@ -228,8 +221,7 @@ pub(crate) fn reference_id(value: &str) -> SerializedReferenceId {
     SerializedReferenceId::new(value.to_string())
 }
 
-/// Mirrors `baseVariable()` from `testing/make-variable.ts`. Builds
-/// a `Let`-declared variable named `x` in scope `s` with one
+/// Builds a `Let`-declared variable named `x` in scope `s` with one
 /// identifier span at offset 0.
 pub(crate) fn base_serialized_variable() -> SerializedVariable {
     SerializedVariable::new(
@@ -242,13 +234,13 @@ pub(crate) fn base_serialized_variable() -> SerializedVariable {
     )
 }
 
-/// Mirrors `normalCompletion()` from `testing/completion.ts`.
+/// Returns a `SerializedCompletion::Normal` literal.
 pub(crate) fn normal_completion() -> SerializedCompletion {
     SerializedCompletion::Normal
 }
 
-/// Mirrors `returnCompletion(startOffset, endOffset, startLine?, endLine?)`
-/// from `testing/completion.ts`.
+/// Build a `SerializedCompletion::Return` covering the supplied
+/// start / end spans.
 pub(crate) fn return_completion(
     start_offset: u32,
     end_offset: u32,
@@ -261,7 +253,8 @@ pub(crate) fn return_completion(
     }
 }
 
-/// Mirrors `throwCompletion(...)` from `testing/completion.ts`.
+/// Build a `SerializedCompletion::Throw` covering the supplied
+/// start / end spans.
 pub(crate) fn throw_completion(
     start_offset: u32,
     end_offset: u32,
@@ -274,8 +267,8 @@ pub(crate) fn throw_completion(
     }
 }
 
-/// Mirrors `jsxContainer(startOffset, endOffset, startLine?, endLine?)`
-/// from `testing/jsx-container.ts`.
+/// Build a [`SerializedJsxElement`] covering the supplied start /
+/// end spans.
 pub(crate) fn jsx_container(
     start_offset: u32,
     end_offset: u32,
@@ -290,7 +283,6 @@ pub(crate) fn jsx_container(
 
 /// Build an empty [`SerializedIR`] (no scopes / variables /
 /// references / diagnostics) backed by a `Ts` source at `x.ts`.
-/// Mirrors the empty literal repeated in every TS `makeCtx` helper.
 pub(crate) fn empty_serialized_ir() -> SerializedIR {
     SerializedIR {
         version: SERIALIZED_IR_VERSION,
@@ -310,8 +302,7 @@ pub(crate) fn empty_serialized_ir() -> SerializedIR {
 /// Build a [`BuilderContext`] whose `variable_map` and `scope_map`
 /// are derived from `ir.variables` / `ir.scopes`. Every other side
 /// table is empty; callers mutate the fields they care about for
-/// each fixture. Mirrors the `makeCtx` helper repeated across the
-/// TS sibling tests.
+/// each fixture.
 pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
     let variable_map = ir.variables.iter().map(|v| (v.id.value(), v)).collect();
     let scope_map = ir.scopes.iter().map(|s| (s.id.value(), s)).collect();

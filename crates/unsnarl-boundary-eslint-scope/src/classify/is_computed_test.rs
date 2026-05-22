@@ -1,5 +1,4 @@
-//! Sibling tests for `is_computed.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/is-computed.test.ts`.
+//! Sibling tests for `is_computed.rs`.
 
 use unsnarl_ir::Language;
 

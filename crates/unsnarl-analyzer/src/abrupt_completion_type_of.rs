@@ -1,17 +1,13 @@
 //! Set of `[[Type]]` Completion Record values reachable at a
 //! statement's termination.
 //!
-//! Mirrors `ts/src/analyzer/abrupt-completion-type-of.ts`. Returns
-//! `None` when any path through the statement can fall through to a
-//! normal completion. `LabeledStatement` is intentionally not
-//! resolved (the TS source documents this limitation; the parity
-//! port preserves it).
+//! Returns `None` when any path through the statement can fall
+//! through to a normal completion. `LabeledStatement` is
+//! intentionally not resolved.
 //!
 //! Set membership uses `Vec` rather than a hash set because the
 //! value space is fixed-size (four `CompletionType` variants) and
-//! comparison happens via `contains` over at most four entries; the
-//! TS source uses `Set<...>` for clarity but the analyzer never
-//! observes its hashing properties.
+//! comparison happens via `contains` over at most four entries.
 
 use oxc_ast::ast::Statement;
 

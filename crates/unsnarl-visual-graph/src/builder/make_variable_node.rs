@@ -1,10 +1,7 @@
-//! Mirrors `ts/src/visual-graph/builder/make-variable-node.ts`.
-//!
-//! Builds a `VisualNode` from a `SerializedVariable`. The TS form
-//! dispatches on `def.type` (the first definition) and assembles
-//! the `common` fields once before adding the kind-specific tail;
-//! the Rust port mirrors that with a single `BindingVisualNode`
-//! constructed up-front and `BindingExtras` for the tail.
+//! Builds a `VisualNode` from a `SerializedVariable`. Dispatches on
+//! `def.type` (the first definition); the `common` fields are
+//! assembled once into a [`BindingVisualNode`] before the
+//! kind-specific tail in [`BindingExtras`] is attached.
 
 use unsnarl_ir::serialized::{SerializedDefinition, SerializedVariable, SimpleDefType};
 use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};

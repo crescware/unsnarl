@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/read-origins.ts`.
-//!
 //! For a read reference, return the set of nodes from which the
 //! `read` edge should be drawn — typically the last preceding
 //! `Write` for the same variable, but extended through branch
@@ -146,8 +144,7 @@ pub fn read_origins(
     dedup_preserve_order(origins)
 }
 
-/// Replicates `Array.from(new Set(origins))` in TS — preserves
-/// first-occurrence order while removing duplicates.
+/// Preserves first-occurrence order while removing duplicates.
 fn dedup_preserve_order(input: Vec<String>) -> Vec<String> {
     use std::collections::HashSet;
     let mut seen = HashSet::new();

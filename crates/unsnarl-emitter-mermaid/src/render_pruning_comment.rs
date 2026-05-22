@@ -1,10 +1,7 @@
 //! Emits the `%% pruning roots ...` comment line at the top of the
 //! diagram when pruning produced a summary.
 //!
-//! Mirrors `ts/src/emitter/mermaid/render-pruning-comment.ts`. The
-//! Rust port walks the same `VisualGraphPruning` shape; the comment
-//! is omitted entirely when `graph.pruning` is `None` so the
-//! pruning-free Step 14 baselines render byte-identical.
+//! The comment is omitted entirely when `graph.pruning` is `None`.
 
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 

@@ -1,5 +1,4 @@
-//! Sibling tests for [`ensure_expression_statement_node`]. Cases
-//! mirror `ts/src/visual-graph/builder/ensure-expression-statement-node.test.ts`.
+//! Sibling tests for [`ensure_expression_statement_node`].
 
 use unsnarl_ir::serialized::SerializedExpressionStatementContainer;
 use unsnarl_ir::serialized::SerializedHeadExpression;

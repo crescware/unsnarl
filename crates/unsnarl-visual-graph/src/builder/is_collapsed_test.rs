@@ -1,5 +1,3 @@
-//! Ports `ts/src/visual-graph/builder/is-collapsed.test.ts`.
-//!
 //! Drives the depth-gating predicate directly: only the recorded
 //! `nesting_depths[kind]` is compared against the matching threshold,
 //! and only when `depths` is provided. Module / function-expression

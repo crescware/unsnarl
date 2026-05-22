@@ -1,9 +1,8 @@
-//! TS-only type-subtree detector.
+//! TypeScript type-only-subtree detector.
 //!
-//! Mirrors `ts/src/analyzer/skip-types.ts`. Returns `true` when a node
-//! (identified by its [`AstType`] and the key it occupies in its
-//! parent) is a TypeScript type-only subtree the analyzer should skip
-//! over.
+//! Returns `true` when a node (identified by its [`AstType`] and the
+//! key it occupies in its parent) is a TypeScript type-only subtree
+//! the analyzer should skip over.
 
 use crate::AstType;
 

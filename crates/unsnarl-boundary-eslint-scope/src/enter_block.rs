@@ -1,16 +1,13 @@
 //! Push a `Block` scope for a `BlockStatement` and hoist its
 //! declarations.
 //!
-//! Mirrors `enterBlock` in
-//! `ts/src/boundary/eslint-scope/enter-block.ts`. The TS port pulls
-//! `node["body"]` and checks `Array.isArray`; the Rust port takes
-//! the typed `BlockStatement<'_>` whose `body: Vec<Statement<'_>>` is
-//! structurally guaranteed.
+//! Takes the typed `BlockStatement<'_>` whose
+//! `body: Vec<Statement<'_>>` is structurally guaranteed by oxc.
 //!
-//! The TS `visitor.onScope?.(...)` callback is dispatched on the
-//! Rust side from `ScopeBuildVisitor::fire_on_scope` (in
-//! `scope_build_visitor.rs`) once the helper has pushed the scope,
-//! so this module is responsible only for pushing and hoisting.
+//! `visitor.on_scope(...)` is dispatched from
+//! `ScopeBuildVisitor::fire_on_scope` (in `scope_build_visitor.rs`)
+//! once this helper has pushed the scope, so the module is
+//! responsible only for pushing and hoisting.
 
 use oxc_ast::ast::BlockStatement;
 

@@ -1,10 +1,7 @@
-//! Sibling tests for `enter_block.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/enter-block.test.ts`.
+//! Sibling tests for `enter_block.rs`.
 //!
 //! Integration-style: feed a source string through `analyze_source`
-//! and observe the resulting scope chain. The TS unit tests that
-//! drove `enterBlock` with a hand-built `NodeLike` are subsumed
-//! here.
+//! and observe the resulting scope chain.
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;
