@@ -34,6 +34,7 @@ fn defaults_match_ts_commander() {
     assert!(args.out_dir.is_none());
     assert!(args.out_file.is_none());
     assert!(!args.debug);
+    assert!(!args.verbose);
     assert!(args.plugins.is_empty());
 }
 
@@ -479,6 +480,19 @@ fn plugin_serializes_as_flat_string_array() {
 fn debug_flag() {
     let args = parse(&["uns", "--debug", "x.ts"]);
     assert!(args.debug);
+}
+
+#[test]
+fn verbose_flag() {
+    let args = parse(&["uns", "--verbose", "x.ts"]);
+    assert!(args.verbose);
+}
+
+#[test]
+fn verbose_field_is_excluded_from_serialization() {
+    let args = parse(&["uns", "--verbose", "x.ts"]);
+    let v = serde_json::to_value(&args).unwrap();
+    assert!(v.get("verbose").is_none());
 }
 
 #[test]

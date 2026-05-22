@@ -32,6 +32,10 @@ pub fn apply_plugins(
     mut ir: unsnarl_ir::serialized::SerializedIR,
     plugins: &[&dyn UnsnarlPlugin],
 ) -> unsnarl_ir::serialized::SerializedIR {
+    if plugins.is_empty() {
+        return ir;
+    }
+    let _span = tracing::info_span!("apply_plugins", count = plugins.len()).entered();
     for p in plugins {
         ir = p.transform(ir);
     }

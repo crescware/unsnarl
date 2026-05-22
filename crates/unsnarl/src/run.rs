@@ -37,6 +37,9 @@ use crate::pipeline::{
 /// Entry point for the `uns` binary. Returns the process exit code so
 /// the binary can propagate it through `main()`.
 pub fn run(args: &Args) -> ExitCode {
+    if args.verbose {
+        init_verbose_tracing();
+    }
     let stdout = io::stdout();
     let stderr = io::stderr();
     let mut out = stdout.lock();
@@ -44,6 +47,20 @@ pub fn run(args: &Args) -> ExitCode {
     let mut stdin = io::stdin();
     let code = run_to(args, &mut stdin, &mut out, &mut err);
     ExitCode::from(code)
+}
+
+/// Install a stderr `tracing-subscriber` at INFO level, emitting span
+/// close events so each pipeline stage prints its elapsed time.
+/// Called only when `--verbose` is set. Wrapped in `try_init` so a
+/// stray double install (e.g. an embedder calling `run` twice) is a
+/// no-op rather than a panic.
+fn init_verbose_tracing() {
+    use tracing_subscriber::fmt::format::FmtSpan;
+    let _ = tracing_subscriber::fmt()
+        .with_writer(std::io::stderr)
+        .with_max_level(tracing::Level::INFO)
+        .with_span_events(FmtSpan::CLOSE)
+        .try_init();
 }
 
 /// Library-level orchestration. The CLI binary calls this with the
@@ -80,9 +97,12 @@ pub(crate) fn run_to(
         None => return 1,
     };
 
-    let details = match dispatch_pipeline(args, &code, &source_path, language, &plugins) {
-        Ok(d) => d,
-        Err(e) => return handle_parse_error(&e, err),
+    let details = {
+        let _span = tracing::info_span!("pipeline", format = ?args.format).entered();
+        match dispatch_pipeline(args, &code, &source_path, language, &plugins) {
+            Ok(d) => d,
+            Err(e) => return handle_parse_error(&e, err),
+        }
     };
 
     emit_resolution_notices(details.resolutions.as_deref(), err);
