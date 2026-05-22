@@ -44,36 +44,62 @@ pub fn run_analysis<'a>(
     language: Language,
     raw: &'a str,
 ) -> AnalyzedSource<'a> {
-    let nesting_depths = compute_nesting_depths(program);
+    let nesting_depths = {
+        let _span = tracing::info_span!("analyze::nesting_depths").entered();
+        compute_nesting_depths(program)
+    };
 
-    let mut collector = DiagnosticCollector::default();
-    let result = analyze(
-        program,
-        &AnalyzeOptions {
-            source_type,
-            language,
-            raw,
-        },
-        &mut collector,
-    );
-    let diagnostics = collector.diagnostics;
-
-    let mut span_to_scope: HashMap<(u32, u32), ScopeId> =
-        HashMap::with_capacity(result.arena.scopes.len());
-    for (id, scope) in result.arena.scopes.iter_enumerated() {
-        span_to_scope.insert((scope.block.span.start, scope.block.span.end), id);
-    }
-    let mut span_to_ref: HashMap<(u32, u32), ReferenceId> =
-        HashMap::with_capacity(result.arena.references.len());
-    for (id, reference) in result.arena.references.iter_enumerated() {
-        span_to_ref.insert(
-            (
-                reference.identifier.span.start,
-                reference.identifier.span.end,
-            ),
-            id,
+    let result = {
+        let _span = tracing::info_span!("analyze::eslint_scope").entered();
+        let mut collector = DiagnosticCollector::default();
+        let result = analyze(
+            program,
+            &AnalyzeOptions {
+                source_type,
+                language,
+                raw,
+            },
+            &mut collector,
         );
-    }
+        tracing::info!(
+            scopes = result.arena.scopes.len(),
+            variables = result.arena.variables.len(),
+            references = result.arena.references.len(),
+            diagnostics = collector.diagnostics.len(),
+            "eslint-scope build done",
+        );
+        (result, collector.diagnostics)
+    };
+    let (result, diagnostics) = result;
+
+    let span_to_scope: HashMap<(u32, u32), ScopeId> = {
+        let _span =
+            tracing::info_span!("analyze::span_to_scope", count = result.arena.scopes.len())
+                .entered();
+        let mut m = HashMap::with_capacity(result.arena.scopes.len());
+        for (id, scope) in result.arena.scopes.iter_enumerated() {
+            m.insert((scope.block.span.start, scope.block.span.end), id);
+        }
+        m
+    };
+    let span_to_ref: HashMap<(u32, u32), ReferenceId> = {
+        let _span = tracing::info_span!(
+            "analyze::span_to_ref",
+            count = result.arena.references.len()
+        )
+        .entered();
+        let mut m = HashMap::with_capacity(result.arena.references.len());
+        for (id, reference) in result.arena.references.iter_enumerated() {
+            m.insert(
+                (
+                    reference.identifier.span.start,
+                    reference.identifier.span.end,
+                ),
+                id,
+            );
+        }
+        m
+    };
 
     let mut annotations = AnnotationsImpl::new();
     // The boundary stamps the normalised hashbang/directive/body
@@ -83,18 +109,28 @@ pub fn run_analysis<'a>(
     // `Program.span.start == normalised_start` instead of the raw
     // oxc value of `0`.
     let program_normalised_start = result.arena.scopes[result.global_scope].block.span.start;
-    let mut walker = BuildAnalysisVisitor::new(
-        raw,
-        &result.arena,
-        &mut annotations,
-        &nesting_depths,
-        &span_to_scope,
-        &span_to_ref,
-        program_normalised_start,
-    );
-    walker.visit_program(program);
+    {
+        let _span = tracing::info_span!("analyze::build_analysis_visitor").entered();
+        let mut walker = BuildAnalysisVisitor::new(
+            raw,
+            &result.arena,
+            &mut annotations,
+            &nesting_depths,
+            &span_to_scope,
+            &span_to_ref,
+            program_normalised_start,
+        );
+        walker.visit_program(program);
+    }
 
-    populate_variable_annotations(&result.arena, &mut annotations);
+    {
+        let _span = tracing::info_span!(
+            "analyze::variable_annotations",
+            count = result.arena.variables.len()
+        )
+        .entered();
+        populate_variable_annotations(&result.arena, &mut annotations);
+    }
 
     AnalyzedSource {
         arena: result.arena,

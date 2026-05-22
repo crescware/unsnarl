@@ -1059,6 +1059,7 @@ dependencies = [
  "oxc_span",
  "oxc_syntax",
  "serde_json",
+ "tracing",
  "unsnarl-annotations",
  "unsnarl-boundary-eslint-scope",
  "unsnarl-ir",

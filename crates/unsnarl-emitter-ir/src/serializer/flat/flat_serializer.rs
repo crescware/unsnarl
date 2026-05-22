@@ -2,6 +2,7 @@
 //! string-id-based scopes, variables, and references.
 
 use std::collections::HashMap;
+use std::time::{Duration, Instant};
 
 use unsnarl_emitter::{IRSerializer, SerializeContext};
 use unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION;
@@ -18,8 +19,10 @@ use crate::serializer::flat::serialize_expression_statement_head::take_head_stat
 use crate::serializer::flat::serialize_reference::{
     serialize_reference, take_serialize_reference_stats,
 };
-use crate::serializer::flat::serialize_scope::serialize_scope;
-use crate::serializer::flat::serialize_variable::serialize_variable;
+use crate::serializer::flat::serialize_scope::{serialize_scope, take_serialize_scope_stats};
+use crate::serializer::flat::serialize_variable::{
+    serialize_variable, take_serialize_variable_stats,
+};
 
 pub struct FlatSerializer;
 
@@ -66,25 +69,50 @@ impl IRSerializer for FlatSerializer {
             Vec<VariableId>,
         ) = {
             let _span = tracing::info_span!("flat::variable_ids").entered();
+            let mut t_arena_lookup = Duration::ZERO;
+            let mut t_scope_lookup = Duration::ZERO;
+            let mut t_pick_offset = Duration::ZERO;
+            let mut t_format_id = Duration::ZERO;
+            let mut t_insert = Duration::ZERO;
             let mut variable_ids: HashMap<VariableId, SerializedVariableId> = HashMap::new();
             let mut ordered_variables: Vec<VariableId> = Vec::new();
             for &s in &scopes {
                 for &v in &arena.scopes[s].variables {
-                    if arena.variables[v].defs.is_empty() {
+                    let t = Instant::now();
+                    let is_empty = arena.variables[v].defs.is_empty();
+                    t_arena_lookup += t.elapsed();
+                    if is_empty {
                         continue;
                     }
-                    let Some(sid) = scope_ids.get(&s) else {
+                    let t = Instant::now();
+                    let sid_opt = scope_ids.get(&s);
+                    t_scope_lookup += t.elapsed();
+                    let Some(sid) = sid_opt else {
                         continue;
                     };
+                    let t = Instant::now();
                     let offset = pick_variable_offset(arena, v, raw);
+                    t_pick_offset += t.elapsed();
+                    let t = Instant::now();
                     let name = arena.variables[v].name();
                     let id =
                         SerializedVariableId::new(format!("{}:{}@{}", sid_str(sid), name, offset));
+                    t_format_id += t.elapsed();
+                    let t = Instant::now();
                     variable_ids.insert(v, id);
                     ordered_variables.push(v);
+                    t_insert += t.elapsed();
                 }
             }
-            tracing::info!(count = ordered_variables.len(), "variable ids built");
+            tracing::info!(
+                count = ordered_variables.len(),
+                arena_lookup_ms = t_arena_lookup.as_millis() as u64,
+                scope_lookup_ms = t_scope_lookup.as_millis() as u64,
+                pick_offset_ms = t_pick_offset.as_millis() as u64,
+                format_id_ms = t_format_id.as_millis() as u64,
+                insert_ms = t_insert.as_millis() as u64,
+                "variable ids built",
+            );
             (variable_ids, ordered_variables)
         };
 
@@ -125,7 +153,8 @@ impl IRSerializer for FlatSerializer {
         let serialized_scopes = {
             let _span =
                 tracing::info_span!("flat::serialize_scopes", count = scopes.len()).entered();
-            scopes
+            let _ = take_serialize_scope_stats();
+            let out: Vec<_> = scopes
                 .iter()
                 .map(|&s| {
                     serialize_scope(
@@ -138,19 +167,50 @@ impl IRSerializer for FlatSerializer {
                         raw,
                     )
                 })
-                .collect()
+                .collect();
+            let st = take_serialize_scope_stats();
+            tracing::info!(
+                lookup_ms = st.lookup_ns / 1_000_000,
+                child_scopes_ms = st.child_scopes_ns / 1_000_000,
+                block_ms = st.block_ns / 1_000_000,
+                variables_ms = st.variables_ns / 1_000_000,
+                references_ms = st.references_ns / 1_000_000,
+                through_ms = st.through_ns / 1_000_000,
+                annotations_ms = st.annotations_ns / 1_000_000,
+                build_ms = st.build_ns / 1_000_000,
+                child_scopes_total = st.child_scopes_total,
+                variables_total = st.variables_total,
+                references_total = st.references_total,
+                through_total = st.through_total,
+                "serialize_scope sub-phase totals",
+            );
+            out
         };
 
         let serialized_variables = {
             let _span =
                 tracing::info_span!("flat::serialize_variables", count = ordered_variables.len())
                     .entered();
-            ordered_variables
+            let _ = take_serialize_variable_stats();
+            let out: Vec<_> = ordered_variables
                 .iter()
                 .map(|&v| {
                     serialize_variable(arena, v, &scope_ids, &variable_ids, &reference_ids, raw)
                 })
-                .collect()
+                .collect();
+            let st = take_serialize_variable_stats();
+            tracing::info!(
+                lookup_ms = st.lookup_ns / 1_000_000,
+                identifiers_ms = st.identifiers_ns / 1_000_000,
+                references_ms = st.references_ns / 1_000_000,
+                defs_ms = st.defs_ns / 1_000_000,
+                build_ms = st.build_ns / 1_000_000,
+                identifiers_total = st.identifiers_total,
+                references_total = st.references_total,
+                defs_total = st.defs_total,
+                "serialize_variable sub-phase totals",
+            );
+            out
         };
 
         let serialized_references = {
