@@ -14,7 +14,9 @@ use crate::serializer::flat::collect_scopes_in_order::collect_scopes_in_order;
 use crate::serializer::flat::has_declaring_def::has_declaring_def;
 use crate::serializer::flat::offset_of_identifier::offset_of_identifier;
 use crate::serializer::flat::pick_variable_offset::pick_variable_offset;
-use crate::serializer::flat::serialize_reference::serialize_reference;
+use crate::serializer::flat::serialize_reference::{
+    serialize_reference, take_serialize_reference_stats,
+};
 use crate::serializer::flat::serialize_scope::serialize_scope;
 use crate::serializer::flat::serialize_variable::serialize_variable;
 
@@ -154,7 +156,11 @@ impl IRSerializer for FlatSerializer {
             let _span =
                 tracing::info_span!("flat::serialize_references", count = all_references.len())
                     .entered();
-            all_references
+            // Reset the per-sub-phase accumulators so the summary
+            // emitted after this loop reflects only this loop's
+            // calls.
+            let _ = take_serialize_reference_stats();
+            let out: Vec<_> = all_references
                 .iter()
                 .map(|&r| {
                     serialize_reference(
@@ -167,7 +173,25 @@ impl IRSerializer for FlatSerializer {
                         raw,
                     )
                 })
-                .collect()
+                .collect();
+            let stats = take_serialize_reference_stats();
+            tracing::info!(
+                lookup_ms = stats.lookup_ns / 1_000_000,
+                annotations_ms = stats.annotations_ns / 1_000_000,
+                owners_ms = stats.owners_ns / 1_000_000,
+                completion_ms = stats.completion_ns / 1_000_000,
+                jsx_ms = stats.jsx_ns / 1_000_000,
+                expression_statement_ms = stats.expression_statement_ns / 1_000_000,
+                identifier_ms = stats.identifier_ns / 1_000_000,
+                build_ms = stats.build_ns / 1_000_000,
+                owners_total = stats.owners_total,
+                return_count = stats.return_count,
+                throw_count = stats.throw_count,
+                jsx_count = stats.jsx_count,
+                expression_statement_count = stats.expression_statement_count,
+                "serialize_reference sub-phase totals",
+            );
+            out
         };
 
         let unused_variable_ids: Vec<SerializedVariableId> = {
