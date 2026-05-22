@@ -19,6 +19,7 @@ use oxc_ast::ast::Program;
 use unsnarl_ir::Language;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
+use crate::parser::SourceType;
 
 pub(crate) mod build;
 pub(crate) mod definition_mapping;
@@ -29,16 +30,27 @@ pub(crate) mod variable_mapping;
 /// Run `oxc_semantic` against `program` and adapt the result into the
 /// unsnarl boundary's [`EslintScopeAnalysisResult`].
 ///
+/// `source_type` selects whether the root scope is `Module` or
+/// `Global`. The underlying [`oxc_semantic::SemanticBuilder`] cannot
+/// recover this on its own because the boundary's
+/// [`crate::parser::OxcParser`] always parses with `with_module(true)`
+/// to keep module-only syntax (top-level `await`, `import` / `export`)
+/// parsing cleanly even when the analysis treats the file as a script;
+/// the analysis-level distinction is therefore carried explicitly here.
+///
+/// `language` selects JS / JSX / TS / TSX. The underlying
+/// [`oxc_semantic::SemanticBuilder`] reads only `program.source_type`,
+/// but a few normalisations the boundary applies (e.g. the TypeScript
+/// hashbang/directive offset normalisation in [`crate::analyze::analyze`])
+/// still depend on the language tag.
+///
 /// `raw` is the original source string; some downstream consumers need
-/// it for span resolution. `language` selects JS / JSX / TS / TSX —
-/// the underlying [`oxc_semantic::SemanticBuilder`] reads only
-/// `program.source_type`, but a few normalisations the boundary applies
-/// (e.g. the TypeScript hashbang/directive offset normalisation in
-/// `analyze::analyze`) still depend on the language tag.
+/// it for span resolution.
 pub fn build_from_program<'a>(
     program: &Program<'a>,
+    source_type: SourceType,
     language: Language,
     raw: &'a str,
 ) -> EslintScopeAnalysisResult {
-    build::build(program, language, raw)
+    build::build(program, source_type, language, raw)
 }
