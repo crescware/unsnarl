@@ -21,11 +21,11 @@
 //!   specifiers, the original imported symbol name
 //!   (`ImportSpecifier.imported.name` / `.value`).
 //!
-//! The fields stay flat (rather than collapsing into a `DefinitionExtras`
-//! enum that mirrors `DefinitionType`) because each is independently
-//! optional in TS too: for example, a `Variable` declarator may have
-//! no initializer but still has a kind, so the variants would not
-//! eliminate the `Option`s.
+//! The fields stay flat (rather than collapsing into a
+//! `DefinitionExtras` enum that mirrors `DefinitionType`) because
+//! each is independently optional: for example, a `Variable`
+//! declarator may have no initializer but still has a kind, so the
+//! variants would not eliminate the `Option`s.
 
 use unsnarl_oxc_parity::VariableDeclarationKind;
 

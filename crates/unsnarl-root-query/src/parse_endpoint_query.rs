@@ -121,12 +121,12 @@ fn strip_l_prefix(s: &str) -> Option<&str> {
 }
 
 fn parse_digits(s: &str) -> Option<u32> {
-    // A byte-level pre-scan is required: `u32::from_str` accepts a leading
-    // `+` (e.g. `"+5"` parses to `5`), which would let inputs like `+5`,
-    // `+5-3`, `+5:foo` slip past the digit-only matchers. The TS reference
-    // grammar pins these endpoints to `^[0-9]+$`, so reject any byte that
-    // is not an ASCII digit before delegating to `u32::from_str` (which
-    // still owns the empty / overflow rejection).
+    // A byte-level pre-scan is required: `u32::from_str` accepts a
+    // leading `+` (e.g. `"+5"` parses to `5`), which would let inputs
+    // like `+5`, `+5-3`, `+5:foo` slip past the digit-only matchers.
+    // The endpoint grammar pins these tokens to `^[0-9]+$`, so reject
+    // any byte that is not an ASCII digit before delegating to
+    // `u32::from_str` (which still owns the empty / overflow rejection).
     let bytes = s.as_bytes();
     if bytes.is_empty() || !bytes.iter().all(u8::is_ascii_digit) {
         return None;

@@ -220,8 +220,7 @@ fn missing_input_without_any_flag_returns_exit_2() {
 fn stdin_input_routes_through_pipeline_with_declared_lang() {
     // `--stdin --stdin-lang tsx`: the orchestration labels the
     // source path `stdin.tsx` so the emitted IR carries a stable,
-    // lang-aware path. Mirrors TS `buildRunOpts.sourcePath` for
-    // the stdin branch.
+    // lang-aware path for the stdin branch.
     let args = Args::try_parse_from(["uns", "-f", "ir", "--stdin", "--stdin-lang", "tsx"])
         .expect("argv should parse");
     let mut stdin: &[u8] = b"const x = 1;\n";
@@ -848,7 +847,7 @@ fn run_to_highlight_short_alone_highlights_roots_match() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H"]
     let out = capture_stdout(&[
         "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H",
@@ -878,7 +877,7 @@ fn run_to_highlight_with_queries_targets_supplied_queries_not_roots() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   [inputPath, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a"]
     let out = capture_stdout(&[
         "uns", &path, "--format", "mermaid", "-r", "b", "-C", "1", "-H", "a",
@@ -913,7 +912,7 @@ fn run_to_highlight_long_form_matches_short_form() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    // Mirrors the TS argv literally:
+    // argv:
     //   short: [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "-H"]
     //   long:  [inputPath, "--format", "mermaid", "-r", "a", "-C", "1", "--highlight"]
     let short = capture_stdout(&[

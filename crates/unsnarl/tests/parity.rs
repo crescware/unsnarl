@@ -247,8 +247,8 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
         // variant directory. The baseline list intentionally
         // excludes `Ir`: pruning / depth / highlight only narrow
         // the downstream `VisualGraph`, so the IR snapshot matches
-        // the parent baseline and the TS side does not record a
-        // per-variant IR fixture either.
+        // the parent baseline and no per-variant IR fixture is
+        // recorded.
         for variant in read_variants(root, dir) {
             let variant_dir = dir.join(variant.dir_name());
             if !variant_dir.is_dir() {
@@ -293,8 +293,8 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
         //
         // Unlike pruning / depth / highlight variants the IR
         // baseline IS per-variant because plugin transforms reshape
-        // the IR itself; the TS side records a per-variant
-        // `expected.ir.json` for the same reason.
+        // the IR itself; each plugin variant directory therefore
+        // records its own `expected.ir.json`.
         for plugin_slug in discover_plugin_slugs(dir) {
             let variant_dir = dir.join(format!("plugin-{plugin_slug}"));
             for baseline in [
@@ -552,12 +552,12 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
     Ok(out)
 }
 
-/// Parse the `highlight` field. Two shapes are accepted, matching the
-/// TS `FixtureHighlight` union: `{"mode": "roots"}` for the `-H`
-/// no-value form (the highlight follows `pruning.roots`), and
-/// `{"mode": "queries", "raw": "<raw>"}` for `-H <raw>`. The raw
-/// string is fed verbatim to `parse_root_queries` so multi-token
-/// strings (`"a,L7"`) round-trip unchanged.
+/// Parse the `highlight` field. Two shapes are accepted:
+/// `{"mode": "roots"}` for the `-H` no-value form (the highlight
+/// follows `pruning.roots`), and `{"mode": "queries", "raw": "<raw>"}`
+/// for `-H <raw>`. The raw string is fed verbatim to
+/// `parse_root_queries` so multi-token strings (`"a,L7"`) round-trip
+/// unchanged.
 fn parse_highlight(slug: &str, v: &serde_json::Value) -> Result<HighlightSpec, String> {
     let obj = v
         .as_object()

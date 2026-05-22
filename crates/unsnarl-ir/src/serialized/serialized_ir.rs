@@ -1,13 +1,9 @@
 //! Top-level on-disk IR shape.
 //!
 //! `SERIALIZED_IR_VERSION` and `SerializedIrVersion` live in this
-//! file rather than their own module. `SerializedIR.version` is the
-//! sole consumer; promoting a single `u32` constant to its own
-//! module mirrored a TS file-per-export habit that gives no benefit
-//! in Rust. The TS-side `diagnostic/diagnostic.ts` was flattened
-//! into `diagnostic.rs` at the parent level for the same reason
-//! ("子が 1 ファイルのみだったため親に平滑化"); this is the same
-//! call applied one level down.
+//! file rather than their own module: `SerializedIR.version` is the
+//! sole consumer, so promoting a single `u32` constant to its own
+//! module would add a path without a corresponding cohesion gain.
 
 use serde::Serialize;
 

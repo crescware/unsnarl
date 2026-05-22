@@ -1,9 +1,7 @@
-//! The TS suite drives `FlatSerializer` through the full
-//! parse -> analyse -> serialise pipeline. The Rust port reuses the
-//! same end-to-end pipeline (via `unsnarl::pipeline::emit_ir_text`)
-//! and inspects the rendered IR JSON because that is what the public
-//! pipeline surfaces; `FlatSerializer` itself is a thin layer that
-//! the JSON output reflects byte-for-byte.
+//! Drives `FlatSerializer` through the full parse → analyse →
+//! serialise pipeline (via `unsnarl::pipeline::emit_ir_text`) and
+//! inspects the rendered IR JSON; the serialiser is a thin layer
+//! whose output is what the public pipeline surfaces.
 
 use serde_json::Value;
 use unsnarl::pipeline::emit_ir_text;

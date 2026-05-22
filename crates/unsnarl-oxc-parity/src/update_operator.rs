@@ -3,9 +3,8 @@
 //!
 //! Placed in `unsnarl-oxc-parity` for the same reason as
 //! `AssignOperator`: values come directly from oxc's
-//! `UpdateExpression.operator` (TS
-//! `analyzer/expression-statement-head.ts:149`). The set is fixed at
-//! `++` and `--` in current ECMA, so the JSON shape is pinned by
+//! `UpdateExpression.operator`. The set is fixed at `++` and `--`
+//! in current ECMA, so the JSON shape is pinned by
 //! `#[serde(rename = "...")]`.
 
 use serde::Serialize;

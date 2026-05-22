@@ -11,11 +11,11 @@ fn ascii_only_offset_matches_byte_offset() {
 
 #[test]
 fn em_dash_in_preceding_comment_shifts_offset_by_two_codeunits() {
-    // `—` is 3 UTF-8 bytes / 1 UTF-16 code unit, so a span end past it
-    // should land 2 UTF-16 units below its UTF-8 byte position. This
-    // mirrors the parity-bench failure where a TS-side endSpan offset
-    // is `byte_len(file) - 2` for files whose only non-ASCII is an
-    // em-dash inside a comment.
+    // `—` is 3 UTF-8 bytes / 1 UTF-16 code unit, so a span end past
+    // it should land 2 UTF-16 units below its UTF-8 byte position.
+    // Regression shape: a file whose only non-ASCII is an em-dash
+    // inside a comment, where the expected `endSpan.offset` is
+    // `byte_len(file) - 2`.
     let raw = "/* — */\n};\n";
     let byte_len = raw.len();
     assert_eq!(byte_len, 13);
@@ -73,11 +73,9 @@ fn non_ascii_before_newline_does_not_affect_later_line_column() {
 
 #[test]
 fn offset_past_file_end_extends_with_clamp_plus_overshoot() {
-    // Out-of-range offsets are tolerated. The TS reference computes
-    // `column = offset - lastNewline - 1` against the raw (un-clamped)
-    // offset and returns the raw offset as-is; the Rust impl converts
-    // the in-range portion to UTF-16 and adds the overshoot 1:1 to
-    // both `offset` and `column`.
+    // Out-of-range offsets are tolerated: the in-range portion is
+    // converted to UTF-16 and the overshoot is added 1:1 to both
+    // `offset` and `column`.
     let raw = "ab";
     let span = span_from_offset(raw, 5);
     assert_eq!(span.offset, SourceOffset(5));

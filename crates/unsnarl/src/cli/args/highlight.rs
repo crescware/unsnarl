@@ -1,5 +1,6 @@
-//! Typed `-H` / `--highlight` value, mirroring the TS commander
-//! `RawHighlight = false | true | readonly ParsedRootQuery[]` form.
+//! Typed `-H` / `--highlight` value: absent, given without an
+//! inline value (follow `-r/--roots`), or given with a parsed query
+//! list.
 
 use serde::{Serialize, Serializer};
 use unsnarl_root_query::ParsedRootQuery;
