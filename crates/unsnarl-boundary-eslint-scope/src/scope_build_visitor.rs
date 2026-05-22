@@ -625,7 +625,7 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_ts_type_assertion(&mut self, it: &TSTypeAssertion<'a>) {
-        // `<T>x` (legacy TS cast) -- same `typeAnnotation`-key
+        // `<T>x` (legacy TypeScript cast) -- same `typeAnnotation`-key
         // omission as `TSAsExpression` (see `visit_ts_as_expression`).
         let kind = AstKind::TSTypeAssertion(self.alloc(it));
         self.enter_node(kind);

@@ -1,12 +1,10 @@
 //! Decide what kind of slot a plain `Identifier` / `JSXIdentifier`
 //! occupies.
 //!
-//! Mirrors `classifyIdentifier` in
-//! `classify/classify-identifier.ts`. The order of the checks
-//! matches TS exactly:
+//! Check order:
 //!
 //! 1. No parent → plain read reference.
-//! 2. Skip context (estree property name, label, ...) → `Skip`.
+//! 2. Skip context (ESTree property name, label, ...) → `Skip`.
 //! 3. Direct binding slot (`VariableDeclarator.id`, etc.)
 //!    → `Binding`, with the `var x = 1` special case promoted to a
 //!    write reference with `init = true`.
@@ -48,15 +46,15 @@ pub(crate) fn classify_identifier(
         return ClassifyResult::Binding;
     }
     // oxc represents `function f(a = b)` as
-    // `FormalParameter { pattern: a, initializer: b }`, while the TS
-    // pipeline sees `AssignmentPattern { left: a, right: b }`. The TS
-    // classify walk routes `b` through `is_pattern_step`
-    // (AssignmentPattern is a pattern step) plus
-    // `find_binding_root_context`, which terminates at
-    // `Function@params` and returns `param`. The resulting outcome is
-    // `Binding` -- the identifier is skipped, no reference row is
-    // created. Mirror that directly here for the immediate-child
-    // initializer slot: identifiers nested deeper inside an
+    // `FormalParameter { pattern: a, initializer: b }`, but the
+    // ESTree-equivalent classify walk sees
+    // `AssignmentPattern { left: a, right: b }`: it routes `b`
+    // through `is_pattern_step` (AssignmentPattern is a pattern
+    // step) plus `find_binding_root_context`, which terminates at
+    // `Function@params` and returns `param`. The expected outcome
+    // is `Binding` -- the identifier is skipped, no reference row
+    // is created. Produce that directly here for the immediate-
+    // child initializer slot; identifiers nested deeper inside an
     // expression (e.g. `a + b` in `c = a + b`) reach this point with
     // a different `parent` (BinaryExpression, MemberExpression, ...)
     // and still fall through to `classify_ordinary_reference`.

@@ -29,10 +29,8 @@ pub(crate) struct NoopVisitor;
 impl AnalysisVisitor for NoopVisitor {}
 
 /// Captures every diagnostic the scope-builder emits during
-/// `analyze`. Mirrors the TS test pattern of reading `diagnostics`
-/// off the `runAnalysis` return value: the Rust port routes
-/// diagnostics through `AnalysisVisitor::on_diagnostic`, so a
-/// per-test visitor is the equivalent observation point.
+/// `analyze`. Diagnostics flow through `AnalysisVisitor::on_diagnostic`,
+/// so a per-test visitor is the natural observation point.
 pub(crate) struct DiagnosticCapturingVisitor {
     pub diagnostics: Vec<Diagnostic>,
 }
@@ -57,9 +55,9 @@ pub(crate) fn analyze_source(code: &str, language: Language) -> EslintScopeAnaly
     analyze_source_as(code, language, default_source_type_for(language))
 }
 
-/// Parse `code` with an explicit `source_type` override. Mirrors the
-/// TS `analyzeAs(code, language, sourceType)` helper used to assert
-/// the module-vs-script branching independently of the language tag.
+/// Parse `code` with an explicit `source_type` override; used to
+/// assert module-vs-script branching independently of the language
+/// tag.
 pub(crate) fn analyze_source_as(
     code: &str,
     language: Language,
@@ -90,9 +88,7 @@ pub(crate) fn analyze_source_as(
 }
 
 /// Run the scope-builder and return both the analysis result and the
-/// list of diagnostics surfaced by the visitor. Mirrors the TS
-/// `{ rootScope, diagnostics }` destructure pattern from
-/// `runAnalysis`.
+/// list of diagnostics surfaced by the visitor.
 pub(crate) fn analyze_source_with_diagnostics(
     code: &str,
     language: Language,
@@ -170,8 +166,7 @@ pub(crate) fn variable_has_def_of(arena: &IrArena, name: &str, kind: DefinitionT
 
 /// Locate a variable inside `scope` by name. Returns the `VariableId`
 /// from `scope.set` (the same lookup the analyzer uses when resolving
-/// declarations). Mirrors the TS `findVariable(scope, name)` helper
-/// used throughout `eslint-compat.test.ts`.
+/// declarations).
 pub(crate) fn find_variable_in_scope(
     arena: &IrArena,
     scope: ScopeId,
@@ -181,8 +176,6 @@ pub(crate) fn find_variable_in_scope(
 }
 
 /// Materialise the list of definition types attached to a variable.
-/// Mirrors the TS `variable.defs.map(d => d.type)` projection used
-/// for the `expect(defTypes(...)).toEqual([...])` assertions.
 pub(crate) fn def_types_of(arena: &IrArena, variable: VariableId) -> Vec<DefinitionType> {
     arena.variables[variable]
         .defs
@@ -212,9 +205,8 @@ pub(crate) fn assert_single_def_type(
     assert!(types[0] == expected, "definition type mismatch");
 }
 
-/// Pre-order traversal of a scope tree. Mirrors the TS
-/// `collectScopes(root)` helper used to find catch / class scopes by
-/// type without walking child-scope indices by hand.
+/// Pre-order traversal of a scope tree. Used to find catch / class
+/// scopes by type without walking child-scope indices by hand.
 pub(crate) fn collect_all_scopes(arena: &IrArena, root: ScopeId) -> Vec<ScopeId> {
     let mut out = Vec::new();
     walk_scope(arena, root, &mut out);

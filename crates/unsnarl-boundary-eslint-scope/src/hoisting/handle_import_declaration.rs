@@ -1,13 +1,13 @@
 //! Hoist each import specifier's `local` binding into the enclosing
 //! scope.
 //!
-//! TS reads `node["specifiers"]` as an array of `NodeLike` and pulls
-//! `spec["local"]`; the Rust port iterates
+//! Iterates
 //! `ImportDeclaration.specifiers: Option<Vec<ImportDeclarationSpecifier>>`
-//! and reads each variant's `local: BindingIdentifier` field directly.
+//! and reads each variant's `local: BindingIdentifier` field
+//! directly.
 //!
-//! Each declared local sees the *spec* node as its `def_node` and the
-//! *import* node as its `parent`, matching the TS shape exactly.
+//! Each declared local sees the *spec* node as its `def_node` and
+//! the *import* node as its `parent` (ESTree shape).
 
 use oxc_ast::ast::{ImportDeclaration, ImportDeclarationSpecifier, ModuleExportName};
 

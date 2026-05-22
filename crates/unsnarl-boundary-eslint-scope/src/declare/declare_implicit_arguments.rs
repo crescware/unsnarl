@@ -1,10 +1,10 @@
 //! Register the synthetic `arguments` binding inside a function scope.
 //!
-//! The TS version pushes a fresh `VariableImpl` with no identifiers
-//! and no defs — the ES spec's `CreateUnmappedArgumentsObject` /
-//! `CreateMappedArgumentsObject` shape — and the Rust port does the
-//! same through the arena. Arrow functions inherit `arguments` from
-//! the enclosing function scope and must not call this helper.
+//! Pushes a fresh `VariableData` with no identifiers and no defs —
+//! the ES spec's `CreateUnmappedArgumentsObject` /
+//! `CreateMappedArgumentsObject` shape. Arrow functions inherit
+//! `arguments` from the enclosing function scope and must not call
+//! this helper.
 
 use unsnarl_ir::ids::ScopeId;
 use unsnarl_ir::scope::VariableData;

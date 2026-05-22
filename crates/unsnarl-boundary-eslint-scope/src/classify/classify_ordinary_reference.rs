@@ -1,11 +1,9 @@
 //! Classify an identifier reference that isn't in a binding /
 //! skip slot.
 //!
-//! Mirrors `classifyOrdinaryReference` in
-//! `classify/classify-ordinary-reference.ts`. The TS port reads
-//! `parent.operator` defensively; the Rust port matches on
-//! `AstKind::AssignmentExpression` and reads
-//! `AssignmentExpression.operator: AssignmentOperator` directly.
+//! Matches on `AstKind::AssignmentExpression` and reads
+//! `AssignmentExpression.operator: AssignmentOperator` directly to
+//! pick the `WRITE` vs `READ_WRITE` flag combination.
 
 use oxc_ast::AstKind;
 use oxc_syntax::operator::AssignmentOperator;

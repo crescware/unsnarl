@@ -29,8 +29,8 @@ pub struct ParseOptions {
 /// Successful parse result.
 ///
 /// `language` is carried because the scope-builder normalises
-/// `Program.span.start` differently for TS-flavored (`Ts`/`Tsx`)
-/// versus JS-flavored (`Js`/`Jsx`) inputs.
+/// `Program.span.start` differently for TypeScript-flavored
+/// (`Ts`/`Tsx`) versus JavaScript-flavored (`Js`/`Jsx`) inputs.
 ///
 /// The `program` field carries the arena lifetime `'a` so this type
 /// — and any downstream consumer — must stay within the boundary

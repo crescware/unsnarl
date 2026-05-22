@@ -1,10 +1,10 @@
 //! Does this AST node have a `computed: true` flag?
 //!
-//! Mirrors `isComputed` in `classify/is-computed.ts`. The TS port
-//! reads `node.computed` defensively because `NodeLike` doesn't pin
-//! the shape. The Rust port matches on `AstKind` variants that carry
-//! a `computed: bool` field. Variants that don't carry one return
-//! `false`.
+//! Matches on `AstKind` variants that carry a `computed: bool`
+//! field; variants that don't carry one return `false`.
+//! `ComputedMemberExpression` is always computed,
+//! `StaticMemberExpression` / `PrivateFieldExpression` are always
+//! not.
 
 use oxc_ast::AstKind;
 

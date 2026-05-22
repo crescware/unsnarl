@@ -52,13 +52,13 @@ pub fn analyze<'a>(
     //     comments and hashbangs are part of the program span.
     //
     // The Rust `oxc_parser` crate emits `Program.span.start = 0` in
-    // every case, so we have to apply the TS-only normalisation
-    // ourselves. The cytoscape.min.js parity gap (the file leads with
-    // a multi-line block comment) surfaced this: under the old
-    // unconditional "skip to body[0].start" rule, the Rust IR
-    // reported `Program.span.start = 1138` while TS reported `0`.
-    let needs_ts_style_skip = matches!(options.language, Language::Ts | Language::Tsx);
-    let normalised_start = if needs_ts_style_skip {
+    // every case, so the TypeScript-only normalisation is applied here
+    // when the unconditional "skip to body[0].start" rule would be
+    // wrong (e.g. cytoscape.min.js, which leads with a multi-line
+    // block comment whose start is 0 and whose first body statement
+    // begins at 1138).
+    let needs_typescript_skip = matches!(options.language, Language::Ts | Language::Tsx);
+    let normalised_start = if needs_typescript_skip {
         program
             .directives
             .first()

@@ -1,15 +1,12 @@
 //! Declare each formal parameter as a `Parameter` binding inside the
 //! function scope.
 //!
-//! The TS
-//! port iterates `node["params"]` and unwraps `RestElement` via
-//! `p["argument"]`; the Rust port iterates the typed
-//! `FormalParameters.items` and handles `FormalParameters.rest`
-//! separately, since oxc keeps the rest parameter off the `items`
-//! vector.
+//! Iterates the typed `FormalParameters.items` and handles
+//! `FormalParameters.rest` separately, since oxc keeps the rest
+//! parameter off the `items` vector.
 //!
-//! Every parameter binding shares the same `def_node` (the surrounding
-//! function node), matching the TS shape.
+//! Every parameter binding shares the same `def_node`: the
+//! surrounding function node.
 
 use oxc_ast::ast::FormalParameters;
 
@@ -27,12 +24,11 @@ pub(crate) fn declare_function_params(
     params: &FormalParameters<'_>,
 ) {
     for p in &params.items {
-        // TS parameter property (`constructor(public x: number)` etc.):
-        // npm `oxc-parser` ESTree-fies this as a `TSParameterProperty`
-        // wrapper and the inner identifier classifies as a plain read
+        // TypeScript parameter property (`constructor(public x: number)`
+        // etc.): the inner identifier classifies as a plain read
         // reference (resolving as an implicit global), not a binding.
-        // Mirror that: skip declaring the parameter binding when oxc
-        // records an accessibility / readonly / override flag.
+        // Skip declaring the parameter binding when oxc records an
+        // accessibility / readonly / override flag.
         if p.accessibility.is_some() || p.readonly || p.r#override {
             continue;
         }

@@ -1,8 +1,7 @@
 //! Sibling tests for `hoist_into.rs`.
 //!
-//! The TS `hoistInto(program, manager.current(), raw, diagnostics)`
-//! is exercised via `analyze_source`'s implicit program-level
-//! hoisting pass.
+//! The `hoist_into` pass is exercised via `analyze_source`'s
+//! implicit program-level hoisting.
 
 use unsnarl_ir::Language;
 

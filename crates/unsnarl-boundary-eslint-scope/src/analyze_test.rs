@@ -56,11 +56,11 @@ fn module_source_seeds_module_scope_with_no_upper() {
 
 #[test]
 fn root_block_span_skips_leading_comments() {
-    // The npm `oxc-parser` package the TS pipeline consumes reports
-    // `Program.start` at the first body / directive / hashbang offset
-    // (skipping leading comments); the Rust `oxc_parser` crate emits
-    // `Program.span.start = 0`. `analyze` is responsible for
-    // normalising the divergence onto the TS-side shape.
+    // The IR contract spells `Program.start` as the first body /
+    // directive / hashbang offset (i.e. leading comments are
+    // skipped). The Rust `oxc_parser` crate emits
+    // `Program.span.start = 0` for the same input; `analyze` is
+    // responsible for normalising onto the contract shape.
     //
     // Source layout: `// leading comment` is bytes 0..18, the `\n`
     // sits at byte 18, and `const x = 1;` starts at byte 19, which is

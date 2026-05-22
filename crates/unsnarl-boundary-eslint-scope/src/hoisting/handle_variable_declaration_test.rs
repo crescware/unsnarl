@@ -114,8 +114,8 @@ fn using_declaration_is_skipped_by_hoist_pass() {
 #[test]
 fn await_using_declaration_is_skipped_by_hoist_pass() {
     // `await using` follows the same skip rule as `using`. It is
-    // only valid inside an async function body in TS, hence the
-    // wrapping `async function`.
+    // only valid inside an async function body, hence the wrapping
+    // `async function`.
     let r = analyze_source(
         "async function f() { await using x = obj; }\n",
         Language::Ts,

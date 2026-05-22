@@ -6,13 +6,12 @@
 //! `AnalysisVisitor` callbacks receive `&[AstNode]` (`type` + `span`
 //! only) so the `'a` lifetime stays inside the boundary crate.
 //!
-//! The `AstType` reported here mirrors what the TS layer's
-//! `asAstType()` would produce for the equivalent unnormalised
-//! `NodeLike.type` string. oxc-side renames (e.g. `Function` →
+//! The `AstType` reported here is the ESTree-style spelling the IR
+//! contract uses. oxc-side renames (e.g. `Function` →
 //! `FunctionDeclaration` / `FunctionExpression`,
 //! `StaticMemberExpression` → `MemberExpression`, `ObjectProperty`
-//! → `Property`) are flattened here so downstream consumers see the
-//! ESTree-style spelling the IR contract uses.
+//! → `Property`) are flattened here so downstream consumers see a
+//! uniform ESTree shape.
 
 use oxc_ast::ast::{
     ClassType, Expression, FunctionType, MethodDefinitionType, PropertyDefinitionType,
@@ -45,10 +44,9 @@ pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
         | AstKind::PrivateFieldExpression(_) => AstType::MemberExpression,
         AstKind::BindingRestElement(_) | AstKind::FormalParameterRest(_) => AstType::RestElement,
         // oxc separates the function body wrapper (`FunctionBody`)
-        // from the standalone `BlockStatement`, but the npm
-        // `oxc-parser` emits both as `BlockStatement` (ESTree's
-        // shape). Mirror the TS spelling so downstream consumers see
-        // the function body as a BlockStatement parent.
+        // from the standalone `BlockStatement`, but ESTree spells
+        // both as `BlockStatement`. Collapse here so downstream
+        // consumers see the function body as a BlockStatement parent.
         AstKind::FunctionBody(_) => AstType::BlockStatement,
         AstKind::IdentifierName(_)
         | AstKind::IdentifierReference(_)
@@ -91,10 +89,11 @@ pub(crate) fn materialise_path(path: &[PathEntry<'_>]) -> Vec<AstNode> {
 /// Convert an `oxc_ast::Expression` to the boundary's lifetime-free
 /// `AstNode` shape.
 ///
-/// Mirrors the ESTree-style `node.type` strings the TS port consumes
-/// (e.g. all numeric / string / boolean / null / regexp / bigint
-/// literals collapse to `AstType::Literal`; member expressions and
-/// private-in expressions collapse to their ESTree counterparts).
+/// Produces the ESTree-style `node.type` strings the IR contract
+/// uses (e.g. all numeric / string / boolean / null / regexp /
+/// bigint literals collapse to `AstType::Literal`; member
+/// expressions and private-in expressions collapse to their ESTree
+/// counterparts).
 pub fn ast_node_of_expression(expr: &Expression<'_>) -> AstNode {
     let (ty, span) = match expr {
         Expression::BooleanLiteral(n) => (AstType::Literal, n.span),

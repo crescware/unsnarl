@@ -1,14 +1,11 @@
 //! Walk up the ancestor chain through pattern wrappers until we hit
 //! the binding-defining context.
 //!
-//! Mirrors `findBindingRootContext` in
-//! `classify/find-binding-root-context.ts`. The TS port returns one
-//! of `"var" | "param" | "catch" | "assign" | null` and the Rust
-//! port mirrors that as a dedicated enum
-//! ([`BindingRootContext`]). The walk shape is identical: while the
-//! current ancestor is a pattern step, climb one level; when we hit
-//! a non-pattern node, the relevant `(type, key)` pair determines
-//! the root context.
+//! Returns the matching [`BindingRootContext`] (`Var` / `Param` /
+//! `Catch` / `Assign`) or `None`. The walk: while the current
+//! ancestor is a pattern step, climb one level; when a non-pattern
+//! node is reached, the `(type, key)` pair determines the root
+//! context.
 
 use oxc_ast::AstKind;
 
@@ -32,7 +29,7 @@ pub(crate) fn find_binding_root_context(
     let mut i = path.len();
     if i == 0 {
         // Defensive: classify is called with `path[len-1] == parent`,
-        // so this shouldn't fire. Bail out the same way TS does.
+        // so this shouldn't fire. Bail out safely.
         return None;
     }
     i -= 1;
@@ -50,12 +47,12 @@ pub(crate) fn find_binding_root_context(
                 {
                     Some(BindingRootContext::Param)
                 }
-                // oxc-specific: TS folds Function.params -> Pattern[]
-                // into a single field, but oxc wraps it as
-                // Function.params -> FormalParameters -> FormalParameter
-                // -> pattern. To keep classify aligned with TS, we
-                // treat `FormalParameter` itself as a binding terminator
-                // for its `pattern` slot.
+                // oxc-specific: ESTree models `Function.params` as a
+                // `Pattern[]` directly, but oxc wraps each entry as
+                // `Function.params -> FormalParameters -> FormalParameter
+                // -> pattern`. To produce the ESTree-equivalent
+                // classify outcome, treat `FormalParameter` itself as
+                // a binding terminator for its `pattern` slot.
                 AstKind::FormalParameter(_) if cur_key == Some("pattern") => {
                     Some(BindingRootContext::Param)
                 }

@@ -1,9 +1,8 @@
 //! Sibling tests for `state.rs`.
 //!
-//! The TS port colocates `declareVariable` in `declare/`; the Rust
-//! port pulls it into `state.rs` because it directly mutates
-//! `ScopeBuilderState`. The sibling tests therefore live next to the
-//! Rust impl.
+//! `declare_variable` lives alongside `ScopeBuilderState` because it
+//! mutates the state directly; the sibling tests live next to that
+//! implementation.
 
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;

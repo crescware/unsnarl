@@ -1,11 +1,10 @@
 //! Push a `Block` scope for a `SwitchCase` and hoist its
 //! consequent.
 //!
-//! Note that the
-//! TS port uses scope type `"block"` (not `"switch"`); the Rust port
-//! does the same. The case's consequent is `Vec<Statement<'_>>` in
-//! oxc, structurally guaranteed, so the TS `Array.isArray` check
-//! collapses.
+//! The scope type is `Block` (not `Switch`) — `SwitchCase` carries
+//! lexical declarations that escape into the surrounding `Switch`
+//! scope's block context. The case's consequent is
+//! `Vec<Statement<'_>>` in oxc, structurally guaranteed.
 
 use oxc_ast::ast::SwitchCase;
 

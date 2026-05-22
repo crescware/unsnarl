@@ -50,7 +50,7 @@ pub(crate) fn bind_reference(
     // scope (exclusive) "passes the reference through" up to the
     // global where the implicit binding lives. The global scope is
     // appended last so the order in `globalScope.through` matches
-    // TS's `bindReference`.
+    // the eslint-scope contract.
     let global = state.global_scope;
     let mut cur = Some(scope);
     while let Some(s) = cur {
