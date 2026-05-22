@@ -1,6 +1,28 @@
 //! unsnarl-specific analysis: builds the side-table annotations
 //! consumed by the serializers.
 //!
+//! Entry point [`run_analysis`] runs three phases in order — nesting
+//! depths, an eslint-scope-compatible scope build via
+//! `unsnarl_boundary_eslint_scope`, and a second walk driven by
+//! [`build_analysis_visitor::BuildAnalysisVisitor`] — and returns an
+//! [`AnalyzedSource`] whose [`AnnotationsImpl`] satisfies the
+//! `unsnarl_annotations::Annotations` lookup trait that serializers
+//! consume. The remaining flat-listed siblings are per-routine
+//! helpers the visitor calls into (`is_unused`, `is_control_exit`,
+//! `abrupt_completion_type_of`, predicate / completion / container
+//! lookups, the two `format_*` diagnostic renderers, etc.).
+//!
+//! [`owner`] is the only sub-directory. It groups three
+//! owner-resolution helpers that share the same ancestor-walk
+//! contract — `BindingPattern` flattening,
+//! `AssignmentTarget` flattening, and locating the nearest owner
+//! slot via [`owner::OwnerLookup`] — and is exposed through the
+//! sibling `owner.rs` file per `docs/code-layout.md`'s
+//! sibling-module rule. No other module in the crate currently
+//! benefits from that finer-granularity grouping; if a future helper
+//! cluster reaches the same coupling, it can follow the same
+//! pattern.
+//!
 //! Functions that only need a node's `(type, span, key)` triple
 //! take materialised `AstNode` values from `unsnarl-ir`; functions
 //! that recurse into AST children (`is_control_exit`,
