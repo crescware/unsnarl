@@ -344,12 +344,19 @@ fn prepare_emit(
 ) -> PreparedEmit {
     let base = {
         let _span = tracing::info_span!("build_visual_graph").entered();
-        build_visual_graph(
+        let graph = build_visual_graph(
             ir,
             &BuildVisualGraphOptions {
                 depths: depths.cloned(),
             },
-        )
+        );
+        tracing::info!(
+            elements = graph.elements.len(),
+            edges = graph.edges.len(),
+            boundary_edges = graph.boundary_edges.len(),
+            "visual graph counts",
+        );
+        graph
     };
 
     let mut pruned_graph: Option<VisualGraph> = None;
@@ -379,6 +386,11 @@ fn prepare_emit(
                     .collect(),
             );
             prune_root_ids = Some(result.root_ids);
+            tracing::info!(
+                kept_elements = result.graph.elements.len(),
+                kept_edges = result.graph.edges.len(),
+                "pruned graph counts",
+            );
             pruned_graph = Some(result.graph);
             resolutions_out = Some(resolved.resolutions);
         }
@@ -512,7 +524,15 @@ fn serialize_ir(
         raw: analyzed.raw,
     };
     let _span = tracing::info_span!("serialize").entered();
-    Ok(serializer.serialize(&ctx))
+    let ir = serializer.serialize(&ctx);
+    tracing::info!(
+        scopes = ir.scopes.len(),
+        variables = ir.variables.len(),
+        references = ir.references.len(),
+        diagnostics = ir.diagnostics.len(),
+        "ir counts",
+    );
+    Ok(ir)
 }
 
 #[cfg(test)]

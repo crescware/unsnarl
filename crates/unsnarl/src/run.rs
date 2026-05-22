@@ -50,10 +50,12 @@ pub fn run(args: &Args) -> ExitCode {
 }
 
 /// Install a stderr `tracing-subscriber` at INFO level, emitting span
-/// close events so each pipeline stage prints its elapsed time.
-/// Called only when `--verbose` is set. Wrapped in `try_init` so a
-/// stray double install (e.g. an embedder calling `run` twice) is a
-/// no-op rather than a panic.
+/// close events so each pipeline stage prints its elapsed time
+/// alongside the in-stage `info!` payload events (input/output
+/// sizes, IR / graph counts) needed to spot bottlenecks. Called only
+/// when `--verbose` is set. Wrapped in `try_init` so a stray double
+/// install (e.g. an embedder calling `run` twice) is a no-op rather
+/// than a panic.
 fn init_verbose_tracing() {
     use tracing_subscriber::fmt::format::FmtSpan;
     let _ = tracing_subscriber::fmt()
@@ -96,6 +98,13 @@ pub(crate) fn run_to(
         Some(t) => t,
         None => return 1,
     };
+    tracing::info!(
+        path = %source_path,
+        bytes = code.len(),
+        language = language_str(language),
+        plugins = plugins.len(),
+        "source loaded",
+    );
 
     let details = {
         let _span = tracing::info_span!("pipeline", format = ?args.format).entered();
@@ -104,6 +113,11 @@ pub(crate) fn run_to(
             Err(e) => return handle_parse_error(&e, err),
         }
     };
+    tracing::info!(
+        output_bytes = details.text.len(),
+        diagnostics = details.diagnostics.len(),
+        "pipeline result",
+    );
 
     emit_resolution_notices(details.resolutions.as_deref(), err);
     emit_pruning_warnings(details.pruning.as_deref(), err);
@@ -366,6 +380,15 @@ fn cli_language_str(lang: &CliLanguage) -> &'static str {
         CliLanguage::Tsx => "tsx",
         CliLanguage::Js => "js",
         CliLanguage::Jsx => "jsx",
+    }
+}
+
+fn language_str(lang: Language) -> &'static str {
+    match lang {
+        Language::Ts => "ts",
+        Language::Tsx => "tsx",
+        Language::Js => "js",
+        Language::Jsx => "jsx",
     }
 }
 
