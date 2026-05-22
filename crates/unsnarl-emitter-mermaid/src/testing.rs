@@ -82,10 +82,9 @@ pub fn base_write_op() -> SyntheticVisualNode {
     }
 }
 
-/// Base shape for synthetic kinds with no extras tail. The TS port's
-/// `baseSimpleNode` mixes binding and synthetic kinds because the
-/// TS `VisualNode` union is flat; the Rust port splits them across
-/// two struct shapes, so the helper splits accordingly.
+/// Base shape for synthetic kinds with no extras tail. Mirrors the
+/// split between `BindingVisualNode` and `SyntheticVisualNode`; the
+/// binding counterpart is `base_simple_binding` above.
 pub fn base_simple_synthetic(kind: SyntheticNodeKind) -> SyntheticVisualNode {
     SyntheticVisualNode {
         r#type: NodeTypeTag::Node,

@@ -17,33 +17,30 @@ pub struct EmitOptions {
     pub debug: bool,
     /// When `Some`, every emitter that would otherwise build a
     /// `VisualGraph` from `SerializedIR` uses this graph instead.
-    /// Mirrors `opts.prunedGraph` in the TS port: the pipeline runs
-    /// `prune_visual_graph` once and hands the result to all
-    /// downstream emitters so the JSON / mermaid / stats / markdown
-    /// renders stay consistent with each other for the same `-r`
-    /// query.
+    /// The pipeline runs `prune_visual_graph` once and hands the
+    /// result to all downstream emitters so the JSON / mermaid /
+    /// stats / markdown renders stay consistent with each other for
+    /// the same `-r` query.
     pub pruned_graph: Option<VisualGraph>,
     /// `LineOrName` disambiguator log produced by
     /// `resolve_ambiguous_queries`. Surfaced by the markdown emitter
     /// in the `## Notice` block and by the CLI's stderr emitter.
     pub resolutions: Option<Vec<RootQueryResolution>>,
     /// Per-`NestingKind` depth ceiling applied at visual-graph build
-    /// time. `None` keeps every scope rendered (the TS default when
-    /// no `--depth*` flag is given); `Some` collapses scopes whose
+    /// time. `None` keeps every scope rendered (the default when no
+    /// `--depth*` flag is given); `Some` collapses scopes whose
     /// recorded `nestingDepths[kind]` strictly exceed the matching
-    /// threshold. Mirrors `opts.depths` in the TS port: the markdown
-    /// emitter additionally surfaces the chosen depths in its
-    /// `## Query` block via `formatDepthQuery`.
+    /// threshold. The markdown emitter additionally surfaces the
+    /// chosen depths in its `## Query` block via `format_depth_query`.
     pub depths: Option<NestingDepths>,
     /// Ordered list of `VisualNode` ids the renderer should paint as
     /// "highlighted". `None` means "no highlight". An empty list means
     /// "highlight requested but matched nothing"; the renderer treats
     /// that the same as `None` but the distinction lets the pipeline
-    /// produce a stderr warning upstream. Mirrors `opts.highlightIds`
-    /// in the TS port, where the underlying `ReadonlySet<string>`
-    /// iterates in insertion order; the mermaid renderer's inline
-    /// `style` block depends on that order to reproduce the TS
-    /// baselines byte-for-byte.
+    /// produce a stderr warning upstream. The list is ordered: the
+    /// mermaid renderer's inline `style` block consumes this slice in
+    /// order, and the order is fixed at construction time so emitted
+    /// bytes stay stable against the IR parity baselines.
     pub highlight_ids: Option<Vec<String>>,
     /// Original highlight request, propagated so emitters that surface
     /// the CLI form (currently markdown) can reconstruct `-H` /

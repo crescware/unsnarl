@@ -48,9 +48,9 @@ fn ascii_source_returns_byte_offset_unchanged() {
 #[test]
 fn non_ascii_before_head_identifier_shifts_offset_to_utf16_units() {
     // Em-dash `—` is 3 UTF-8 bytes / 1 UTF-16 code unit. With one
-    // em-dash in the leading comment, the byte offset of `x` is 13 but
-    // its UTF-16 offset is 11; `pick_variable_offset` must report the
-    // latter because that is what the TS reference produces.
+    // em-dash in the leading comment, the byte offset of `x` is 13
+    // but its UTF-16 offset is 11; `pick_variable_offset` must
+    // report the latter to honour the IR's UTF-16 offset contract.
     let raw = "// —\nconst x = 1;\n";
     let mut arena = empty_arena();
     let head = ident_at("x", 13);

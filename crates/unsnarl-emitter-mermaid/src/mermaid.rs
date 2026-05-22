@@ -46,8 +46,7 @@ impl MermaidEmitter {
     /// Construct a `MermaidEmitter` bound to the given strategy and
     /// color theme. Both choices live at the CLI / pipeline
     /// boundary; this constructor does not pick defaults so that
-    /// every caller is forced to make both decisions explicitly
-    /// (matching the TS constructor's required options).
+    /// every caller is forced to make both decisions explicitly.
     pub fn new(strategy: MermaidStrategy, theme: &'static ColorTheme) -> Self {
         Self { strategy, theme }
     }
@@ -165,9 +164,9 @@ fn render_mermaid(
     render_boundary_edges(graph, &mut state.lines, &mut stub_ids);
     // Depth-limit stubs share the boundary-stub class so they pick
     // up the same dashed-circle treatment as the pruning ones.
-    // Walks the element tree directly (rather than `state.node_map.values()`)
-    // so the emitted order matches the deterministic insertion order
-    // TS gets out of `Map.prototype.values()`.
+    // Walks the element tree directly (rather than
+    // `state.node_map.values()`) so the emitted order matches the
+    // tree's deterministic insertion order.
     collect_beyond_depth_stub_ids(&graph.elements, &mut stub_ids);
 
     let var_ids = collect_var_node_ids(&graph.elements);
@@ -210,9 +209,8 @@ fn collect_beyond_depth_stub_ids(elements: &[VisualElement], out: &mut Vec<Strin
 }
 
 /// Deep-walks the element tree in preorder and appends every
-/// matching node's id to `out`. The walk order mirrors the TS
-/// `collectNodesInto` insertion order so the rendered class blocks
-/// stay deterministic byte-for-byte against the TS baselines.
+/// matching node's id to `out`. The preorder walk fixes the
+/// rendered class blocks against the IR parity baselines.
 fn walk_collect_kind(elements: &[VisualElement], kind: NodeKind, out: &mut Vec<String>) {
     for e in elements {
         match e {
