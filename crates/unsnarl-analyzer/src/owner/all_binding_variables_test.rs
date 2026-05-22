@@ -184,8 +184,8 @@ fn assignment_target_object_destructuring_resolves_each_property() {
 fn assignment_target_member_expression_is_skipped() {
     // `obj.prop = ...` does not introduce a binding; the target is a
     // member access that resolves to the existing `obj` binding only
-    // indirectly. `assignment_target_variables` mirrors the TS
-    // behavior of returning an empty list for member-target assignments.
+    // indirectly. `assignment_target_variables` returns an empty list
+    // for member-target assignments.
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let obj = {}; obj.prop = 1;");
     let assign = match program.body.get(1).unwrap() {
@@ -244,11 +244,10 @@ fn assignment_target_object_rest_is_collected() {
 
 #[test]
 fn duplicate_names_are_deduped() {
-    // The TS function de-dupes via `Array.includes`; the Rust port
-    // mirrors that with a `Vec::contains` check. Build a pattern that
-    // binds two declarations with the same name — `let [a, a]` is not
-    // valid syntax, so we exercise the dedupe by hand using a doubly-
-    // bound destructuring target.
+    // `assignment_target_variables` de-dupes via `Vec::contains`.
+    // Build a pattern that binds two declarations with the same name
+    // — `let [a, a]` is not valid syntax, so exercise the dedupe with
+    // a doubly-bound destructuring target.
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a; let a2; [a, a] = [1, 2];");
     let assign = match program.body.get(2).unwrap() {

@@ -29,8 +29,8 @@ pub fn if_chain_root_offset(
     let mut chain_top_offset: u32 = parent.span.start;
     let mut walked = false;
     let len = path.len();
-    // TS loop: for (let i = path.length - 1; i >= 1; i--).
-    // i ranges over [1, len-1] inclusive when len >= 2; otherwise empty.
+    // Walk from `path.len() - 1` down to `1` inclusive when len >=
+    // 2; otherwise the loop body never runs.
     if len >= 2 {
         let mut i = len - 1;
         loop {

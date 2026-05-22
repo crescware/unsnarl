@@ -148,7 +148,7 @@ fn compound_assignment_preserves_operator() {
 
 #[test]
 fn assignment_operator_translation_covers_every_variant() {
-    // The 16 entries below pair every JS / TS assignment operator with the
+    // The 16 entries below pair every JavaScript / TypeScript assignment operator with the
     // `AssignOperator` variant `convert_assign_operator` is expected to
     // produce. The list mirrors `oxc_syntax::operator::AssignmentOperator`
     // exhaustively so a mismatch in the table is caught.

@@ -25,10 +25,11 @@ pub fn find_predicate_container(
     path: &[PathEntry],
     raw: &str,
 ) -> Option<PredicateContainer> {
-    // `entry.node.span.start` and `parent_offset` arrive in UTF-8 byte
-    // units from oxc; the serialized `PredicateContainer.offset` is in
-    // UTF-16 code units to match the TS reference, so we convert each
-    // candidate offset through `span_from_offset` before returning.
+    // `entry.node.span.start` and `parent_offset` arrive in UTF-8
+    // byte units from oxc; the serialised `PredicateContainer.offset`
+    // is in UTF-16 code units per the IR contract, so each candidate
+    // offset is converted through `span_from_offset` before being
+    // returned.
     let mut cur_key: Option<&str> = key;
     for entry in path.iter().rev() {
         let ty = &entry.node.r#type;

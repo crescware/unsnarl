@@ -46,15 +46,12 @@ fn try_build(node: &Expression<'_>) -> Option<HeadExpression> {
         }
         Expression::ComputedMemberExpression(_) => None,
         Expression::PrivateFieldExpression(m) => {
-            // npm `oxc-parser` flattens `obj.#prop` into a regular
-            // MemberExpression with `property = PrivateIdentifier {
-            // name: "prop" }` and `computed: false`. The TS
-            // head-builder reads `property.name` directly without
-            // checking the property's node type, so the resulting
-            // head is `{ kind: member, object, property: "prop" }`
-            // -- identical shape to a non-private `obj.prop`. The
-            // Rust `oxc_parser` crate keeps PrivateFieldExpression
-            // separate, so mirror the same flattening here.
+            // The head expression for `obj.#prop` must come out as
+            // `{ kind: member, object, property: "prop" }` -- the
+            // same shape as a non-private `obj.prop`. The Rust
+            // `oxc_parser` crate keeps `PrivateFieldExpression`
+            // separate, so flatten it onto a member head here using
+            // the bare private name.
             let object_head = try_build(&m.object)?;
             let prop = m.field.name.as_str();
             if prop.is_empty() {
@@ -86,7 +83,7 @@ fn try_build(node: &Expression<'_>) -> Option<HeadExpression> {
             let right_head = try_build(&asn.right);
             let left_operand = operand_from(left_target_span(&asn.left), left_target_head);
             let right_operand = operand_from(asn.right.span(), right_head);
-            // Both sides collapsed to `elided` — fall back to raw, matching TS.
+            // Both sides collapsed to `elided` — fall back to raw.
             if matches!(left_operand.head, HeadExpression::Elided)
                 && matches!(right_operand.head, HeadExpression::Elided)
             {
@@ -100,10 +97,10 @@ fn try_build(node: &Expression<'_>) -> Option<HeadExpression> {
         }
         Expression::UpdateExpression(up) => {
             let operator = convert_update_operator(up.operator);
-            // `argument` is a `SimpleAssignmentTarget`; we try to reduce
+            // `argument` is a `SimpleAssignmentTarget`; try to reduce
             // it via its expression form. If the structural reduction
-            // fails the whole UpdateExpression is unrecognised (the TS
-            // source returns `null` in the same situation).
+            // fails the whole UpdateExpression is unrecognised (head
+            // collapses to raw).
             let arg_head = try_build_simple_assignment_target(&up.argument)?;
             let arg_operand =
                 operand_from(simple_assignment_target_span(&up.argument), Some(arg_head));
@@ -142,11 +139,10 @@ fn try_build_assignment_target(
             Some(HeadExpression::member(object_head, prop.to_string()))
         }
         AT::PrivateFieldExpression(m) => {
-            // Same flattening as the expression-position arm: TS
-            // sees `obj.#prop = rhs` as `MemberExpression(obj,
-            // PrivateIdentifier("prop"))` on the left, builds
-            // `{kind: member, property: "prop"}` for it, and emits
-            // the surrounding assignment in the head IR.
+            // Same flattening as the expression-position arm:
+            // `obj.#prop = rhs` reduces to a member head with the
+            // bare private name in the property slot, and the head
+            // IR emits the surrounding assignment shape.
             let object_head = try_build(&m.object)?;
             let prop = m.field.name.as_str();
             if prop.is_empty() {
@@ -185,8 +181,9 @@ fn try_build_simple_assignment_target(
         }
         SAT::PrivateFieldExpression(m) => {
             // Same flattening as the AssignmentTarget arm above:
-            // UpdateExpression's argument is a SimpleAssignmentTarget,
-            // and TS reduces `++obj.#prop` to a member head shape.
+            // an UpdateExpression's argument is a
+            // SimpleAssignmentTarget, and `++obj.#prop` reduces to a
+            // member head with the bare private name.
             let object_head = try_build(&m.object)?;
             let prop = m.field.name.as_str();
             if prop.is_empty() {

@@ -1,10 +1,8 @@
 //! Sibling tests for `format_case_test`.
 //!
-//! The TS test suite uses programmatic `AstNode` literals (arbitrary
-//! `start`/`end` plus optional `name` / `value` fields). The Rust
-//! port lifts those scenarios to real `oxc_parser` snippets so the
-//! `&Expression` shape is genuine; only the "type-specific
-//! fallback" branches remain assertable on synthetic spans.
+//! Cases are driven from real `oxc_parser` snippets so the
+//! `&Expression` shape is genuine; only the "type-specific fallback"
+//! branches are exercised on synthetic spans.
 
 use oxc_allocator::Allocator;
 use oxc_ast::ast::{Expression, Statement};

@@ -88,8 +88,8 @@ fn parent_span_offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
     // the byte position of a token below it by +2 (3 - 1) vs UTF-16.
     // `if` starts at byte 7 (chars: `/`, `/`, ` `, `—`, `\n`, then
     // `if`); in UTF-16 the equivalent code-unit offset is 5. The
-    // serialized `parentSpanOffset` must use the UTF-16 value to match
-    // the TS reference.
+    // serialised `parentSpanOffset` must use the UTF-16 value per
+    // the IR contract.
     let raw = "// —\nif (true) {}\n";
     let parent = crate::testing::ast_node(AstType::IfStatement, 7);
     let ctx = block_context_of(Some(&parent), Some("consequent"), &[], raw).expect("Some");

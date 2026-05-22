@@ -60,12 +60,11 @@ pub fn assignment_target_variables(
 /// Walk every identifier reachable from an `AssignmentTarget`,
 /// invoking `f` once per occurrence in source order.
 ///
-/// The traversal mirrors the TS `findReferenceOwners /
-/// allBindingVariables` shape: identifiers nested under
-/// destructuring patterns, defaulted slots, rest targets and
-/// shorthand property bindings are all visited. Member expressions
-/// and TS-only wrappers in target position contribute no bindings
-/// and are skipped.
+/// Identifiers nested under destructuring patterns, defaulted slots,
+/// rest targets and shorthand property bindings are all visited.
+/// Member expressions and TypeScript-only wrappers (`as`, `satisfies`,
+/// `!`, `<T>` casts) in target position contribute no bindings and
+/// are skipped.
 ///
 /// `oxc_ast` spells the identifier slot two different ways: the
 /// `AssignmentTargetIdentifier` variants wrap a
