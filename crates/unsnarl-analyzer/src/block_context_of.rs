@@ -6,9 +6,10 @@
 //! [`if_chain_root_offset`].
 //!
 //! Both offsets are recorded in UTF-16 code units. The `oxc_parser`
-//! crate returns UTF-8 bytes, so we convert.
+//! crate returns UTF-8 bytes, so we convert via the pre-built
+//! [`SourceIndex`] in O(log lines + line_length) per lookup.
 
-use unsnarl_ir::primitive::{span_from_offset, AstNode};
+use unsnarl_ir::primitive::{AstNode, SourceIndex};
 use unsnarl_ir::scope::{BlockContext, OtherBlockContext};
 
 use crate::if_chain_root_offset::if_chain_root_offset;
@@ -18,13 +19,13 @@ pub fn block_context_of(
     parent: Option<&AstNode>,
     key: Option<&str>,
     path: &[PathEntry],
-    raw: &str,
+    index: &SourceIndex<'_>,
 ) -> Option<BlockContext> {
     let parent = parent?;
     let key = key?;
     let chain_root = if_chain_root_offset(Some(parent), Some(key), path)
-        .map(|byte_offset| span_from_offset(raw, byte_offset as usize).offset);
-    let parent_offset = span_from_offset(raw, parent.span.start as usize).offset;
+        .map(|byte_offset| index.span_at(byte_offset as usize).offset);
+    let parent_offset = index.span_at(parent.span.start as usize).offset;
     Some(BlockContext::Other(OtherBlockContext::new(
         parent.r#type.clone(),
         key.to_string(),

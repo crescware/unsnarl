@@ -28,6 +28,7 @@ use unsnarl_boundary_eslint_scope::parser::SourceType;
 use unsnarl_boundary_eslint_scope::visitor::AnalysisVisitor;
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
 use unsnarl_oxc_parity::AstType;
@@ -109,10 +110,14 @@ pub fn run_analysis<'a>(
     // `Program.span.start == normalised_start` instead of the raw
     // oxc value of `0`.
     let program_normalised_start = result.arena.scopes[result.global_scope].block.span.start;
+    let index = {
+        let _span = tracing::info_span!("analyze::build_source_index", bytes = raw.len()).entered();
+        SourceIndex::build(raw)
+    };
     {
         let _span = tracing::info_span!("analyze::build_analysis_visitor").entered();
         let mut walker = BuildAnalysisVisitor::new(
-            raw,
+            &index,
             &result.arena,
             &mut annotations,
             &nesting_depths,
