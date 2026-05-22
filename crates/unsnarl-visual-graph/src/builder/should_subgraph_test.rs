@@ -37,9 +37,8 @@ fn branch_block_if_consequent_is_subgraph() {
 
 #[test]
 fn bare_block_is_subgraph() {
-    // Mirrors the TS fallthrough: a `Block` scope without a
-    // recognised parent context still renders as the generic
-    // 'block' subgraph.
+    // Fallthrough: a `Block` scope without a recognised parent
+    // context still renders as the generic 'block' subgraph.
     assert!(check(ScopeType::Block, None));
 }
 

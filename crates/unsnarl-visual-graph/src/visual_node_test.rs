@@ -1,9 +1,8 @@
 //! Locks down the JSON field order produced by each of the two
-//! `VisualNode` shapes. The order matches the JS object-literal
-//! order at the corresponding TS construction sites
-//! (`makeVariableNode` for the binding shape, the various
-//! `ensure-*` / anchor builders for the synthetic shape) — bytes
-//! that the IR parity harness compares against `expected.json`.
+//! `VisualNode` shapes (the binding shape from `make_variable_node`
+//! and the synthetic shape from the various `ensure_*` / anchor
+//! builders) — bytes that the IR parity harness compares against
+//! `expected.json`.
 
 use unsnarl_oxc_parity::VariableDeclarationKind;
 

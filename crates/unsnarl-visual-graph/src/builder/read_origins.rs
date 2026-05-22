@@ -144,8 +144,7 @@ pub fn read_origins(
     dedup_preserve_order(origins)
 }
 
-/// Replicates `Array.from(new Set(origins))` in TS — preserves
-/// first-occurrence order while removing duplicates.
+/// Preserves first-occurrence order while removing duplicates.
 fn dedup_preserve_order(input: Vec<String>) -> Vec<String> {
     use std::collections::HashSet;
     let mut seen = HashSet::new();

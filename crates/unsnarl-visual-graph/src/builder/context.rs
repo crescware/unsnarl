@@ -38,13 +38,10 @@ pub struct BuilderContext<'a> {
     /// fresh; no zero-copy benefit here.
     pub subgraph_owner_var: HashMap<String, String>,
     /// `variable id → Write `WriteOp`s in identifier-offset order`.
-    /// Mirrors `writeOpsByVariable` in TS.
     pub write_ops_by_variable: HashMap<String, Vec<WriteOp>>,
     /// `scope id → Write `WriteOp`s declared in that scope`.
-    /// Mirrors `writeOpsByScope` in TS.
     pub write_ops_by_scope: HashMap<String, Vec<WriteOp>>,
     /// `reference id → WriteOp` for direct ref-to-op lookup.
-    /// Mirrors `writeOpByRef` in TS.
     pub write_op_by_ref: HashMap<String, WriteOp>,
     /// `branch-container key → cases sorted by source order`. Keys
     /// look like `switch:<parentScope>:<offset>`; the value lets

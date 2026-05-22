@@ -1,7 +1,5 @@
-//! Sibling tests for [`find_host_subgraph`].
-//! The
-//! Rust signature returns a [`SubgraphIdx`] handle (vs the TS
-//! `VisualSubgraph` value) so each test asserts on the returned
+//! Sibling tests for [`find_host_subgraph`]. The signature returns
+//! a [`SubgraphIdx`] handle, so each test asserts on the returned
 //! handle's identity against the arena slots it populated.
 
 use std::collections::HashMap;

@@ -1,7 +1,5 @@
-//! Sibling tests for [`line_for_offset`]. The TS side has no
-//! dedicated test file; these cases lock the basic loop semantics
-//! (line counting, offset clamping, UTF-16 stepping) so the Rust
-//! port stays bug-compatible with the TS reference.
+//! Sibling tests for [`line_for_offset`]. Cases lock the basic loop
+//! semantics: line counting, offset clamping, and UTF-16 stepping.
 
 use super::line_for_offset;
 

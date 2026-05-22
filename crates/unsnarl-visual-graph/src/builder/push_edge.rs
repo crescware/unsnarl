@@ -1,5 +1,5 @@
 //! Deduplicates emitted edges by a `from -->|label| to` key so the
-//! TS one-edge-per-from/to/label invariant is preserved across
+//! one-edge-per-(from, to, label) invariant is preserved across
 //! every site that pushes into `state.edges`.
 
 use std::collections::HashSet;

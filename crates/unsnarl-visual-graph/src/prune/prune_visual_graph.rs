@@ -47,10 +47,8 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
         })
         .collect();
     // Two parallel containers: a Vec preserves the
-    // `iterate_visual_nodes` walk order (which the TS port's
-    // `ReadonlySet<string>` reproduces via insertion-order iteration),
-    // while the HashSet keeps lookups O(1) during the subgraph sweep
-    // and during BFS.
+    // `iterate_visual_nodes` walk order while the HashSet keeps
+    // lookups O(1) during the subgraph sweep and during BFS.
     let mut root_ids: Vec<String> = Vec::new();
     let mut root_ids_set: HashSet<String> = HashSet::new();
 
@@ -108,9 +106,10 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
     // 100 cut neighbors should still produce a single hint, not 100. So
     // collapse on (inside, direction); for "in" we additionally union
     // the labels (split by comma so "read,call" + "read" yields
-    // {call, read}). The bucket list is kept in JS Map insertion order
-    // (the order keys were first observed during the edge walk) so the
-    // emitted boundaryEdges slice matches the TS port byte-for-byte.
+    // {call, read}). The bucket list is kept in insertion order (the
+    // order keys were first observed during the edge walk) so the
+    // emitted boundaryEdges slice stays stable against the IR parity
+    // baselines.
     let mut bucket_order: Vec<String> = Vec::new();
     let mut buckets: HashMap<String, Bucket> = HashMap::new();
 

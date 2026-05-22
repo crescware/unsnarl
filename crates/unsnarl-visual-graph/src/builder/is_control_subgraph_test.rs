@@ -92,7 +92,7 @@ fn block_in_do_while_body_is_control_subgraph() {
 #[test]
 fn plain_block_without_block_context_is_control_subgraph() {
     // A bare block scope (no `blockContext`) still renders as the
-    // generic 'block' subgraph in both TS and Rust.
+    // generic 'block' subgraph.
     let mut scope = base_serialized_scope("s");
     scope.r#type = ScopeType::Block;
     assert!(is_control_subgraph(&scope));

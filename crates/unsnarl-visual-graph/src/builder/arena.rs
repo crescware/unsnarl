@@ -1,15 +1,14 @@
 //! Owning storage for the builder's mutable nodes and subgraphs.
 //!
-//! TS calls `state.subgraphByScope.set(id, sg)` and then later
-//! `sg.elements.push(...)` from a different call site. In Rust the
-//! same pattern collides with the borrow checker and the project's
-//! ban on `Rc<RefCell<T>>`. Every node and subgraph instead lives
-//! once in the arena's flat `Vec`s, addressed by [`NodeIdx`] /
-//! [`SubgraphIdx`] handles, and the nested tree (subgraph elements)
-//! is recorded as parallel `Vec<ElementHandle>` lists that the
-//! builder rebuilds into a real `Vec<VisualElement>` at finalize
-//! time. Each subgraph's `descriptor.elements` therefore stays
-//! empty until `finalize_root` walks the handle tree.
+//! Naively recording a subgraph and later pushing into its elements
+//! from a different call site collides with the borrow checker and
+//! the project's ban on `Rc<RefCell<T>>`. Every node and subgraph
+//! instead lives once in the arena's flat `Vec`s, addressed by
+//! [`NodeIdx`] / [`SubgraphIdx`] handles, and the nested tree
+//! (subgraph elements) is recorded as parallel `Vec<ElementHandle>`
+//! lists that the builder rebuilds into a real `Vec<VisualElement>`
+//! at finalize time. Each subgraph's `descriptor.elements` therefore
+//! stays empty until `finalize_root` walks the handle tree.
 //!
 //! `Container` is the write-end handle: builders push either to the
 //! root list (the eventual `VisualGraph.elements`) or to a subgraph

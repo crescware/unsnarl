@@ -36,11 +36,10 @@ fn if_alternate_block_scope_is_branch() {
 
 #[test]
 fn switch_case_scope_is_branch() {
-    // is_branch_scope routes through `branch_container_key`, which
-    // for the `switch:` case key requires the `CaseClause` variant.
-    // The TS test uses a generic block context, but the Rust impl
-    // separates the variants — exercise the `CaseClause` variant
-    // here so the test mirrors the underlying merge-key contract.
+    // `is_branch_scope` routes through `branch_container_key`,
+    // which for the `switch:` case key requires the `CaseClause`
+    // variant. Exercise that variant here so the test asserts the
+    // underlying merge-key contract directly.
     use unsnarl_ir::primitive::SourceOffset;
     use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
     let ctx = BlockContext::CaseClause(CaseClauseBlockContext::new(

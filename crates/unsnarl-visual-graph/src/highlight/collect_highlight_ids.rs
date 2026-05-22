@@ -17,11 +17,9 @@ use crate::prune::iterate_visual_nodes::iterate_visual_nodes;
 use crate::visual_graph::VisualGraph;
 
 /// The list is returned in `iterate_visual_nodes` walk order with
-/// duplicates removed, mirroring the iteration order of the
-/// `ReadonlySet<string>` returned by the TS port (TS `Set` preserves
-/// insertion order). Downstream consumers — the mermaid emitter's
-/// inline `style` block, in particular — rely on this order to
-/// reproduce the TS baselines byte-for-byte.
+/// duplicates removed. Downstream consumers — the mermaid emitter's
+/// inline `style` block, in particular — rely on this order to keep
+/// emitted bytes stable against the IR parity baselines.
 pub fn collect_highlight_ids(graph: &VisualGraph, queries: &[ParsedRootQuery]) -> Vec<String> {
     let mut ids: Vec<String> = Vec::new();
     if queries.is_empty() {
