@@ -1,10 +1,7 @@
 //! Apply the collected deletions / replacements to the IR.
 //!
-//! Mirrors `rebuildIr` + `rebuildVariable` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. The TS port
-//! returns a new `SerializedIR` via spread; the Rust port mutates
-//! the owned IR in place since the transform takes ownership of
-//! the value:
+//! Mutates the owned IR in place since the transform takes
+//! ownership of the value:
 //!
 //! - `ir.references` is filtered against `refs_to_remove`.
 //! - `ir.variables` is filtered against `vars_to_remove`. For each

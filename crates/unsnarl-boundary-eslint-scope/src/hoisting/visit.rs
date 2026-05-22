@@ -1,18 +1,14 @@
 //! Per-statement dispatcher for the hoist pass.
 //!
-//! Mirrors `visit` in `ts/src/boundary/eslint-scope/hoisting/visit.ts`.
-//! TS switches on a `NodeLike.type` string; the Rust port pattern-matches
-//! on the typed `Statement` enum and the typed `Declaration` enum.
+//! Pattern-matches on the typed `Statement` enum and the typed
+//! `Declaration` enum.
 //!
-//! TS recurses through `ExportNamedDeclaration.declaration` and
-//! `ExportDefaultDeclaration.declaration` with the same `visit`
-//! function. Rust splits that into [`visit_statement`] and
-//! [`visit_declaration`] because oxc_ast types each as a distinct
-//! enum: `Statement` for the top-level form, `Declaration` for the
-//! body of `ExportNamedDeclaration`, and `ExportDefaultDeclarationKind`
-//! for `ExportDefaultDeclaration`. Each helper dispatches to the same
-//! per-shape `handle_*_declaration`, so the externally observable
-//! behaviour is identical.
+//! [`visit_statement`] handles the top-level `Statement` form,
+//! [`visit_declaration`] handles `ExportNamedDeclaration.declaration`
+//! (`Declaration`) and the
+//! `ExportDefaultDeclaration.declaration` (`ExportDefaultDeclarationKind`)
+//! body. Each helper dispatches to the same per-shape
+//! `handle_*_declaration`.
 
 use oxc_ast::ast::{Declaration, ExportDefaultDeclarationKind, Statement};
 

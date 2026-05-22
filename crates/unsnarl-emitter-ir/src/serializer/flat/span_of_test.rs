@@ -1,9 +1,7 @@
-//! Mirrors `ts/src/serializer/flat/span-of.test.ts`. The TS test
-//! pinned that `spanOf` reads `node.start` and projects it through
-//! `spanFromOffset`. In the Rust IR `node.span.start` is always
-//! present (no `?? 0` fallback to test), so the meaningful invariant
-//! to pin is "the returned `Span.offset` matches `node.span.start`
-//! when the raw source contains that offset".
+//! `node.span.start` is always present in the IR (no `?? 0`
+//! fallback to test), so the meaningful invariant to pin is "the
+//! returned `Span.offset` matches `node.span.start` when the raw
+//! source contains that offset".
 
 use oxc_span::Span as OxcSpan;
 use unsnarl_ir::primitive::{AstIdentifier, AstNode, SourceOffset};

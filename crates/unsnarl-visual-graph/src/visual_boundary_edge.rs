@@ -2,10 +2,9 @@
 //! "more context exists in this direction" without dragging the next
 //! generation of nodes back into the graph.
 //!
-//! Mirrors `ts/src/visual-graph/visual-boundary-edge.ts`. The TS
-//! shape is a discriminated union on `direction`. The Rust enum
-//! uses `#[serde(untagged)]` so each variant serializes its own
-//! field order, matching the JS object-literal output:
+//! Modeled as a discriminated union on `direction`. The enum uses
+//! `#[serde(untagged)]` so each variant serializes its own field
+//! order:
 //!
 //! - `Out` direction: `{ inside, direction: "out" }`
 //! - `In`  direction: `{ inside, direction: "in", label }`

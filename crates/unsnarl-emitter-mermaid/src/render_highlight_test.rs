@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/render-highlight.test.ts`.
-
 use super::render_highlight;
 use crate::theme::DARK_THEME;
 

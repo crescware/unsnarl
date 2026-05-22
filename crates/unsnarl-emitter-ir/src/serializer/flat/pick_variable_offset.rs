@@ -1,21 +1,15 @@
 //! Pick the offset used to spell a variable's serialized ID.
 //!
-//! Mirrors `pickVariableOffset` in
-//! `ts/src/serializer/flat/pick-variable-offset.ts`. The TS source
-//! falls back to `def.name.start ?? 0` if both the identifier head
-//! and the first definition's name lack a start position; in the
-//! Rust IR every identifier carries a span, so we use the head
-//! identifier's span, then the first def's name span, then `0` as a
-//! final fallback when the variable has no identifiers AND no defs.
+//! Falls back through the head identifier's span, then the first
+//! def's name span, then `0` as a final fallback when the variable
+//! has no identifiers AND no defs.
 //!
-//! The npm `oxc-parser` package emits offsets in UTF-16 code units
-//! (JavaScript string indices) so TS `head.start` is already in that
-//! unit. The Rust `oxc_parser` crate emits offsets in UTF-8 bytes;
-//! this function converts that byte offset to UTF-16 code units via
-//! `span_from_offset` so the serialized variable ID
-//! (`scope#N:name@offset`) matches the TS implementation byte-for-byte
-//! in sources containing non-ASCII characters (e.g. an arrow `→` or
-//! em-dash `—` in a docstring before the declaration).
+//! The serialized variable ID (`scope#N:name@offset`) records the
+//! offset in UTF-16 code units. The `oxc_parser` crate emits offsets
+//! in UTF-8 bytes; this function converts that byte offset via
+//! `span_from_offset` so the encoded ID stays consistent in sources
+//! containing non-ASCII characters (e.g. an arrow `→` or em-dash
+//! `—` in a docstring before the declaration).
 
 use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::{IrArena, VariableId};

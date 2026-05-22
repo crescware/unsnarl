@@ -1,6 +1,6 @@
-//! Mirrors `ts/src/emitter/mermaid/theme/light-theme.test.ts`. Pins
-//! that the light theme has every slot populated and shares the
-//! same transparent elkEmptyPlaceholder workaround as the dark theme.
+//! Pins that the light theme has every slot populated and shares
+//! the same transparent elkEmptyPlaceholder workaround as the dark
+//! theme.
 
 use super::LIGHT_THEME;
 

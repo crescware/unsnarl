@@ -834,14 +834,11 @@ impl<'a, 'v> oxc_ast_visit::Visit<'a> for ScopeBuildVisitor<'a, 'v> {
     }
 
     fn visit_binding_identifier(&mut self, it: &BindingIdentifier<'a>) {
-        // The TS port routes every `Identifier`-typed node through
-        // `handleIdentifierReference` and lets `classifyIdentifier`
-        // decide whether the slot is a plain binding (no reference),
-        // a write reference with `init = true` (`let x = 1`'s `x`),
-        // or a pattern-step binding -- see
-        // `ts/src/boundary/eslint-scope/handle-enter.ts`. The Rust
-        // port dispatches per oxc AST type, so we route
-        // `BindingIdentifier` here using the same classification path.
+        // Routes `BindingIdentifier` through the shared classification
+        // path: `classify_identifier` decides whether the slot is a
+        // plain binding (no reference), a write reference with
+        // `init = true` (`let x = 1`'s `x`), or a pattern-step
+        // binding.
         if self.type_only_depth == 0 {
             let parent = self.parent_kind();
             let key = self.current_key();

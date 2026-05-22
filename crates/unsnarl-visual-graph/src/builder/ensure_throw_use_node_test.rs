@@ -1,5 +1,4 @@
-//! Sibling tests for [`ensure_throw_use_node`]. Cases mirror
-//! `ts/src/visual-graph/builder/ensure-throw-use-node.test.ts`.
+//! Sibling tests for [`ensure_throw_use_node`].
 
 use unsnarl_ir::serialized::serialized_reference::SerializedReferenceIdentifier;
 use unsnarl_ir::serialized::SerializedReference;

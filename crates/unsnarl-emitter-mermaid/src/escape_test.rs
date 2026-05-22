@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/escape.test.ts`.
-
 use super::escape;
 
 #[test]

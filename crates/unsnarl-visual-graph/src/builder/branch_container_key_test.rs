@@ -1,5 +1,5 @@
-//! Sibling tests for [`branch_container_key`]. Cases mirror
-//! `ts/src/visual-graph/builder/branch-container-key.test.ts`. The
+//! Sibling tests for [`branch_container_key`].
+//! The
 //! Rust impl splits `BlockContext` into `Other` (if / try) and
 //! `CaseClause` (switch cases), so the switch-cases scenarios build
 //! the `CaseClause` variant directly while every other scenario

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/loop-test-anchor.ts`.
-//!
 //! Stage a loop-test anchor node for a body subgraph. The actual
 //! placement is deferred: the anchor node is created and parked in
 //! `state.pending_loop_test_anchors`, then placed at the very end

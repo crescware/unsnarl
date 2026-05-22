@@ -1,11 +1,8 @@
 //! `RenderState`: mutable scratch space threaded through the
 //! per-element render helpers.
 //!
-//! Mirrors `ts/src/emitter/mermaid/render-state.ts`. The TS form
-//! declares the wrapping object as `Readonly<{...}>` with mutable
-//! inner collections; the Rust port keeps the same intent by
-//! holding the collections owned and passing the struct around via
-//! `&mut RenderState`.
+//! The collections are owned by the struct and the struct is
+//! threaded through the render helpers via `&mut RenderState`.
 
 use std::collections::{HashMap, HashSet};
 

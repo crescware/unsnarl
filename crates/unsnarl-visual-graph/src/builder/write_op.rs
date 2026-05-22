@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/write-op.ts`.
-//!
 //! Per-Write reference record that the builder threads through
 //! the various edge-emitting helpers. `offset` is the identifier's
 //! UTF-16 offset; `scope_id` is the scope the reference lives in

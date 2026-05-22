@@ -1,12 +1,11 @@
 //! Marker error type for `uns` CLI usage failures.
 //!
-//! Mirrors `ts/src/cli/run-cli/cli-usage-error.ts`. The Rust port
-//! routes through [`handle_cli_usage_error`](super::handle_cli_usage_error)
+//! Routed through [`handle_cli_usage_error`](super::handle_cli_usage_error)
 //! / `run.rs` to translate the error into an exit code 2 plus an
 //! `error: <message>` line on stderr. `help` carries the
-//! `command.helpInformation()` string when one was available at
-//! throw-site; the orchestration prints it after the error line so
-//! the user sees usage hints right alongside the diagnostic.
+//! help-information string when one was available at throw-site;
+//! the orchestration prints it after the error line so the user
+//! sees usage hints right alongside the diagnostic.
 
 use std::error::Error;
 use std::fmt;

@@ -1,9 +1,7 @@
 //! Hoist the top-level body of a parsed program into a target scope.
 //!
-//! Mirrors `hoistInto` in `ts/src/boundary/eslint-scope/hoist-into.ts`.
-//! TS reads `program["body"]` and dispatches when it is an array; the
-//! Rust port takes a typed `&Program<'_>` where `body: Vec<Statement>`
-//! is structurally guaranteed, so no array-check is needed.
+//! Takes a typed `&Program<'_>` where `body: Vec<Statement>` is
+//! structurally guaranteed.
 
 use oxc_ast::ast::Program;
 

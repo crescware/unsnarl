@@ -1,9 +1,8 @@
-//! `formatDepthQuery`: render the `--depth*` form for the markdown
+//! `format_depth_query`: render the `--depth*` form for the markdown
 //! `## Query` section, returning `None` when every kind is still at
 //! `DEFAULT_DEPTH` (the user did not narrow anything).
 //!
-//! Mirrors `ts/src/emitter/markdown/format-depth-query.ts`. The CLI
-//! surface exposes only `--depth`, `--depth-function`, and
+//! The CLI surface exposes only `--depth`, `--depth-function`, and
 //! `--depth-block`, so when the seven per-kind values reduce to a
 //! `{function, block}` pair this picks the shortest equivalent of
 //! those three flags. When the non-function kinds disagree (which is

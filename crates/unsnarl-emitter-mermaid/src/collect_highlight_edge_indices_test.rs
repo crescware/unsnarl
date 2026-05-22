@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/collect-highlight-edge-indices.test.ts`.
-
 use std::collections::HashSet;
 
 use unsnarl_visual_graph::boundary_edge_direction::{

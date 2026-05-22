@@ -1,5 +1,4 @@
-//! Sibling tests for [`last_write_op_in_scope_before`]. Cases
-//! mirror `ts/src/visual-graph/builder/last-write-op-in-scope-before.test.ts`.
+//! Sibling tests for [`last_write_op_in_scope_before`].
 
 use std::collections::HashMap;
 

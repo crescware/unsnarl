@@ -1,7 +1,5 @@
 //! Flatten a `BindingPattern` into the list of bound identifiers.
 //!
-//! Mirrors `collectBindingIdentifiers` in
-//! `ts/src/boundary/eslint-scope/declare/collect-binding-identifiers.ts`.
 //! The TS port walks an unnormalised `AstNode` and switches on
 //! `node.type` strings; the Rust port walks the typed
 //! `oxc_ast::ast::BindingPattern` enum directly. The recursion shape

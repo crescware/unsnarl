@@ -1,7 +1,4 @@
 //! Serialize a `VariableData` into a `SerializedVariable`.
-//!
-//! Mirrors `serializeVariable` in
-//! `ts/src/serializer/flat/serialize-variable.ts`.
 
 use std::collections::HashMap;
 

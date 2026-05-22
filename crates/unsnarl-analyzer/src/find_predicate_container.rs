@@ -1,14 +1,13 @@
 //! Locate the nearest predicate-owning container along a reference's
 //! ancestor chain.
 //!
-//! Mirrors `ts/src/analyzer/predicate.ts`. Walks the path leaf -> root
-//! tracking the slot key the previous step occupied; reports the
-//! first ancestor whose `(type, key)` pair identifies it as the
-//! predicate of an `if` / `switch` / `while` / `do`-`while` / `for*`
-//! statement. The trailing `parent` / `key` check covers the case
-//! where the reference itself is the predicate slot of the immediate
-//! parent (the visitor has already popped the predicate-owner off
-//! the path).
+//! Walks the path leaf -> root tracking the slot key the previous
+//! step occupied; reports the first ancestor whose `(type, key)`
+//! pair identifies it as the predicate of an `if` / `switch` /
+//! `while` / `do`-`while` / `for*` statement. The trailing `parent`
+//! / `key` check covers the case where the reference itself is the
+//! predicate slot of the immediate parent (the visitor has already
+//! popped the predicate-owner off the path).
 
 use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::reference::PredicateContainer;

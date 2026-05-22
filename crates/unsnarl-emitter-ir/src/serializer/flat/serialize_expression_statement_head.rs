@@ -1,8 +1,5 @@
 //! Serialize an in-memory `HeadExpression` (offset-based) into the
 //! on-disk `SerializedHeadExpression` (span-based).
-//!
-//! Mirrors `serializeHeadExpression` in
-//! `ts/src/serializer/flat/serialize-expression-statement-head.ts`.
 
 use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::reference::expression_statement_head::{HeadExpression, HeadOperand};

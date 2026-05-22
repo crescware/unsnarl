@@ -1,7 +1,5 @@
 //! Hoist a function declaration into the enclosing scope.
 //!
-//! Mirrors `handleFunctionDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-function-declaration.ts`.
 //! TS reads `node["id"]` and skips when it is not an identifier; the
 //! Rust port matches on `Function.id: Option<BindingIdentifier>`,
 //! which encodes the same skip condition at the type level.

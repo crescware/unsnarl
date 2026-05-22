@@ -1,7 +1,5 @@
 //! Walk a `VisualElement` tree and visit every [`VisualSubgraph`] in
 //! pre-order.
-//!
-//! Mirrors `ts/src/visual-graph/prune/iterate-visual-subgraphs.ts`.
 
 use crate::visual_element::VisualElement;
 use crate::visual_subgraph::VisualSubgraph;

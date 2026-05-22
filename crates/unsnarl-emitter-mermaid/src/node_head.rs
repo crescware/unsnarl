@@ -1,7 +1,5 @@
 //! Builds the leading text fragment of a node's mermaid label
 //! (before the trailing `<br/>L<line>` range stamp).
-//!
-//! Mirrors `ts/src/emitter/mermaid/node-head.ts`.
 
 use unsnarl_oxc_parity::VariableDeclarationKind;
 use unsnarl_visual_graph::node_kind::NodeKind;

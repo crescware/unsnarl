@@ -1,5 +1,4 @@
-//! Sibling tests for `declare_function_params.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/declare-function-params.test.ts`.
+//! Sibling tests for `declare_function_params.rs`.
 
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;

@@ -1,19 +1,14 @@
-//! Sibling tests for [`super`]. Ports
-//! `ts/src/cli/run-cli/resolve-plugin.test.ts`, which exercises the
-//! per-name resolution layer the CLI calls before handing the
-//! activated list to the pipeline. The TS port loads each plugin
-//! through dynamic `import()`; the Rust port resolves through the
-//! compile-time [`default_registry`]. The two surfaces are otherwise
-//! equivalent: a known short name resolves to the bundled plugin
-//! instance, and an unknown short name produces a
+//! Sibling tests for [`super`]. Exercises the per-name resolution
+//! layer the CLI calls before handing the activated list to the
+//! pipeline: a known short name resolves to the bundled plugin
+//! instance through the compile-time [`default_registry`], and an
+//! unknown short name produces a
 //! `Plugin 'unsnarl-plugin-<name>' is not bundled with this unsnarl build.`
 //! error.
 //!
-//! TS `validate-plugin-module.test.ts` (the "module has no default
-//! export" failure mode) intentionally has no Rust counterpart:
-//! [`default_registry`] is constructed in code, so a missing
-//! registration is a build-time error, not a runtime one. Porting
-//! that test would assert against a Rust state that cannot occur.
+//! A "module has no default export" failure mode is intentionally
+//! out of scope: [`default_registry`] is constructed in code, so a
+//! missing registration is a build-time error, not a runtime one.
 
 use super::{activate, default_registry};
 

@@ -1,10 +1,9 @@
 //! `ColorTheme`: every CSS-style value the mermaid emitter splices
 //! into `classDef` / `style` / `linkStyle` lines.
 //!
-//! Mirrors `ts/src/emitter/mermaid/theme/color-theme.ts`. The Rust
-//! form keeps every field as `&'static str` so concrete themes can
-//! sit in `static` storage and be referenced by `&'static
-//! ColorTheme` from the emitter.
+//! Every field is `&'static str` so concrete themes can sit in
+//! `static` storage and be referenced by `&'static ColorTheme`
+//! from the emitter.
 
 pub struct BoundaryStubColors {
     pub stroke: &'static str,

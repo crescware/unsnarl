@@ -1,6 +1,5 @@
 //! Integration tests for [`unsnarl_visual_graph::builder::build_visual_graph`].
 //!
-//! Cases mirror `ts/src/visual-graph/builder/build-visual-graph.test.ts`.
 //! Lives outside `crates/unsnarl-visual-graph/src/builder/` (which
 //! would be the natural sibling location) because each test feeds
 //! source through `unsnarl-boundary-eslint-scope::parser::OxcParser`,

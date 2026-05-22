@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/renders-in-synthetic-block.test.ts`.
-
 use unsnarl_visual_graph::node_kind::NodeKind;
 use unsnarl_visual_graph::visual_node::{BindingNodeKind, SyntheticNodeKind, VisualNode};
 

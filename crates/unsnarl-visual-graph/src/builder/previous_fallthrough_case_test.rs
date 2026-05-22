@@ -1,5 +1,4 @@
-//! Sibling tests for [`previous_fallthrough_case`]. Cases mirror
-//! `ts/src/visual-graph/builder/previous-fallthrough-case.test.ts`.
+//! Sibling tests for [`previous_fallthrough_case`].
 //! `branch_container_key` builds the `switch:<upper>:<offset>` key
 //! from a `CaseClause` block context, so each case fixture uses the
 //! `CaseClause` variant directly.

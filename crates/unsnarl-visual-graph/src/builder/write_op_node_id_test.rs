@@ -1,5 +1,4 @@
-//! Sibling tests for [`write_op_node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/write-op-node-id.test.ts`.
+//! Sibling tests for [`write_op_node_id`].
 
 use super::write_op_node_id;
 

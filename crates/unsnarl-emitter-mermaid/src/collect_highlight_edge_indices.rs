@@ -1,8 +1,6 @@
 //! Walks body / import / boundary edges in the order the renderer
 //! emits them and returns the indices of edges that touch a
 //! highlighted node id.
-//!
-//! Mirrors `ts/src/emitter/mermaid/collect-highlight-edge-indices.ts`.
 
 use std::collections::HashSet;
 

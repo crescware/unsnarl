@@ -1,9 +1,7 @@
 //! Group scopes by their parent (`upper`).
 //!
-//! Mirrors `groupChildScopes` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Used by
-//! `collectInitTargets` to look up sibling scopes of a wrapped
-//! variable's owning scope when searching for the inner
+//! Used by `collect_init_targets` to look up sibling scopes of a
+//! wrapped variable's owning scope when searching for the inner
 //! `useFoo(() => ..., deps)` callback.
 
 use std::collections::HashMap;

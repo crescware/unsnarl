@@ -1,5 +1,4 @@
-//! Sibling tests for [`if_test_node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/if-test-node-id.test.ts`.
+//! Sibling tests for [`if_test_node_id`].
 
 use super::if_test_node_id;
 

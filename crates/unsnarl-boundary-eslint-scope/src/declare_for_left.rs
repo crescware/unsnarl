@@ -1,8 +1,7 @@
 //! Hoist `var` / `let` / `const` bindings declared in the head of a
 //! `for` / `for-in` / `for-of` statement.
 //!
-//! Mirrors `declareForLeft` in
-//! `ts/src/boundary/eslint-scope/declare-for-left.ts`. The TS port
+//! The TS port
 //! pulls `node["init"]` and `node["left"]`; the Rust port takes an
 //! explicit `&VariableDeclaration<'_>` since the caller already knows
 //! which slot it came from (`ForStatement.init` or

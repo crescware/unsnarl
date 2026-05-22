@@ -1,7 +1,6 @@
 //! Stderr warning emitter for `-r` queries that matched zero nodes.
 //!
-//! Mirrors `ts/src/cli/run-cli/emit-pruning-warnings.ts`. The
-//! pipeline runner exposes `PipelineRunDetails.pruning` as the
+//! The pipeline runner exposes `PipelineRunDetails.pruning` as the
 //! source of truth; this module formats one warning line per
 //! zero-match entry to the supplied stderr writer.
 

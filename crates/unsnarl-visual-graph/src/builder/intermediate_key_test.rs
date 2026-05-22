@@ -1,5 +1,4 @@
-//! Sibling tests for [`intermediate_key`]. Cases mirror
-//! `ts/src/visual-graph/builder/intermediate-key.test.ts`.
+//! Sibling tests for [`intermediate_key`].
 
 use super::intermediate_key;
 

@@ -1,8 +1,7 @@
 //! Push a `Block` scope for a `BlockStatement` and hoist its
 //! declarations.
 //!
-//! Mirrors `enterBlock` in
-//! `ts/src/boundary/eslint-scope/enter-block.ts`. The TS port pulls
+//! The TS port pulls
 //! `node["body"]` and checks `Array.isArray`; the Rust port takes
 //! the typed `BlockStatement<'_>` whose `body: Vec<Statement<'_>>` is
 //! structurally guaranteed.

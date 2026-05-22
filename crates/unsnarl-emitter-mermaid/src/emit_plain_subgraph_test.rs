@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/emit-plain-subgraph.test.ts`.
-//!
 //! The TS suite uses a per-test mock strategy to assert the
 //! placeholder behavior. The Rust port has only two concrete
 //! `MermaidStrategy` variants (Dagre / Elk) and no open extension

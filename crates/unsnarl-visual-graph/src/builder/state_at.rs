@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/state-at.ts`.
-//!
 //! Find the latest write reference id whose offset precedes the
 //! supplied `offset`. Returns the variable id itself when no
 //! preceding write exists.

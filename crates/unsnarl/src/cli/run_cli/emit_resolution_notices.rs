@@ -1,9 +1,8 @@
 //! Stderr emitter for `LineOrName` resolution notices.
 //!
-//! Mirrors `ts/src/cli/run-cli/emit-resolution-notices.ts`. The
-//! pipeline runner exposes `PipelineRunDetails.resolutions` as the
-//! source of truth; this module formats one three-line notice per
-//! resolution to the supplied stderr writer, using
+//! The pipeline runner exposes `PipelineRunDetails.resolutions` as
+//! the source of truth; this module formats one three-line notice
+//! per resolution to the supplied stderr writer, using
 //! [`format_resolution_notice`] so the wording stays in lock-step
 //! with the markdown emitter's Notice section.
 

@@ -1,8 +1,7 @@
 //! Inputs and outputs for [`prune_visual_graph`](super::prune_visual_graph).
 //!
-//! Mirrors `ts/src/visual-graph/prune/prune-options.ts`. `PruneOptions`
-//! carries the resolved (post-`resolve_ambiguous_queries`) query list
-//! plus the descendants/ancestors radii from the CLI's
+//! `PruneOptions` carries the resolved (post-`resolve_ambiguous_queries`)
+//! query list plus the descendants / ancestors radii from the CLI's
 //! `-A` / `-B` / `-C` flags.
 
 use unsnarl_root_query::ParsedRootQuery;

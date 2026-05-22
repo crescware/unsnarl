@@ -1,7 +1,5 @@
 //! Register the synthetic `arguments` binding inside a function scope.
 //!
-//! Mirrors `declareImplicitArguments` in
-//! `ts/src/boundary/eslint-scope/declare/declare-implicit-arguments.ts`.
 //! The TS version pushes a fresh `VariableImpl` with no identifiers
 //! and no defs — the ES spec's `CreateUnmappedArgumentsObject` /
 //! `CreateMappedArgumentsObject` shape — and the Rust port does the

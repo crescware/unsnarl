@@ -1,12 +1,10 @@
 //! `sanitize`: replace every non-alphanumeric / non-underscore
 //! character with `_`.
 //!
-//! Mirrors `ts/src/visual-graph/builder/sanitize.ts`. The TS
-//! implementation runs `value.replace(/[^a-zA-Z0-9_]/g, "_")` which
-//! steps through UTF-16 code units one at a time. The Rust port
-//! mirrors that exactly via [`str::encode_utf16`] so multi-byte
-//! / surrogate-pair characters produce the same number of `_`
-//! characters as in TS.
+//! Steps through UTF-16 code units via [`str::encode_utf16`] so the
+//! number of `_` characters emitted for multi-byte / surrogate-pair
+//! characters matches what the regex `value.replace(/[^a-zA-Z0-9_]/g, "_")`
+//! would produce in a JavaScript string.
 
 pub fn sanitize(value: &str) -> String {
     value

@@ -1,13 +1,13 @@
 //! Format a [`HighlightRunOptions`] as the CLI invocation that
 //! produced it.
 //!
-//! Mirrors `ts/src/emitter/markdown/format-highlight-query.ts`. The
-//! markdown emitter surfaces the result in its `## Query` block so the
-//! rendered preview round-trips back to the user's `-H` / `--highlight`
-//! invocation: `-H` for the no-value (roots-tracking) mode, `-H <raw>`
-//! when the user supplied a query list. The raw string is
-//! reconstructed from the parsed queries' `.raw` so multi-token
-//! `-H "a,L7"` keeps its comma form rather than getting normalized.
+//! The markdown emitter surfaces the result in its `## Query` block
+//! so the rendered preview round-trips back to the user's `-H` /
+//! `--highlight` invocation: `-H` for the no-value (roots-tracking)
+//! mode, `-H <raw>` when the user supplied a query list. The raw
+//! string is reconstructed from the parsed queries' `.raw` so
+//! multi-token `-H "a,L7"` keeps its comma form rather than getting
+//! normalized.
 
 use unsnarl_root_query::ParsedRootQuery;
 use unsnarl_visual_graph::highlight::HighlightRunOptions;

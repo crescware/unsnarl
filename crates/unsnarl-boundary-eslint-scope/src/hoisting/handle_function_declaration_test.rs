@@ -1,6 +1,4 @@
-//! Sibling tests for `hoisting/handle_function_declaration.rs`,
-//! mirroring TS
-//! `ts/src/boundary/eslint-scope/hoisting/handle-function-declaration.test.ts`.
+//! Sibling tests for `hoisting/handle_function_declaration.rs`.
 
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;

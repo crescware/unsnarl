@@ -1,7 +1,6 @@
-//! Mirrors `ts/src/emitter/stats/collect-nodes.test.ts`. The TS
-//! suite pins the preorder walk: top-level nodes come through
-//! verbatim, subgraphs flatten their `elements` into the same
-//! stream, and empty subgraphs contribute nothing.
+//! Pins the preorder walk: top-level nodes come through verbatim,
+//! subgraphs flatten their `elements` into the same stream, and
+//! empty subgraphs contribute nothing.
 
 use unsnarl_visual_graph::direction::Direction;
 use unsnarl_visual_graph::visual_element::VisualElement;

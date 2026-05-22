@@ -1,10 +1,8 @@
 //! Appends one `from --|label|--> to` line per edge.
 //!
-//! Mirrors `ts/src/emitter/mermaid/push-edge-lines.ts`. The TS form
-//! takes the node map as optional and falls back to `false` when
-//! omitted; the Rust port keeps the same shape with
-//! `Option<&HashMap<...>>` so callers that lack the map still go
-//! through the solid-arrow path.
+//! Takes the node map as `Option<&HashMap<...>>` and falls back to
+//! `false` when the map is omitted, so callers that lack the map
+//! still go through the solid-arrow path.
 
 use std::collections::HashMap;
 

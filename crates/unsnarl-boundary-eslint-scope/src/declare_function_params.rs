@@ -1,8 +1,7 @@
 //! Declare each formal parameter as a `Parameter` binding inside the
 //! function scope.
 //!
-//! Mirrors `declareFunctionParams` in
-//! `ts/src/boundary/eslint-scope/declare-function-params.ts`. The TS
+//! The TS
 //! port iterates `node["params"]` and unwraps `RestElement` via
 //! `p["argument"]`; the Rust port iterates the typed
 //! `FormalParameters.items` and handles `FormalParameters.rest`

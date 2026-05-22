@@ -1,10 +1,7 @@
 //! Walker that fills the per-entity side-table annotations after the
 //! eslint-scope-compatible scope build.
 //!
-//! Mirrors `buildAnalysisVisitor` in
-//! `ts/src/pipeline/analyze/build-analysis-visitor.ts`. The TS port plugs
-//! into the scope-build walk via `AnalysisVisitor` callbacks; the Rust
-//! port runs a separate `oxc_ast_visit::Visit` pass after `analyze`
+//! Runs a separate `oxc_ast_visit::Visit` pass after `analyze`
 //! returns because several analyzer functions need full `AstKind`
 //! handles (`expression_statement_container`, `find_reference_owners`,
 //! `case_falls_through`, `case_exits_function`, `format_case_test`) or

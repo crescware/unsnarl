@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/switch-discriminant-anchor.ts`.
-//!
 //! Stage the discriminant anchor for a switch scope. Like the
 //! loop-test anchor the actual placement is deferred to the end of
 //! the build via `state.pending_loop_test_anchors`; the

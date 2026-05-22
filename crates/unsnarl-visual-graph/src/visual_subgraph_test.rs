@@ -1,9 +1,7 @@
 //! Locks down the JSON field order produced by each of the two
 //! `VisualSubgraph` shapes. The "owned" path puts `kind` directly
 //! after `id` and `elements` last; the "control" path puts
-//! `elements` in the middle and `kind` near the end. Both shapes
-//! match the corresponding TS construction sites under
-//! `ts/src/visual-graph/builder/`.
+//! `elements` in the middle and `kind` near the end.
 
 use super::*;
 use crate::direction::Direction;

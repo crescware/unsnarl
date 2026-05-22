@@ -1,7 +1,5 @@
 //! Hoist each binding inside a `var` / `let` / `const` declaration.
 //!
-//! Mirrors `handleVariableDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-variable-declaration.ts`.
 //!
 //! Behaviour:
 //!

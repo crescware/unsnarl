@@ -1,10 +1,9 @@
 //! Whether the consequent of a switch-case clause falls through to
 //! the next case clause.
 //!
-//! Mirrors `ts/src/analyzer/case-falls-through.ts`. An empty
-//! consequent falls through (per ECMA §13.12.10); otherwise the
-//! clause falls through iff its trailing statement does not transfer
-//! control out of the switch.
+//! An empty consequent falls through (per ECMA §13.12.10);
+//! otherwise the clause falls through iff its trailing statement
+//! does not transfer control out of the switch.
 
 use oxc_ast::ast::Statement;
 

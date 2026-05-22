@@ -1,4 +1,3 @@
-//! Mirrors `ts/src/serializer/flat/collect-scopes-in-order.test.ts`.
 //! Pins the depth-first pre-order traversal of `child_scopes`
 //! starting from the root.
 

@@ -1,10 +1,8 @@
 //! Emits the dashed boundary-stub triplet for each pruned-away
 //! neighbor.
 //!
-//! Mirrors `ts/src/emitter/mermaid/render-boundary-edges.ts`. The
-//! Rust port walks the same `boundary_edges` list and pushes the
-//! same `boundary_stub_N` ids; the surface used by `render_class_defs`
-//! to attach the dashed-circle class.
+//! Pushes `boundary_stub_N` ids that `render_class_defs` later
+//! picks up to attach the dashed-circle class.
 
 use unsnarl_visual_graph::visual_boundary_edge::VisualBoundaryEdge;
 use unsnarl_visual_graph::visual_graph::VisualGraph;

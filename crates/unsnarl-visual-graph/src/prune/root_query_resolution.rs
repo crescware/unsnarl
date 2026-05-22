@@ -1,9 +1,8 @@
 //! Record of a `LineOrName` query that was disambiguated.
 //!
-//! Mirrors `ts/src/visual-graph/prune/root-query-resolution.ts`.
 //! Emitted by [`resolve_ambiguous_queries`](super::resolve_ambiguous_queries)
-//! and consumed by the markdown emitter's Notice section
-//! (Step 15) and the CLI's stderr emitter (Step 21).
+//! and consumed by the markdown emitter's Notice section and the
+//! CLI's stderr emitter.
 
 use unsnarl_ir::SourceLine;
 

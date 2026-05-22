@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/read-origins.ts`.
-//!
 //! For a read reference, return the set of nodes from which the
 //! `read` edge should be drawn — typically the last preceding
 //! `Write` for the same variable, but extended through branch

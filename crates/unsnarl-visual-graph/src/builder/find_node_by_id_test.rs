@@ -1,5 +1,4 @@
-//! Sibling tests for [`find_node_by_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/find-node-by-id.test.ts`.
+//! Sibling tests for [`find_node_by_id`].
 
 use super::find_node_by_id;
 use crate::direction::Direction;

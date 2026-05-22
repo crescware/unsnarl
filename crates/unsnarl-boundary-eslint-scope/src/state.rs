@@ -142,21 +142,19 @@ pub(crate) fn pop_scope(state: &mut ScopeBuilderState) {
     state.stack.pop();
 }
 
-/// Declare a variable inside a scope, mirroring `declareVariable` in
-/// `ts/src/boundary/eslint-scope/declare/declare-variable.ts`.
+/// Declare a variable inside a scope.
 ///
 /// Looks up the binding by name in the target scope's `set`; if no
 /// variable with that name exists yet, allocates a fresh
 /// `VariableData` in the arena, registers it on the scope (`set` +
 /// `variables`), and proceeds. Then records `identifier` on the
-/// variable's `identifiers` list (the TS `variable.identifiers.push`)
-/// and pushes a `DefinitionData` carrying the same identifier plus
-/// `def_type` / `def_node` / `parent` (the TS object literal pushed to
-/// `variable.defs`).
+/// variable's `identifiers` list and pushes a `DefinitionData`
+/// carrying the same identifier plus `def_type` / `def_node` /
+/// `parent`.
 ///
-/// `identifier` is consumed twice on the TS side (`variable.identifiers`
-/// and `def.name`); Rust requires an explicit clone, which is the
-/// derive-policy justification for `AstIdentifier: Clone`.
+/// `identifier` is consumed twice (once in `variable.identifiers`,
+/// once in `def.name`); the explicit clone is the derive-policy
+/// justification for `AstIdentifier: Clone`.
 /// Per-definition extras the serializer reads but the
 /// `(node, parent)` materialisation drops. Defaults to all-`None` so
 /// callsites that build simple defs (function names, class names,

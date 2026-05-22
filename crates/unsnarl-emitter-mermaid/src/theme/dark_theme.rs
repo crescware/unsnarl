@@ -1,6 +1,4 @@
 //! The built-in dark color theme.
-//!
-//! Mirrors `ts/src/emitter/mermaid/theme/dark-theme.ts`.
 
 use super::color_theme::{
     BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,

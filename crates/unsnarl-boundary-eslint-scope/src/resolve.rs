@@ -1,10 +1,8 @@
 //! Reference resolution against the live scope chain plus implicit
 //! global fallback.
 //!
-//! Mirrors `bindReference` / `resolveInScopeChain` in
-//! `ts/src/boundary/eslint-scope/resolve.ts`. The TS port mutates the
-//! `Reference` object's `resolved` field via a cast; the Rust port
-//! goes through the arena (`arena.references[id].resolved = ...`).
+//! The `resolved` field is updated through the arena
+//! (`arena.references[id].resolved = ...`).
 //!
 //! When the identifier doesn't resolve in any reachable scope, we
 //! create an `ImplicitGlobalVariable` on the global scope so the

@@ -1,9 +1,7 @@
 //! Mutable bag of `Diagnostic` values used by the scope builder during
 //! `analyze`.
 //!
-//! Mirrors `DiagnosticCollector` in `ts/src/util/diagnostic.ts`. The TS
-//! version exposes `add` / `list`; the Rust port mirrors that shape
-//! but lowers `list` to `into_list` because the build state is owned
+//! `list` is exposed as `into_list` because the build state is owned
 //! by `ScopeBuilderState` and the diagnostics escape the boundary
 //! crate only once at `finish` time.
 

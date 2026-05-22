@@ -1,8 +1,6 @@
 //! Resolve a wrapped binding's `init` call to a hook import.
 //!
-//! Mirrors `findHookCalleeKind` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Walks every
-//! reference and keeps the first one that:
+//! Walks every reference and keeps the first one that:
 //! - is not the binding's own `init` reference (`r.init === false`),
 //! - is a call site (`flags.call`),
 //! - resolves to one of the tracked hook imports,

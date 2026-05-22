@@ -1,12 +1,9 @@
 //! Collect references owned by a wrapped variable that should drop
 //! out of the IR.
 //!
-//! Mirrors `collectRefsToRemove` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Iterates every
-//! non-init reference; if any of its `owners` is in
-//! [`wrapped_var_ids`], the reference is queued for removal. The
-//! TS comment notes these are the `() => ...` body and the
-//! dependency-array references.
+//! Iterates every non-init reference; if any of its `owners` is in
+//! [`wrapped_var_ids`], the reference is queued for removal. These
+//! are the `() => ...` body and the dependency-array references.
 
 use std::collections::HashSet;
 

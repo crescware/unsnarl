@@ -1,5 +1,4 @@
-//! Sibling tests for [`node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/node-id.test.ts`.
+//! Sibling tests for [`node_id`].
 
 use super::node_id;
 

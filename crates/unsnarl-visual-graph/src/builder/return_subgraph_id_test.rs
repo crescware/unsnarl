@@ -1,5 +1,4 @@
-//! Sibling tests for [`return_subgraph_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/return-subgraph-id.test.ts`.
+//! Sibling tests for [`return_subgraph_id`].
 
 use super::return_subgraph_id;
 

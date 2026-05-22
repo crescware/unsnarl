@@ -1,12 +1,11 @@
 //! Resolve the source the pipeline runs against.
 //!
-//! Mirrors `ts/src/cli/run-cli/calc-source.ts`: feed stdin through
-//! the `--stdin-lang` `SourceType` when `--stdin` is set, otherwise
-//! require a positional file path. Returns a [`CliUsageError`]
-//! (which the CLI converts to exit code 2) when neither input is
-//! available — this is the same up-front guard the TS port runs
-//! before any output-path resolution, so `uns -o build` with no
-//! input cannot leak an empty `derived_basename` downstream.
+//! Feed stdin through the `--stdin-lang` `SourceType` when `--stdin`
+//! is set, otherwise require a positional file path. Returns a
+//! [`CliUsageError`] (which the CLI converts to exit code 2) when
+//! neither input is available — this is the up-front guard that
+//! runs before any output-path resolution, so `uns -o build` with
+//! no input cannot leak an empty `derived_basename` downstream.
 
 use std::io::{self, Read};
 use std::path::PathBuf;

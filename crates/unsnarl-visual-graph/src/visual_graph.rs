@@ -1,7 +1,6 @@
 //! `VisualGraph`: top-level shape produced by the builder.
 //!
-//! Mirrors `ts/src/visual-graph/visual-graph.ts`. The
-//! `SerializedIrVersion` carried in `version` is re-used from
+//! The `SerializedIrVersion` carried in `version` is re-used from
 //! `unsnarl-ir` to keep the on-disk constant single-sourced.
 
 use serde::Serialize;

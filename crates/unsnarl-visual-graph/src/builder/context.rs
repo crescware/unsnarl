@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/context.ts`.
-//!
 //! Immutable side tables threaded through every builder helper:
 //! variable / scope lookup maps borrowed from the `SerializedIR`,
 //! plus the precomputed `WriteOp` indices that drive edge emission.

@@ -1,11 +1,10 @@
 //! Pick the code-fence language tag for the `## Input` block.
 //!
-//! Mirrors `ts/src/emitter/markdown/code-fence-lang.ts`. Every
-//! recognised `Language` round-trips to its short form (`tsx` / `jsx`
-//! / `js`); the TS port falls back to `ts` for the default branch, so
-//! the Rust port lists `Language::Ts` explicitly and keeps a `_`
-//! arm pointing at the same literal to preserve byte-for-byte
-//! equivalence if `Language` grows new variants later.
+//! Every recognised `Language` round-trips to its short form (`tsx`
+//! / `jsx` / `js` / `ts`). `Language::Ts` is listed explicitly so
+//! the default branch could be reintroduced (pointing at `"ts"`) if
+//! `Language` grows new variants later without changing output for
+//! existing cases.
 
 use unsnarl_ir::language::Language;
 

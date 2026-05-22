@@ -1,7 +1,5 @@
 //! Build a child -> parent-subgraph id map by walking the element
 //! tree.
-//!
-//! Mirrors `ts/src/visual-graph/prune/build-parent-map.ts`.
 
 use std::collections::HashMap;
 

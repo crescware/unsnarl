@@ -1,13 +1,10 @@
 //! `StatsEmitter`: renders a `SerializedIR` as a wc-like TSV table
 //! of per-node edge counts (`descendants  ancestors  path:line label`).
 //!
-//! Mirrors `StatsEmitter` in `ts/src/emitter/stats/stats.ts`. The
-//! TS implementation builds a `VisualGraph` from the IR (or pulls a
-//! pre-pruned graph from `opts.prunedGraph`) and walks it to count
-//! edges per node, rendering each direction as `?` for nodes that
-//! touch a boundary edge. The Rust port follows the same control
-//! flow; the pruned-graph short-circuit lands alongside Step 17
-//! when `EmitOptions` starts attaching `prunedGraph`.
+//! Builds a `VisualGraph` from the IR (or uses a pre-pruned graph
+//! supplied via the emit options) and walks it to count edges per
+//! node, rendering each direction as `?` for nodes that touch a
+//! boundary edge.
 
 use std::collections::{HashMap, HashSet};
 

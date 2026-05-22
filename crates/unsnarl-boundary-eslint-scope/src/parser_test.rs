@@ -1,4 +1,4 @@
-//! Tests for [`OxcParser`], ported 1:1 from `ts/src/parser/oxc-parser.test.ts`.
+//! Tests for [`OxcParser`].
 
 use oxc_allocator::Allocator;
 use oxc_ast::ast::Statement;
@@ -114,14 +114,12 @@ fn preserves_an_explicitly_requested_source_type_regardless_of_the_language_exte
 
 #[test]
 fn parses_js_with_top_level_await_when_analysis_source_type_is_script() {
-    // Parity regression: `ts/src/parser/oxc-parser.ts` calls
-    // `parseSync(..., { sourceType: "module" })` unconditionally, so
-    // top-level `await` parses cleanly even when the analysis-level
-    // SourceType is Script. CLI shebang files like
-    // `vite/bin/vite.js` and `oxlint/dist/cli.js` rely on this --
-    // they ship as `.js` (analysis-level Script) but use top-level
-    // `await` and ES module syntax, and `unsnarl@0.2.0` parses them
-    // without error. The Rust parser must do the same.
+    // The parser passes `sourceType: "module"` to oxc unconditionally
+    // so top-level `await` parses cleanly even when the analysis-level
+    // SourceType is Script. CLI shebang files like `vite/bin/vite.js`
+    // and `oxlint/dist/cli.js` rely on this -- they ship as `.js`
+    // (analysis-level Script) but use top-level `await` and ES module
+    // syntax, and must still parse without error.
     let allocator = Allocator::default();
     let code = "import { x } from 'node:fs';\nconst y = await x();\n";
     let parsed = parser()
@@ -176,7 +174,6 @@ fn throws_parse_error_on_syntactically_invalid_source() {
     assert!(captured.message().contains("broken.ts"));
 }
 
-// Ports `ts/src/pipeline/parse/default-source-type-for.test.ts`.
 // `default_source_type_for` lives next to the parser in the
 // boundary crate (not under `pipeline/parse/`) because it pairs
 // directly with `OxcParser::parse`; the tests are pinned here so

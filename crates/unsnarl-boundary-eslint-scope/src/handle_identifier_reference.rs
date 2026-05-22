@@ -1,10 +1,5 @@
 //! Classify and bind an identifier reference, then notify the
-//! external visitor.
-//!
-//! Mirrors `handleIdentifierReference` in
-//! `ts/src/boundary/eslint-scope/handle-identifier-reference.ts`.
-//! The TS port calls `visitor.onReference?.(...)` at the end; the
-//! Rust port mirrors that through `AnalysisVisitor::on_reference`,
+//! external visitor through `AnalysisVisitor::on_reference`,
 //! materialising the internal `AstKind<'a>` parent / path into
 //! lifetime-free `AstNode` form so `'a` does not leak past the
 //! boundary crate.

@@ -1,18 +1,16 @@
 //! Per-offset nesting-depth snapshots.
 //!
-//! Mirrors `ts/src/analyzer/compute-nesting-depths.ts`. Walks the
-//! program AST, maintains seven counters (`Function`, `If`, `For`,
-//! `While`, `Switch`, `TryCatchFinally`, `Block`), and snapshots the
-//! current vector at each node's `start` offset.
+//! Walks the program AST, maintains seven counters (`Function`,
+//! `If`, `For`, `While`, `Switch`, `TryCatchFinally`, `Block`), and
+//! snapshots the current vector at each node's `start` offset.
 //!
 //! Block-statement classification depends on the immediate parent's
 //! type and the slot key it occupies on that parent (e.g.
-//! `IfStatement.consequent` increments `If`). The TS port relies on
-//! `walk`'s generic `(node, parent, key)` callback; the Rust port
-//! reaches the same shape by maintaining a `key_stack` alongside the
-//! ancestor stack and overriding every container visitor that owns
-//! BlockStatement slots so it pushes / pops the right key around each
-//! child visit.
+//! `IfStatement.consequent` increments `If`). To recover the
+//! `(node, parent, key)` shape the visitor maintains a `key_stack`
+//! alongside the ancestor stack and overrides every container
+//! visitor that owns BlockStatement slots so it pushes / pops the
+//! right key around each child visit.
 
 use std::collections::HashMap;
 

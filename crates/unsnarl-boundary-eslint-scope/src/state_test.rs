@@ -1,5 +1,4 @@
-//! Sibling tests for `state.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/declare/declare-variable.test.ts`.
+//! Sibling tests for `state.rs`.
 //!
 //! The TS port colocates `declareVariable` in `declare/`; the Rust
 //! port pulls it into `state.rs` because it directly mutates

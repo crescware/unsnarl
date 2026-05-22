@@ -1,12 +1,8 @@
 //! Serialize a `Definition` into its on-disk JSON union form.
 //!
-//! Mirrors `serializeDefinition` in
-//! `ts/src/serializer/flat/serialize-definition.ts`. The TS source
-//! reads parser-owned `parent["kind"]`, `parent["source"]`, and
-//! `node["imported"]` fields off the live AST; the Rust port reads
-//! them off the `Definition.{declaration_kind, import_source,
-//! imported_name, init}` extras that the boundary materialises at
-//! declaration time.
+//! Reads parser-owned fields off the
+//! `Definition.{declaration_kind, import_source, imported_name,
+//! init}` extras that the boundary materialises at declaration time.
 
 use unsnarl_ir::scope::definition::Definition;
 use unsnarl_ir::serialized::{

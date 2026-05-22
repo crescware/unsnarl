@@ -1,7 +1,5 @@
 //! Walks an element tree and indexes every [`VisualNode`] by id
 //! into the supplied map.
-//!
-//! Mirrors `ts/src/emitter/mermaid/collect-nodes-into.ts`.
 
 use std::collections::HashMap;
 

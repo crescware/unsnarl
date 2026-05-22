@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/render-pruning-comment.test.ts`.
-
 use unsnarl_visual_graph::visual_graph_pruning::{PruningRoot, VisualGraphPruning};
 
 use super::render_pruning_comment;

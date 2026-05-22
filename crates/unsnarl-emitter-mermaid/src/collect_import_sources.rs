@@ -1,7 +1,5 @@
 //! Selects the set of ids whose outgoing edges should be rendered
 //! in the import-edge bucket.
-//!
-//! Mirrors `ts/src/emitter/mermaid/collect-import-sources.ts`.
 
 use std::collections::{HashMap, HashSet};
 

@@ -1,12 +1,10 @@
 //! `MarkdownEmitter`: wraps the mermaid emitter's output in a
 //! Markdown preview document.
 //!
-//! Mirrors `MarkdownEmitter` in `ts/src/emitter/markdown/markdown.ts`.
-//! The TS implementation composes a configured `MermaidEmitter`,
-//! strips trailing newlines from both the source and the mermaid
-//! render, and assembles the `# <path>` / `## Notice` / `## Input` /
-//! `## Query` / `## Mermaid` sections. The Rust port keeps the same
-//! composition and section order.
+//! Composes a configured `MermaidEmitter`, strips trailing newlines
+//! from both the source and the mermaid render, and assembles the
+//! `# <path>` / `## Notice` / `## Input` / `## Query` / `## Mermaid`
+//! sections in that order.
 
 use unsnarl_analyzer::format_var_diagnostic;
 use unsnarl_emitter::{EmitOptions, Emitter};

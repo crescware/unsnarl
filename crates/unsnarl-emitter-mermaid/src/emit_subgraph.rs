@@ -1,7 +1,5 @@
 //! Emits a subgraph block, wrapping it with its owner Function
 //! node when the kind is Function and an owner is known.
-//!
-//! Mirrors `ts/src/emitter/mermaid/emit-subgraph.ts`.
 
 use unsnarl_visual_graph::subgraph_kind::SubgraphKind;
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;

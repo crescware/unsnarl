@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/find-host-subgraph.ts`.
-//!
 //! Walk `ref.from` upward to the closest scope that materialised a
 //! subgraph during the top-down build and return its handle. When
 //! no scope-direct hit is found, fall back to the function

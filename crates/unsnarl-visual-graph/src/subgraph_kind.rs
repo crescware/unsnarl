@@ -1,9 +1,9 @@
 //! `SubgraphKind`: tag on `VisualSubgraph` distinguishing every shape
 //! of subgraph the builder emits.
 //!
-//! Mirrors `ts/src/visual-graph/subgraph-kind.ts`. The values double
-//! as the on-disk JSON tags (`"function"`, `"if-else-container"`,
-//! ...), so they serialize to those literal strings.
+//! The values double as the on-disk JSON tags (`"function"`,
+//! `"if-else-container"`, ...), so they serialize to those literal
+//! strings.
 
 use serde::Serialize;
 

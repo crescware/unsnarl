@@ -1,5 +1,4 @@
-//! Sibling tests for [`throw_use_node_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/throw-use-node-id.test.ts`.
+//! Sibling tests for [`throw_use_node_id`].
 
 use super::throw_use_node_id;
 

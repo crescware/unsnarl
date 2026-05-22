@@ -1,10 +1,7 @@
 //! Build the ExpressionStatement-wrapping side info for a reference.
 //!
-//! Mirrors `ts/src/analyzer/expression-statement-container.ts`. The
-//! TS source walks the path leaf -> root, finds the nearest
-//! `ExpressionStatement`, then reads its `expression` slot to compute
-//! the head mini-AST. The Rust port splits the two responsibilities so
-//! the AST-bearing handle is supplied separately by the call site:
+//! Two responsibilities are split so the AST-bearing handle is
+//! supplied separately by the call site:
 //!
 //! * [`nearest_expression_statement`] returns the path entry of the
 //!   innermost `ExpressionStatement` (or `None`).
@@ -14,7 +11,7 @@
 //!
 //! Keeping the lookup outside this crate lets `unsnarl-analyzer` stay
 //! free of bookkeeping for `(path index → AST reference)`; the
-//! pipeline crate (Step 21) owns that mapping anyway.
+//! pipeline crate owns that mapping.
 
 use oxc_ast::ast::Expression;
 use oxc_span::Span;

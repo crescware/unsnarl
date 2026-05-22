@@ -1,5 +1,4 @@
-//! Sibling tests for [`set_predecessor_of`]. Cases mirror
-//! `ts/src/visual-graph/builder/set-predecessor-of.test.ts`.
+//! Sibling tests for [`set_predecessor_of`].
 
 use std::collections::HashMap;
 

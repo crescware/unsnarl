@@ -1,10 +1,8 @@
 //! Emitter trait.
 //!
-//! Mirrors `Emitter` in `ts/src/pipeline/emit/emitter.ts`. The TS form
-//! declares `format`, `contentType`, and `extension` as readonly
-//! string properties on each implementation; in Rust they are
-//! returned by `&self` getters so the trait stays object-safe
-//! (`&dyn Emitter`) for the future registry.
+//! `format`, `content_type`, and `extension` are returned by `&self`
+//! getters so the trait stays object-safe (`&dyn Emitter`) for the
+//! registry.
 
 use unsnarl_ir::serialized::SerializedIR;
 

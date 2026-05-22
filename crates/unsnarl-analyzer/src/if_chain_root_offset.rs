@@ -1,12 +1,10 @@
 //! Resolve an `else if` chain root's start offset for a nested
 //! IfStatement.
 //!
-//! Mirrors `ts/src/analyzer/if-chain-root-offset.ts`. The TS code
-//! compares ancestor nodes by reference identity (`entryNode !==
-//! chainTop`); the Rust port compares them by [`Span`] start/end
-//! pairs because the materialised [`AstNode`] values are not pointer-
-//! identifiable and span uniqueness within a parsed program suffices
-//! for the chain walk.
+//! Compares ancestor nodes by [`Span`] start/end pairs (rather than
+//! by reference identity) because the materialised [`AstNode`]
+//! values are not pointer-identifiable; span uniqueness within a
+//! parsed program suffices for the chain walk.
 
 use oxc_span::Span;
 

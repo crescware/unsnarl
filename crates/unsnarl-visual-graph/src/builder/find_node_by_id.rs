@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/find-node-by-id.ts`.
-//!
 //! Linear search through a (potentially nested) `VisualElement`
 //! tree, returning a `&mut` to the matching `VisualNode` so
 //! callers can patch `unused` / `end_line` after the fact.

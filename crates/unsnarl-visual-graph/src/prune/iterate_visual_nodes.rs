@@ -2,11 +2,9 @@
 //! [`NodeKind`](crate::node_kind::NodeKind) is a root candidate (per
 //! [`is_root_candidate_kind`]).
 //!
-//! Mirrors `ts/src/visual-graph/prune/iterate-visual-nodes.ts`. The
-//! TS file is a generator; the Rust port accepts a callback that the
-//! walker invokes for each candidate node so callers can either
-//! collect them or short-circuit without buying into an explicit
-//! iterator-state machine.
+//! Accepts a callback that the walker invokes for each candidate
+//! node so callers can either collect them or short-circuit without
+//! buying into an explicit iterator-state machine.
 
 use crate::prune::root_candidate_kinds::is_root_candidate_kind;
 use crate::visual_element::VisualElement;

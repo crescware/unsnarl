@@ -1,5 +1,4 @@
-//! Sibling tests for [`resolve_read_target_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/resolve-read-target-id.test.ts`.
+//! Sibling tests for [`resolve_read_target_id`].
 
 use unsnarl_ir::serialized::SerializedReference;
 

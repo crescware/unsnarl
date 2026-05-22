@@ -1,9 +1,8 @@
 //! Core pruning orchestration.
 //!
-//! Mirrors `ts/src/visual-graph/prune/prune-visual-graph.ts`. Takes a
-//! base [`VisualGraph`] and a list of resolved queries, walks the
-//! graph to determine the surviving node / edge set, and assembles a
-//! new [`VisualGraph`] plus per-query match counts.
+//! Takes a base [`VisualGraph`] and a list of resolved queries,
+//! walks the graph to determine the surviving node / edge set, and
+//! assembles a new [`VisualGraph`] plus per-query match counts.
 
 use std::collections::{HashMap, HashSet};
 

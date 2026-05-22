@@ -1,7 +1,6 @@
 //! Run the hoist pass over a statement body.
 //!
-//! Mirrors `hoistDeclarations` in
-//! `ts/src/boundary/eslint-scope/hoisting/hoist-declarations.ts`. TS
+//! TS
 //! iterates `body` as `readonly unknown[]` and filters with
 //! `isNodeLike`; the Rust port takes a typed `&[Statement<'_>]`, so
 //! the filter is unnecessary — every element is already a valid

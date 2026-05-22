@@ -1,8 +1,5 @@
 //! Does the variable have at least one non-`ImplicitGlobalVariable`
 //! definition?
-//!
-//! Mirrors `hasDeclaringDef` in
-//! `ts/src/serializer/flat/has-declaring-def.ts`.
 
 use unsnarl_ir::{DefinitionType, IrArena, VariableId};
 

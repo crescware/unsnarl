@@ -1,6 +1,4 @@
 //! Emits every top-level subgraph at depth 1.
-//!
-//! Mirrors `ts/src/emitter/mermaid/render-top-level-subgraphs.ts`.
 
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_graph::VisualGraph;

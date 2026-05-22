@@ -1,6 +1,4 @@
-//! `uns` CLI argument definitions. Mirrors the TS commander source at
-//! `ts/src/cli/args/build-command.ts` and the per-option files alongside
-//! it.
+//! `uns` CLI argument definitions.
 
 use std::path::{Path, PathBuf};
 

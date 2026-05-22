@@ -32,14 +32,11 @@ pub struct Span {
     pub offset: SourceOffset,
 }
 
-/// Mirrors `spanFromOffset` in `ts/src/util/span.ts`. The TS reference
-/// reads source via `fs.readFileSync(..., "utf8")` and consumes
-/// offsets produced by the npm `oxc-parser` package, both of which
-/// operate in UTF-16 code units (JavaScript string indices). The Rust
-/// pipeline consumes UTF-8 byte offsets from the `oxc_parser` crate;
-/// this function converts those byte offsets into UTF-16 code-unit
-/// offsets so the emitted IR matches the TS output byte-for-byte even
-/// in sources containing non-ASCII characters.
+/// The `oxc_parser` crate produces UTF-8 byte offsets, but the
+/// emitted IR carries UTF-16 code-unit offsets so the on-disk
+/// shape matches JavaScript-string indexing semantics. This
+/// function performs the conversion so the IR stays consistent
+/// even in sources containing non-ASCII characters.
 ///
 /// `offset` is a UTF-8 byte offset into `raw`. The returned `offset`
 /// and `column` are both in UTF-16 code units; `line` counts `\n`

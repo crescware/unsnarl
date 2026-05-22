@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/is-function-subgraph.ts`.
-
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::SerializedScope;
 

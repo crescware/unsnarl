@@ -1,9 +1,5 @@
-//! Read the start offset off an IR `AstIdentifier`.
-//!
-//! Mirrors the `AstIdentifier` arm of `offsetOf` in
-//! `ts/src/serializer/flat/offset-of.ts`. The TS source falls back
-//! to `0` when `node.start` is absent; in the Rust IR the span is
-//! always present, so the fallback collapses to "take `span.start`".
+//! Read the start offset off an IR `AstIdentifier`. The IR span is
+//! always present, so this simply returns `span.start`.
 //!
 //! This is the production-hot arm: `flat_serializer.rs` calls it for
 //! every reference identifier, so the parity sweep exercises it

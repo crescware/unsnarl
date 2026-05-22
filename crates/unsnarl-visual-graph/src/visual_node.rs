@@ -1,17 +1,16 @@
 //! `VisualNode`: a single rendered node in the visual graph.
 //!
-//! Mirrors `ts/src/visual-graph/visual-node.ts` and the construction
-//! sites under `ts/src/visual-graph/builder/`. The TS file declares
-//! a single discriminated union, but the on-disk JSON field order
-//! depends on the construction site: `makeVariableNode` builds the
-//! object as `{ type, id, name, line, endLine, isJsxElement, unused,
-//! kind, ...extras }` while every synthetic builder
-//! (`ensureExpressionStatementNode`, the loop / switch / if
+//! The on-disk JSON field order depends on the construction site:
+//! `make_variable_node` writes
+//! `{ type, id, name, line, end_line, is_jsx_element, unused,
+//! kind, ...extras }`, while every synthetic builder
+//! (`ensure_expression_statement_node`, the loop / switch / if
 //! anchors, the module / intermediate / sink builders, the
-//! WriteOp builder, `ensureReturnUseNode` / `ensureThrowUseNode` /
-//! `ensureBeyondDepthStub`) writes `{ type, id, kind, name, line,
-//! endLine, isJsxElement, unused, ...extras }`. To preserve those
-//! two orders we host two struct shapes and pick at construction.
+//! WriteOp builder, `ensure_return_use_node` /
+//! `ensure_throw_use_node` / `ensure_beyond_depth_stub`) writes
+//! `{ type, id, kind, name, line, end_line, is_jsx_element,
+//! unused, ...extras }`. Two struct shapes preserve both orders
+//! and the construction site picks the right one.
 
 use serde::Serialize;
 use unsnarl_oxc_parity::VariableDeclarationKind;

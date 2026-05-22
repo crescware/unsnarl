@@ -1,14 +1,12 @@
 //! unsnarl-specific analysis: builds the side-table annotations
 //! consumed by the serializers.
 //!
-//! Ports `ts/src/analyzer/`. The TS analyzer lives in a single
-//! directory with ~20 modules plus an `owner/` sub-module; the Rust
-//! port keeps the same module split. Functions that only need a
-//! node's `(type, span, key)` triple take materialised `AstNode`
-//! values from `unsnarl-ir`; functions that recurse into AST children
-//! (`is_control_exit`, `abrupt_completion_type_of`, etc.) take the
-//! corresponding `oxc_ast` references directly so the lifetime stays
-//! inside the analyzer call site rather than being baked into the IR.
+//! Functions that only need a node's `(type, span, key)` triple
+//! take materialised `AstNode` values from `unsnarl-ir`; functions
+//! that recurse into AST children (`is_control_exit`,
+//! `abrupt_completion_type_of`, etc.) take the corresponding
+//! `oxc_ast` references directly so the lifetime stays inside the
+//! analyzer call site rather than being baked into the IR.
 
 pub mod abrupt_completion_type_of;
 pub mod analyzed_source;

@@ -1,10 +1,10 @@
 //! End-to-end pipeline helpers for the CLI and the parity harness.
 //!
-//! Mirrors the slice of `ts/src/pipeline/` that Step 12 exercises: parse
-//! the source with `OxcParser`, analyse it with [`run_analysis`], hand
-//! the analysed IR + annotations to [`FlatSerializer`], and render the
-//! result with [`IrEmitter`]. Visual-graph / pruning / highlight
-//! plumbing comes in later steps (#122 onward).
+//! Parse the source with `OxcParser`, analyse it with
+//! [`run_analysis`], hand the analysed IR + annotations to
+//! [`FlatSerializer`], and render the result with [`IrEmitter`] (or
+//! one of the other emitters, with optional visual-graph pruning /
+//! highlight applied beforehand).
 
 pub mod highlight;
 pub mod plugin;
@@ -42,31 +42,24 @@ use unsnarl_visual_graph::visual_graph::VisualGraph;
 use crate::pipeline::plugin::apply_plugins;
 use crate::pipeline::prune::PruningRunOptions;
 
-/// Per-emit run knobs that grow as later Steps wire new transforms
-/// into the visual-graph build. Mirrors the slice of
-/// `PipelineRunOptions` in `ts/src/pipeline/runner/pipeline-run-options.ts`
-/// that the Rust emitter helpers consume directly. Highlight lands
-/// alongside Step 19 as another optional field on this struct rather
-/// than a new positional argument on every `emit_*_text` call.
+/// Per-emit run knobs that the emitter helpers consume directly.
+/// Optional fields keep individual `emit_*_text` call sites stable
+/// when new transforms enter the visual-graph build.
 #[derive(Default, Clone, Copy)]
 pub struct PipelineRunOptions<'a> {
     pub pruning: Option<&'a PruningRunOptions>,
     pub depths: Option<&'a NestingDepths>,
     pub highlight: Option<&'a HighlightRunOptions>,
-    /// Activated plugins to fold over the serialized IR. Mirrors
-    /// `PipelineConfig.plugins` in
-    /// `ts/src/pipeline/runner/pipeline-config.ts` + `runDetailed`'s
-    /// reduce step in `ts/src/pipeline/pipeline.ts`. The slice is
-    /// `&[&dyn UnsnarlPlugin]` so callers can pass the activated set
-    /// returned by [`plugin::activate`] without taking ownership of
-    /// the trait objects.
+    /// Activated plugins to fold over the serialized IR. The slice
+    /// is `&[&dyn UnsnarlPlugin]` so callers can pass the activated
+    /// set returned by [`plugin::activate`] without taking ownership
+    /// of the trait objects.
     pub plugins: &'a [&'a dyn UnsnarlPlugin],
 }
 
-/// Map a path's extension to a [`Language`]. Mirrors
-/// `fixtureLanguageFromExt` in `ts/integration/fixture-snapshot.ts`.
-/// `.mjs` / `.cjs` map to `Js` because they are JavaScript at the
-/// parser level; module-vs-script is resolved separately via
+/// Map a path's extension to a [`Language`]. `.mjs` / `.cjs` map to
+/// `Js` because they are JavaScript at the parser level;
+/// module-vs-script is resolved separately via
 /// [`source_type_from_path`].
 pub fn language_for_path(path: &str) -> Option<Language> {
     let ext = Path::new(path)
@@ -82,10 +75,8 @@ pub fn language_for_path(path: &str) -> Option<Language> {
     }
 }
 
-/// Mirrors `sourceTypeFromPath` in
-/// `ts/src/pipeline/parse/source-type-from-path.ts`: `.mjs` / `.cjs`
-/// are spec-pinned to module / script, every other extension falls
-/// back to the language-level default.
+/// `.mjs` / `.cjs` are spec-pinned to module / script; every other
+/// extension falls back to the language-level default.
 pub fn source_type_from_path(path: &str, language: Language) -> SourceType {
     if path.ends_with(".mjs") {
         return SourceType::Module;
@@ -98,9 +89,8 @@ pub fn source_type_from_path(path: &str, language: Language) -> SourceType {
 
 /// Detailed result of a pipeline run.
 ///
-/// Mirrors `ts/src/pipeline/runner/pipeline-run-details.ts`. The IR
-/// path leaves `pruning` / `resolutions` at `None` (matching the TS
-/// `runDetailed` branch where `emitter.format === "ir"`).
+/// The IR path leaves `pruning` / `resolutions` at `None` (those
+/// fields belong to the visual-graph-aware emit paths).
 pub struct PipelineRunDetails {
     pub text: String,
     pub pruning: Option<Vec<PrunePerQueryDetail>>,
@@ -108,11 +98,10 @@ pub struct PipelineRunDetails {
     pub diagnostics: Vec<Diagnostic>,
 }
 
-/// Per-query match count surfaced by `runDetailed`. Mirrors the
-/// `pruning[].{query, matched}` shape in
-/// `ts/src/pipeline/runner/pipeline-run-details.ts`: `query` is the
-/// raw token the user typed (after `-r` parsing), `matched` is the
-/// number of nodes the prune walk treated as roots for that query.
+/// Per-query match count surfaced alongside the rendered text:
+/// `query` is the raw token the user typed (after `-r` parsing) and
+/// `matched` is the number of nodes the prune walk treated as roots
+/// for that query.
 pub struct PrunePerQueryDetail {
     pub query: String,
     pub matched: u32,
@@ -136,9 +125,8 @@ pub fn emit_ir_text(
 
 /// Detailed variant of [`emit_ir_text`]. Returns the rendered text
 /// together with the analyser diagnostics so the CLI orchestration
-/// can emit `var`-detected warnings on stderr (mirrors the IR branch
-/// of `runDetailed` in `ts/src/pipeline/pipeline.ts`, which returns
-/// `{ text, pruning: null, resolutions: null, diagnostics }`).
+/// can emit `var`-detected warnings on stderr. The IR branch leaves
+/// `pruning` / `resolutions` at `None`.
 pub fn emit_ir_detailed(
     code: &str,
     source_path: &str,
@@ -247,10 +235,8 @@ pub fn emit_mermaid_detailed(
 /// Same as [`emit_ir_text`] but routes the parsed IR through
 /// [`MarkdownEmitter`]. The markdown emitter composes a configured
 /// [`MermaidEmitter`] so the caller picks the renderer / theme on
-/// behalf of the embedded `## Mermaid` block — matching the TS
-/// `createConfiguredEmitterRegistry` wiring where `MarkdownEmitter`
-/// receives the same `MermaidEmitter` instance that `-f mermaid`
-/// uses directly.
+/// behalf of the embedded `## Mermaid` block — the same configured
+/// `MermaidEmitter` instance that `-f mermaid` uses directly.
 pub fn emit_markdown_text(
     code: &str,
     source_path: &str,
@@ -343,11 +329,10 @@ struct PreparedEmit {
 
 /// Build the visual graph once and run pruning / highlight on it.
 ///
-/// Mirrors `runDetailed`'s pruning + highlight block in
-/// `ts/src/pipeline/pipeline.ts`. Pruning runs first (since `-H` in
-/// roots mode follows the prune walk's root ids); highlight then
-/// resolves against the working graph — the pruned one when pruning
-/// is active, the base one otherwise.
+/// Pruning runs first (since `-H` in roots mode follows the prune
+/// walk's root ids); highlight then resolves against the working
+/// graph — the pruned one when pruning is active, the base one
+/// otherwise.
 fn prepare_emit(
     ir: &SerializedIR,
     pruning: Option<&PruningRunOptions>,
@@ -418,10 +403,9 @@ fn prepare_emit(
     }
 }
 
-/// Extract the user-typed token from a [`ParsedRootQuery`]. Mirrors
-/// the `query.raw` field the TS `runDetailed` reads when building
-/// `pruning[].query`. Every `ParsedRootQuery` variant carries the
-/// raw string so this is just a structural projection.
+/// Extract the user-typed token from a [`ParsedRootQuery`]. Every
+/// variant carries the raw string so this is just a structural
+/// projection.
 fn raw_root_query(q: &ParsedRootQuery) -> &str {
     match q {
         ParsedRootQuery::Line { raw, .. }

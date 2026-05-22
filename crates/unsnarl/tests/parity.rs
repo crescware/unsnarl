@@ -1,15 +1,15 @@
 //! Parity harness.
 //!
-//! Walks `ts/integration/fixtures/**` for directories that contain
-//! `input.{ts,tsx,js,jsx,mjs,cjs}` plus one of the `expected.*`
-//! sibling baselines and dynamically generates one `libtest-mimic`
-//! test per (fixture, baseline) pair.
+//! Walks the fixtures tree (see [`fixtures_root`]) for directories
+//! that contain `input.{ts,tsx,js,jsx,mjs,cjs}` plus one of the
+//! `expected.*` sibling baselines, and dynamically generates one
+//! `libtest-mimic` test per (fixture, baseline) pair.
 //!
 //! Each test feeds the input through the matching in-process
 //! pipeline helper (`emit_ir_text` for `expected.ir.json`,
 //! `emit_json_text` for `expected.json`) and compares the rendered
 //! text to the on-disk baseline via `pretty_assertions::StrComparison`.
-//! The TS baselines are treated as the source of truth; the
+//! The on-disk baselines are treated as the source of truth; the
 //! `expected.*` files are never written back from Rust.
 //!
 //! ## Pruning / depth / highlight / plugin variants
@@ -18,16 +18,14 @@
 //! `depth-<slug>/`, `pruned-depth-<slug>/`, `highlight-<slug>/`,
 //! `pruned-highlight-<slug>/`, or `plugin-<slug>/` directories
 //! whose expected baselines reflect a pruned, depth-collapsed,
-//! highlighted, plugin-applied, or combined visual graph. The TS
-//! test-snapshot setup (`ts/integration/fixture-snapshot.ts`
-//! invoked from `index.test.ts`) declares the underlying pruning /
-//! depth / highlight / plugin options inline.
+//! highlighted, plugin-applied, or combined visual graph.
 //!
-//! The Rust harness reads the same options from a `variants.json`
+//! The harness reads the per-variant options from a `variants.json`
 //! manifest at the mirrored path under
-//! `crates/unsnarl/tests/fixture-variants/`. The `ts/` tree is the
-//! archived TS port and accepts no new files; manifests therefore
-//! live outside it. Each manifest entry yields a
+//! `crates/unsnarl/tests/fixture-variants/` (see
+//! [`fixture_variants_root`]). The fixtures tree is treated as
+//! immutable, so the manifests live alongside the harness rather
+//! than under it. Each manifest entry yields a
 //! [`PruningRunOptions`] / [`NestingDepths`] /
 //! [`HighlightRunOptions`] tuple that the harness runs the pipeline
 //! against before comparing the variant's baseline.
@@ -71,11 +69,10 @@ fn fixtures_root() -> PathBuf {
 }
 
 /// Root of the per-fixture `variants.json` manifests consumed by
-/// this harness. Lives outside `ts/` because the TS tree is the
-/// archived port — no new files are added under it. Layout mirrors
-/// the fixture tree exactly: a fixture at
-/// `ts/integration/fixtures/<rel>` reads its manifest from
-/// `crates/unsnarl/tests/fixture-variants/<rel>/variants.json`.
+/// this harness. Lives alongside the harness because the fixtures
+/// tree is treated as immutable. Layout mirrors the fixture tree
+/// exactly: a fixture at `<fixtures-root>/<rel>` reads its manifest
+/// from `crates/unsnarl/tests/fixture-variants/<rel>/variants.json`.
 fn fixture_variants_root() -> PathBuf {
     workspace_root().join("crates/unsnarl/tests/fixture-variants")
 }
@@ -208,10 +205,9 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
             .to_string_lossy()
             .replace('\\', "/")
             .to_string();
-        // Source path the IR records: relative to the `ts/` dir
-        // (matches the `relative(PROJECT_ROOT, ...)` shape from
-        // `ts/integration/fixture-snapshot.ts`, where PROJECT_ROOT
-        // is `ts/`).
+        // Source path the IR records: relative to the project root
+        // (the parent-of-parent of the fixtures root), matching the
+        // baseline snapshots' `relative(PROJECT_ROOT, ...)` shape.
         let ts_root = root
             .parent()
             .and_then(Path::parent)
@@ -340,10 +336,8 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
 
 /// Per-fixture variant declared in `variants.json`.
 ///
-/// One entry per variant sibling directory. Mirrors the `pruning` /
-/// `depths` / `highlight` args of `fixtureSnapshot` in
-/// `ts/integration/fixture-snapshot.ts`. `kind` selects whether the
-/// variant directory is `pruned-<slug>/`, `depth-<slug>/`,
+/// One entry per variant sibling directory. `kind` selects whether
+/// the variant directory is `pruned-<slug>/`, `depth-<slug>/`,
 /// `pruned-depth-<slug>/`, `highlight-<slug>/`, or
 /// `pruned-highlight-<slug>/`; the field defaults to `pruned` for
 /// backward compatibility with the original manifests (which only
@@ -403,8 +397,7 @@ impl VariantKind {
     }
 }
 
-/// `highlight` field on a variant. Mirrors `FixtureHighlight` in
-/// `ts/integration/fixture-snapshot.ts`:
+/// `highlight` field on a variant:
 /// - `Roots` -> `-H` with no inline value (the highlight follows
 ///   `pruning.roots`; only meaningful alongside a pruned variant).
 /// - `Queries(raw)` -> `-H <raw>`. The raw string is fed verbatim to

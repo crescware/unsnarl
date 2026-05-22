@@ -1,10 +1,10 @@
 //! Land the emitted text on the chosen destination.
 //!
-//! Mirrors `ts/src/cli/run-cli/write-output.ts`. When `output_path`
-//! is `None`, the text goes to the supplied stdout writer (the CLI
-//! binary passes `io::stdout().lock()`). When a path is given, the
-//! parent directory is created recursively and the file is written
-//! in full (overwriting any existing content).
+//! When `output_path` is `None`, the text goes to the supplied
+//! stdout writer (the CLI binary passes `io::stdout().lock()`).
+//! When a path is given, the parent directory is created recursively
+//! and the file is written in full (overwriting any existing
+//! content).
 
 use std::fs;
 use std::io::{self, Write};

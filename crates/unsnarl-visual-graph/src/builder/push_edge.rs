@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/push-edge.ts`.
-//!
 //! Deduplicates emitted edges by a `from -->|label| to` key so the
 //! TS one-edge-per-from/to/label invariant is preserved across
 //! every site that pushes into `state.edges`.

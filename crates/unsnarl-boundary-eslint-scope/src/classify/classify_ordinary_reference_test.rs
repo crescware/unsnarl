@@ -1,5 +1,4 @@
-//! Sibling tests for `classify_ordinary_reference.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/classify-ordinary-reference.test.ts`.
+//! Sibling tests for `classify_ordinary_reference.rs`.
 
 use unsnarl_ir::reference::reference_flags::ReferenceFlags;
 use unsnarl_ir::Language;

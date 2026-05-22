@@ -1,10 +1,9 @@
 //! `unsnarl-visual-graph` builder family.
 //!
-//! Mirrors `ts/src/visual-graph/builder/`. The leaf modules host
-//! single pure functions; composite modules (`build_scope`,
-//! `build_children`, `build_visual_graph`) drive them. The entry
-//! point [`build_visual_graph::build_visual_graph`] lands once the
-//! supporting leaves and composites are populated.
+//! The leaf modules host single pure functions; composite modules
+//! (`build_scope`, `build_children`, `build_visual_graph`) drive
+//! them. The entry point is
+//! [`build_visual_graph::build_visual_graph`].
 
 pub mod arena;
 pub mod branch_container_key;

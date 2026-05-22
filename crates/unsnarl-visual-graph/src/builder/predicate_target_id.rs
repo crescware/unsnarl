@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/predicate-target-id.ts`.
-//!
 //! Resolves a reference's predicate-container target id by routing
 //! `PredicateContainerType` to the matching anchor map. The maps
 //! themselves are populated by `attach_loop_test_anchor` /

@@ -1,11 +1,9 @@
 //! Per-variable retained-reference counter.
 //!
-//! Mirrors `countRetainedRefsByResolved` in
-//! `ts/src/plugins/unsnarl-plugin-react/index.ts`. Walks every
-//! reference that is NOT in [`refs_to_remove`] and bumps the count
-//! for its `resolved` variable id. The result is used to decide
-//! whether a hook import has any live use sites remaining; if not,
-//! the import binding itself can be dropped.
+//! Walks every reference that is NOT in [`refs_to_remove`] and bumps
+//! the count for its `resolved` variable id. The result is used to
+//! decide whether a hook import has any live use sites remaining;
+//! if not, the import binding itself can be dropped.
 
 use std::collections::{HashMap, HashSet};
 

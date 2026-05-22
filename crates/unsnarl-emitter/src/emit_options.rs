@@ -1,12 +1,7 @@
 //! Options passed into `Emitter::emit`.
 //!
-//! Mirrors `EmitOptions` in `ts/src/pipeline/emit/emit-options.ts`.
-//! The TS shape carries fields for pruned graphs, root-query
-//! resolutions, highlight sets, debug flags, and depths in addition
-//! to `prettyJson`. The Rust port grows the struct one field at a
-//! time as each emitter starts consuming the corresponding TS
-//! field; pruning lands in Step 17, depth / highlight follow in
-//! Steps 18–19.
+//! Carries fields for pruned graphs, root-query resolutions,
+//! highlight sets, debug flags, and depths alongside `pretty_json`.
 
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_visual_graph::highlight::HighlightRunOptions;

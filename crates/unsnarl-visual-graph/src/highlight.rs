@@ -1,10 +1,11 @@
 //! Highlight reuses the `-r/--roots` query grammar to flag a subset of
 //! nodes for renderer-specific paint.
 //!
-//! Mirrors `ts/src/visual-graph/highlight/` plus the
-//! `pipeline/highlight/highlight-run-options.ts` data carrier (hosted
-//! here because the emitter crates need to reach it through
-//! [`crate::EmitOptions`] equivalents). Public entry points:
+//! Also hosts the `HighlightRunOptions` data carrier here so the
+//! emitter crates can reach it through [`crate::EmitOptions`]
+//! equivalents.
+//!
+//! Public entry points:
 //!
 //! - [`collect_highlight_ids::collect_highlight_ids`] — given a
 //!   [`crate::VisualGraph`] and a list of already-resolved queries,

@@ -1,5 +1,4 @@
-//! Sibling tests for [`enclosing_function_var`]. Cases mirror
-//! `ts/src/visual-graph/builder/enclosing-function-var.test.ts`.
+//! Sibling tests for [`enclosing_function_var`].
 
 use std::collections::HashMap;
 

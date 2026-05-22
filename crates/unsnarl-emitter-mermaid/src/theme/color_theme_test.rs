@@ -1,10 +1,6 @@
-//! Mirrors `ts/src/emitter/mermaid/theme/color-theme.test.ts`. The
-//! TS test was a structural sanity check that required the literal
-//! to type-check against the interface; in Rust the struct definition
-//! enforces the same shape at compile time. The test below builds a
-//! minimal `ColorTheme` value to act as the same fence — if a field
-//! is ever renamed, this expression stops compiling and the test
-//! fails to build.
+//! The test below builds a minimal `ColorTheme` value to act as a
+//! compile-time fence — if a field is ever renamed, this expression
+//! stops compiling and the test fails to build.
 
 use super::{
     BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,

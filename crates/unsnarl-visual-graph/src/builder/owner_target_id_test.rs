@@ -1,5 +1,4 @@
-//! Sibling tests for [`owner_target_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/owner-target-id.test.ts`.
+//! Sibling tests for [`owner_target_id`].
 
 use std::collections::HashMap;
 

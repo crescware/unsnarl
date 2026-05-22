@@ -1,11 +1,8 @@
 //! Sibling tests for [`super::pipeline`].
 //!
-//! Covers `source_type_from_path` (ported from
-//! `ts/src/pipeline/parse/source-type-from-path.test.ts`) and
-//! `language_for_path` (ported from
-//! `ts/src/cli/run-cli/detect-language.test.ts`). The other pipeline
-//! entry points (`emit_*_text` / `emit_*_detailed`) are driven
-//! end-to-end by the integration tests under
+//! Covers `source_type_from_path` and `language_for_path`. The
+//! other pipeline entry points (`emit_*_text` / `emit_*_detailed`)
+//! are driven end-to-end by the integration tests under
 //! `crates/unsnarl/tests/parity.rs`, so they do not need duplicate
 //! sibling coverage here.
 
@@ -74,16 +71,12 @@ fn jsx_extension_falls_back_to_default_source_type_for_module() {
     ));
 }
 
-// Port of `ts/src/cli/run-cli/detect-language.test.ts`. The TS
-// `detectLanguage` returns a `CliLanguage` keyed off the path's
-// extension; the Rust counterpart [`language_for_path`] returns an
-// `Option<Language>` and is the seam the CLI uses to map a positional
-// file path to a parser language tag. The cases below cover the
-// shared extension set (`.ts/.tsx/.js/.jsx/.mjs/.cjs`). The TS test's
-// `.ejs/.mts/.cts/unknown` fallbacks intentionally do not survive the
-// port: Rust does not accept those at the CLI layer (the unsupported
-// extension path is surfaced as an error in `read_source_file`), so a
-// passing test would assert the wrong semantic.
+// [`language_for_path`] returns an `Option<Language>` and is the
+// seam the CLI uses to map a positional file path to a parser
+// language tag. The cases below cover the supported extension set
+// (`.ts/.tsx/.js/.jsx/.mjs/.cjs`); the unsupported-extension path is
+// surfaced as an error in `read_source_file` rather than mapped to
+// any default language, so unknown extensions must yield `None`.
 
 #[test]
 fn language_for_path_tsx_extension_yields_tsx() {

@@ -1,6 +1,4 @@
 //! Per-node matcher for a single `-r` query.
-//!
-//! Mirrors `ts/src/visual-graph/prune/node-matches-query.ts`.
 
 use unsnarl_ir::SourceLine;
 use unsnarl_root_query::ParsedRootQuery;

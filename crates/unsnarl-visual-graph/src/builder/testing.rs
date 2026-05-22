@@ -1,9 +1,7 @@
 //! Shared test fixtures for sibling tests under
-//! `crates/unsnarl-visual-graph/src/builder/`. Mirrors the
-//! `ts/src/visual-graph/builder/testing/` helpers (`make-scope.ts`
-//! et al.) so the Rust tests can express each test case as a
-//! field-by-field override of a known base, rather than rebuilding
-//! the full struct in every test.
+//! `crates/unsnarl-visual-graph/src/builder/`. Lets each test case
+//! express itself as a field-by-field override of a known base,
+//! rather than rebuilding the full struct in every test.
 //!
 //! Gated behind `#[cfg(test)]`; not part of the crate's public API.
 
@@ -57,11 +55,10 @@ pub(crate) fn scope_id(value: &str) -> SerializedScopeId {
     SerializedScopeId::new(value.to_string())
 }
 
-/// Mirrors `baseScope()` from
-/// `ts/src/visual-graph/builder/testing/make-scope.ts`. Returns a
-/// `Block` scope with empty variables / references / children, a
-/// 1-character body span, and zeroed nesting depths. Tests override
-/// individual fields by binding the result and mutating, e.g.
+/// Returns a `Block` scope with empty variables / references /
+/// children, a 1-character body span, and zeroed nesting depths.
+/// Tests override individual fields by binding the result and
+/// mutating, e.g.
 ///
 /// ```ignore
 /// let mut s = base_serialized_scope("scope1");
@@ -108,10 +105,9 @@ pub(crate) fn other_block_context(
 }
 
 /// Build a [`CaseClauseBlockContext`] and wrap as
-/// [`BlockContext::CaseClause`]. Mirrors
-/// `baseCaseClauseBlockContext()` in
-/// `ts/.../testing/make-block-context.ts` when no overrides are
-/// applied; pass an explicit `case_test` to model a concrete case.
+/// [`BlockContext::CaseClause`]. Defaults represent a "no-overrides"
+/// case clause; pass an explicit `case_test` to model a concrete
+/// case.
 pub(crate) fn case_clause_block_context(
     parent_type: AstType,
     key: &str,

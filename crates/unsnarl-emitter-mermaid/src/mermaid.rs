@@ -2,12 +2,8 @@
 //! flowchart, respecting the active layout strategy and color
 //! theme.
 //!
-//! Mirrors `MermaidEmitter` in `ts/src/emitter/mermaid/mermaid.ts`.
-//! The TS implementation builds a `VisualGraph` from the IR (or
-//! pulls a pre-pruned graph from `opts.prunedGraph`) and walks it
-//! to emit text. The Rust port follows the same control flow; the
-//! pruned-graph short-circuit lands alongside Step 17 when
-//! pruning starts attaching `prunedGraph` to `EmitOptions`.
+//! Builds a `VisualGraph` from the IR (or uses a pre-pruned graph
+//! supplied via the emit options) and walks it to emit text.
 
 use std::collections::{HashMap, HashSet};
 

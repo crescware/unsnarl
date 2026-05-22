@@ -1,5 +1,4 @@
-//! Mirrors `ts/src/serializer/flat/has-declaring-def.test.ts`. Pins
-//! the rule "at least one def whose type is NOT
+//! Pins the rule "at least one def whose type is NOT
 //! `ImplicitGlobalVariable`" — anything else (including the empty
 //! defs list) is treated as not having a declaring def.
 

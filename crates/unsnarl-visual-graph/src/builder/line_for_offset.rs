@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/line-for-offset.ts`.
-//!
 //! TS counts UTF-16 code units up to `offset`, scanning for `\n`
 //! (code unit 10). The IR contract carries `offset` as a UTF-16
 //! code unit count (see `unsnarl_ir::primitive::span_from_offset`),

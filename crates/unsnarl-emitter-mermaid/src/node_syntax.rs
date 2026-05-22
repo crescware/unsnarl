@@ -1,7 +1,5 @@
 //! Wraps a node's label in the right mermaid shape syntax
 //! (`["..."]`, `((...))`, `{"..."}`, ...).
-//!
-//! Mirrors `ts/src/emitter/mermaid/node-syntax.ts`.
 
 use unsnarl_visual_graph::node_kind::NodeKind;
 use unsnarl_visual_graph::visual_node::VisualNode;

@@ -1,6 +1,4 @@
 //! Breadth-first traversal helper for pruning.
-//!
-//! Mirrors `ts/src/visual-graph/prune/bfs.ts`.
 
 use std::collections::{HashMap, HashSet};
 

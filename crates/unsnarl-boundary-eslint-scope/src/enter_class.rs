@@ -1,7 +1,6 @@
 //! Push a `Class` scope and declare the inner class name.
 //!
-//! Mirrors `enterClass` in
-//! `ts/src/boundary/eslint-scope/enter-class.ts`. The TS port reads
+//! The TS port reads
 //! `node["id"]` defensively because `NodeLike` does not pin the
 //! shape; the Rust port matches on `Class.id: Option<BindingIdentifier>`
 //! directly.

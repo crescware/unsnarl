@@ -1,5 +1,5 @@
-//! Sibling tests for [`find_host_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/find-host-subgraph.test.ts`. The
+//! Sibling tests for [`find_host_subgraph`].
+//! The
 //! Rust signature returns a [`SubgraphIdx`] handle (vs the TS
 //! `VisualSubgraph` value) so each test asserts on the returned
 //! handle's identity against the arena slots it populated.

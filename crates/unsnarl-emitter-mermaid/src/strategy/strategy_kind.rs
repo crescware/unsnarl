@@ -1,12 +1,8 @@
 //! `MermaidStrategy`: enum selecting the renderer-specific lines.
 //!
-//! Mirrors `ts/src/emitter/mermaid/strategy/strategy.ts` together
-//! with `dagre-strategy.ts` / `elk-strategy.ts`. The TS port keeps
-//! the strategy as an object with three callable members so it can
-//! be passed as a dependency; the Rust port collapses that into a
-//! two-variant enum because the choice has zero open extension
-//! points -- new strategies would land here as a new variant rather
-//! than via an external `impl`.
+//! Modeled as a two-variant enum because the choice has zero open
+//! extension points -- new strategies would land here as a new
+//! variant rather than via an external `impl`.
 
 use crate::theme::ColorTheme;
 

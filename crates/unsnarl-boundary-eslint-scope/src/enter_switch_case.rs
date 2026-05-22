@@ -1,8 +1,7 @@
 //! Push a `Block` scope for a `SwitchCase` and hoist its
 //! consequent.
 //!
-//! Mirrors `enterSwitchCase` in
-//! `ts/src/boundary/eslint-scope/enter-switch-case.ts`. Note that the
+//! Note that the
 //! TS port uses scope type `"block"` (not `"switch"`); the Rust port
 //! does the same. The case's consequent is `Vec<Statement<'_>>` in
 //! oxc, structurally guaranteed, so the TS `Array.isArray` check

@@ -1,10 +1,9 @@
-//! Sibling tests for `skip_block_scope.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/skip-block-scope.test.ts`.
+//! Sibling tests for `skip_block_scope.rs`.
 //!
 //! In oxc the only parent type that triggers the skip is
-//! `CatchClause` (TS's `Function` / `ArrowFunctionExpression` are
-//! ruled out structurally because their bodies are `FunctionBody`,
-//! not `BlockStatement`).
+//! `CatchClause` — `Function` / `ArrowFunctionExpression` are ruled
+//! out structurally because their bodies are `FunctionBody`, not
+//! `BlockStatement`.
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;

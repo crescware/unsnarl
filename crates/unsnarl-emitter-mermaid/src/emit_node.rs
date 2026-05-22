@@ -1,6 +1,4 @@
 //! Emits one `<id><shape>["<label>"]` line for a node.
-//!
-//! Mirrors `ts/src/emitter/mermaid/emit-node.ts`.
 
 use unsnarl_visual_graph::visual_node::VisualNode;
 

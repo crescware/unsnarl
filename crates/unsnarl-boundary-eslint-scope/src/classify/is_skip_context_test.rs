@@ -1,5 +1,4 @@
-//! Sibling tests for `is_skip_context.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/is-skip-context.test.ts`.
+//! Sibling tests for `is_skip_context.rs`.
 
 use unsnarl_ir::Language;
 

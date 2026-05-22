@@ -1,9 +1,5 @@
-//! Read the start offset off an IR `AstNode`.
-//!
-//! Mirrors the `AstNode` arm of `offsetOf` in
-//! `ts/src/serializer/flat/offset-of.ts`. The TS source falls back to
-//! `0` when `node.start` is absent; in the Rust IR the span is
-//! always present, so the fallback collapses to "take `span.start`".
+//! Read the start offset off an IR `AstNode`. The IR span is
+//! always present, so this simply returns `span.start`.
 //!
 //! Kept in its own file (and out of `offset_of_identifier.rs`) so
 //! the coverage report can show that `pick_variable_offset` — the

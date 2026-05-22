@@ -1,9 +1,7 @@
 //! Reduce an ExpressionStatement's `expression` to the
 //! `HeadExpression` mini-AST.
 //!
-//! Mirrors `ts/src/analyzer/expression-statement-head.ts`. The TS
-//! source operates on dynamically-typed AST nodes; the Rust port
-//! matches on `oxc_ast::Expression` variants directly. Unrecognised
+//! Matches on `oxc_ast::Expression` variants directly. Unrecognised
 //! shapes fall back to `HeadExpression::Raw` with the surrounding
 //! ExpressionStatement's span (passed as `fallback`).
 

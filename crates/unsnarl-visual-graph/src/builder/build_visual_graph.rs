@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/build-visual-graph.ts`.
-//!
 //! Entry point for the visual-graph build. Constructs the
 //! `BuilderContext` side tables off the analysed `SerializedIR`,
 //! walks the module / global root scope through `build_scope`,

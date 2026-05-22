@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/control-subgraph-kind-of.ts`.
-
 use unsnarl_ir::scope::block_context::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::SerializedScope;

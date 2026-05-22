@@ -1,10 +1,10 @@
 //! `IrEmitter`: renders a `SerializedIR` as JSON.
 //!
-//! Mirrors `IrEmitter` in `ts/src/emitter/ir/ir.ts`. The output is
-//! `JSON.stringify(ir, null, 2)\n` when `pretty_json` is true, and
-//! `JSON.stringify(ir)\n` otherwise. The two serialisations live in
-//! sibling files under `ir/` so the coverage report can show parity
-//! exercising only the pretty path (the CLI never sets
+//! The output is the pretty-printed JSON (2-space indent, trailing
+//! newline) when `pretty_json` is true, and the compact form (no
+//! whitespace, trailing newline) otherwise. The two serialisations
+//! live in sibling files under `ir/` so the coverage report can
+//! show parity exercising only the pretty path (the CLI never sets
 //! `pretty_json = false`).
 
 mod serialize_compact;

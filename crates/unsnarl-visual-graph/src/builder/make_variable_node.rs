@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/make-variable-node.ts`.
-//!
 //! Builds a `VisualNode` from a `SerializedVariable`. The TS form
 //! dispatches on `def.type` (the first definition) and assembles
 //! the `common` fields once before adding the kind-specific tail;

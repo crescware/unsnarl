@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/emit-subgraph.test.ts`.
-
 use unsnarl_visual_graph::visual_node::{BindingNodeKind, BindingVisualNode, VisualNode};
 use unsnarl_visual_graph::visual_subgraph::{
     ControlSubgraphKind, OwnedExtras, OwnedVisualSubgraph, VisualSubgraph,

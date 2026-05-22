@@ -1,5 +1,4 @@
-//! Sibling tests for [`describe_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/describe-subgraph.test.ts`.
+//! Sibling tests for [`describe_subgraph`].
 
 use std::collections::HashMap;
 

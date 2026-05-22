@@ -1,18 +1,13 @@
 //! Build helpers shared by the boundary-crate `*_test.rs` files.
 //!
-//! Mirrors `ts/src/boundary/eslint-scope/testing/`. The TS layer
-//! offers `parse(code, language)` and `findFirst(root, type)`; the
-//! Rust port replaces both with a higher-level helper
-//! ([`analyze_source`]) that drives `OxcParser` → `analyze` and
-//! returns the populated [`EslintScopeAnalysisResult`], plus a
-//! handful of shared IR-shape predicates used by the sibling
-//! `*_test.rs` files.
+//! [`analyze_source`] is the workhorse: it drives `OxcParser` →
+//! `analyze` and returns the populated
+//! [`EslintScopeAnalysisResult`]. Companion helpers expose shared
+//! IR-shape predicates used by the sibling `*_test.rs` files.
 //!
-//! Per issue #118, boundary tests stay integration-style — source
-//! string in, IR observation out — so individual `enter_*` / classify
-//! helpers don't need `&'a Program<'a>` mocks. The TS-side
-//! `findFirst` (used to pull AST sub-nodes for unit tests) has no
-//! Rust counterpart for that reason.
+//! Boundary tests stay integration-style — source string in, IR
+//! observation out — so individual `enter_*` / classify helpers
+//! don't need `&'a Program<'a>` mocks.
 
 #![cfg(test)]
 

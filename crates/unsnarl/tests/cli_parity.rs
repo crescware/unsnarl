@@ -61,8 +61,8 @@ fn ts_root() -> PathBuf {
 }
 
 /// Root of the per-fixture `variants.json` manifests, mirrored from
-/// `tests/parity.rs::fixture_variants_root`. The TS fixture tree is
-/// archived (read-only); the manifests live alongside the in-process
+/// `tests/parity.rs::fixture_variants_root`. The fixtures tree is
+/// treated as immutable; the manifests live alongside the in-process
 /// parity harness and are shared verbatim with this CLI harness.
 fn fixture_variants_root() -> PathBuf {
     workspace_root().join("crates/unsnarl/tests/fixture-variants")
@@ -554,11 +554,12 @@ fn collect_cases() -> Vec<CliCase> {
 fn run_case(case: &CliCase) -> Result<(), Failed> {
     let expected = fs::read_to_string(&case.expected)
         .map_err(|e| Failed::from(format!("read expected {}: {e}", case.expected.display())))?;
-    // Run with cwd = ts/ and feed the input as a relative path so the
-    // CLI's recorded `source` field matches the parity baselines,
-    // which embed paths shaped like `integration/fixtures/.../input.ts`
-    // (the `relative(PROJECT_ROOT, ...)` form `fixture-snapshot.ts`
-    // emits under `PROJECT_ROOT = ts/`).
+    // Run with cwd set to the project root and feed the input as a
+    // relative path so the CLI's recorded `source` field matches the
+    // parity baselines, which embed paths shaped like
+    // `integration/fixtures/.../input.ts` — the
+    // `relative(PROJECT_ROOT, ...)` form the baselines were captured
+    // under.
     let ts = ts_root();
     let rel_input = case.input.strip_prefix(&ts).unwrap_or(&case.input);
     let mut command = Command::new(UNS_BIN);

@@ -1,5 +1,4 @@
-//! Sibling tests for [`should_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/should-subgraph.test.ts`.
+//! Sibling tests for [`should_subgraph`].
 
 use unsnarl_ir::scope::block_context::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;

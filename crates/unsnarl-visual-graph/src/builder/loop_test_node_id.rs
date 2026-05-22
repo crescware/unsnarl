@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/loop-test-node-id.ts`.
-
 use super::sanitize::sanitize;
 
 pub fn while_test_node_id(parent_scope_id: &str, offset: u32) -> String {

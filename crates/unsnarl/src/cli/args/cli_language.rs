@@ -1,7 +1,4 @@
 //! Stdin language selection for `--stdin-lang`.
-//!
-//! Mirrors `LANGUAGE` in `ts/src/language.ts` (validated via
-//! `LANGUAGES` in `ts/src/cli/args/cli-language.ts`).
 
 use clap::ValueEnum;
 use serde::Serialize;

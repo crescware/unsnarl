@@ -1,5 +1,4 @@
-//! Sibling tests for `is_pattern_step.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/is-pattern-step.test.ts`.
+//! Sibling tests for `is_pattern_step.rs`.
 
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;

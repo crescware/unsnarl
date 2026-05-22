@@ -1,5 +1,4 @@
-//! Sibling tests for `reference.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/reference.test.ts`.
+//! Sibling tests for `reference.rs`.
 //!
 //! The TS `reference(flags, init)` factory is exercised inside
 //! `classify_*` paths. The Rust port keeps the function for parity

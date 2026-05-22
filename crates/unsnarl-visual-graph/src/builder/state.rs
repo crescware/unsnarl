@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/build-state.ts`.
-//!
 //! The TS shape stores live `VisualSubgraph` references inside its
 //! maps. The Rust port stores [`SubgraphIdx`] handles into a
 //! [`BuildArena`](super::arena::BuildArena) so the same subgraph can

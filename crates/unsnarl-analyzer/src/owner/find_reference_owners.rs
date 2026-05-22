@@ -1,12 +1,10 @@
 //! Walk a reference's ancestor chain to locate the owning binding
 //! slot.
 //!
-//! Mirrors `ts/src/analyzer/owner/find-reference-owners.ts`. The TS
-//! function returns `Variable[]`; the Rust port returns an
-//! [`OwnerLookup`] describing the path entry the call site should
-//! resolve back to an AST handle. Step 21's pipeline then calls
-//! [`all_binding_variables`] or [`assignment_target_variables`] with
-//! that handle.
+//! Returns an [`OwnerLookup`] describing the path entry the call
+//! site should resolve back to an AST handle. The pipeline then
+//! calls [`all_binding_variables`] or [`assignment_target_variables`]
+//! with that handle.
 //!
 //! [`all_binding_variables`]: super::all_binding_variables::all_binding_variables
 //! [`assignment_target_variables`]: super::all_binding_variables::assignment_target_variables

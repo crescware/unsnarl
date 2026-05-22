@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/render-top-level-nodes.test.ts`.
-
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_node::{
     BindingVisualNode, SyntheticNodeKind, SyntheticVisualNode, VisualNode,

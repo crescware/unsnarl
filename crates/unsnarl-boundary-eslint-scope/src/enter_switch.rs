@@ -1,7 +1,6 @@
 //! Push a `Switch` scope (no declarations of its own).
 //!
-//! Mirrors `enterSwitch` in
-//! `ts/src/boundary/eslint-scope/enter-switch.ts`. The Rust port
+//! The Rust port
 //! shrinks to a single `push_scope` call; the TS `onScope` callback
 //! is dispatched on the Rust side from
 //! `ScopeBuildVisitor::fire_on_scope` (in `scope_build_visitor.rs`)

@@ -1,6 +1,4 @@
-//! Sibling tests for `hoisting/handle_variable_declaration.rs`,
-//! mirroring TS
-//! `ts/src/boundary/eslint-scope/hoisting/handle-variable-declaration.test.ts`.
+//! Sibling tests for `hoisting/handle_variable_declaration.rs`.
 
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::Language;

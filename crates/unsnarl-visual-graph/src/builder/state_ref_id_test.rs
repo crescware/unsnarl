@@ -1,5 +1,4 @@
-//! Sibling tests for [`state_ref_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/state-ref-id.test.ts`.
+//! Sibling tests for [`state_ref_id`].
 
 use super::state_ref_id;
 use crate::builder::testing::{

@@ -1,5 +1,4 @@
-//! Sibling tests for [`build_scope`]. Cases mirror
-//! `ts/src/visual-graph/builder/build-scope.test.ts`.
+//! Sibling tests for [`build_scope`].
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_definition::{

@@ -1,5 +1,4 @@
-//! Mirrors `ts/src/emitter/stats/format-label.test.ts`. The TS
-//! suite pins the third TSV column: `path:line [unused ]name`. The
+//! Pins the third TSV column: `path:line [unused ]name`. The
 //! `unused ` prefix surfaces only when `node.unused` is true; the
 //! default (`unused: false`) emits no prefix.
 

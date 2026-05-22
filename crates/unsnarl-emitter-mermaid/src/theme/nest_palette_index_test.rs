@@ -1,8 +1,6 @@
-//! Mirrors `ts/src/emitter/mermaid/theme/nest-palette-index.test.ts`.
-//! The TS reference accepts arbitrary numbers and throws on
-//! non-positive inputs; the Rust signature is `(u32, usize)`, so
-//! "depth < 1" collapses to "depth == 0" (the only non-positive u32)
-//! and "negative palette length" is unrepresentable.
+//! The signature is `(u32, usize)`, so "depth < 1" collapses to
+//! "depth == 0" (the only non-positive u32) and "negative palette
+//! length" is unrepresentable.
 
 use super::nest_palette_index;
 

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/node-syntax.test.ts`.
-
 use unsnarl_visual_graph::visual_node::{SyntheticNodeKind, SyntheticVisualNode, VisualNode};
 
 use super::node_syntax;

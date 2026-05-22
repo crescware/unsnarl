@@ -1,5 +1,5 @@
-//! Sibling tests for [`predicate_target_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/predicate-target-id.test.ts`. The
+//! Sibling tests for [`predicate_target_id`].
+//! The
 //! Rust implementation takes the per-kind anchor maps via
 //! [`PredicateAnchorMaps`] rather than the full `BuildState` shape
 //! used by TS, so each test builds the wrapper from local

@@ -1,22 +1,18 @@
-//! `Annotations.ofVariable(v).isUnused` source of truth.
+//! `Annotations::of_variable(v).is_unused` source of truth.
 //!
-//! Mirrors `ts/src/analyzer/is-unused.ts`. A variable is considered
-//! unused when no read reference originates from outside one of the
-//! variable's own defining bodies. Writes (the init Write plus any
-//! later re-assignments) and self-internal reads (the recursive call
-//! inside `function foo() { foo(); }` or `const a = () => a;`) do
-//! not count as usage.
+//! A variable is considered unused when no read reference originates
+//! from outside one of the variable's own defining bodies. Writes
+//! (the init Write plus any later re-assignments) and self-internal
+//! reads (the recursive call inside `function foo() { foo(); }` or
+//! `const a = () => a;`) do not count as usage.
 //!
-//! The TS port collects "body nodes" from each def via
-//! `bodyNodeOf(def.node)`, which is either the def's node itself
-//! (functionlike) or the def's `init` (`VariableDeclarator` with a
-//! functionlike initialiser). Rust's materialised [`AstNode`] does
-//! not carry the `init` slot, so the Rust port factors that lookup
-//! out into a caller-supplied `body_span_lookup` closure: given a
-//! [`DefinitionId`], it returns the span of the body that should
-//! establish a body scope (or `None` when the def has none). Step 21
-//! populates this closure from the underlying AST at boundary build
-//! time; tests construct it inline.
+//! "Body nodes" are collected from each def. The materialised
+//! [`AstNode`] does not carry the `init` slot, so that lookup is
+//! factored out into a caller-supplied `body_span_lookup` closure:
+//! given a [`DefinitionId`], it returns the span of the body that
+//! should establish a body scope (or `None` when the def has none).
+//! The pipeline populates this closure from the underlying AST at
+//! boundary build time; tests construct it inline.
 
 use oxc_span::Span;
 

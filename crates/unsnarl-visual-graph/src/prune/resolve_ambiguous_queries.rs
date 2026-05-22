@@ -1,6 +1,4 @@
 //! Disambiguate `LineOrName` queries by inspecting the graph.
-//!
-//! Mirrors `ts/src/visual-graph/prune/resolve-ambiguous-queries.ts`.
 
 use std::collections::HashSet;
 

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/ensure-throw-use-node.ts`.
-//!
 //! Twin of [`super::ensure_return_use_node::ensure_return_use_node`]
 //! for `throw` completions. See that module's doc for the full
 //! rationale; the only differences are the discriminator

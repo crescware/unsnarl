@@ -1,5 +1,4 @@
-//! Sibling tests for `is_direct_binding.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/classify/is-direct-binding.test.ts`.
+//! Sibling tests for `is_direct_binding.rs`.
 //!
 //! In oxc, most "direct binding" slots are inhabited by
 //! `BindingIdentifier` (a distinct AST type from

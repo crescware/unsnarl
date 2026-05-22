@@ -1,7 +1,6 @@
 //! Walk a [`VisualGraph`] and return the ids of every visible node
 //! that satisfies at least one of the supplied queries.
 //!
-//! Mirrors `ts/src/visual-graph/highlight/collect-highlight-ids.ts`.
 //! The query grammar matches `-r/--roots`, but the matching predicate
 //! is the highlight-specific [`node_matches_highlight_query`], which
 //! deliberately does not apply the `NAME_QUERY_EXCLUDED` filter so

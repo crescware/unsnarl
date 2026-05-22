@@ -1,14 +1,13 @@
 //! `JsonEmitter`: renders a `SerializedIR` as a JSON-encoded
 //! `VisualGraph`.
 //!
-//! Mirrors `JsonEmitter` in `ts/src/emitter/json/json.ts`. The
-//! visual-graph build runs once per emit; the resulting `VisualGraph`
-//! is serialized with `serialize_pretty::serialize` when
-//! `pretty_json` is true, otherwise with `serialize_compact::serialize`.
-//! The two serialisations live in sibling files so the coverage
-//! report can show parity exercising only the pretty path (the CLI
-//! never sets `pretty_json = false`). The returned text always ends
-//! in a trailing newline (matches the TS `${text}\n`).
+//! The visual-graph build runs once per emit; the resulting
+//! `VisualGraph` is serialized with `serialize_pretty::serialize`
+//! when `pretty_json` is true, otherwise with
+//! `serialize_compact::serialize`. The two serialisations live in
+//! sibling files so the coverage report can show parity exercising
+//! only the pretty path (the CLI never sets `pretty_json = false`).
+//! The returned text always ends in a trailing newline.
 
 mod serialize_compact;
 mod serialize_pretty;

@@ -1,7 +1,5 @@
 //! Builds the full mermaid label string for a node (head + line
 //! range + optional `<br/>kind` suffix for `--debug`).
-//!
-//! Mirrors `ts/src/emitter/mermaid/node-label.ts`.
 
 use unsnarl_visual_graph::node_kind::NodeKind;
 use unsnarl_visual_graph::visual_node::VisualNode;

@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/split-edges.test.ts`.
-
 use std::collections::HashSet;
 
 use unsnarl_visual_graph::visual_edge::VisualEdge;

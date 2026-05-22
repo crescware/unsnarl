@@ -1,8 +1,6 @@
 //! Flat serializer: walks the IR arena pre-order and emits a
 //! `SerializedIR` whose scopes / variables / references are addressed
 //! by string IDs (`scope#N`, `scope#N:name@offset`, `ref#N`).
-//!
-//! Mirrors `ts/src/serializer/flat/`.
 
 pub mod collect_scopes_in_order;
 pub mod flat_serializer;

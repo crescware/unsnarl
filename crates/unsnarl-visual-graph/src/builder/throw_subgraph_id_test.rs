@@ -1,5 +1,4 @@
-//! Sibling tests for [`throw_subgraph_id`]. Cases mirror
-//! `ts/src/visual-graph/builder/throw-subgraph-id.test.ts`.
+//! Sibling tests for [`throw_subgraph_id`].
 
 use super::throw_subgraph_id;
 

@@ -1,7 +1,5 @@
 //! Emits the trailing `classDef` / `class` lines that style boundary
 //! stubs, var nodes, and per-depth nest fills.
-//!
-//! Mirrors `ts/src/emitter/mermaid/render-class-defs.ts`.
 
 use std::collections::HashMap;
 

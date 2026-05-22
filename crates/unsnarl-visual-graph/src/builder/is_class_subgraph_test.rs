@@ -1,5 +1,4 @@
-//! Sibling tests for [`is_class_subgraph`]. Cases mirror
-//! `ts/src/visual-graph/builder/is-class-subgraph.test.ts`.
+//! Sibling tests for [`is_class_subgraph`].
 
 use unsnarl_ir::scope_type::ScopeType;
 

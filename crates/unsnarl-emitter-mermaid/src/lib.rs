@@ -1,10 +1,9 @@
 //! Mermaid emitter (strategy + theme).
 //!
-//! Mirrors `ts/src/emitter/mermaid/`. The strategy enum selects the
-//! renderer-specific lines (elk vs dagre); the theme governs the
-//! `classDef` / `style` / `linkStyle` colors. Both are picked at the
-//! CLI / pipeline boundary and handed to [`MermaidEmitter`] at
-//! construction time.
+//! The strategy enum selects the renderer-specific lines (elk vs
+//! dagre); the theme governs the `classDef` / `style` / `linkStyle`
+//! colors. Both are picked at the CLI / pipeline boundary and handed
+//! to [`MermaidEmitter`] at construction time.
 
 pub mod collect_highlight_edge_indices;
 pub mod collect_import_sources;

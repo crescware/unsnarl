@@ -1,6 +1,4 @@
 //! Collect every node id and subgraph id from an element tree.
-//!
-//! Mirrors `ts/src/visual-graph/prune/collect-ids.ts`.
 
 use std::collections::HashSet;
 

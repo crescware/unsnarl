@@ -1,22 +1,20 @@
 //! `VisualSubgraph`: a container element in the visual graph.
 //!
-//! Mirrors `ts/src/visual-graph/visual-subgraph.ts` together with
-//! the construction sites under `ts/src/visual-graph/builder/`. As
-//! with [`VisualNode`](crate::visual_node::VisualNode), the on-disk
-//! JSON field order varies by construction site:
+//! As with [`VisualNode`](crate::visual_node::VisualNode), the
+//! on-disk JSON field order varies by construction site:
 //!
-//! - `describeSubgraph` ("owned") path for Function / Class /
-//!   Return / Throw subgraphs and `build-children`'s manually-built
-//!   IfElseContainer write `{ type, id, kind, line, endLine,
-//!   direction, ...extras, elements }`.
-//! - `describeSubgraph` ("control" common-spread) path for Case /
-//!   Switch / If / Else / Try / Catch / Finally / For / While /
-//!   DoWhile / Block writes `{ type, id, line, endLine, direction,
-//!   elements, kind, ...extras }`.
+//! - `describe_subgraph` ("owned") path for Function / Class /
+//!   Return / Throw subgraphs and `build_children`'s manually-built
+//!   IfElseContainer writes
+//!   `{ type, id, kind, line, end_line, direction, ...extras, elements }`.
+//! - `describe_subgraph` ("control" common-spread) path for
+//!   Case / Switch / If / Else / Try / Catch / Finally / For /
+//!   While / DoWhile / Block writes
+//!   `{ type, id, line, end_line, direction, elements, kind, ...extras }`.
 //!
-//! Two struct shapes mirror that split. They are wrapped in a
-//! single untagged [`VisualSubgraph`] enum so the rest of the
-//! builder can hold a uniform element kind.
+//! Two struct shapes match the split, wrapped in a single untagged
+//! [`VisualSubgraph`] enum so the rest of the builder can hold a
+//! uniform element kind.
 
 use serde::Serialize;
 

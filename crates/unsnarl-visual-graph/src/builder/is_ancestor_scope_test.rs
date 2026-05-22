@@ -1,5 +1,4 @@
-//! Sibling tests for [`is_ancestor_scope`]. Cases mirror
-//! `ts/src/visual-graph/builder/is-ancestor-scope.test.ts`.
+//! Sibling tests for [`is_ancestor_scope`].
 
 use std::collections::HashMap;
 

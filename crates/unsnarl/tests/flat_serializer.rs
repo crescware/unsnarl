@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/serializer/flat/flat-serializer.test.ts`.
-//!
 //! The TS suite drives `FlatSerializer` through the full
 //! parse -> analyse -> serialise pipeline. The Rust port reuses the
 //! same end-to-end pipeline (via `unsnarl::pipeline::emit_ir_text`)

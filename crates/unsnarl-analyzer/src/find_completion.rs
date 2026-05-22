@@ -1,13 +1,12 @@
 //! Resolve the `[[Type]]` Completion category that carries a
 //! reference's value.
 //!
-//! Mirrors `ts/src/analyzer/find-completion.ts`. Walks the ancestor
-//! chain leaf -> root and reports the nearest enclosing
-//! `ReturnStatement` / `ThrowStatement`, or `Normal` if a function /
-//! class boundary is hit first (function / class internals never feed
-//! the enclosing function's completion). Arrow functions with an
-//! expression body (no explicit `return`) classify the body
-//! expression itself as the implicit return target.
+//! Walks the ancestor chain leaf -> root and reports the nearest
+//! enclosing `ReturnStatement` / `ThrowStatement`, or `Normal` if a
+//! function / class boundary is hit first (function / class
+//! internals never feed the enclosing function's completion). Arrow
+//! functions with an expression body (no explicit `return`) classify
+//! the body expression itself as the implicit return target.
 
 use unsnarl_ir::reference::ReferenceCompletion;
 use unsnarl_ir::SourceOffset;

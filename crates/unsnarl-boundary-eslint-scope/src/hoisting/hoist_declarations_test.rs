@@ -1,5 +1,4 @@
-//! Sibling tests for `hoisting/hoist_declarations.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/hoisting/hoist-declarations.test.ts`.
+//! Sibling tests for `hoisting/hoist_declarations.rs`.
 
 use unsnarl_ir::Language;
 

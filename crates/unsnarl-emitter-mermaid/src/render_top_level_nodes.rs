@@ -1,8 +1,6 @@
 //! Emits top-level "tree" nodes (anything that isn't a synthetic
 //! top-level import/module/sink and isn't a wrapped function-owner
 //! name).
-//!
-//! Mirrors `ts/src/emitter/mermaid/render-top-level-nodes.ts`.
 
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_graph::VisualGraph;

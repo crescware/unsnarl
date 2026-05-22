@@ -1,8 +1,4 @@
 //! Layout engine selection for `--mermaid-renderer`.
-//!
-//! Mirrors `CLI_MERMAID_RENDERER` in `ts/src/cli-mermaid-renderer.ts`
-//! (validated via `MERMAID_RENDERERS` in
-//! `ts/src/cli/args/cli-mermaid-renderer.ts`).
 
 use clap::ValueEnum;
 use serde::Serialize;

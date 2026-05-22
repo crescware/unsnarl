@@ -1,5 +1,4 @@
-//! Sibling tests for `enter_for.rs`, mirroring TS
-//! `ts/src/boundary/eslint-scope/enter-for.test.ts`.
+//! Sibling tests for `enter_for.rs`.
 
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;

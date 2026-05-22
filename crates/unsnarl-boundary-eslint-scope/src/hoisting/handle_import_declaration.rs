@@ -1,8 +1,6 @@
 //! Hoist each import specifier's `local` binding into the enclosing
 //! scope.
 //!
-//! Mirrors `handleImportDeclaration` in
-//! `ts/src/boundary/eslint-scope/hoisting/handle-import-declaration.ts`.
 //! TS reads `node["specifiers"]` as an array of `NodeLike` and pulls
 //! `spec["local"]`; the Rust port iterates
 //! `ImportDeclaration.specifiers: Option<Vec<ImportDeclarationSpecifier>>`

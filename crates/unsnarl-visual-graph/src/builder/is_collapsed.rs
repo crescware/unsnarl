@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/visual-graph/builder/is-collapsed.ts`.
-//!
 //! Returns `true` when the supplied depth ceiling is below the
 //! scope's recorded nesting count for the same kind, which is the
 //! signal Step 18's depth control uses to drop the scope's body

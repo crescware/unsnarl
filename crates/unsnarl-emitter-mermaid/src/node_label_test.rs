@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/node-label.test.ts`.
-
 use unsnarl_visual_graph::visual_node::{
     BindingNodeKind, BindingVisualNode, SyntheticNodeKind, SyntheticVisualNode, VisualNode,
 };

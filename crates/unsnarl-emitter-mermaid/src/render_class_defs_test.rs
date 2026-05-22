@@ -1,5 +1,3 @@
-//! Mirrors `ts/src/emitter/mermaid/render-class-defs.test.ts`.
-
 use std::collections::HashMap;
 
 use super::render_class_defs;
