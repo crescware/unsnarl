@@ -28,7 +28,8 @@ static T_ANNOTATIONS_NS: AtomicU64 = AtomicU64::new(0);
 static T_OWNERS_NS: AtomicU64 = AtomicU64::new(0);
 static T_COMPLETION_NS: AtomicU64 = AtomicU64::new(0);
 static T_JSX_NS: AtomicU64 = AtomicU64::new(0);
-static T_EXPR_STMT_NS: AtomicU64 = AtomicU64::new(0);
+static T_EXPR_STMT_CONTAINER_NS: AtomicU64 = AtomicU64::new(0);
+static T_EXPR_STMT_HEAD_NS: AtomicU64 = AtomicU64::new(0);
 static T_IDENTIFIER_NS: AtomicU64 = AtomicU64::new(0);
 static T_BUILD_NS: AtomicU64 = AtomicU64::new(0);
 static N_OWNERS_TOTAL: AtomicU64 = AtomicU64::new(0);
@@ -46,7 +47,8 @@ pub struct SerializeReferenceStats {
     pub owners_ns: u64,
     pub completion_ns: u64,
     pub jsx_ns: u64,
-    pub expression_statement_ns: u64,
+    pub expression_statement_container_ns: u64,
+    pub expression_statement_head_ns: u64,
     pub identifier_ns: u64,
     pub build_ns: u64,
     pub owners_total: u64,
@@ -65,7 +67,8 @@ pub fn take_serialize_reference_stats() -> SerializeReferenceStats {
         owners_ns: T_OWNERS_NS.swap(0, Ordering::Relaxed),
         completion_ns: T_COMPLETION_NS.swap(0, Ordering::Relaxed),
         jsx_ns: T_JSX_NS.swap(0, Ordering::Relaxed),
-        expression_statement_ns: T_EXPR_STMT_NS.swap(0, Ordering::Relaxed),
+        expression_statement_container_ns: T_EXPR_STMT_CONTAINER_NS.swap(0, Ordering::Relaxed),
+        expression_statement_head_ns: T_EXPR_STMT_HEAD_NS.swap(0, Ordering::Relaxed),
         identifier_ns: T_IDENTIFIER_NS.swap(0, Ordering::Relaxed),
         build_ns: T_BUILD_NS.swap(0, Ordering::Relaxed),
         owners_total: N_OWNERS_TOTAL.swap(0, Ordering::Relaxed),
@@ -160,16 +163,21 @@ pub fn serialize_reference(
     });
     record(&T_JSX_NS, t);
 
-    let t = Instant::now();
     let expression_statement_container = ann.expression_statement_container.as_ref().map(|c| {
         N_EXPR_STMT.fetch_add(1, Ordering::Relaxed);
+        let t_container = Instant::now();
+        let start_span = span_from_offset(raw, c.start_offset.0 as usize);
+        let end_span = span_from_offset(raw, c.end_offset.0 as usize);
+        record(&T_EXPR_STMT_CONTAINER_NS, t_container);
+        let t_head = Instant::now();
+        let head = serialize_head_expression(&c.head, raw);
+        record(&T_EXPR_STMT_HEAD_NS, t_head);
         SerializedExpressionStatementContainer {
-            start_span: span_from_offset(raw, c.start_offset.0 as usize),
-            end_span: span_from_offset(raw, c.end_offset.0 as usize),
-            head: serialize_head_expression(&c.head, raw),
+            start_span,
+            end_span,
+            head,
         }
     });
-    record(&T_EXPR_STMT_NS, t);
 
     let t = Instant::now();
     let identifier = SerializedReferenceIdentifier::new(

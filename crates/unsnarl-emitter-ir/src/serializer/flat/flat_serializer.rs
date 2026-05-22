@@ -14,6 +14,7 @@ use crate::serializer::flat::collect_scopes_in_order::collect_scopes_in_order;
 use crate::serializer::flat::has_declaring_def::has_declaring_def;
 use crate::serializer::flat::offset_of_identifier::offset_of_identifier;
 use crate::serializer::flat::pick_variable_offset::pick_variable_offset;
+use crate::serializer::flat::serialize_expression_statement_head::take_head_stats;
 use crate::serializer::flat::serialize_reference::{
     serialize_reference, take_serialize_reference_stats,
 };
@@ -160,6 +161,7 @@ impl IRSerializer for FlatSerializer {
             // emitted after this loop reflects only this loop's
             // calls.
             let _ = take_serialize_reference_stats();
+            let _ = take_head_stats();
             let out: Vec<_> = all_references
                 .iter()
                 .map(|&r| {
@@ -175,13 +177,15 @@ impl IRSerializer for FlatSerializer {
                 })
                 .collect();
             let stats = take_serialize_reference_stats();
+            let head = take_head_stats();
             tracing::info!(
                 lookup_ms = stats.lookup_ns / 1_000_000,
                 annotations_ms = stats.annotations_ns / 1_000_000,
                 owners_ms = stats.owners_ns / 1_000_000,
                 completion_ms = stats.completion_ns / 1_000_000,
                 jsx_ms = stats.jsx_ns / 1_000_000,
-                expression_statement_ms = stats.expression_statement_ns / 1_000_000,
+                expr_stmt_container_ms = stats.expression_statement_container_ns / 1_000_000,
+                expr_stmt_head_ms = stats.expression_statement_head_ns / 1_000_000,
                 identifier_ms = stats.identifier_ns / 1_000_000,
                 build_ms = stats.build_ns / 1_000_000,
                 owners_total = stats.owners_total,
@@ -189,6 +193,9 @@ impl IRSerializer for FlatSerializer {
                 throw_count = stats.throw_count,
                 jsx_count = stats.jsx_count,
                 expression_statement_count = stats.expression_statement_count,
+                head_nodes_total = head.nodes,
+                head_span_calls = head.span_calls,
+                head_span_ms = head.span_ns / 1_000_000,
                 "serialize_reference sub-phase totals",
             );
             out
