@@ -1,10 +1,10 @@
 //! Sibling tests for `scope_build_visitor.rs`.
 //!
-//! Collapses the TS test surface for `handle-enter.test.ts`,
-//! `handle-leave.test.ts`, `walk/walk.test.ts`, and
-//! `eslint-compat.test.ts` because the Rust walker subsumes all four
-//! into one `ScopeBuildVisitor` (each TS module's `case` arm is now
-//! a `visit_*` override on this struct).
+//! `ScopeBuildVisitor` consolidates enter, leave, and per-AST-shape
+//! dispatch behaviour into a single struct, so this module covers the
+//! whole surface (handle-enter, handle-leave, the walk skeleton, and
+//! the eslint-compat invariants) through `visit_*` overrides on that
+//! struct.
 
 use oxc_allocator::Allocator;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};
@@ -78,12 +78,12 @@ fn eslint_compat_module_scope_chain_terminates_at_module_root() {
 
 #[test]
 fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
-    // Parity regression: the npm `oxc-parser` package's visitorKeys
-    // list `["declaration", "specifiers", "source", "attributes"]` for
-    // `ExportNamedDeclaration`, so the TS reference fires `on_scope`
-    // for an `export class Foo {}` inner class scope with `key =
-    // Some("declaration")`. Without an explicit override, oxc's
-    // auto-generated walker leaks whatever the surrounding
+    // Parity regression: the ESTree visitorKey list for
+    // `ExportNamedDeclaration` is
+    // `["declaration", "specifiers", "source", "attributes"]`, so the
+    // inner class scope of `export class Foo {}` must fire `on_scope`
+    // with `key = Some("declaration")`. Without an explicit override,
+    // oxc's auto-generated walker leaks whatever the surrounding
     // statement-list pushed (typically `Some("body")` from
     // `Program.body`).
     #[derive(Default)]
@@ -158,9 +158,9 @@ fn export_named_declaration_routes_declaration_slot_key_to_inner_class_scope() {
 
 #[test]
 fn parameter_default_immediate_identifier_does_not_register_as_runtime_reference() {
-    // `function f(b = a) { ... }` -- TS classifies `a` (the direct
-    // child of the parameter's initializer slot) as a binding, not a
-    // reference, because in its ESTree shape the parent is
+    // `function f(b = a) { ... }` -- `a` (the direct child of the
+    // parameter's initializer slot) is classified as a binding, not
+    // a reference, because in the ESTree shape its parent is
     // `AssignmentPattern` (a pattern step). oxc instead stores this
     // as `FormalParameter { pattern: b, initializer: a }`, so we
     // must short-circuit the classify walk at
@@ -191,11 +191,12 @@ fn parameter_default_nested_identifier_still_registers_as_runtime_reference() {
 
 #[test]
 fn ts_parameter_property_identifier_still_classifies_as_reference() {
-    // `constructor(public x: number)` -- the TS parameter-property
-    // case still falls through to `classify_ordinary_reference`,
-    // producing a read reference resolved against the implicit
-    // globals scope. The new initializer-slot fast-path must not
-    // apply (`key="params"`, not `"initializer"`).
+    // `constructor(public x: number)` -- the TypeScript parameter-
+    // property case still falls through to
+    // `classify_ordinary_reference`, producing a read reference
+    // resolved against the implicit globals scope. The new
+    // initializer-slot fast-path must not apply (`key="params"`,
+    // not `"initializer"`).
     let r = analyze_source(
         "class C {\n  constructor(public x: number) {}\n}\n",
         Language::Ts,
@@ -203,7 +204,7 @@ fn ts_parameter_property_identifier_still_classifies_as_reference() {
     let refs = reference_identifier_names(&r.arena);
     assert!(
         refs.iter().any(|n| n == "x"),
-        "TS parameter property `public x` must still register `x` as a runtime reference; got {refs:?}"
+        "TypeScript parameter property `public x` must still register `x` as a runtime reference; got {refs:?}"
     );
 }
 
@@ -212,7 +213,7 @@ fn ts_as_const_does_not_register_const_as_runtime_reference() {
     // Parity regression: oxc's auto-generated `walk_ts_as_expression`
     // descends into `type_annotation` without recording the
     // `typeAnnotation` slot key, so the `const` identifier inside
-    // `as const` (a TS literal-type marker, not a runtime binding)
+    // `as const` (a TypeScript literal-type marker, not a runtime binding)
     // would slip through `is_type_only_subtree` and be classified as
     // a global implicit reference. After the fix the type subtree is
     // entered with `key = Some("typeAnnotation")`, `type_only_depth`
@@ -234,8 +235,8 @@ fn ts_as_const_does_not_register_const_as_runtime_reference() {
 
 #[test]
 fn ts_as_named_type_does_not_register_type_name_as_runtime_reference() {
-    // `as UnsnarlPlugin` -- the type name is a TS-only reference and
-    // must not appear in `arena.references`.
+    // `as UnsnarlPlugin` -- the type name is a TypeScript-only
+    // reference and must not appear in `arena.references`.
     let r = analyze_source(
         "type T = number;\nconst x: unknown = 0;\nconst y = x as T;\n",
         Language::Ts,
@@ -276,11 +277,10 @@ fn ts_legacy_type_assertion_does_not_register_type_name_as_runtime_reference() {
 #[test]
 fn rest_parameter_type_annotation_does_not_register_named_type_as_runtime_reference() {
     // `function f(...nodes: VisualNode[])` -- the rest parameter's
-    // `type_annotation` slot is TS-only; the inner `VisualNode` must
-    // not appear in `arena.references`. This matches the parity-bench
-    // failure in `src/emitter/mermaid/collect-import-sources.test.ts`
-    // where `function asMap(...nodes: readonly VisualNode[])`
-    // produced an extra reference row.
+    // `type_annotation` slot is TypeScript-only; the inner
+    // `VisualNode` must not appear in `arena.references`. Regression
+    // shape: `function asMap(...nodes: readonly VisualNode[])`
+    // previously produced an extra reference row.
     let r = analyze_source(
         "type VisualNode = { id: string };\nfunction f(...nodes: readonly VisualNode[]) { return nodes.length; }\n",
         Language::Ts,
@@ -295,11 +295,10 @@ fn rest_parameter_type_annotation_does_not_register_named_type_as_runtime_refere
 #[test]
 fn property_definition_type_annotation_does_not_register_named_type_as_runtime_reference() {
     // `class C { items: Diagnostic[] = []; }` -- `Diagnostic` is a
-    // TS-only type reference and must not appear in
-    // `arena.references`. This matches the parity-bench failures in
-    // `src/util/diagnostic.ts` / `src/parser/parse-error.ts` where
-    // class property type annotations were leaking their named types
-    // as extra runtime references.
+    // TypeScript-only type reference and must not appear in
+    // `arena.references`. Regression shape: class property type
+    // annotations previously leaked their named types as extra
+    // runtime references.
     let r = analyze_source(
         "type Diagnostic = { message: string };\nclass C {\n  items: Diagnostic[] = [];\n}\n",
         Language::Ts,
@@ -326,8 +325,8 @@ fn accessor_property_type_annotation_does_not_register_named_type_as_runtime_ref
 
 #[test]
 fn call_expression_type_argument_is_not_registered_as_runtime_reference() {
-    // `f<Tag>(x)` -- the `Tag` is a TS-only type argument and must
-    // not appear in `arena.references`.
+    // `f<Tag>(x)` -- the `Tag` is a TypeScript-only type argument
+    // and must not appear in `arena.references`.
     let r = analyze_source(
         "type Tag = number;\nfunction f<U>(x: U): U { return x; }\nconst y = f<Tag>(1);\n",
         Language::Ts,
@@ -341,11 +340,9 @@ fn call_expression_type_argument_is_not_registered_as_runtime_reference() {
 
 #[test]
 fn new_expression_type_argument_is_not_registered_as_runtime_reference() {
-    // `new Set<Item>(arr)` -- same as above for the `new` form. This
-    // matches the parity-bench failure shape in
-    // `src/visual-graph/prune/name-query-excluded.ts`, where the
-    // generic type argument on a `new Set<NodeKind>` call was being
-    // mis-emitted as an extra `Reference` row.
+    // `new Set<Item>(arr)` -- same as above for the `new` form.
+    // Regression shape: generic type arguments on `new Set<NodeKind>`
+    // call sites previously surfaced as extra `Reference` rows.
     let r = analyze_source(
         "type Item = number;\nconst s = new Set<Item>([1, 2]);\n",
         Language::Ts,
@@ -387,8 +384,8 @@ fn jsx_opening_element_type_argument_is_not_registered_as_runtime_reference() {
 
 #[test]
 fn ts_instantiation_expression_does_not_register_type_argument_as_runtime_reference() {
-    // `f<T>` -- the type arguments are TS-only and must not appear
-    // in `arena.references`.
+    // `f<T>` -- the type arguments are TypeScript-only and must not
+    // appear in `arena.references`.
     let r = analyze_source(
         "type T = number;\nfunction f<U>(x: U): U { return x; }\nconst g = f<T>;\n",
         Language::Ts,
