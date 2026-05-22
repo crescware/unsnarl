@@ -75,14 +75,27 @@ pub(crate) fn run_to(
     out: &mut dyn Write,
     err: &mut dyn Write,
 ) -> u8 {
+    tracing::info!(
+        format = ?args.format,
+        stdin = args.stdin,
+        out_file = ?args.out_file,
+        out_dir = ?args.out_dir,
+        roots = args.roots.len(),
+        requested_plugins = args.plugins.len(),
+        "run starting",
+    );
+
     emit_out_flag_notice(args.out_dir.as_deref(), err);
 
     let registry = default_registry();
-    let plugins: Vec<&dyn UnsnarlPlugin> = match registry.activate_all(&args.plugins) {
-        Ok(v) => v,
-        Err(e) => {
-            writeln!(err, "error: {e}").ok();
-            return 1;
+    let plugins: Vec<&dyn UnsnarlPlugin> = {
+        let _span = tracing::info_span!("activate_plugins").entered();
+        match registry.activate_all(&args.plugins) {
+            Ok(v) => v,
+            Err(e) => {
+                writeln!(err, "error: {e}").ok();
+                return 1;
+            }
         }
     };
 
@@ -94,9 +107,12 @@ pub(crate) fn run_to(
     let emitter = build_emitter(args);
     let output_path = resolve_output_path(args, emitter.as_ref());
 
-    let (code, source_path, language) = match read_source_text(&source, err) {
-        Some(t) => t,
-        None => return 1,
+    let (code, source_path, language) = {
+        let _span = tracing::info_span!("read_source").entered();
+        match read_source_text(&source, err) {
+            Some(t) => t,
+            None => return 1,
+        }
     };
     tracing::info!(
         path = %source_path,
