@@ -13,14 +13,19 @@ use unsnarl_ir::Language;
 use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::parser::SourceType;
 
-use super::{reference_mapping, scope_mapping, variable_mapping};
+use super::{definition_mapping, reference_mapping, scope_mapping, variable_mapping};
 
-/// Phase 2 entry point. Wires the scope / variable / reference
-/// mapping passes into the arena. `definitions` is seeded here as
-/// an empty `IndexVec`; `reference_mapping` extends it with
-/// `ImplicitGlobalVariable` rows for every unresolved reference, and
-/// `definition_mapping` (Phase 2, follow-up commit) will append the
-/// remaining six `DefinitionType` variants.
+/// Phase 2 entry point. Wires the scope / variable / reference /
+/// definition mapping passes into the arena.
+///
+/// `reference_mapping` runs before `definition_mapping` because it
+/// owns the `ImplicitGlobalVariable` synthesis path (one
+/// `DefinitionData` per implicit-global Variable, emitted as a side
+/// effect of resolving unresolved references). `definition_mapping`
+/// then appends the remaining six `DefinitionType` variants
+/// (`Variable` / `FunctionName` / `ClassName` / `Parameter` /
+/// `CatchClause` / `ImportBinding`) by walking
+/// `Scoping::symbol_declarations`.
 pub(crate) fn build<'a>(
     program: &Program<'a>,
     source_type: SourceType,
@@ -36,6 +41,12 @@ pub(crate) fn build<'a>(
     let references = reference_mapping::build_references(
         &semantic,
         &mut scopes,
+        &mut variables,
+        &mut definitions,
+        &symbol_to_variable,
+    );
+    definition_mapping::build_definitions(
+        &semantic,
         &mut variables,
         &mut definitions,
         &symbol_to_variable,
