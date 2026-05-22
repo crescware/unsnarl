@@ -9,7 +9,7 @@
 //! predicate slot of the immediate parent (the visitor has already
 //! popped the predicate-owner off the path).
 
-use unsnarl_ir::primitive::span_from_offset;
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::reference::PredicateContainer;
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
@@ -23,18 +23,18 @@ pub fn find_predicate_container(
     parent_offset: Option<u32>,
     key: Option<&str>,
     path: &[PathEntry],
-    raw: &str,
+    index: &SourceIndex<'_>,
 ) -> Option<PredicateContainer> {
     // `entry.node.span.start` and `parent_offset` arrive in UTF-8
     // byte units from oxc; the serialised `PredicateContainer.offset`
     // is in UTF-16 code units per the IR contract, so each candidate
-    // offset is converted through `span_from_offset` before being
+    // offset is converted through `SourceIndex::span_at` before being
     // returned.
     let mut cur_key: Option<&str> = key;
     for entry in path.iter().rev() {
         let ty = &entry.node.r#type;
         if let Some(container_type) = predicate_container_for(ty, cur_key) {
-            let offset = span_from_offset(raw, entry.node.span.start as usize).offset;
+            let offset = index.span_at(entry.node.span.start as usize).offset;
             return Some(PredicateContainer {
                 r#type: container_type,
                 offset,
@@ -44,7 +44,7 @@ pub fn find_predicate_container(
     }
     let parent_type = parent_type?;
     let container_type = predicate_container_for(parent_type, key)?;
-    let offset = span_from_offset(raw, parent_offset.unwrap_or(0) as usize).offset;
+    let offset = index.span_at(parent_offset.unwrap_or(0) as usize).offset;
     Some(PredicateContainer {
         r#type: container_type,
         offset,

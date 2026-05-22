@@ -1,3 +1,4 @@
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::reference::PredicateContainer;
 use unsnarl_ir::SourceOffset;
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
@@ -20,7 +21,13 @@ fn find_predicate_container(
     key: Option<&str>,
     path: &[PathEntry],
 ) -> Option<PredicateContainer> {
-    super::find_predicate_container(parent_type, parent_offset, key, path, "")
+    super::find_predicate_container(
+        parent_type,
+        parent_offset,
+        key,
+        path,
+        &SourceIndex::build(""),
+    )
 }
 
 fn expect_container(
@@ -330,12 +337,13 @@ fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
         entry(if_stmt, Some("body")),
         entry(test_expr, Some("test")),
     ];
+    let index = SourceIndex::build(raw);
     let from_path = super::find_predicate_container(
         Some(&AstType::BinaryExpression),
         Some(11),
         Some("left"),
         &path,
-        raw,
+        &index,
     );
     expect_container(from_path, PredicateContainerType::IfStatement, 5);
 
@@ -344,7 +352,7 @@ fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
         Some(7),
         Some("test"),
         &[],
-        raw,
+        &index,
     );
     expect_container(from_parent_fallback, PredicateContainerType::IfStatement, 5);
 }

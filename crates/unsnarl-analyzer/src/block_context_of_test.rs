@@ -1,3 +1,4 @@
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_oxc_parity::AstType;
 
@@ -11,13 +12,13 @@ fn serialize(ctx: &BlockContext) -> serde_json::Value {
 
 #[test]
 fn returns_none_when_parent_is_null() {
-    assert!(block_context_of(None, Some("body"), &[], "").is_none());
+    assert!(block_context_of(None, Some("body"), &[], &SourceIndex::build("")).is_none());
 }
 
 #[test]
 fn returns_none_when_key_is_null() {
     let parent = ast_node(AstType::IfStatement, 5);
-    assert!(block_context_of(Some(&parent), None, &[], "").is_none());
+    assert!(block_context_of(Some(&parent), None, &[], &SourceIndex::build("")).is_none());
 }
 
 #[test]
@@ -26,7 +27,13 @@ fn returns_parent_type_key_and_start_as_parent_span_offset() {
     // 14 bytes of ASCII so byte 12 is in-range and UTF-16 conversion
     // is a no-op for this position.
     let raw = "let x = 1; if";
-    let ctx = block_context_of(Some(&parent), Some("consequent"), &[], raw).expect("Some");
+    let ctx = block_context_of(
+        Some(&parent),
+        Some("consequent"),
+        &[],
+        &SourceIndex::build(raw),
+    )
+    .expect("Some");
     assert_eq!(
         serialize(&ctx),
         serde_json::json!({
@@ -42,7 +49,8 @@ fn returns_parent_type_key_and_start_as_parent_span_offset() {
 #[test]
 fn falls_back_to_parent_span_offset_zero_when_start_is_zero() {
     let parent = ast_node(AstType::Program, 0);
-    let ctx = block_context_of(Some(&parent), Some("body"), &[], "").expect("Some");
+    let ctx =
+        block_context_of(Some(&parent), Some("body"), &[], &SourceIndex::build("")).expect("Some");
     assert_eq!(
         serialize(&ctx),
         serde_json::json!({
@@ -68,7 +76,13 @@ fn includes_if_chain_root_offset_when_path_indicates_else_if_chain() {
     // Pad to >= 100 bytes of ASCII so the byte offsets pre-converted
     // through `span_from_offset` are in-range and map 1:1 to UTF-16.
     let raw = " ".repeat(100);
-    let ctx = block_context_of(Some(&inner), Some("consequent"), &path, &raw).expect("Some");
+    let ctx = block_context_of(
+        Some(&inner),
+        Some("consequent"),
+        &path,
+        &SourceIndex::build(&raw),
+    )
+    .expect("Some");
     assert_eq!(
         serialize(&ctx),
         serde_json::json!({
@@ -92,7 +106,13 @@ fn parent_span_offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
     // the IR contract.
     let raw = "// —\nif (true) {}\n";
     let parent = crate::testing::ast_node(AstType::IfStatement, 7);
-    let ctx = block_context_of(Some(&parent), Some("consequent"), &[], raw).expect("Some");
+    let ctx = block_context_of(
+        Some(&parent),
+        Some("consequent"),
+        &[],
+        &SourceIndex::build(raw),
+    )
+    .expect("Some");
     assert_eq!(
         serialize(&ctx),
         serde_json::json!({
@@ -122,7 +142,13 @@ fn if_chain_root_offset_is_in_utf16_code_units_when_source_contains_non_ascii() 
         entry(outer, Some("body")),
         entry(inner.clone(), Some("alternate")),
     ];
-    let ctx = block_context_of(Some(&inner), Some("consequent"), &path, raw).expect("Some");
+    let ctx = block_context_of(
+        Some(&inner),
+        Some("consequent"),
+        &path,
+        &SourceIndex::build(raw),
+    )
+    .expect("Some");
     let v = serialize(&ctx);
     assert_eq!(v["parentSpanOffset"], serde_json::json!(20));
     assert_eq!(v["ifChainRootOffset"], serde_json::json!(5));

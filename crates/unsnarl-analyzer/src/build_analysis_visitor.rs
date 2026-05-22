@@ -37,7 +37,7 @@ use oxc_syntax::scope::ScopeFlags;
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_boundary_eslint_scope::materialise::ast_node_of;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{span_from_offset, AstNode};
+use unsnarl_ir::primitive::{AstNode, SourceIndex};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
@@ -70,19 +70,22 @@ const ZERO_DEPTHS: NestingDepths = NestingDepths {
     block: NestingDepth(0),
 };
 
-/// Internal walk-time frame: the live `AstKind` handle plus the key it
-/// occupies on its parent (the slot's field name) plus, for
+/// Internal walk-time frame: the live `AstKind` handle plus, for
 /// `ArrowFunctionExpression`, the body-shape side-channel
 /// `find_completion` needs to distinguish expression-body arrows from
 /// block-body arrows.
+///
+/// The slot key on the parent and the materialised `AstNode` are held
+/// on the parallel `path_entries: Vec<PathEntry>` so the analyzer
+/// helpers can borrow them as `&[PathEntry]` without re-materialising
+/// per fire_* call.
 struct PathFrame<'a> {
     kind: AstKind<'a>,
-    key: Option<&'static str>,
     arrow_body: Option<ArrowBodyInfo>,
 }
 
 pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
-    raw: &'arena str,
+    index: &'arena SourceIndex<'arena>,
     arena: &'arena IrArena,
     annotations: &'arena mut AnnotationsImpl,
     nesting_depths: &'arena HashMap<u32, NestingDepths>,
@@ -90,6 +93,15 @@ pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
     span_to_ref: &'arena HashMap<(u32, u32), ReferenceId>,
     key_stack: Vec<Option<&'static str>>,
     path: Vec<PathFrame<'a>>,
+    /// Parallel to `path`, kept in lock-step on push / pop. Holds
+    /// the lifetime-free `(AstNode, key, arrow_body)` triple that the
+    /// path-walking analyzer helpers consume. Materialised once per
+    /// node entry instead of being re-cloned from `path` on every
+    /// `fire_scope` / `fire_reference` call — on minified bundles
+    /// (mermaid.js: ~250k fire_* calls, depth 20+) that copy is the
+    /// single hottest source of allocator churn and per-ancestor
+    /// `ast_type_of` work.
+    path_entries: Vec<PathEntry>,
     /// Normalised `Program.span.start` matching the boundary's
     /// hashbang/directive/body offset. Used when materialising
     /// `AstNode { Program, span }` so downstream consumers
@@ -101,7 +113,7 @@ pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
 
 impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
     pub(crate) fn new(
-        raw: &'arena str,
+        index: &'arena SourceIndex<'arena>,
         arena: &'arena IrArena,
         annotations: &'arena mut AnnotationsImpl,
         nesting_depths: &'arena HashMap<u32, NestingDepths>,
@@ -110,7 +122,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         program_normalised_start: u32,
     ) -> Self {
         Self {
-            raw,
+            index,
             arena,
             annotations,
             nesting_depths,
@@ -118,6 +130,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             span_to_ref,
             key_stack: Vec::new(),
             path: Vec::new(),
+            path_entries: Vec::new(),
             program_normalised_start,
         }
     }
@@ -134,19 +147,8 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         self.key_stack.last().copied().flatten()
     }
 
-    fn materialise_path(&self) -> Vec<PathEntry> {
-        self.path
-            .iter()
-            .map(|f| PathEntry {
-                node: self.ast_node_of_kind(&f.kind),
-                key: f.key,
-                arrow_body: f.arrow_body,
-            })
-            .collect()
-    }
-
-    fn parent_ast_node(&self) -> Option<AstNode> {
-        self.path.last().map(|f| self.ast_node_of_kind(&f.kind))
+    fn parent_ast_node(&self) -> Option<&AstNode> {
+        self.path_entries.last().map(|e| &e.node)
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches
@@ -164,7 +166,6 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         let scope_type = self.arena.scopes[scope_id].r#type;
         let parent_node = self.parent_ast_node();
         let key = self.current_key();
-        let path_entries = self.materialise_path();
         let is_switch_case = matches!(scope_type, ScopeType::Block)
             && matches!(ast_node_of(kind).r#type, AstType::SwitchCase);
         let (block_context, falls_through, exits_function) = if is_switch_case {
@@ -175,9 +176,9 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             let case_test = switch_case
                 .test
                 .as_ref()
-                .map(|expr| format_case_test(expr, self.raw));
-            let block_context = parent_node.as_ref().zip(key).map(|(parent, k)| {
-                let parent_offset = span_from_offset(self.raw, parent.span.start as usize).offset;
+                .map(|expr| format_case_test(expr, self.index.raw()));
+            let block_context = parent_node.zip(key).map(|(parent, k)| {
+                let parent_offset = self.index.span_at(parent.span.start as usize).offset;
                 BlockContext::CaseClause(CaseClauseBlockContext::new(
                     parent.r#type.clone(),
                     k.to_string(),
@@ -191,8 +192,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         } else if matches!(scope_type, ScopeType::Function) {
             (None, false, false)
         } else {
-            let block_context =
-                block_context_of(parent_node.as_ref(), key, &path_entries, self.raw);
+            let block_context = block_context_of(parent_node, key, &self.path_entries, self.index);
             (block_context, false, false)
         };
         self.annotations.set_scope(
@@ -215,11 +215,10 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         };
         let scope = self.arena.references[ref_id].from;
         let parent_node = self.parent_ast_node();
-        let parent_type = parent_node.as_ref().map(|n| n.r#type.clone());
-        let parent_offset = parent_node.as_ref().map(|n| n.span.start);
+        let parent_type = parent_node.map(|n| n.r#type.clone());
+        let parent_offset = parent_node.map(|n| n.span.start);
         let key = self.current_key();
-        let path_entries = self.materialise_path();
-        let owners = match locate_reference_owner_slot(&path_entries) {
+        let owners = match locate_reference_owner_slot(&self.path_entries) {
             OwnerLookup::None | OwnerLookup::Boundary => Vec::new(),
             OwnerLookup::VariableDeclarator { path_index } => {
                 let kind = &self.path[path_index].kind;
@@ -269,11 +268,11 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             parent_type.as_ref(),
             parent_offset,
             key,
-            &path_entries,
-            self.raw,
+            &self.path_entries,
+            self.index,
         );
-        let completion = find_completion(&path_entries);
-        let jsx_element = find_jsx_element_span(&path_entries);
+        let completion = find_completion(&self.path_entries);
+        let jsx_element = find_jsx_element_span(&self.path_entries);
         let expression_statement_container =
             self.path
                 .iter()
@@ -307,8 +306,10 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 
     fn push_path(&mut self, kind: AstKind<'a>, arrow_body: Option<ArrowBodyInfo>) {
         let key = self.current_key();
-        self.path.push(PathFrame {
-            kind,
+        let node = self.ast_node_of_kind(&kind);
+        self.path.push(PathFrame { kind, arrow_body });
+        self.path_entries.push(PathEntry {
+            node,
             key,
             arrow_body,
         });
@@ -316,6 +317,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 
     fn pop_path(&mut self) {
         self.path.pop();
+        self.path_entries.pop();
     }
 }
 
