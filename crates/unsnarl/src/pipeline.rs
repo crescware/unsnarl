@@ -136,18 +136,21 @@ pub fn emit_ir_detailed(
 ) -> Result<PipelineRunDetails, ParseError> {
     let serialized = apply_plugins(serialize_ir(code, source_path, language)?, plugins);
     let diagnostics = serialized.diagnostics.clone();
-    let text = IrEmitter.emit(
-        &serialized,
-        &EmitOptions {
-            pretty_json,
-            debug: false,
-            pruned_graph: None,
-            resolutions: None,
-            depths: None,
-            highlight_ids: None,
-            highlight: None,
-        },
-    );
+    let text = {
+        let _span = tracing::info_span!("emit", format = "ir").entered();
+        IrEmitter.emit(
+            &serialized,
+            &EmitOptions {
+                pretty_json,
+                debug: false,
+                pruned_graph: None,
+                resolutions: None,
+                depths: None,
+                highlight_ids: None,
+                highlight: None,
+            },
+        )
+    };
     Ok(PipelineRunDetails {
         text,
         pruning: None,
@@ -339,12 +342,22 @@ fn prepare_emit(
     depths: Option<&NestingDepths>,
     highlight: Option<&HighlightRunOptions>,
 ) -> PreparedEmit {
-    let base = build_visual_graph(
-        ir,
-        &BuildVisualGraphOptions {
-            depths: depths.cloned(),
-        },
-    );
+    let base = {
+        let _span = tracing::info_span!("build_visual_graph").entered();
+        let graph = build_visual_graph(
+            ir,
+            &BuildVisualGraphOptions {
+                depths: depths.cloned(),
+            },
+        );
+        tracing::info!(
+            elements = graph.elements.len(),
+            edges = graph.edges.len(),
+            boundary_edges = graph.boundary_edges.len(),
+            "visual graph counts",
+        );
+        graph
+    };
 
     let mut pruned_graph: Option<VisualGraph> = None;
     let mut resolutions_out: Option<Vec<RootQueryResolution>> = None;
@@ -352,6 +365,7 @@ fn prepare_emit(
     let mut prune_root_ids: Option<Vec<String>> = None;
     if let Some(p) = pruning {
         if !p.roots.is_empty() {
+            let _span = tracing::info_span!("prune", roots = p.roots.len()).entered();
             let resolved = resolve_ambiguous_queries(&base, &p.roots);
             let result = prune_visual_graph(
                 &base,
@@ -372,25 +386,33 @@ fn prepare_emit(
                     .collect(),
             );
             prune_root_ids = Some(result.root_ids);
+            tracing::info!(
+                kept_elements = result.graph.elements.len(),
+                kept_edges = result.graph.edges.len(),
+                "pruned graph counts",
+            );
             pruned_graph = Some(result.graph);
             resolutions_out = Some(resolved.resolutions);
         }
     }
 
-    let highlight_ids = highlight.map(|h| match h {
-        // Roots mode mirrors `-r`'s match set verbatim, so it inherits
-        // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
-        // and `-r counter -H` exclude the same use-site kinds). When
-        // `-r` was not given the prune root set is empty — paint
-        // nothing.
-        HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
-        // Queries mode (`-H <raw>`) uses the looser highlight matcher
-        // so explicit highlight queries paint every occurrence of the
-        // identifier.
-        HighlightRunOptions::Queries(queries) => {
-            let working = pruned_graph.as_ref().unwrap_or(&base);
-            let resolved = resolve_ambiguous_queries(working, queries);
-            collect_highlight_ids(working, &resolved.resolved)
+    let highlight_ids = highlight.map(|h| {
+        let _span = tracing::info_span!("highlight").entered();
+        match h {
+            // Roots mode mirrors `-r`'s match set verbatim, so it inherits
+            // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
+            // and `-r counter -H` exclude the same use-site kinds). When
+            // `-r` was not given the prune root set is empty — paint
+            // nothing.
+            HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
+            // Queries mode (`-H <raw>`) uses the looser highlight matcher
+            // so explicit highlight queries paint every occurrence of the
+            // identifier.
+            HighlightRunOptions::Queries(queries) => {
+                let working = pruned_graph.as_ref().unwrap_or(&base);
+                let resolved = resolve_ambiguous_queries(working, queries);
+                collect_highlight_ids(working, &resolved.resolved)
+            }
         }
     });
 
@@ -442,18 +464,21 @@ fn emit_pruning_aware_with(
     };
     let resolutions_for_details = prepared.resolutions.clone();
     let per_query_for_details = prepared.per_query;
-    let text = emitter.emit(
-        &serialized,
-        &EmitOptions {
-            pretty_json: base_opts.pretty_json,
-            debug: base_opts.debug,
-            pruned_graph: prepared.pruned_graph,
-            resolutions: prepared.resolutions,
-            depths: run.depths.cloned(),
-            highlight_ids: prepared.highlight_ids,
-            highlight: prepared.highlight,
-        },
-    );
+    let text = {
+        let _span = tracing::info_span!("emit").entered();
+        emitter.emit(
+            &serialized,
+            &EmitOptions {
+                pretty_json: base_opts.pretty_json,
+                debug: base_opts.debug,
+                pruned_graph: prepared.pruned_graph,
+                resolutions: prepared.resolutions,
+                depths: run.depths.cloned(),
+                highlight_ids: prepared.highlight_ids,
+                highlight: prepared.highlight,
+            },
+        )
+    };
     Ok(PipelineRunDetails {
         text,
         pruning: per_query_for_details,
@@ -470,16 +495,22 @@ fn serialize_ir(
     let source_type = source_type_from_path(source_path, language);
     let allocator = Allocator::default();
     let parser = OxcParser;
-    let parsed = parser.parse(
-        &allocator,
-        code,
-        &ParseOptions {
-            language,
-            source_path: source_path.to_string(),
-            source_type,
-        },
-    )?;
-    let analyzed = run_analysis(&parsed.program, parsed.source_type, language, parsed.raw);
+    let parsed = {
+        let _span = tracing::info_span!("parse", bytes = code.len()).entered();
+        parser.parse(
+            &allocator,
+            code,
+            &ParseOptions {
+                language,
+                source_path: source_path.to_string(),
+                source_type,
+            },
+        )?
+    };
+    let analyzed = {
+        let _span = tracing::info_span!("analyze").entered();
+        run_analysis(&parsed.program, parsed.source_type, language, parsed.raw)
+    };
     let serializer = FlatSerializer;
     let ctx = SerializeContext {
         arena: &analyzed.arena,
@@ -492,7 +523,16 @@ fn serialize_ir(
         diagnostics: &analyzed.diagnostics,
         raw: analyzed.raw,
     };
-    Ok(serializer.serialize(&ctx))
+    let _span = tracing::info_span!("serialize").entered();
+    let ir = serializer.serialize(&ctx);
+    tracing::info!(
+        scopes = ir.scopes.len(),
+        variables = ir.variables.len(),
+        references = ir.references.len(),
+        diagnostics = ir.diagnostics.len(),
+        "ir counts",
+    );
+    Ok(ir)
 }
 
 #[cfg(test)]

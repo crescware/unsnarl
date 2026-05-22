@@ -189,6 +189,15 @@ pub struct Args {
     #[arg(long = "debug", action = clap::ArgAction::SetTrue)]
     pub debug: bool,
 
+    /// Stream diagnostic and timing logs to stderr.
+    ///
+    /// Diagnostic-only and intentionally absent from the TS parity
+    /// surface; `#[serde(skip)]` keeps it out of the serialized
+    /// `Args` snapshot that mirrors `parsed-cli-options.ts`.
+    #[arg(long = "verbose", action = clap::ArgAction::SetTrue)]
+    #[serde(skip)]
+    pub verbose: bool,
+
     /// Enable plugin(s). Repeat the flag or comma-delimit for multiple. The 'unsnarl-plugin-' prefix may be omitted.
     ///
     /// Stored per-occurrence as the validated list returned by
