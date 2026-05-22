@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
-use unsnarl_ir::primitive::Span;
+use unsnarl_ir::primitive::{SourceIndex, Span};
 use unsnarl_ir::serialized::{
     SerializedReferenceId, SerializedScopeId, SerializedVariable, SerializedVariableId,
 };
@@ -57,7 +57,7 @@ pub fn serialize_variable(
     scope_ids: &HashMap<ScopeId, SerializedScopeId>,
     variable_ids: &HashMap<VariableId, SerializedVariableId>,
     reference_ids: &HashMap<ReferenceId, SerializedReferenceId>,
-    raw: &str,
+    index: &SourceIndex<'_>,
 ) -> SerializedVariable {
     let t = Instant::now();
     let v = &arena.variables[variable];
@@ -75,7 +75,7 @@ pub fn serialize_variable(
     let identifiers: Vec<Span> = v
         .identifiers
         .iter()
-        .map(|ident| span_of_identifier(ident, raw))
+        .map(|ident| span_of_identifier(ident, index))
         .collect();
     N_IDENTIFIERS.fetch_add(identifiers.len() as u64, Ordering::Relaxed);
     record(&T_IDENTIFIERS_NS, t);
@@ -93,7 +93,7 @@ pub fn serialize_variable(
     let defs: Vec<_> = v
         .defs
         .iter()
-        .map(|&d| serialize_definition(&arena.definitions[d], raw))
+        .map(|&d| serialize_definition(&arena.definitions[d], index))
         .collect();
     N_DEFS.fetch_add(defs.len() as u64, Ordering::Relaxed);
     record(&T_DEFS_NS, t);

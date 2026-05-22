@@ -10,7 +10,7 @@
 //! `SerializedHeadExpression` does not derive `PartialEq`, so the
 //! tests compare the serde-serialised JSON for shape + ordering.
 
-use unsnarl_ir::primitive::SourceOffset;
+use unsnarl_ir::primitive::{SourceIndex, SourceOffset};
 use unsnarl_ir::reference::expression_statement_head::{HeadExpression, HeadOperand};
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
@@ -24,7 +24,7 @@ fn json(s: &impl serde::Serialize) -> serde_json::Value {
 fn passes_an_identifier_head_through_unchanged() {
     let head = HeadExpression::identifier("x".to_string());
     assert_eq!(
-        json(&serialize_head_expression(&head, "")),
+        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
         serde_json::json!({"kind": "identifier", "name": "x"})
     );
 }
@@ -36,7 +36,7 @@ fn recurses_through_a_member_head_and_keeps_the_property_name() {
         "push".to_string(),
     );
     assert_eq!(
-        json(&serialize_head_expression(&head, "")),
+        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
         serde_json::json!({
             "kind": "member",
             "object": {"kind": "identifier", "name": "fns"},
@@ -51,7 +51,7 @@ fn recurses_through_a_call_head() {
         callee: Box::new(HeadExpression::identifier("foo".to_string())),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, "")),
+        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
         serde_json::json!({
             "kind": "call",
             "callee": {"kind": "identifier", "name": "foo"}
@@ -65,7 +65,7 @@ fn recurses_through_a_new_head() {
         callee: Box::new(HeadExpression::identifier("C".to_string())),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, "")),
+        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
         serde_json::json!({
             "kind": "new",
             "callee": {"kind": "identifier", "name": "C"}
@@ -81,7 +81,7 @@ fn recurses_through_an_await_head() {
         }),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, "")),
+        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
         serde_json::json!({
             "kind": "await",
             "argument": {
@@ -112,7 +112,7 @@ fn recurses_through_an_assign_head_and_converts_each_operands_offsets_to_spans()
         }),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, raw)),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "assign",
             "operator": "=",
@@ -157,7 +157,7 @@ fn preserves_the_span_on_an_elided_assign_operand_through_serialization() {
         }),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, raw)),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "assign",
             "operator": "=",
@@ -195,7 +195,7 @@ fn recurses_through_an_update_head_and_keeps_operator_prefix_argument_span() {
         }),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, raw)),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "update",
             "operator": "++",
@@ -221,7 +221,7 @@ fn converts_a_raw_heads_offsets_to_spans_against_the_original_source() {
         end_offset: SourceOffset(16),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, raw)),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "raw",
             "startSpan": {"offset": 6, "line": 2, "column": 0},
