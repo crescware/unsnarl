@@ -22,6 +22,7 @@ pub(crate) mod handle_identifier_reference;
 pub(crate) mod hoist_into;
 pub(crate) mod hoisting;
 pub mod materialise;
+pub mod oxc_semantic_adapter;
 pub(crate) mod oxc_semantic_probe;
 pub mod parser;
 pub mod resolve;
