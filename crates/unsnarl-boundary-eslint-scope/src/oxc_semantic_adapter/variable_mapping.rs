@@ -49,13 +49,31 @@ use unsnarl_oxc_parity::AstType;
 /// `ScopeData::variables` is a positional list of declared bindings
 /// and `ScopeData::set` is the name → id index; both are populated
 /// here rather than reconstructed later.
+///
+/// The second tuple element is the `SymbolId → VariableId` projection
+/// produced as a side effect: every `iter_bindings_in` symbol gets a
+/// corresponding `VariableData` row, and that row's id is recorded at
+/// the symbol's slot so [`super::reference_mapping`] can translate
+/// `oxc_semantic`'s `Reference::symbol_id` into the matching
+/// `VariableId`. Slots for symbols that the walk never reaches (none
+/// exist in practice; every symbol is bound in some scope) stay
+/// `None`. Implicit-`arguments` synthesis bypasses this map because
+/// the synthesised variable has no `SymbolId` on the `oxc_semantic`
+/// side.
 pub(crate) fn build_variables(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
-) -> IndexVec<VariableId, VariableData> {
+) -> (
+    IndexVec<VariableId, VariableData>,
+    IndexVec<SymbolId, Option<VariableId>>,
+) {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
     let mut variables: IndexVec<VariableId, VariableData> = IndexVec::new();
+    let mut symbol_to_variable: IndexVec<SymbolId, Option<VariableId>> =
+        std::iter::repeat_with(|| None)
+            .take(scoping.symbols_len())
+            .collect();
 
     for oxc_scope_id in scoping.scope_descendants_from_root() {
         let ir_scope = ir_scope_id(oxc_scope_id);
@@ -78,10 +96,11 @@ pub(crate) fn build_variables(
             ));
             scopes[ir_scope].insert_into_set(name, var_id);
             scopes[ir_scope].variables.push(var_id);
+            symbol_to_variable[symbol_id] = Some(var_id);
         }
     }
 
-    variables
+    (variables, symbol_to_variable)
 }
 
 fn push_implicit_arguments(
