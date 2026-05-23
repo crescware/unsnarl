@@ -29,7 +29,7 @@ use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
 use super::context::{BuildVisualGraphOptions, BuilderContext};
 use super::edge_label_of_ref::edge_label_of_ref;
-use super::enclosing_function_var::enclosing_function_var;
+use super::enclosing_function_var::enclosing_function_var_borrowed;
 use super::ensure_expression_statement_node::ensure_expression_statement_node;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::find_host_subgraph::find_host_subgraph;
@@ -543,9 +543,12 @@ fn emit_reference_edges(
                 }
             }
         } else {
-            let enclosing_fn_var_id =
-                enclosing_function_var(r.from.value(), &ctx.scope_map, &ctx.subgraph_owner_var);
-            let host = find_host_subgraph(r, enclosing_fn_var_id.as_deref(), &ctx.scope_map, state);
+            let enclosing_fn_var_id = enclosing_function_var_borrowed(
+                r.from.value(),
+                &ctx.scope_map,
+                &ctx.subgraph_owner_var,
+            );
+            let host = find_host_subgraph(r, enclosing_fn_var_id, &ctx.scope_map, state);
             let target_container = match host {
                 Some(sg) => Container::Subgraph(sg),
                 None => Container::Root,
@@ -562,7 +565,7 @@ fn emit_reference_edges(
                 state,
                 ctx,
                 expr_stmt_id.as_deref(),
-                enclosing_fn_var_id.as_deref(),
+                enclosing_fn_var_id,
                 r,
             );
             for from_id in &from_ids {
