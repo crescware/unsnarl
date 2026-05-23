@@ -5,56 +5,23 @@
 //! counterpart in `unsnarl_oxc_parity::AstType` (e.g.
 //! `PrivateInExpression`, `ArrayAssignmentTarget`,
 //! `AssignmentTargetIdentifier`) collapse to `AstType::UnknownAstType`
-//! when they appear on the walker's path. This is intentional but
-//! lossy, so the test pins the behaviour: callbacks observing
-//! `UnknownAstType` are looking at an oxc-only node that the boundary
-//! layer hasn't (and may never) map onto an ESTree-style spelling.
+//! when their kind is materialised. This is intentional but lossy, so
+//! the test pins the behaviour: callers observing `UnknownAstType` are
+//! looking at an oxc-only node that the boundary layer hasn't (and may
+//! never) map onto an ESTree-style spelling.
 
 use oxc_allocator::Allocator;
+use oxc_ast::AstKind;
+use oxc_semantic::SemanticBuilder;
 
-use unsnarl_ir::diagnostic::Diagnostic;
-use unsnarl_ir::ids::{ReferenceId, ScopeId};
-use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::Language;
 use unsnarl_oxc_parity::AstType;
 
-use crate::analyze::{analyze, AnalyzeOptions};
+use crate::materialise::ast_type_of;
 use crate::parser::{default_source_type_for, OxcParser, ParseOptions};
-use crate::visitor::AnalysisVisitor;
-use crate::ScopeBuilderState;
 
 #[test]
-fn private_in_expression_falls_back_to_unknown_ast_type_on_path() {
-    // `#x in o` puts a `PrivateInExpression` on the walker's path
-    // when the right-hand-side `IdentifierReference` (`o`) fires
-    // `visit_identifier_reference`. `PrivateInExpression` has no
-    // variant in `unsnarl_oxc_parity::AstType`, so the materialised
-    // path must record it as `UnknownAstType`.
-    struct Capture {
-        saw_unknown_for_o: bool,
-    }
-    impl AnalysisVisitor for Capture {
-        fn on_reference(
-            &mut self,
-            _ref_id: ReferenceId,
-            _parent: Option<&AstNode>,
-            _key: Option<&str>,
-            path: &[AstNode],
-            _scope_id: ScopeId,
-            state: &ScopeBuilderState,
-        ) {
-            let identifier = &state.arena.references[_ref_id].identifier;
-            if identifier.name() != "o" {
-                return;
-            }
-            if path
-                .iter()
-                .any(|node| matches!(node.r#type, AstType::UnknownAstType))
-            {
-                self.saw_unknown_for_o = true;
-            }
-        }
-    }
+fn private_in_expression_falls_back_to_unknown_ast_type() {
     let allocator = Allocator::default();
     let parsed = OxcParser
         .parse(
@@ -67,54 +34,25 @@ fn private_in_expression_falls_back_to_unknown_ast_type_on_path() {
             },
         )
         .expect("must parse");
-    let mut visitor = Capture {
-        saw_unknown_for_o: false,
-    };
-    let _ = analyze(
-        &parsed.program,
-        &AnalyzeOptions {
-            source_type: parsed.source_type,
-            language: parsed.language,
-            raw: parsed.raw,
-        },
-        &mut visitor,
-    );
+    let semantic = SemanticBuilder::new().build(&parsed.program).semantic;
+    let nodes = semantic.nodes();
+    let saw_unknown = nodes.iter().any(|node| {
+        matches!(node.kind(), AstKind::PrivateInExpression(_))
+            && matches!(ast_type_of(&node.kind()), AstType::UnknownAstType)
+    });
     assert!(
-        visitor.saw_unknown_for_o,
-        "`PrivateInExpression` on the path must materialise as UnknownAstType"
+        saw_unknown,
+        "`PrivateInExpression` must materialise as UnknownAstType",
     );
 }
 
 #[test]
-fn known_ast_type_on_path_does_not_collapse_to_unknown() {
-    // Counter-example: an ordinary `obj.prop` path consists of
-    // nodes (`ExpressionStatement`, `MemberExpression`, ...) whose
-    // names are all present in `unsnarl_oxc_parity::AstType`, so
-    // the materialised path must contain no `UnknownAstType`. This
-    // guards the fallback against being entered accidentally for
-    // the common case.
-    struct Capture {
-        any_unknown: bool,
-    }
-    impl AnalysisVisitor for Capture {
-        fn on_reference(
-            &mut self,
-            _ref_id: ReferenceId,
-            _parent: Option<&AstNode>,
-            _key: Option<&str>,
-            path: &[AstNode],
-            _scope_id: ScopeId,
-            _state: &ScopeBuilderState,
-        ) {
-            if path
-                .iter()
-                .any(|node| matches!(node.r#type, AstType::UnknownAstType))
-            {
-                self.any_unknown = true;
-            }
-        }
-        fn on_diagnostic(&mut self, _diag: &Diagnostic) {}
-    }
+fn known_ast_type_does_not_collapse_to_unknown() {
+    // Counter-example: an ordinary `obj.prop` AST consists of nodes
+    // (`ExpressionStatement`, `MemberExpression`, ...) whose names
+    // are all present in `unsnarl_oxc_parity::AstType`, so none of
+    // them collapse to `UnknownAstType`. Guards the fallback against
+    // being entered accidentally for the common case.
     let allocator = Allocator::default();
     let parsed = OxcParser
         .parse(
@@ -127,18 +65,13 @@ fn known_ast_type_on_path_does_not_collapse_to_unknown() {
             },
         )
         .expect("must parse");
-    let mut visitor = Capture { any_unknown: false };
-    let _ = analyze(
-        &parsed.program,
-        &AnalyzeOptions {
-            source_type: parsed.source_type,
-            language: parsed.language,
-            raw: parsed.raw,
-        },
-        &mut visitor,
-    );
+    let semantic = SemanticBuilder::new().build(&parsed.program).semantic;
+    let any_unknown = semantic
+        .nodes()
+        .iter()
+        .any(|node| matches!(ast_type_of(&node.kind()), AstType::UnknownAstType));
     assert!(
-        !visitor.any_unknown,
-        "ordinary identifier paths must not hit the UnknownAstType fallback"
+        !any_unknown,
+        "ordinary identifier nodes must not hit the UnknownAstType fallback",
     );
 }

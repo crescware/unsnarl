@@ -1,23 +1,18 @@
 //! Entry point for the eslint-scope-compatible scope-builder.
 //!
-//! Seeds the root scope, hoists the program-level declarations,
-//! drives the walker via [`ScopeBuildVisitor`], flushes accumulated
-//! diagnostics into the supplied visitor, and finally drains the
-//! build state into an [`EslintScopeAnalysisResult`].
+//! Drives [`crate::oxc_semantic_adapter::build_from_program`] against
+//! the parsed AST, dispatches any diagnostics the adapter collects
+//! ([`unsnarl_ir::diagnostic_kind::DiagnosticKind::VarDetected`])
+//! through the supplied [`AnalysisVisitor::on_diagnostic`] callback,
+//! and returns the resulting [`EslintScopeAnalysisResult`].
 
 use oxc_ast::ast::Program;
-use oxc_ast_visit::Visit;
 
-use unsnarl_ir::primitive::AstNode;
-use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;
-use unsnarl_oxc_parity::AstType;
 
 use crate::analysis_result::EslintScopeAnalysisResult;
-use crate::hoist_into::hoist_into;
+use crate::oxc_semantic_adapter::build_from_program;
 use crate::parser::SourceType;
-use crate::scope_build_visitor::ScopeBuildVisitor;
-use crate::state::{finish, ScopeBuilderState};
 use crate::visitor::AnalysisVisitor;
 
 /// Options accepted by [`analyze`].
@@ -37,60 +32,11 @@ pub fn analyze<'a>(
     options: &AnalyzeOptions<'a>,
     visitor: &mut dyn AnalysisVisitor,
 ) -> EslintScopeAnalysisResult {
-    let root_kind = match options.source_type {
-        SourceType::Module => ScopeType::Module,
-        SourceType::Script => ScopeType::Global,
-    };
-    // Mirror npm `oxc-parser`'s `program.start` exactly. Verified
-    // empirically against `oxc-parser@0.128.0`:
-    //
-    //   - `lang: "ts" | "tsx"` advances past any leading hashbang and
-    //     leading line / block comments, so `program.start` lands on
-    //     the first directive / body statement's start (or after the
-    //     hashbang if neither exists).
-    //   - `lang: "js" | "jsx"` keeps `program.start = 0`; leading
-    //     comments and hashbangs are part of the program span.
-    //
-    // The Rust `oxc_parser` crate emits `Program.span.start = 0` in
-    // every case, so the TypeScript-only normalisation is applied here
-    // when the unconditional "skip to body[0].start" rule would be
-    // wrong (e.g. cytoscape.min.js, which leads with a multi-line
-    // block comment whose start is 0 and whose first body statement
-    // begins at 1138).
-    let needs_typescript_skip = matches!(options.language, Language::Ts | Language::Tsx);
-    let normalised_start = if needs_typescript_skip {
-        program
-            .directives
-            .first()
-            .map(|d| d.span.start)
-            .or_else(|| {
-                program
-                    .body
-                    .first()
-                    .map(|s| oxc_span::GetSpan::span(s).start)
-            })
-            .or_else(|| program.hashbang.as_ref().map(|h| h.span.end))
-            .unwrap_or(program.span.start)
-    } else {
-        program.span.start
-    };
-    let root_block = AstNode {
-        r#type: AstType::Program,
-        span: oxc_span::Span::new(normalised_start, program.span.end),
-    };
-    let mut state = ScopeBuilderState::new(root_kind, root_block);
-    let global_scope = state.global_scope;
-    hoist_into(&mut state, program, global_scope, options.raw);
-    let mut walker = ScopeBuildVisitor::new(&mut state, visitor, options.raw);
-    walker.visit_program(program);
-    let (arena, global_scope, diagnostics) = finish(state);
-    for diag in &diagnostics {
+    let output = build_from_program(program, options.source_type, options.language, options.raw);
+    for diag in &output.diagnostics {
         visitor.on_diagnostic(diag);
     }
-    EslintScopeAnalysisResult {
-        arena,
-        global_scope,
-    }
+    output.analysis
 }
 
 #[cfg(test)]

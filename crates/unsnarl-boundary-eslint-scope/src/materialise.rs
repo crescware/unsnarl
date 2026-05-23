@@ -1,10 +1,5 @@
-//! Convert internal `AstKind<'a>` walker state into the
-//! lifetime-free `AstNode` form exposed to `AnalysisVisitor`.
-//!
-//! The walker keeps `Vec<PathEntry<'a>>` internally so classify
-//! routines can read structural fields off the typed AST, but
-//! `AnalysisVisitor` callbacks receive `&[AstNode]` (`type` + `span`
-//! only) so the `'a` lifetime stays inside the boundary crate.
+//! Convert internal `AstKind<'a>` references into the lifetime-free
+//! `AstNode` form exposed by the boundary's public API.
 //!
 //! The `AstType` reported here is the ESTree-style spelling the IR
 //! contract uses. oxc-side renames (e.g. `Function` →
@@ -21,8 +16,6 @@ use oxc_span::GetSpan;
 
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_oxc_parity::{as_ast_type, AstType};
-
-use crate::walk::PathEntry;
 
 pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
     match kind {
@@ -66,9 +59,8 @@ pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
             // Fallback: oxc's own `AstType` variant name matches
             // unsnarl's for the vast majority of nodes (every node
             // that isn't renamed above). The `Debug` round-trip is
-            // not on a hot path — it runs once per `on_scope` /
-            // `on_reference` callback, both of which fire at most
-            // once per AST node.
+            // not on a hot path — it runs once per IR node
+            // materialisation during `build_from_program`.
             let oxc_ty = format!("{:?}", kind.ty());
             as_ast_type(&oxc_ty)
         }
@@ -80,10 +72,6 @@ pub fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
         r#type: ast_type_of(kind),
         span: kind.span(),
     }
-}
-
-pub(crate) fn materialise_path(path: &[PathEntry<'_>]) -> Vec<AstNode> {
-    path.iter().map(|p| ast_node_of(&p.node)).collect()
 }
 
 /// Convert an `oxc_ast::Expression` to the boundary's lifetime-free

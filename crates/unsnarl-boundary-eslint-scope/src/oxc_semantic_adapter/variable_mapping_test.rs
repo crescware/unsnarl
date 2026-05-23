@@ -1,0 +1,441 @@
+//! Sibling tests for `variable_mapping.rs`.
+//!
+//! Tests parse a small source string, run `SemanticBuilder` followed
+//! by [`super::scope_mapping::build_scopes`] and
+//! [`super::variable_mapping::build_variables`], and assert properties
+//! of the resulting variables list and scope-side `set` / `variables`
+//! cross-links. Characterization-style: pins the 1:1 walk shape plus
+//! the implicit-`arguments` synthesis. Ordering and TypeScript-only-
+//! scope filtering are deferred (see the module header for the full
+//! list).
+
+use std::collections::HashSet;
+
+use oxc_allocator::Allocator;
+use oxc_index::IndexVec;
+use oxc_semantic::SemanticBuilder;
+
+use unsnarl_ir::ids::{ScopeId, VariableId};
+use unsnarl_ir::scope::{ScopeData, VariableData};
+use unsnarl_ir::scope_type::ScopeType;
+use unsnarl_ir::Language;
+
+use crate::parser::{OxcParser, ParseOptions, SourceType};
+
+use super::build_variables;
+use crate::oxc_semantic_adapter::scope_mapping::build_scopes;
+
+fn with_arena(
+    code: &str,
+    language: Language,
+    source_type: SourceType,
+    body: impl FnOnce(&IndexVec<ScopeId, ScopeData>, &IndexVec<VariableId, VariableData>),
+) {
+    let allocator = Allocator::default();
+    let parsed = OxcParser
+        .parse(
+            &allocator,
+            code,
+            &ParseOptions {
+                language,
+                source_path: format!(
+                    "input.{}",
+                    match language {
+                        Language::Js => "js",
+                        Language::Jsx => "jsx",
+                        Language::Ts => "ts",
+                        Language::Tsx => "tsx",
+                    }
+                ),
+                source_type,
+            },
+        )
+        .expect("test source must parse cleanly");
+    let ret = SemanticBuilder::new().build(&parsed.program);
+    let scope_mapping = build_scopes(&ret.semantic, source_type, language);
+    let mut scopes = scope_mapping.scopes;
+    let translation = scope_mapping.translation;
+    let switch_cases = scope_mapping.switch_cases;
+    let mut definitions: IndexVec<
+        unsnarl_ir::ids::DefinitionId,
+        unsnarl_ir::scope::DefinitionData,
+    > = IndexVec::new();
+    let result = build_variables(
+        &ret.semantic,
+        &mut scopes,
+        &mut definitions,
+        &translation,
+        &switch_cases,
+    );
+    body(&scopes, &result.variables);
+}
+
+fn root() -> ScopeId {
+    ScopeId::from_usize(0)
+}
+
+fn names_in(
+    scope: ScopeId,
+    scopes: &IndexVec<ScopeId, ScopeData>,
+    variables: &IndexVec<VariableId, VariableData>,
+) -> HashSet<String> {
+    scopes[scope]
+        .variables
+        .iter()
+        .map(|&id| variables[id].name().to_string())
+        .collect()
+}
+
+#[test]
+fn empty_script_has_no_variables() {
+    with_arena("", Language::Js, SourceType::Script, |scopes, variables| {
+        assert!(variables.is_empty());
+        assert!(scopes[root()].variables.is_empty());
+        assert!(scopes[root()].set().is_empty());
+    });
+}
+
+#[test]
+fn module_scope_let_binding_registers_one_variable() {
+    with_arena(
+        "let x = 1;",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            assert_eq!(variables.len(), 1);
+            let var_id = scopes[root()].variables[0];
+            assert_eq!(variables[var_id].name(), "x");
+            assert!(variables[var_id].scope == root());
+            // The binding-identifier occurrence is recorded.
+            assert_eq!(variables[var_id].identifiers.len(), 1);
+            assert_eq!(variables[var_id].identifiers[0].name(), "x");
+            // refs / defs are filled by later passes; empty here.
+            assert!(variables[var_id].references.is_empty());
+            assert!(variables[var_id].defs.is_empty());
+            // The scope's `set` index links the name to the same id.
+            assert_eq!(scopes[root()].set().get("x").copied(), Some(var_id));
+        },
+    );
+}
+
+#[test]
+fn function_scope_synthesises_arguments_binding() {
+    with_arena(
+        "function f(a, b) { return a + b; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            // root has `f`; function scope has `arguments`, `a`, `b`.
+            let f_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[f_scope].r#type, ScopeType::Function));
+            let names = names_in(f_scope, scopes, variables);
+            assert!(
+                names.contains("arguments"),
+                "expected synthesised `arguments` binding (got {names:?})",
+            );
+            assert!(names.contains("a"));
+            assert!(names.contains("b"));
+            // The synthesised `arguments` has no identifier occurrences
+            // and no defs — eslint-scope shape.
+            let arg_id = scopes[f_scope].set().get("arguments").copied().unwrap();
+            assert!(variables[arg_id].identifiers.is_empty());
+            assert!(variables[arg_id].defs.is_empty());
+            assert!(variables[arg_id].scope == f_scope);
+        },
+    );
+}
+
+#[test]
+fn arrow_function_scope_does_not_synthesise_arguments() {
+    with_arena(
+        "const f = (a) => a;",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            // Root has `f`; arrow function scope has only `a`.
+            let arrow = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[arrow].r#type, ScopeType::Function));
+            let names = names_in(arrow, scopes, variables);
+            assert!(
+                !names.contains("arguments"),
+                "arrow functions inherit `arguments`; adapter must not synthesise it here \
+                 (got {names:?})",
+            );
+            assert!(names.contains("a"));
+        },
+    );
+}
+
+/// `Scoping::iter_bindings_in` returns symbols in HashMap order,
+/// which is not stable across runs and doesn't follow declaration
+/// order. The adapter sorts bindings by declaration span before
+/// emitting them so downstream consumers see them in source order
+/// — pinned here with two adjacent declarations whose HashMap order
+/// would otherwise be unpredictable.
+#[test]
+fn bindings_in_a_scope_follow_declaration_order() {
+    with_arena(
+        "function a() {} function b() {} function c() {} function d() {}",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let names: Vec<&str> = scopes[root()]
+                .variables
+                .iter()
+                .map(|&v| variables[v].name())
+                .collect();
+            assert_eq!(names, vec!["a", "b", "c", "d"]);
+        },
+    );
+}
+
+#[test]
+fn nested_function_each_get_their_own_arguments() {
+    with_arena(
+        "function outer() { function inner() {} }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let outer = scopes[root()].child_scopes[0];
+            assert!(scopes[outer].set().contains_key("arguments"));
+            let inner = scopes[outer].child_scopes[0];
+            assert!(scopes[inner].set().contains_key("arguments"));
+            let outer_args = scopes[outer].set().get("arguments").copied().unwrap();
+            let inner_args = scopes[inner].set().get("arguments").copied().unwrap();
+            assert_ne!(outer_args, inner_args);
+            // Each `arguments` is anchored to its declaring function scope.
+            assert!(variables[outer_args].scope == outer);
+            assert!(variables[inner_args].scope == inner);
+        },
+    );
+}
+
+#[test]
+fn var_redeclaration_collapses_to_single_variable_with_two_identifier_occurrences() {
+    with_arena(
+        "var x; var x;",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let names: Vec<&str> = scopes[root()]
+                .variables
+                .iter()
+                .map(|&id| variables[id].name())
+                .collect();
+            assert_eq!(names.iter().filter(|n| **n == "x").count(), 1);
+            let var_id = scopes[root()].set().get("x").copied().unwrap();
+            // Both `var x;` occurrences are recorded against the same
+            // VariableData; the hand-rolled walker pushes one
+            // identifier per declaration site.
+            assert_eq!(variables[var_id].identifiers.len(), 2);
+        },
+    );
+}
+
+#[test]
+fn block_scoped_let_lives_in_block_scope_not_function_scope() {
+    with_arena(
+        "function f() { let z = 1; }",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let f_scope = scopes[root()].child_scopes[0];
+            // `z` is `let`, so it stays in the function-body block
+            // scope rather than hoisting to the function scope. The
+            // function-body block scope is the function scope's first
+            // child... actually `oxc_semantic` hoists `let` into the
+            // function scope when the body's block is the function
+            // body itself. Read the actual shape from the symbol's
+            // declaring scope rather than asserting placement, so this
+            // test pins behaviour rather than guessing.
+            let var_id = variables
+                .iter_enumerated()
+                .find(|(_, v)| v.name() == "z")
+                .map(|(id, _)| id)
+                .expect("expected to find a variable named `z`");
+            // Either way, `z` must not appear in the root scope.
+            assert!(
+                variables[var_id].scope != root(),
+                "`let z` must not be declared in the root scope",
+            );
+            // And the scope `z` is declared in must list it in its
+            // `variables` and `set`.
+            let declaring = variables[var_id].scope;
+            assert!(scopes[declaring].variables.contains(&var_id));
+            assert_eq!(
+                scopes[declaring].set().get("z").copied(),
+                Some(var_id),
+                "scope's `set` must link the name back to the variable id",
+            );
+            // The function scope itself still carries `arguments`.
+            assert!(scopes[f_scope].set().contains_key("arguments"));
+        },
+    );
+}
+
+/// The catch body `BlockStatement` is merged into the `Catch` scope
+/// (see `scope_mapping::is_merged_into_parent`). Block-scoped
+/// declarations inside the body must therefore surface inside the
+/// `Catch` scope's `variables` / `set`, alongside the catch param.
+#[test]
+fn catch_body_let_binding_merges_into_catch_scope() {
+    with_arena(
+        "try {} catch (e) { let x; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let catch = scopes
+                .iter_enumerated()
+                .find(|(_, s)| matches!(s.r#type, ScopeType::Catch))
+                .map(|(id, _)| id)
+                .expect("expected a Catch scope");
+            let names = names_in(catch, scopes, variables);
+            assert!(
+                names.contains("e"),
+                "catch param `e` must live in the Catch scope (got {names:?})",
+            );
+            assert!(
+                names.contains("x"),
+                "`let x` from the catch body must merge into the Catch scope (got {names:?})",
+            );
+        },
+    );
+}
+
+/// A TypeScript parameter property
+/// (`constructor(public x: number)`) declares `x` as a class field
+/// rather than a parameter binding. The adapter must skip its
+/// `VariableData` so the parity baseline (an implicit global for `x`
+/// on the module scope) matches.
+#[test]
+fn typescript_parameter_property_is_not_emitted_as_a_function_scope_variable() {
+    with_arena(
+        "class C {\n  constructor(public x: number) {}\n}",
+        Language::Ts,
+        SourceType::Module,
+        |scopes, variables| {
+            // Find the constructor's Function scope (under the Class).
+            let class_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[class_scope].r#type, ScopeType::Class));
+            let fn_scope = scopes[class_scope].child_scopes[0];
+            assert!(matches!(scopes[fn_scope].r#type, ScopeType::Function));
+            // The function scope must NOT carry an `x` binding.
+            let names = names_in(fn_scope, scopes, variables);
+            assert!(
+                !names.contains("x"),
+                "ts parameter property `x` must not appear in the function scope (got {names:?})",
+            );
+        },
+    );
+}
+
+/// For a class *declaration* (`class C { ... }`), the boundary's
+/// hand-rolled walker creates two `ClassName` bindings: one in the
+/// enclosing scope (from hoisting) and one inside the `Class` scope
+/// (from `enter_class`) so references to `C` from inside method
+/// bodies resolve to the inner binding. `oxc_semantic` only creates
+/// the outer one, so the adapter must synthesise the inner row.
+#[test]
+fn class_declaration_synthesises_inner_class_name_binding() {
+    with_arena(
+        "class C { foo() { return C; } }",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            // Outer (module) scope still has its `C` Variable from
+            // oxc_semantic.
+            let outer = scopes[root()]
+                .set()
+                .get("C")
+                .copied()
+                .expect("expected outer `C` in module scope");
+            assert!(variables[outer].scope == root());
+            // Inner Class scope also carries a synthesised `C`.
+            let class_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[class_scope].r#type, ScopeType::Class));
+            let inner = scopes[class_scope]
+                .set()
+                .get("C")
+                .copied()
+                .expect("expected synthesised inner `C` in class scope");
+            assert!(variables[inner].scope == class_scope);
+            assert_ne!(outer, inner);
+            assert_eq!(variables[inner].defs.len(), 1);
+        },
+    );
+}
+
+/// Class *expressions* (`const C = class D { ... }`) already get
+/// their inner-name binding from `oxc_semantic`, so the adapter must
+/// not double-synthesise — only one `D` row should appear in the
+/// class scope.
+#[test]
+fn class_expression_inner_name_is_not_double_synthesised() {
+    with_arena(
+        "const c = class D { foo() { return D; } };",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let class_scope = scopes[root()].child_scopes[0];
+            let inner = scopes[class_scope]
+                .set()
+                .get("D")
+                .copied()
+                .expect("expected `D` in class scope");
+            // Exactly one `D` Variable lives in the class scope.
+            let d_count = scopes[class_scope]
+                .variables
+                .iter()
+                .filter(|&&v| variables[v].name() == "D")
+                .count();
+            assert_eq!(
+                d_count, 1,
+                "synthesis must not duplicate the class-expression self-name"
+            );
+            assert!(variables[inner].scope == class_scope);
+        },
+    );
+}
+
+/// The boundary's hand-rolled walker classifies a named function
+/// expression's `id` as a direct binding but never allocates a
+/// `VariableData` for it. The adapter must mirror that: skip emitting
+/// `inner` as a Variable in the Function scope.
+#[test]
+fn named_function_expression_self_name_is_not_emitted_as_a_variable() {
+    with_arena(
+        "const f = function inner() { return inner; };",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let fn_scope = scopes[root()].child_scopes[0];
+            let names = names_in(fn_scope, scopes, variables);
+            assert!(
+                !names.contains("inner"),
+                "function-expression self-name `inner` must not be emitted as a Variable \
+                 (got {names:?})",
+            );
+        },
+    );
+}
+
+#[test]
+fn class_declaration_creates_class_named_binding_in_outer_scope() {
+    with_arena(
+        "class C {}",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            // The class binding lives in the outer (module) scope.
+            let var_id = scopes[root()].set().get("C").copied();
+            assert!(
+                var_id.is_some(),
+                "expected `C` to be declared in the module scope",
+            );
+            let var_id = var_id.unwrap();
+            assert!(variables[var_id].scope == root());
+            assert_eq!(variables[var_id].identifiers.len(), 1);
+            assert_eq!(variables[var_id].identifiers[0].name(), "C");
+        },
+    );
+}

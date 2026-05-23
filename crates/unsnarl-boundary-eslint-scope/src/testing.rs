@@ -15,7 +15,6 @@ use oxc_allocator::Allocator;
 
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ScopeId, VariableId};
-use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
@@ -134,34 +133,6 @@ pub(crate) fn variable_names_in_scope(arena: &IrArena, scope: ScopeId) -> Vec<St
         .iter()
         .map(|&id| arena.variables[id].name().to_string())
         .collect()
-}
-
-/// First child of `root` matching `target` scope type. Useful for
-/// pulling the function / class / catch scope out of the global
-/// scope's `child_scopes` without having to count indices.
-pub(crate) fn find_first_descendant_scope(
-    arena: &IrArena,
-    root: ScopeId,
-    target: ScopeType,
-) -> Option<ScopeId> {
-    if arena.scopes[root].r#type == target {
-        return Some(root);
-    }
-    for &child in &arena.scopes[root].child_scopes {
-        if let Some(hit) = find_first_descendant_scope(arena, child, target) {
-            return Some(hit);
-        }
-    }
-    None
-}
-
-pub(crate) fn variable_has_def_of(arena: &IrArena, name: &str, kind: DefinitionType) -> bool {
-    arena
-        .variables
-        .iter()
-        .filter(|v| v.name() == name)
-        .flat_map(|v| v.defs.iter())
-        .any(|&d| arena.definitions[d].r#type == kind)
 }
 
 /// Locate a variable inside `scope` by name. Returns the `VariableId`

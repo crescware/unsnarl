@@ -51,7 +51,7 @@ pub fn run_analysis<'a>(
     };
 
     let result = {
-        let _span = tracing::info_span!("analyze::eslint_scope").entered();
+        let _span = tracing::info_span!("analyze::scope_build").entered();
         let mut collector = DiagnosticCollector::default();
         let result = analyze(
             program,
@@ -67,7 +67,7 @@ pub fn run_analysis<'a>(
             variables = result.arena.variables.len(),
             references = result.arena.references.len(),
             diagnostics = collector.diagnostics.len(),
-            "eslint-scope build done",
+            "scope build done",
         );
         (result, collector.diagnostics)
     };
