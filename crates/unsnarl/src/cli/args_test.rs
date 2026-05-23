@@ -1,9 +1,10 @@
 use std::path::Path;
 
 use super::*;
-use clap::error::ErrorKind;
 use unsnarl_ir::{NestingDepth, SourceLine};
 use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
+
+use super::parse_error::ParseErrorKind;
 
 fn parse(argv: &[&str]) -> Args {
     Args::try_parse_from(argv).expect("argv should parse")
@@ -504,24 +505,24 @@ fn unknown_flag_yields_exit_code_2() {
 #[test]
 fn version_short_lowercase_uses_display_version() {
     let err = Args::try_parse_from(["uns", "-v"]).unwrap_err();
-    assert_eq!(err.kind(), ErrorKind::DisplayVersion);
+    assert_eq!(err.kind(), ParseErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn version_long_uses_display_version() {
     let err = Args::try_parse_from(["uns", "--version"]).unwrap_err();
-    assert_eq!(err.kind(), ErrorKind::DisplayVersion);
+    assert_eq!(err.kind(), ParseErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn help_short_and_long_use_display_help() {
     let err = Args::try_parse_from(["uns", "-h"]).unwrap_err();
-    assert_eq!(err.kind(), ErrorKind::DisplayHelp);
+    assert_eq!(err.kind(), ParseErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
     let err = Args::try_parse_from(["uns", "--help"]).unwrap_err();
-    assert_eq!(err.kind(), ErrorKind::DisplayHelp);
+    assert_eq!(err.kind(), ParseErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
 }
 

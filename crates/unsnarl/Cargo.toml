@@ -30,7 +30,6 @@ unsnarl-emitter-stats = { workspace = true }
 unsnarl-plugin = { workspace = true }
 unsnarl-plugin-react = { workspace = true }
 
-clap = { workspace = true }
 oxc_allocator = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

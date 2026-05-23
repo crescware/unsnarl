@@ -3,7 +3,6 @@ use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
-use clap::CommandFactory;
 use unsnarl_emitter::{Emitter, DEFAULT_DEPTH};
 use unsnarl_emitter_ir::IrEmitter;
 use unsnarl_emitter_json::JsonEmitter;
@@ -157,7 +156,7 @@ pub(crate) fn run_to(
 }
 
 fn render_help() -> String {
-    Args::command().render_help().to_string()
+    crate::cli::args::help_text::HELP_TEXT.to_string()
 }
 
 fn handle_cli_usage_error(e: &CliUsageError, err: &mut dyn Write) -> u8 {
