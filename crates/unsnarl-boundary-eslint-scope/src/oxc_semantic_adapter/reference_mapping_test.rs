@@ -225,6 +225,45 @@ fn destructuring_pattern_emits_one_init_reference_per_binding() {
     );
 }
 
+/// A TypeScript parameter property is reachable through the
+/// hand-rolled walker as an ordinary read reference resolving to a
+/// root-scope implicit global. The adapter must synthesise both the
+/// implicit global on root and the read reference at the parameter
+/// position, since `oxc_semantic` produces neither (it only binds
+/// the symbol in the function scope, which `variable_mapping` skips).
+#[test]
+fn typescript_parameter_property_synthesises_read_against_implicit_global() {
+    with_arena(
+        "class C {\n  constructor(public x: number) {}\n}",
+        Language::Ts,
+        SourceType::Module,
+        |b| {
+            // Implicit global `x` lives on the module scope.
+            let x_var = b.scopes[root()]
+                .set()
+                .get("x")
+                .copied()
+                .expect("expected implicit global `x` on module scope");
+            assert!(b.variables[x_var].scope == root());
+            // Exactly one ImplicitGlobalVariable def.
+            assert_eq!(b.variables[x_var].defs.len(), 1);
+            assert!(matches!(
+                b.definitions[b.variables[x_var].defs[0]].r#type,
+                DefinitionType::ImplicitGlobalVariable
+            ));
+            // The synthesised reference is a Read resolving to `x`.
+            let r = b
+                .references
+                .iter()
+                .find(|r| r.identifier.name() == "x")
+                .expect("expected an `x` reference at the parameter position");
+            assert_eq!(r.resolved, Some(x_var));
+            assert!((r.flags & ReferenceFlags::READ).0 != 0);
+            assert!(!r.init);
+        },
+    );
+}
+
 #[test]
 fn variable_declarator_without_init_does_not_emit_init_reference() {
     with_arena("let x;", Language::Js, SourceType::Module, |b| {

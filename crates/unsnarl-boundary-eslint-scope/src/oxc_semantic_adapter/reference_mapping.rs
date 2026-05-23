@@ -71,7 +71,7 @@
 //!    so they flow through this pass unchanged. No special-casing
 //!    needed here.
 
-use oxc_ast::ast::{BindingIdentifier, BindingPattern};
+use oxc_ast::ast::{BindingIdentifier, BindingPattern, FormalParameter};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::Semantic;
@@ -236,6 +236,17 @@ pub(crate) fn build_references(
         }
     }
 
+    synthesise_parameter_property_references(
+        semantic,
+        scopes,
+        variables,
+        &mut references,
+        definitions,
+        &mut implicit_globals,
+        translation,
+        root,
+    );
+
     references
 }
 
@@ -390,6 +401,71 @@ fn synthesise_init_references(
             variables[var_id].references.push(new_id);
         }
     }
+}
+
+/// Walk every TypeScript parameter property and emit a Read
+/// reference at each binding identifier inside its pattern, resolving
+/// to a root-scope implicit global. The hand-rolled walker reaches
+/// this slot via `classify_ordinary_reference` because
+/// `scope_build_visitor::visit_formal_parameter` omits the
+/// `"pattern"` key when `accessibility` / `readonly` / `override` is
+/// set; `oxc_semantic` produces no `Reference` at the binding
+/// identifier position, so the adapter must synthesise it.
+#[allow(clippy::too_many_arguments)]
+fn synthesise_parameter_property_references(
+    semantic: &Semantic<'_>,
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    references: &mut IndexVec<ReferenceId, ReferenceData>,
+    definitions: &mut IndexVec<DefinitionId, DefinitionData>,
+    implicit_globals: &mut HashMap<String, VariableId>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    root: ScopeId,
+) {
+    let nodes = semantic.nodes();
+    for node in nodes.iter() {
+        let AstKind::FormalParameter(fp) = node.kind() else {
+            continue;
+        };
+        if !is_parameter_property(fp) {
+            continue;
+        }
+        let Some(from) = translation[node.scope_id()] else {
+            continue;
+        };
+        let mut bindings: Vec<&BindingIdentifier<'_>> = Vec::new();
+        collect_binding_idents(&fp.pattern, &mut bindings);
+        for binding in bindings {
+            let identifier = AstIdentifier::new(
+                AstType::Identifier,
+                binding.name.as_str().to_string(),
+                binding.span,
+            );
+            let var_id = ensure_implicit_global(
+                scopes,
+                variables,
+                definitions,
+                implicit_globals,
+                root,
+                binding.name.as_str(),
+                &identifier,
+            );
+            let new_id = references.push(ReferenceData {
+                identifier,
+                from,
+                resolved: Some(var_id),
+                init: false,
+                flags: ReferenceFlags::READ,
+            });
+            scopes[from].references.push(new_id);
+            variables[var_id].references.push(new_id);
+            push_through_chain(scopes, from, root, new_id);
+        }
+    }
+}
+
+fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
+    fp.accessibility.is_some() || fp.readonly || fp.r#override
 }
 
 fn collect_binding_idents<'a, 'b>(

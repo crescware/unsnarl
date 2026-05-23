@@ -24,6 +24,24 @@
 //! resolved against the skipped symbol into the implicit-global
 //! synthesis path, matching the parity baseline.
 //!
+//! ## TypeScript parameter properties
+//!
+//! `constructor(public x: number, private y)` declares `x` / `y` as
+//! class fields rather than function parameters in eslint-scope's
+//! model. The boundary's hand-rolled walker's `declare_function_params`
+//! short-circuits when `accessibility` / `readonly` / `override` is
+//! set on a `FormalParameter` and the walker visits the binding
+//! pattern without pushing the `"pattern"` key, so the binding
+//! identifier classifies as an ordinary reference (resolving as an
+//! implicit global) rather than a binding.
+//!
+//! The adapter mirrors that here: when a symbol's declaration node
+//! is a `FormalParameter` carrying any of those flags, skip emitting
+//! the `VariableData` and record the symbol in
+//! `synthetic_unresolved` so [`super::reference_mapping`] re-routes
+//! `oxc_semantic`-resolved references against the parameter to the
+//! implicit-global path.
+//!
 //! ## Inner `ClassName` for class declarations
 //!
 //! For a class *declaration* (`class C { ... }`), `oxc_semantic`
@@ -160,6 +178,10 @@ pub(crate) fn build_variables(
                 synthetic_unresolved.insert(symbol_id);
                 continue;
             }
+            if is_typescript_parameter_property(scoping, nodes, symbol_id) {
+                synthetic_unresolved.insert(symbol_id);
+                continue;
+            }
             let identifiers = build_identifiers(scoping, symbol_id, &name);
             let var_id = variables.push(VariableData::new(
                 name.clone(),
@@ -196,6 +218,23 @@ fn named_function_expression_self_name<'a>(anchor: &'a AstKind<'_>) -> Option<&'
         return None;
     }
     func.id.as_ref().map(|id| id.name.as_str())
+}
+
+/// Returns true if `symbol_id`'s declaration node is a TypeScript
+/// parameter property — a `FormalParameter` (or `FormalParameterRest`)
+/// carrying `accessibility` / `readonly` / `override`. Those slots
+/// represent class fields rather than parameters in the
+/// eslint-scope model.
+fn is_typescript_parameter_property(
+    scoping: &Scoping,
+    nodes: &oxc_semantic::AstNodes<'_>,
+    symbol_id: SymbolId,
+) -> bool {
+    let kind = nodes.kind(scoping.symbol_declaration(symbol_id));
+    match kind {
+        AstKind::FormalParameter(fp) => fp.accessibility.is_some() || fp.readonly || fp.r#override,
+        _ => false,
+    }
 }
 
 /// If `anchor` is the `Class` node of a named class *declaration*,

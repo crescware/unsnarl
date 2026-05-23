@@ -295,6 +295,33 @@ fn catch_body_let_binding_merges_into_catch_scope() {
     );
 }
 
+/// A TypeScript parameter property
+/// (`constructor(public x: number)`) declares `x` as a class field
+/// rather than a parameter binding. The adapter must skip its
+/// `VariableData` so the parity baseline (an implicit global for `x`
+/// on the module scope) matches.
+#[test]
+fn typescript_parameter_property_is_not_emitted_as_a_function_scope_variable() {
+    with_arena(
+        "class C {\n  constructor(public x: number) {}\n}",
+        Language::Ts,
+        SourceType::Module,
+        |scopes, variables| {
+            // Find the constructor's Function scope (under the Class).
+            let class_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[class_scope].r#type, ScopeType::Class));
+            let fn_scope = scopes[class_scope].child_scopes[0];
+            assert!(matches!(scopes[fn_scope].r#type, ScopeType::Function));
+            // The function scope must NOT carry an `x` binding.
+            let names = names_in(fn_scope, scopes, variables);
+            assert!(
+                !names.contains("x"),
+                "ts parameter property `x` must not appear in the function scope (got {names:?})",
+            );
+        },
+    );
+}
+
 /// For a class *declaration* (`class C { ... }`), the boundary's
 /// hand-rolled walker creates two `ClassName` bindings: one in the
 /// enclosing scope (from hoisting) and one inside the `Class` scope
