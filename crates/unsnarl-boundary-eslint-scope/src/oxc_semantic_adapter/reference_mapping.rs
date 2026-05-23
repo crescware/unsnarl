@@ -124,6 +124,9 @@ pub(crate) fn build_references(
                 if oxc_ref.flags().is_type() {
                     continue;
                 }
+                if reference_is_skip_slot(nodes, oxc_ref.node_id()) {
+                    continue;
+                }
                 let Some(from) = translation[oxc_ref.scope_id()] else {
                     continue;
                 };
@@ -154,6 +157,9 @@ pub(crate) fn build_references(
             for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
                 let oxc_ref = scoping.get_reference(oxc_ref_id);
                 if oxc_ref.flags().is_type() {
+                    continue;
+                }
+                if reference_is_skip_slot(nodes, oxc_ref.node_id()) {
                     continue;
                 }
                 let Some(from) = translation[oxc_ref.scope_id()] else {
@@ -220,6 +226,9 @@ pub(crate) fn build_references(
         for &oxc_ref_id in ref_ids.iter() {
             let oxc_ref = scoping.get_reference(oxc_ref_id);
             if oxc_ref.flags().is_type() {
+                continue;
+            }
+            if reference_is_skip_slot(nodes, oxc_ref.node_id()) {
                 continue;
             }
             let Some(from) = translation[oxc_ref.scope_id()] else {
@@ -783,6 +792,23 @@ fn synthesise_parameter_property_references(
 
 fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
+}
+
+/// Mirror `crate::classify::is_skip_context`'s checks for an
+/// `IdentifierReference` / `JSXIdentifier` reference node.
+///
+/// `oxc_semantic` emits `Reference` rows for identifiers that appear
+/// in slots the hand-rolled walker classifies as `Skip` and therefore
+/// drops. Currently handled: identifiers under a `JSXClosingElement`
+/// (the closing-tag identifier duplicates the opening tag's
+/// reference, which `crate::classify::is_skip_context`'s
+/// `JSXClosingElement => true` arm rejects regardless of slot key).
+fn reference_is_skip_slot(
+    nodes: &oxc_semantic::AstNodes<'_>,
+    node_id: oxc_semantic::NodeId,
+) -> bool {
+    let parent_kind = nodes.parent_kind(node_id);
+    matches!(parent_kind, AstKind::JSXClosingElement(_))
 }
 
 /// Mirror `crate::classify::is_skip_context`'s JSX rules for a
