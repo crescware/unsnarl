@@ -377,10 +377,11 @@ fn is_type_only_function_declaration(
 }
 
 /// Returns true if any ancestor of `symbol_id`'s declaration node is
-/// a `TSImportEqualsDeclaration` / `TSExportAssignment` /
-/// `TSNamespaceExportDeclaration`. `is_type_only_subtree` marks
-/// these as type-only, so the hand-rolled walker skips them via
-/// `type_only_depth` and never declares the inner binding.
+/// a TypeScript type-only construct that
+/// [`unsnarl_oxc_parity::is_type_only_subtree`] marks as type-only.
+/// The hand-rolled walker skipped these subtrees via `type_only_depth`
+/// and never declared the inner binding, so the parity baseline never
+/// records them in the variables list.
 fn is_under_type_only_declaration(
     scoping: &Scoping,
     nodes: &oxc_semantic::AstNodes<'_>,
@@ -392,7 +393,11 @@ fn is_under_type_only_declaration(
             nodes.kind(cur),
             AstKind::TSImportEqualsDeclaration(_)
                 | AstKind::TSExportAssignment(_)
-                | AstKind::TSNamespaceExportDeclaration(_),
+                | AstKind::TSNamespaceExportDeclaration(_)
+                | AstKind::TSInterfaceDeclaration(_)
+                | AstKind::TSTypeAliasDeclaration(_)
+                | AstKind::TSEnumDeclaration(_)
+                | AstKind::TSModuleDeclaration(_),
         ) {
             return true;
         }
