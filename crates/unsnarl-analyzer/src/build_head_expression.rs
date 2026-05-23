@@ -12,7 +12,7 @@ use oxc_syntax::operator::{
 };
 
 use unsnarl_ir::reference::{HeadExpression, HeadOperand};
-use unsnarl_ir::SourceOffset;
+use unsnarl_ir::Utf8ByteOffset;
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
 /// Build a `HeadExpression` for an ExpressionStatement whose
@@ -220,16 +220,16 @@ fn simple_assignment_target_span(target: &oxc_ast::ast::SimpleAssignmentTarget<'
 fn operand_from(span: Span, head: Option<HeadExpression>) -> HeadOperand {
     HeadOperand {
         head: head.unwrap_or(HeadExpression::Elided),
-        start_offset: SourceOffset(span.start),
-        end_offset: SourceOffset(span.end),
+        start_offset: Utf8ByteOffset(span.start),
+        end_offset: Utf8ByteOffset(span.end),
     }
 }
 
 fn raw_from_expression(expression: Option<&Expression<'_>>, fallback: Span) -> HeadExpression {
     let span = expression.map(|e| e.span()).unwrap_or(fallback);
     HeadExpression::Raw {
-        start_offset: SourceOffset(span.start),
-        end_offset: SourceOffset(span.end),
+        start_offset: Utf8ByteOffset(span.start),
+        end_offset: Utf8ByteOffset(span.end),
     }
 }
 

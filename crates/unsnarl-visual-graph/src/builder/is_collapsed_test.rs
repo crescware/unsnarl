@@ -6,7 +6,7 @@
 
 use super::is_collapsed;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::{SerializedBlock, SerializedScope, SerializedScopeId};
 use unsnarl_oxc_parity::AstType;
@@ -21,12 +21,12 @@ fn base_block() -> SerializedBlock {
         span: Span {
             line: SourceLine(1),
             column: SourceColumn(0),
-            offset: SourceOffset(0),
+            offset: Utf16CodeUnitOffset(0),
         },
         end_span: Span {
             line: SourceLine(1),
             column: SourceColumn(0),
-            offset: SourceOffset(0),
+            offset: Utf16CodeUnitOffset(0),
         },
     }
 }

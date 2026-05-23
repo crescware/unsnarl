@@ -1,6 +1,6 @@
 //! Sibling tests for [`attach_switch_discriminant_anchor`].
 
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::{SerializedBlock, SerializedScope};
 use unsnarl_oxc_parity::AstType;
@@ -53,12 +53,12 @@ fn switch_scope(parent: Option<&str>, offset: u32, line: u32) -> SerializedScope
         span: Span {
             line: SourceLine(line),
             column: SourceColumn(0),
-            offset: SourceOffset(offset),
+            offset: Utf16CodeUnitOffset(offset),
         },
         end_span: Span {
             line: SourceLine(line + 5),
             column: SourceColumn(1),
-            offset: SourceOffset(offset + 86),
+            offset: Utf16CodeUnitOffset(offset + 86),
         },
     };
     scope

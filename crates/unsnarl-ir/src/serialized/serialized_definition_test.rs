@@ -2,7 +2,7 @@ use super::*;
 
 use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
-use crate::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use crate::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 
 fn name() -> DefinitionName {
     DefinitionName::new(
@@ -10,7 +10,7 @@ fn name() -> DefinitionName {
         Span {
             line: SourceLine(1),
             column: SourceColumn(0),
-            offset: SourceOffset(0),
+            offset: Utf16CodeUnitOffset(0),
         },
     )
 }
@@ -21,7 +21,7 @@ fn node(r#type: AstType) -> DefinitionNode {
         span: Span {
             line: SourceLine(1),
             column: SourceColumn(0),
-            offset: SourceOffset(0),
+            offset: Utf16CodeUnitOffset(0),
         },
     }
 }

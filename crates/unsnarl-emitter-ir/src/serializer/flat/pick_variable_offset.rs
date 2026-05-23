@@ -11,19 +11,23 @@
 //! sources containing non-ASCII characters (e.g. an arrow `→` or
 //! em-dash `—` in a docstring before the declaration).
 
-use unsnarl_ir::primitive::SourceIndex;
+use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset, Utf8ByteOffset};
 use unsnarl_ir::{IrArena, VariableId};
 
-pub fn pick_variable_offset(arena: &IrArena, variable: VariableId, index: &SourceIndex<'_>) -> u32 {
+pub fn pick_variable_offset(
+    arena: &IrArena,
+    variable: VariableId,
+    index: &SourceIndex<'_>,
+) -> Utf16CodeUnitOffset {
     let v = &arena.variables[variable];
     let byte_offset = if let Some(head) = v.identifiers.first() {
         head.span.start
     } else if let Some(&def_id) = v.defs.first() {
         arena.definitions[def_id].name.span.start
     } else {
-        return 0;
+        return Utf16CodeUnitOffset(0);
     };
-    index.span_at(byte_offset as usize).offset.0
+    index.span_at(Utf8ByteOffset(byte_offset)).offset
 }
 
 #[cfg(test)]

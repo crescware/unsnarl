@@ -7,7 +7,7 @@
 //! `Serialize` is intentionally not derived on `ReferenceAnnotation`.
 //! Three fields (`completion`, `jsx_element`,
 //! `expression_statement_container`) reference `unsnarl-ir` types
-//! whose in-memory shape carries `SourceOffset` while the
+//! whose in-memory shape carries `Utf16CodeUnitOffset` while the
 //! pipeline-emitted shape carries `Span` (the conversion happens
 //! inside `SerializedReference` at serialize time). Deriving
 //! `Serialize` here would therefore force `Serialize` impls on

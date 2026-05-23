@@ -33,7 +33,7 @@ use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{AstNode, SourceIndex};
+use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
@@ -175,7 +175,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                 .as_ref()
                 .map(|expr| format_case_test(expr, self.index.raw()));
             let block_context = parent_node.zip(key).map(|(parent, k)| {
-                let parent_offset = self.index.span_at(parent.span.start as usize).offset;
+                let parent_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
                 BlockContext::CaseClause(CaseClauseBlockContext::new(
                     parent.r#type.clone(),
                     k.to_string(),
@@ -213,7 +213,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         let scope = self.arena.references[ref_id].from;
         let parent_node = self.parent_ast_node();
         let parent_type = parent_node.map(|n| n.r#type.clone());
-        let parent_offset = parent_node.map(|n| n.span.start);
+        let parent_offset = parent_node.map(|n| Utf8ByteOffset(n.span.start));
         let key = self.current_key();
         let owners = match locate_reference_owner_slot(&self.path_entries) {
             OwnerLookup::None | OwnerLookup::Boundary => Vec::new(),

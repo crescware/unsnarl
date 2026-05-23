@@ -54,5 +54,5 @@ pub use ids::{DefinitionId, ReferenceId, ScopeId, VariableId};
 pub use import_kind::ImportKind;
 pub use language::Language;
 pub use nesting_kind::{NestingDepth, NestingDepths, NestingKind};
-pub use primitive::{SourceColumn, SourceLine, SourceOffset};
+pub use primitive::{SourceColumn, SourceLine, Utf16CodeUnitOffset, Utf8ByteOffset};
 pub use scope_type::ScopeType;

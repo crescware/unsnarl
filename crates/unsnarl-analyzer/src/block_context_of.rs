@@ -9,7 +9,7 @@
 //! crate returns UTF-8 bytes, so we convert via the pre-built
 //! [`SourceIndex`] in O(log lines + line_length) per lookup.
 
-use unsnarl_ir::primitive::{AstNode, SourceIndex};
+use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::scope::{BlockContext, OtherBlockContext};
 
 use crate::if_chain_root_offset::if_chain_root_offset;
@@ -24,8 +24,8 @@ pub fn block_context_of(
     let parent = parent?;
     let key = key?;
     let chain_root = if_chain_root_offset(Some(parent), Some(key), path)
-        .map(|byte_offset| index.span_at(byte_offset as usize).offset);
-    let parent_offset = index.span_at(parent.span.start as usize).offset;
+        .map(|byte_offset| index.span_at(Utf8ByteOffset(byte_offset)).offset);
+    let parent_offset = index.span_at(Utf8ByteOffset(parent.span.start)).offset;
     Some(BlockContext::Other(OtherBlockContext::new(
         parent.r#type.clone(),
         key.to_string(),
