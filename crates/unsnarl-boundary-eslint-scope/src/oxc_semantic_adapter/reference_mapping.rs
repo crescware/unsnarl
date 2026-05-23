@@ -754,6 +754,37 @@ fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
 }
 
+/// Mirror `crate::classify::is_skip_context`'s JSX rules for a
+/// `JSXIdentifier` node: return `true` when the identifier sits in a
+/// purely structural slot that the hand-rolled walker does not treat
+/// as a reference.
+///
+/// Skip slots:
+///
+/// * `JSXAttribute.name` when the name is a `JSXIdentifier` directly.
+/// * `JSXMemberExpression.property` (the `.b` in `<a.b />`).
+/// * Anything beneath a `JSXClosingElement` (the closing-tag identifier
+///   would otherwise duplicate the opening tag's reference).
+fn jsx_identifier_is_skip_slot(
+    nodes: &oxc_semantic::AstNodes<'_>,
+    node_id: oxc_semantic::NodeId,
+    span: Span,
+) -> bool {
+    let parent_kind = nodes.parent_kind(node_id);
+    match parent_kind {
+        AstKind::JSXAttribute(attr) => {
+            // JSXAttribute.name can be JSXIdentifier or JSXNamespacedName;
+            // skip only when this JSXIdentifier IS the JSXAttribute's
+            // direct `.name` slot (i.e. spans match).
+            use oxc_ast::ast::JSXAttributeName;
+            matches!(&attr.name, JSXAttributeName::Identifier(id) if id.span == span)
+        }
+        AstKind::JSXMemberExpression(mp) => mp.property.span == span,
+        AstKind::JSXClosingElement(_) => true,
+        _ => false,
+    }
+}
+
 /// Synthesise implicit-global Read references at identifier positions
 /// the hand-rolled walker treats as references but `oxc_semantic` does
 /// not emit `Reference` rows for.
@@ -825,6 +856,9 @@ fn synthesise_identifier_name_references(
                 }
             }
             AstKind::JSXIdentifier(id) => {
+                if jsx_identifier_is_skip_slot(nodes, node.id(), id.span) {
+                    continue;
+                }
                 sites.push((from, id.name.as_str(), id.span, AstType::JSXIdentifier));
             }
             _ => {}
