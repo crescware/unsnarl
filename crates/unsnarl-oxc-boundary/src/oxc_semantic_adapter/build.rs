@@ -46,42 +46,61 @@ pub(crate) fn build<'a>(
     language: Language,
     raw: &'a str,
 ) -> BuildOutput {
-    let ret = SemanticBuilder::new().build(program);
+    let _span = tracing::info_span!("scope_build").entered();
+    let ret = {
+        let _span = tracing::info_span!("oxc_semantic").entered();
+        SemanticBuilder::new().build(program)
+    };
     let semantic = ret.semantic;
-    let scope_mapping = scope_mapping::build_scopes(&semantic, source_type, language);
+    let scope_mapping = {
+        let _span = tracing::info_span!("scope_mapping").entered();
+        scope_mapping::build_scopes(&semantic, source_type, language)
+    };
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
     let switch_cases = scope_mapping.switch_cases;
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
-    let variable_mapping = variable_mapping::build_variables(
-        &semantic,
-        &mut scopes,
-        &mut definitions,
-        &translation,
-        &switch_cases,
-    );
+    let variable_mapping = {
+        let _span = tracing::info_span!("variable_mapping").entered();
+        variable_mapping::build_variables(
+            &semantic,
+            &mut scopes,
+            &mut definitions,
+            &translation,
+            &switch_cases,
+        )
+    };
     let mut variables = variable_mapping.variables;
     let symbol_to_variable = variable_mapping.symbol_to_variable;
     let synthetic_unresolved = variable_mapping.synthetic_unresolved;
     let inner_class_names = variable_mapping.inner_class_names;
-    let references = reference_mapping::build_references(
-        &semantic,
-        &mut scopes,
-        &mut variables,
-        &mut definitions,
-        &symbol_to_variable,
-        &translation,
-        &synthetic_unresolved,
-        &switch_cases,
-        &inner_class_names,
-    );
-    definition_mapping::build_definitions(
-        &semantic,
-        &mut variables,
-        &mut definitions,
-        &symbol_to_variable,
-    );
-    let diagnostics = collect_var_detected_diagnostics(&semantic, raw);
+    let references = {
+        let _span = tracing::info_span!("reference_mapping").entered();
+        reference_mapping::build_references(
+            &semantic,
+            &mut scopes,
+            &mut variables,
+            &mut definitions,
+            &symbol_to_variable,
+            &translation,
+            &synthetic_unresolved,
+            &switch_cases,
+            &inner_class_names,
+        )
+    };
+    {
+        let _span = tracing::info_span!("definition_mapping").entered();
+        definition_mapping::build_definitions(
+            &semantic,
+            &mut variables,
+            &mut definitions,
+            &symbol_to_variable,
+        );
+    }
+    let diagnostics = {
+        let _span = tracing::info_span!("collect_var_detected").entered();
+        collect_var_detected_diagnostics(&semantic, raw)
+    };
     BuildOutput {
         analysis: ScopeAnalysisResult {
             arena: IrArena {
