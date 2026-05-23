@@ -264,7 +264,40 @@ pub(crate) fn build_references(
 
     mark_variable_declarator_init_reads(semantic, &mut references);
 
+    sort_reference_lists_by_source_order(scopes, variables, &references);
+
     references
+}
+
+/// Sort each scope's `references` / `through` list and each variable's
+/// `references` list by the underlying identifier's source offset.
+///
+/// The hand-rolled walker pushes references to these lists in source
+/// order because it traverses the AST once and emits each reference at
+/// the moment of encounter. This pass instead walks `Scoping`'s
+/// symbol-keyed reference tables first, then performs separate
+/// AST-walking synthesis passes (`synthesise_init_references`,
+/// `synthesise_parameter_property_references`) and a sorted unresolved
+/// loop afterwards, so per-scope and per-variable lists end up
+/// interleaved by category rather than by source position. The IR
+/// emitter [`unsnarl_emitter_ir::serializer::flat`] renumbers
+/// references by source offset before serialization but preserves
+/// these lists' order, so without this final sort the serialized
+/// output's `scope.references` / `scope.through` / `variable.references`
+/// lists would emit out-of-order ids relative to the parity baseline.
+fn sort_reference_lists_by_source_order(
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    references: &IndexVec<ReferenceId, ReferenceData>,
+) {
+    let key = |r: &ReferenceId| references[*r].identifier.span.start;
+    for scope in scopes.iter_mut() {
+        scope.references.sort_by_key(key);
+        scope.through.sort_by_key(key);
+    }
+    for var in variables.iter_mut() {
+        var.references.sort_by_key(key);
+    }
 }
 
 /// Mirror `classify_ordinary_reference`'s `init = true` flag for read
