@@ -1054,6 +1054,11 @@ fn synthesise_identifier_name_references(
                     sites.push((from, id.name.as_str(), id.span, AstType::Identifier));
                 }
             }
+            AstKind::ExportAllDeclaration(ead) => {
+                if let Some(ModuleExportName::IdentifierName(id)) = &ead.exported {
+                    sites.push((from, id.name.as_str(), id.span, AstType::Identifier));
+                }
+            }
             AstKind::JSXIdentifier(id) => {
                 if jsx_identifier_is_skip_slot(nodes, node.id(), id.span) {
                     continue;
