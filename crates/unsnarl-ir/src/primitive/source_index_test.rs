@@ -1,5 +1,5 @@
 use super::*;
-use crate::primitive::offset::Utf8ByteOffset;
+use crate::primitive::offset::{Utf16CodeUnitOffset, Utf8ByteOffset};
 use crate::primitive::span::span_from_offset;
 
 fn assert_matches_span_from_offset(raw: &str, offset: Utf8ByteOffset) {
@@ -89,4 +89,61 @@ fn every_char_boundary_matches_span_from_offset_mixed() {
 fn newline_at_end_of_file_emits_trailing_line() {
     let raw = "a\nb\n";
     assert_matches_span_from_offset(raw, Utf8ByteOffset(raw.len() as u32));
+}
+
+#[test]
+fn line_for_utf16_offset_returns_one_at_start_of_file() {
+    let index = SourceIndex::build("abc\ndef\nghi");
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(0)), 1);
+}
+
+#[test]
+fn line_for_utf16_offset_returns_previous_line_when_offset_lands_on_newline() {
+    let index = SourceIndex::build("abc\ndef");
+    // Offset 3 sits on the `\n` byte; the scan loop in
+    // `span_from_offset` stops before consuming it, so the answer is
+    // still line 1.
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(3)), 1);
+}
+
+#[test]
+fn line_for_utf16_offset_advances_to_next_line_one_unit_past_newline() {
+    let index = SourceIndex::build("abc\ndef");
+    // Offset 4 is the first code unit of line 2 (`d`).
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(4)), 2);
+}
+
+#[test]
+fn line_for_utf16_offset_counts_in_utf16_units_not_utf8_bytes() {
+    // The em-dash `—` is 3 UTF-8 bytes / 1 UTF-16 code unit. After
+    // it, a UTF-16 offset of 2 is the position right before the
+    // `\n` at UTF-16 code unit 2 (still line 1); offset 3 is the
+    // first code unit of line 2.
+    let index = SourceIndex::build("—a\nb");
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(2)), 1);
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(3)), 2);
+}
+
+#[test]
+fn line_for_utf16_offset_clamps_past_end_of_file() {
+    let index = SourceIndex::build("a\nb\nc");
+    // The source has 3 lines; any offset past the last line start
+    // (UTF-16 code unit 4 = `c`) stays on line 3.
+    assert_eq!(index.line_for_utf16_offset(Utf16CodeUnitOffset(100)), 3);
+}
+
+#[test]
+fn line_for_utf16_offset_matches_span_at_line_for_ascii_only_source() {
+    // For ASCII input UTF-8 byte offsets and UTF-16 code-unit offsets
+    // coincide, so the two APIs should agree on every position.
+    let raw = "let x = 1;\nlet y = 2;\nfn z() { return x + y; }\n";
+    let index = SourceIndex::build(raw);
+    for i in 0..=raw.len() as u32 + 3 {
+        let from_byte = index.span_at(Utf8ByteOffset(i)).line.0;
+        let from_utf16 = index.line_for_utf16_offset(Utf16CodeUnitOffset(i));
+        assert_eq!(
+            from_byte, from_utf16,
+            "mismatch at offset {i}: span_at={from_byte} line_for_utf16_offset={from_utf16}"
+        );
+    }
 }

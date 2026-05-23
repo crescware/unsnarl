@@ -100,6 +100,23 @@ impl<'a> SourceIndex<'a> {
             offset: Utf16CodeUnitOffset(line_start_utf16 + column_utf16 + overshoot),
         }
     }
+
+    /// Resolve a UTF-16 code-unit offset (the encoding IR fields
+    /// such as `Span::offset` and `block_context::parent_span_offset`
+    /// carry) into the 1-based line number containing that position.
+    /// Matches the legacy `span_from_offset` line-counting behaviour:
+    /// an offset that lands exactly on a `\n` boundary is reported as
+    /// still on the line *before* the newline, because the source
+    /// scan stops one position short of `offset`.
+    pub fn line_for_utf16_offset(&self, offset: Utf16CodeUnitOffset) -> u32 {
+        let line_idx = match self.line_start_utf16.binary_search(&offset.0) {
+            Ok(i) => i,
+            // `Err(0)` is impossible because `line_start_utf16[0] == 0`
+            // and the search target is a non-negative `u32`.
+            Err(i) => i - 1,
+        };
+        (line_idx + 1) as u32
+    }
 }
 
 #[cfg(test)]
