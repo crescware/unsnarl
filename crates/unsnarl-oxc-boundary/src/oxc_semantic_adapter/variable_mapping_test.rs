@@ -438,3 +438,86 @@ fn class_declaration_creates_class_named_binding_in_outer_scope() {
         },
     );
 }
+
+/// `var` declared inside a switch case sits at the nearest
+/// var-creating ancestor (here the enclosing function), per
+/// ECMAScript's `var`-hoisting rules — `oxc_semantic`'s `Binder`
+/// for `VariableDeclarator` (`oxc_semantic-0.128.0/src/binder.rs`,
+/// the `VariableDeclarationKind::Var` arm) walks
+/// `scope_ancestors` until it finds an `is_var()` scope and binds
+/// the symbol there. The adapter must not pull the binding back
+/// down into the synthetic per-`SwitchCase` `Block` row: doing so
+/// would silently move the `var` out of the function scope and
+/// break lookups from any code outside the switch.
+#[test]
+fn var_in_switch_case_stays_in_enclosing_function_scope() {
+    with_arena(
+        "function f(k) { switch (k) { case 1: var x = 1; break; } return x; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let fn_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[fn_scope].r#type, ScopeType::Function));
+            let names = names_in(fn_scope, scopes, variables);
+            assert!(
+                names.contains("x"),
+                "`var x` declared inside `case 1:` must hoist into the enclosing function \
+                 scope (got {names:?})",
+            );
+            let var_id = scopes[fn_scope].set().get("x").copied().unwrap();
+            assert!(variables[var_id].scope == fn_scope);
+            // The synthetic case-Block scopes must not list `x`.
+            let switch_scope = scopes[fn_scope]
+                .child_scopes
+                .iter()
+                .copied()
+                .find(|&s| matches!(scopes[s].r#type, ScopeType::Switch))
+                .expect("switch scope present");
+            for &case_ir in &scopes[switch_scope].child_scopes {
+                let case_names = names_in(case_ir, scopes, variables);
+                assert!(
+                    !case_names.contains("x"),
+                    "synthetic case Block scope must not absorb hoisted `var x` \
+                     (got {case_names:?})",
+                );
+            }
+        },
+    );
+}
+
+/// A `let` written directly under a `case` consequent (without a
+/// wrapping `{ ... }`) is bound by `oxc_semantic` to the switch
+/// scope itself. The parity baseline routes such bindings into the
+/// synthetic per-`SwitchCase` `Block` row so that block-scoped
+/// names stay contained within their case; the adapter must keep
+/// performing that reparenting now that the guard only fires when
+/// the binding's declaring scope IS the switch.
+#[test]
+fn lexical_binding_directly_under_case_reparents_to_case_block_scope() {
+    with_arena(
+        "switch (k) { case 1: let x = 1; break; default: break; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let switch_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[switch_scope].r#type, ScopeType::Switch));
+            // The switch scope itself must not carry `x`; it should
+            // have been pulled into the first synthetic case Block.
+            let switch_names = names_in(switch_scope, scopes, variables);
+            assert!(
+                !switch_names.contains("x"),
+                "bare switch scope must not carry case-local `let x` (got {switch_names:?})",
+            );
+            let case_one = scopes[switch_scope].child_scopes[0];
+            assert!(matches!(scopes[case_one].r#type, ScopeType::Block));
+            let case_names = names_in(case_one, scopes, variables);
+            assert!(
+                case_names.contains("x"),
+                "case-local `let x` must live in the synthetic case Block scope \
+                 (got {case_names:?})",
+            );
+            let var_id = scopes[case_one].set().get("x").copied().unwrap();
+            assert!(variables[var_id].scope == case_one);
+        },
+    );
+}

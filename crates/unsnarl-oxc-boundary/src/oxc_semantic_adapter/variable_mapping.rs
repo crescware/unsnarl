@@ -259,58 +259,44 @@ pub(crate) fn build_variables(
 
 /// Reparent a binding to the per-case Block scope inside a switch.
 ///
-/// Mirrors `super::reference_mapping::reparent_to_switch_case`: pick
-/// the innermost switch whose `switch_span` contains `span` and whose
-/// scope chain includes `ir_scope` as `switch_ir` itself or any
-/// ancestor. Within that switch, prefer the case-Block scope whose
-/// span contains the binding, otherwise the bare switch scope.
+/// Only relocate when the binding's declaring scope IS the switch
+/// scope itself — i.e. `oxc_semantic` placed the binding directly on
+/// the switch row (a `let` / `const` / function declaration written
+/// directly under a `case` consequent with no wrapping block). In
+/// that situation the parity baseline expects the binding to live on
+/// the synthetic per-`SwitchCase` `Block` row, so the adapter picks
+/// the case-Block whose span contains the binding (falling back to
+/// the bare switch when the binding sits outside every case head).
+///
+/// Crucially, bindings whose `oxc_semantic` declaring scope is an
+/// *ancestor* of a switch must stay put. The motivating case is
+/// `function f() { switch (k) { case 1: var x; } }`: `var x` is
+/// hoisted to the function scope (matching ECMAScript semantics and
+/// `oxc_semantic`'s `Binder` for `VariableDeclarator`), so
+/// `iter_bindings_in(function_scope)` yields the symbol with
+/// `symbol_span` pointing inside the case. Reparenting it to the
+/// case-Block would silently move `x` out of the function scope's
+/// `set` / `variables`, breaking lookups from any code outside the
+/// switch.
 fn reparent_binding_to_switch_case(
     ir_scope: ScopeId,
     span: Span,
     scopes: &IndexVec<ScopeId, ScopeData>,
     switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) -> ScopeId {
-    let mut best: Option<(u32, ScopeId)> = None;
-    for (&switch_ir, cases) in switch_cases {
-        let switch_span = scopes[switch_ir].block.span;
-        if span.start < switch_span.start || span.end > switch_span.end {
-            continue;
-        }
-        if !is_ancestor_or_self(scopes, switch_ir, ir_scope) {
-            continue;
-        }
-        let mut candidate_span = switch_span;
-        let mut candidate_ir = switch_ir;
-        for (case_span, case_ir) in cases {
-            if case_span.start <= span.start && span.end <= case_span.end {
-                candidate_span = *case_span;
-                candidate_ir = *case_ir;
-                break;
-            }
-        }
-        let width = candidate_span.end - candidate_span.start;
-        if best.is_none_or(|(w, _)| width < w) {
-            best = Some((width, candidate_ir));
+    let Some(cases) = switch_cases.get(&ir_scope) else {
+        return ir_scope;
+    };
+    let switch_span = scopes[ir_scope].block.span;
+    if span.start < switch_span.start || span.end > switch_span.end {
+        return ir_scope;
+    }
+    for (case_span, case_ir) in cases {
+        if case_span.start <= span.start && span.end <= case_span.end {
+            return *case_ir;
         }
     }
-    best.map(|(_, s)| s).unwrap_or(ir_scope)
-}
-
-/// Is `candidate` either `descendant` itself or any of its ancestors
-/// walked through `ScopeData::upper`?
-fn is_ancestor_or_self(
-    scopes: &IndexVec<ScopeId, ScopeData>,
-    descendant: ScopeId,
-    candidate: ScopeId,
-) -> bool {
-    let mut cur = Some(descendant);
-    while let Some(s) = cur {
-        if s == candidate {
-            return true;
-        }
-        cur = scopes[s].upper;
-    }
-    false
+    ir_scope
 }
 
 /// If `anchor` is the `Function` node of a named function expression,
