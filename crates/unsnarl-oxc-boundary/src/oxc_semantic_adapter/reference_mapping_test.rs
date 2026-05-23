@@ -502,3 +502,58 @@ fn jsx_uppercase_tag_resolves_to_outer_binding() {
         },
     );
 }
+
+/// A `C` reference inside the body of a class `C` nested inside
+/// another class `C` must resolve to the innermost synthesised
+/// inner-`ClassName` row. `inner_class_names` is built in
+/// `scope_descendants_from_root` DFS order, so the outer match
+/// appears first; a naive walk would bind the reference to the
+/// outer inner row, leaving the innermost class's self-reference
+/// pointing at the wrong variable.
+#[test]
+fn nested_same_named_class_resolves_inner_reference_to_innermost_inner_name() {
+    let source = "class C { method() { class C { foo() { return C; } } } }";
+    with_arena(source, Language::Js, SourceType::Module, |b| {
+        // Find both class scopes (outer + inner) by walking the
+        // scope tree.
+        let outer_class = b.scopes[root()].child_scopes[0];
+        let outer_method = b.scopes[outer_class].child_scopes[0];
+        let inner_class = b.scopes[outer_method].child_scopes[0];
+        // The two inner `C` bindings are the synthesised inner
+        // `ClassName` rows in each class scope.
+        let outer_inner_c = b.scopes[outer_class]
+            .set()
+            .get("C")
+            .copied()
+            .expect("outer class scope must carry inner `C`");
+        let inner_inner_c = b.scopes[inner_class]
+            .set()
+            .get("C")
+            .copied()
+            .expect("inner class scope must carry inner `C`");
+        assert_ne!(outer_inner_c, inner_inner_c);
+        // The `return C` reference in `foo` resolves to the
+        // innermost (`inner_inner_c`), not the outer one.
+        let r = b
+            .references
+            .iter()
+            .find(|r| r.identifier.name() == "C")
+            .expect("expected a `C` reference inside foo()");
+        assert_eq!(
+            r.resolved,
+            Some(inner_inner_c),
+            "inner-class self-reference must bind to the innermost inner ClassName, \
+             not the outer one",
+        );
+        // Cross-link bookkeeping: the inner row owns the reference;
+        // the outer row does not.
+        assert!(b.variables[inner_inner_c]
+            .references
+            .iter()
+            .any(|&id| b.references[id].identifier.name() == "C"));
+        assert!(b.variables[outer_inner_c]
+            .references
+            .iter()
+            .all(|&id| b.references[id].identifier.name() != "C"));
+    });
+}

@@ -385,6 +385,14 @@ fn reparent_decorator_references(
 /// class scope that owns a synthesised inner binding sharing the
 /// identifier's name, move the cross-link from the outer to the inner
 /// variable and update `ReferenceData::resolved`.
+///
+/// When multiple inner-class scopes share the identifier's name and
+/// each contains the reference span (e.g. nested `class C { method()
+/// { class C { foo() { return C; } } } }`), the *innermost* enclosing
+/// scope wins, mirroring lexical resolution. `inner_class_names` is
+/// built in `scope_descendants_from_root` DFS order, so a naive walk
+/// would otherwise pick the outermost match and bind references to
+/// the wrong row.
 fn rebind_inner_class_name_references(
     scopes: &IndexVec<ScopeId, ScopeData>,
     variables: &mut IndexVec<VariableId, VariableData>,
@@ -408,6 +416,7 @@ fn rebind_inner_class_name_references(
         })
         .collect();
     for (ref_id, outer, name, span) in snapshots {
+        let mut best: Option<(u32, &super::variable_mapping::InnerClassName)> = None;
         for icn in inner_class_names {
             if icn.inner == outer {
                 continue;
@@ -419,10 +428,15 @@ fn rebind_inner_class_name_references(
             if span.start < class_span.start || span.end > class_span.end {
                 continue;
             }
+            let width = class_span.end - class_span.start;
+            if best.is_none_or(|(w, _)| width < w) {
+                best = Some((width, icn));
+            }
+        }
+        if let Some((_, icn)) = best {
             references[ref_id].resolved = Some(icn.inner);
             variables[outer].references.retain(|&id| id != ref_id);
             variables[icn.inner].references.push(ref_id);
-            break;
         }
     }
 }
