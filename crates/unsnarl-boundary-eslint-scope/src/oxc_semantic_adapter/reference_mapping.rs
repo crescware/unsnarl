@@ -75,6 +75,7 @@ use oxc_ast::ast::{BindingIdentifier, BindingPattern, FormalParameter};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::Semantic;
+use oxc_span::GetSpan;
 use oxc_syntax::reference::ReferenceFlags as OxcReferenceFlags;
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
@@ -186,7 +187,21 @@ pub(crate) fn build_references(
         translation,
     );
 
-    for (name_ident, ref_ids) in scoping.root_unresolved_references() {
+    // `Scoping::root_unresolved_references` is keyed on a
+    // `hashbrown::HashMap`, so its iteration order is arbitrary. The
+    // hand-rolled walker encounters identifiers in source order, so
+    // implicit globals appear in source order too. Sort here by the
+    // first reference's identifier span so the IR `variables` /
+    // implicit-globals ordering matches the parity baseline.
+    let mut unresolved: Vec<_> = scoping.root_unresolved_references().iter().collect();
+    unresolved.sort_by_key(|(_name, ref_ids)| {
+        ref_ids
+            .iter()
+            .map(|&id| nodes.kind(scoping.get_reference(id).node_id()).span().start)
+            .min()
+            .unwrap_or(u32::MAX)
+    });
+    for (name_ident, ref_ids) in unresolved {
         let name = name_ident.as_str().to_string();
         for &oxc_ref_id in ref_ids.iter() {
             let oxc_ref = scoping.get_reference(oxc_ref_id);
