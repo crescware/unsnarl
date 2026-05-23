@@ -11,3 +11,4 @@ unsnarl-emitter = { workspace = true }
 unsnarl-visual-graph = { workspace = true }
 unsnarl-ir = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
+tracing = { workspace = true }
