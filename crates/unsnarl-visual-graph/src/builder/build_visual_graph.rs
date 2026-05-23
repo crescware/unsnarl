@@ -393,7 +393,7 @@ fn emit_reference_edges(
                     &mut state.emitted_edges,
                     &mut state.edges,
                     from_id,
-                    &label,
+                    label,
                     &target,
                 );
             }
@@ -423,7 +423,7 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         from_id,
-                        &label,
+                        label,
                         target,
                     );
                 }
@@ -449,7 +449,7 @@ fn emit_reference_edges(
                             &mut state.emitted_edges,
                             &mut state.edges,
                             from_id,
-                            &label,
+                            label,
                             &redirect,
                         );
                     }
@@ -475,7 +475,7 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         &from_id,
-                        &label,
+                        label,
                         &target_id,
                     );
                 }
@@ -537,7 +537,7 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         from_id,
-                        &label,
+                        label,
                         &target_id,
                     );
                 }
@@ -570,7 +570,7 @@ fn emit_reference_edges(
                     &mut state.emitted_edges,
                     &mut state.edges,
                     from_id,
-                    &label,
+                    label,
                     &target_id,
                 );
             }
