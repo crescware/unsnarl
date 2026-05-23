@@ -24,6 +24,20 @@
 //! resolved against the skipped symbol into the implicit-global
 //! synthesis path, matching the parity baseline.
 //!
+//! ## Inner `ClassName` for class declarations
+//!
+//! For a class *declaration* (`class C { ... }`), `oxc_semantic`
+//! binds `C` only in the enclosing scope. The boundary's hand-rolled
+//! `enter_class` adds a *second* binding for `C` inside the `Class`
+//! scope so references to `C` from inside method bodies resolve to
+//! the inner row instead of the outer one. Class *expressions*
+//! (`const C = class D { ... }`) already get their inner-name
+//! binding from `oxc_semantic`, so no synthesis is needed for them.
+//!
+//! Synthesise the inner `ClassName` row here for class declarations
+//! only, emitting both the `VariableData` and the corresponding
+//! `DefinitionData` (`DefinitionType::ClassName`).
+//!
 //! `identifiers` carries one entry per binding-identifier occurrence,
 //! matching what the hand-rolled walker pushes on each
 //! `declare_variable` call. `oxc_semantic` collapses re-declarations
@@ -50,16 +64,17 @@
 
 use std::collections::HashSet;
 
-use oxc_ast::ast::FunctionType;
+use oxc_ast::ast::{ClassType, FunctionType};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::{Scoping, Semantic};
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
 
-use unsnarl_ir::ids::{ScopeId, VariableId};
-use unsnarl_ir::primitive::AstIdentifier;
-use unsnarl_ir::scope::{ScopeData, VariableData};
+use unsnarl_ir::ids::{DefinitionId, ScopeId, VariableId};
+use unsnarl_ir::primitive::{AstIdentifier, AstNode};
+use unsnarl_ir::scope::{DefinitionData, ScopeData, VariableData};
+use unsnarl_ir::DefinitionType;
 use unsnarl_oxc_parity::AstType;
 
 /// Output of [`build_variables`]: the IR variable arena, the
@@ -101,6 +116,7 @@ pub(crate) struct VariableMappingResult {
 pub(crate) fn build_variables(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
+    definitions: &mut IndexVec<DefinitionId, DefinitionData>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
 ) -> VariableMappingResult {
     let scoping = semantic.scoping();
@@ -123,6 +139,17 @@ pub(crate) fn build_variables(
 
         if matches!(anchor, AstKind::Function(_)) {
             push_implicit_arguments(scopes, &mut variables, ir_scope);
+        }
+        if let Some((name, span, class_span)) = inner_class_declaration_name(&anchor) {
+            push_inner_class_name(
+                scopes,
+                &mut variables,
+                definitions,
+                ir_scope,
+                name,
+                span,
+                class_span,
+            );
         }
 
         for symbol_id in scoping.iter_bindings_in(oxc_scope_id) {
@@ -167,6 +194,61 @@ fn named_function_expression_self_name<'a>(anchor: &'a AstKind<'_>) -> Option<&'
         return None;
     }
     func.id.as_ref().map(|id| id.name.as_str())
+}
+
+/// If `anchor` is the `Class` node of a named class *declaration*,
+/// return `(name, id_span, class_span)`. Class *expressions* already
+/// receive an inner-name binding from `oxc_semantic`, so they return
+/// `None` here.
+fn inner_class_declaration_name<'a>(
+    anchor: &'a AstKind<'_>,
+) -> Option<(&'a str, oxc_span::Span, oxc_span::Span)> {
+    let AstKind::Class(class) = anchor else {
+        return None;
+    };
+    if !matches!(class.r#type, ClassType::ClassDeclaration) {
+        return None;
+    }
+    let id = class.id.as_ref()?;
+    Some((id.name.as_str(), id.span, class.span))
+}
+
+/// Synthesise the inner `ClassName` binding plus its `ClassName`
+/// definition for a class declaration, mirroring the hand-rolled
+/// `enter_class` helper.
+fn push_inner_class_name(
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    definitions: &mut IndexVec<DefinitionId, DefinitionData>,
+    scope: ScopeId,
+    name: &str,
+    id_span: oxc_span::Span,
+    class_span: oxc_span::Span,
+) {
+    let identifier = AstIdentifier::new(AstType::Identifier, name.to_string(), id_span);
+    let var_id = variables.push(VariableData::new(
+        name.to_string(),
+        scope,
+        vec![identifier.clone()],
+        Vec::new(),
+        Vec::new(),
+    ));
+    scopes[scope].insert_into_set(name.to_string(), var_id);
+    scopes[scope].variables.push(var_id);
+    let def_id = definitions.push(DefinitionData {
+        r#type: DefinitionType::ClassName,
+        name: identifier,
+        node: AstNode {
+            r#type: AstType::ClassDeclaration,
+            span: class_span,
+        },
+        parent: None,
+        init: None,
+        declaration_kind: None,
+        import_source: None,
+        imported_name: None,
+    });
+    variables[var_id].defs.push(def_id);
 }
 
 fn push_implicit_arguments(

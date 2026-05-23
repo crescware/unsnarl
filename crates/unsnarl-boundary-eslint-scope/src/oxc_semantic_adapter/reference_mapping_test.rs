@@ -63,11 +63,11 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
     let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
-    let var_result = build_variables(&ret.semantic, &mut scopes, &translation);
+    let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
+    let var_result = build_variables(&ret.semantic, &mut scopes, &mut definitions, &translation);
     let mut variables = var_result.variables;
     let symbol_to_variable = var_result.symbol_to_variable;
     let synthetic_unresolved = var_result.synthetic_unresolved;
-    let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
     let references = build_references(
         &ret.semantic,
         &mut scopes,

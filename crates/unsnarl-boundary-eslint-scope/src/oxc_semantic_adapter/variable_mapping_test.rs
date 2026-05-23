@@ -55,7 +55,11 @@ fn with_arena(
     let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
-    let result = build_variables(&ret.semantic, &mut scopes, &translation);
+    let mut definitions: IndexVec<
+        unsnarl_ir::ids::DefinitionId,
+        unsnarl_ir::scope::DefinitionData,
+    > = IndexVec::new();
+    let result = build_variables(&ret.semantic, &mut scopes, &mut definitions, &translation);
     body(&scopes, &result.variables);
 }
 
@@ -264,6 +268,74 @@ fn catch_body_let_binding_merges_into_catch_scope() {
                 names.contains("x"),
                 "`let x` from the catch body must merge into the Catch scope (got {names:?})",
             );
+        },
+    );
+}
+
+/// For a class *declaration* (`class C { ... }`), the boundary's
+/// hand-rolled walker creates two `ClassName` bindings: one in the
+/// enclosing scope (from hoisting) and one inside the `Class` scope
+/// (from `enter_class`) so references to `C` from inside method
+/// bodies resolve to the inner binding. `oxc_semantic` only creates
+/// the outer one, so the adapter must synthesise the inner row.
+#[test]
+fn class_declaration_synthesises_inner_class_name_binding() {
+    with_arena(
+        "class C { foo() { return C; } }",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            // Outer (module) scope still has its `C` Variable from
+            // oxc_semantic.
+            let outer = scopes[root()]
+                .set()
+                .get("C")
+                .copied()
+                .expect("expected outer `C` in module scope");
+            assert!(variables[outer].scope == root());
+            // Inner Class scope also carries a synthesised `C`.
+            let class_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[class_scope].r#type, ScopeType::Class));
+            let inner = scopes[class_scope]
+                .set()
+                .get("C")
+                .copied()
+                .expect("expected synthesised inner `C` in class scope");
+            assert!(variables[inner].scope == class_scope);
+            assert_ne!(outer, inner);
+            assert_eq!(variables[inner].defs.len(), 1);
+        },
+    );
+}
+
+/// Class *expressions* (`const C = class D { ... }`) already get
+/// their inner-name binding from `oxc_semantic`, so the adapter must
+/// not double-synthesise — only one `D` row should appear in the
+/// class scope.
+#[test]
+fn class_expression_inner_name_is_not_double_synthesised() {
+    with_arena(
+        "const c = class D { foo() { return D; } };",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let class_scope = scopes[root()].child_scopes[0];
+            let inner = scopes[class_scope]
+                .set()
+                .get("D")
+                .copied()
+                .expect("expected `D` in class scope");
+            // Exactly one `D` Variable lives in the class scope.
+            let d_count = scopes[class_scope]
+                .variables
+                .iter()
+                .filter(|&&v| variables[v].name() == "D")
+                .count();
+            assert_eq!(
+                d_count, 1,
+                "synthesis must not duplicate the class-expression self-name"
+            );
+            assert!(variables[inner].scope == class_scope);
         },
     );
 }
