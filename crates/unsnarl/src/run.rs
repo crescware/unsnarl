@@ -4,7 +4,6 @@ use std::path::{Path, PathBuf};
 use std::process::ExitCode;
 
 use clap::CommandFactory;
-use unsnarl_boundary_eslint_scope::parser::ParseError;
 use unsnarl_emitter::{Emitter, DEFAULT_DEPTH};
 use unsnarl_emitter_ir::IrEmitter;
 use unsnarl_emitter_json::JsonEmitter;
@@ -15,6 +14,7 @@ use unsnarl_emitter_mermaid::MermaidEmitter;
 use unsnarl_emitter_stats::StatsEmitter;
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::Language;
+use unsnarl_oxc_boundary::parser::ParseError;
 use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_visual_graph::highlight::HighlightRunOptions;
 

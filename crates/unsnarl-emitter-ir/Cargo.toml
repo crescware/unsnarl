@@ -16,7 +16,7 @@ serde_json = { workspace = true }
 tracing = { workspace = true }
 
 [dev-dependencies]
-unsnarl-boundary-eslint-scope = { workspace = true }
+unsnarl-oxc-boundary = { workspace = true }
 unsnarl-analyzer = { workspace = true }
 oxc_allocator = { workspace = true }
 oxc_ast = { workspace = true }

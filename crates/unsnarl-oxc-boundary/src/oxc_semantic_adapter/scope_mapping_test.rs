@@ -5,9 +5,7 @@
 //! resulting scope tree. The tests are characterization-style: they
 //! pin the adapter's mapping decisions (anchor → `ScopeType`,
 //! `is_strict` propagation, `variable_scope` resolution, `upper` /
-//! `child_scopes` wiring) and document known divergences from the
-//! eslint-scope-compatible hand-rolled walker that follow-up commits
-//! must address.
+//! `child_scopes` wiring) against the parity baseline.
 
 use oxc_allocator::Allocator;
 use oxc_index::IndexVec;
@@ -60,11 +58,11 @@ fn root() -> ScopeId {
 /// For TypeScript inputs whose source begins with a hashbang and/or
 /// leading comments, npm `oxc-parser` exposes `program.start` past
 /// those tokens (so `program.start` lands on the first body
-/// statement); the boundary's hand-rolled walker normalises the
-/// Rust-side `Program.span.start = 0` to the same offset. The
-/// adapter mirrors that normalisation in `build_anchor_node` only for
-/// `Language::Ts` / `Language::Tsx`. For `Language::Js` / `Jsx` the
-/// start stays at the raw program start.
+/// statement); the parity baseline normalises the Rust-side
+/// `Program.span.start = 0` to the same offset. The adapter applies
+/// that normalisation in `build_anchor_node` only for `Language::Ts`
+/// / `Language::Tsx`. For `Language::Js` / `Jsx` the start stays at
+/// the raw program start.
 #[test]
 fn typescript_root_block_skips_leading_block_comment() {
     let code = "/* leading */\nconst x = 1;\n";
@@ -171,10 +169,9 @@ fn top_level_block_statement_creates_block_scope_with_parent_var_scope() {
     });
 }
 
-/// The hand-rolled walker — and therefore the parity baseline — does
-/// not emit a `class-field-initializer` scope for a class field's
-/// initialiser expression, even though the npm `eslint-scope` package
-/// would. Pin that behaviour here so any future drift is observable.
+/// The parity baseline does not emit a `class-field-initializer`
+/// scope for a class field's initialiser expression. Pin that
+/// behaviour here so any future drift is observable.
 #[test]
 fn class_field_initializer_does_not_create_its_own_scope() {
     with_scopes(
@@ -196,18 +193,18 @@ fn class_declaration_creates_class_scope_inheriting_parent_strictness() {
         let class = scopes[root()].child_scopes[0];
         let c = &scopes[class];
         assert!(matches!(c.r#type, ScopeType::Class));
-        // The hand-rolled scope-builder propagates `is_strict` purely
-        // from the root scope's analysis-level source type (Module ⇒
-        // strict, Script ⇒ sloppy) without recognising
-        // class-body auto-strictness. Mirror that behaviour: a class
-        // in a script stays `is_strict = false`.
+        // The adapter propagates `is_strict` purely from the root
+        // scope's analysis-level source type (Module ⇒ strict, Script
+        // ⇒ sloppy) without recognising class-body auto-strictness,
+        // matching the parity baseline. A class in a script stays
+        // `is_strict = false`.
         assert!(!c.is_strict);
     });
 
     with_scopes("class C {}", Language::Js, SourceType::Module, |scopes| {
         let class = scopes[root()].child_scopes[0];
         // In module mode the root is strict, so the class inherits
-        // strict — same as the hand-rolled implementation.
+        // strict.
         assert!(scopes[class].is_strict);
     });
 }
@@ -240,9 +237,9 @@ fn switch_statement_creates_switch_scope() {
     );
 }
 
-/// eslint-scope creates one `Block` scope per `SwitchCase`, anchored
-/// to the `SwitchCase` AST node. `oxc_semantic` does not, so the
-/// adapter synthesises these rows immediately after each
+/// The parity baseline carries one `Block` scope per `SwitchCase`,
+/// anchored to the `SwitchCase` AST node. `oxc_semantic` does not,
+/// so the adapter synthesises these rows immediately after each
 /// `SwitchStatement` scope it emits.
 #[test]
 fn switch_statement_synthesises_one_block_per_case() {
@@ -294,13 +291,12 @@ fn switch_case_nested_block_attaches_to_synthetic_case_scope() {
 
 #[test]
 fn with_statement_scope_is_merged_into_parent() {
-    // The hand-rolled walker has no `visit_with_statement` override
-    // and lets the default walk descend straight into the body, so
-    // the body's `BlockStatement` becomes a regular Block scope
-    // parented directly under the enclosing scope without any
-    // intervening "With" scope in the parity baseline. The adapter
-    // mirrors that by treating the `WithStatement`'s `oxc_semantic`
-    // scope as merged into its parent (no IR row of its own).
+    // The parity baseline carries no separate `With` scope for
+    // `with (o) { ... }` — the body's `BlockStatement` becomes a
+    // regular Block scope parented directly under the enclosing
+    // scope. The adapter mirrors that by treating the
+    // `WithStatement`'s `oxc_semantic` scope as merged into its
+    // parent (no IR row of its own).
     with_scopes(
         "var o; with (o) { x; }",
         Language::Js,
@@ -318,11 +314,10 @@ fn with_statement_scope_is_merged_into_parent() {
 
 #[test]
 fn class_static_block_scope_is_merged_into_class() {
-    // The hand-rolled walker has no `visit_static_block` override,
-    // so `class C { static { ... } }` does not produce a dedicated
-    // `ClassStaticBlock` scope row in the parity baseline. The body
-    // identifiers stay associated with the enclosing `Class` scope.
-    // `is_merged_into_parent` mirrors that by collapsing the
+    // The parity baseline does not produce a dedicated
+    // `ClassStaticBlock` scope row for `class C { static { ... } }`;
+    // the body identifiers stay associated with the enclosing `Class`
+    // scope. `is_merged_into_parent` mirrors that by collapsing the
     // `StaticBlock` scope into its parent.
     with_scopes(
         "class C { static { C; } }",
@@ -341,14 +336,14 @@ fn class_static_block_scope_is_merged_into_class() {
 
 /// `oxc_semantic` emits two scopes for `try {} catch (e) {}`: the
 /// `CatchClause` (parameter scope, `ScopeFlags::CatchClause`) and an
-/// inner `BlockStatement` (the catch body, empty flags). Eslint-scope
-/// collapses these into a single `Catch` scope holding both the param
-/// and the body's declarations.
+/// inner `BlockStatement` (the catch body, empty flags). The parity
+/// baseline collapses these into a single `Catch` scope holding both
+/// the param and the body's declarations.
 ///
 /// The adapter folds the catch body `BlockStatement` into the
-/// `CatchClause`'s IR row so the emitted tree matches eslint-scope's
-/// shape: a single `Catch` scope under the `TryStatement`'s siblings,
-/// with no nested body block of its own.
+/// `CatchClause`'s IR row so the emitted tree matches the parity
+/// baseline: a single `Catch` scope under the `TryStatement`'s
+/// siblings, with no nested body block of its own.
 #[test]
 fn catch_clause_merges_body_block_into_catch_scope() {
     with_scopes(
@@ -381,13 +376,11 @@ fn catch_clause_merges_body_block_into_catch_scope() {
     );
 }
 
-/// The boundary's hand-rolled walker never creates a
-/// `FunctionExpressionName` scope, even for named function
-/// expressions: it classifies `Function.id` as a direct binding but
-/// allocates no separate scope or `VariableData` for it. The adapter
-/// mirrors that behaviour — only the `Function` scope appears, and
-/// the self-name is intentionally skipped during variable mapping
-/// (verified separately in `variable_mapping_test`).
+/// The parity baseline carries no `FunctionExpressionName` scope,
+/// even for named function expressions, and no `VariableData` for
+/// the self-name. The adapter matches that: only the `Function`
+/// scope appears, and the self-name is intentionally skipped during
+/// variable mapping (verified separately in `variable_mapping_test`).
 #[test]
 fn named_function_expression_does_not_emit_a_wrapper_scope() {
     with_scopes(
@@ -409,11 +402,10 @@ fn named_function_expression_does_not_emit_a_wrapper_scope() {
 
 /// TypeScript type-only scopes (`namespace X { ... }`, `interface X`,
 /// `type X = ...`, mapped / conditional types) are emitted by
-/// `oxc_semantic` but eslint-scope never sees them — the hand-rolled
-/// walker treats their AST subtrees as type-only via
-/// `unsnarl_oxc_parity::is_type_only_subtree`. The adapter must drop
-/// these scopes from the IR tree so the parity harness compares like
-/// for like.
+/// `oxc_semantic` but the parity baseline does not record them. The
+/// adapter drops these scopes from the IR tree via
+/// `unsnarl_oxc_parity::is_type_only_subtree` so the parity harness
+/// compares like for like.
 #[test]
 fn typescript_type_alias_scope_is_filtered_out() {
     with_scopes(

@@ -11,7 +11,7 @@ use oxc_allocator::Allocator;
 use oxc_parser::{Parser, ParserReturn};
 use oxc_span::SourceType;
 use unsnarl_annotations::Annotations;
-use unsnarl_boundary_eslint_scope::parser::SourceType as BoundarySourceType;
+use unsnarl_oxc_boundary::parser::SourceType as BoundarySourceType;
 
 use unsnarl_ir::reference::reference_flags::ReferenceFlags;
 use unsnarl_ir::Language;

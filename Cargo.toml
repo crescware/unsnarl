@@ -4,7 +4,7 @@ members = [
     "crates/unsnarl-oxc-parity",
     "crates/unsnarl-ir",
     "crates/unsnarl-annotations",
-    "crates/unsnarl-boundary-eslint-scope",
+    "crates/unsnarl-oxc-boundary",
     "crates/unsnarl-analyzer",
     "crates/unsnarl-root-query",
     "crates/unsnarl-visual-graph",
@@ -31,7 +31,7 @@ repository = "https://github.com/crescware/unsnarl"
 unsnarl-oxc-parity = { path = "crates/unsnarl-oxc-parity" }
 unsnarl-ir = { path = "crates/unsnarl-ir" }
 unsnarl-annotations = { path = "crates/unsnarl-annotations" }
-unsnarl-boundary-eslint-scope = { path = "crates/unsnarl-boundary-eslint-scope" }
+unsnarl-oxc-boundary = { path = "crates/unsnarl-oxc-boundary" }
 unsnarl-analyzer = { path = "crates/unsnarl-analyzer" }
 unsnarl-root-query = { path = "crates/unsnarl-root-query" }
 unsnarl-visual-graph = { path = "crates/unsnarl-visual-graph" }

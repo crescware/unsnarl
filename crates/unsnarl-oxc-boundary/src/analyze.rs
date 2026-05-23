@@ -1,16 +1,16 @@
-//! Entry point for the eslint-scope-compatible scope-builder.
+//! Entry point for the scope-builder.
 //!
 //! Drives [`crate::oxc_semantic_adapter::build_from_program`] against
 //! the parsed AST, dispatches any diagnostics the adapter collects
 //! ([`unsnarl_ir::diagnostic_kind::DiagnosticKind::VarDetected`])
 //! through the supplied [`AnalysisVisitor::on_diagnostic`] callback,
-//! and returns the resulting [`EslintScopeAnalysisResult`].
+//! and returns the resulting [`ScopeAnalysisResult`].
 
 use oxc_ast::ast::Program;
 
 use unsnarl_ir::Language;
 
-use crate::analysis_result::EslintScopeAnalysisResult;
+use crate::analysis_result::ScopeAnalysisResult;
 use crate::oxc_semantic_adapter::build_from_program;
 use crate::parser::SourceType;
 use crate::visitor::AnalysisVisitor;
@@ -31,7 +31,7 @@ pub fn analyze<'a>(
     program: &Program<'a>,
     options: &AnalyzeOptions<'a>,
     visitor: &mut dyn AnalysisVisitor,
-) -> EslintScopeAnalysisResult {
+) -> ScopeAnalysisResult {
     let output = build_from_program(program, options.source_type, options.language, options.raw);
     for diag in &output.diagnostics {
         visitor.on_diagnostic(diag);

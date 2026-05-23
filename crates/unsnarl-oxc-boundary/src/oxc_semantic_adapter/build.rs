@@ -1,5 +1,5 @@
 //! Top-level orchestration: drive `SemanticBuilder` and stitch the
-//! per-entity mappings into a single [`EslintScopeAnalysisResult`].
+//! per-entity mappings into a single [`ScopeAnalysisResult`].
 
 use oxc_ast::ast::{Program, VariableDeclarationKind};
 use oxc_ast::AstKind;
@@ -14,7 +14,7 @@ use unsnarl_ir::scope::DefinitionData;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
 
-use crate::analysis_result::EslintScopeAnalysisResult;
+use crate::analysis_result::ScopeAnalysisResult;
 use crate::parser::SourceType;
 
 use super::{definition_mapping, reference_mapping, scope_mapping, variable_mapping};
@@ -25,7 +25,7 @@ use super::{definition_mapping, reference_mapping, scope_mapping, variable_mappi
 /// can dispatch the diagnostics to its `AnalysisVisitor::on_diagnostic`
 /// callback.
 pub struct BuildOutput {
-    pub analysis: EslintScopeAnalysisResult,
+    pub analysis: ScopeAnalysisResult,
     pub diagnostics: Vec<Diagnostic>,
 }
 
@@ -83,7 +83,7 @@ pub(crate) fn build<'a>(
     );
     let diagnostics = collect_var_detected_diagnostics(&semantic, raw);
     BuildOutput {
-        analysis: EslintScopeAnalysisResult {
+        analysis: ScopeAnalysisResult {
             arena: IrArena {
                 scopes,
                 variables,
@@ -99,10 +99,6 @@ pub(crate) fn build<'a>(
 /// Walk every `VariableDeclaration` AST node and emit a
 /// `DiagnosticKind::VarDetected` warning for each `var` declaration.
 ///
-/// Mirrors the boundary's hand-rolled
-/// `hoisting::handle_variable_declaration` and `declare_for_left`
-/// helpers, which both push the same diagnostic onto
-/// `ScopeBuilderState::diagnostics` when a `var` head is encountered.
 /// `for (var ...; ...)`'s init and `for (var ... in/of ...)`'s left
 /// slot are both ordinary `VariableDeclaration` nodes on the AST, so
 /// a single walk covers every site without double-counting.

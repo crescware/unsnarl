@@ -3,8 +3,8 @@
 //! Three phases run end-to-end:
 //!
 //! 1. Compute the per-offset `NestingDepths` table.
-//! 2. Drive the eslint-scope-compatible scope build through
-//!    [`unsnarl_boundary_eslint_scope::analyze::analyze`] with a
+//! 2. Drive the scope build through
+//!    [`unsnarl_oxc_boundary::analyze::analyze`] with a
 //!    diagnostics-only `AnalysisVisitor`, then build span -> arena ID
 //!    indices on the arena it returns.
 //! 3. Walk the `Program` again with [`BuildAnalysisVisitor`] to fill
@@ -23,14 +23,14 @@ use std::collections::HashMap;
 use oxc_ast::ast::Program;
 use oxc_ast_visit::Visit;
 
-use unsnarl_boundary_eslint_scope::analyze::{analyze, AnalyzeOptions};
-use unsnarl_boundary_eslint_scope::parser::SourceType;
-use unsnarl_boundary_eslint_scope::visitor::AnalysisVisitor;
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ReferenceId, ScopeId};
 use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
+use unsnarl_oxc_boundary::analyze::{analyze, AnalyzeOptions};
+use unsnarl_oxc_boundary::parser::SourceType;
+use unsnarl_oxc_boundary::visitor::AnalysisVisitor;
 use unsnarl_oxc_parity::AstType;
 
 use crate::analyzed_source::AnalyzedSource;

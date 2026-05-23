@@ -2,7 +2,7 @@
 //!
 //! [`analyze_source`] is the workhorse: it drives `OxcParser` →
 //! `analyze` and returns the populated
-//! [`EslintScopeAnalysisResult`]. Companion helpers expose shared
+//! [`ScopeAnalysisResult`]. Companion helpers expose shared
 //! IR-shape predicates used by the sibling `*_test.rs` files.
 //!
 //! Boundary tests stay integration-style — source string in, IR
@@ -19,7 +19,7 @@ use unsnarl_ir::DefinitionType;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
 
-use crate::analysis_result::EslintScopeAnalysisResult;
+use crate::analysis_result::ScopeAnalysisResult;
 use crate::analyze::{analyze, AnalyzeOptions};
 use crate::parser::{default_source_type_for, OxcParser, ParseOptions, SourceType};
 use crate::visitor::AnalysisVisitor;
@@ -50,7 +50,7 @@ impl AnalysisVisitor for DiagnosticCapturingVisitor {
 
 /// Parse `code` as the requested language and run the full
 /// scope-builder pass against it.
-pub(crate) fn analyze_source(code: &str, language: Language) -> EslintScopeAnalysisResult {
+pub(crate) fn analyze_source(code: &str, language: Language) -> ScopeAnalysisResult {
     analyze_source_as(code, language, default_source_type_for(language))
 }
 
@@ -61,7 +61,7 @@ pub(crate) fn analyze_source_as(
     code: &str,
     language: Language,
     source_type: SourceType,
-) -> EslintScopeAnalysisResult {
+) -> ScopeAnalysisResult {
     let allocator = Allocator::default();
     let parsed = OxcParser
         .parse(
@@ -91,7 +91,7 @@ pub(crate) fn analyze_source_as(
 pub(crate) fn analyze_source_with_diagnostics(
     code: &str,
     language: Language,
-) -> (EslintScopeAnalysisResult, Vec<Diagnostic>) {
+) -> (ScopeAnalysisResult, Vec<Diagnostic>) {
     let allocator = Allocator::default();
     let parsed = OxcParser
         .parse(

@@ -1,4 +1,5 @@
-//! eslint-scope compatible scope-builder + parser wrapper.
+//! Scope-builder + parser wrapper around the oxc crates
+//! (`oxc-parser`, `oxc_semantic`, `oxc_ast`).
 //!
 //! Boundary crate: must not depend on `unsnarl-annotations` or
 //! `unsnarl-analyzer`. This invariant is physically enforced by the

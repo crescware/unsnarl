@@ -6,8 +6,8 @@
 //! `crates/unsnarl/tests/parity.rs`, so they do not need duplicate
 //! sibling coverage here.
 
-use unsnarl_boundary_eslint_scope::parser::SourceType;
 use unsnarl_ir::Language;
+use unsnarl_oxc_boundary::parser::SourceType;
 
 use super::{language_for_path, source_type_from_path};
 

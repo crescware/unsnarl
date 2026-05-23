@@ -14,9 +14,6 @@ use std::path::Path;
 
 use oxc_allocator::Allocator;
 use unsnarl_analyzer::run_analysis;
-use unsnarl_boundary_eslint_scope::parser::{
-    default_source_type_for, OxcParser, ParseError, ParseOptions, SourceType,
-};
 use unsnarl_emitter::{EmitOptions, Emitter, IRSerializer, SerializeContext, SerializeSourceMeta};
 use unsnarl_emitter_ir::{FlatSerializer, IrEmitter};
 use unsnarl_emitter_json::JsonEmitter;
@@ -29,6 +26,9 @@ use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
+use unsnarl_oxc_boundary::parser::{
+    default_source_type_for, OxcParser, ParseError, ParseOptions, SourceType,
+};
 use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_root_query::ParsedRootQuery;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;

@@ -7,7 +7,7 @@
 use unsnarl_ir::ids::ScopeId;
 use unsnarl_ir::IrArena;
 
-pub struct EslintScopeAnalysisResult {
+pub struct ScopeAnalysisResult {
     pub arena: IrArena,
     pub global_scope: ScopeId,
 }
