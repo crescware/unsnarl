@@ -208,6 +208,11 @@ pub(crate) fn build_variables(
                 continue;
             }
             if is_type_only_function_declaration(scoping, nodes, symbol_id) {
+                synthetic_unresolved.insert(symbol_id);
+                continue;
+            }
+            if is_under_type_only_declaration(scoping, nodes, symbol_id) {
+                synthetic_unresolved.insert(symbol_id);
                 continue;
             }
             let identifiers = build_identifiers(scoping, symbol_id, &name);
@@ -369,6 +374,34 @@ fn is_type_only_function_declaration(
         func.r#type,
         FunctionType::TSDeclareFunction | FunctionType::TSEmptyBodyFunctionExpression
     )
+}
+
+/// Returns true if any ancestor of `symbol_id`'s declaration node is
+/// a `TSImportEqualsDeclaration` / `TSExportAssignment` /
+/// `TSNamespaceExportDeclaration`. `is_type_only_subtree` marks
+/// these as type-only, so the hand-rolled walker skips them via
+/// `type_only_depth` and never declares the inner binding.
+fn is_under_type_only_declaration(
+    scoping: &Scoping,
+    nodes: &oxc_semantic::AstNodes<'_>,
+    symbol_id: SymbolId,
+) -> bool {
+    let mut cur = scoping.symbol_declaration(symbol_id);
+    loop {
+        if matches!(
+            nodes.kind(cur),
+            AstKind::TSImportEqualsDeclaration(_)
+                | AstKind::TSExportAssignment(_)
+                | AstKind::TSNamespaceExportDeclaration(_),
+        ) {
+            return true;
+        }
+        let next = nodes.parent_id(cur);
+        if next == cur {
+            return false;
+        }
+        cur = next;
+    }
 }
 
 /// If `anchor` is the `Class` node of a named class *declaration*,

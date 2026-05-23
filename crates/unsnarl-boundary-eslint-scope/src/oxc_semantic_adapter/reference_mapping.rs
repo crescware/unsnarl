@@ -910,7 +910,7 @@ fn synthesise_identifier_name_references(
     root: ScopeId,
     switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) {
-    use oxc_ast::ast::ImportAttributeKey;
+    use oxc_ast::ast::{ImportAttributeKey, ModuleExportName};
 
     let existing_spans: HashSet<(u32, u32)> = references
         .iter()
@@ -939,6 +939,11 @@ fn synthesise_identifier_name_references(
             }
             AstKind::ImportAttribute(ia) => {
                 if let ImportAttributeKey::Identifier(id) = &ia.key {
+                    sites.push((from, id.name.as_str(), id.span, AstType::Identifier));
+                }
+            }
+            AstKind::ExportSpecifier(es) => {
+                if let ModuleExportName::IdentifierName(id) = &es.local {
                     sites.push((from, id.name.as_str(), id.span, AstType::Identifier));
                 }
             }
