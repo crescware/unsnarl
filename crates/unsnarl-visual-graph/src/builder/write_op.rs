@@ -14,3 +14,14 @@ pub struct WriteOp {
     pub offset: u32,
     pub scope_id: String,
 }
+
+/// Returns the prefix of `ops` whose `offset` is strictly less than
+/// `boundary`. The caller is responsible for ensuring `ops` is sorted
+/// by `offset` ascending; in practice every `Vec<WriteOp>` in
+/// `BuilderContext::write_ops_by_variable` (and every filtered subset
+/// derived from it) is, because they're built from a reference list
+/// pre-sorted on `identifier.span().offset` in `build_visual_graph`.
+#[inline]
+pub fn ops_before(ops: &[WriteOp], boundary: u32) -> &[WriteOp] {
+    &ops[..ops.partition_point(|op| op.offset < boundary)]
+}

@@ -8,7 +8,7 @@ use super::branch_container_key::branch_container_key;
 use super::context::BuilderContext;
 use super::is_ancestor_scope::is_ancestor_scope;
 use super::outermost_branch_under::outermost_branch_under;
-use super::write_op::WriteOp;
+use super::write_op::{ops_before, WriteOp};
 use super::write_op_node_id::write_op_node_id;
 
 pub fn branch_merged_origins(
@@ -37,15 +37,23 @@ pub fn branch_merged_origins(
         return vec![write_op_node_id(&last.ref_id)];
     };
 
+    // `branch_scopes_by_container` is a pre-built index keyed by the
+    // container key (e.g. `if:<offset>`, `switch:<offset>`,
+    // `try:<offset>`), so the scopes that share `inner_key` can be
+    // looked up directly. The previous shape walked every scope in
+    // the IR (~36k on `mermaid.js`) once per call, which dominated
+    // wall time inside `read_origins`.
     let inner_siblings: Vec<_> = ctx
-        .ir
-        .scopes
-        .iter()
-        .filter(|s| {
-            branch_container_key(s).as_deref() == Some(inner_key.as_str())
-                && is_ancestor_scope(branch_id, s.id.value(), &ctx.scope_map)
+        .branch_scopes_by_container
+        .get(&inner_key)
+        .map(|scopes| {
+            scopes
+                .iter()
+                .copied()
+                .filter(|s| is_ancestor_scope(branch_id, s.id.value(), &ctx.scope_map))
+                .collect()
         })
-        .collect();
+        .unwrap_or_default();
 
     let is_switch = inner_key.starts_with("switch:");
     let sorted_cases = if is_switch {
@@ -98,11 +106,7 @@ pub fn branch_merged_origins(
             .as_ref()
             .map(|c| c.parent_span_offset().0)
             .unwrap_or(0);
-        let before_inner: Vec<&WriteOp> = inside_owned
-            .iter()
-            .filter(|op| op.offset < inner_offset)
-            .collect();
-        if let Some(last_before) = before_inner.last() {
+        if let Some(last_before) = ops_before(&inside_owned, inner_offset).last() {
             merged.push(write_op_node_id(&last_before.ref_id));
         }
     }
