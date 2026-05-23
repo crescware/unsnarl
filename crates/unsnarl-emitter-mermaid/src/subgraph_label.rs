@@ -7,24 +7,39 @@ use unsnarl_visual_graph::subgraph_kind::SubgraphKind;
 use unsnarl_visual_graph::visual_node::VisualNode;
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
 
-use crate::escape::escape;
-use crate::line_range_label::line_range_label;
+use crate::escape::escape_into;
+use crate::line_range_label::line_range_label_into;
 
 pub fn subgraph_label(
     sg: &VisualSubgraph,
     node_map: &HashMap<String, &VisualNode>,
     debug: bool,
 ) -> String {
-    let base = base_label(sg, node_map);
+    let mut out = String::new();
+    subgraph_label_into(&mut out, sg, node_map, debug);
+    out
+}
+
+/// Destination-arg variant of [`subgraph_label`]: writes the full
+/// `<header><br/>L<start>(-<end>)?(<br/>kind)?` label straight into
+/// `out` so `emit_plain_subgraph` can assemble the surrounding
+/// `subgraph <id>["<label>"]` line in a single `String` rather than
+/// stacking `line_range_label` → `escape` → `base_label` → outer
+/// `format!`.
+pub fn subgraph_label_into(
+    out: &mut String,
+    sg: &VisualSubgraph,
+    node_map: &HashMap<String, &VisualNode>,
+    debug: bool,
+) {
+    base_label_into(out, sg, node_map);
     if debug {
-        format!("{base}<br/>{}", sg.kind().as_str())
-    } else {
-        base
+        out.push_str("<br/>");
+        out.push_str(sg.kind().as_str());
     }
 }
 
-fn base_label(sg: &VisualSubgraph, node_map: &HashMap<String, &VisualNode>) -> String {
-    let range = line_range_label(sg);
+fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<String, &VisualNode>) {
     match sg.kind() {
         SubgraphKind::Function => {
             // Prefer the name baked onto the subgraph at build
@@ -34,48 +49,101 @@ fn base_label(sg: &VisualSubgraph, node_map: &HashMap<String, &VisualNode>) -> S
             // back to the live node_map entry in that case.
             let owner_node_id = sg.owner_node_id();
             if owner_node_id.is_none() {
-                return format!("(anonymous)<br/>{range}");
+                out.push_str("(anonymous)<br/>");
+                line_range_label_into(out, sg);
+                return;
             }
             let owner_name = sg.owner_name().unwrap_or("");
-            let resolved = if !owner_name.is_empty() {
-                owner_name.to_string()
+            if !owner_name.is_empty() {
+                escape_into(out, owner_name);
             } else if let Some(id) = owner_node_id {
-                node_map
-                    .get(id)
-                    .map(|n| n.name().to_string())
-                    .unwrap_or_default()
-            } else {
-                String::new()
-            };
-            format!("{}()<br/>{range}", escape(&resolved))
+                if let Some(n) = node_map.get(id) {
+                    escape_into(out, n.name());
+                }
+            }
+            out.push_str("()<br/>");
+            line_range_label_into(out, sg);
         }
         SubgraphKind::Class => match sg.class_name() {
-            None => format!("class (anonymous)<br/>{range}"),
-            Some(name) => format!("class {}<br/>{range}", escape(name)),
+            None => {
+                out.push_str("class (anonymous)<br/>");
+                line_range_label_into(out, sg);
+            }
+            Some(name) => {
+                out.push_str("class ");
+                escape_into(out, name);
+                out.push_str("<br/>");
+                line_range_label_into(out, sg);
+            }
         },
-        SubgraphKind::Switch => format!("switch {range}"),
+        SubgraphKind::Switch => {
+            out.push_str("switch ");
+            line_range_label_into(out, sg);
+        }
         SubgraphKind::Case => match sg.case_test() {
-            None => format!("default {range}"),
-            Some(test) => format!("case {} {range}", escape(test)),
+            None => {
+                out.push_str("default ");
+                line_range_label_into(out, sg);
+            }
+            Some(test) => {
+                out.push_str("case ");
+                escape_into(out, test);
+                out.push(' ');
+                line_range_label_into(out, sg);
+            }
         },
-        SubgraphKind::If => format!("if {range}"),
-        SubgraphKind::Else => format!("else {range}"),
+        SubgraphKind::If => {
+            out.push_str("if ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Else => {
+            out.push_str("else ");
+            line_range_label_into(out, sg);
+        }
         SubgraphKind::IfElseContainer => {
             if sg.has_else() {
-                format!("if-else {range}")
+                out.push_str("if-else ");
             } else {
-                format!("if {range}")
+                out.push_str("if ");
             }
+            line_range_label_into(out, sg);
         }
-        SubgraphKind::Try => format!("try {range}"),
-        SubgraphKind::Catch => format!("catch {range}"),
-        SubgraphKind::Finally => format!("finally {range}"),
-        SubgraphKind::For => format!("for {range}"),
-        SubgraphKind::While => format!("while {range}"),
-        SubgraphKind::DoWhile => format!("do-while {range}"),
-        SubgraphKind::Return => format!("return {range}"),
-        SubgraphKind::Throw => format!("throw {range}"),
-        SubgraphKind::Block => format!("block {range}"),
+        SubgraphKind::Try => {
+            out.push_str("try ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Catch => {
+            out.push_str("catch ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Finally => {
+            out.push_str("finally ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::For => {
+            out.push_str("for ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::While => {
+            out.push_str("while ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::DoWhile => {
+            out.push_str("do-while ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Return => {
+            out.push_str("return ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Throw => {
+            out.push_str("throw ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Block => {
+            out.push_str("block ");
+            line_range_label_into(out, sg);
+        }
     }
 }
 
