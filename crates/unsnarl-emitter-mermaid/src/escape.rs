@@ -7,6 +7,15 @@
 
 pub fn escape(value: &str) -> String {
     let mut out = String::with_capacity(value.len());
+    escape_into(&mut out, value);
+    out
+}
+
+/// Destination-arg variant of [`escape`]: writes the escaped bytes
+/// directly into `out` so callers that are already building a larger
+/// string (a node line, a subgraph label, ...) avoid the per-label
+/// `String` allocation that the owned-return form would force.
+pub fn escape_into(out: &mut String, value: &str) {
     for ch in value.chars() {
         match ch {
             '&' => out.push_str("&amp;"),
@@ -16,7 +25,6 @@ pub fn escape(value: &str) -> String {
             other => out.push(other),
         }
     }
-    out
 }
 
 #[cfg(test)]
