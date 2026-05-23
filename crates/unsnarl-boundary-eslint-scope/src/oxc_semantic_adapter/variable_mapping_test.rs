@@ -159,6 +159,29 @@ fn arrow_function_scope_does_not_synthesise_arguments() {
     );
 }
 
+/// `Scoping::iter_bindings_in` returns symbols in HashMap order,
+/// which is not stable across runs and doesn't follow declaration
+/// order. The adapter sorts bindings by declaration span before
+/// emitting them so downstream consumers see them in source order
+/// — pinned here with two adjacent declarations whose HashMap order
+/// would otherwise be unpredictable.
+#[test]
+fn bindings_in_a_scope_follow_declaration_order() {
+    with_arena(
+        "function a() {} function b() {} function c() {} function d() {}",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let names: Vec<&str> = scopes[root()]
+                .variables
+                .iter()
+                .map(|&v| variables[v].name())
+                .collect();
+            assert_eq!(names, vec!["a", "b", "c", "d"]);
+        },
+    );
+}
+
 #[test]
 fn nested_function_each_get_their_own_arguments() {
     with_arena(

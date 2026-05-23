@@ -51,16 +51,16 @@
 //! while eslint-scope inserts an `arguments` `Variable` with no defs
 //! and no identifiers into every non-arrow function's local scope.
 //!
-//! ## Ordering caveat
+//! ## Binding ordering
 //!
 //! `Scoping::iter_bindings_in` returns bindings by iterating the
 //! underlying `hashbrown::HashMap`, which does not preserve insertion
-//! order. The hand-rolled walker, in contrast, appends to each scope's
-//! `variables` array in declaration order (post-hoisting). The two
-//! orderings therefore diverge for any scope with more than one
-//! binding; downstream consumers that index `variables` positionally
-//! will observe the difference. Aligning order is gated on the
-//! parity harness signal (Phase 2 step 5).
+//! order. The hand-rolled walker, in contrast, appends each scope's
+//! `variables` array in declaration-site order (post-hoisting: var /
+//! function / class declarations land in source order). Sort the
+//! per-scope binding list by `Scoping::symbol_span(sid).start` before
+//! emitting rows so downstream consumers that index `variables`
+//! positionally see the same order as the parity baseline.
 
 use std::collections::HashSet;
 
@@ -152,7 +152,9 @@ pub(crate) fn build_variables(
             );
         }
 
-        for symbol_id in scoping.iter_bindings_in(oxc_scope_id) {
+        let mut bindings: Vec<SymbolId> = scoping.iter_bindings_in(oxc_scope_id).collect();
+        bindings.sort_by_key(|sid| scoping.symbol_span(*sid).start);
+        for symbol_id in bindings {
             let name = scoping.symbol_name(symbol_id).to_string();
             if matches!(named_fe_self_name, Some(self_name) if self_name == name) {
                 synthetic_unresolved.insert(symbol_id);
