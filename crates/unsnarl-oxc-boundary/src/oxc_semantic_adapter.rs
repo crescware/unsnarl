@@ -5,14 +5,14 @@
 //! <https://github.com/crescware/unsnarl/issues/190>. The adapter
 //! replaces the hand-rolled eslint-scope-compatible scope-builder; its
 //! output must remain shape-compatible with the existing
-//! [`EslintScopeAnalysisResult`] so downstream crates
+//! [`ScopeAnalysisResult`] so downstream crates
 //! (`unsnarl-analyzer`, `unsnarl-emitter-ir`, …) continue to work
 //! unchanged.
 //!
 //! Sub-modules split the mapping by entity (scopes, variables,
 //! references, definitions). The entry point is [`build_from_program`].
 //!
-//! [`EslintScopeAnalysisResult`]: crate::analysis_result::EslintScopeAnalysisResult
+//! [`ScopeAnalysisResult`]: crate::analysis_result::ScopeAnalysisResult
 
 use oxc_ast::ast::Program;
 
@@ -29,7 +29,7 @@ pub(crate) mod variable_mapping;
 pub use build::BuildOutput;
 
 /// Run `oxc_semantic` against `program` and adapt the result into the
-/// unsnarl boundary's [`EslintScopeAnalysisResult`].
+/// unsnarl boundary's [`ScopeAnalysisResult`].
 ///
 /// `source_type` selects whether the root scope is `Module` or
 /// `Global`. The underlying [`oxc_semantic::SemanticBuilder`] cannot

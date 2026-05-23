@@ -84,7 +84,7 @@ pub(crate) fn parse_and_analyze_ts<'a>(
     source: &'a str,
 ) -> (
     Program<'a>,
-    unsnarl_oxc_boundary::analysis_result::EslintScopeAnalysisResult,
+    unsnarl_oxc_boundary::analysis_result::ScopeAnalysisResult,
 ) {
     use unsnarl_oxc_boundary::analyze::{analyze, AnalyzeOptions};
     use unsnarl_oxc_boundary::parser::SourceType as BoundarySourceType;
