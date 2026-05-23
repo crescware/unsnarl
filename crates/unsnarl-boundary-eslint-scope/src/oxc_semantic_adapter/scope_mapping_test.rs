@@ -286,6 +286,74 @@ fn named_function_expression_currently_lacks_function_expression_name_wrapper() 
     );
 }
 
+/// TypeScript type-only scopes (`namespace X { ... }`, `interface X`,
+/// `type X = ...`, mapped / conditional types) are emitted by
+/// `oxc_semantic` but eslint-scope never sees them — the hand-rolled
+/// walker treats their AST subtrees as type-only via
+/// `unsnarl_oxc_parity::is_type_only_subtree`. The adapter must drop
+/// these scopes from the IR tree so the parity harness compares like
+/// for like.
+#[test]
+fn typescript_type_alias_scope_is_filtered_out() {
+    with_scopes(
+        "type X = number; const y = 0;",
+        Language::Ts,
+        SourceType::Module,
+        |scopes| {
+            // Only the module scope remains; the `TSTypeAliasDeclaration`
+            // scope is dropped along with any binding inside it.
+            assert_eq!(scopes.len(), 1);
+            assert!(matches!(scopes[root()].r#type, ScopeType::Module));
+        },
+    );
+}
+
+#[test]
+fn typescript_namespace_scope_is_filtered_out() {
+    with_scopes(
+        "namespace N { export const x = 1; } const y = 0;",
+        Language::Ts,
+        SourceType::Module,
+        |scopes| {
+            // The `TSModuleDeclaration` ("namespace N") scope is
+            // dropped; the `const x` binding inside it is filtered
+            // along with the surrounding subtree.
+            assert_eq!(
+                scopes.len(),
+                1,
+                "expected only the module root scope; got {} scopes",
+                scopes.len(),
+            );
+        },
+    );
+}
+
+#[test]
+fn typescript_conditional_type_scope_is_filtered_out() {
+    with_scopes(
+        "type If<C, T, F> = C extends true ? T : F;",
+        Language::Ts,
+        SourceType::Module,
+        |scopes| {
+            // `TSTypeAliasDeclaration` + its nested `TSConditionalType`
+            // both vanish from the IR scope tree.
+            assert_eq!(scopes.len(), 1);
+        },
+    );
+}
+
+#[test]
+fn typescript_interface_does_not_emit_a_scope() {
+    with_scopes(
+        "interface Shape { x: number; }",
+        Language::Ts,
+        SourceType::Module,
+        |scopes| {
+            assert_eq!(scopes.len(), 1);
+        },
+    );
+}
+
 #[test]
 fn variable_scope_chains_through_nested_blocks() {
     with_scopes(

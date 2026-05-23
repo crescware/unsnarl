@@ -63,7 +63,7 @@ use unsnarl_oxc_parity::AstType;
 pub(crate) fn build_variables(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
-    translation: &IndexVec<OxcScopeId, ScopeId>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
 ) -> (
     IndexVec<VariableId, VariableData>,
     IndexVec<SymbolId, Option<VariableId>>,
@@ -77,7 +77,9 @@ pub(crate) fn build_variables(
             .collect();
 
     for oxc_scope_id in scoping.scope_descendants_from_root() {
-        let ir_scope = translation[oxc_scope_id];
+        let Some(ir_scope) = translation[oxc_scope_id] else {
+            continue;
+        };
         let node_id = scoping.get_node_id(oxc_scope_id);
         let anchor = nodes.kind(node_id);
 

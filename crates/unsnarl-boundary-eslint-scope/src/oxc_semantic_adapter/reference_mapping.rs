@@ -103,7 +103,7 @@ pub(crate) fn build_references(
     variables: &mut IndexVec<VariableId, VariableData>,
     definitions: &mut IndexVec<DefinitionId, DefinitionData>,
     symbol_to_variable: &IndexVec<SymbolId, Option<VariableId>>,
-    translation: &IndexVec<OxcScopeId, ScopeId>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
 ) -> IndexVec<ReferenceId, ReferenceData> {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
@@ -112,13 +112,16 @@ pub(crate) fn build_references(
     let mut implicit_globals: HashMap<String, VariableId> = HashMap::new();
 
     for sid in scoping.symbol_ids() {
-        let var_id = symbol_to_variable[sid].expect(
-            "every SymbolId iter_bindings_in produced has a corresponding VariableId by \
-             variable_mapping::build_variables",
-        );
+        let Some(var_id) = symbol_to_variable[sid] else {
+            // Symbol lives in a filtered (TypeScript type-only) scope;
+            // its references aren't part of the runtime IR either.
+            continue;
+        };
         for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
             let oxc_ref = scoping.get_reference(oxc_ref_id);
-            let from = translation[oxc_ref.scope_id()];
+            let Some(from) = translation[oxc_ref.scope_id()] else {
+                continue;
+            };
             let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
             let flags = convert_flags(oxc_ref.flags());
             let new_id = references.push(ReferenceData {
@@ -137,7 +140,9 @@ pub(crate) fn build_references(
         let name = name_ident.as_str().to_string();
         for &oxc_ref_id in ref_ids.iter() {
             let oxc_ref = scoping.get_reference(oxc_ref_id);
-            let from = translation[oxc_ref.scope_id()];
+            let Some(from) = translation[oxc_ref.scope_id()] else {
+                continue;
+            };
             let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
             let flags = convert_flags(oxc_ref.flags());
 

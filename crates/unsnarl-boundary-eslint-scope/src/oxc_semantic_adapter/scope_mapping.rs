@@ -41,14 +41,17 @@
 //! ## OxcScopeId → IrScopeId translation
 //!
 //! The walk is no longer a 1:1 `usize` cast: scopes the eslint-scope
-//! model collapses into a single row (currently only the
-//! `CatchClause` + catch-body `BlockStatement` merge) skip emitting
-//! their own IR row and instead route to the parent's. The
+//! model collapses into a single row (currently the `CatchClause` +
+//! catch-body `BlockStatement` merge) skip emitting their own IR row
+//! and instead route to the parent's, while TypeScript type-only
+//! scopes are dropped entirely (the hand-rolled walker never enters
+//! them via [`unsnarl_oxc_parity::is_type_only_subtree`]). The
 //! [`ScopeMappingResult::translation`] table records, for every
-//! `OxcScopeId`, the IR id that should be observed for it; downstream
-//! passes ([`super::variable_mapping`], [`super::reference_mapping`])
-//! use this map to resolve `scope_id` references coming out of
-//! `Scoping`.
+//! `OxcScopeId`, either the IR id that should be observed for it or
+//! `None` if the scope is filtered out; downstream passes
+//! ([`super::variable_mapping`], [`super::reference_mapping`]) use
+//! this map to resolve `scope_id` references coming out of `Scoping`
+//! and skip any rows whose scope is `None`.
 //!
 //! ## Known divergences (deferred to follow-up commits)
 //!
@@ -58,10 +61,6 @@
 //! 3. **`ClassFieldInitializer`**: eslint-scope creates a per-field
 //!    initializer scope; `oxc_semantic` does not. Synthesis is a
 //!    follow-up.
-//! 4. **TypeScript-only scopes**: `oxc_semantic` adds scopes for
-//!    `TSModuleDeclaration` / `TSConditionalType` / `TSMappedType`
-//!    that the boundary's hand-rolled walker filters out via
-//!    `is_type_only_subtree`. Filtering is a follow-up.
 //!
 //! Each item is gated on a parity-harness signal (Phase 2 step 5);
 //! the comment is kept in code so reviewers see the exact scope of
@@ -80,14 +79,15 @@ use crate::materialise::ast_node_of;
 use crate::parser::SourceType;
 
 /// Output of [`build_scopes`]: the IR scope arena plus the
-/// `OxcScopeId → IrScopeId` translation that downstream passes use to
-/// resolve `Scoping`-side scope references.
+/// `OxcScopeId → Option<IrScopeId>` translation that downstream passes
+/// use to resolve `Scoping`-side scope references.
 pub(crate) struct ScopeMappingResult {
     pub(crate) scopes: IndexVec<ScopeId, ScopeData>,
     /// For every `OxcScopeId`, the IR scope id that downstream passes
-    /// must observe. Scopes that are merged into their parent (catch
-    /// body block today) map to the parent's IR id.
-    pub(crate) translation: IndexVec<OxcScopeId, ScopeId>,
+    /// must observe, or `None` if the scope is filtered out (currently
+    /// any TypeScript type-only subtree). Scopes that are merged into
+    /// their parent (catch body block today) carry `Some(parent_ir)`.
+    pub(crate) translation: IndexVec<OxcScopeId, Option<ScopeId>>,
 }
 
 /// Walk `semantic.scoping()`'s scope tree and produce the
@@ -104,25 +104,43 @@ pub(crate) fn build_scopes<'a>(
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
     let total = scoping.scopes_len();
-    let mut translation: IndexVec<OxcScopeId, ScopeId> = IndexVec::with_capacity(total);
+    let mut translation: IndexVec<OxcScopeId, Option<ScopeId>> = IndexVec::with_capacity(total);
     let mut next_ir = 0usize;
     for oxc_id in scoping.scope_descendants_from_root() {
         debug_assert_eq!(translation.len(), oxc_id.index());
-        if is_merged_into_parent(oxc_id, scoping, nodes) {
-            let parent = scoping
-                .scope_parent_id(oxc_id)
-                .expect("merged scope must have a parent");
-            translation.push(translation[parent]);
-        } else {
-            translation.push(ScopeId::from_usize(next_ir));
-            next_ir += 1;
+        let parent_routing = scoping.scope_parent_id(oxc_id).map(|p| translation[p]);
+        // Inherited filter: a child of a filtered subtree is itself
+        // filtered. `Some(None)` means the parent is filtered out.
+        if matches!(parent_routing, Some(None)) {
+            translation.push(None);
+            continue;
         }
+        let kind = nodes.kind(scoping.get_node_id(oxc_id));
+        if is_filtered_out(&kind) {
+            translation.push(None);
+            continue;
+        }
+        if is_merged_into_parent(oxc_id, scoping, nodes) {
+            let parent_ir = parent_routing
+                .flatten()
+                .expect("merged scope must have an IR-visible parent");
+            translation.push(Some(parent_ir));
+            continue;
+        }
+        translation.push(Some(ScopeId::from_usize(next_ir)));
+        next_ir += 1;
     }
 
     let mut scopes: IndexVec<ScopeId, ScopeData> = IndexVec::with_capacity(next_ir);
     let root_is_strict = matches!(source_type, SourceType::Module);
     for oxc_id in scoping.scope_descendants_from_root() {
-        if is_merged_into_parent(oxc_id, scoping, nodes) {
+        let Some(routing) = translation[oxc_id] else {
+            continue;
+        };
+        // Merged scopes share their IR id with their parent; only the
+        // first time we see that IR id (i.e. the parent) do we emit a
+        // row. Subsequent merged-in children fall through here.
+        if routing.index() < scopes.len() {
             continue;
         }
         let node_id = scoping.get_node_id(oxc_id);
@@ -130,7 +148,7 @@ pub(crate) fn build_scopes<'a>(
         let block = ast_node_of(&kind);
         let flags = scoping.scope_flags(oxc_id);
         let ty = derive_scope_type(flags, &kind, source_type);
-        let upper = scoping.scope_parent_id(oxc_id).map(|p| translation[p]);
+        let upper = scoping.scope_parent_id(oxc_id).and_then(|p| translation[p]);
         let is_strict = match upper {
             Some(upper_id) => scopes[upper_id].is_strict,
             None => root_is_strict,
@@ -217,6 +235,28 @@ fn is_merged_into_parent(oxc_id: OxcScopeId, scoping: &Scoping, nodes: &AstNodes
     let kind = nodes.kind(scoping.get_node_id(oxc_id));
     let parent_kind = nodes.kind(scoping.get_node_id(parent));
     matches!(kind, AstKind::BlockStatement(_)) && matches!(parent_kind, AstKind::CatchClause(_))
+}
+
+/// Predicate: should this scope (and its entire subtree) be omitted
+/// from the IR scope tree?
+///
+/// `oxc_semantic` allocates a scope for several TypeScript type-only
+/// constructs (`type X = ...`, `interface X { ... }`, `namespace X
+/// { ... }`, mapped / conditional types). The hand-rolled walker
+/// recognises the surrounding subtree via
+/// [`unsnarl_oxc_parity::is_type_only_subtree`] and never enters
+/// scope-creation for them; mirror that behaviour by dropping the
+/// scope's IR row outright. Filtering propagates to descendants in
+/// the calling loop via the inherited-filter check.
+fn is_filtered_out(kind: &AstKind<'_>) -> bool {
+    matches!(
+        kind,
+        AstKind::TSModuleDeclaration(_)
+            | AstKind::TSTypeAliasDeclaration(_)
+            | AstKind::TSInterfaceDeclaration(_)
+            | AstKind::TSConditionalType(_)
+            | AstKind::TSMappedType(_)
+    )
 }
 
 fn is_var_creating(flags: ScopeFlags) -> bool {
