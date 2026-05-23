@@ -550,50 +550,77 @@ fn push_through_chain(
     scopes[root].through.push(ref_id);
 }
 
-/// Reparent a reference to the eslint-scope-equivalent switch scope
-/// when `oxc_semantic`'s `scope_id` lands on either the bare
-/// `SwitchStatement` scope (so the case body lives one level too high)
-/// or the switch's own parent (so the discriminant or case-test lives
-/// one level too high).
+/// Reparent a reference to the eslint-scope-equivalent switch scope.
 ///
-/// Three shapes are handled, all triggered by `span ⊆ switch_span`:
+/// `oxc_semantic` places the discriminant / case-test identifiers of a
+/// `SwitchStatement` in the switch's *parent* scope (the discriminant
+/// is evaluated before the switch's body opens) and places case-body
+/// identifiers on the bare switch scope without a per-case Block.
+/// `super::scope_mapping` synthesises one Block scope per `SwitchCase`,
+/// and this helper redirects every reference whose identifier span
+/// lies inside any switch in `switch_cases` to the most specific
+/// eslint-scope-equivalent owner.
 ///
-/// 1. `from = switch_ir`, `span ⊆ case_span` → return case scope. This
-///    is the per-`SwitchCase` re-parenting introduced in commit
-///    `54499542`.
-/// 2. `from = switch_ir.upper`, `span ⊆ case_span` → return case
-///    scope. Covers `case <Expr>:` test identifiers that `oxc_semantic`
-///    classifies in the switch's parent rather than the switch scope.
-/// 3. `from = switch_ir.upper`, `span ⊄ any case_span` → return
-///    switch scope. Covers the `switch (Expr) { ... }` discriminant,
-///    which `oxc_semantic` classifies in the switch's parent.
+/// Walk every recorded switch and collect the innermost (smallest
+/// width) match whose:
 ///
-/// All other shapes (deeper descendants, references outside the
-/// switch entirely) return `from` unchanged.
+/// * `switch_span` contains the reference's identifier span, *and*
+/// * `from` is either the switch scope itself or any ancestor of it
+///   (i.e. `from` is not a descendant scope — a function nested inside
+///   a case body would have `from` deeper than the switch, and its
+///   identifiers must stay inside that function scope).
+///
+/// For the chosen switch, the case-Block scope is preferred over the
+/// bare switch scope whenever the span lies inside a specific case.
+/// Nested switches naturally select the deepest one because their
+/// `switch_span` is the smallest.
 fn reparent_to_switch_case(
     from: ScopeId,
     span: Span,
     scopes: &IndexVec<ScopeId, ScopeData>,
     switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) -> ScopeId {
+    let mut best: Option<(u32, ScopeId)> = None;
     for (&switch_ir, cases) in switch_cases {
         let switch_span = scopes[switch_ir].block.span;
         if span.start < switch_span.start || span.end > switch_span.end {
             continue;
         }
-        let switch_upper = scopes[switch_ir].upper;
-        let is_relevant = from == switch_ir || Some(from) == switch_upper;
-        if !is_relevant {
+        if !is_ancestor_or_self(scopes, switch_ir, from) {
             continue;
         }
+        let mut candidate_span = switch_span;
+        let mut candidate_ir = switch_ir;
         for (case_span, case_ir) in cases {
             if case_span.start <= span.start && span.end <= case_span.end {
-                return *case_ir;
+                candidate_span = *case_span;
+                candidate_ir = *case_ir;
+                break;
             }
         }
-        return switch_ir;
+        let width = candidate_span.end - candidate_span.start;
+        if best.is_none_or(|(w, _)| width < w) {
+            best = Some((width, candidate_ir));
+        }
     }
-    from
+    best.map(|(_, s)| s).unwrap_or(from)
+}
+
+/// Is `candidate` either `descendant` itself or any of its ancestors
+/// walked through `ScopeData::upper`?
+fn is_ancestor_or_self(
+    scopes: &IndexVec<ScopeId, ScopeData>,
+    descendant: ScopeId,
+    candidate: ScopeId,
+) -> bool {
+    let mut cur = Some(descendant);
+    while let Some(s) = cur {
+        if s == candidate {
+            return true;
+        }
+        cur = scopes[s].upper;
+    }
+    false
 }
 
 /// Walk every `VariableDeclarator` node and emit a write reference

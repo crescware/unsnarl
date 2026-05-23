@@ -257,44 +257,60 @@ pub(crate) fn build_variables(
     }
 }
 
-/// Reparent a binding to the eslint-scope-equivalent switch scope
-/// when `oxc_semantic` places it on either the bare `SwitchStatement`
-/// scope (binding inside a case body) or the switch's parent (a
-/// hoisted `var` whose declaration site lies between cases).
+/// Reparent a binding to the eslint-scope-equivalent switch scope.
 ///
-/// Three shapes are handled, all triggered by `span ⊆ switch_span`:
-///
-/// 1. `ir_scope = switch_ir`, `span ⊆ case_span` → return case scope.
-/// 2. `ir_scope = switch_ir.upper`, `span ⊆ case_span` → return case
-///    scope.
-/// 3. `ir_scope = switch_ir.upper`, `span ⊄ any case_span` → return
-///    switch scope.
-///
-/// Mirrors `super::reference_mapping::reparent_to_switch_case`.
+/// Mirrors `super::reference_mapping::reparent_to_switch_case`: pick
+/// the innermost switch whose `switch_span` contains `span` and whose
+/// scope chain includes `ir_scope` as `switch_ir` itself or any
+/// ancestor. Within that switch, prefer the case-Block scope whose
+/// span contains the binding, otherwise the bare switch scope.
 fn reparent_binding_to_switch_case(
     ir_scope: ScopeId,
     span: Span,
     scopes: &IndexVec<ScopeId, ScopeData>,
     switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) -> ScopeId {
+    let mut best: Option<(u32, ScopeId)> = None;
     for (&switch_ir, cases) in switch_cases {
         let switch_span = scopes[switch_ir].block.span;
         if span.start < switch_span.start || span.end > switch_span.end {
             continue;
         }
-        let switch_upper = scopes[switch_ir].upper;
-        let is_relevant = ir_scope == switch_ir || Some(ir_scope) == switch_upper;
-        if !is_relevant {
+        if !is_ancestor_or_self(scopes, switch_ir, ir_scope) {
             continue;
         }
+        let mut candidate_span = switch_span;
+        let mut candidate_ir = switch_ir;
         for (case_span, case_ir) in cases {
             if case_span.start <= span.start && span.end <= case_span.end {
-                return *case_ir;
+                candidate_span = *case_span;
+                candidate_ir = *case_ir;
+                break;
             }
         }
-        return switch_ir;
+        let width = candidate_span.end - candidate_span.start;
+        if best.is_none_or(|(w, _)| width < w) {
+            best = Some((width, candidate_ir));
+        }
     }
-    ir_scope
+    best.map(|(_, s)| s).unwrap_or(ir_scope)
+}
+
+/// Is `candidate` either `descendant` itself or any of its ancestors
+/// walked through `ScopeData::upper`?
+fn is_ancestor_or_self(
+    scopes: &IndexVec<ScopeId, ScopeData>,
+    descendant: ScopeId,
+    candidate: ScopeId,
+) -> bool {
+    let mut cur = Some(descendant);
+    while let Some(s) = cur {
+        if s == candidate {
+            return true;
+        }
+        cur = scopes[s].upper;
+    }
+    false
 }
 
 /// If `anchor` is the `Function` node of a named function expression,
