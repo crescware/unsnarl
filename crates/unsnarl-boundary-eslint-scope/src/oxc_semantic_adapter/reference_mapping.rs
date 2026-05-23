@@ -124,7 +124,7 @@ pub(crate) fn build_references(
                 let Some(from) = translation[oxc_ref.scope_id()] else {
                     continue;
                 };
-                let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let identifier = build_identifier(nodes, oxc_ref.node_id());
                 let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
                 let flags = convert_flags(oxc_ref.flags());
                 let new_id = references.push(ReferenceData {
@@ -153,7 +153,7 @@ pub(crate) fn build_references(
                 let Some(from) = translation[oxc_ref.scope_id()] else {
                     continue;
                 };
-                let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let identifier = build_identifier(nodes, oxc_ref.node_id());
                 let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
                 let flags = convert_flags(oxc_ref.flags());
                 let lookup = ensure_implicit_global(
@@ -216,7 +216,7 @@ pub(crate) fn build_references(
             let Some(from) = translation[oxc_ref.scope_id()] else {
                 continue;
             };
-            let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+            let identifier = build_identifier(nodes, oxc_ref.node_id());
             let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
             let flags = convert_flags(oxc_ref.flags());
 
@@ -429,13 +429,35 @@ fn mark_variable_declarator_init_reads(
     }
 }
 
-fn build_identifier(kind: AstKind<'_>) -> AstIdentifier {
+/// Build the IR `AstIdentifier` row for the reference's AST node.
+///
+/// `AstType` follows the hand-rolled walker's
+/// `scope_build_visitor::visit_identifier_reference` shape: an
+/// `IdentifierReference` nested under a `JSXMemberExpression` or a
+/// `JSXOpeningElement.name` slot carries `AstType::JSXIdentifier`
+/// because oxc represents the JSX-tag `<a.b />`'s `a` as
+/// `JSXMemberExpressionObject::IdentifierReference` rather than a
+/// `JSXIdentifier`. The IR contract still expects the JSX shape on
+/// the resulting reference / implicit-global definition rows, so
+/// detect the parent here and adjust the type.
+fn build_identifier(
+    nodes: &oxc_semantic::AstNodes<'_>,
+    node_id: oxc_semantic::NodeId,
+) -> AstIdentifier {
+    let kind = nodes.kind(node_id);
     match kind {
-        AstKind::IdentifierReference(ident) => AstIdentifier::new(
-            AstType::Identifier,
-            ident.name.as_str().to_string(),
-            ident.span,
-        ),
+        AstKind::IdentifierReference(ident) => {
+            let parent_kind = nodes.parent_kind(node_id);
+            let ast_type = if matches!(
+                parent_kind,
+                AstKind::JSXMemberExpression(_) | AstKind::JSXOpeningElement(_),
+            ) {
+                AstType::JSXIdentifier
+            } else {
+                AstType::Identifier
+            };
+            AstIdentifier::new(ast_type, ident.name.as_str().to_string(), ident.span)
+        }
         AstKind::JSXIdentifier(ident) => AstIdentifier::new(
             AstType::JSXIdentifier,
             ident.name.as_str().to_string(),
