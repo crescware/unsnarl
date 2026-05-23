@@ -133,6 +133,94 @@ fn line_for_utf16_offset_clamps_past_end_of_file() {
 }
 
 #[test]
+fn slice_utf16_returns_empty_when_start_is_at_or_past_end() {
+    let index = SourceIndex::build("abc");
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(0), Utf16CodeUnitOffset(0)),
+        ""
+    );
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(2), Utf16CodeUnitOffset(2)),
+        ""
+    );
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(3), Utf16CodeUnitOffset(1)),
+        ""
+    );
+}
+
+#[test]
+fn slice_utf16_on_ascii_only_source_matches_byte_slice() {
+    let raw = "let x = 1;\nlet y = 2;";
+    let index = SourceIndex::build(raw);
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(4), Utf16CodeUnitOffset(9)),
+        "x = 1"
+    );
+    assert_eq!(
+        index.slice_utf16(
+            Utf16CodeUnitOffset(0),
+            Utf16CodeUnitOffset(raw.len() as u32)
+        ),
+        raw
+    );
+}
+
+#[test]
+fn slice_utf16_spans_multiple_lines() {
+    let raw = "abc\ndef\nghi";
+    let index = SourceIndex::build(raw);
+    // From UTF-16 unit 2 (the `c` on line 1) to unit 9 (the `h` on
+    // line 3) — covers a newline and the entirety of line 2.
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(2), Utf16CodeUnitOffset(9)),
+        "c\ndef\ng"
+    );
+}
+
+#[test]
+fn slice_utf16_handles_non_ascii_inside_a_line() {
+    // `—` is 3 UTF-8 bytes / 1 UTF-16 code unit. Slicing
+    // UTF-16 [0, 2) over `—a` should give `—a`.
+    let raw = "—a";
+    let index = SourceIndex::build(raw);
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(0), Utf16CodeUnitOffset(2)),
+        "—a"
+    );
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(1), Utf16CodeUnitOffset(2)),
+        "a"
+    );
+}
+
+#[test]
+fn slice_utf16_handles_surrogate_pair() {
+    // `😀` (U+1F600) is 4 UTF-8 bytes / 2 UTF-16 code units. Slicing
+    // UTF-16 [0, 2) extracts the whole surrogate pair.
+    let raw = "😀x";
+    let index = SourceIndex::build(raw);
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(0), Utf16CodeUnitOffset(2)),
+        "😀"
+    );
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(0), Utf16CodeUnitOffset(3)),
+        "😀x"
+    );
+}
+
+#[test]
+fn slice_utf16_clamps_offsets_past_end_of_file() {
+    let raw = "abc";
+    let index = SourceIndex::build(raw);
+    assert_eq!(
+        index.slice_utf16(Utf16CodeUnitOffset(1), Utf16CodeUnitOffset(100)),
+        "bc"
+    );
+}
+
+#[test]
 fn line_for_utf16_offset_matches_span_at_line_for_ascii_only_source() {
     // For ASCII input UTF-8 byte offsets and UTF-16 code-unit offsets
     // coincide, so the two APIs should agree on every position.

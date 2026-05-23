@@ -5,30 +5,37 @@
 //! shape like `C.z = 1` shows up as `C.z = ...` without dragging
 //! the literal RHS into the diagram.
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::SerializedHeadExpression;
 
-pub fn render_head_expression(head: &SerializedHeadExpression, raw: &str) -> String {
+pub fn render_head_expression(
+    head: &SerializedHeadExpression,
+    source_index: &SourceIndex<'_>,
+) -> String {
     match head {
         SerializedHeadExpression::Identifier { name } => name.clone(),
         SerializedHeadExpression::Member { object, property } => {
-            format!("{}.{property}", render_head_expression(object, raw))
+            format!(
+                "{}.{property}",
+                render_head_expression(object, source_index)
+            )
         }
         SerializedHeadExpression::Call { callee } => {
-            format!("{}()", render_head_expression(callee, raw))
+            format!("{}()", render_head_expression(callee, source_index))
         }
         SerializedHeadExpression::New { callee } => {
-            format!("new {}()", render_head_expression(callee, raw))
+            format!("new {}()", render_head_expression(callee, source_index))
         }
         SerializedHeadExpression::Await { argument } => {
-            format!("await {}", render_head_expression(argument, raw))
+            format!("await {}", render_head_expression(argument, source_index))
         }
         SerializedHeadExpression::Assign {
             operator,
             left,
             right,
         } => {
-            let left_text = render_head_expression(&left.head, raw);
-            let right_text = render_head_expression(&right.head, raw);
+            let left_text = render_head_expression(&left.head, source_index);
+            let right_text = render_head_expression(&right.head, source_index);
             format!("{left_text} {} {right_text}", operator.as_str())
         }
         SerializedHeadExpression::Update {
@@ -36,7 +43,7 @@ pub fn render_head_expression(head: &SerializedHeadExpression, raw: &str) -> Str
             prefix,
             argument,
         } => {
-            let arg = render_head_expression(&argument.head, raw);
+            let arg = render_head_expression(&argument.head, source_index);
             if *prefix {
                 format!("{}{arg}", operator.as_str())
             } else {
@@ -47,32 +54,10 @@ pub fn render_head_expression(head: &SerializedHeadExpression, raw: &str) -> Str
         SerializedHeadExpression::Raw {
             start_span,
             end_span,
-        } => raw_slice_utf16(raw, start_span.offset.0, end_span.offset.0),
+        } => source_index
+            .slice_utf16(start_span.offset, end_span.offset)
+            .to_string(),
     }
-}
-
-/// Slice `raw` between two UTF-16 offsets. The IR carries offsets
-/// in UTF-16 code units (see `unsnarl_ir::primitive::span_from_offset`),
-/// so naive UTF-8 byte slicing would mis-cut when the source
-/// contains multi-byte characters.
-fn raw_slice_utf16(raw: &str, start: u32, end: u32) -> String {
-    let mut result = String::new();
-    let mut buf = [0u16; 2];
-    let mut consumed: u32 = 0;
-    for ch in raw.chars() {
-        let unit_count = ch.encode_utf16(&mut buf).len() as u32;
-        let next = consumed + unit_count;
-        if next <= start {
-            consumed = next;
-            continue;
-        }
-        if consumed >= end {
-            break;
-        }
-        result.push(ch);
-        consumed = next;
-    }
-    result
 }
 
 #[cfg(test)]

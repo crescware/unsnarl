@@ -5,6 +5,7 @@
 //! node. Returns `None` when the reference is not inside an
 //! ExpressionStatement (no synthetic stand-in is needed).
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::SerializedReference;
 
 use crate::visual_element_type::NodeTypeTag;
@@ -20,7 +21,7 @@ pub fn ensure_expression_statement_node(
     arena: &mut BuildArena,
     state: &mut BuildState,
     r: &SerializedReference,
-    raw: &str,
+    source_index: &SourceIndex<'_>,
     target: Container,
 ) -> Option<String> {
     let _t = TimingScope::start("ensure_expression_statement_node");
@@ -30,7 +31,7 @@ pub fn ensure_expression_statement_node(
         return Some(existing.clone());
     }
     let id = expression_statement_node_id(offset);
-    let name = render_head_expression(&container.head, raw);
+    let name = render_head_expression(&container.head, source_index);
     let start_line = container.start_span.line.0;
     let end_line = if container.end_span.line.0 != start_line {
         Some(container.end_span.line.0)

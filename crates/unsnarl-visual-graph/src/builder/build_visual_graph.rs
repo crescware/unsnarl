@@ -544,8 +544,13 @@ fn emit_reference_edges(
                 Some(sg) => Container::Subgraph(sg),
                 None => Container::Root,
             };
-            let expr_stmt_id =
-                ensure_expression_statement_node(arena, state, r, &ctx.ir.raw, target_container);
+            let expr_stmt_id = ensure_expression_statement_node(
+                arena,
+                state,
+                r,
+                &ctx.source_index,
+                target_container,
+            );
             let target_id = resolve_read_target_id(
                 arena,
                 state,

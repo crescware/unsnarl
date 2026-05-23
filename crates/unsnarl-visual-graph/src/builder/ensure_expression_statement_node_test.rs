@@ -1,5 +1,6 @@
 //! Sibling tests for [`ensure_expression_statement_node`].
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::SerializedExpressionStatementContainer;
 use unsnarl_ir::serialized::SerializedHeadExpression;
 
@@ -60,7 +61,13 @@ fn returns_none_when_ref_has_no_expression_statement_container() {
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
     let r = base_serialized_reference();
-    let id = ensure_expression_statement_node(&mut arena, &mut state, &r, "", Container::Root);
+    let id = ensure_expression_statement_node(
+        &mut arena,
+        &mut state,
+        &r,
+        &SourceIndex::build(""),
+        Container::Root,
+    );
     assert_eq!(id, None);
     assert!(arena.root_children.is_empty());
 }
@@ -74,7 +81,7 @@ fn renders_call_member_identifier_to_receiver_dot_property() {
         &mut arena,
         &mut state,
         &r,
-        "console.log(a);",
+        &SourceIndex::build("console.log(a);"),
         Container::Root,
     );
     assert_eq!(id.as_deref(), Some("expr_stmt_0"));
@@ -105,7 +112,13 @@ fn renders_bare_identifier_head_without_parens() {
     );
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
-    ensure_expression_statement_node(&mut arena, &mut state, &r, "a;", Container::Root);
+    ensure_expression_statement_node(
+        &mut arena,
+        &mut state,
+        &r,
+        &SourceIndex::build("a;"),
+        Container::Root,
+    );
     let VisualNode::Synthetic(s) = finalize_one_node(arena).expect("node") else {
         panic!("expected synthetic");
     };
@@ -132,7 +145,13 @@ fn renders_awaited_chain() {
     let r = ref_with_head("r1", 0, 50, 1, 5, head);
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
-    ensure_expression_statement_node(&mut arena, &mut state, &r, "", Container::Root);
+    ensure_expression_statement_node(
+        &mut arena,
+        &mut state,
+        &r,
+        &SourceIndex::build(""),
+        Container::Root,
+    );
     let VisualNode::Synthetic(s) = finalize_one_node(arena).expect("node") else {
         panic!("expected synthetic");
     };
@@ -148,7 +167,13 @@ fn slices_original_source_for_raw_head() {
     let r = ref_with_head("r1", 0, 6, 3, 3, head);
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
-    ensure_expression_statement_node(&mut arena, &mut state, &r, "x = 1;", Container::Root);
+    ensure_expression_statement_node(
+        &mut arena,
+        &mut state,
+        &r,
+        &SourceIndex::build("x = 1;"),
+        Container::Root,
+    );
     let VisualNode::Synthetic(s) = finalize_one_node(arena).expect("node") else {
         panic!("expected synthetic");
     };
@@ -164,7 +189,7 @@ fn sets_end_line_when_statement_spans_multiple_lines() {
         &mut arena,
         &mut state,
         &r,
-        "console.log(\n  a,\n);",
+        &SourceIndex::build("console.log(\n  a,\n);"),
         Container::Root,
     );
     let VisualNode::Synthetic(s) = finalize_one_node(arena).expect("node") else {
@@ -180,11 +205,11 @@ fn returns_cached_id_and_does_not_re_append_for_refs_in_same_statement() {
     let ref_b = ref_with_head("r2", 0, 15, 7, 7, console_log_head());
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
-    let raw = "console.log(a);";
+    let index = SourceIndex::build("console.log(a);");
     let id_a =
-        ensure_expression_statement_node(&mut arena, &mut state, &ref_a, raw, Container::Root);
+        ensure_expression_statement_node(&mut arena, &mut state, &ref_a, &index, Container::Root);
     let id_b =
-        ensure_expression_statement_node(&mut arena, &mut state, &ref_b, raw, Container::Root);
+        ensure_expression_statement_node(&mut arena, &mut state, &ref_b, &index, Container::Root);
     assert_eq!(id_a, id_b);
     // Single node appended to root.
     assert_eq!(arena.root_children.len(), 1);
