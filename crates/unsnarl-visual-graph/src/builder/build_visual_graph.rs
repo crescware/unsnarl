@@ -178,13 +178,18 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
     }
 
     let mut sorted_cases_by_container: HashMap<String, Vec<&SerializedScope>> = HashMap::new();
+    let mut branch_scopes_by_container: HashMap<String, Vec<&SerializedScope>> = HashMap::new();
     for s in &ir.scopes {
         let Some(ckey) = branch_container_key(s) else {
             continue;
         };
         if ckey.starts_with("switch:") {
-            sorted_cases_by_container.entry(ckey).or_default().push(s);
+            sorted_cases_by_container
+                .entry(ckey.clone())
+                .or_default()
+                .push(s);
         }
+        branch_scopes_by_container.entry(ckey).or_default().push(s);
     }
     for arr in sorted_cases_by_container.values_mut() {
         arr.sort_by_key(|s| s.block.span.offset.0);
@@ -199,6 +204,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         write_ops_by_scope,
         write_op_by_ref,
         sorted_cases_by_container,
+        branch_scopes_by_container,
         depths: opts.depths.clone(),
         source_index: SourceIndex::build(&ir.raw),
     };

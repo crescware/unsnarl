@@ -50,12 +50,10 @@ pub fn read_origins(
     };
 
     let branch_scope_ids: Vec<&str> = ctx
-        .ir
-        .scopes
-        .iter()
-        .filter(|s| branch_container_key(s).as_deref() == Some(container_key.as_str()))
-        .map(|s| s.id.value())
-        .collect();
+        .branch_scopes_by_container
+        .get(&container_key)
+        .map(|scopes| scopes.iter().map(|s| s.id.value()).collect())
+        .unwrap_or_default();
 
     let is_switch = container_key.starts_with("switch:");
     let sorted_cases = if is_switch {

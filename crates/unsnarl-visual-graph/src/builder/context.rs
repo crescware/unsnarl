@@ -48,6 +48,12 @@ pub struct BuilderContext<'a> {
     /// look like `switch:<parentScope>:<offset>`; the value lets
     /// fallthrough handling pick the textual "last case".
     pub sorted_cases_by_container: HashMap<String, Vec<&'a SerializedScope>>,
+    /// `branch-container key → every scope sharing that key`. Built
+    /// once per fixture by walking `ir.scopes`. `read_origins` uses
+    /// it to fan out across the sibling branches of an `if` / `try` /
+    /// `switch` container without re-filtering `ir.scopes` per
+    /// reference. Order matches `ir.scopes`'s source order.
+    pub branch_scopes_by_container: HashMap<String, Vec<&'a SerializedScope>>,
     /// Depth ceiling for the pruning pass. `None` means
     /// `is_collapsed` returns false for every scope and the full
     /// graph is rendered.
