@@ -368,10 +368,19 @@ fn push_through_chain(
 }
 
 /// Walk every `VariableDeclarator` node and emit a write reference
-/// with `init = true` for each binding identifier inside its pattern
-/// whose declarator has an `init` expression. Mirrors the
-/// `classify_identifier` → `WRITE + init = true` path in the
-/// hand-rolled walker for the `VariableDeclarator.id` slot.
+/// with `init = true` for each declarator whose `id` slot is itself a
+/// `BindingIdentifier` and whose declarator has an `init` expression.
+/// Mirrors the `classify_identifier` → `WRITE + init = true` path in
+/// the hand-rolled walker for the immediate `VariableDeclarator.id`
+/// slot.
+///
+/// Destructuring patterns (`var [a, b] = ...`, `var { a } = ...`,
+/// `var [{ c }] = ...`, …) are deliberately skipped: the hand-rolled
+/// walker's `classify_identifier` returns `ClassifyResult::Binding`
+/// for every `BindingIdentifier` reached through a pattern step, so
+/// no reference row is created for nested binding identifiers — the
+/// parity baseline therefore carries no synthetic init write for the
+/// pattern's leaf bindings.
 fn synthesise_init_references(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
@@ -388,33 +397,32 @@ fn synthesise_init_references(
         if vd.init.is_none() {
             continue;
         }
+        let BindingPattern::BindingIdentifier(binding) = &vd.id else {
+            continue;
+        };
+        let Some(symbol_id) = binding.symbol_id.get() else {
+            continue;
+        };
+        let Some(var_id) = symbol_to_variable[symbol_id] else {
+            continue;
+        };
         let Some(from) = translation[node.scope_id()] else {
             continue;
         };
-        let mut bindings: Vec<&BindingIdentifier<'_>> = Vec::new();
-        collect_binding_idents(&vd.id, &mut bindings);
-        for binding in bindings {
-            let Some(symbol_id) = binding.symbol_id.get() else {
-                continue;
-            };
-            let Some(var_id) = symbol_to_variable[symbol_id] else {
-                continue;
-            };
-            let identifier = AstIdentifier::new(
-                AstType::Identifier,
-                binding.name.as_str().to_string(),
-                binding.span,
-            );
-            let new_id = references.push(ReferenceData {
-                identifier,
-                from,
-                resolved: Some(var_id),
-                init: true,
-                flags: ReferenceFlags::WRITE,
-            });
-            scopes[from].references.push(new_id);
-            variables[var_id].references.push(new_id);
-        }
+        let identifier = AstIdentifier::new(
+            AstType::Identifier,
+            binding.name.as_str().to_string(),
+            binding.span,
+        );
+        let new_id = references.push(ReferenceData {
+            identifier,
+            from,
+            resolved: Some(var_id),
+            init: true,
+            flags: ReferenceFlags::WRITE,
+        });
+        scopes[from].references.push(new_id);
+        variables[var_id].references.push(new_id);
     }
 }
 

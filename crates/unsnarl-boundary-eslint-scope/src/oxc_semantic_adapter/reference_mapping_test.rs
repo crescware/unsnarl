@@ -199,28 +199,28 @@ fn variable_declarator_with_init_emits_synthetic_init_reference() {
 }
 
 #[test]
-fn destructuring_pattern_emits_one_init_reference_per_binding() {
+fn destructuring_pattern_emits_no_init_writes_at_leaf_bindings() {
+    // Mirrors `classify_identifier`: a `BindingIdentifier` reached
+    // through a destructuring pattern step (ObjectProperty.value,
+    // ArrayPattern element, AssignmentPattern.left) returns
+    // `ClassifyResult::Binding` — no reference row. Only the immediate
+    // `VariableDeclarator.id = BindingIdentifier` shape promotes to a
+    // synthetic `WRITE + init = true` reference. The parity baseline
+    // therefore carries no init-write reference for `a` / `c` in
+    // `const { a, b: c } = obj;`.
     with_arena(
         "const { a, b: c } = obj;",
         Language::Js,
         SourceType::Module,
         |b| {
-            let a_var = b.scopes[root()].set().get("a").copied().expect("a exists");
-            let c_var = b.scopes[root()].set().get("c").copied().expect("c exists");
-            // `obj` is unresolved → one implicit-global ref. Plus one
-            // init ref per leaf binding (a, c). Filter to init-only.
-            let init_refs: Vec<_> = b.references.iter().filter(|r| r.init).collect();
-            assert_eq!(init_refs.len(), 2);
-            let init_for_a = init_refs
+            let _a_var = b.scopes[root()].set().get("a").copied().expect("a exists");
+            let _c_var = b.scopes[root()].set().get("c").copied().expect("c exists");
+            let init_writes: Vec<_> = b
+                .references
                 .iter()
-                .find(|r| r.identifier.name() == "a")
-                .unwrap();
-            assert_eq!(init_for_a.resolved, Some(a_var));
-            let init_for_c = init_refs
-                .iter()
-                .find(|r| r.identifier.name() == "c")
-                .unwrap();
-            assert_eq!(init_for_c.resolved, Some(c_var));
+                .filter(|r| r.init && (r.flags & ReferenceFlags::WRITE).0 != 0)
+                .collect();
+            assert_eq!(init_writes.len(), 0);
         },
     );
 }
