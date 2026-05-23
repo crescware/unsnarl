@@ -1,5 +1,5 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
-// Run `uns -f stats` against every `.js` / `.ts` file under
+// Run `uns` (default formatter) against every `.js` / `.ts` file under
 // `ts/node_modules` (excluding `*.d.ts`) and rank them by per-file
 // wall-clock time in milliseconds. Sequential by design so the
 // timings are not contaminated by parallel CPU contention.
@@ -78,7 +78,7 @@ for (const abs of files) {
   // exactly the same way `scripts/bench-parity.ts` does it.
   const start = performance.now();
   const out = await new Deno.Command(UNS_BIN, {
-    args: ["-f", "stats", abs],
+    args: [abs],
     stdout: "null",
     stderr: "null",
   }).output();
