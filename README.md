@@ -66,6 +66,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 |       | `--out-file <path>`      | Write to that exact file path — see Writing output            |
 |       | `--plugin <names>`       | Enable bundled plugin(s) (repeatable) — see Plugins           |
 |       | `--debug`                | Annotate Mermaid labels with `NODE_KIND` / `SUBGRAPH_KIND`    |
+|       | `--verbose`              | Stream diagnostic and timing logs to stderr                   |
 | `-v`  | `--version`              | Show version                                                  |
 | `-h`  | `--help`                 | Show help                                                     |
 
@@ -323,9 +324,8 @@ Workspace tasks are defined in `mise.toml` and invoked via
 ## Stack
 
 - **Language**: Rust (edition 2021, MSRV 1.95).
-- **Workspace**: 17 crates under `crates/`; the CLI binary `uns` is produced by `crates/unsnarl`.
+- **Workspace**: Cargo workspace under `crates/`; the CLI binary `uns` is produced by `crates/unsnarl`.
 - **Parser / AST**: [oxc][oxc] (`oxc_parser` / `oxc_ast` / `oxc_ast_visit`).
-- **CLI**: [`clap`](https://docs.rs/clap).
 - **Task runner**: [mise](https://mise.jdx.dev/) pins the toolchain and exposes the workspace tasks above.
 - **Helper scripts**: Deno TypeScript modules under `scripts/`.
 - **Reference implementation**: TypeScript port under `ts/`, kept in lockstep for IR-byte parity.

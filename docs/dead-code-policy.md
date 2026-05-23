@@ -36,13 +36,14 @@ file, line number, and the matching line.
 ## Why this isn't enforced by clippy or `forbid(dead_code)`
 
 The natural-looking shortcut — `[workspace.lints.rust] dead_code =
-"forbid"` — does not work in this workspace. `clap`'s `Parser` and
-`ValueEnum` derive macros expand to code that itself contains
-`#[allow(dead_code)]` on synthetic items. Under `forbid`, the macro
-expansion fails to compile (`E0453: allow(dead_code) incompatible with
-previous forbid`), so every type using those derives in the
-`unsnarl` CLI crate stops building. There is no way to scope
-`forbid(dead_code)` to user-written attributes only.
+"forbid"` — is too broad. `forbid` also escalates the underlying
+`dead_code` warning into a hard compile error, blocking transient
+unused items that the warning level is meant to surface during
+iteration (e.g. a function temporarily unreferenced mid-refactor that
+still belongs in the tree). The intent here is narrower: leave the
+warning in place so unused code stays visible, but reject the
+`#[allow(dead_code)]` escape hatch that turns it off indefinitely.
+rustc's lint levels can't express that split.
 
 Clippy's `clippy::allow_attributes` restriction lint bans every
 `#[allow(...)]` uniformly. Adopting it would also reject the legitimate
