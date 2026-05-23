@@ -316,5 +316,6 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
         write_op_by_ref: HashMap::new(),
         sorted_cases_by_container: HashMap::new(),
         depths: None,
+        source_index: unsnarl_ir::primitive::SourceIndex::build(&ir.raw),
     }
 }

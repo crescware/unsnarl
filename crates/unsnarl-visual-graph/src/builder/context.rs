@@ -10,6 +10,7 @@
 use std::collections::HashMap;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::{SerializedIR, SerializedScope, SerializedVariable};
 
 use super::write_op::WriteOp;
@@ -51,4 +52,8 @@ pub struct BuilderContext<'a> {
     /// `is_collapsed` returns false for every scope and the full
     /// graph is rendered.
     pub depths: Option<NestingDepths>,
+    /// Precomputed line-start / UTF-16 index over `ir.raw`. Lookups
+    /// such as `line_for_offset(offset)` resolve in `O(log lines)`
+    /// rather than re-scanning `raw` from byte 0 each call.
+    pub source_index: SourceIndex<'a>,
 }

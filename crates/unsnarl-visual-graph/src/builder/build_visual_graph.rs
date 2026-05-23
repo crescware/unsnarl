@@ -10,6 +10,7 @@
 
 use std::collections::{HashMap, HashSet};
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::{
     SerializedDefinition, SerializedIR, SerializedReference, SerializedScope, SerializedVariable,
@@ -199,6 +200,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         write_op_by_ref,
         sorted_cases_by_container,
         depths: opts.depths.clone(),
+        source_index: SourceIndex::build(&ir.raw),
     };
     let mut state = BuildState::new();
     let mut arena = BuildArena::new();

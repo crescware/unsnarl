@@ -13,6 +13,7 @@
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::SerializedScope;
 
 use crate::direction::Direction;
@@ -29,13 +30,13 @@ use super::if_test_node_id::if_test_node_id;
 use super::line_for_offset::line_for_offset;
 use super::state::BuildState;
 
-fn make_if_test_anchor(id: String, offset: u32, raw: &str) -> VisualNode {
+fn make_if_test_anchor(id: String, offset: u32, source_index: &SourceIndex<'_>) -> VisualNode {
     VisualNode::Synthetic(SyntheticVisualNode {
         r#type: NodeTypeTag::Node,
         id,
         kind: SyntheticNodeKind::SyntheticIfStatementTest,
         name: "if-test".to_string(),
-        line: line_for_offset(raw, offset),
+        line: line_for_offset(source_index, offset),
         end_line: None,
         is_jsx_element: false,
         unused: false,
@@ -49,13 +50,13 @@ fn push_if_test_anchor(
     parent_scope_id: &str,
     offset: u32,
     container: Container,
-    raw: &str,
+    source_index: &SourceIndex<'_>,
 ) {
     if state.if_test_anchor_by_offset.contains_key(&offset) {
         return;
     }
     let id = if_test_node_id(parent_scope_id, offset);
-    let node = make_if_test_anchor(id.clone(), offset, raw);
+    let node = make_if_test_anchor(id.clone(), offset, source_index);
     let idx = arena.push_node(node);
     arena.append_child(container, ElementHandle::Node(idx));
     state.if_test_anchor_by_offset.insert(offset, id);
@@ -74,7 +75,7 @@ fn attach_test_anchor_to_consequent(
     consequent: &SerializedScope,
     offset: u32,
     fallback_container: Container,
-    raw: &str,
+    source_index: &SourceIndex<'_>,
 ) {
     if state.if_test_anchor_by_offset.contains_key(&offset) {
         return;
@@ -83,7 +84,7 @@ fn attach_test_anchor_to_consequent(
     if let Some(body_sg) = body_sg {
         let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
         let id = if_test_node_id(parent_id, offset);
-        let node = make_if_test_anchor(id.clone(), offset, raw);
+        let node = make_if_test_anchor(id.clone(), offset, source_index);
         let idx = arena.push_node(node);
         arena.prepend_child(Container::Subgraph(body_sg), ElementHandle::Node(idx));
         state.if_test_anchor_by_offset.insert(offset, id);
@@ -96,7 +97,14 @@ fn attach_test_anchor_to_consequent(
         return;
     }
     let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
-    push_if_test_anchor(arena, state, parent_id, offset, fallback_container, raw);
+    push_if_test_anchor(
+        arena,
+        state,
+        parent_id,
+        offset,
+        fallback_container,
+        source_index,
+    );
 }
 
 pub fn build_children(
@@ -152,7 +160,7 @@ pub fn build_children(
                     lone,
                     offset,
                     container,
-                    &ctx.ir.raw,
+                    &ctx.source_index,
                 );
             }
             i = j;
@@ -173,7 +181,7 @@ pub fn build_children(
             r#type: SubgraphTypeTag::Subgraph,
             id: container_id,
             kind: OwnedSubgraphKind::IfElseContainer,
-            line: line_for_offset(&ctx.ir.raw, offset),
+            line: line_for_offset(&ctx.source_index, offset),
             end_line: None,
             direction: Direction::RL,
             extras: OwnedExtras::IfElseContainer { has_else },
@@ -209,7 +217,7 @@ pub fn build_children(
                 g,
                 off,
                 Container::Subgraph(container_idx),
-                &ctx.ir.raw,
+                &ctx.source_index,
             );
         }
 
