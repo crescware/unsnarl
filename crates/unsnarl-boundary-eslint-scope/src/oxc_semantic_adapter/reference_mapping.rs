@@ -274,6 +274,18 @@ pub(crate) fn build_references(
         switch_cases,
     );
 
+    synthesise_identifier_name_references(
+        semantic,
+        scopes,
+        variables,
+        &mut references,
+        definitions,
+        &mut implicit_globals,
+        translation,
+        root,
+        switch_cases,
+    );
+
     mark_variable_declarator_init_reads(semantic, &mut references);
 
     rebind_inner_class_name_references(scopes, variables, &mut references, inner_class_names);
@@ -713,6 +725,91 @@ fn synthesise_parameter_property_references(
 
 fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
+}
+
+/// Synthesise implicit-global Read references at `IdentifierName`
+/// positions that the hand-rolled walker treats as references via
+/// `scope_build_visitor::visit_identifier_name`.
+///
+/// `oxc_semantic` does not emit `Reference` rows for `IdentifierName`
+/// nodes — those are syntactic identifiers (e.g. the `meta` /
+/// `property` slots of a `MetaProperty`, or an `ImportAttribute.key`
+/// when keyed by an `Identifier`). The hand-rolled walker, however,
+/// classifies them as plain reads and routes them through the
+/// implicit-global synthesis path. Walk every relevant AST node and
+/// emit the corresponding read references so the IR carries the
+/// same `scope#0:new@27` / `scope#0:target@31` /
+/// `scope#0:type@<offset>` implicit-global variables the parity
+/// baseline shows.
+///
+/// Currently covered: [`MetaProperty.meta`], [`MetaProperty.property`],
+/// [`ImportAttribute.key`] when the key is an identifier shape (not a
+/// string literal). `ExportSpecifier.local` and
+/// `ExportAllDeclaration.exported` are covered indirectly through
+/// `oxc_semantic`'s own reference table when the identifier matches
+/// an in-scope binding, and otherwise stay unbound — the parity
+/// baseline treats them the same way.
+#[allow(clippy::too_many_arguments)]
+fn synthesise_identifier_name_references(
+    semantic: &Semantic<'_>,
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    references: &mut IndexVec<ReferenceId, ReferenceData>,
+    definitions: &mut IndexVec<DefinitionId, DefinitionData>,
+    implicit_globals: &mut HashMap<String, VariableId>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    root: ScopeId,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
+) {
+    use oxc_ast::ast::ImportAttributeKey;
+
+    let nodes = semantic.nodes();
+    let mut sites: Vec<(ScopeId, &str, Span)> = Vec::new();
+    for node in nodes.iter() {
+        let Some(from) = translation[node.scope_id()] else {
+            continue;
+        };
+        match node.kind() {
+            AstKind::MetaProperty(mp) => {
+                sites.push((from, mp.meta.name.as_str(), mp.meta.span));
+                sites.push((from, mp.property.name.as_str(), mp.property.span));
+            }
+            AstKind::ImportAttribute(ia) => {
+                if let ImportAttributeKey::Identifier(id) = &ia.key {
+                    sites.push((from, id.name.as_str(), id.span));
+                }
+            }
+            _ => {}
+        }
+    }
+    // Emit in source order so first-occurrence implicit-global synthesis
+    // mirrors the hand-rolled walker.
+    sites.sort_by_key(|(_, _, span)| span.start);
+    for (from, name, span) in sites {
+        let identifier = AstIdentifier::new(AstType::Identifier, name.to_string(), span);
+        let from = reparent_to_switch_case(from, span, scopes, switch_cases);
+        let lookup = ensure_implicit_global(
+            scopes,
+            variables,
+            definitions,
+            implicit_globals,
+            root,
+            name,
+            &identifier,
+        );
+        let new_id = references.push(ReferenceData {
+            identifier,
+            from,
+            resolved: Some(lookup.var_id),
+            init: false,
+            flags: ReferenceFlags::READ,
+        });
+        scopes[from].references.push(new_id);
+        variables[lookup.var_id].references.push(new_id);
+        if lookup.newly_created {
+            push_through_chain(scopes, from, root, new_id);
+        }
+    }
 }
 
 fn collect_binding_idents<'a, 'b>(
