@@ -70,13 +70,19 @@
 //! ## Known divergences (deferred to follow-up commits)
 //!
 //! 1. **`FunctionExpressionName`**: not synthesised here (see above).
-//! 2. **`ClassFieldInitializer`**: eslint-scope creates a per-field
-//!    initializer scope; `oxc_semantic` does not. Synthesis is a
-//!    follow-up.
 //!
-//! Each item is gated on a parity-harness signal (Phase 2 step 5);
-//! the comment is kept in code so reviewers see the exact scope of
-//! this commit's coverage rather than discovering it from test output.
+//! `ClassFieldInitializer` is absent from both sides intentionally:
+//! the npm `eslint-scope` package would create one per
+//! `PropertyDefinition` initialiser, but the boundary's hand-rolled
+//! walker does not emit one (the parity fixtures' `expected.ir.json`
+//! files confirm this — class scopes hold field-initialiser references
+//! directly, with no nested `class-field-initializer` row). The
+//! adapter follows suit and emits no such scope either.
+//!
+//! Remaining divergences are gated on a parity-harness signal (Phase
+//! 2 step 5); the comment is kept in code so reviewers see the exact
+//! scope of this commit's coverage rather than discovering it from
+//! test output.
 
 use std::collections::HashMap;
 

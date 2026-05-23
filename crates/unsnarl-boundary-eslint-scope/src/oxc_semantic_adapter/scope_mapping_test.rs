@@ -129,6 +129,24 @@ fn top_level_block_statement_creates_block_scope_with_parent_var_scope() {
     });
 }
 
+/// The hand-rolled walker — and therefore the parity baseline — does
+/// not emit a `class-field-initializer` scope for a class field's
+/// initialiser expression, even though the npm `eslint-scope` package
+/// would. Pin that behaviour here so any future drift is observable.
+#[test]
+fn class_field_initializer_does_not_create_its_own_scope() {
+    with_scopes(
+        "function f(seed) { return class { x = seed; }; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            assert!(scopes
+                .iter()
+                .all(|s| !matches!(s.r#type, ScopeType::ClassFieldInitializer)));
+        },
+    );
+}
+
 #[test]
 fn class_declaration_creates_class_scope_inheriting_parent_strictness() {
     with_scopes("class C {}", Language::Js, SourceType::Script, |scopes| {
