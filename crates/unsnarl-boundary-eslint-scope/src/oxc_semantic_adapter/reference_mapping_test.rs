@@ -207,7 +207,10 @@ fn destructuring_pattern_emits_no_init_writes_at_leaf_bindings() {
     // `VariableDeclarator.id = BindingIdentifier` shape promotes to a
     // synthetic `WRITE + init = true` reference. The parity baseline
     // therefore carries no init-write reference for `a` / `c` in
-    // `const { a, b: c } = obj;`.
+    // `const { a, b: c } = obj;`; the only `init = true` reference is
+    // the read of `obj` itself, which sits at
+    // `VariableDeclarator.init` and gets the flag via
+    // `mark_variable_declarator_init_reads`.
     with_arena(
         "const { a, b: c } = obj;",
         Language::Js,
@@ -221,6 +224,13 @@ fn destructuring_pattern_emits_no_init_writes_at_leaf_bindings() {
                 .filter(|r| r.init && (r.flags & ReferenceFlags::WRITE).0 != 0)
                 .collect();
             assert_eq!(init_writes.len(), 0);
+            let init_reads: Vec<_> = b
+                .references
+                .iter()
+                .filter(|r| r.init && (r.flags & ReferenceFlags::WRITE).0 == 0)
+                .collect();
+            assert_eq!(init_reads.len(), 1);
+            assert_eq!(init_reads[0].identifier.name(), "obj");
         },
     );
 }

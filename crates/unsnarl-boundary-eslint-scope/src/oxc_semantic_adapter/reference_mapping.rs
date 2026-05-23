@@ -262,7 +262,56 @@ pub(crate) fn build_references(
         root,
     );
 
+    mark_variable_declarator_init_reads(semantic, &mut references);
+
     references
+}
+
+/// Mirror `classify_ordinary_reference`'s `init = true` flag for read
+/// references that sit directly in the `init` slot of a
+/// [`oxc_ast::ast::VariableDeclarator`].
+///
+/// The hand-rolled walker stamps `init = true` on any identifier whose
+/// parent is `VariableDeclarator` and whose slot key is `"init"` (see
+/// `crate::classify::classify_ordinary_reference`). The matching
+/// references in this adapter come from [`oxc_semantic::Scoping`]'s
+/// resolved-reference table (the regular Loop 1 above) or from the
+/// `unresolved` loop, both of which default `init` to `false`. Walk
+/// every `VariableDeclarator` in the program, look up the identifier
+/// at the immediate `init` position, and stamp the matching
+/// `ReferenceData::init` to `true`.
+///
+/// Only the immediate-child identifier case is handled: identifiers
+/// nested inside a wrapping expression (`const x = a + b`) keep
+/// `init = false` because `classify_ordinary_reference` sees a parent
+/// like `BinaryExpression` rather than `VariableDeclarator` for them,
+/// matching the hand-rolled walker's behaviour.
+fn mark_variable_declarator_init_reads(
+    semantic: &oxc_semantic::Semantic<'_>,
+    references: &mut IndexVec<ReferenceId, ReferenceData>,
+) {
+    use oxc_ast::ast::Expression;
+
+    let mut init_spans: HashSet<(u32, u32)> = HashSet::new();
+    for node in semantic.nodes().iter() {
+        let AstKind::VariableDeclarator(vd) = node.kind() else {
+            continue;
+        };
+        let Some(init) = &vd.init else {
+            continue;
+        };
+        if let Expression::Identifier(id) = init {
+            init_spans.insert((id.span.start, id.span.end));
+        }
+    }
+    if init_spans.is_empty() {
+        return;
+    }
+    for r in references.iter_mut() {
+        if init_spans.contains(&(r.identifier.span.start, r.identifier.span.end)) {
+            r.init = true;
+        }
+    }
 }
 
 fn build_identifier(kind: AstKind<'_>) -> AstIdentifier {
