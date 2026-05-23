@@ -54,9 +54,10 @@ pub fn run(args: &Args) -> ExitCode {
 /// alongside the in-stage `info!` payload events (input/output
 /// sizes, IR / graph counts) needed to spot bottlenecks. Called only
 /// when `--verbose` is set. Wrapped in `try_init` so a stray double
-/// install (e.g. an embedder calling `run` twice) is a no-op rather
-/// than a panic.
-fn init_verbose_tracing() {
+/// install (e.g. an embedder calling `run` twice, or `main` having
+/// already installed it to time the pre-`Args::parse` window) is a
+/// no-op rather than a panic.
+pub fn init_verbose_tracing() {
     use tracing_subscriber::fmt::format::FmtSpan;
     let _ = tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
