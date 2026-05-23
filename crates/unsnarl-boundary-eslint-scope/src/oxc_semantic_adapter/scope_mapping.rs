@@ -394,6 +394,15 @@ fn is_merged_into_parent(oxc_id: OxcScopeId, scoping: &Scoping, nodes: &AstNodes
 /// scope's IR row outright. Filtering propagates to descendants in
 /// the calling loop via the inherited-filter check.
 fn is_filtered_out(kind: &AstKind<'_>) -> bool {
+    if let AstKind::Function(func) = kind {
+        if matches!(
+            func.r#type,
+            oxc_ast::ast::FunctionType::TSDeclareFunction
+                | oxc_ast::ast::FunctionType::TSEmptyBodyFunctionExpression
+        ) {
+            return true;
+        }
+    }
     matches!(
         kind,
         AstKind::TSModuleDeclaration(_)
@@ -401,6 +410,8 @@ fn is_filtered_out(kind: &AstKind<'_>) -> bool {
             | AstKind::TSInterfaceDeclaration(_)
             | AstKind::TSConditionalType(_)
             | AstKind::TSMappedType(_)
+            | AstKind::TSEnumDeclaration(_)
+            | AstKind::TSEnumBody(_)
     )
 }
 

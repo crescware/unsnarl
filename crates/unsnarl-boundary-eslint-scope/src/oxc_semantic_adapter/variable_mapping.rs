@@ -207,6 +207,9 @@ pub(crate) fn build_variables(
                 synthetic_unresolved.insert(symbol_id);
                 continue;
             }
+            if is_type_only_function_declaration(scoping, nodes, symbol_id) {
+                continue;
+            }
             let identifiers = build_identifiers(scoping, symbol_id, &name);
             // `oxc_semantic` keeps every per-`SwitchCase` binding on the
             // enclosing `SwitchStatement` scope. The eslint-scope model
@@ -345,6 +348,27 @@ fn is_typescript_parameter_property(
         AstKind::FormalParameter(fp) => fp.accessibility.is_some() || fp.readonly || fp.r#override,
         _ => false,
     }
+}
+
+/// Returns true if `symbol_id`'s declaration is a TypeScript
+/// type-only function (`declare function f(): void`, parsed by oxc as
+/// `Function { type: TSDeclareFunction, ... }`, or an overload
+/// signature parsed as `TSEmptyBodyFunctionExpression`). The
+/// hand-rolled walker drops such functions via `type_only_depth`, so
+/// the binding never makes it into the IR variable list.
+fn is_type_only_function_declaration(
+    scoping: &Scoping,
+    nodes: &oxc_semantic::AstNodes<'_>,
+    symbol_id: SymbolId,
+) -> bool {
+    let kind = nodes.kind(scoping.symbol_declaration(symbol_id));
+    let AstKind::Function(func) = kind else {
+        return false;
+    };
+    matches!(
+        func.r#type,
+        FunctionType::TSDeclareFunction | FunctionType::TSEmptyBodyFunctionExpression
+    )
 }
 
 /// If `anchor` is the `Class` node of a named class *declaration*,
