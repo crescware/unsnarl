@@ -9,7 +9,7 @@ use std::collections::HashMap;
 
 use unsnarl_ir::language::Language;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::reference::predicate_container::PredicateContainer;
 use unsnarl_ir::scope::block_context::{BlockContext, CaseClauseBlockContext, OtherBlockContext};
 use unsnarl_ir::scope_type::ScopeType;
@@ -42,7 +42,7 @@ pub(crate) fn span_at(line: u32, column: u32, offset: u32) -> Span {
     Span {
         line: SourceLine(line),
         column: SourceColumn(column),
-        offset: SourceOffset(offset),
+        offset: Utf16CodeUnitOffset(offset),
     }
 }
 
@@ -99,8 +99,8 @@ pub(crate) fn other_block_context(
     BlockContext::Other(OtherBlockContext::new(
         parent_type,
         key.to_string(),
-        SourceOffset(parent_span_offset),
-        if_chain_root_offset.map(SourceOffset),
+        Utf16CodeUnitOffset(parent_span_offset),
+        if_chain_root_offset.map(Utf16CodeUnitOffset),
     ))
 }
 
@@ -117,7 +117,7 @@ pub(crate) fn case_clause_block_context(
     BlockContext::CaseClause(CaseClauseBlockContext::new(
         parent_type,
         key.to_string(),
-        SourceOffset(parent_span_offset),
+        Utf16CodeUnitOffset(parent_span_offset),
         case_test.map(|s| s.to_string()),
     ))
 }
@@ -167,7 +167,7 @@ pub(crate) fn predicate_container(
 ) -> PredicateContainer {
     PredicateContainer {
         r#type,
-        offset: SourceOffset(offset),
+        offset: Utf16CodeUnitOffset(offset),
     }
 }
 

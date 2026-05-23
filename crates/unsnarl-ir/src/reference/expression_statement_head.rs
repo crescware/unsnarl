@@ -8,12 +8,12 @@
 
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
-use crate::primitive::SourceOffset;
+use crate::primitive::Utf8ByteOffset;
 
 pub struct HeadOperand {
     pub head: HeadExpression,
-    pub start_offset: SourceOffset,
-    pub end_offset: SourceOffset,
+    pub start_offset: Utf8ByteOffset,
+    pub end_offset: Utf8ByteOffset,
 }
 
 pub enum HeadExpression {
@@ -45,8 +45,8 @@ pub enum HeadExpression {
     },
     Elided,
     Raw {
-        start_offset: SourceOffset,
-        end_offset: SourceOffset,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
 }
 

@@ -16,7 +16,7 @@
 //! itself does not derive `Serialize` because three of its fields
 //! (`completion`, `jsx_element`, `expression_statement_container`)
 //! reference `unsnarl-ir` types whose in-memory shape carries
-//! `SourceOffset` while the pipeline-emitted shape carries `Span`;
+//! `Utf16CodeUnitOffset` while the pipeline-emitted shape carries `Span`;
 //! adding `Serialize` would produce a second JSON form no pipeline
 //! path emits. Field order is preserved by struct declaration order;
 //! see `reference_annotation`'s module doc for the deviation rationale.

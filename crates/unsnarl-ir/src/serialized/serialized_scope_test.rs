@@ -1,7 +1,7 @@
 use super::*;
 
 use crate::nesting_kind::NestingDepth;
-use crate::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use crate::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 
 fn scope_id(s: &str) -> SerializedScopeId {
     SerializedScopeId::new(s.to_string())
@@ -21,12 +21,12 @@ fn serialized_scope_field_order() {
             span: Span {
                 line: SourceLine(1),
                 column: SourceColumn(0),
-                offset: SourceOffset(0),
+                offset: Utf16CodeUnitOffset(0),
             },
             end_span: Span {
                 line: SourceLine(1),
                 column: SourceColumn(0),
-                offset: SourceOffset(0),
+                offset: Utf16CodeUnitOffset(0),
             },
         },
         variables: Vec::new(),

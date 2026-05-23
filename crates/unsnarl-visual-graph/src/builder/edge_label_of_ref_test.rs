@@ -16,7 +16,7 @@ fn ref_with_flags(read: bool, write: bool, call: bool) -> SerializedReference {
             Span {
                 line: unsnarl_ir::primitive::SourceLine(1),
                 column: unsnarl_ir::primitive::SourceColumn(0),
-                offset: unsnarl_ir::primitive::SourceOffset(0),
+                offset: unsnarl_ir::primitive::Utf16CodeUnitOffset(0),
             },
         ),
         from: SerializedScopeId::new("scope_0".to_string()),

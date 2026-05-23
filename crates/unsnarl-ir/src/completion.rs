@@ -12,7 +12,7 @@ pub mod completion_type;
 
 pub use completion_type::CompletionType;
 
-use crate::primitive::SourceOffset;
+use crate::primitive::Utf8ByteOffset;
 
 pub enum Completion {
     Normal,
@@ -21,21 +21,21 @@ pub enum Completion {
 
 pub enum AbruptCompletion {
     Return {
-        start_offset: SourceOffset,
-        end_offset: SourceOffset,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
     Throw {
-        start_offset: SourceOffset,
-        end_offset: SourceOffset,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
     Break {
         target: Option<String>,
-        start_offset: SourceOffset,
-        end_offset: SourceOffset,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
     Continue {
         target: Option<String>,
-        start_offset: SourceOffset,
-        end_offset: SourceOffset,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
 }

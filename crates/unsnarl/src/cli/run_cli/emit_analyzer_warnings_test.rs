@@ -1,5 +1,5 @@
 use super::*;
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 
 fn capture(diagnostics: &[Diagnostic]) -> String {
     let mut buf = Vec::new();
@@ -11,7 +11,7 @@ fn span_at(line: u32, column: u32) -> Span {
     Span {
         line: SourceLine(line),
         column: SourceColumn(column),
-        offset: SourceOffset(0),
+        offset: Utf16CodeUnitOffset(0),
     }
 }
 

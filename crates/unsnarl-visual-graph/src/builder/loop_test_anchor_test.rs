@@ -3,7 +3,7 @@
 //! interned into the arena; assertions therefore read the node back
 //! through `arena.node()`.
 
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::{SerializedBlock, SerializedScope};
 use unsnarl_oxc_parity::AstType;
@@ -56,12 +56,12 @@ fn for_scope_at(parent: Option<&str>, offset: u32, line: u32) -> SerializedScope
         span: Span {
             line: SourceLine(line),
             column: SourceColumn(0),
-            offset: SourceOffset(offset),
+            offset: Utf16CodeUnitOffset(offset),
         },
         end_span: Span {
             line: SourceLine(line + 2),
             column: SourceColumn(1),
-            offset: SourceOffset(offset + 46),
+            offset: Utf16CodeUnitOffset(offset + 46),
         },
     };
     scope
@@ -131,12 +131,12 @@ fn while_body_scope(parent_span_offset: u32, block_line: u32) -> SerializedScope
         span: Span {
             line: SourceLine(block_line),
             column: SourceColumn(0),
-            offset: SourceOffset(33),
+            offset: Utf16CodeUnitOffset(33),
         },
         end_span: Span {
             line: SourceLine(block_line + 2),
             column: SourceColumn(1),
-            offset: SourceOffset(80),
+            offset: Utf16CodeUnitOffset(80),
         },
     };
     scope.block_context = Some(other_block_context(
@@ -199,12 +199,12 @@ fn do_while_body_scope(parent_span_offset: u32) -> SerializedScope {
         span: Span {
             line: SourceLine(3),
             column: SourceColumn(0),
-            offset: SourceOffset(36),
+            offset: Utf16CodeUnitOffset(36),
         },
         end_span: Span {
             line: SourceLine(6),
             column: SourceColumn(1),
-            offset: SourceOffset(80),
+            offset: Utf16CodeUnitOffset(80),
         },
     };
     scope.block_context = Some(other_block_context(

@@ -3,10 +3,10 @@ use super::*;
 #[test]
 fn ascii_only_offset_matches_byte_offset() {
     let raw = "let x = 1;\nlet y = 2;\n";
-    let span = span_from_offset(raw, raw.len());
+    let span = span_from_offset(raw, Utf8ByteOffset(raw.len() as u32));
     assert_eq!(span.line, SourceLine(3));
     assert_eq!(span.column, SourceColumn(0));
-    assert_eq!(span.offset, SourceOffset(22));
+    assert_eq!(span.offset, Utf16CodeUnitOffset(22));
 }
 
 #[test]
@@ -19,10 +19,10 @@ fn em_dash_in_preceding_comment_shifts_offset_by_two_codeunits() {
     let raw = "/* — */\n};\n";
     let byte_len = raw.len();
     assert_eq!(byte_len, 13);
-    let span = span_from_offset(raw, byte_len);
+    let span = span_from_offset(raw, Utf8ByteOffset(byte_len as u32));
     assert_eq!(span.line, SourceLine(3));
     assert_eq!(span.column, SourceColumn(0));
-    assert_eq!(span.offset, SourceOffset((byte_len - 2) as u32));
+    assert_eq!(span.offset, Utf16CodeUnitOffset((byte_len - 2) as u32));
 }
 
 #[test]
@@ -30,8 +30,8 @@ fn section_sign_shifts_offset_by_one_codeunit() {
     // `§` is 2 UTF-8 bytes / 1 UTF-16 code unit.
     let raw = "// §6.2.4\nx;\n";
     let byte_len = raw.len();
-    let span = span_from_offset(raw, byte_len);
-    assert_eq!(span.offset, SourceOffset((byte_len - 1) as u32));
+    let span = span_from_offset(raw, Utf8ByteOffset(byte_len as u32));
+    assert_eq!(span.offset, Utf16CodeUnitOffset((byte_len - 1) as u32));
 }
 
 #[test]
@@ -40,8 +40,8 @@ fn supplementary_codepoint_contributes_two_utf16_units() {
     // pair). UTF-16 offset shifts by `bytes - codeunits = 4 - 2 = 2`.
     let raw = "/* 😀 */\nx;\n";
     let byte_len = raw.len();
-    let span = span_from_offset(raw, byte_len);
-    assert_eq!(span.offset, SourceOffset((byte_len - 2) as u32));
+    let span = span_from_offset(raw, Utf8ByteOffset(byte_len as u32));
+    assert_eq!(span.offset, Utf16CodeUnitOffset((byte_len - 2) as u32));
 }
 
 #[test]
@@ -51,10 +51,10 @@ fn column_is_in_utf16_codeunits_relative_to_line_start() {
     let raw = "—x";
     // Byte offset at end of file is 4 (3 for `—`, 1 for `x`); UTF-16
     // column is 2 (1 for `—`, 1 for `x`).
-    let span = span_from_offset(raw, raw.len());
+    let span = span_from_offset(raw, Utf8ByteOffset(raw.len() as u32));
     assert_eq!(span.line, SourceLine(1));
     assert_eq!(span.column, SourceColumn(2));
-    assert_eq!(span.offset, SourceOffset(2));
+    assert_eq!(span.offset, Utf16CodeUnitOffset(2));
 }
 
 #[test]
@@ -64,11 +64,11 @@ fn non_ascii_before_newline_does_not_affect_later_line_column() {
     // affects the absolute `offset` but not the `column`.
     let raw = "// —\nlet x = 1;";
     let byte_offset = raw.len();
-    let span = span_from_offset(raw, byte_offset);
+    let span = span_from_offset(raw, Utf8ByteOffset(byte_offset as u32));
     assert_eq!(span.line, SourceLine(2));
     assert_eq!(span.column, SourceColumn(10));
     // UTF-16 offset = 5 (line 1: `// — \n` is 5 code units) + 10 = 15.
-    assert_eq!(span.offset, SourceOffset(15));
+    assert_eq!(span.offset, Utf16CodeUnitOffset(15));
 }
 
 #[test]
@@ -77,15 +77,15 @@ fn offset_past_file_end_extends_with_clamp_plus_overshoot() {
     // converted to UTF-16 and the overshoot is added 1:1 to both
     // `offset` and `column`.
     let raw = "ab";
-    let span = span_from_offset(raw, 5);
-    assert_eq!(span.offset, SourceOffset(5));
+    let span = span_from_offset(raw, Utf8ByteOffset(5));
+    assert_eq!(span.offset, Utf16CodeUnitOffset(5));
     assert_eq!(span.column, SourceColumn(5));
 }
 
 #[test]
 fn empty_source() {
-    let span = span_from_offset("", 0);
+    let span = span_from_offset("", Utf8ByteOffset(0));
     assert_eq!(span.line, SourceLine(1));
     assert_eq!(span.column, SourceColumn(0));
-    assert_eq!(span.offset, SourceOffset(0));
+    assert_eq!(span.offset, Utf16CodeUnitOffset(0));
 }

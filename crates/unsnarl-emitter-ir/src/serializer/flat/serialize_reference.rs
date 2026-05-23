@@ -136,8 +136,8 @@ pub fn serialize_reference(
         } => {
             N_RETURN.fetch_add(1, Ordering::Relaxed);
             SerializedCompletion::Return {
-                start_span: index.span_at(start_offset.0 as usize),
-                end_span: index.span_at(end_offset.0 as usize),
+                start_span: index.span_at(*start_offset),
+                end_span: index.span_at(*end_offset),
             }
         }
         ReferenceCompletion::Throw {
@@ -146,8 +146,8 @@ pub fn serialize_reference(
         } => {
             N_THROW.fetch_add(1, Ordering::Relaxed);
             SerializedCompletion::Throw {
-                start_span: index.span_at(start_offset.0 as usize),
-                end_span: index.span_at(end_offset.0 as usize),
+                start_span: index.span_at(*start_offset),
+                end_span: index.span_at(*end_offset),
             }
         }
     };
@@ -157,8 +157,8 @@ pub fn serialize_reference(
     let jsx_element = ann.jsx_element.as_ref().map(|jsx| {
         N_JSX.fetch_add(1, Ordering::Relaxed);
         SerializedJsxElement {
-            start_span: index.span_at(jsx.start_offset.0 as usize),
-            end_span: index.span_at(jsx.end_offset.0 as usize),
+            start_span: index.span_at(jsx.start_offset),
+            end_span: index.span_at(jsx.end_offset),
         }
     });
     record(&T_JSX_NS, t);
@@ -166,8 +166,8 @@ pub fn serialize_reference(
     let expression_statement_container = ann.expression_statement_container.as_ref().map(|c| {
         N_EXPR_STMT.fetch_add(1, Ordering::Relaxed);
         let t_container = Instant::now();
-        let start_span = index.span_at(c.start_offset.0 as usize);
-        let end_span = index.span_at(c.end_offset.0 as usize);
+        let start_span = index.span_at(c.start_offset);
+        let end_span = index.span_at(c.end_offset);
         record(&T_EXPR_STMT_CONTAINER_NS, t_container);
         let t_head = Instant::now();
         let head = serialize_head_expression(&c.head, index);

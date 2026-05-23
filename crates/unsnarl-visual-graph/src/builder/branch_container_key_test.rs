@@ -5,7 +5,7 @@
 //! the `CaseClause` variant directly while every other scenario
 //! uses the `other_block_context` helper.
 
-use unsnarl_ir::primitive::SourceOffset;
+use unsnarl_ir::primitive::Utf16CodeUnitOffset;
 use unsnarl_ir::scope::block_context::{BlockContext, CaseClauseBlockContext};
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
@@ -24,7 +24,7 @@ fn case_clause(parent: AstType, key: &str, offset: u32) -> BlockContext {
     BlockContext::CaseClause(CaseClauseBlockContext::new(
         parent,
         key.to_string(),
-        SourceOffset(offset),
+        Utf16CodeUnitOffset(offset),
         None,
     ))
 }

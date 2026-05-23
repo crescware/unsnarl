@@ -9,7 +9,7 @@
 //! predicate slot of the immediate parent (the visitor has already
 //! popped the predicate-owner off the path).
 
-use unsnarl_ir::primitive::SourceIndex;
+use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::reference::PredicateContainer;
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
@@ -20,7 +20,7 @@ const LOOP_HEADER_KEYS_FOR_OF_IN: &[&str] = &["left", "right"];
 
 pub fn find_predicate_container(
     parent_type: Option<&AstType>,
-    parent_offset: Option<u32>,
+    parent_offset: Option<Utf8ByteOffset>,
     key: Option<&str>,
     path: &[PathEntry],
     index: &SourceIndex<'_>,
@@ -34,7 +34,7 @@ pub fn find_predicate_container(
     for entry in path.iter().rev() {
         let ty = &entry.node.r#type;
         if let Some(container_type) = predicate_container_for(ty, cur_key) {
-            let offset = index.span_at(entry.node.span.start as usize).offset;
+            let offset = index.span_at(Utf8ByteOffset(entry.node.span.start)).offset;
             return Some(PredicateContainer {
                 r#type: container_type,
                 offset,
@@ -44,7 +44,9 @@ pub fn find_predicate_container(
     }
     let parent_type = parent_type?;
     let container_type = predicate_container_for(parent_type, key)?;
-    let offset = index.span_at(parent_offset.unwrap_or(0) as usize).offset;
+    let offset = index
+        .span_at(parent_offset.unwrap_or(Utf8ByteOffset(0)))
+        .offset;
     Some(PredicateContainer {
         r#type: container_type,
         offset,

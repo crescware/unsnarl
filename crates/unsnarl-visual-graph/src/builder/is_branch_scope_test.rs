@@ -40,12 +40,12 @@ fn switch_case_scope_is_branch() {
     // which for the `switch:` case key requires the `CaseClause`
     // variant. Exercise that variant here so the test asserts the
     // underlying merge-key contract directly.
-    use unsnarl_ir::primitive::SourceOffset;
+    use unsnarl_ir::primitive::Utf16CodeUnitOffset;
     use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
     let ctx = BlockContext::CaseClause(CaseClauseBlockContext::new(
         AstType::SwitchStatement,
         "cases".to_string(),
-        SourceOffset(0),
+        Utf16CodeUnitOffset(0),
         None,
     ));
     assert!(check(Some(ctx)));

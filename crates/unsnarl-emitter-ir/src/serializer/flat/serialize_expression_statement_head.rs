@@ -4,7 +4,7 @@
 use std::sync::atomic::{AtomicU64, Ordering};
 use std::time::Instant;
 
-use unsnarl_ir::primitive::SourceIndex;
+use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::reference::expression_statement_head::{HeadExpression, HeadOperand};
 use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};
 
@@ -31,7 +31,7 @@ pub fn take_head_stats() -> HeadStats {
     }
 }
 
-fn timed_span_at(index: &SourceIndex<'_>, offset: usize) -> unsnarl_ir::primitive::Span {
+fn timed_span_at(index: &SourceIndex<'_>, offset: Utf8ByteOffset) -> unsnarl_ir::primitive::Span {
     N_SPAN_CALLS.fetch_add(1, Ordering::Relaxed);
     let t = Instant::now();
     let out = index.span_at(offset);
@@ -82,8 +82,8 @@ pub fn serialize_head_expression(
             start_offset,
             end_offset,
         } => SerializedHeadExpression::Raw {
-            start_span: timed_span_at(index, start_offset.0 as usize),
-            end_span: timed_span_at(index, end_offset.0 as usize),
+            start_span: timed_span_at(index, *start_offset),
+            end_span: timed_span_at(index, *end_offset),
         },
     }
 }
@@ -91,8 +91,8 @@ pub fn serialize_head_expression(
 fn serialize_head_operand(operand: &HeadOperand, index: &SourceIndex<'_>) -> SerializedHeadOperand {
     SerializedHeadOperand {
         head: serialize_head_expression(&operand.head, index),
-        start_span: timed_span_at(index, operand.start_offset.0 as usize),
-        end_span: timed_span_at(index, operand.end_offset.0 as usize),
+        start_span: timed_span_at(index, operand.start_offset),
+        end_span: timed_span_at(index, operand.end_offset),
     }
 }
 

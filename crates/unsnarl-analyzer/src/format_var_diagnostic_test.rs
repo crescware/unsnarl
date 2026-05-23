@@ -1,6 +1,6 @@
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 
 use super::format_var_diagnostic;
 
@@ -12,7 +12,7 @@ fn renders_single_line_warning_with_line_column_and_message() {
         span: Span {
             line: SourceLine(3),
             column: SourceColumn(0),
-            offset: SourceOffset(11),
+            offset: Utf16CodeUnitOffset(11),
         },
     };
     let lines = format_var_diagnostic(&diagnostic);
