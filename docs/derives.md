@@ -11,10 +11,10 @@ somewhere in the workspace:
 
 - A method of the trait is called on a value of the type — `.clone()`,
   `==` / `assert_eq!`, `{:?}` formatting, `.hash(...)`, etc.
-- A generic bound elsewhere requires the trait — e.g. clap's
-  `ValueEnum` derive requires `Clone`; using a value as a `HashMap` key
-  requires `Hash + Eq`; `Result::unwrap_err` on `Result<T, _>` requires
-  `T: Debug`.
+- A generic bound elsewhere requires the trait — e.g.
+  `serde_json::to_string(&v)` requires `v`'s type to implement
+  `Serialize`; using a value as a `HashMap` key requires `Hash + Eq`;
+  `Result::unwrap_err` on `Result<T, _>` requires `T: Debug`.
 - The value crosses a generated boundary that depends on the trait —
   serde `Serialize` / `Deserialize` at a serialization point, `Default`
   at a `..Default::default()` construction site, etc.
