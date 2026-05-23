@@ -418,6 +418,11 @@ fn is_filtered_out(kind: &AstKind<'_>) -> bool {
             | AstKind::TSMappedType(_)
             | AstKind::TSEnumDeclaration(_)
             | AstKind::TSEnumBody(_)
+            | AstKind::TSFunctionType(_)
+            | AstKind::TSConstructorType(_)
+            | AstKind::TSMethodSignature(_)
+            | AstKind::TSConstructSignatureDeclaration(_)
+            | AstKind::TSCallSignatureDeclaration(_)
     )
 }
 
