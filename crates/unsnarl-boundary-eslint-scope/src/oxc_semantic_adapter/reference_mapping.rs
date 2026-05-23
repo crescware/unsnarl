@@ -156,7 +156,7 @@ pub(crate) fn build_references(
                 let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
                 let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
                 let flags = convert_flags(oxc_ref.flags());
-                let var_id = ensure_implicit_global(
+                let lookup = ensure_implicit_global(
                     scopes,
                     variables,
                     definitions,
@@ -168,13 +168,15 @@ pub(crate) fn build_references(
                 let new_id = references.push(ReferenceData {
                     identifier,
                     from,
-                    resolved: Some(var_id),
+                    resolved: Some(lookup.var_id),
                     init: false,
                     flags,
                 });
                 scopes[from].references.push(new_id);
-                variables[var_id].references.push(new_id);
-                push_through_chain(scopes, from, root, new_id);
+                variables[lookup.var_id].references.push(new_id);
+                if lookup.newly_created {
+                    push_through_chain(scopes, from, root, new_id);
+                }
             }
             continue;
         }
@@ -235,7 +237,7 @@ pub(crate) fn build_references(
                 scopes[from].references.push(new_id);
                 variables[var_id].references.push(new_id);
             } else {
-                let var_id = ensure_implicit_global(
+                let lookup = ensure_implicit_global(
                     scopes,
                     variables,
                     definitions,
@@ -247,13 +249,15 @@ pub(crate) fn build_references(
                 let new_id = references.push(ReferenceData {
                     identifier,
                     from,
-                    resolved: Some(var_id),
+                    resolved: Some(lookup.var_id),
                     init: false,
                     flags,
                 });
                 scopes[from].references.push(new_id);
-                variables[var_id].references.push(new_id);
-                push_through_chain(scopes, from, root, new_id);
+                variables[lookup.var_id].references.push(new_id);
+                if lookup.newly_created {
+                    push_through_chain(scopes, from, root, new_id);
+                }
             }
         }
     }
@@ -457,6 +461,19 @@ fn resolve_synthetic_arguments(
     None
 }
 
+/// Outcome of [`ensure_implicit_global`]: the resolved `VariableId`
+/// plus whether this call freshly created the implicit-global row.
+/// Used by the caller to decide whether to push the reference through
+/// the `scope.through` chain — the hand-rolled walker only pushes a
+/// through entry on the first unresolved encounter of a name (because
+/// every subsequent occurrence resolves against the freshly-created
+/// implicit-global row in the root scope and takes the resolved
+/// short-circuit path instead).
+struct ImplicitGlobalLookup {
+    var_id: VariableId,
+    newly_created: bool,
+}
+
 #[allow(clippy::too_many_arguments)]
 fn ensure_implicit_global(
     scopes: &mut IndexVec<ScopeId, ScopeData>,
@@ -466,9 +483,12 @@ fn ensure_implicit_global(
     root: ScopeId,
     name: &str,
     first_occurrence: &AstIdentifier,
-) -> VariableId {
+) -> ImplicitGlobalLookup {
     if let Some(&id) = implicit_globals.get(name) {
-        return id;
+        return ImplicitGlobalLookup {
+            var_id: id,
+            newly_created: false,
+        };
     }
     let var_id = variables.push(VariableData::new(
         name.to_string(),
@@ -495,7 +515,10 @@ fn ensure_implicit_global(
     });
     variables[var_id].defs.push(def_id);
     implicit_globals.insert(name.to_string(), var_id);
-    var_id
+    ImplicitGlobalLookup {
+        var_id,
+        newly_created: true,
+    }
 }
 
 fn push_through_chain(
@@ -663,7 +686,7 @@ fn synthesise_parameter_property_references(
                 binding.span,
             );
             let from = reparent_to_switch_case(from, binding.span, scopes, switch_cases);
-            let var_id = ensure_implicit_global(
+            let lookup = ensure_implicit_global(
                 scopes,
                 variables,
                 definitions,
@@ -675,13 +698,15 @@ fn synthesise_parameter_property_references(
             let new_id = references.push(ReferenceData {
                 identifier,
                 from,
-                resolved: Some(var_id),
+                resolved: Some(lookup.var_id),
                 init: false,
                 flags: ReferenceFlags::READ,
             });
             scopes[from].references.push(new_id);
-            variables[var_id].references.push(new_id);
-            push_through_chain(scopes, from, root, new_id);
+            variables[lookup.var_id].references.push(new_id);
+            if lookup.newly_created {
+                push_through_chain(scopes, from, root, new_id);
+            }
         }
     }
 }
