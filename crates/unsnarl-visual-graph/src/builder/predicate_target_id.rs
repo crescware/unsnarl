@@ -27,6 +27,19 @@ pub fn predicate_target_id(
     r: &SerializedReference,
     anchors: &PredicateAnchorMaps<'_>,
 ) -> Option<String> {
+    predicate_target_id_borrowed(r, anchors).map(str::to_string)
+}
+
+/// Borrow-returning twin of [`predicate_target_id`]. The returned
+/// `&str` is borrowed from one of the five anchor maps in
+/// `PredicateAnchorMaps`, all of which live in `BuildState` for the
+/// duration of `emit_reference_edges` (~107k calls on `mermaid.js`).
+/// The hot caller only ever consumes the result as `&str`, so the
+/// borrowed form skips one `String` clone per matched reference.
+pub fn predicate_target_id_borrowed<'a>(
+    r: &SerializedReference,
+    anchors: &PredicateAnchorMaps<'a>,
+) -> Option<&'a str> {
     let _t = TimingScope::start("predicate_target_id");
     let pc = r.predicate_container.as_ref()?;
     let offset = pc.offset.0;
@@ -39,7 +52,7 @@ pub fn predicate_target_id(
         | PredicateContainerType::ForInStatement => anchors.for_test,
         PredicateContainerType::IfStatement => anchors.if_test,
     };
-    map.get(&offset).cloned()
+    map.get(&offset).map(String::as_str)
 }
 
 #[cfg(test)]

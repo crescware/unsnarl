@@ -39,7 +39,7 @@ use super::last_write_op_in_scope_before::last_write_op_in_scope_before;
 use super::module_root_id::MODULE_ROOT_ID;
 use super::node_id::node_id;
 use super::owner_target_id::owner_target_id;
-use super::predicate_target_id::{predicate_target_id, PredicateAnchorMaps};
+use super::predicate_target_id::{predicate_target_id_borrowed, PredicateAnchorMaps};
 use super::previous_fallthrough_case::previous_fallthrough_case;
 use super::push_edge::push_edge;
 use super::read_origins::read_origins;
@@ -408,8 +408,8 @@ fn emit_reference_edges(
             do_while_test: &state.do_while_test_anchor_by_offset,
             for_test: &state.for_test_anchor_by_offset,
         };
-        let predicate_target = predicate_target_id(r, &anchors);
-        if let Some(target) = predicate_target.as_ref() {
+        let predicate_target = predicate_target_id_borrowed(r, &anchors);
+        if let Some(target) = predicate_target {
             if !r.flags.write {
                 let from_ids = read_origins(
                     resolved.value(),
