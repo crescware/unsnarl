@@ -121,6 +121,9 @@ pub(crate) fn build_references(
         if let Some(var_id) = symbol_to_variable[sid] {
             for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
                 let oxc_ref = scoping.get_reference(oxc_ref_id);
+                if oxc_ref.flags().is_type() {
+                    continue;
+                }
                 let Some(from) = translation[oxc_ref.scope_id()] else {
                     continue;
                 };
@@ -150,6 +153,9 @@ pub(crate) fn build_references(
             let name = scoping.symbol_name(sid).to_string();
             for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
                 let oxc_ref = scoping.get_reference(oxc_ref_id);
+                if oxc_ref.flags().is_type() {
+                    continue;
+                }
                 let Some(from) = translation[oxc_ref.scope_id()] else {
                     continue;
                 };
@@ -213,6 +219,9 @@ pub(crate) fn build_references(
         let name = name_ident.as_str().to_string();
         for &oxc_ref_id in ref_ids.iter() {
             let oxc_ref = scoping.get_reference(oxc_ref_id);
+            if oxc_ref.flags().is_type() {
+                continue;
+            }
             let Some(from) = translation[oxc_ref.scope_id()] else {
                 continue;
             };
