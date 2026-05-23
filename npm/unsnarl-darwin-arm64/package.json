@@ -1,6 +1,6 @@
 {
   "name": "unsnarl-darwin-arm64",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Prebuilt unsnarl CLI binary for darwin-arm64.",
   "homepage": "https://github.com/crescware/unsnarl#readme",
   "bugs": {
