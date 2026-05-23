@@ -29,7 +29,7 @@ use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
 use super::context::{BuildVisualGraphOptions, BuilderContext};
 use super::edge_label_of_ref::edge_label_of_ref;
-use super::enclosing_function_var::enclosing_function_var;
+use super::enclosing_function_var::enclosing_function_var_borrowed;
 use super::ensure_expression_statement_node::ensure_expression_statement_node;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::find_host_subgraph::find_host_subgraph;
@@ -39,7 +39,7 @@ use super::last_write_op_in_scope_before::last_write_op_in_scope_before;
 use super::module_root_id::MODULE_ROOT_ID;
 use super::node_id::node_id;
 use super::owner_target_id::owner_target_id;
-use super::predicate_target_id::{predicate_target_id, PredicateAnchorMaps};
+use super::predicate_target_id::{predicate_target_id_borrowed, PredicateAnchorMaps};
 use super::previous_fallthrough_case::previous_fallthrough_case;
 use super::push_edge::push_edge;
 use super::read_origins::read_origins;
@@ -393,7 +393,7 @@ fn emit_reference_edges(
                     &mut state.emitted_edges,
                     &mut state.edges,
                     from_id,
-                    &label,
+                    label,
                     &target,
                 );
             }
@@ -408,8 +408,8 @@ fn emit_reference_edges(
             do_while_test: &state.do_while_test_anchor_by_offset,
             for_test: &state.for_test_anchor_by_offset,
         };
-        let predicate_target = predicate_target_id(r, &anchors);
-        if let Some(target) = predicate_target.as_ref() {
+        let predicate_target = predicate_target_id_borrowed(r, &anchors);
+        if let Some(target) = predicate_target {
             if !r.flags.write {
                 let from_ids = read_origins(
                     resolved.value(),
@@ -423,7 +423,7 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         from_id,
-                        &label,
+                        label,
                         target,
                     );
                 }
@@ -449,7 +449,7 @@ fn emit_reference_edges(
                             &mut state.emitted_edges,
                             &mut state.edges,
                             from_id,
-                            &label,
+                            label,
                             &redirect,
                         );
                     }
@@ -475,7 +475,7 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         &from_id,
-                        &label,
+                        label,
                         &target_id,
                     );
                 }
@@ -537,15 +537,18 @@ fn emit_reference_edges(
                         &mut state.emitted_edges,
                         &mut state.edges,
                         from_id,
-                        &label,
+                        label,
                         &target_id,
                     );
                 }
             }
         } else {
-            let enclosing_fn_var_id =
-                enclosing_function_var(r.from.value(), &ctx.scope_map, &ctx.subgraph_owner_var);
-            let host = find_host_subgraph(r, enclosing_fn_var_id.as_deref(), &ctx.scope_map, state);
+            let enclosing_fn_var_id = enclosing_function_var_borrowed(
+                r.from.value(),
+                &ctx.scope_map,
+                &ctx.subgraph_owner_var,
+            );
+            let host = find_host_subgraph(r, enclosing_fn_var_id, &ctx.scope_map, state);
             let target_container = match host {
                 Some(sg) => Container::Subgraph(sg),
                 None => Container::Root,
@@ -562,7 +565,7 @@ fn emit_reference_edges(
                 state,
                 ctx,
                 expr_stmt_id.as_deref(),
-                enclosing_fn_var_id.as_deref(),
+                enclosing_fn_var_id,
                 r,
             );
             for from_id in &from_ids {
@@ -570,7 +573,7 @@ fn emit_reference_edges(
                     &mut state.emitted_edges,
                     &mut state.edges,
                     from_id,
-                    &label,
+                    label,
                     &target_id,
                 );
             }

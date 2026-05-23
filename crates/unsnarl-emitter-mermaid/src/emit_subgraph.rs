@@ -30,14 +30,24 @@ pub fn emit_subgraph(state: &mut RenderState<'_>, sg: &VisualSubgraph, indent: &
                 // function-vs-body boundary disappears. body depth
                 // = wrap depth + 1 keeps the gradient monotonic.
                 record_nest_slot(state, &wrap_id, depth);
-                state
-                    .lines
-                    .push(format!("{indent}subgraph {wrap_id}[\" \"]"));
+                let mut header = String::with_capacity(indent.len() + 11 + wrap_id.len() + 5);
+                header.push_str(indent);
+                header.push_str("subgraph ");
+                header.push_str(&wrap_id);
+                header.push_str("[\" \"]");
+                state.lines.push(header);
                 let wrap_indent = format!("{indent}  ");
-                state.lines.push(format!("{wrap_indent}direction TB"));
+                let mut direction_line =
+                    String::with_capacity(wrap_indent.len() + "direction TB".len());
+                direction_line.push_str(&wrap_indent);
+                direction_line.push_str("direction TB");
+                state.lines.push(direction_line);
                 emit_node(state, owner_node, &wrap_indent);
                 emit_plain_subgraph(state, sg, &wrap_indent, depth + 1);
-                state.lines.push(format!("{indent}end"));
+                let mut end_line = String::with_capacity(indent.len() + 3);
+                end_line.push_str(indent);
+                end_line.push_str("end");
+                state.lines.push(end_line);
                 return;
             }
         }

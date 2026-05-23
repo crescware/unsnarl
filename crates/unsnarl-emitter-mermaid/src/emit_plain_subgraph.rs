@@ -10,7 +10,7 @@ use crate::emit_subgraph::emit_subgraph;
 use crate::record_nest_slot::record_nest_slot;
 use crate::render_state::RenderState;
 use crate::strategy::EmptySubgraphContext;
-use crate::subgraph_label::subgraph_label;
+use crate::subgraph_label::subgraph_label_into;
 
 pub fn emit_plain_subgraph(
     state: &mut RenderState<'_>,
@@ -18,16 +18,26 @@ pub fn emit_plain_subgraph(
     indent: &str,
     depth: u32,
 ) {
-    let label = subgraph_label(sg, &state.node_map, state.debug);
-    state
-        .lines
-        .push(format!("{indent}subgraph {}[\"{label}\"]", sg.id()));
+    // Build the `subgraph <id>["<label>"]` line directly into a
+    // single owned `String` so the chain
+    // `line_range_label` → `escape` → `subgraph_label` → outer
+    // `format!` stops allocating one short-lived `String` per
+    // nesting level (~35k subgraphs on `mermaid.js`).
+    let mut header = String::with_capacity(indent.len() + 11 + sg.id().len() + sg.id().len() + 32);
+    header.push_str(indent);
+    header.push_str("subgraph ");
+    header.push_str(sg.id());
+    header.push_str("[\"");
+    subgraph_label_into(&mut header, sg, &state.node_map, state.debug);
+    header.push_str("\"]");
+    state.lines.push(header);
     record_nest_slot(state, sg.id(), depth);
     let child_indent = format!("{indent}  ");
-    state.lines.push(format!(
-        "{child_indent}direction {}",
-        sg.direction().as_str()
-    ));
+    let mut direction_line = String::with_capacity(child_indent.len() + "direction ".len() + 2);
+    direction_line.push_str(&child_indent);
+    direction_line.push_str("direction ");
+    direction_line.push_str(sg.direction().as_str());
+    state.lines.push(direction_line);
 
     let mut emitted_children = 0usize;
     for e in sg.elements() {
@@ -56,7 +66,10 @@ pub fn emit_plain_subgraph(
             state.placeholder_ids.push(p.placeholder_id);
         }
     }
-    state.lines.push(format!("{indent}end"));
+    let mut end_line = String::with_capacity(indent.len() + 3);
+    end_line.push_str(indent);
+    end_line.push_str("end");
+    state.lines.push(end_line);
 }
 
 #[cfg(test)]

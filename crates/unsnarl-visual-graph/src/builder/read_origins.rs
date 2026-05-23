@@ -13,7 +13,7 @@ use super::context::BuilderContext;
 use super::is_ancestor_scope::is_ancestor_scope;
 use super::node_id::node_id;
 use super::timing::TimingScope;
-use super::write_op::WriteOp;
+use super::write_op::{ops_before, WriteOp};
 use super::write_op_node_id::write_op_node_id;
 
 pub fn read_origins(
@@ -28,11 +28,7 @@ pub fn read_origins(
         .get(var_id)
         .map(Vec::as_slice)
         .unwrap_or(&[]);
-    let prev: Vec<WriteOp> = ops_slice
-        .iter()
-        .filter(|op| op.offset < ref_offset)
-        .cloned()
-        .collect();
+    let prev: &[WriteOp] = ops_before(ops_slice, ref_offset);
     let Some(last) = prev.last() else {
         return vec![node_id(var_id)];
     };
@@ -80,7 +76,7 @@ pub fn read_origins(
                 continue;
             }
         }
-        let sub = branch_merged_origins(branch_id, &prev, ctx);
+        let sub = branch_merged_origins(branch_id, prev, ctx);
         origins.extend(sub);
     }
 
@@ -99,11 +95,7 @@ pub fn read_origins(
                 .as_ref()
                 .map(|c| c.parent_span_offset().0)
                 .unwrap_or(0);
-            let before: Vec<&WriteOp> = ops_slice
-                .iter()
-                .filter(|op| op.offset < if_offset)
-                .collect();
-            if let Some(last_before) = before.last() {
+            if let Some(last_before) = ops_before(ops_slice, if_offset).last() {
                 origins.push(write_op_node_id(&last_before.ref_id));
             } else {
                 origins.push(node_id(var_id));
@@ -126,11 +118,7 @@ pub fn read_origins(
                 .as_ref()
                 .map(|c| c.parent_span_offset().0)
                 .unwrap_or(0);
-            let before: Vec<&WriteOp> = ops_slice
-                .iter()
-                .filter(|op| op.offset < try_offset)
-                .collect();
-            if let Some(last_before) = before.last() {
+            if let Some(last_before) = ops_before(ops_slice, try_offset).last() {
                 origins.push(write_op_node_id(&last_before.ref_id));
             } else {
                 origins.push(node_id(var_id));
