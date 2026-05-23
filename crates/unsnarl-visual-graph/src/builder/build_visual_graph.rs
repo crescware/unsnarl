@@ -267,6 +267,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         let _span = tracing::info_span!("arena_finalize_root").entered();
         arena.finalize_root()
     };
+    super::timing::drain_and_emit();
     VisualGraph {
         version: unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION,
         source: VisualGraphSource {

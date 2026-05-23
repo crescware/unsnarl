@@ -12,6 +12,7 @@ use super::branch_scope_of::branch_scope_of;
 use super::context::BuilderContext;
 use super::is_ancestor_scope::is_ancestor_scope;
 use super::node_id::node_id;
+use super::timing::TimingScope;
 use super::write_op::WriteOp;
 use super::write_op_node_id::write_op_node_id;
 
@@ -21,6 +22,7 @@ pub fn read_origins(
     ref_scope_id: &str,
     ctx: &BuilderContext<'_>,
 ) -> Vec<String> {
+    let _t = TimingScope::start("read_origins");
     let ops_slice: &[WriteOp] = ctx
         .write_ops_by_variable
         .get(var_id)

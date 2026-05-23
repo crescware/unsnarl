@@ -5,6 +5,7 @@
 //! side tables.
 
 pub fn line_for_offset(raw: &str, offset: u32) -> u32 {
+    let _t = super::timing::TimingScope::start("line_for_offset");
     let offset = offset as usize;
     let mut line: u32 = 1;
     for (consumed, unit) in raw.encode_utf16().enumerate() {

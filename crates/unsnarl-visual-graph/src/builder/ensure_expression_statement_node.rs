@@ -14,6 +14,7 @@ use super::arena::{BuildArena, Container, ElementHandle};
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::render_head_expression::render_head_expression;
 use super::state::BuildState;
+use super::timing::TimingScope;
 
 pub fn ensure_expression_statement_node(
     arena: &mut BuildArena,
@@ -22,6 +23,7 @@ pub fn ensure_expression_statement_node(
     raw: &str,
     target: Container,
 ) -> Option<String> {
+    let _t = TimingScope::start("ensure_expression_statement_node");
     let container = r.expression_statement_container.as_ref()?;
     let offset = container.start_span.offset.0;
     if let Some(existing) = state.expression_statement_by_offset.get(&offset) {

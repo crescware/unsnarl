@@ -9,6 +9,8 @@ use std::collections::HashMap;
 use unsnarl_ir::serialized::SerializedReference;
 use unsnarl_oxc_parity::PredicateContainerType;
 
+use super::timing::TimingScope;
+
 /// Anchor-map handles the `predicate_target_id` lookup needs. Each
 /// field is a `(offset → anchor-node-id)` map carried by the
 /// builder state. Kept as a single bundle so callers do not have
@@ -25,6 +27,7 @@ pub fn predicate_target_id(
     r: &SerializedReference,
     anchors: &PredicateAnchorMaps<'_>,
 ) -> Option<String> {
+    let _t = TimingScope::start("predicate_target_id");
     let pc = r.predicate_container.as_ref()?;
     let offset = pc.offset.0;
     let map = match pc.r#type {
