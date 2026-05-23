@@ -353,17 +353,31 @@ pub(crate) fn derive_scope_type(
 /// Predicate: does this oxc scope have no IR row of its own, instead
 /// merging into the parent's row?
 ///
-/// Currently the only merge case is the catch body `BlockStatement`:
-/// `oxc_semantic` emits a separate `BlockStatement` scope for
-/// `catch (e) { ... }`'s body block, while eslint-scope folds both the
-/// catch parameter and the body's declarations into a single `Catch`
-/// scope. The body block is detected by its parent in
-/// [`Scoping::scope_parent_id`] being a `CatchClause` scope.
+/// Two merge cases:
+///
+/// * Catch body `BlockStatement`: `oxc_semantic` emits a separate
+///   `BlockStatement` scope for `catch (e) { ... }`'s body block,
+///   while eslint-scope folds both the catch parameter and the body's
+///   declarations into a single `Catch` scope. The body block is
+///   detected by its parent in [`Scoping::scope_parent_id`] being a
+///   `CatchClause` scope.
+/// * `WithStatement`: `oxc_semantic` allocates a dedicated With scope
+///   (`ScopeFlags::With`), but the hand-rolled walker has no
+///   `visit_with_statement` override and lets the default walk descend
+///   straight into the body — so the body's `BlockStatement` ends up
+///   parented directly under the enclosing scope, no separate With
+///   scope row exists in the parity baseline. Mirror that by treating
+///   the `WithStatement` scope as merged into its parent; its body
+///   block scope (a regular `BlockStatement`) keeps its own IR row
+///   with the With's parent as its `upper`.
 fn is_merged_into_parent(oxc_id: OxcScopeId, scoping: &Scoping, nodes: &AstNodes<'_>) -> bool {
+    let kind = nodes.kind(scoping.get_node_id(oxc_id));
+    if matches!(kind, AstKind::WithStatement(_)) {
+        return true;
+    }
     let Some(parent) = scoping.scope_parent_id(oxc_id) else {
         return false;
     };
-    let kind = nodes.kind(scoping.get_node_id(oxc_id));
     let parent_kind = nodes.kind(scoping.get_node_id(parent));
     matches!(kind, AstKind::BlockStatement(_)) && matches!(parent_kind, AstKind::CatchClause(_))
 }

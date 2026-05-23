@@ -445,19 +445,34 @@ fn arguments_at_module_top_level_falls_through_to_implicit_global() {
 }
 
 #[test]
-fn jsx_intrinsic_lower_tag_is_not_a_reference() {
-    // `<div />` is a JSX intrinsic in oxc-ast (JSXIdentifier, not
-    // IdentifierReference), so `oxc_semantic` does not emit a
-    // reference for it. The adapter passes that decision through.
+fn jsx_intrinsic_lower_tag_emits_implicit_global_jsx_reference() {
+    // `<div />` parses as a `JSXIdentifier`, not an
+    // `IdentifierReference`, so `oxc_semantic` does not emit a
+    // reference row for it. The hand-rolled walker's
+    // `scope_build_visitor::visit_jsx_identifier` instead routes the
+    // tag through `handle_identifier_reference` and lands it on a
+    // root-scope implicit global with `AstType::JSXIdentifier` on
+    // both the reference and the implicit-global definition.
+    // `synthesise_identifier_name_references` mirrors that.
     with_arena(
         "const _ = <div />;",
         Language::Jsx,
         SourceType::Module,
         |b| {
-            assert!(
-                b.references.iter().all(|r| r.identifier.name() != "div"),
-                "lowercase JSX tag must not surface as a reference",
-            );
+            let div_var = b.scopes[root()]
+                .set()
+                .get("div")
+                .copied()
+                .expect("`div` implicit global on root scope");
+            let r = b
+                .references
+                .iter()
+                .find(|r| r.identifier.name() == "div")
+                .expect("expected reference for `<div />` JSX tag");
+            assert_eq!(r.resolved, Some(div_var));
+            assert!(matches!(r.identifier.r#type, AstType::JSXIdentifier));
+            assert!((r.flags & ReferenceFlags::READ).0 != 0);
+            assert!((r.flags & ReferenceFlags::WRITE).0 == 0);
         },
     );
 }
@@ -482,7 +497,13 @@ fn jsx_uppercase_tag_resolves_to_outer_binding() {
                 .find(|r| r.identifier.name() == "MyComp")
                 .expect("JSX tag reference for `MyComp`");
             assert_eq!(r.resolved, Some(comp_var));
-            assert!(matches!(r.identifier.r#type, AstType::Identifier));
+            // `build_identifier` rewrites the type to `JSXIdentifier`
+            // when the reference node's parent is `JSXOpeningElement`
+            // (matching the hand-rolled walker's
+            // `visit_identifier_reference` normalisation), so the JSX
+            // tag carries that shape even though oxc represents it as
+            // an `IdentifierReference`.
+            assert!(matches!(r.identifier.r#type, AstType::JSXIdentifier));
         },
     );
 }

@@ -293,15 +293,25 @@ fn switch_case_nested_block_attaches_to_synthetic_case_scope() {
 }
 
 #[test]
-fn with_statement_creates_with_scope_in_sloppy_mode() {
+fn with_statement_scope_is_merged_into_parent() {
+    // The hand-rolled walker has no `visit_with_statement` override
+    // and lets the default walk descend straight into the body, so
+    // the body's `BlockStatement` becomes a regular Block scope
+    // parented directly under the enclosing scope without any
+    // intervening "With" scope in the parity baseline. The adapter
+    // mirrors that by treating the `WithStatement`'s `oxc_semantic`
+    // scope as merged into its parent (no IR row of its own).
     with_scopes(
         "var o; with (o) { x; }",
         Language::Js,
         SourceType::Script,
         |scopes| {
-            let with = scopes[root()].child_scopes[0];
-            assert!(matches!(scopes[with].r#type, ScopeType::With));
-            assert!(!scopes[with].is_strict);
+            // root has a single child: the body's Block scope, not a
+            // synthetic With scope.
+            assert_eq!(scopes[root()].child_scopes.len(), 1);
+            let body_block = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[body_block].r#type, ScopeType::Block));
+            assert!(scopes[body_block].upper == Some(root()));
         },
     );
 }
