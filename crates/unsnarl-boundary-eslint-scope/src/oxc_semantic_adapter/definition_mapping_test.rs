@@ -56,8 +56,11 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
         )
         .expect("test source must parse cleanly");
     let ret = SemanticBuilder::new().build(&parsed.program);
-    let mut scopes = build_scopes(&ret.semantic, source_type);
-    let (mut variables, symbol_to_variable) = build_variables(&ret.semantic, &mut scopes);
+    let scope_mapping = build_scopes(&ret.semantic, source_type);
+    let mut scopes = scope_mapping.scopes;
+    let translation = scope_mapping.translation;
+    let (mut variables, symbol_to_variable) =
+        build_variables(&ret.semantic, &mut scopes, &translation);
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
     let _references = build_references(
         &ret.semantic,
@@ -65,6 +68,7 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
         &mut variables,
         &mut definitions,
         &symbol_to_variable,
+        &translation,
     );
     build_definitions(
         &ret.semantic,

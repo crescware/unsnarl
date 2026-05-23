@@ -34,9 +34,11 @@ pub(crate) fn build<'a>(
 ) -> EslintScopeAnalysisResult {
     let ret = SemanticBuilder::new().build(program);
     let semantic = ret.semantic;
-    let mut scopes = scope_mapping::build_scopes(&semantic, source_type);
+    let scope_mapping = scope_mapping::build_scopes(&semantic, source_type);
+    let mut scopes = scope_mapping.scopes;
+    let translation = scope_mapping.translation;
     let (mut variables, symbol_to_variable) =
-        variable_mapping::build_variables(&semantic, &mut scopes);
+        variable_mapping::build_variables(&semantic, &mut scopes, &translation);
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
     let references = reference_mapping::build_references(
         &semantic,
@@ -44,6 +46,7 @@ pub(crate) fn build<'a>(
         &mut variables,
         &mut definitions,
         &symbol_to_variable,
+        &translation,
     );
     definition_mapping::build_definitions(
         &semantic,

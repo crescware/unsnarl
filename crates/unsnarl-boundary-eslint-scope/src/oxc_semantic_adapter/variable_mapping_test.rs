@@ -52,8 +52,11 @@ fn with_arena(
         )
         .expect("test source must parse cleanly");
     let ret = SemanticBuilder::new().build(&parsed.program);
-    let mut scopes = build_scopes(&ret.semantic, source_type);
-    let (variables, _symbol_to_variable) = build_variables(&ret.semantic, &mut scopes);
+    let scope_mapping = build_scopes(&ret.semantic, source_type);
+    let mut scopes = scope_mapping.scopes;
+    let translation = scope_mapping.translation;
+    let (variables, _symbol_to_variable) =
+        build_variables(&ret.semantic, &mut scopes, &translation);
     body(&scopes, &variables);
 }
 
@@ -233,6 +236,35 @@ fn block_scoped_let_lives_in_block_scope_not_function_scope() {
             );
             // The function scope itself still carries `arguments`.
             assert!(scopes[f_scope].set().contains_key("arguments"));
+        },
+    );
+}
+
+/// The catch body `BlockStatement` is merged into the `Catch` scope
+/// (see `scope_mapping::is_merged_into_parent`). Block-scoped
+/// declarations inside the body must therefore surface inside the
+/// `Catch` scope's `variables` / `set`, alongside the catch param.
+#[test]
+fn catch_body_let_binding_merges_into_catch_scope() {
+    with_arena(
+        "try {} catch (e) { let x; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let catch = scopes
+                .iter_enumerated()
+                .find(|(_, s)| matches!(s.r#type, ScopeType::Catch))
+                .map(|(id, _)| id)
+                .expect("expected a Catch scope");
+            let names = names_in(catch, scopes, variables);
+            assert!(
+                names.contains("e"),
+                "catch param `e` must live in the Catch scope (got {names:?})",
+            );
+            assert!(
+                names.contains("x"),
+                "`let x` from the catch body must merge into the Catch scope (got {names:?})",
+            );
         },
     );
 }

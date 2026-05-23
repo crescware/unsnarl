@@ -49,8 +49,8 @@ fn with_scopes(
         )
         .expect("test source must parse cleanly");
     let ret = SemanticBuilder::new().build(&parsed.program);
-    let scopes = build_scopes(&ret.semantic, source_type);
-    body(&scopes);
+    let scope_mapping = build_scopes(&ret.semantic, source_type);
+    body(&scope_mapping.scopes);
 }
 
 fn root() -> ScopeId {
@@ -219,29 +219,38 @@ fn class_static_block_creates_class_static_block_scope() {
 /// collapses these into a single `Catch` scope holding both the param
 /// and the body's declarations.
 ///
-/// This test pins the current divergence so the follow-up commit that
-/// merges the two scopes is observable as a deliberate change.
+/// The adapter folds the catch body `BlockStatement` into the
+/// `CatchClause`'s IR row so the emitted tree matches eslint-scope's
+/// shape: a single `Catch` scope under the `TryStatement`'s siblings,
+/// with no nested body block of its own.
 #[test]
-fn catch_clause_currently_splits_into_catch_plus_block_pending_merge() {
+fn catch_clause_merges_body_block_into_catch_scope() {
     with_scopes(
-        "try {} catch (e) { var x; }",
+        "try {} catch (e) { let x; }",
         Language::Js,
         SourceType::Script,
         |scopes| {
-            // Walk to find the Catch scope. The exact tree shape under
-            // a `TryStatement` is: root → BlockStatement (try body)
-            // and root → CatchClause; oxc visits the try body before
-            // the catch, so the first child is the try body block.
             let catch = scopes
                 .iter_enumerated()
                 .find(|(_, s)| matches!(s.r#type, ScopeType::Catch))
                 .map(|(id, _)| id)
                 .expect("expected a Catch scope for `catch (e) {}`");
-            // The catch scope should have a single `BlockStatement`
-            // child — the catch body that eslint-scope merges in.
-            assert_eq!(scopes[catch].child_scopes.len(), 1);
-            let body = scopes[catch].child_scopes[0];
-            assert!(matches!(scopes[body].r#type, ScopeType::Block));
+            // After the merge, the catch body `BlockStatement` is
+            // absorbed into the `Catch` row: no spurious Block child.
+            assert!(
+                scopes[catch].child_scopes.is_empty(),
+                "expected catch scope to have no child scopes after merge",
+            );
+            // No standalone `Block` scope should be visible for the
+            // catch body — only the try body's block remains.
+            let block_count = scopes
+                .iter()
+                .filter(|s| matches!(s.r#type, ScopeType::Block))
+                .count();
+            assert_eq!(
+                block_count, 1,
+                "expected exactly one Block scope (the try body) after catch merge",
+            );
         },
     );
 }

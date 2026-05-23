@@ -38,20 +38,27 @@
 //! scope. Synthesising that wrapper is a follow-up commit; for now
 //! the mapping is a direct 1:1 walk of `oxc_semantic`'s scope tree.
 //!
+//! ## OxcScopeId → IrScopeId translation
+//!
+//! The walk is no longer a 1:1 `usize` cast: scopes the eslint-scope
+//! model collapses into a single row (currently only the
+//! `CatchClause` + catch-body `BlockStatement` merge) skip emitting
+//! their own IR row and instead route to the parent's. The
+//! [`ScopeMappingResult::translation`] table records, for every
+//! `OxcScopeId`, the IR id that should be observed for it; downstream
+//! passes ([`super::variable_mapping`], [`super::reference_mapping`])
+//! use this map to resolve `scope_id` references coming out of
+//! `Scoping`.
+//!
 //! ## Known divergences (deferred to follow-up commits)
 //!
-//! 1. **Catch clause**: `oxc_semantic` emits two scopes
-//!    (`ScopeFlags::CatchClause` for the parameter scope, and an
-//!    empty-flagged `BlockStatement` scope for the body). Eslint-scope
-//!    emits one (`Catch`) covering both. This mapping currently
-//!    surfaces both; merging is a follow-up.
-//! 2. **`FunctionExpressionName`**: not synthesised here (see above).
-//! 3. **`SwitchCase`**: eslint-scope creates a per-`SwitchCase` Block
+//! 1. **`FunctionExpressionName`**: not synthesised here (see above).
+//! 2. **`SwitchCase`**: eslint-scope creates a per-`SwitchCase` Block
 //!    scope; `oxc_semantic` does not. Synthesis is a follow-up.
-//! 4. **`ClassFieldInitializer`**: eslint-scope creates a per-field
+//! 3. **`ClassFieldInitializer`**: eslint-scope creates a per-field
 //!    initializer scope; `oxc_semantic` does not. Synthesis is a
 //!    follow-up.
-//! 5. **TypeScript-only scopes**: `oxc_semantic` adds scopes for
+//! 4. **TypeScript-only scopes**: `oxc_semantic` adds scopes for
 //!    `TSModuleDeclaration` / `TSConditionalType` / `TSMappedType`
 //!    that the boundary's hand-rolled walker filters out via
 //!    `is_type_only_subtree`. Filtering is a follow-up.
@@ -62,7 +69,7 @@
 
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
-use oxc_semantic::Semantic;
+use oxc_semantic::{AstNodes, Scoping, Semantic};
 use oxc_syntax::scope::{ScopeFlags, ScopeId as OxcScopeId};
 
 use unsnarl_ir::ids::ScopeId;
@@ -72,28 +79,58 @@ use unsnarl_ir::scope_type::ScopeType;
 use crate::materialise::ast_node_of;
 use crate::parser::SourceType;
 
+/// Output of [`build_scopes`]: the IR scope arena plus the
+/// `OxcScopeId → IrScopeId` translation that downstream passes use to
+/// resolve `Scoping`-side scope references.
+pub(crate) struct ScopeMappingResult {
+    pub(crate) scopes: IndexVec<ScopeId, ScopeData>,
+    /// For every `OxcScopeId`, the IR scope id that downstream passes
+    /// must observe. Scopes that are merged into their parent (catch
+    /// body block today) map to the parent's IR id.
+    pub(crate) translation: IndexVec<OxcScopeId, ScopeId>,
+}
+
 /// Walk `semantic.scoping()`'s scope tree and produce the
-/// `unsnarl_ir` arena rows. ID translation between `oxc_semantic`'s
-/// `ScopeId` and `unsnarl_ir::ids::ScopeId` is a 1:1 `usize` cast:
-/// both are `NonMaxU32`-backed and `scope_descendants_from_root`
-/// preserves DFS order starting at zero.
+/// `unsnarl_ir` arena rows alongside the `OxcScopeId → IrScopeId`
+/// translation table. Most scopes are emitted 1:1, but a small set of
+/// shapes (currently the catch body `BlockStatement`) are merged into
+/// their parent's IR row; the translation records the routing so
+/// downstream passes can convert `Scoping`-side scope ids without
+/// re-deriving the merge predicate.
 pub(crate) fn build_scopes<'a>(
     semantic: &Semantic<'a>,
     source_type: SourceType,
-) -> IndexVec<ScopeId, ScopeData> {
+) -> ScopeMappingResult {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
     let total = scoping.scopes_len();
-    let mut scopes: IndexVec<ScopeId, ScopeData> = IndexVec::with_capacity(total);
+    let mut translation: IndexVec<OxcScopeId, ScopeId> = IndexVec::with_capacity(total);
+    let mut next_ir = 0usize;
+    for oxc_id in scoping.scope_descendants_from_root() {
+        debug_assert_eq!(translation.len(), oxc_id.index());
+        if is_merged_into_parent(oxc_id, scoping, nodes) {
+            let parent = scoping
+                .scope_parent_id(oxc_id)
+                .expect("merged scope must have a parent");
+            translation.push(translation[parent]);
+        } else {
+            translation.push(ScopeId::from_usize(next_ir));
+            next_ir += 1;
+        }
+    }
 
+    let mut scopes: IndexVec<ScopeId, ScopeData> = IndexVec::with_capacity(next_ir);
     let root_is_strict = matches!(source_type, SourceType::Module);
     for oxc_id in scoping.scope_descendants_from_root() {
+        if is_merged_into_parent(oxc_id, scoping, nodes) {
+            continue;
+        }
         let node_id = scoping.get_node_id(oxc_id);
         let kind = nodes.kind(node_id);
         let block = ast_node_of(&kind);
         let flags = scoping.scope_flags(oxc_id);
         let ty = derive_scope_type(flags, &kind, source_type);
-        let upper = scoping.scope_parent_id(oxc_id).map(ir_scope_id);
+        let upper = scoping.scope_parent_id(oxc_id).map(|p| translation[p]);
         let is_strict = match upper {
             Some(upper_id) => scopes[upper_id].is_strict,
             None => root_is_strict,
@@ -127,7 +164,10 @@ pub(crate) fn build_scopes<'a>(
         }
     }
 
-    scopes
+    ScopeMappingResult {
+        scopes,
+        translation,
+    }
 }
 
 /// Derive the eslint-scope `ScopeType` for a scope from its anchor
@@ -161,12 +201,26 @@ pub(crate) fn derive_scope_type(
     }
 }
 
-fn is_var_creating(flags: ScopeFlags) -> bool {
-    flags.is_var()
+/// Predicate: does this oxc scope have no IR row of its own, instead
+/// merging into the parent's row?
+///
+/// Currently the only merge case is the catch body `BlockStatement`:
+/// `oxc_semantic` emits a separate `BlockStatement` scope for
+/// `catch (e) { ... }`'s body block, while eslint-scope folds both the
+/// catch parameter and the body's declarations into a single `Catch`
+/// scope. The body block is detected by its parent in
+/// [`Scoping::scope_parent_id`] being a `CatchClause` scope.
+fn is_merged_into_parent(oxc_id: OxcScopeId, scoping: &Scoping, nodes: &AstNodes<'_>) -> bool {
+    let Some(parent) = scoping.scope_parent_id(oxc_id) else {
+        return false;
+    };
+    let kind = nodes.kind(scoping.get_node_id(oxc_id));
+    let parent_kind = nodes.kind(scoping.get_node_id(parent));
+    matches!(kind, AstKind::BlockStatement(_)) && matches!(parent_kind, AstKind::CatchClause(_))
 }
 
-fn ir_scope_id(oxc: OxcScopeId) -> ScopeId {
-    ScopeId::from_usize(oxc.index())
+fn is_var_creating(flags: ScopeFlags) -> bool {
+    flags.is_var()
 }
 
 #[cfg(test)]
