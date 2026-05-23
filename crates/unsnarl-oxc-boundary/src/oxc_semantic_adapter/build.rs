@@ -46,14 +46,14 @@ pub(crate) fn build<'a>(
     language: Language,
     raw: &'a str,
 ) -> BuildOutput {
-    let _span = tracing::info_span!("scope_build").entered();
+    let _span = unsnarl_instrumentation::span!("scope_build");
     let ret = {
-        let _span = tracing::info_span!("oxc_semantic").entered();
+        let _span = unsnarl_instrumentation::span!("oxc_semantic");
         SemanticBuilder::new().build(program)
     };
     let semantic = ret.semantic;
     let scope_mapping = {
-        let _span = tracing::info_span!("scope_mapping").entered();
+        let _span = unsnarl_instrumentation::span!("scope_mapping");
         scope_mapping::build_scopes(&semantic, source_type, language)
     };
     let mut scopes = scope_mapping.scopes;
@@ -61,7 +61,7 @@ pub(crate) fn build<'a>(
     let switch_cases = scope_mapping.switch_cases;
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
     let variable_mapping = {
-        let _span = tracing::info_span!("variable_mapping").entered();
+        let _span = unsnarl_instrumentation::span!("variable_mapping");
         variable_mapping::build_variables(
             &semantic,
             &mut scopes,
@@ -75,7 +75,7 @@ pub(crate) fn build<'a>(
     let synthetic_unresolved = variable_mapping.synthetic_unresolved;
     let inner_class_names = variable_mapping.inner_class_names;
     let references = {
-        let _span = tracing::info_span!("reference_mapping").entered();
+        let _span = unsnarl_instrumentation::span!("reference_mapping");
         reference_mapping::build_references(
             &semantic,
             &mut scopes,
@@ -89,7 +89,7 @@ pub(crate) fn build<'a>(
         )
     };
     {
-        let _span = tracing::info_span!("definition_mapping").entered();
+        let _span = unsnarl_instrumentation::span!("definition_mapping");
         definition_mapping::build_definitions(
             &semantic,
             &mut variables,
@@ -98,7 +98,7 @@ pub(crate) fn build<'a>(
         );
     }
     let diagnostics = {
-        let _span = tracing::info_span!("collect_var_detected").entered();
+        let _span = unsnarl_instrumentation::span!("collect_var_detected");
         collect_var_detected_diagnostics(&semantic, raw)
     };
     BuildOutput {

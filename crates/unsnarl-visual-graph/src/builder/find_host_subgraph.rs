@@ -11,7 +11,7 @@ use unsnarl_ir::serialized::{SerializedReference, SerializedScope};
 
 use super::arena::SubgraphIdx;
 use super::state::BuildState;
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn find_host_subgraph(
     r: &SerializedReference,

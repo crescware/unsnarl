@@ -9,7 +9,7 @@ use std::collections::HashMap;
 use unsnarl_ir::serialized::SerializedReference;
 use unsnarl_oxc_parity::PredicateContainerType;
 
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 /// Anchor-map handles the `predicate_target_id` lookup needs. Each
 /// field is a `(offset → anchor-node-id)` map carried by the

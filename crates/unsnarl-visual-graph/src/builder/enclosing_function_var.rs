@@ -5,7 +5,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use super::find_enclosing_subgraph_scope::{
     find_enclosing_subgraph_scope, find_enclosing_subgraph_scope_borrowed,
 };
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn enclosing_function_var(
     scope_id: &str,

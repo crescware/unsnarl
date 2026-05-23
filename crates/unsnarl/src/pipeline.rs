@@ -137,7 +137,7 @@ pub fn emit_ir_detailed(
     let serialized = apply_plugins(serialize_ir(code, source_path, language)?, plugins);
     let diagnostics = serialized.diagnostics.clone();
     let text = {
-        let _span = tracing::info_span!("emit", format = "ir").entered();
+        let _span = unsnarl_instrumentation::span!("emit", format = "ir");
         IrEmitter.emit(
             &serialized,
             &EmitOptions {
@@ -343,7 +343,7 @@ fn prepare_emit(
     highlight: Option<&HighlightRunOptions>,
 ) -> PreparedEmit {
     let base = {
-        let _span = tracing::info_span!("build_visual_graph").entered();
+        let _span = unsnarl_instrumentation::span!("build_visual_graph");
         let graph = build_visual_graph(
             ir,
             &BuildVisualGraphOptions {
@@ -365,7 +365,7 @@ fn prepare_emit(
     let mut prune_root_ids: Option<Vec<String>> = None;
     if let Some(p) = pruning {
         if !p.roots.is_empty() {
-            let _span = tracing::info_span!("prune", roots = p.roots.len()).entered();
+            let _span = unsnarl_instrumentation::span!("prune", roots = p.roots.len());
             let resolved = resolve_ambiguous_queries(&base, &p.roots);
             let result = prune_visual_graph(
                 &base,
@@ -397,7 +397,7 @@ fn prepare_emit(
     }
 
     let highlight_ids = highlight.map(|h| {
-        let _span = tracing::info_span!("highlight").entered();
+        let _span = unsnarl_instrumentation::span!("highlight");
         match h {
             // Roots mode mirrors `-r`'s match set verbatim, so it inherits
             // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
@@ -465,7 +465,7 @@ fn emit_pruning_aware_with(
     let resolutions_for_details = prepared.resolutions.clone();
     let per_query_for_details = prepared.per_query;
     let text = {
-        let _span = tracing::info_span!("emit").entered();
+        let _span = unsnarl_instrumentation::span!("emit");
         emitter.emit(
             &serialized,
             &EmitOptions {
@@ -496,7 +496,7 @@ fn serialize_ir(
     let allocator = Allocator::default();
     let parser = OxcParser;
     let parsed = {
-        let _span = tracing::info_span!("parse", bytes = code.len()).entered();
+        let _span = unsnarl_instrumentation::span!("parse", bytes = code.len());
         parser.parse(
             &allocator,
             code,
@@ -508,7 +508,7 @@ fn serialize_ir(
         )?
     };
     let analyzed = {
-        let _span = tracing::info_span!("analyze").entered();
+        let _span = unsnarl_instrumentation::span!("analyze");
         run_analysis(&parsed.program, parsed.source_type, language, parsed.raw)
     };
     let serializer = FlatSerializer;
@@ -523,7 +523,7 @@ fn serialize_ir(
         diagnostics: &analyzed.diagnostics,
         raw: analyzed.raw,
     };
-    let _span = tracing::info_span!("serialize").entered();
+    let _span = unsnarl_instrumentation::span!("serialize");
     let ir = serializer.serialize(&ctx);
     tracing::info!(
         scopes = ir.scopes.len(),

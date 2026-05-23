@@ -46,12 +46,12 @@ pub fn run_analysis<'a>(
     raw: &'a str,
 ) -> AnalyzedSource<'a> {
     let nesting_depths = {
-        let _span = tracing::info_span!("analyze::nesting_depths").entered();
+        let _span = unsnarl_instrumentation::span!("analyze::nesting_depths");
         compute_nesting_depths(program)
     };
 
     let result = {
-        let _span = tracing::info_span!("analyze::scope_build").entered();
+        let _span = unsnarl_instrumentation::span!("analyze::scope_build");
         let mut collector = DiagnosticCollector::default();
         let result = analyze(
             program,
@@ -74,9 +74,10 @@ pub fn run_analysis<'a>(
     let (result, diagnostics) = result;
 
     let span_to_scope: HashMap<(u32, u32), ScopeId> = {
-        let _span =
-            tracing::info_span!("analyze::span_to_scope", count = result.arena.scopes.len())
-                .entered();
+        let _span = unsnarl_instrumentation::span!(
+            "analyze::span_to_scope",
+            count = result.arena.scopes.len()
+        );
         let mut m = HashMap::with_capacity(result.arena.scopes.len());
         for (id, scope) in result.arena.scopes.iter_enumerated() {
             m.insert((scope.block.span.start, scope.block.span.end), id);
@@ -84,11 +85,10 @@ pub fn run_analysis<'a>(
         m
     };
     let span_to_ref: HashMap<(u32, u32), ReferenceId> = {
-        let _span = tracing::info_span!(
+        let _span = unsnarl_instrumentation::span!(
             "analyze::span_to_ref",
             count = result.arena.references.len()
-        )
-        .entered();
+        );
         let mut m = HashMap::with_capacity(result.arena.references.len());
         for (id, reference) in result.arena.references.iter_enumerated() {
             m.insert(
@@ -111,11 +111,12 @@ pub fn run_analysis<'a>(
     // oxc value of `0`.
     let program_normalised_start = result.arena.scopes[result.global_scope].block.span.start;
     let index = {
-        let _span = tracing::info_span!("analyze::build_source_index", bytes = raw.len()).entered();
+        let _span =
+            unsnarl_instrumentation::span!("analyze::build_source_index", bytes = raw.len());
         SourceIndex::build(raw)
     };
     {
-        let _span = tracing::info_span!("analyze::build_analysis_visitor").entered();
+        let _span = unsnarl_instrumentation::span!("analyze::build_analysis_visitor");
         let mut walker = BuildAnalysisVisitor::new(
             &index,
             &result.arena,
@@ -129,11 +130,10 @@ pub fn run_analysis<'a>(
     }
 
     {
-        let _span = tracing::info_span!(
+        let _span = unsnarl_instrumentation::span!(
             "analyze::variable_annotations",
             count = result.arena.variables.len()
-        )
-        .entered();
+        );
         populate_variable_annotations(&result.arena, &mut annotations);
     }
 

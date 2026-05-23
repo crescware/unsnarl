@@ -1082,6 +1082,7 @@ dependencies = [
  "unsnarl-emitter-markdown",
  "unsnarl-emitter-mermaid",
  "unsnarl-emitter-stats",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-boundary",
  "unsnarl-plugin",
@@ -1103,6 +1104,7 @@ dependencies = [
  "serde_json",
  "tracing",
  "unsnarl-annotations",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-boundary",
  "unsnarl-oxc-parity",
@@ -1140,6 +1142,7 @@ dependencies = [
  "unsnarl-analyzer",
  "unsnarl-annotations",
  "unsnarl-emitter",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-boundary",
  "unsnarl-oxc-parity",
@@ -1174,6 +1177,7 @@ version = "0.3.2"
 dependencies = [
  "tracing",
  "unsnarl-emitter",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-parity",
  "unsnarl-visual-graph",
@@ -1186,6 +1190,13 @@ dependencies = [
  "unsnarl-emitter",
  "unsnarl-ir",
  "unsnarl-visual-graph",
+]
+
+[[package]]
+name = "unsnarl-instrumentation"
+version = "0.3.2"
+dependencies = [
+ "tracing",
 ]
 
 [[package]]
@@ -1213,6 +1224,7 @@ dependencies = [
  "oxc_span",
  "oxc_syntax",
  "tracing",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-parity",
 ]
@@ -1256,6 +1268,7 @@ dependencies = [
  "serde_json",
  "tracing",
  "unsnarl-annotations",
+ "unsnarl-instrumentation",
  "unsnarl-ir",
  "unsnarl-oxc-parity",
  "unsnarl-root-query",

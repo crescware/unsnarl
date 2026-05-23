@@ -26,9 +26,9 @@ use super::node_id::node_id;
 use super::should_subgraph::should_subgraph;
 use super::state::BuildState;
 use super::switch_discriminant_anchor::attach_switch_discriminant_anchor;
-use super::timing::TimingScope;
 use super::visible_ancestor_subgraph::visible_ancestor_subgraph;
 use super::write_op_node_id::write_op_node_id;
+use unsnarl_instrumentation::TimingScope;
 
 fn record_collapsed_descendants(
     state: &mut BuildState,

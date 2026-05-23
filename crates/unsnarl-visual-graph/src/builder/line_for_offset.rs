@@ -4,10 +4,11 @@
 //! table, so the lookup is `O(log lines)` per call rather than the
 //! linear-scan shape it had before.
 
+use unsnarl_instrumentation::TimingScope;
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 
 pub fn line_for_offset(source_index: &SourceIndex<'_>, offset: Utf16CodeUnitOffset) -> u32 {
-    let _t = super::timing::TimingScope::start("line_for_offset");
+    let _t = TimingScope::start("line_for_offset");
     source_index.line_for_utf16_offset(offset)
 }
 

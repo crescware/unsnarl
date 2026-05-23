@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "crates/unsnarl-oxc-parity",
+    "crates/unsnarl-instrumentation",
     "crates/unsnarl-ir",
     "crates/unsnarl-annotations",
     "crates/unsnarl-oxc-boundary",
@@ -29,6 +30,7 @@ repository = "https://github.com/crescware/unsnarl"
 
 [workspace.dependencies]
 unsnarl-oxc-parity = { path = "crates/unsnarl-oxc-parity" }
+unsnarl-instrumentation = { path = "crates/unsnarl-instrumentation" }
 unsnarl-ir = { path = "crates/unsnarl-ir" }
 unsnarl-annotations = { path = "crates/unsnarl-annotations" }
 unsnarl-oxc-boundary = { path = "crates/unsnarl-oxc-boundary" }
