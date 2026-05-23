@@ -100,22 +100,6 @@ impl<'a> SourceIndex<'a> {
             offset: Utf16CodeUnitOffset(line_start_utf16 + column_utf16 + overshoot),
         }
     }
-
-    /// Resolve a UTF-16 code-unit offset (the encoding the IR carries
-    /// in every `Span.offset`) into the 1-based line number containing
-    /// that position. Matches the legacy
-    /// [`crate::primitive::span_from_offset`] behaviour for IR
-    /// offsets: an offset that lands exactly on a `\n` is reported as
-    /// still on the line *before* the newline.
-    pub fn line_for_utf16_offset(&self, offset: Utf16CodeUnitOffset) -> u32 {
-        let target = offset.0;
-        let line_idx = match self.line_start_utf16.binary_search(&target) {
-            Ok(i) => i,
-            // `Err(0)` is impossible because `line_start_utf16[0] == 0 <= target`.
-            Err(i) => i - 1,
-        };
-        (line_idx + 1) as u32
-    }
 }
 
 #[cfg(test)]

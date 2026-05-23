@@ -213,7 +213,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         let scope = self.arena.references[ref_id].from;
         let parent_node = self.parent_ast_node();
         let parent_type = parent_node.map(|n| n.r#type.clone());
-        let parent_offset = parent_node.map(|n| n.span.start);
+        let parent_offset = parent_node.map(|n| Utf8ByteOffset(n.span.start));
         let key = self.current_key();
         let owners = match locate_reference_owner_slot(&self.path_entries) {
             OwnerLookup::None | OwnerLookup::Boundary => Vec::new(),

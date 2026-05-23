@@ -22,15 +22,32 @@
 //! on-disk JSON keeps emitting a bare number — the type-level
 //! discipline is internal.
 //!
-//! ## Conversion sites
+//! ## Conversion site
 //!
-//! * The boundary in `unsnarl-oxc-boundary` (where `oxc Span` lands
-//!   in the IR) is the **only** place that should translate
-//!   [`Utf8ByteOffset`] → [`Utf16CodeUnitOffset`]; the conversion is
-//!   performed by [`crate::primitive::SourceIndex::span_at`].
-//! * Every IR consumer (analyzer, emitters, visual-graph builder)
-//!   should only see [`Utf16CodeUnitOffset`] and never construct or
-//!   consume a [`Utf8ByteOffset`].
+//! Translation from [`Utf8ByteOffset`] to [`Utf16CodeUnitOffset`] is
+//! funneled through a single helper —
+//! [`crate::primitive::SourceIndex::span_at`] — so every consumer
+//! that needs a UTF-16 offset goes through the same lookup table.
+//!
+//! ## Which offset lives where
+//!
+//! Each IR field is typed by *what it actually stores*, not by
+//! whether the consumer happens to be the analyzer or the
+//! serializer.
+//!
+//! * Fields that are pre-converted to UTF-16 at construction time
+//!   (`BlockContext::*::parent_span_offset`,
+//!   `OtherBlockContext::if_chain_root_offset`,
+//!   `PredicateContainer::offset`, every `Span::offset`) carry
+//!   [`Utf16CodeUnitOffset`].
+//! * Fields that retain the raw AST offset until serialize time
+//!   (`ReferenceCompletion::*::start_offset` / `end_offset`,
+//!   `JsxElementContainer::*`, `ExpressionStatementContainer::*`,
+//!   `HeadExpression::Raw::*`, `HeadOperand::*`,
+//!   `Completion::AbruptCompletion::*::*_offset`) carry
+//!   [`Utf8ByteOffset`]. The flat serializer translates each one to
+//!   a `Span` through [`crate::primitive::SourceIndex::span_at`] at
+//!   the emit site.
 
 use serde::Serialize;
 

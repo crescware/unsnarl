@@ -102,8 +102,12 @@ impl IRSerializer for FlatSerializer {
                     t_pick_offset += t.elapsed();
                     let t = Instant::now();
                     let name = arena.variables[v].name();
-                    let id =
-                        SerializedVariableId::new(format!("{}:{}@{}", sid_str(sid), name, offset));
+                    let id = SerializedVariableId::new(format!(
+                        "{}:{}@{}",
+                        sid_str(sid),
+                        name,
+                        offset.0
+                    ));
                     t_format_id += t.elapsed();
                     let t = Instant::now();
                     variable_ids.insert(v, id);

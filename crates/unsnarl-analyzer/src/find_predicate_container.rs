@@ -20,7 +20,7 @@ const LOOP_HEADER_KEYS_FOR_OF_IN: &[&str] = &["left", "right"];
 
 pub fn find_predicate_container(
     parent_type: Option<&AstType>,
-    parent_offset: Option<u32>,
+    parent_offset: Option<Utf8ByteOffset>,
     key: Option<&str>,
     path: &[PathEntry],
     index: &SourceIndex<'_>,
@@ -45,7 +45,7 @@ pub fn find_predicate_container(
     let parent_type = parent_type?;
     let container_type = predicate_container_for(parent_type, key)?;
     let offset = index
-        .span_at(Utf8ByteOffset(parent_offset.unwrap_or(0)))
+        .span_at(parent_offset.unwrap_or(Utf8ByteOffset(0)))
         .offset;
     Some(PredicateContainer {
         r#type: container_type,

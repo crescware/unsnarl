@@ -1,7 +1,7 @@
 use oxc_index::IndexVec;
 use oxc_span::Span;
 
-use unsnarl_ir::primitive::{AstIdentifier, SourceIndex};
+use unsnarl_ir::primitive::{AstIdentifier, SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::scope::{DefinitionData, VariableData};
 use unsnarl_ir::{DefinitionType, IrArena, ScopeId};
 use unsnarl_oxc_parity::AstType;
@@ -44,7 +44,7 @@ fn ascii_source_returns_byte_offset_unchanged() {
     ));
     assert_eq!(
         pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
-        6
+        Utf16CodeUnitOffset(6)
     );
 }
 
@@ -66,7 +66,7 @@ fn non_ascii_before_head_identifier_shifts_offset_to_utf16_units() {
     ));
     assert_eq!(
         pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
-        11
+        Utf16CodeUnitOffset(11)
     );
 }
 
@@ -101,7 +101,7 @@ fn falls_back_to_first_def_name_when_identifiers_is_empty() {
     ));
     assert_eq!(
         pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
-        11
+        Utf16CodeUnitOffset(11)
     );
 }
 
@@ -118,6 +118,6 @@ fn returns_zero_when_variable_has_no_identifiers_and_no_defs() {
     ));
     assert_eq!(
         pick_variable_offset(&arena, var_id, &SourceIndex::build(raw)),
-        0
+        Utf16CodeUnitOffset(0)
     );
 }

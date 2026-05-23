@@ -1,6 +1,6 @@
 use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::reference::PredicateContainer;
-use unsnarl_ir::Utf16CodeUnitOffset;
+use unsnarl_ir::{Utf16CodeUnitOffset, Utf8ByteOffset};
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
 use crate::path_entry::PathEntry;
@@ -23,7 +23,7 @@ fn find_predicate_container(
 ) -> Option<PredicateContainer> {
     super::find_predicate_container(
         parent_type,
-        parent_offset,
+        parent_offset.map(Utf8ByteOffset),
         key,
         path,
         &SourceIndex::build(""),
@@ -340,7 +340,7 @@ fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
     let index = SourceIndex::build(raw);
     let from_path = super::find_predicate_container(
         Some(&AstType::BinaryExpression),
-        Some(11),
+        Some(Utf8ByteOffset(11)),
         Some("left"),
         &path,
         &index,
@@ -349,7 +349,7 @@ fn offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
 
     let from_parent_fallback = super::find_predicate_container(
         Some(&AstType::IfStatement),
-        Some(7),
+        Some(Utf8ByteOffset(7)),
         Some("test"),
         &[],
         &index,
