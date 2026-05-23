@@ -132,7 +132,11 @@ pub(crate) fn build_references(
                 };
                 let identifier = build_identifier(nodes, oxc_ref.node_id());
                 let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
-                let flags = convert_flags(oxc_ref.flags());
+                let flags = adjust_flags_for_parent(
+                    convert_flags(oxc_ref.flags()),
+                    nodes,
+                    oxc_ref.node_id(),
+                );
                 let new_id = references.push(ReferenceData {
                     identifier,
                     from,
@@ -497,6 +501,28 @@ fn convert_flags(flags: OxcReferenceFlags) -> ReferenceFlagBits {
         out |= ReferenceFlags::WRITE;
     }
     out
+}
+
+/// Mirror the hand-rolled walker's `classify_ordinary_reference`
+/// decision for slots where `oxc_semantic`'s flag does not match
+/// `crate::classify`'s mapping.
+///
+/// Currently handled: `ForInStatement.left` and `ForOfStatement.left`.
+/// `oxc_semantic` marks the loop variable as `Write` (each iteration
+/// assigns to it), but the hand-rolled walker's
+/// `classify_ordinary_reference` has no special case for these slots
+/// and falls through to `reference(READ, false)`. Force the flags to
+/// `READ` when the reference's parent is one of those `for` shapes.
+fn adjust_flags_for_parent(
+    flags: ReferenceFlagBits,
+    nodes: &oxc_semantic::AstNodes<'_>,
+    node_id: oxc_semantic::NodeId,
+) -> ReferenceFlagBits {
+    let parent_kind = nodes.parent_kind(node_id);
+    match parent_kind {
+        AstKind::ForOfStatement(_) | AstKind::ForInStatement(_) => ReferenceFlags::READ,
+        _ => flags,
+    }
 }
 
 fn resolve_synthetic_arguments(
