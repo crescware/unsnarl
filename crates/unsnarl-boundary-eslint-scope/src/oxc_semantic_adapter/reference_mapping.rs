@@ -754,28 +754,32 @@ fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
 }
 
-/// Synthesise implicit-global Read references at `IdentifierName`
-/// positions that the hand-rolled walker treats as references via
-/// `scope_build_visitor::visit_identifier_name`.
+/// Synthesise implicit-global Read references at identifier positions
+/// the hand-rolled walker treats as references but `oxc_semantic` does
+/// not emit `Reference` rows for.
 ///
 /// `oxc_semantic` does not emit `Reference` rows for `IdentifierName`
-/// nodes — those are syntactic identifiers (e.g. the `meta` /
-/// `property` slots of a `MetaProperty`, or an `ImportAttribute.key`
-/// when keyed by an `Identifier`). The hand-rolled walker, however,
-/// classifies them as plain reads and routes them through the
-/// implicit-global synthesis path. Walk every relevant AST node and
-/// emit the corresponding read references so the IR carries the
-/// same `scope#0:new@27` / `scope#0:target@31` /
-/// `scope#0:type@<offset>` implicit-global variables the parity
+/// nodes, nor for `JSXIdentifier` nodes at JSX-tag positions whose
+/// name is a lowercase intrinsic. The hand-rolled walker's
+/// `scope_build_visitor::visit_identifier_name` /
+/// `visit_jsx_identifier`, however, route both shapes through
+/// `handle_identifier_reference` and produce implicit-global Read
+/// references with the appropriate `AstType` on the resulting
+/// `Reference` / `ImplicitGlobalVariable` rows. Walk every relevant
+/// AST node and synthesise the matching references so the IR carries
+/// the same `scope#0:new@<offset>` / `scope#0:target@<offset>` /
+/// `scope#0:span@<offset>` implicit-global variables the parity
 /// baseline shows.
 ///
-/// Currently covered: [`MetaProperty.meta`], [`MetaProperty.property`],
-/// [`ImportAttribute.key`] when the key is an identifier shape (not a
-/// string literal). `ExportSpecifier.local` and
-/// `ExportAllDeclaration.exported` are covered indirectly through
-/// `oxc_semantic`'s own reference table when the identifier matches
-/// an in-scope binding, and otherwise stay unbound — the parity
-/// baseline treats them the same way.
+/// Currently covered:
+///
+/// * [`AstKind::MetaProperty`] — both `meta` and `property`
+///   `IdentifierName` slots (`new.target`, `import.meta`).
+/// * [`AstKind::ImportAttribute`] when the key is an `Identifier`
+///   variant (the `type` in `import x from "y" with { type: "json" }`).
+/// * [`AstKind::JSXIdentifier`] — every JSX-tag / attribute / member
+///   identifier whose span isn't already covered by an existing
+///   reference from the resolved- or unresolved-loop passes.
 #[allow(clippy::too_many_arguments)]
 fn synthesise_identifier_name_references(
     semantic: &Semantic<'_>,
@@ -790,30 +794,51 @@ fn synthesise_identifier_name_references(
 ) {
     use oxc_ast::ast::ImportAttributeKey;
 
+    let existing_spans: HashSet<(u32, u32)> = references
+        .iter()
+        .map(|r| (r.identifier.span.start, r.identifier.span.end))
+        .collect();
     let nodes = semantic.nodes();
-    let mut sites: Vec<(ScopeId, &str, Span)> = Vec::new();
+    let mut sites: Vec<(ScopeId, &str, Span, AstType)> = Vec::new();
     for node in nodes.iter() {
         let Some(from) = translation[node.scope_id()] else {
             continue;
         };
         match node.kind() {
             AstKind::MetaProperty(mp) => {
-                sites.push((from, mp.meta.name.as_str(), mp.meta.span));
-                sites.push((from, mp.property.name.as_str(), mp.property.span));
+                sites.push((
+                    from,
+                    mp.meta.name.as_str(),
+                    mp.meta.span,
+                    AstType::Identifier,
+                ));
+                sites.push((
+                    from,
+                    mp.property.name.as_str(),
+                    mp.property.span,
+                    AstType::Identifier,
+                ));
             }
             AstKind::ImportAttribute(ia) => {
                 if let ImportAttributeKey::Identifier(id) = &ia.key {
-                    sites.push((from, id.name.as_str(), id.span));
+                    sites.push((from, id.name.as_str(), id.span, AstType::Identifier));
                 }
+            }
+            AstKind::JSXIdentifier(id) => {
+                sites.push((from, id.name.as_str(), id.span, AstType::JSXIdentifier));
             }
             _ => {}
         }
     }
+    // Drop any site whose span already has a Reference row from the
+    // resolved- or unresolved-loop passes (an `<MyComp/>` tag where
+    // `MyComp` is in scope was already handled there).
+    sites.retain(|(_, _, span, _)| !existing_spans.contains(&(span.start, span.end)));
     // Emit in source order so first-occurrence implicit-global synthesis
     // mirrors the hand-rolled walker.
-    sites.sort_by_key(|(_, _, span)| span.start);
-    for (from, name, span) in sites {
-        let identifier = AstIdentifier::new(AstType::Identifier, name.to_string(), span);
+    sites.sort_by_key(|(_, _, span, _)| span.start);
+    for (from, name, span, ast_type) in sites {
+        let identifier = AstIdentifier::new(ast_type, name.to_string(), span);
         let from = reparent_to_switch_case(from, span, scopes, switch_cases);
         let lookup = ensure_implicit_global(
             scopes,
