@@ -49,12 +49,54 @@ fn with_scopes(
         )
         .expect("test source must parse cleanly");
     let ret = SemanticBuilder::new().build(&parsed.program);
-    let scope_mapping = build_scopes(&ret.semantic, source_type);
+    let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     body(&scope_mapping.scopes);
 }
 
 fn root() -> ScopeId {
     ScopeId::from_usize(0)
+}
+
+/// For TypeScript inputs whose source begins with a hashbang and/or
+/// leading comments, npm `oxc-parser` exposes `program.start` past
+/// those tokens (so `program.start` lands on the first body
+/// statement); the boundary's hand-rolled walker normalises the
+/// Rust-side `Program.span.start = 0` to the same offset. The
+/// adapter mirrors that normalisation in `build_anchor_node` only for
+/// `Language::Ts` / `Language::Tsx`. For `Language::Js` / `Jsx` the
+/// start stays at the raw program start.
+#[test]
+fn typescript_root_block_skips_leading_block_comment() {
+    let code = "/* leading */\nconst x = 1;\n";
+    with_scopes(code, Language::Ts, SourceType::Module, |scopes| {
+        let block = &scopes[root()].block;
+        assert!(
+            block.span.start > 0,
+            "expected root block start to skip past the leading block comment (got {})",
+            block.span.start,
+        );
+    });
+}
+
+#[test]
+fn javascript_root_block_keeps_leading_offset_zero() {
+    let code = "/* leading */\nconst x = 1;\n";
+    with_scopes(code, Language::Js, SourceType::Module, |scopes| {
+        assert_eq!(scopes[root()].block.span.start, 0);
+    });
+}
+
+#[test]
+fn typescript_root_block_skips_hashbang() {
+    let code = "#!/usr/bin/env node\nconst x = 1;\n";
+    with_scopes(code, Language::Ts, SourceType::Module, |scopes| {
+        let block = &scopes[root()].block;
+        assert!(
+            block.span.start > 0,
+            "expected root block start to skip past hashbang (got {})",
+            block.span.start,
+        );
+    });
 }
 
 #[test]

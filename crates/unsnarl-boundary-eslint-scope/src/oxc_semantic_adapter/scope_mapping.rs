@@ -96,6 +96,7 @@ use unsnarl_ir::ids::ScopeId;
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope::ScopeData;
 use unsnarl_ir::scope_type::ScopeType;
+use unsnarl_ir::Language;
 use unsnarl_oxc_parity::AstType;
 
 use crate::materialise::ast_node_of;
@@ -138,6 +139,7 @@ struct SwitchInfo {
 pub(crate) fn build_scopes<'a>(
     semantic: &Semantic<'a>,
     source_type: SourceType,
+    language: Language,
 ) -> ScopeMappingResult {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
@@ -167,7 +169,7 @@ pub(crate) fn build_scopes<'a>(
             continue;
         }
         let new_id = ScopeId::from_usize(scopes.len());
-        let block = ast_node_of(&kind);
+        let block = build_anchor_node(&kind, language);
         let flags = scoping.scope_flags(oxc_id);
         let ty = derive_scope_type(flags, &kind, source_type);
         let upper = upper_for(oxc_id, scoping, nodes, &translation, &switch_info);
@@ -235,6 +237,38 @@ pub(crate) fn build_scopes<'a>(
         scopes,
         translation,
     }
+}
+
+/// Build the `AstNode` recorded on a scope's `block` field, applying
+/// the TypeScript-only `Program` span normalisation when the scope's
+/// anchor is the root `Program`.
+///
+/// Background: npm `oxc-parser` exposes `program.start = 0` for
+/// `lang: "js" / "jsx"`, but for `lang: "ts" / "tsx"` it advances
+/// past any leading hashbang and leading line / block comments so
+/// `program.start` lands on the first directive / body statement.
+/// The Rust `oxc_parser` crate emits `Program.span.start = 0`
+/// unconditionally, so the boundary's hand-rolled walker normalises
+/// the start in [`crate::analyze::analyze`] before pushing the root
+/// scope. Mirror that normalisation here so the adapter's root
+/// `block.span` matches the parity baseline for TypeScript inputs
+/// whose source begins with comments / a hashbang (e.g.
+/// cytoscape.min.js).
+fn build_anchor_node(kind: &AstKind<'_>, language: Language) -> AstNode {
+    let mut node = ast_node_of(kind);
+    if matches!(kind, AstKind::Program(_)) && matches!(language, Language::Ts | Language::Tsx) {
+        if let AstKind::Program(program) = kind {
+            let normalised_start = program
+                .directives
+                .first()
+                .map(|d| d.span.start)
+                .or_else(|| program.body.first().map(|s| s.span().start))
+                .or_else(|| program.hashbang.as_ref().map(|h| h.span.end))
+                .unwrap_or(program.span.start);
+            node.span = Span::new(normalised_start, program.span.end);
+        }
+    }
+    node
 }
 
 /// Compute the IR `upper` for a non-merged, non-filtered oxc scope.

@@ -29,12 +29,12 @@ use super::{definition_mapping, reference_mapping, scope_mapping, variable_mappi
 pub(crate) fn build<'a>(
     program: &Program<'a>,
     source_type: SourceType,
-    _language: Language,
+    language: Language,
     _raw: &'a str,
 ) -> EslintScopeAnalysisResult {
     let ret = SemanticBuilder::new().build(program);
     let semantic = ret.semantic;
-    let scope_mapping = scope_mapping::build_scopes(&semantic, source_type);
+    let scope_mapping = scope_mapping::build_scopes(&semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
     let (mut variables, symbol_to_variable) =

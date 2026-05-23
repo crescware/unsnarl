@@ -56,7 +56,7 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
         )
         .expect("test source must parse cleanly");
     let ret = SemanticBuilder::new().build(&parsed.program);
-    let scope_mapping = build_scopes(&ret.semantic, source_type);
+    let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
     let (mut variables, symbol_to_variable) =
