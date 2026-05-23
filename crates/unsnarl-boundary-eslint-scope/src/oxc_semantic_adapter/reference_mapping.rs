@@ -48,12 +48,13 @@
 //! `oxc_semantic_probe_test::with_body_identifier_resolves_to_outer_binding_diverging_from_eslint_scope`'s
 //! observation that the declaration carries the init directly). The
 //! hand-rolled walker, in contrast, synthesises a write reference
-//! with `init = true` at that slot. Since the relevant reference
-//! does not exist on the `oxc_semantic` side at all, this pass sets
-//! `init = false` on every reference it emits; recovering the
-//! hand-rolled shape would require synthesising new references from
-//! declarator AST walks rather than from `Scoping`'s reference table,
-//! which is gated on the parity-harness signal (Phase 2 step 5).
+//! with `init = true` at each binding inside a `VariableDeclarator`
+//! that has an `init` expression. This pass walks `VariableDeclarator`
+//! AST nodes after the regular reference loop and synthesises those
+//! `init = true` writes, looking each binding identifier's symbol up
+//! via `symbol_to_variable` so the synthesised reference resolves to
+//! the right `VariableData`. Destructuring patterns are flattened to
+//! their constituent binding identifiers (one `init` write per leaf).
 //!
 //! ## Known divergences (deferred to follow-up commits)
 //!
@@ -69,8 +70,8 @@
 //!    are represented as `IdentifierReference` by the parser already,
 //!    so they flow through this pass unchanged. No special-casing
 //!    needed here.
-//! 3. **`init = true` for `var x = 0`**: see above.
 
+use oxc_ast::ast::{BindingIdentifier, BindingPattern};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::Semantic;
@@ -175,6 +176,15 @@ pub(crate) fn build_references(
         // type-only) scope; its references aren't part of the runtime
         // IR either.
     }
+
+    synthesise_init_references(
+        semantic,
+        scopes,
+        variables,
+        &mut references,
+        symbol_to_variable,
+        translation,
+    );
 
     for (name_ident, ref_ids) in scoping.root_unresolved_references() {
         let name = name_ident.as_str().to_string();
@@ -329,6 +339,85 @@ fn push_through_chain(
         cur = scopes[s].upper;
     }
     scopes[root].through.push(ref_id);
+}
+
+/// Walk every `VariableDeclarator` node and emit a write reference
+/// with `init = true` for each binding identifier inside its pattern
+/// whose declarator has an `init` expression. Mirrors the
+/// `classify_identifier` → `WRITE + init = true` path in the
+/// hand-rolled walker for the `VariableDeclarator.id` slot.
+fn synthesise_init_references(
+    semantic: &Semantic<'_>,
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    references: &mut IndexVec<ReferenceId, ReferenceData>,
+    symbol_to_variable: &IndexVec<SymbolId, Option<VariableId>>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+) {
+    let nodes = semantic.nodes();
+    for node in nodes.iter() {
+        let AstKind::VariableDeclarator(vd) = node.kind() else {
+            continue;
+        };
+        if vd.init.is_none() {
+            continue;
+        }
+        let Some(from) = translation[node.scope_id()] else {
+            continue;
+        };
+        let mut bindings: Vec<&BindingIdentifier<'_>> = Vec::new();
+        collect_binding_idents(&vd.id, &mut bindings);
+        for binding in bindings {
+            let Some(symbol_id) = binding.symbol_id.get() else {
+                continue;
+            };
+            let Some(var_id) = symbol_to_variable[symbol_id] else {
+                continue;
+            };
+            let identifier = AstIdentifier::new(
+                AstType::Identifier,
+                binding.name.as_str().to_string(),
+                binding.span,
+            );
+            let new_id = references.push(ReferenceData {
+                identifier,
+                from,
+                resolved: Some(var_id),
+                init: true,
+                flags: ReferenceFlags::WRITE,
+            });
+            scopes[from].references.push(new_id);
+            variables[var_id].references.push(new_id);
+        }
+    }
+}
+
+fn collect_binding_idents<'a, 'b>(
+    pattern: &'b BindingPattern<'a>,
+    out: &mut Vec<&'b BindingIdentifier<'a>>,
+) {
+    match pattern {
+        BindingPattern::BindingIdentifier(id) => out.push(id),
+        BindingPattern::ObjectPattern(obj) => {
+            for prop in &obj.properties {
+                collect_binding_idents(&prop.value, out);
+            }
+            if let Some(rest) = obj.rest.as_deref() {
+                collect_binding_idents(&rest.argument, out);
+            }
+        }
+        BindingPattern::ArrayPattern(arr) => {
+            for el in arr.elements.iter().flatten() {
+                collect_binding_idents(el, out);
+            }
+            if let Some(rest) = arr.rest.as_deref() {
+                collect_binding_idents(&rest.argument, out);
+            }
+        }
+        BindingPattern::AssignmentPattern(asn) => {
+            collect_binding_idents(&asn.left, out);
+        }
+    }
 }
 
 #[cfg(test)]

@@ -138,27 +138,19 @@ fn empty_script_has_no_references() {
 fn resolved_read_links_back_to_variable() {
     with_arena("let x = 1; x;", Language::Js, SourceType::Module, |b| {
         let var_id = b.scopes[root()].set().get("x").copied().expect("x exists");
-        assert_eq!(
-            b.references.len(),
-            1,
-            "expected exactly one reference for `x`"
-        );
-        let r = &b.references[ReferenceId::from_usize(0)];
-        assert_eq!(r.identifier.name(), "x");
-        assert!(matches!(r.identifier.r#type, AstType::Identifier));
-        assert_eq!(r.resolved, Some(var_id));
-        assert!(!r.init);
-        assert!((r.flags & ReferenceFlags::READ).0 != 0);
-        assert!((r.flags & ReferenceFlags::WRITE).0 == 0);
-        assert_eq!(r.from, root());
-        assert_eq!(
-            b.scopes[root()].references,
-            vec![ReferenceId::from_usize(0)]
-        );
-        assert_eq!(
-            b.variables[var_id].references,
-            vec![ReferenceId::from_usize(0)]
-        );
+        // Two references: the synthesised `init = true` write at the
+        // declarator's `x`, and the trailing `x;` read.
+        assert_eq!(b.references.len(), 2);
+        let read = b
+            .references
+            .iter()
+            .find(|r| !r.init && (r.flags & ReferenceFlags::READ).0 != 0)
+            .expect("expected a non-init read reference");
+        assert_eq!(read.identifier.name(), "x");
+        assert!(matches!(read.identifier.r#type, AstType::Identifier));
+        assert_eq!(read.resolved, Some(var_id));
+        assert!((read.flags & ReferenceFlags::WRITE).0 == 0);
+        assert_eq!(read.from, root());
         // No implicit-global created → no through walk.
         assert!(b.scopes[root()].through.is_empty());
     });
@@ -168,15 +160,76 @@ fn resolved_read_links_back_to_variable() {
 fn resolved_write_carries_write_flag() {
     with_arena("let x = 1; x = 2;", Language::Js, SourceType::Module, |b| {
         let var_id = b.scopes[root()].set().get("x").copied().expect("x exists");
-        // `x = 2` is a Write reference. `oxc_semantic` does not emit
-        // a reference for the binding side of `let x = 1`, so we
-        // expect exactly one reference here.
-        assert_eq!(b.references.len(), 1);
-        let r = &b.references[ReferenceId::from_usize(0)];
-        assert_eq!(r.identifier.name(), "x");
-        assert_eq!(r.resolved, Some(var_id));
-        assert!((r.flags & ReferenceFlags::WRITE).0 != 0);
-        assert!(!r.init);
+        // Two references: the synthesised `init = true` write at the
+        // declarator's `x`, and the subsequent `x = 2` write (not
+        // init). Locate the non-init write.
+        let assign_write = b
+            .references
+            .iter()
+            .find(|r| !r.init && (r.flags & ReferenceFlags::WRITE).0 != 0)
+            .expect("expected a non-init write reference for `x = 2`");
+        assert_eq!(assign_write.identifier.name(), "x");
+        assert_eq!(assign_write.resolved, Some(var_id));
+    });
+}
+
+#[test]
+fn variable_declarator_with_init_emits_synthetic_init_reference() {
+    with_arena("let x = 1;", Language::Js, SourceType::Module, |b| {
+        let var_id = b.scopes[root()].set().get("x").copied().expect("x exists");
+        assert_eq!(
+            b.references.len(),
+            1,
+            "expected exactly the synthesised init reference"
+        );
+        let init = &b.references[ReferenceId::from_usize(0)];
+        assert!(init.init, "expected `init = true` on the synthesised ref");
+        assert_eq!(init.resolved, Some(var_id));
+        assert!((init.flags & ReferenceFlags::WRITE).0 != 0);
+        assert!((init.flags & ReferenceFlags::READ).0 == 0);
+        // The init ref is registered under the variable's scope.
+        assert_eq!(init.from, root());
+        assert!(b.scopes[root()]
+            .references
+            .contains(&ReferenceId::from_usize(0)));
+        assert!(b.variables[var_id]
+            .references
+            .contains(&ReferenceId::from_usize(0)));
+    });
+}
+
+#[test]
+fn destructuring_pattern_emits_one_init_reference_per_binding() {
+    with_arena(
+        "const { a, b: c } = obj;",
+        Language::Js,
+        SourceType::Module,
+        |b| {
+            let a_var = b.scopes[root()].set().get("a").copied().expect("a exists");
+            let c_var = b.scopes[root()].set().get("c").copied().expect("c exists");
+            // `obj` is unresolved → one implicit-global ref. Plus one
+            // init ref per leaf binding (a, c). Filter to init-only.
+            let init_refs: Vec<_> = b.references.iter().filter(|r| r.init).collect();
+            assert_eq!(init_refs.len(), 2);
+            let init_for_a = init_refs
+                .iter()
+                .find(|r| r.identifier.name() == "a")
+                .unwrap();
+            assert_eq!(init_for_a.resolved, Some(a_var));
+            let init_for_c = init_refs
+                .iter()
+                .find(|r| r.identifier.name() == "c")
+                .unwrap();
+            assert_eq!(init_for_c.resolved, Some(c_var));
+        },
+    );
+}
+
+#[test]
+fn variable_declarator_without_init_does_not_emit_init_reference() {
+    with_arena("let x;", Language::Js, SourceType::Module, |b| {
+        // No init expression → no synthesised reference.
+        assert!(b.references.is_empty());
     });
 }
 
