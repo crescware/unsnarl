@@ -794,21 +794,51 @@ fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
 }
 
-/// Mirror `crate::classify::is_skip_context`'s checks for an
-/// `IdentifierReference` / `JSXIdentifier` reference node.
+/// Mirror `crate::classify::is_skip_context` / `is_type_only_subtree`
+/// for an `IdentifierReference` / `JSXIdentifier` reference node.
 ///
 /// `oxc_semantic` emits `Reference` rows for identifiers that appear
-/// in slots the hand-rolled walker classifies as `Skip` and therefore
-/// drops. Currently handled: identifiers under a `JSXClosingElement`
-/// (the closing-tag identifier duplicates the opening tag's
-/// reference, which `crate::classify::is_skip_context`'s
-/// `JSXClosingElement => true` arm rejects regardless of slot key).
+/// in slots the hand-rolled walker classifies as `Skip` (or wraps in
+/// a type-only subtree that bumps `type_only_depth`). Two predicates
+/// are checked:
+///
+/// 1. Immediate-parent JSX skip: identifiers nested directly under a
+///    `JSXClosingElement` duplicate the opening tag's reference.
+/// 2. Ancestor walk for type-only enclosures: any ancestor among
+///    `TSImportEqualsDeclaration` / `TSExportAssignment` /
+///    `TSNamespaceExportDeclaration` makes the reference type-only
+///    even when `ReferenceFlags::Type` is not set (oxc treats the
+///    `x` in `export = x` as a value reference, but the parity
+///    baseline matches the hand-rolled walker's `is_type_only_subtree`
+///    rule and drops it). The other type-only `AstKind`s
+///    (`TSInterfaceDeclaration`, `TSTypeAliasDeclaration`,
+///    `TSEnumDeclaration`, `TSDeclareFunction`, etc.) are already
+///    pruned via `scope_mapping::is_filtered_out`.
 fn reference_is_skip_slot(
     nodes: &oxc_semantic::AstNodes<'_>,
     node_id: oxc_semantic::NodeId,
 ) -> bool {
     let parent_kind = nodes.parent_kind(node_id);
-    matches!(parent_kind, AstKind::JSXClosingElement(_))
+    if matches!(parent_kind, AstKind::JSXClosingElement(_)) {
+        return true;
+    }
+    let mut cur = nodes.parent_id(node_id);
+    loop {
+        if matches!(
+            nodes.kind(cur),
+            AstKind::TSImportEqualsDeclaration(_)
+                | AstKind::TSExportAssignment(_)
+                | AstKind::TSNamespaceExportDeclaration(_),
+        ) {
+            return true;
+        }
+        let next = nodes.parent_id(cur);
+        if next == cur {
+            // `parent_id` is a self-loop at the program root.
+            return false;
+        }
+        cur = next;
+    }
 }
 
 /// Mirror `crate::classify::is_skip_context`'s JSX rules for a
