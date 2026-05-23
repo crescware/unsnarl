@@ -317,20 +317,24 @@ fn with_statement_scope_is_merged_into_parent() {
 }
 
 #[test]
-fn class_static_block_creates_class_static_block_scope() {
+fn class_static_block_scope_is_merged_into_class() {
+    // The hand-rolled walker has no `visit_static_block` override,
+    // so `class C { static { ... } }` does not produce a dedicated
+    // `ClassStaticBlock` scope row in the parity baseline. The body
+    // identifiers stay associated with the enclosing `Class` scope.
+    // `is_merged_into_parent` mirrors that by collapsing the
+    // `StaticBlock` scope into its parent.
     with_scopes(
-        "class C { static { let x; } }",
+        "class C { static { C; } }",
         Language::Js,
         SourceType::Module,
         |scopes| {
-            // Module + Class + ClassStaticBlock
             let class = scopes[root()].child_scopes[0];
-            let static_block = scopes[class].child_scopes[0];
-            assert!(matches!(
-                scopes[static_block].r#type,
-                ScopeType::ClassStaticBlock
-            ));
-            assert!(scopes[static_block].variable_scope == static_block);
+            assert!(matches!(scopes[class].r#type, ScopeType::Class));
+            assert!(
+                scopes[class].child_scopes.is_empty(),
+                "static block must not allocate its own scope row"
+            );
         },
     );
 }
