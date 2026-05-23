@@ -367,28 +367,23 @@ fn catch_clause_merges_body_block_into_catch_scope() {
     );
 }
 
-/// Direct 1:1 mapping currently does NOT synthesise the
-/// `FunctionExpressionName` wrapper scope. The named function
-/// expression's binding therefore ends up inside the function scope
-/// itself in `oxc_semantic`. This test pins the divergence so the
-/// follow-up commit that adds the wrapper is observable.
+/// The boundary's hand-rolled walker never creates a
+/// `FunctionExpressionName` scope, even for named function
+/// expressions: it classifies `Function.id` as a direct binding but
+/// allocates no separate scope or `VariableData` for it. The adapter
+/// mirrors that behaviour — only the `Function` scope appears, and
+/// the self-name is intentionally skipped during variable mapping
+/// (verified separately in `variable_mapping_test`).
 #[test]
-fn named_function_expression_currently_lacks_function_expression_name_wrapper() {
+fn named_function_expression_does_not_emit_a_wrapper_scope() {
     with_scopes(
         "const f = function inner() { return inner; };",
         Language::Js,
         SourceType::Script,
         |scopes| {
-            let any_fen = scopes
+            assert!(scopes
                 .iter()
-                .any(|s| matches!(s.r#type, ScopeType::FunctionExpressionName));
-            assert!(
-                !any_fen,
-                "FunctionExpressionName wrapper should be absent prior to synthesis",
-            );
-            // Exactly one Function scope is present, holding the
-            // params + body. The binding `inner` (visible inside it)
-            // is registered in that scope by `oxc_semantic`.
+                .all(|s| !matches!(s.r#type, ScopeType::FunctionExpressionName)));
             let fn_count = scopes
                 .iter()
                 .filter(|s| matches!(s.r#type, ScopeType::Function))

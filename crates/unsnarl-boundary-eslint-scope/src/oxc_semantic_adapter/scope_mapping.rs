@@ -32,11 +32,15 @@
 //!
 //! `variables` / `references` / `through` stay empty here; the
 //! respective entity passes (`variable_mapping`, `reference_mapping`)
-//! fill them. `function_expression_scope` stays `false`: eslint-scope
-//! synthesises a `FunctionExpressionName` wrapper around named
-//! function expressions, but `oxc_semantic` does not create such a
-//! scope. Synthesising that wrapper is a follow-up commit; for now
-//! the mapping is a direct 1:1 walk of `oxc_semantic`'s scope tree.
+//! fill them. `function_expression_scope` stays `false`: the
+//! boundary's hand-rolled walker never allocates a separate
+//! `FunctionExpressionName` scope for a named function expression's
+//! self-name (it classifies the `Function.id` slot as a direct
+//! binding but does not push a scope), so the adapter mirrors that
+//! shape and emits only the `Function` scope. The self-name binding
+//! itself is skipped in `variable_mapping`, and resolved references
+//! to it are redirected to root-scope implicit globals in
+//! `reference_mapping`.
 //!
 //! ## OxcScopeId → IrScopeId translation
 //!
@@ -69,7 +73,10 @@
 //!
 //! ## Known divergences (deferred to follow-up commits)
 //!
-//! 1. **`FunctionExpressionName`**: not synthesised here (see above).
+//! No remaining scope-shape divergences; both the
+//! `FunctionExpressionName` and `ClassFieldInitializer` cases noted
+//! in earlier drafts turn out to be no-ops for parity (see above and
+//! below).
 //!
 //! `ClassFieldInitializer` is absent from both sides intentionally:
 //! the npm `eslint-scope` package would create one per

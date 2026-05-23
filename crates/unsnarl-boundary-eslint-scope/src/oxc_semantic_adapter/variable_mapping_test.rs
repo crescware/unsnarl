@@ -55,9 +55,8 @@ fn with_arena(
     let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
-    let (variables, _symbol_to_variable) =
-        build_variables(&ret.semantic, &mut scopes, &translation);
-    body(&scopes, &variables);
+    let result = build_variables(&ret.semantic, &mut scopes, &translation);
+    body(&scopes, &result.variables);
 }
 
 fn root() -> ScopeId {
@@ -264,6 +263,28 @@ fn catch_body_let_binding_merges_into_catch_scope() {
             assert!(
                 names.contains("x"),
                 "`let x` from the catch body must merge into the Catch scope (got {names:?})",
+            );
+        },
+    );
+}
+
+/// The boundary's hand-rolled walker classifies a named function
+/// expression's `id` as a direct binding but never allocates a
+/// `VariableData` for it. The adapter must mirror that: skip emitting
+/// `inner` as a Variable in the Function scope.
+#[test]
+fn named_function_expression_self_name_is_not_emitted_as_a_variable() {
+    with_arena(
+        "const f = function inner() { return inner; };",
+        Language::Js,
+        SourceType::Module,
+        |scopes, variables| {
+            let fn_scope = scopes[root()].child_scopes[0];
+            let names = names_in(fn_scope, scopes, variables);
+            assert!(
+                !names.contains("inner"),
+                "function-expression self-name `inner` must not be emitted as a Variable \
+                 (got {names:?})",
             );
         },
     );

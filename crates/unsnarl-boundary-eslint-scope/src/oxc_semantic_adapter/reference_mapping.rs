@@ -78,7 +78,7 @@ use oxc_syntax::reference::ReferenceFlags as OxcReferenceFlags;
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use unsnarl_ir::ids::{DefinitionId, ReferenceId, ScopeId, VariableId};
 use unsnarl_ir::primitive::{AstIdentifier, AstNode};
@@ -104,6 +104,7 @@ pub(crate) fn build_references(
     definitions: &mut IndexVec<DefinitionId, DefinitionData>,
     symbol_to_variable: &IndexVec<SymbolId, Option<VariableId>>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    synthetic_unresolved: &HashSet<SymbolId>,
 ) -> IndexVec<ReferenceId, ReferenceData> {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
@@ -112,28 +113,67 @@ pub(crate) fn build_references(
     let mut implicit_globals: HashMap<String, VariableId> = HashMap::new();
 
     for sid in scoping.symbol_ids() {
-        let Some(var_id) = symbol_to_variable[sid] else {
-            // Symbol lives in a filtered (TypeScript type-only) scope;
-            // its references aren't part of the runtime IR either.
+        if let Some(var_id) = symbol_to_variable[sid] {
+            for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
+                let oxc_ref = scoping.get_reference(oxc_ref_id);
+                let Some(from) = translation[oxc_ref.scope_id()] else {
+                    continue;
+                };
+                let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let flags = convert_flags(oxc_ref.flags());
+                let new_id = references.push(ReferenceData {
+                    identifier,
+                    from,
+                    resolved: Some(var_id),
+                    init: false,
+                    flags,
+                });
+                scopes[from].references.push(new_id);
+                variables[var_id].references.push(new_id);
+            }
             continue;
-        };
-        for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
-            let oxc_ref = scoping.get_reference(oxc_ref_id);
-            let Some(from) = translation[oxc_ref.scope_id()] else {
-                continue;
-            };
-            let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
-            let flags = convert_flags(oxc_ref.flags());
-            let new_id = references.push(ReferenceData {
-                identifier,
-                from,
-                resolved: Some(var_id),
-                init: false,
-                flags,
-            });
-            scopes[from].references.push(new_id);
-            variables[var_id].references.push(new_id);
         }
+        if synthetic_unresolved.contains(&sid) {
+            // The boundary's hand-rolled walker never allocates a
+            // `VariableData` for a named function-expression self-name
+            // (see `variable_mapping`'s module header). References
+            // `oxc_semantic` resolved against this symbol must be
+            // re-emitted through the implicit-global path so they end
+            // up matching the parity baseline (an unresolved read
+            // resolving to a root-scope implicit global).
+            let name = scoping.symbol_name(sid).to_string();
+            for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
+                let oxc_ref = scoping.get_reference(oxc_ref_id);
+                let Some(from) = translation[oxc_ref.scope_id()] else {
+                    continue;
+                };
+                let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let flags = convert_flags(oxc_ref.flags());
+                let var_id = ensure_implicit_global(
+                    scopes,
+                    variables,
+                    definitions,
+                    &mut implicit_globals,
+                    root,
+                    &name,
+                    &identifier,
+                );
+                let new_id = references.push(ReferenceData {
+                    identifier,
+                    from,
+                    resolved: Some(var_id),
+                    init: false,
+                    flags,
+                });
+                scopes[from].references.push(new_id);
+                variables[var_id].references.push(new_id);
+                push_through_chain(scopes, from, root, new_id);
+            }
+            continue;
+        }
+        // Otherwise this symbol lives in a filtered (TypeScript
+        // type-only) scope; its references aren't part of the runtime
+        // IR either.
     }
 
     for (name_ident, ref_ids) in scoping.root_unresolved_references() {
