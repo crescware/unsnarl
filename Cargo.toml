@@ -2,6 +2,7 @@
 resolver = "2"
 members = [
     "crates/unsnarl-oxc-parity",
+    "crates/unsnarl-instrumentation",
     "crates/unsnarl-ir",
     "crates/unsnarl-annotations",
     "crates/unsnarl-oxc-boundary",
@@ -29,6 +30,7 @@ repository = "https://github.com/crescware/unsnarl"
 
 [workspace.dependencies]
 unsnarl-oxc-parity = { path = "crates/unsnarl-oxc-parity" }
+unsnarl-instrumentation = { path = "crates/unsnarl-instrumentation" }
 unsnarl-ir = { path = "crates/unsnarl-ir" }
 unsnarl-annotations = { path = "crates/unsnarl-annotations" }
 unsnarl-oxc-boundary = { path = "crates/unsnarl-oxc-boundary" }
@@ -62,3 +64,17 @@ pretty_assertions = "1"
 regex = "1"
 tracing = "0.1"
 tracing-subscriber = "0.3"
+
+# Release profile tuned for `uns` startup latency. Limited to
+# compiler-level optimizations that do not discard information from
+# the artifact: `lto = "thin"` lets the linker inline and dead-code-
+# eliminate across crates, and `codegen-units = 1` lets each crate
+# be optimized as a single unit rather than fragmented for parallel
+# codegen. Settings that would shrink the binary by deleting useful
+# data (`strip` removes symbols needed for production stack traces,
+# `panic = "abort"` removes unwind tables at the cost of skipping
+# `Drop` on panic for any future code path holding temp files /
+# sockets / external resources) are deliberately omitted.
+[profile.release]
+lto = "thin"
+codegen-units = 1

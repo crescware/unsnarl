@@ -54,10 +54,18 @@ pub fn run(args: &Args) -> ExitCode {
 /// alongside the in-stage `info!` payload events (input/output
 /// sizes, IR / graph counts) needed to spot bottlenecks. Called only
 /// when `--verbose` is set. Wrapped in `try_init` so a stray double
-/// install (e.g. an embedder calling `run` twice) is a no-op rather
-/// than a panic.
-fn init_verbose_tracing() {
+/// install (e.g. an embedder calling `run` twice, or `main` having
+/// already installed it to time the pre-`Args::parse` window) is a
+/// no-op rather than a panic.
+pub fn init_verbose_tracing() {
     use tracing_subscriber::fmt::format::FmtSpan;
+    // Flip the process-global verbose gate so the `unsnarl-instrumentation`
+    // probes start recording. The gate has no effect on `tracing` itself
+    // (the subscriber below handles that side), but it short-circuits the
+    // `Instant::now` / atomic-counter / `TimingScope` primitives scattered
+    // across the workspace, which would otherwise pay their full cost on
+    // every `uns` run regardless of `--verbose`.
+    unsnarl_instrumentation::set_verbose(true);
     let _ = tracing_subscriber::fmt()
         .with_writer(std::io::stderr)
         .with_max_level(tracing::Level::INFO)
@@ -89,7 +97,7 @@ pub(crate) fn run_to(
 
     let registry = default_registry();
     let plugins: Vec<&dyn UnsnarlPlugin> = {
-        let _span = tracing::info_span!("activate_plugins").entered();
+        let _span = unsnarl_instrumentation::span!("activate_plugins");
         match registry.activate_all(&args.plugins) {
             Ok(v) => v,
             Err(e) => {
@@ -108,7 +116,7 @@ pub(crate) fn run_to(
     let output_path = resolve_output_path(args, emitter.as_ref());
 
     let (code, source_path, language) = {
-        let _span = tracing::info_span!("read_source").entered();
+        let _span = unsnarl_instrumentation::span!("read_source");
         match read_source_text(&source, err) {
             Some(t) => t,
             None => return 1,
@@ -123,7 +131,7 @@ pub(crate) fn run_to(
     );
 
     let details = {
-        let _span = tracing::info_span!("pipeline", format = ?args.format).entered();
+        let _span = unsnarl_instrumentation::span!("pipeline", format = ?args.format);
         match dispatch_pipeline(args, &code, &source_path, language, &plugins) {
             Ok(d) => d,
             Err(e) => return handle_parse_error(&e, err),

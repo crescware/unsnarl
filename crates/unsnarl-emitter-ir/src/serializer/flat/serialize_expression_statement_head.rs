@@ -2,8 +2,8 @@
 //! on-disk `SerializedHeadExpression` (span-based).
 
 use std::sync::atomic::{AtomicU64, Ordering};
-use std::time::Instant;
 
+use unsnarl_instrumentation::{count_if_verbose, record_elapsed_ns, timing_start, verbose};
 use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::reference::expression_statement_head::{HeadExpression, HeadOperand};
 use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};
@@ -11,31 +11,33 @@ use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};
 // Module-level counters drained by `take_head_stats`. Counts every
 // HeadExpression node visited (recursive total per top-level call),
 // every span lookup made inside the head walk, and the accumulated
-// time spent inside those lookups.
+// time spent inside those lookups. The drained triple is emitted as
+// fields of the `serialize_reference sub-phase totals` event, so
+// there is no `emit_stats` here; the caller in `serialize_reference`
+// folds it into its own combined event.
 static N_NODES: AtomicU64 = AtomicU64::new(0);
 static N_SPAN_CALLS: AtomicU64 = AtomicU64::new(0);
 static T_SPAN_NS: AtomicU64 = AtomicU64::new(0);
 
-#[derive(Debug, Default)]
-pub struct HeadStats {
-    pub nodes: u64,
-    pub span_calls: u64,
-    pub span_ns: u64,
-}
-
-pub fn take_head_stats() -> HeadStats {
-    HeadStats {
-        nodes: N_NODES.swap(0, Ordering::Relaxed),
-        span_calls: N_SPAN_CALLS.swap(0, Ordering::Relaxed),
-        span_ns: T_SPAN_NS.swap(0, Ordering::Relaxed),
+/// Drain the accumulators and return `(nodes, span_calls, span_ns)`.
+/// No-op (returns zeros) when verbose is off. Called from
+/// [`crate::serializer::flat::serialize_reference::emit_stats`].
+pub fn emit_head_stats() -> (u64, u64, u64) {
+    if !verbose() {
+        return (0, 0, 0);
     }
+    (
+        N_NODES.swap(0, Ordering::Relaxed),
+        N_SPAN_CALLS.swap(0, Ordering::Relaxed),
+        T_SPAN_NS.swap(0, Ordering::Relaxed),
+    )
 }
 
 fn timed_span_at(index: &SourceIndex<'_>, offset: Utf8ByteOffset) -> unsnarl_ir::primitive::Span {
-    N_SPAN_CALLS.fetch_add(1, Ordering::Relaxed);
-    let t = Instant::now();
+    count_if_verbose(&N_SPAN_CALLS, 1);
+    let t = timing_start();
     let out = index.span_at(offset);
-    T_SPAN_NS.fetch_add(t.elapsed().as_nanos() as u64, Ordering::Relaxed);
+    record_elapsed_ns(&T_SPAN_NS, t);
     out
 }
 
@@ -43,7 +45,7 @@ pub fn serialize_head_expression(
     head: &HeadExpression,
     index: &SourceIndex<'_>,
 ) -> SerializedHeadExpression {
-    N_NODES.fetch_add(1, Ordering::Relaxed);
+    count_if_verbose(&N_NODES, 1);
     match head {
         HeadExpression::Identifier { name } => SerializedHeadExpression::identifier(name.clone()),
         HeadExpression::Member { object, property } => SerializedHeadExpression::member(

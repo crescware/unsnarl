@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use unsnarl_ir::serialized::SerializedScope;
 
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn is_ancestor_scope(
     ancestor_id: &str,

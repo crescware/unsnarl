@@ -10,7 +10,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use super::arena::SubgraphIdx;
 use super::context::BuilderContext;
 use super::state::BuildState;
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn visible_ancestor_subgraph(
     scope: &SerializedScope,

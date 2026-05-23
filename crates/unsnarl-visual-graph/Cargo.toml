@@ -9,6 +9,7 @@ repository.workspace = true
 [dependencies]
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
+unsnarl-instrumentation = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 unsnarl-root-query = { workspace = true }
 serde = { workspace = true }

@@ -15,7 +15,7 @@ use super::arena::{BuildArena, Container, ElementHandle};
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::render_head_expression::render_head_expression;
 use super::state::BuildState;
-use super::timing::TimingScope;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn ensure_expression_statement_node(
     arena: &mut BuildArena,

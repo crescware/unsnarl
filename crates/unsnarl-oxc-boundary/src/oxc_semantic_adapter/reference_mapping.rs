@@ -95,7 +95,7 @@ pub(crate) fn build_references(
     let mut implicit_globals: HashMap<String, VariableId> = HashMap::new();
 
     {
-        let _span = tracing::info_span!("refs_resolved_loop").entered();
+        let _span = unsnarl_instrumentation::span!("refs_resolved_loop");
         for sid in scoping.symbol_ids() {
             if let Some(var_id) = symbol_to_variable[sid] {
                 for &oxc_ref_id in scoping.get_resolved_reference_ids(sid) {
@@ -182,7 +182,7 @@ pub(crate) fn build_references(
     }
 
     {
-        let _span = tracing::info_span!("synth_init").entered();
+        let _span = unsnarl_instrumentation::span!("synth_init");
         synthesise_init_references(
             semantic,
             scopes,
@@ -195,7 +195,7 @@ pub(crate) fn build_references(
     }
 
     {
-        let _span = tracing::info_span!("refs_unresolved_loop").entered();
+        let _span = unsnarl_instrumentation::span!("refs_unresolved_loop");
         // `Scoping::root_unresolved_references` is keyed on a
         // `hashbrown::HashMap`, so its iteration order is arbitrary. The
         // parity baseline visits identifiers in source order, so implicit
@@ -271,7 +271,7 @@ pub(crate) fn build_references(
     }
 
     {
-        let _span = tracing::info_span!("synth_param_props").entered();
+        let _span = unsnarl_instrumentation::span!("synth_param_props");
         synthesise_parameter_property_references(
             semantic,
             scopes,
@@ -286,7 +286,7 @@ pub(crate) fn build_references(
     }
 
     {
-        let _span = tracing::info_span!("synth_identifier_names").entered();
+        let _span = unsnarl_instrumentation::span!("synth_identifier_names");
         synthesise_identifier_name_references(
             semantic,
             scopes,
@@ -301,22 +301,22 @@ pub(crate) fn build_references(
     }
 
     {
-        let _span = tracing::info_span!("mark_init_reads").entered();
+        let _span = unsnarl_instrumentation::span!("mark_init_reads");
         mark_variable_declarator_init_reads(semantic, &mut references);
     }
 
     {
-        let _span = tracing::info_span!("reparent_decorators").entered();
+        let _span = unsnarl_instrumentation::span!("reparent_decorators");
         reparent_decorator_references(semantic, scopes, variables, &mut references, translation);
     }
 
     {
-        let _span = tracing::info_span!("rebind_inner_class_names").entered();
+        let _span = unsnarl_instrumentation::span!("rebind_inner_class_names");
         rebind_inner_class_name_references(scopes, variables, &mut references, inner_class_names);
     }
 
     {
-        let _span = tracing::info_span!("sort_ref_lists").entered();
+        let _span = unsnarl_instrumentation::span!("sort_ref_lists");
         sort_reference_lists_by_source_order(scopes, variables, &references);
     }
 

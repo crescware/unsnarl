@@ -70,7 +70,7 @@ impl Emitter for MermaidEmitter {
         let graph = if let Some(pruned) = &opts.pruned_graph {
             pruned
         } else {
-            let _span = tracing::info_span!("emit::build_visual_graph").entered();
+            let _span = unsnarl_instrumentation::span!("emit::build_visual_graph");
             built = build_visual_graph(
                 ir,
                 &BuildVisualGraphOptions {
@@ -79,7 +79,7 @@ impl Emitter for MermaidEmitter {
             );
             &built
         };
-        let _span = tracing::info_span!("emit::render_mermaid").entered();
+        let _span = unsnarl_instrumentation::span!("emit::render_mermaid");
         render_mermaid(
             graph,
             self.strategy,

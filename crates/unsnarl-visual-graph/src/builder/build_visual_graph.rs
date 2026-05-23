@@ -54,7 +54,7 @@ use super::write_op::WriteOp;
 use super::write_op_node_id::write_op_node_id;
 
 pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> VisualGraph {
-    let _span = tracing::info_span!("build_visual_graph").entered();
+    let _span = unsnarl_instrumentation::span!("build_visual_graph");
     let mut variable_map: HashMap<&str, &SerializedVariable> = HashMap::new();
     for v in &ir.variables {
         variable_map.insert(v.id.value(), v);
@@ -216,16 +216,16 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         .iter()
         .find(|v| matches!(v.r#type, ScopeType::Module | ScopeType::Global));
     if let Some(root) = root {
-        let _span = tracing::info_span!("build_scope").entered();
+        let _span = unsnarl_instrumentation::span!("build_scope");
         build_scope(&mut arena, &mut state, &ctx, root, Container::Root);
     }
 
     {
-        let _span = tracing::info_span!("emit_let_chain_edges").entered();
+        let _span = unsnarl_instrumentation::span!("emit_let_chain_edges");
         emit_let_chain_edges(&mut state, &ctx);
     }
     {
-        let _span = tracing::info_span!("emit_reference_edges").entered();
+        let _span = unsnarl_instrumentation::span!("emit_reference_edges");
         emit_reference_edges(&mut arena, &mut state, &ctx, &var_var_ids);
     }
 
@@ -247,21 +247,21 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
     }
 
     {
-        let _span = tracing::info_span!("emit_module_and_intermediate").entered();
+        let _span = unsnarl_instrumentation::span!("emit_module_and_intermediate");
         emit_module_and_intermediate(&mut arena, &mut state, &ctx);
     }
     {
-        let _span = tracing::info_span!("apply_pending_loop_test_anchors").entered();
+        let _span = unsnarl_instrumentation::span!("apply_pending_loop_test_anchors");
         apply_pending_loop_test_anchors(&mut arena, &state);
     }
     {
-        let _span = tracing::info_span!("mark_unused").entered();
+        let _span = unsnarl_instrumentation::span!("mark_unused");
         mark_unused(&mut arena, ctx.ir, &var_var_ids);
     }
 
     // Edge redirection for collapsed scopes.
     if !state.collapsed_root_by_scope.is_empty() {
-        let _span = tracing::info_span!("redirect_edges_into_collapsed").entered();
+        let _span = unsnarl_instrumentation::span!("redirect_edges_into_collapsed");
         redirect_edges_into_collapsed(
             &mut state.edges,
             ir,
@@ -272,10 +272,10 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
     }
 
     let elements = {
-        let _span = tracing::info_span!("arena_finalize_root").entered();
+        let _span = unsnarl_instrumentation::span!("arena_finalize_root");
         arena.finalize_root()
     };
-    super::timing::drain_and_emit();
+    unsnarl_instrumentation::drain_and_emit!("build_visual_graph::timing");
     VisualGraph {
         version: unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION,
         source: VisualGraphSource {

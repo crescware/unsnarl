@@ -12,9 +12,9 @@ use super::branch_scope_of::branch_scope_of;
 use super::context::BuilderContext;
 use super::is_ancestor_scope::is_ancestor_scope;
 use super::node_id::node_id;
-use super::timing::TimingScope;
 use super::write_op::{ops_before, WriteOp};
 use super::write_op_node_id::write_op_node_id;
+use unsnarl_instrumentation::TimingScope;
 
 pub fn read_origins(
     var_id: &str,

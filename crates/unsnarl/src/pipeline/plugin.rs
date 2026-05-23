@@ -35,7 +35,7 @@ pub fn apply_plugins(
     if plugins.is_empty() {
         return ir;
     }
-    let _span = tracing::info_span!("apply_plugins", count = plugins.len()).entered();
+    let _span = unsnarl_instrumentation::span!("apply_plugins", count = plugins.len());
     for p in plugins {
         ir = p.transform(ir);
     }

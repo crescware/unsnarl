@@ -10,6 +10,7 @@ repository.workspace = true
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
 unsnarl-emitter = { workspace = true }
+unsnarl-instrumentation = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }
