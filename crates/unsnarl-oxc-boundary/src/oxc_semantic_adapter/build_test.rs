@@ -4,8 +4,8 @@
 //! assert properties of the [`BuildOutput`] bundle that downstream
 //! consumers depend on. Today the only such property is the
 //! `VarDetected` diagnostic list — every `var` declaration in the
-//! input source must surface as a `Diagnostic` carrying the same
-//! message string the hand-rolled walker emits.
+//! input source must surface as a `Diagnostic` matching the parity
+//! baseline's message string.
 
 use oxc_allocator::Allocator;
 
@@ -52,15 +52,15 @@ fn single_var_declaration_emits_one_var_detected_diagnostic() {
     assert!(matches!(d.kind, DiagnosticKind::VarDetected));
     assert!(
         d.message.contains("var declaration detected"),
-        "expected hand-rolled message wording, got {:?}",
+        "expected parity-baseline message wording, got {:?}",
         d.message,
     );
 }
 
 #[test]
 fn multi_declarator_var_emits_exactly_one_diagnostic() {
-    // The hand-rolled walker emits ONE diagnostic per
-    // `VariableDeclaration` node, not one per declarator.
+    // ONE diagnostic per `VariableDeclaration` node, not one per
+    // declarator.
     let out = build_from("var a = 1, b = 2, c = 3;", Language::Js, SourceType::Script);
     assert_eq!(out.diagnostics.len(), 1);
 }

@@ -10,75 +10,68 @@
 //!
 //! `oxc_semantic` records the id of a named function expression
 //! (`const f = function inner() { ... }`) as a binding inside the
-//! enclosing `Function` scope. The boundary's hand-rolled walker, by
-//! contrast, classifies that identifier as a direct binding via
-//! `classify::is_direct_binding` (`Function.id` slot) but does *not*
-//! allocate a `VariableData` for it — the parity baseline therefore
-//! has no `inner` row anywhere, and references to `inner` inside the
-//! body fall through to the implicit-global path on the root scope.
+//! enclosing `Function` scope. The parity baseline has no `inner` row
+//! anywhere; references to `inner` inside the body fall through to
+//! the implicit-global path on the root scope.
 //!
-//! Mirror that behaviour here: skip emitting a `VariableData` for the
-//! function-expression self-name symbol and record its `SymbolId` in
-//! [`VariableMappingResult::synthetic_unresolved`]. [`super::reference_mapping`]
-//! reads that set and redirects any `Reference`s `oxc_semantic`
-//! resolved against the skipped symbol into the implicit-global
-//! synthesis path, matching the parity baseline.
+//! Skip emitting a `VariableData` for the function-expression
+//! self-name symbol and record its `SymbolId` in
+//! [`VariableMappingResult::synthetic_unresolved`].
+//! [`super::reference_mapping`] reads that set and redirects any
+//! `Reference`s `oxc_semantic` resolved against the skipped symbol
+//! into the implicit-global synthesis path.
 //!
 //! ## TypeScript parameter properties
 //!
 //! `constructor(public x: number, private y)` declares `x` / `y` as
-//! class fields rather than function parameters in eslint-scope's
-//! model. The boundary's hand-rolled walker's `declare_function_params`
-//! short-circuits when `accessibility` / `readonly` / `override` is
-//! set on a `FormalParameter` and the walker visits the binding
-//! pattern without pushing the `"pattern"` key, so the binding
+//! class fields rather than function parameters. The parity baseline
+//! does not record them as parameter bindings; instead, the binding
 //! identifier classifies as an ordinary reference (resolving as an
-//! implicit global) rather than a binding.
+//! implicit global).
 //!
-//! The adapter mirrors that here: when a symbol's declaration node
-//! is a `FormalParameter` carrying any of those flags, skip emitting
-//! the `VariableData` and record the symbol in
-//! `synthetic_unresolved` so [`super::reference_mapping`] re-routes
+//! When a symbol's declaration node is a `FormalParameter` carrying
+//! `accessibility` / `readonly` / `override`, skip emitting the
+//! `VariableData` and record the symbol in `synthetic_unresolved` so
+//! [`super::reference_mapping`] re-routes the
 //! `oxc_semantic`-resolved references against the parameter to the
 //! implicit-global path.
 //!
 //! ## Inner `ClassName` for class declarations
 //!
 //! For a class *declaration* (`class C { ... }`), `oxc_semantic`
-//! binds `C` only in the enclosing scope. The boundary's hand-rolled
-//! `enter_class` adds a *second* binding for `C` inside the `Class`
-//! scope so references to `C` from inside method bodies resolve to
-//! the inner row instead of the outer one. Class *expressions*
-//! (`const C = class D { ... }`) already get their inner-name
-//! binding from `oxc_semantic`, so no synthesis is needed for them.
+//! binds `C` only in the enclosing scope. The parity baseline adds a
+//! *second* binding for `C` inside the `Class` scope so references to
+//! `C` from inside method bodies resolve to the inner row instead of
+//! the outer one. Class *expressions* (`const C = class D { ... }`)
+//! already get their inner-name binding from `oxc_semantic`, so no
+//! synthesis is needed for them.
 //!
 //! Synthesise the inner `ClassName` row here for class declarations
 //! only, emitting both the `VariableData` and the corresponding
 //! `DefinitionData` (`DefinitionType::ClassName`).
 //!
-//! `identifiers` carries one entry per binding-identifier occurrence,
-//! matching what the hand-rolled walker pushes on each
-//! `declare_variable` call. `oxc_semantic` collapses re-declarations
-//! into a single `SymbolId`; the per-occurrence spans are recovered
-//! from `Scoping::symbol_redeclarations` when present, otherwise from
+//! `identifiers` carries one entry per binding-identifier occurrence.
+//! `oxc_semantic` collapses re-declarations into a single `SymbolId`;
+//! the per-occurrence spans are recovered from
+//! `Scoping::symbol_redeclarations` when present, otherwise from
 //! `Scoping::symbol_span` (a single-occurrence binding).
 //!
 //! Additionally, this pass synthesises the implicit per-function
-//! `arguments` binding. `oxc_semantic` deliberately omits it (pinned by
-//! `oxc_semantic_probe_test::arguments_is_or_is_not_a_symbol_inside_a_function`),
-//! while eslint-scope inserts an `arguments` `Variable` with no defs
-//! and no identifiers into every non-arrow function's local scope.
+//! `arguments` binding. `oxc_semantic` does not bind `arguments`,
+//! while the parity baseline inserts an `arguments` `Variable` with
+//! no defs and no identifiers into every non-arrow function's local
+//! scope.
 //!
 //! ## Binding ordering
 //!
 //! `Scoping::iter_bindings_in` returns bindings by iterating the
 //! underlying `hashbrown::HashMap`, which does not preserve insertion
-//! order. The hand-rolled walker, in contrast, appends each scope's
-//! `variables` array in declaration-site order (post-hoisting: var /
-//! function / class declarations land in source order). Sort the
-//! per-scope binding list by `Scoping::symbol_span(sid).start` before
-//! emitting rows so downstream consumers that index `variables`
-//! positionally see the same order as the parity baseline.
+//! order. The parity baseline appends each scope's `variables` array
+//! in declaration-site order (post-hoisting: var / function / class
+//! declarations land in source order). Sort the per-scope binding
+//! list by `Scoping::symbol_span(sid).start` before emitting rows so
+//! downstream consumers that index `variables` positionally see the
+//! same order as the parity baseline.
 
 use std::collections::{HashMap, HashSet};
 
@@ -107,9 +100,8 @@ pub(crate) struct VariableMappingResult {
     pub(crate) symbol_to_variable: IndexVec<SymbolId, Option<VariableId>>,
     /// Symbols whose `VariableData` is intentionally absent so that
     /// resolved references to them can be re-emitted as implicit
-    /// globals (matching the boundary's hand-rolled walker, which
-    /// classifies named function-expression `id` slots as direct
-    /// bindings but never allocates a `VariableData` for them — see
+    /// globals (matching the parity baseline, which never allocates a
+    /// `VariableData` for named function-expression `id` slots — see
     /// the module header).
     pub(crate) synthetic_unresolved: HashSet<SymbolId>,
     /// For each class *declaration* that received a synthesised inner
@@ -136,10 +128,10 @@ pub(crate) struct InnerClassName {
 /// `unsnarl_ir` arena's `variables` rows, while populating each
 /// scope's `variables` / `set` indexes in `scopes`.
 ///
-/// `scopes` is taken `&mut` because eslint-scope's
-/// `ScopeData::variables` is a positional list of declared bindings
-/// and `ScopeData::set` is the name → id index; both are populated
-/// here rather than reconstructed later.
+/// `scopes` is taken `&mut` because `ScopeData::variables` is a
+/// positional list of declared bindings and `ScopeData::set` is the
+/// name → id index; both are populated here rather than
+/// reconstructed later.
 ///
 /// `symbol_to_variable` in the result is the `SymbolId → VariableId`
 /// projection produced as a side effect: every `iter_bindings_in`
@@ -216,12 +208,12 @@ pub(crate) fn build_variables(
                 continue;
             }
             let identifiers = build_identifiers(scoping, symbol_id, &name);
-            // `oxc_semantic` keeps every per-`SwitchCase` binding on the
-            // enclosing `SwitchStatement` scope. The eslint-scope model
-            // — mirrored by `super::scope_mapping`'s synthetic case
-            // `Block` scopes — pulls them down to the case scope. Route
-            // the binding to the case scope whose span encloses the
-            // symbol's declaration site.
+            // `oxc_semantic` keeps every per-`SwitchCase` binding on
+            // the enclosing `SwitchStatement` scope. The parity
+            // baseline — mirrored by `super::scope_mapping`'s
+            // synthetic case `Block` scopes — pulls them down to the
+            // case scope. Route the binding to the case scope whose
+            // span encloses the symbol's declaration site.
             let target_scope = reparent_binding_to_switch_case(
                 ir_scope,
                 scoping.symbol_span(symbol_id),
@@ -265,7 +257,7 @@ pub(crate) fn build_variables(
     }
 }
 
-/// Reparent a binding to the eslint-scope-equivalent switch scope.
+/// Reparent a binding to the per-case Block scope inside a switch.
 ///
 /// Mirrors `super::reference_mapping::reparent_to_switch_case`: pick
 /// the innermost switch whose `switch_span` contains `span` and whose
@@ -323,8 +315,8 @@ fn is_ancestor_or_self(
 
 /// If `anchor` is the `Function` node of a named function expression,
 /// return its self-name. Used by [`build_variables`] to detect the
-/// binding that must be skipped per the hand-rolled walker's
-/// behaviour (see the module header).
+/// binding that must be skipped per the parity baseline (see the
+/// module header).
 fn named_function_expression_self_name<'a>(anchor: &'a AstKind<'_>) -> Option<&'a str> {
     let AstKind::Function(func) = anchor else {
         return None;
@@ -341,8 +333,8 @@ fn named_function_expression_self_name<'a>(anchor: &'a AstKind<'_>) -> Option<&'
 /// Returns true if `symbol_id`'s declaration node is a TypeScript
 /// parameter property — a `FormalParameter` (or `FormalParameterRest`)
 /// carrying `accessibility` / `readonly` / `override`. Those slots
-/// represent class fields rather than parameters in the
-/// eslint-scope model.
+/// represent class fields rather than parameters, so the parity
+/// baseline does not record them as parameter bindings.
 fn is_typescript_parameter_property(
     scoping: &Scoping,
     nodes: &oxc_semantic::AstNodes<'_>,
@@ -358,9 +350,9 @@ fn is_typescript_parameter_property(
 /// Returns true if `symbol_id`'s declaration is a TypeScript
 /// type-only function (`declare function f(): void`, parsed by oxc as
 /// `Function { type: TSDeclareFunction, ... }`, or an overload
-/// signature parsed as `TSEmptyBodyFunctionExpression`). The
-/// hand-rolled walker drops such functions via `type_only_depth`, so
-/// the binding never makes it into the IR variable list.
+/// signature parsed as `TSEmptyBodyFunctionExpression`). The parity
+/// baseline drops such functions, so the binding never makes it into
+/// the IR variable list.
 fn is_type_only_function_declaration(
     scoping: &Scoping,
     nodes: &oxc_semantic::AstNodes<'_>,
@@ -379,9 +371,8 @@ fn is_type_only_function_declaration(
 /// Returns true if any ancestor of `symbol_id`'s declaration node is
 /// a TypeScript type-only construct that
 /// [`unsnarl_oxc_parity::is_type_only_subtree`] marks as type-only.
-/// The hand-rolled walker skipped these subtrees via `type_only_depth`
-/// and never declared the inner binding, so the parity baseline never
-/// records them in the variables list.
+/// The parity baseline never declares the inner binding in such
+/// subtrees, so the variable is omitted from the IR variable list.
 fn is_under_type_only_declaration(
     scoping: &Scoping,
     nodes: &oxc_semantic::AstNodes<'_>,
@@ -427,9 +418,8 @@ fn inner_class_declaration_name<'a>(
 }
 
 /// Synthesise the inner `ClassName` binding plus its `ClassName`
-/// definition for a class declaration, mirroring the hand-rolled
-/// `enter_class` helper. Returns the new `VariableId` so the caller
-/// can record it for the reference-mapping rebind pass.
+/// definition for a class declaration. Returns the new `VariableId`
+/// so the caller can record it for the reference-mapping rebind pass.
 fn push_inner_class_name(
     scopes: &mut IndexVec<ScopeId, ScopeData>,
     variables: &mut IndexVec<VariableId, VariableData>,

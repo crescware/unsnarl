@@ -1,4 +1,4 @@
-//! Entry point for the eslint-scope-compatible scope-builder.
+//! Entry point for the scope-builder.
 //!
 //! Drives [`crate::oxc_semantic_adapter::build_from_program`] against
 //! the parsed AST, dispatches any diagnostics the adapter collects

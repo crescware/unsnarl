@@ -1,10 +1,7 @@
 //! Adapter from `oxc_semantic::SemanticBuilder` output to the unsnarl
 //! IR shape returned by [`crate::analyze::analyze`].
 //!
-//! Phase 2 of the migration documented in
-//! <https://github.com/crescware/unsnarl/issues/190>. The adapter
-//! replaces the hand-rolled eslint-scope-compatible scope-builder; its
-//! output must remain shape-compatible with the existing
+//! Output must remain shape-compatible with the existing
 //! [`ScopeAnalysisResult`] so downstream crates
 //! (`unsnarl-analyzer`, `unsnarl-emitter-ir`, …) continue to work
 //! unchanged.

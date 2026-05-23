@@ -2,8 +2,8 @@
 //! into.
 //!
 //! `Break` / `Continue` accept only a label `Identifier`
-//! syntactically and eslint-scope classifies a label as `Label`, not
-//! `Reference`, so a reference's value cannot flow into a break /
+//! syntactically; the scope build tracks labels separately from value
+//! references, so a reference's value cannot flow into a break /
 //! continue completion. The variant set is therefore narrowed to
 //! `Normal` / `Return` / `Throw`.
 

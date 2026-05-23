@@ -3,7 +3,7 @@
 //! Three phases run end-to-end:
 //!
 //! 1. Compute the per-offset `NestingDepths` table.
-//! 2. Drive the eslint-scope-compatible scope build through
+//! 2. Drive the scope build through
 //!    [`unsnarl_oxc_boundary::analyze::analyze`] with a
 //!    diagnostics-only `AnalysisVisitor`, then build span -> arena ID
 //!    indices on the arena it returns.

@@ -99,10 +99,6 @@ pub(crate) fn build<'a>(
 /// Walk every `VariableDeclaration` AST node and emit a
 /// `DiagnosticKind::VarDetected` warning for each `var` declaration.
 ///
-/// Mirrors the boundary's hand-rolled
-/// `hoisting::handle_variable_declaration` and `declare_for_left`
-/// helpers, which both push the same diagnostic onto
-/// `ScopeBuilderState::diagnostics` when a `var` head is encountered.
 /// `for (var ...; ...)`'s init and `for (var ... in/of ...)`'s left
 /// slot are both ordinary `VariableDeclaration` nodes on the AST, so
 /// a single walk covers every site without double-counting.

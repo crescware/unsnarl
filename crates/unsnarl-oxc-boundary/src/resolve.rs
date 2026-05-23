@@ -2,10 +2,8 @@
 //! `BindingPattern` identifier name back to the live `VariableId` it
 //! resolves to.
 //!
-//! The hand-rolled scope-builder this crate used pre-Phase-2 fed every
-//! identifier reference through the same chain walk to drive binding
-//! resolution. Phase 2 hands off scope / reference resolution to
-//! [`crate::oxc_semantic_adapter`], but downstream consumers
+//! [`crate::oxc_semantic_adapter`] handles scope / reference resolution
+//! at build time, but downstream consumers
 //! (`unsnarl_analyzer::owner::all_binding_variables`) still need the
 //! same `(arena, scope, name) → Option<VariableId>` projection at
 //! analysis time. Keeping the helper in the boundary crate avoids

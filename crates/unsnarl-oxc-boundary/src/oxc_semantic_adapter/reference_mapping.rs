@@ -4,8 +4,7 @@
 //! `Scoping::symbol_ids()` ⇒ `get_resolved_reference_ids(sid)` for
 //! the resolved set, plus `Scoping::root_unresolved_references()`
 //! for the unresolved set — and emits one [`unsnarl_ir::ReferenceData`]
-//! per reference. The pass also populates the cross-link sites that
-//! the hand-rolled walker maintains:
+//! per reference. The pass also populates these cross-link sites:
 //!
 //! * `ScopeData::references` — appended on every reference at its
 //!   creating scope.
@@ -13,23 +12,20 @@
 //!   (to a real binding, an adapter-synthesised `arguments`, or an
 //!   implicit-global Variable).
 //! * `ScopeData::through` — only along the implicit-global path. The
-//!   hand-rolled `resolve.rs` walks from the reference's scope up to
-//!   and *including* the global scope, pushing the reference id on
-//!   each scope's `through`; this pass mirrors that exactly.
+//!   walk runs from the reference's scope up to and *including* the
+//!   global scope, pushing the reference id on each scope's `through`.
 //!
 //! ## `arguments` synthesis
 //!
-//! `oxc_semantic` does not bind `arguments` (pinned by
-//! `oxc_semantic_probe_test::arguments_is_or_is_not_a_symbol_inside_a_function`),
-//! so an `arguments` identifier inside a function body surfaces as a
-//! root-unresolved reference. `variable_mapping` has already inserted
-//! a synthetic `arguments` `VariableData` into every non-arrow
-//! function scope; this pass walks the scope chain from the
-//! reference's scope upward, and if the first ancestor containing an
-//! `arguments` binding is one of those synthetic rows, resolves the
-//! reference to it. References to `arguments` outside any function
-//! (e.g. module-level) fall through to the implicit-global path,
-//! matching the hand-rolled `resolve_in_scope_chain` shape.
+//! `oxc_semantic` does not bind `arguments`, so an `arguments`
+//! identifier inside a function body surfaces as a root-unresolved
+//! reference. `variable_mapping` has already inserted a synthetic
+//! `arguments` `VariableData` into every non-arrow function scope;
+//! this pass walks the scope chain from the reference's scope upward,
+//! and if the first ancestor containing an `arguments` binding is one
+//! of those synthetic rows, resolves the reference to it. References
+//! to `arguments` outside any function (e.g. module-level) fall
+//! through to the implicit-global path.
 //!
 //! ## Implicit globals
 //!
@@ -38,38 +34,19 @@
 //! first occurrence creates the `VariableData` (with one identifier
 //! entry recording the reference's identifier span) plus the
 //! `DefinitionData` row; subsequent occurrences for the same name
-//! reuse the same `VariableId`. This mirrors the hand-rolled
-//! `declare_implicit_global` exactly.
+//! reuse the same `VariableId`.
 //!
 //! ## `init` flag
 //!
 //! `oxc_semantic` does not emit a reference for the binding side of
-//! `var x = 0` (pinned by
-//! `oxc_semantic_probe_test::with_body_identifier_resolves_to_outer_binding_diverging_from_eslint_scope`'s
-//! observation that the declaration carries the init directly). The
-//! hand-rolled walker, in contrast, synthesises a write reference
-//! with `init = true` at each binding inside a `VariableDeclarator`
-//! that has an `init` expression. This pass walks `VariableDeclarator`
-//! AST nodes after the regular reference loop and synthesises those
-//! `init = true` writes, looking each binding identifier's symbol up
-//! via `symbol_to_variable` so the synthesised reference resolves to
-//! the right `VariableData`. Destructuring patterns are flattened to
-//! their constituent binding identifiers (one `init` write per leaf).
-//!
-//! ## Known divergences (deferred to follow-up commits)
-//!
-//! 1. **`with` body resolution**: `oxc_semantic` resolves identifiers
-//!    inside a `with (o) { ... }` block against the outer binding
-//!    (pinned by the probe test linked above). Eslint-scope
-//!    deliberately leaves them unresolved because the `with` extends
-//!    the scope chain at runtime. This pass leaves `oxc_semantic`'s
-//!    resolution intact; post-processing references inside `with`
-//!    bodies is gated on the parity-harness signal.
-//! 2. **JSX tag references**: lowercase JSX intrinsics (`<div />`)
-//!    are not references on either side; uppercase ones (`<MyComp />`)
-//!    are represented as `IdentifierReference` by the parser already,
-//!    so they flow through this pass unchanged. No special-casing
-//!    needed here.
+//! `var x = 0` — the declaration carries the init directly. This pass
+//! walks `VariableDeclarator` AST nodes after the regular reference
+//! loop and synthesises a write reference with `init = true` at each
+//! binding inside a declarator that has an `init` expression, looking
+//! each binding identifier's symbol up via `symbol_to_variable` so the
+//! synthesised reference resolves to the right `VariableData`.
+//! Destructuring patterns are flattened to their constituent binding
+//! identifiers (one `init` write per leaf).
 
 use oxc_ast::ast::{BindingIdentifier, BindingPattern, FormalParameter};
 use oxc_ast::AstKind;
@@ -150,9 +127,9 @@ pub(crate) fn build_references(
             continue;
         }
         if synthetic_unresolved.contains(&sid) {
-            // The boundary's hand-rolled walker never allocates a
-            // `VariableData` for a named function-expression self-name
-            // (see `variable_mapping`'s module header). References
+            // The adapter does not allocate a `VariableData` for a
+            // named function-expression self-name (see
+            // `variable_mapping`'s module header). References
             // `oxc_semantic` resolved against this symbol must be
             // re-emitted through the implicit-global path so they end
             // up matching the parity baseline (an unresolved read
@@ -213,9 +190,9 @@ pub(crate) fn build_references(
 
     // `Scoping::root_unresolved_references` is keyed on a
     // `hashbrown::HashMap`, so its iteration order is arbitrary. The
-    // hand-rolled walker encounters identifiers in source order, so
-    // implicit globals appear in source order too. Sort here by the
-    // first reference's identifier span so the IR `variables` /
+    // parity baseline visits identifiers in source order, so implicit
+    // globals appear in source order too. Sort here by the first
+    // reference's identifier span so the IR `variables` /
     // implicit-globals ordering matches the parity baseline.
     let mut unresolved: Vec<_> = scoping.root_unresolved_references().iter().collect();
     unresolved.sort_by_key(|(_name, ref_ids)| {
@@ -321,16 +298,12 @@ pub(crate) fn build_references(
 
 /// Reparent references that appear in a class decorator (`@dec`) from
 /// the class's enclosing scope (where `oxc_semantic` places them) to
-/// the class scope itself (where the hand-rolled walker places them,
-/// matching the parity baseline).
+/// the class scope itself, matching the parity baseline.
 ///
 /// `oxc_semantic` evaluates decorators in the class's parent scope —
 /// they execute before the class body is opened — so `@dec class C {}`
-/// emits the `dec` reference with `scope_id = module`. The hand-rolled
-/// walker, by contrast, runs the decorator visit while inside the
-/// `Class` scope (the visitor pushes the class scope before walking
-/// the AST node's decorators), so the parity baseline records the
-/// reference with `from = class_scope`.
+/// emits the `dec` reference with `scope_id = module`. The parity
+/// baseline records the reference with `from = class_scope`.
 ///
 /// Walk every `Class` AST node, find its scope (via the
 /// `node_id → scope_id` projection over `Scoping::scope_descendants_from_root`),
@@ -404,14 +377,14 @@ fn reparent_decorator_references(
 ///
 /// `oxc_semantic` only binds a class declaration's name in the
 /// enclosing scope, so any reference to that name from inside the
-/// class body resolves to the outer binding. eslint-scope, mirrored
-/// by `push_inner_class_name`, additionally exposes the name on the
-/// class scope so references from method bodies (e.g. `new C()`
-/// inside `class C { m() { ... } }`) resolve to the inner row. Walk
-/// every reference; if its identifier span lies inside a class
-/// scope that owns a synthesised inner binding sharing the
-/// identifier's name, move the cross-link from the outer to the
-/// inner variable and update `ReferenceData::resolved`.
+/// class body resolves to the outer binding. The parity baseline,
+/// mirrored by `push_inner_class_name`, additionally exposes the name
+/// on the class scope so references from method bodies (e.g.
+/// `new C()` inside `class C { m() { ... } }`) resolve to the inner
+/// row. Walk every reference; if its identifier span lies inside a
+/// class scope that owns a synthesised inner binding sharing the
+/// identifier's name, move the cross-link from the outer to the inner
+/// variable and update `ReferenceData::resolved`.
 fn rebind_inner_class_name_references(
     scopes: &IndexVec<ScopeId, ScopeData>,
     variables: &mut IndexVec<VariableId, VariableData>,
@@ -457,11 +430,10 @@ fn rebind_inner_class_name_references(
 /// Sort each scope's `references` / `through` list and each variable's
 /// `references` list by the underlying identifier's source offset.
 ///
-/// The hand-rolled walker pushes references to these lists in source
-/// order because it traverses the AST once and emits each reference at
-/// the moment of encounter. This pass instead walks `Scoping`'s
-/// symbol-keyed reference tables first, then performs separate
-/// AST-walking synthesis passes (`synthesise_init_references`,
+/// The parity baseline lists references in source order. The adapter
+/// walks `Scoping`'s symbol-keyed reference tables first, then runs
+/// separate AST-walking synthesis passes
+/// (`synthesise_init_references`,
 /// `synthesise_parameter_property_references`) and a sorted unresolved
 /// loop afterwards, so per-scope and per-variable lists end up
 /// interleaved by category rather than by source position. The IR
@@ -485,25 +457,20 @@ fn sort_reference_lists_by_source_order(
     }
 }
 
-/// Mirror `classify_ordinary_reference`'s `init = true` flag for read
-/// references that sit directly in the `init` slot of a
-/// [`oxc_ast::ast::VariableDeclarator`].
+/// Stamp `init = true` on read references that sit directly in the
+/// `init` slot of a [`oxc_ast::ast::VariableDeclarator`].
 ///
-/// The hand-rolled walker stamps `init = true` on any identifier whose
-/// parent is `VariableDeclarator` and whose slot key is `"init"` (see
-/// `crate::classify::classify_ordinary_reference`). The matching
-/// references in this adapter come from [`oxc_semantic::Scoping`]'s
-/// resolved-reference table (the regular Loop 1 above) or from the
-/// `unresolved` loop, both of which default `init` to `false`. Walk
-/// every `VariableDeclarator` in the program, look up the identifier
-/// at the immediate `init` position, and stamp the matching
-/// `ReferenceData::init` to `true`.
+/// The references this pass targets come from
+/// [`oxc_semantic::Scoping`]'s resolved-reference table (the regular
+/// Loop 1 above) or from the `unresolved` loop, both of which default
+/// `init` to `false`. Walk every `VariableDeclarator` in the program,
+/// look up the identifier at the immediate `init` position, and stamp
+/// the matching `ReferenceData::init` to `true`.
 ///
 /// Only the immediate-child identifier case is handled: identifiers
 /// nested inside a wrapping expression (`const x = a + b`) keep
-/// `init = false` because `classify_ordinary_reference` sees a parent
-/// like `BinaryExpression` rather than `VariableDeclarator` for them,
-/// matching the hand-rolled walker's behaviour.
+/// `init = false`, matching the parity baseline (which only flags
+/// identifiers whose immediate parent is a `VariableDeclarator`).
 fn mark_variable_declarator_init_reads(
     semantic: &oxc_semantic::Semantic<'_>,
     references: &mut IndexVec<ReferenceId, ReferenceData>,
@@ -534,9 +501,7 @@ fn mark_variable_declarator_init_reads(
 
 /// Build the IR `AstIdentifier` row for the reference's AST node.
 ///
-/// `AstType` follows the hand-rolled walker's
-/// `scope_build_visitor::visit_identifier_reference` shape: an
-/// `IdentifierReference` nested under a `JSXMemberExpression` or a
+/// An `IdentifierReference` nested under a `JSXMemberExpression` or a
 /// `JSXOpeningElement.name` slot carries `AstType::JSXIdentifier`
 /// because oxc represents the JSX-tag `<a.b />`'s `a` as
 /// `JSXMemberExpressionObject::IdentifierReference` rather than a
@@ -584,16 +549,14 @@ fn convert_flags(flags: OxcReferenceFlags) -> ReferenceFlagBits {
     out
 }
 
-/// Mirror the hand-rolled walker's `classify_ordinary_reference`
-/// decision for slots where `oxc_semantic`'s flag does not match
-/// `crate::classify`'s mapping.
+/// Adjust reference flags for slots where `oxc_semantic`'s flag does
+/// not match the parity baseline.
 ///
 /// Currently handled: `ForInStatement.left` and `ForOfStatement.left`.
 /// `oxc_semantic` marks the loop variable as `Write` (each iteration
-/// assigns to it), but the hand-rolled walker's
-/// `classify_ordinary_reference` has no special case for these slots
-/// and falls through to `reference(READ, false)`. Force the flags to
-/// `READ` when the reference's parent is one of those `for` shapes.
+/// assigns to it), but the parity baseline records these as plain
+/// `READ`. Force the flags to `READ` when the reference's parent is
+/// one of those `for` shapes.
 fn adjust_flags_for_parent(
     flags: ReferenceFlagBits,
     nodes: &oxc_semantic::AstNodes<'_>,
@@ -623,7 +586,7 @@ fn resolve_synthetic_arguments(
 /// Outcome of [`ensure_implicit_global`]: the resolved `VariableId`
 /// plus whether this call freshly created the implicit-global row.
 /// Used by the caller to decide whether to push the reference through
-/// the `scope.through` chain — the hand-rolled walker only pushes a
+/// the `scope.through` chain — the parity baseline only records a
 /// through entry on the first unresolved encounter of a name (because
 /// every subsequent occurrence resolves against the freshly-created
 /// implicit-global row in the root scope and takes the resolved
@@ -697,7 +660,7 @@ fn push_through_chain(
     scopes[root].through.push(ref_id);
 }
 
-/// Reparent a reference to the eslint-scope-equivalent switch scope.
+/// Reparent a reference to the per-case Block scope inside a switch.
 ///
 /// `oxc_semantic` places the discriminant / case-test identifiers of a
 /// `SwitchStatement` in the switch's *parent* scope (the discriminant
@@ -706,7 +669,8 @@ fn push_through_chain(
 /// `super::scope_mapping` synthesises one Block scope per `SwitchCase`,
 /// and this helper redirects every reference whose identifier span
 /// lies inside any switch in `switch_cases` to the most specific
-/// eslint-scope-equivalent owner.
+/// owner (the case-Block scope, falling back to the bare switch
+/// scope).
 ///
 /// Walk every recorded switch and collect the innermost (smallest
 /// width) match whose:
@@ -773,17 +737,12 @@ fn is_ancestor_or_self(
 /// Walk every `VariableDeclarator` node and emit a write reference
 /// with `init = true` for each declarator whose `id` slot is itself a
 /// `BindingIdentifier` and whose declarator has an `init` expression.
-/// Mirrors the `classify_identifier` → `WRITE + init = true` path in
-/// the hand-rolled walker for the immediate `VariableDeclarator.id`
-/// slot.
 ///
 /// Destructuring patterns (`var [a, b] = ...`, `var { a } = ...`,
-/// `var [{ c }] = ...`, …) are deliberately skipped: the hand-rolled
-/// walker's `classify_identifier` returns `ClassifyResult::Binding`
-/// for every `BindingIdentifier` reached through a pattern step, so
-/// no reference row is created for nested binding identifiers — the
-/// parity baseline therefore carries no synthetic init write for the
-/// pattern's leaf bindings.
+/// `var [{ c }] = ...`, …) are deliberately skipped: the parity
+/// baseline records no reference row for nested binding identifiers
+/// reached through a pattern step, so no synthetic init write is
+/// emitted for the pattern's leaf bindings either.
 #[allow(clippy::too_many_arguments)]
 fn synthesise_init_references(
     semantic: &Semantic<'_>,
@@ -834,12 +793,12 @@ fn synthesise_init_references(
 
 /// Walk every TypeScript parameter property and emit a Read
 /// reference at each binding identifier inside its pattern, resolving
-/// to a root-scope implicit global. The hand-rolled walker reaches
-/// this slot via `classify_ordinary_reference` because
-/// `scope_build_visitor::visit_formal_parameter` omits the
-/// `"pattern"` key when `accessibility` / `readonly` / `override` is
-/// set; `oxc_semantic` produces no `Reference` at the binding
-/// identifier position, so the adapter must synthesise it.
+/// to a root-scope implicit global. The parity baseline emits this
+/// reference because the binding-identifier slot is treated as a
+/// plain reference when `accessibility` / `readonly` / `override` is
+/// set on the parameter; `oxc_semantic` produces no `Reference` at
+/// the binding identifier position, so the adapter must synthesise
+/// it.
 #[allow(clippy::too_many_arguments)]
 fn synthesise_parameter_property_references(
     semantic: &Semantic<'_>,
@@ -901,13 +860,11 @@ fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
     fp.accessibility.is_some() || fp.readonly || fp.r#override
 }
 
-/// Mirror `crate::classify::is_skip_context` / `is_type_only_subtree`
-/// for an `IdentifierReference` / `JSXIdentifier` reference node.
+/// Decide whether a reference node sits in a slot that the parity
+/// baseline treats as a non-reference (skip) site.
 ///
-/// `oxc_semantic` emits `Reference` rows for identifiers that appear
-/// in slots the hand-rolled walker classifies as `Skip` (or wraps in
-/// a type-only subtree that bumps `type_only_depth`). Two predicates
-/// are checked:
+/// `oxc_semantic` emits `Reference` rows for identifiers that the
+/// parity baseline drops. Two predicates are checked:
 ///
 /// 1. Immediate-parent JSX skip: identifiers nested directly under a
 ///    `JSXClosingElement` duplicate the opening tag's reference.
@@ -916,8 +873,7 @@ fn is_parameter_property(fp: &FormalParameter<'_>) -> bool {
 ///    `TSNamespaceExportDeclaration` makes the reference type-only
 ///    even when `ReferenceFlags::Type` is not set (oxc treats the
 ///    `x` in `export = x` as a value reference, but the parity
-///    baseline matches the hand-rolled walker's `is_type_only_subtree`
-///    rule and drops it). The other type-only `AstKind`s
+///    baseline drops it). The other type-only `AstKind`s
 ///    (`TSInterfaceDeclaration`, `TSTypeAliasDeclaration`,
 ///    `TSEnumDeclaration`, `TSDeclareFunction`, etc.) are already
 ///    pruned via `scope_mapping::is_filtered_out`.
@@ -948,10 +904,8 @@ fn reference_is_skip_slot(
     }
 }
 
-/// Mirror `crate::classify::is_skip_context`'s JSX rules for a
-/// `JSXIdentifier` node: return `true` when the identifier sits in a
-/// purely structural slot that the hand-rolled walker does not treat
-/// as a reference.
+/// Decide whether a `JSXIdentifier` node sits in a purely structural
+/// slot that should not produce a reference row.
 ///
 /// Skip slots:
 ///
@@ -980,21 +934,18 @@ fn jsx_identifier_is_skip_slot(
 }
 
 /// Synthesise implicit-global Read references at identifier positions
-/// the hand-rolled walker treats as references but `oxc_semantic` does
-/// not emit `Reference` rows for.
+/// that the parity baseline treats as references but for which
+/// `oxc_semantic` does not emit `Reference` rows.
 ///
 /// `oxc_semantic` does not emit `Reference` rows for `IdentifierName`
 /// nodes, nor for `JSXIdentifier` nodes at JSX-tag positions whose
-/// name is a lowercase intrinsic. The hand-rolled walker's
-/// `scope_build_visitor::visit_identifier_name` /
-/// `visit_jsx_identifier`, however, route both shapes through
-/// `handle_identifier_reference` and produce implicit-global Read
-/// references with the appropriate `AstType` on the resulting
-/// `Reference` / `ImplicitGlobalVariable` rows. Walk every relevant
-/// AST node and synthesise the matching references so the IR carries
-/// the same `scope#0:new@<offset>` / `scope#0:target@<offset>` /
-/// `scope#0:span@<offset>` implicit-global variables the parity
-/// baseline shows.
+/// name is a lowercase intrinsic. The parity baseline does, treating
+/// both shapes as implicit-global Reads with the appropriate
+/// `AstType` on the resulting `Reference` / `ImplicitGlobalVariable`
+/// rows. Walk every relevant AST node and synthesise the matching
+/// references so the IR carries the same `scope#0:new@<offset>` /
+/// `scope#0:target@<offset>` / `scope#0:span@<offset>` implicit-global
+/// variables the parity baseline shows.
 ///
 /// Currently covered:
 ///
@@ -1072,8 +1023,8 @@ fn synthesise_identifier_name_references(
     // resolved- or unresolved-loop passes (an `<MyComp/>` tag where
     // `MyComp` is in scope was already handled there).
     sites.retain(|(_, _, span, _)| !existing_spans.contains(&(span.start, span.end)));
-    // Emit in source order so first-occurrence implicit-global synthesis
-    // mirrors the hand-rolled walker.
+    // Emit in source order so first-occurrence implicit-global
+    // synthesis matches the parity baseline.
     sites.sort_by_key(|(_, _, span, _)| span.start);
     for (from, name, span, ast_type) in sites {
         let identifier = AstIdentifier::new(ast_type, name.to_string(), span);

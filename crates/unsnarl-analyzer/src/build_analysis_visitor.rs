@@ -1,21 +1,18 @@
 //! Walker that fills the per-entity side-table annotations after the
-//! eslint-scope-compatible scope build.
+//! scope build.
 //!
 //! Runs a separate `oxc_ast_visit::Visit` pass after `analyze`
 //! returns because several analyzer functions need full `AstKind`
 //! handles (`expression_statement_container`, `find_reference_owners`,
 //! `case_falls_through`, `case_exits_function`, `format_case_test`) or
-//! per-entry keys (`find_predicate_container`, `if_chain_root_offset`)
-//! — both of which the boundary's materialised-path callback shape
-//! drops.
+//! per-entry keys (`find_predicate_container`, `if_chain_root_offset`).
 //!
 //! The walker is keyed against the arena built by the boundary: scope
 //! rows are looked up by `scope.block.span`, reference rows by
 //! `reference.identifier.span`. Encountered AST nodes whose spans do
 //! not match any arena row are simply skipped (e.g. a `BlockStatement`
-//! that is the body of a `CatchClause` — the boundary's
-//! `skip_block_scope` table makes those reuse the catch scope rather
-//! than allocating a new one).
+//! that is the body of a `CatchClause`, which the boundary merges into
+//! the enclosing catch scope rather than allocating a new one).
 
 use std::collections::HashMap;
 

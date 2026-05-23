@@ -38,34 +38,19 @@
 //! `name.span` for each `DefinitionData` is the identifier's own
 //! span (`Scoping::symbol_span` for the original declaration, or each
 //! redeclaration's `Redeclaration::span` for subsequent sites) — not
-//! the anchor's span. This mirrors the hand-rolled walker, which
-//! constructs the def's `name: AstIdentifier` from the parsed
+//! the anchor's span. Constructed directly from the parsed
 //! `BindingIdentifier`.
 //!
-//! ## Known divergences (deferred to follow-up commits)
+//! ## Bindings that produce no `DefinitionData` here
 //!
-//! 1. **TS parameter properties**: a `FormalParameter` carrying
-//!    `accessibility` / `readonly` / `override` is still emitted as
-//!    a `Parameter` definition here, even though the hand-rolled
-//!    walker (`declare_function_params`) skips it (those bindings
-//!    are class fields, not parameters in eslint-scope's model).
-//!    Filtering is gated on the parity-harness signal.
-//! 2. **Inner class self-name**: eslint-scope creates a second
-//!    `ClassName` binding *inside* the class scope so `class C { foo()
-//!    { return C; } }` resolves to the inner binding;
-//!    `oxc_semantic` keeps only the outer binding. The
-//!    `function_expression_scope` / inner-`ClassName` synthesis is a
-//!    scope_mapping / variable_mapping follow-up and is not produced
-//!    here.
-//! 3. **Named function expression self-name**: `oxc_semantic` binds
-//!    a named function expression's name in the
-//!    function-expression-name scope; this pass emits a `FunctionName`
-//!    definition for that symbol, while the hand-rolled walker emits
-//!    nothing (no enclosing `function_expression_scope` exists in
-//!    scope_mapping's output today, so the variable lives in the
-//!    function scope itself with an associated `FunctionName` def
-//!    that has no counterpart on the hand-rolled side). Aligning is
-//!    deferred along with item 2.
+//! Some symbols are dropped entirely by `variable_mapping` (TS
+//! parameter properties, named function-expression self-names,
+//! type-only declarations) and therefore have no `VariableData` to
+//! cross-link a def into. The inner-class-self-name and
+//! implicit-`arguments` synthetic variables get their defs
+//! synthesised in `variable_mapping` directly. This pass only emits
+//! definitions for the symbols that survive into the IR via the
+//! main `iter_bindings_in` walk.
 
 use oxc_ast::ast::{ClassType, FunctionType, ModuleExportName, VariableDeclarationKind};
 use oxc_ast::AstKind;

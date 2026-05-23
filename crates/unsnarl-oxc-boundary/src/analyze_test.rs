@@ -1,10 +1,12 @@
 //! Sibling tests for `analyze.rs`, the entry point of the
-//! eslint-scope-compatible scope-builder.
+//! scope-builder.
 //!
 //! Per-feature observations live in the sibling `*_test.rs` files
-//! next to each implementation module (`enter_*`, `classify/*`,
-//! `hoisting/*`, etc.). This file keeps the entry-level smoke and
-//! shape tests plus the eslint-compatibility integration cases.
+//! next to each adapter implementation module
+//! (`oxc_semantic_adapter/scope_mapping`, `variable_mapping`,
+//! `reference_mapping`, `definition_mapping`, `build`). This file
+//! keeps the entry-level smoke and shape tests plus the integration
+//! cases that exercise the full pipeline.
 
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::primitive::SourceLine;
@@ -121,11 +123,9 @@ fn script_source_seeds_global_scope() {
     assert!(matches!(global.r#type, ScopeType::Global));
 }
 
-// Integration cases pinning eslint-scope compatibility. Drives
-// [`analyze`] through the `analyze_source*` helpers; each case
-// observes the resulting scope tree / variable / definition shape
-// and asserts the invariants eslint-scope itself asserts on
-// `Scope` / `Variable`.
+// Integration cases that drive [`analyze`] through the
+// `analyze_source*` helpers and pin the resulting scope tree /
+// variable / definition shape against the parity baseline.
 
 #[test]
 fn module_scope_collects_const_and_let_as_variable_defs() {

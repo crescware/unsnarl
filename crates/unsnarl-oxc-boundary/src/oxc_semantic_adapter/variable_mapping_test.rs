@@ -136,7 +136,7 @@ fn function_scope_synthesises_arguments_binding() {
             assert!(names.contains("a"));
             assert!(names.contains("b"));
             // The synthesised `arguments` has no identifier occurrences
-            // and no defs — eslint-scope shape.
+            // and no defs, matching the parity baseline.
             let arg_id = scopes[f_scope].set().get("arguments").copied().unwrap();
             assert!(variables[arg_id].identifiers.is_empty());
             assert!(variables[arg_id].defs.is_empty());
@@ -225,7 +225,7 @@ fn var_redeclaration_collapses_to_single_variable_with_two_identifier_occurrence
             assert_eq!(names.iter().filter(|n| **n == "x").count(), 1);
             let var_id = scopes[root()].set().get("x").copied().unwrap();
             // Both `var x;` occurrences are recorded against the same
-            // VariableData; the hand-rolled walker pushes one
+            // VariableData; the parity baseline carries one
             // identifier per declaration site.
             assert_eq!(variables[var_id].identifiers.len(), 2);
         },
@@ -329,12 +329,12 @@ fn typescript_parameter_property_is_not_emitted_as_a_function_scope_variable() {
     );
 }
 
-/// For a class *declaration* (`class C { ... }`), the boundary's
-/// hand-rolled walker creates two `ClassName` bindings: one in the
-/// enclosing scope (from hoisting) and one inside the `Class` scope
-/// (from `enter_class`) so references to `C` from inside method
-/// bodies resolve to the inner binding. `oxc_semantic` only creates
-/// the outer one, so the adapter must synthesise the inner row.
+/// For a class *declaration* (`class C { ... }`), the parity baseline
+/// carries two `ClassName` bindings: one in the enclosing scope (from
+/// hoisting) and one inside the `Class` scope so references to `C`
+/// from inside method bodies resolve to the inner binding.
+/// `oxc_semantic` only creates the outer one, so the adapter must
+/// synthesise the inner row.
 #[test]
 fn class_declaration_synthesises_inner_class_name_binding() {
     with_arena(
@@ -397,10 +397,9 @@ fn class_expression_inner_name_is_not_double_synthesised() {
     );
 }
 
-/// The boundary's hand-rolled walker classifies a named function
-/// expression's `id` as a direct binding but never allocates a
-/// `VariableData` for it. The adapter must mirror that: skip emitting
-/// `inner` as a Variable in the Function scope.
+/// The parity baseline never allocates a `VariableData` for a named
+/// function expression's `id`. The adapter must match that: skip
+/// emitting `inner` as a Variable in the Function scope.
 #[test]
 fn named_function_expression_self_name_is_not_emitted_as_a_variable() {
     with_arena(

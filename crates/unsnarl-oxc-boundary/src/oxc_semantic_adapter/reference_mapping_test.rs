@@ -5,13 +5,11 @@
 //! [`super::super::variable_mapping::build_variables`], and finally
 //! [`super::build_references`], then assert properties of the
 //! resulting reference table plus the cross-link updates on scopes /
-//! variables / definitions. Characterization-style: pins the
-//! 1:1 walk plus the adapter-only behaviours (synthetic-`arguments`
+//! variables / definitions. Characterization-style: pins the 1:1
+//! walk plus the adapter-only behaviours (synthetic-`arguments`
 //! resolution, implicit-global synthesis with `through` chain,
 //! `init = false` everywhere because `oxc_semantic` doesn't emit a
-//! reference for the binding side of `var x = 0`). Order-sensitive
-//! divergences with the hand-rolled walker are left for the parity
-//! harness signal — see the module header.
+//! reference for the binding side of `var x = 0`).
 
 use oxc_allocator::Allocator;
 use oxc_index::IndexVec;
@@ -102,7 +100,7 @@ fn root() -> ScopeId {
 /// `oxc_semantic` resolves the inside-body `inner` reference against
 /// the named function expression's self-name symbol; the adapter
 /// re-emits those resolved references as implicit-global reads on
-/// the root scope, since the hand-rolled walker has no
+/// the root scope, since the parity baseline carries no
 /// `VariableData` for `inner` to bind against.
 #[test]
 fn named_function_expression_self_reference_becomes_implicit_global() {
@@ -245,12 +243,12 @@ fn destructuring_pattern_emits_no_init_writes_at_leaf_bindings() {
     );
 }
 
-/// A TypeScript parameter property is reachable through the
-/// hand-rolled walker as an ordinary read reference resolving to a
-/// root-scope implicit global. The adapter must synthesise both the
-/// implicit global on root and the read reference at the parameter
-/// position, since `oxc_semantic` produces neither (it only binds
-/// the symbol in the function scope, which `variable_mapping` skips).
+/// A TypeScript parameter property appears in the parity baseline as
+/// an ordinary read reference resolving to a root-scope implicit
+/// global. The adapter must synthesise both the implicit global on
+/// root and the read reference at the parameter position, since
+/// `oxc_semantic` produces neither (it only binds the symbol in the
+/// function scope, which `variable_mapping` skips).
 #[test]
 fn typescript_parameter_property_synthesises_read_against_implicit_global() {
     with_arena(
@@ -448,12 +446,10 @@ fn arguments_at_module_top_level_falls_through_to_implicit_global() {
 fn jsx_intrinsic_lower_tag_emits_implicit_global_jsx_reference() {
     // `<div />` parses as a `JSXIdentifier`, not an
     // `IdentifierReference`, so `oxc_semantic` does not emit a
-    // reference row for it. The hand-rolled walker's
-    // `scope_build_visitor::visit_jsx_identifier` instead routes the
-    // tag through `handle_identifier_reference` and lands it on a
+    // reference row for it. The parity baseline lands the tag on a
     // root-scope implicit global with `AstType::JSXIdentifier` on
-    // both the reference and the implicit-global definition.
-    // `synthesise_identifier_name_references` mirrors that.
+    // both the reference and the implicit-global definition;
+    // `synthesise_identifier_name_references` provides that.
     with_arena(
         "const _ = <div />;",
         Language::Jsx,
@@ -498,11 +494,10 @@ fn jsx_uppercase_tag_resolves_to_outer_binding() {
                 .expect("JSX tag reference for `MyComp`");
             assert_eq!(r.resolved, Some(comp_var));
             // `build_identifier` rewrites the type to `JSXIdentifier`
-            // when the reference node's parent is `JSXOpeningElement`
-            // (matching the hand-rolled walker's
-            // `visit_identifier_reference` normalisation), so the JSX
-            // tag carries that shape even though oxc represents it as
-            // an `IdentifierReference`.
+            // when the reference node's parent is `JSXOpeningElement`,
+            // matching the parity baseline, so the JSX tag carries
+            // that shape even though oxc represents it as an
+            // `IdentifierReference`.
             assert!(matches!(r.identifier.r#type, AstType::JSXIdentifier));
         },
     );

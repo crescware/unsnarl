@@ -1,7 +1,7 @@
 //! Shared test helpers for the analyzer crate.
 //!
-//! Mirrors the role of `unsnarl-oxc-boundary/src/testing.rs`
-//! within this crate. Most analyzer-side `*_test.rs` files build
+//! Mirrors the role of `unsnarl-oxc-boundary/src/testing.rs` within
+//! this crate. Most analyzer-side `*_test.rs` files build
 //! `PathEntry` fixtures from `(AstType, span)` tuples and compare
 //! returned `PredicateContainer` / `ReferenceCompletion` rows by
 //! destructuring; the helpers here keep that scaffolding from being
@@ -76,9 +76,9 @@ pub(crate) fn parse_ts<'a>(allocator: &'a Allocator, source: &'a str) -> Program
     program
 }
 
-/// Parse `source` as TypeScript and run the eslint-scope-compatible
-/// scope builder over it, returning both the program (for AST-level
-/// inspection) and the analysis result (arena + global scope id).
+/// Parse `source` as TypeScript and run the scope builder over it,
+/// returning both the program (for AST-level inspection) and the
+/// analysis result (arena + global scope id).
 pub(crate) fn parse_and_analyze_ts<'a>(
     allocator: &'a Allocator,
     source: &'a str,
