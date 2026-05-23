@@ -7,13 +7,13 @@
 //! smallest `block.span.offset` strictly greater than the
 //! `CallExpression` start.
 
-use unsnarl_ir::primitive::SourceOffset;
+use unsnarl_ir::primitive::Utf16CodeUnitOffset;
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 pub fn find_inner_function_scope<'a>(
     siblings: &[&'a SerializedScope],
-    call_offset: SourceOffset,
+    call_offset: Utf16CodeUnitOffset,
 ) -> Option<&'a SerializedScope> {
     let mut best: Option<&'a SerializedScope> = None;
     for s in siblings {

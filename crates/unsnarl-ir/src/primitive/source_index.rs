@@ -13,7 +13,8 @@
 //! offsets past the end of the source (the same "clamp plus
 //! overshoot" semantics apply).
 
-use crate::primitive::span::{SourceColumn, SourceLine, SourceOffset, Span};
+use crate::primitive::offset::{Utf16CodeUnitOffset, Utf8ByteOffset};
+use crate::primitive::span::{SourceColumn, SourceLine, Span};
 
 pub struct SourceIndex<'a> {
     raw: &'a str,
@@ -70,10 +71,13 @@ impl<'a> SourceIndex<'a> {
         self.raw
     }
 
-    pub fn span_at(&self, offset: usize) -> Span {
+    /// Resolve a UTF-8 byte offset (the encoding `oxc_parser` produces)
+    /// into a [`Span`] whose `offset` / `column` are UTF-16 code units.
+    pub fn span_at(&self, offset: Utf8ByteOffset) -> Span {
         let byte_len = self.raw.len();
-        let clamped = offset.min(byte_len);
-        let overshoot = (offset - clamped) as u32;
+        let offset_usize = offset.0 as usize;
+        let clamped = offset_usize.min(byte_len);
+        let overshoot = (offset_usize - clamped) as u32;
 
         let line_idx = match self.line_starts.binary_search(&(clamped as u32)) {
             Ok(i) => i,
@@ -93,8 +97,24 @@ impl<'a> SourceIndex<'a> {
         Span {
             line: SourceLine((line_idx + 1) as u32),
             column: SourceColumn(column_utf16 + overshoot),
-            offset: SourceOffset(line_start_utf16 + column_utf16 + overshoot),
+            offset: Utf16CodeUnitOffset(line_start_utf16 + column_utf16 + overshoot),
         }
+    }
+
+    /// Resolve a UTF-16 code-unit offset (the encoding the IR carries
+    /// in every `Span.offset`) into the 1-based line number containing
+    /// that position. Matches the legacy
+    /// [`crate::primitive::span_from_offset`] behaviour for IR
+    /// offsets: an offset that lands exactly on a `\n` is reported as
+    /// still on the line *before* the newline.
+    pub fn line_for_utf16_offset(&self, offset: Utf16CodeUnitOffset) -> u32 {
+        let target = offset.0;
+        let line_idx = match self.line_start_utf16.binary_search(&target) {
+            Ok(i) => i,
+            // `Err(0)` is impossible because `line_start_utf16[0] == 0 <= target`.
+            Err(i) => i - 1,
+        };
+        (line_idx + 1) as u32
     }
 }
 

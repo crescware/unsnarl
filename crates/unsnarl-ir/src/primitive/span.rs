@@ -1,21 +1,19 @@
 //! Source-position triple used in the serialized IR.
 //!
-//! Internally the IR carries raw `SourceOffset` (or `oxc_span::Span`)
-//! and the serializer converts those into a `Span` by walking line
-//! breaks in the source text at emit time.
+//! Internally the IR carries raw [`Utf8ByteOffset`] (or
+//! `oxc_span::Span`) and the serializer converts those into a `Span`
+//! by walking line breaks in the source text at emit time.
 //!
-//! `SourceOffset`, `SourceLine`, and `SourceColumn` are distinct
-//! newtypes over `u32` so the type system catches accidental swaps
-//! at construction sites (a byte offset, a line number, and a column
-//! number are all 32-bit unsigned integers but mean different
-//! things). Each is `#[serde(transparent)]` so the on-disk JSON
-//! shape stays a bare number.
+//! [`SourceLine`] and [`SourceColumn`] are distinct newtypes over
+//! `u32` so the type system catches accidental swaps at construction
+//! sites. The `offset` field is a [`Utf16CodeUnitOffset`], i.e. the
+//! IR carries UTF-16 code-unit offsets so the on-disk JSON matches
+//! JavaScript-string indexing semantics. Each numeric field is
+//! `#[serde(transparent)]` so the JSON shape stays a bare number.
 
 use serde::Serialize;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
-#[serde(transparent)]
-pub struct SourceOffset(pub u32);
+use super::offset::{Utf16CodeUnitOffset, Utf8ByteOffset};
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, Serialize)]
 #[serde(transparent)]
@@ -29,21 +27,22 @@ pub struct SourceColumn(pub u32);
 pub struct Span {
     pub line: SourceLine,
     pub column: SourceColumn,
-    pub offset: SourceOffset,
+    pub offset: Utf16CodeUnitOffset,
 }
 
 /// The `oxc_parser` crate produces UTF-8 byte offsets, but the
-/// emitted IR carries UTF-16 code-unit offsets so the on-disk
-/// shape matches JavaScript-string indexing semantics. This
-/// function performs the conversion so the IR stays consistent
-/// even in sources containing non-ASCII characters.
+/// emitted IR carries UTF-16 code-unit offsets so the on-disk shape
+/// matches JavaScript-string indexing semantics. This function
+/// performs the conversion so the IR stays consistent even in
+/// sources containing non-ASCII characters.
 ///
-/// `offset` is a UTF-8 byte offset into `raw`. The returned `offset`
-/// and `column` are both in UTF-16 code units; `line` counts `\n`
+/// `offset` is a [`Utf8ByteOffset`] into `raw`. The returned `offset`
+/// and `column` are both UTF-16 code units; `line` counts `\n`
 /// occurrences (which are ASCII in either encoding).
-pub fn span_from_offset(raw: &str, offset: usize) -> Span {
+pub fn span_from_offset(raw: &str, offset: Utf8ByteOffset) -> Span {
     let bytes = raw.as_bytes();
-    let limit = offset.min(bytes.len());
+    let offset_usize = offset.0 as usize;
+    let limit = offset_usize.min(bytes.len());
     let mut line: u32 = 1;
     let mut last_newline: Option<usize> = None;
     for (i, b) in bytes[..limit].iter().enumerate() {
@@ -53,13 +52,13 @@ pub fn span_from_offset(raw: &str, offset: usize) -> Span {
         }
     }
     let line_start_byte = last_newline.map(|n| n + 1).unwrap_or(0);
-    let overshoot = offset.saturating_sub(bytes.len());
+    let overshoot = offset_usize.saturating_sub(bytes.len());
     let column_utf16 = raw[line_start_byte..limit].encode_utf16().count() + overshoot;
     let offset_utf16 = raw[..limit].encode_utf16().count() + overshoot;
     Span {
         line: SourceLine(line),
         column: SourceColumn(u32::try_from(column_utf16).unwrap_or(0)),
-        offset: SourceOffset(u32::try_from(offset_utf16).unwrap_or(u32::MAX)),
+        offset: Utf16CodeUnitOffset(u32::try_from(offset_utf16).unwrap_or(u32::MAX)),
     }
 }
 

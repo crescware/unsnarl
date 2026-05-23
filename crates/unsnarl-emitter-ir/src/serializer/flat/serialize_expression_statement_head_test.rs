@@ -10,7 +10,7 @@
 //! `SerializedHeadExpression` does not derive `PartialEq`, so the
 //! tests compare the serde-serialised JSON for shape + ordering.
 
-use unsnarl_ir::primitive::{SourceIndex, SourceOffset};
+use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::reference::expression_statement_head::{HeadExpression, HeadOperand};
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
@@ -102,13 +102,13 @@ fn recurses_through_an_assign_head_and_converts_each_operands_offsets_to_spans()
                 HeadExpression::identifier("C".to_string()),
                 "z".to_string(),
             ),
-            start_offset: SourceOffset(0),
-            end_offset: SourceOffset(3),
+            start_offset: Utf8ByteOffset(0),
+            end_offset: Utf8ByteOffset(3),
         }),
         right: Box::new(HeadOperand {
             head: HeadExpression::identifier("v".to_string()),
-            start_offset: SourceOffset(6),
-            end_offset: SourceOffset(7),
+            start_offset: Utf8ByteOffset(6),
+            end_offset: Utf8ByteOffset(7),
         }),
     };
     assert_eq!(
@@ -147,13 +147,13 @@ fn preserves_the_span_on_an_elided_assign_operand_through_serialization() {
                 HeadExpression::identifier("C".to_string()),
                 "z".to_string(),
             ),
-            start_offset: SourceOffset(0),
-            end_offset: SourceOffset(3),
+            start_offset: Utf8ByteOffset(0),
+            end_offset: Utf8ByteOffset(3),
         }),
         right: Box::new(HeadOperand {
             head: HeadExpression::Elided,
-            start_offset: SourceOffset(6),
-            end_offset: SourceOffset(7),
+            start_offset: Utf8ByteOffset(6),
+            end_offset: Utf8ByteOffset(7),
         }),
     };
     assert_eq!(
@@ -190,8 +190,8 @@ fn recurses_through_an_update_head_and_keeps_operator_prefix_argument_span() {
                 HeadExpression::identifier("C".to_string()),
                 "z".to_string(),
             ),
-            start_offset: SourceOffset(2),
-            end_offset: SourceOffset(5),
+            start_offset: Utf8ByteOffset(2),
+            end_offset: Utf8ByteOffset(5),
         }),
     };
     assert_eq!(
@@ -217,8 +217,8 @@ fn recurses_through_an_update_head_and_keeps_operator_prefix_argument_span() {
 fn converts_a_raw_heads_offsets_to_spans_against_the_original_source() {
     let raw = "line1\nline2 += 1;";
     let head = HeadExpression::Raw {
-        start_offset: SourceOffset(6),
-        end_offset: SourceOffset(16),
+        start_offset: Utf8ByteOffset(6),
+        end_offset: Utf8ByteOffset(16),
     };
     assert_eq!(
         json(&serialize_head_expression(&head, &SourceIndex::build(raw))),

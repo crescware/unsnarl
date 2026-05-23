@@ -16,8 +16,8 @@
 use oxc_ast::ast::Expression;
 use oxc_span::Span;
 
+use unsnarl_ir::primitive::Utf8ByteOffset;
 use unsnarl_ir::reference::ExpressionStatementContainer;
-use unsnarl_ir::SourceOffset;
 use unsnarl_oxc_parity::AstType;
 
 use crate::build_head_expression::build_head_expression;
@@ -34,8 +34,8 @@ pub fn build_expression_statement_container(
     expression: Option<&Expression<'_>>,
 ) -> ExpressionStatementContainer {
     ExpressionStatementContainer {
-        start_offset: SourceOffset(statement_span.start),
-        end_offset: SourceOffset(statement_span.end),
+        start_offset: Utf8ByteOffset(statement_span.start),
+        end_offset: Utf8ByteOffset(statement_span.end),
         head: build_head_expression(expression, statement_span),
     }
 }

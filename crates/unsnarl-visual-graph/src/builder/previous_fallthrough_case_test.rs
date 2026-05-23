@@ -5,7 +5,7 @@
 
 use std::collections::HashMap;
 
-use unsnarl_ir::primitive::SourceOffset;
+use unsnarl_ir::primitive::Utf16CodeUnitOffset;
 use unsnarl_ir::scope::block_context::{BlockContext, CaseClauseBlockContext};
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
@@ -20,7 +20,7 @@ fn case_scope(id: &str, parent_span_offset: u32, falls_through: bool) -> Seriali
     s.block_context = Some(BlockContext::CaseClause(CaseClauseBlockContext::new(
         AstType::SwitchStatement,
         "cases".to_string(),
-        SourceOffset(parent_span_offset),
+        Utf16CodeUnitOffset(parent_span_offset),
         None,
     )));
     s

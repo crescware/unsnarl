@@ -1,6 +1,6 @@
 use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::reference::PredicateContainer;
-use unsnarl_ir::SourceOffset;
+use unsnarl_ir::Utf16CodeUnitOffset;
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
 use crate::path_entry::PathEntry;
@@ -40,7 +40,7 @@ fn expect_container(
         std::mem::discriminant(&r#type) == std::mem::discriminant(&expected_type),
         "predicate container type mismatch"
     );
-    assert_eq!(offset, SourceOffset(expected_offset));
+    assert_eq!(offset, Utf16CodeUnitOffset(expected_offset));
 }
 
 #[test]

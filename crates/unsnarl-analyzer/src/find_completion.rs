@@ -8,8 +8,8 @@
 //! functions with an expression body (no explicit `return`) classify
 //! the body expression itself as the implicit return target.
 
+use unsnarl_ir::primitive::Utf8ByteOffset;
 use unsnarl_ir::reference::ReferenceCompletion;
-use unsnarl_ir::SourceOffset;
 use unsnarl_oxc_parity::AstType;
 
 use crate::path_entry::PathEntry;
@@ -19,14 +19,14 @@ pub fn find_completion(path: &[PathEntry]) -> ReferenceCompletion {
         match entry.node.r#type {
             AstType::ReturnStatement => {
                 return ReferenceCompletion::Return {
-                    start_offset: SourceOffset(entry.node.span.start),
-                    end_offset: SourceOffset(entry.node.span.end),
+                    start_offset: Utf8ByteOffset(entry.node.span.start),
+                    end_offset: Utf8ByteOffset(entry.node.span.end),
                 };
             }
             AstType::ThrowStatement => {
                 return ReferenceCompletion::Throw {
-                    start_offset: SourceOffset(entry.node.span.start),
-                    end_offset: SourceOffset(entry.node.span.end),
+                    start_offset: Utf8ByteOffset(entry.node.span.start),
+                    end_offset: Utf8ByteOffset(entry.node.span.end),
                 };
             }
             AstType::ArrowFunctionExpression => {
@@ -37,8 +37,8 @@ pub fn find_completion(path: &[PathEntry]) -> ReferenceCompletion {
                 if let Some(body) = entry.arrow_body {
                     if !body.is_block {
                         return ReferenceCompletion::Return {
-                            start_offset: SourceOffset(body.span.start),
-                            end_offset: SourceOffset(body.span.end),
+                            start_offset: Utf8ByteOffset(body.span.start),
+                            end_offset: Utf8ByteOffset(body.span.end),
                         };
                     }
                 }

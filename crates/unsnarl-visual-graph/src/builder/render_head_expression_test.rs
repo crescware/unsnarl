@@ -2,7 +2,7 @@
 //! head shape: identifier, member, call, new, await, assign, update
 //! (prefix + postfix), elided, raw.
 
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, SourceOffset, Span};
+use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
@@ -12,7 +12,7 @@ fn span_at(line: u32, column: u32, offset: u32) -> Span {
     Span {
         line: SourceLine(line),
         column: SourceColumn(column),
-        offset: SourceOffset(offset),
+        offset: Utf16CodeUnitOffset(offset),
     }
 }
 

@@ -9,7 +9,7 @@ use serde::Serialize;
 
 use unsnarl_oxc_parity::AstType;
 
-use crate::primitive::SourceOffset;
+use crate::primitive::Utf16CodeUnitOffset;
 
 #[derive(Clone, Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -17,7 +17,7 @@ pub struct CaseClauseBlockContext {
     kind: super::block_context_kind::BlockContextKind,
     parent_type: AstType,
     key: String,
-    parent_span_offset: SourceOffset,
+    parent_span_offset: Utf16CodeUnitOffset,
     case_test: Option<String>,
 }
 
@@ -25,7 +25,7 @@ impl CaseClauseBlockContext {
     pub fn new(
         parent_type: AstType,
         key: String,
-        parent_span_offset: SourceOffset,
+        parent_span_offset: Utf16CodeUnitOffset,
         case_test: Option<String>,
     ) -> Self {
         assert!(
@@ -59,7 +59,7 @@ impl CaseClauseBlockContext {
         &self.key
     }
 
-    pub fn parent_span_offset(&self) -> SourceOffset {
+    pub fn parent_span_offset(&self) -> Utf16CodeUnitOffset {
         self.parent_span_offset
     }
 
@@ -74,16 +74,16 @@ pub struct OtherBlockContext {
     kind: super::block_context_kind::BlockContextKind,
     parent_type: AstType,
     key: String,
-    parent_span_offset: SourceOffset,
-    if_chain_root_offset: Option<SourceOffset>,
+    parent_span_offset: Utf16CodeUnitOffset,
+    if_chain_root_offset: Option<Utf16CodeUnitOffset>,
 }
 
 impl OtherBlockContext {
     pub fn new(
         parent_type: AstType,
         key: String,
-        parent_span_offset: SourceOffset,
-        if_chain_root_offset: Option<SourceOffset>,
+        parent_span_offset: Utf16CodeUnitOffset,
+        if_chain_root_offset: Option<Utf16CodeUnitOffset>,
     ) -> Self {
         assert!(!key.is_empty(), "OtherBlockContext.key must be non-empty");
         Self {
@@ -107,11 +107,11 @@ impl OtherBlockContext {
         &self.key
     }
 
-    pub fn parent_span_offset(&self) -> SourceOffset {
+    pub fn parent_span_offset(&self) -> Utf16CodeUnitOffset {
         self.parent_span_offset
     }
 
-    pub fn if_chain_root_offset(&self) -> Option<SourceOffset> {
+    pub fn if_chain_root_offset(&self) -> Option<Utf16CodeUnitOffset> {
         self.if_chain_root_offset
     }
 }
@@ -141,7 +141,7 @@ impl BlockContext {
         }
     }
 
-    pub fn parent_span_offset(&self) -> SourceOffset {
+    pub fn parent_span_offset(&self) -> Utf16CodeUnitOffset {
         match self {
             Self::CaseClause(b) => b.parent_span_offset(),
             Self::Other(b) => b.parent_span_offset(),
@@ -167,7 +167,7 @@ impl BlockContext {
     /// Convenience accessor that returns the `ifChainRootOffset`
     /// payload when `self` is an [`OtherBlockContext`], `None`
     /// otherwise.
-    pub fn if_chain_root_offset(&self) -> Option<SourceOffset> {
+    pub fn if_chain_root_offset(&self) -> Option<Utf16CodeUnitOffset> {
         match self {
             Self::CaseClause(_) => None,
             Self::Other(b) => b.if_chain_root_offset(),

@@ -6,8 +6,8 @@
 //! returns the element's span. Anything else short-circuits to
 //! `None`.
 
+use unsnarl_ir::primitive::Utf8ByteOffset;
 use unsnarl_ir::reference::JsxElementContainer;
-use unsnarl_ir::SourceOffset;
 use unsnarl_oxc_parity::AstType;
 
 use crate::path_entry::PathEntry;
@@ -29,8 +29,8 @@ pub fn find_jsx_element_span(path: &[PathEntry]) -> Option<JsxElementContainer> 
                     return None;
                 }
                 return Some(JsxElementContainer {
-                    start_offset: SourceOffset(element_entry.node.span.start),
-                    end_offset: SourceOffset(element_entry.node.span.end),
+                    start_offset: Utf8ByteOffset(element_entry.node.span.start),
+                    end_offset: Utf8ByteOffset(element_entry.node.span.end),
                 });
             }
             AstType::JSXMemberExpression => {
