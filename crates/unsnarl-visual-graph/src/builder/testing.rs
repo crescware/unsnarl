@@ -306,6 +306,12 @@ pub(crate) fn empty_serialized_ir() -> SerializedIR {
 pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
     let variable_map = ir.variables.iter().map(|v| (v.id.value(), v)).collect();
     let scope_map = ir.scopes.iter().map(|s| (s.id.value(), s)).collect();
+    let mut branch_scopes_by_container: HashMap<String, Vec<&SerializedScope>> = HashMap::new();
+    for s in &ir.scopes {
+        if let Some(ckey) = super::branch_container_key::branch_container_key(s) {
+            branch_scopes_by_container.entry(ckey).or_default().push(s);
+        }
+    }
     BuilderContext {
         ir,
         variable_map,
@@ -315,6 +321,8 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
         write_ops_by_scope: HashMap::new(),
         write_op_by_ref: HashMap::new(),
         sorted_cases_by_container: HashMap::new(),
+        branch_scopes_by_container,
         depths: None,
+        source_index: unsnarl_ir::primitive::SourceIndex::build(&ir.raw),
     }
 }

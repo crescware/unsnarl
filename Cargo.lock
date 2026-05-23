@@ -1172,6 +1172,7 @@ dependencies = [
 name = "unsnarl-emitter-mermaid"
 version = "0.3.1"
 dependencies = [
+ "tracing",
  "unsnarl-emitter",
  "unsnarl-ir",
  "unsnarl-oxc-parity",
@@ -1253,6 +1254,7 @@ version = "0.3.1"
 dependencies = [
  "serde",
  "serde_json",
+ "tracing",
  "unsnarl-annotations",
  "unsnarl-ir",
  "unsnarl-oxc-parity",

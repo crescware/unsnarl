@@ -62,6 +62,7 @@ pub mod subgraph_scope_id;
 pub mod switch_discriminant_anchor;
 pub mod throw_subgraph_id;
 pub mod throw_use_node_id;
+pub mod timing;
 pub mod visible_ancestor_subgraph;
 pub mod write_op;
 pub mod write_op_node_id;

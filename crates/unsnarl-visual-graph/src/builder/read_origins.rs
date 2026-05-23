@@ -12,6 +12,7 @@ use super::branch_scope_of::branch_scope_of;
 use super::context::BuilderContext;
 use super::is_ancestor_scope::is_ancestor_scope;
 use super::node_id::node_id;
+use super::timing::TimingScope;
 use super::write_op::WriteOp;
 use super::write_op_node_id::write_op_node_id;
 
@@ -21,6 +22,7 @@ pub fn read_origins(
     ref_scope_id: &str,
     ctx: &BuilderContext<'_>,
 ) -> Vec<String> {
+    let _t = TimingScope::start("read_origins");
     let ops_slice: &[WriteOp] = ctx
         .write_ops_by_variable
         .get(var_id)
@@ -48,12 +50,10 @@ pub fn read_origins(
     };
 
     let branch_scope_ids: Vec<&str> = ctx
-        .ir
-        .scopes
-        .iter()
-        .filter(|s| branch_container_key(s).as_deref() == Some(container_key.as_str()))
-        .map(|s| s.id.value())
-        .collect();
+        .branch_scopes_by_container
+        .get(&container_key)
+        .map(|scopes| scopes.iter().map(|s| s.id.value()).collect())
+        .unwrap_or_default();
 
     let is_switch = container_key.starts_with("switch:");
     let sorted_cases = if is_switch {

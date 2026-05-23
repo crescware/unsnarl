@@ -10,6 +10,7 @@
 
 use std::collections::{HashMap, HashSet};
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::{
     SerializedDefinition, SerializedIR, SerializedReference, SerializedScope, SerializedVariable,
@@ -53,6 +54,7 @@ use super::write_op::WriteOp;
 use super::write_op_node_id::write_op_node_id;
 
 pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> VisualGraph {
+    let _span = tracing::info_span!("build_visual_graph").entered();
     let mut variable_map: HashMap<&str, &SerializedVariable> = HashMap::new();
     for v in &ir.variables {
         variable_map.insert(v.id.value(), v);
@@ -176,13 +178,18 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
     }
 
     let mut sorted_cases_by_container: HashMap<String, Vec<&SerializedScope>> = HashMap::new();
+    let mut branch_scopes_by_container: HashMap<String, Vec<&SerializedScope>> = HashMap::new();
     for s in &ir.scopes {
         let Some(ckey) = branch_container_key(s) else {
             continue;
         };
         if ckey.starts_with("switch:") {
-            sorted_cases_by_container.entry(ckey).or_default().push(s);
+            sorted_cases_by_container
+                .entry(ckey.clone())
+                .or_default()
+                .push(s);
         }
+        branch_scopes_by_container.entry(ckey).or_default().push(s);
     }
     for arr in sorted_cases_by_container.values_mut() {
         arr.sort_by_key(|s| s.block.span.offset.0);
@@ -197,7 +204,9 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         write_ops_by_scope,
         write_op_by_ref,
         sorted_cases_by_container,
+        branch_scopes_by_container,
         depths: opts.depths.clone(),
+        source_index: SourceIndex::build(&ir.raw),
     };
     let mut state = BuildState::new();
     let mut arena = BuildArena::new();
@@ -207,11 +216,18 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         .iter()
         .find(|v| matches!(v.r#type, ScopeType::Module | ScopeType::Global));
     if let Some(root) = root {
+        let _span = tracing::info_span!("build_scope").entered();
         build_scope(&mut arena, &mut state, &ctx, root, Container::Root);
     }
 
-    emit_let_chain_edges(&mut state, &ctx);
-    emit_reference_edges(&mut arena, &mut state, &ctx, &var_var_ids);
+    {
+        let _span = tracing::info_span!("emit_let_chain_edges").entered();
+        emit_let_chain_edges(&mut state, &ctx);
+    }
+    {
+        let _span = tracing::info_span!("emit_reference_edges").entered();
+        emit_reference_edges(&mut arena, &mut state, &ctx, &var_var_ids);
+    }
 
     let needs_module_root = state.edges.iter().any(|e| e.to == MODULE_ROOT_ID);
     if needs_module_root {
@@ -230,12 +246,22 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         arena.append_child(Container::Root, ElementHandle::Node(idx));
     }
 
-    emit_module_and_intermediate(&mut arena, &mut state, &ctx);
-    apply_pending_loop_test_anchors(&mut arena, &state);
-    mark_unused(&mut arena, ctx.ir, &var_var_ids);
+    {
+        let _span = tracing::info_span!("emit_module_and_intermediate").entered();
+        emit_module_and_intermediate(&mut arena, &mut state, &ctx);
+    }
+    {
+        let _span = tracing::info_span!("apply_pending_loop_test_anchors").entered();
+        apply_pending_loop_test_anchors(&mut arena, &state);
+    }
+    {
+        let _span = tracing::info_span!("mark_unused").entered();
+        mark_unused(&mut arena, ctx.ir, &var_var_ids);
+    }
 
     // Edge redirection for collapsed scopes.
     if !state.collapsed_root_by_scope.is_empty() {
+        let _span = tracing::info_span!("redirect_edges_into_collapsed").entered();
         redirect_edges_into_collapsed(
             &mut state.edges,
             ir,
@@ -245,7 +271,11 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         );
     }
 
-    let elements = arena.finalize_root();
+    let elements = {
+        let _span = tracing::info_span!("arena_finalize_root").entered();
+        arena.finalize_root()
+    };
+    super::timing::drain_and_emit();
     VisualGraph {
         version: unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION,
         source: VisualGraphSource {
@@ -520,8 +550,13 @@ fn emit_reference_edges(
                 Some(sg) => Container::Subgraph(sg),
                 None => Container::Root,
             };
-            let expr_stmt_id =
-                ensure_expression_statement_node(arena, state, r, &ctx.ir.raw, target_container);
+            let expr_stmt_id = ensure_expression_statement_node(
+                arena,
+                state,
+                r,
+                &ctx.source_index,
+                target_container,
+            );
             let target_id = resolve_read_target_id(
                 arena,
                 state,

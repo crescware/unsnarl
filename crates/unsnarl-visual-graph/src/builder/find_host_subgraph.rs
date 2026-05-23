@@ -11,6 +11,7 @@ use unsnarl_ir::serialized::{SerializedReference, SerializedScope};
 
 use super::arena::SubgraphIdx;
 use super::state::BuildState;
+use super::timing::TimingScope;
 
 pub fn find_host_subgraph(
     r: &SerializedReference,
@@ -18,6 +19,7 @@ pub fn find_host_subgraph(
     scope_map: &HashMap<&str, &SerializedScope>,
     state: &BuildState,
 ) -> Option<SubgraphIdx> {
+    let _t = TimingScope::start("find_host_subgraph");
     let mut cur = scope_map.get(r.from.value()).copied();
     while let Some(scope) = cur {
         if let Some(&idx) = state.subgraph_by_scope.get(scope.id.value()) {

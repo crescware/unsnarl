@@ -10,12 +10,14 @@ use unsnarl_ir::serialized::SerializedScope;
 use super::arena::SubgraphIdx;
 use super::context::BuilderContext;
 use super::state::BuildState;
+use super::timing::TimingScope;
 
 pub fn visible_ancestor_subgraph(
     scope: &SerializedScope,
     ctx: &BuilderContext<'_>,
     state: &BuildState,
 ) -> Option<SubgraphIdx> {
+    let _t = TimingScope::start("visible_ancestor_subgraph");
     let mut parent_id = scope.upper.as_ref().map(|id| id.value());
     while let Some(id) = parent_id {
         if let Some(&idx) = state.subgraph_by_scope.get(id) {

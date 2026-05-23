@@ -26,6 +26,7 @@ use super::node_id::node_id;
 use super::should_subgraph::should_subgraph;
 use super::state::BuildState;
 use super::switch_discriminant_anchor::attach_switch_discriminant_anchor;
+use super::timing::TimingScope;
 use super::visible_ancestor_subgraph::visible_ancestor_subgraph;
 use super::write_op_node_id::write_op_node_id;
 
@@ -54,6 +55,7 @@ pub fn build_scope(
     container: Container,
 ) {
     if is_collapsed(scope, ctx.depths.as_ref()) {
+        let _t = TimingScope::start("build_scope::collapsed_branch");
         record_collapsed_descendants(state, ctx, scope, scope.id.value());
         let owner_var_id = ctx.subgraph_owner_var.get(scope.id.value()).cloned();
         let anchor_id: Option<String> = if let Some(var_id) = owner_var_id.as_ref() {
@@ -75,68 +77,80 @@ pub fn build_scope(
         return;
     }
 
-    let subgraph_here = should_subgraph(scope);
-    let mut body_container = container;
-    let mut body_subgraph: Option<SubgraphIdx> = None;
-    if subgraph_here {
-        let sg_descriptor = describe_subgraph(scope, &ctx.subgraph_owner_var, &ctx.variable_map);
-        let idx = arena.push_subgraph(sg_descriptor);
-        arena.append_child(container, ElementHandle::Subgraph(idx));
-        body_container = Container::Subgraph(idx);
-        body_subgraph = Some(idx);
-        state
-            .subgraph_by_scope
-            .insert(scope.id.value().to_string(), idx);
-        if let Some(owner_var) = ctx.subgraph_owner_var.get(scope.id.value()) {
-            state.function_subgraph_by_fn.insert(owner_var.clone(), idx);
+    let (body_container, body_subgraph) = {
+        let _t = TimingScope::start("build_scope::subgraph_setup");
+        let subgraph_here = should_subgraph(scope);
+        let mut body_container = container;
+        let mut body_subgraph: Option<SubgraphIdx> = None;
+        if subgraph_here {
+            let sg_descriptor =
+                describe_subgraph(scope, &ctx.subgraph_owner_var, &ctx.variable_map);
+            let idx = arena.push_subgraph(sg_descriptor);
+            arena.append_child(container, ElementHandle::Subgraph(idx));
+            body_container = Container::Subgraph(idx);
+            body_subgraph = Some(idx);
+            state
+                .subgraph_by_scope
+                .insert(scope.id.value().to_string(), idx);
+            if let Some(owner_var) = ctx.subgraph_owner_var.get(scope.id.value()) {
+                state.function_subgraph_by_fn.insert(owner_var.clone(), idx);
+            }
+        }
+        (body_container, body_subgraph)
+    };
+    {
+        let _t = TimingScope::start("build_scope::variables_loop");
+        for vid in &scope.variables {
+            let Some(v) = ctx.variable_map.get(vid.value()).copied() else {
+                continue;
+            };
+            let node = make_variable_node(v);
+            let node_id_str = node.id().to_string();
+            let idx = arena.push_node(node);
+            state
+                .node_id_origin_scope
+                .insert(node_id_str, scope.id.value().to_string());
+            arena.append_child(body_container, ElementHandle::Node(idx));
         }
     }
-    for vid in &scope.variables {
-        let Some(v) = ctx.variable_map.get(vid.value()).copied() else {
-            continue;
-        };
-        let node = make_variable_node(v);
-        let node_id_str = node.id().to_string();
-        let idx = arena.push_node(node);
-        state
-            .node_id_origin_scope
-            .insert(node_id_str, scope.id.value().to_string());
-        arena.append_child(body_container, ElementHandle::Node(idx));
-    }
-    let empty_ops: Vec<super::write_op::WriteOp> = Vec::new();
-    let ops_slice: &[super::write_op::WriteOp] = ctx
-        .write_ops_by_scope
-        .get(scope.id.value())
-        .unwrap_or(&empty_ops);
-    let ops_owned: Vec<super::write_op::WriteOp> = ops_slice.to_vec();
-    for op in &ops_owned {
-        let owner_var = ctx.variable_map.get(op.var_id.as_str()).copied();
-        let declaration_kind: Option<VariableDeclarationKind> = owner_var
-            .and_then(|v| v.defs.first())
-            .and_then(|def| match def {
-                SerializedDefinition::Variable(d) => Some(d.declaration_kind().clone()),
-                _ => None,
+    {
+        let _t = TimingScope::start("build_scope::write_ops_loop");
+        let empty_ops: Vec<super::write_op::WriteOp> = Vec::new();
+        let ops_slice: &[super::write_op::WriteOp] = ctx
+            .write_ops_by_scope
+            .get(scope.id.value())
+            .unwrap_or(&empty_ops);
+        let ops_owned: Vec<super::write_op::WriteOp> = ops_slice.to_vec();
+        for op in &ops_owned {
+            let owner_var = ctx.variable_map.get(op.var_id.as_str()).copied();
+            let declaration_kind: Option<VariableDeclarationKind> = owner_var
+                .and_then(|v| v.defs.first())
+                .and_then(|def| match def {
+                    SerializedDefinition::Variable(d) => Some(d.declaration_kind().clone()),
+                    _ => None,
+                });
+            let id = write_op_node_id(&op.ref_id);
+            let node = VisualNode::Synthetic(SyntheticVisualNode {
+                r#type: NodeTypeTag::Node,
+                id: id.clone(),
+                kind: SyntheticNodeKind::WriteReference,
+                name: op.var_name.clone(),
+                line: op.line,
+                end_line: None,
+                is_jsx_element: false,
+                unused: false,
+                extras: SyntheticExtras::WriteOp { declaration_kind },
             });
-        let id = write_op_node_id(&op.ref_id);
-        let node = VisualNode::Synthetic(SyntheticVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: id.clone(),
-            kind: SyntheticNodeKind::WriteReference,
-            name: op.var_name.clone(),
-            line: op.line,
-            end_line: None,
-            is_jsx_element: false,
-            unused: false,
-            extras: SyntheticExtras::WriteOp { declaration_kind },
-        });
-        let node_idx = arena.push_node(node);
-        state
-            .node_id_origin_scope
-            .insert(id, scope.id.value().to_string());
-        arena.append_child(body_container, ElementHandle::Node(node_idx));
+            let node_idx = arena.push_node(node);
+            state
+                .node_id_origin_scope
+                .insert(id, scope.id.value().to_string());
+            arena.append_child(body_container, ElementHandle::Node(node_idx));
+        }
     }
     build_children(arena, state, ctx, scope, body_container);
     if let Some(sg) = body_subgraph {
+        let _t = TimingScope::start("build_scope::attach_anchors");
         attach_loop_test_anchor(arena, state, scope, sg);
         attach_switch_discriminant_anchor(arena, state, scope, sg);
     }

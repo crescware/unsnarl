@@ -2,7 +2,7 @@
 //! head shape: identifier, member, call, new, await, assign, update
 //! (prefix + postfix), elided, raw.
 
-use unsnarl_ir::primitive::{SourceColumn, SourceLine, Span, Utf16CodeUnitOffset};
+use unsnarl_ir::primitive::{SourceColumn, SourceIndex, SourceLine, Span, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::{SerializedHeadExpression, SerializedHeadOperand};
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
@@ -19,7 +19,10 @@ fn span_at(line: u32, column: u32, offset: u32) -> Span {
 #[test]
 fn identifier_renders_as_name() {
     let head = SerializedHeadExpression::identifier("foo".to_string());
-    assert_eq!(render_head_expression(&head, ""), "foo");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "foo"
+    );
 }
 
 #[test]
@@ -28,7 +31,10 @@ fn member_renders_with_dot() {
         SerializedHeadExpression::identifier("console".to_string()),
         "log".to_string(),
     );
-    assert_eq!(render_head_expression(&head, ""), "console.log");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "console.log"
+    );
 }
 
 #[test]
@@ -36,7 +42,10 @@ fn call_appends_parens() {
     let head = SerializedHeadExpression::Call {
         callee: Box::new(SerializedHeadExpression::identifier("run".to_string())),
     };
-    assert_eq!(render_head_expression(&head, ""), "run()");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "run()"
+    );
 }
 
 #[test]
@@ -44,7 +53,10 @@ fn new_renders_with_new_keyword() {
     let head = SerializedHeadExpression::New {
         callee: Box::new(SerializedHeadExpression::identifier("Set".to_string())),
     };
-    assert_eq!(render_head_expression(&head, ""), "new Set()");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "new Set()"
+    );
 }
 
 #[test]
@@ -52,7 +64,10 @@ fn await_renders_with_await_keyword() {
     let head = SerializedHeadExpression::Await {
         argument: Box::new(SerializedHeadExpression::identifier("p".to_string())),
     };
-    assert_eq!(render_head_expression(&head, ""), "await p");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "await p"
+    );
 }
 
 #[test]
@@ -70,7 +85,10 @@ fn assign_inserts_operator_with_spaces() {
             end_span: span_at(1, 6, 6),
         }),
     };
-    assert_eq!(render_head_expression(&head, ""), "x += ...");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "x += ..."
+    );
 }
 
 #[test]
@@ -84,7 +102,10 @@ fn prefix_update_prepends_operator() {
             end_span: span_at(1, 1, 1),
         }),
     };
-    assert_eq!(render_head_expression(&head, ""), "++i");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "++i"
+    );
 }
 
 #[test]
@@ -98,13 +119,19 @@ fn postfix_update_appends_operator() {
             end_span: span_at(1, 1, 1),
         }),
     };
-    assert_eq!(render_head_expression(&head, ""), "i--");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "i--"
+    );
 }
 
 #[test]
 fn elided_collapses_to_ellipsis() {
     let head = SerializedHeadExpression::Elided;
-    assert_eq!(render_head_expression(&head, ""), "...");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build("")),
+        "..."
+    );
 }
 
 #[test]
@@ -114,7 +141,10 @@ fn raw_slices_the_source_between_offsets() {
         start_span: span_at(1, 0, 0),
         end_span: span_at(1, 8, 8),
     };
-    assert_eq!(render_head_expression(&head, raw), "abc(def)");
+    assert_eq!(
+        render_head_expression(&head, &SourceIndex::build(raw)),
+        "abc(def)"
+    );
 }
 
 #[test]
@@ -128,10 +158,16 @@ fn raw_slice_respects_utf16_offsets_for_non_ascii_source() {
         start_span: span_at(1, 0, 0),
         end_span: span_at(1, 1, 1),
     };
-    assert_eq!(render_head_expression(&head_a, raw), "a");
+    assert_eq!(
+        render_head_expression(&head_a, &SourceIndex::build(raw)),
+        "a"
+    );
     let head_b = SerializedHeadExpression::Raw {
         start_span: span_at(1, 1, 1),
         end_span: span_at(1, 3, 3),
     };
-    assert_eq!(render_head_expression(&head_b, raw), "\u{2014}b");
+    assert_eq!(
+        render_head_expression(&head_b, &SourceIndex::build(raw)),
+        "\u{2014}b"
+    );
 }

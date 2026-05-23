@@ -13,6 +13,7 @@
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
 
+use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::SerializedScope;
 
 use crate::direction::Direction;
@@ -29,13 +30,17 @@ use super::if_test_node_id::if_test_node_id;
 use super::line_for_offset::line_for_offset;
 use super::state::BuildState;
 
-fn make_if_test_anchor(id: String, offset: u32, raw: &str) -> VisualNode {
+fn make_if_test_anchor(
+    id: String,
+    offset: Utf16CodeUnitOffset,
+    source_index: &SourceIndex<'_>,
+) -> VisualNode {
     VisualNode::Synthetic(SyntheticVisualNode {
         r#type: NodeTypeTag::Node,
         id,
         kind: SyntheticNodeKind::SyntheticIfStatementTest,
         name: "if-test".to_string(),
-        line: line_for_offset(raw, offset),
+        line: line_for_offset(source_index, offset),
         end_line: None,
         is_jsx_element: false,
         unused: false,
@@ -47,18 +52,18 @@ fn push_if_test_anchor(
     arena: &mut BuildArena,
     state: &mut BuildState,
     parent_scope_id: &str,
-    offset: u32,
+    offset: Utf16CodeUnitOffset,
     container: Container,
-    raw: &str,
+    source_index: &SourceIndex<'_>,
 ) {
-    if state.if_test_anchor_by_offset.contains_key(&offset) {
+    if state.if_test_anchor_by_offset.contains_key(&offset.0) {
         return;
     }
-    let id = if_test_node_id(parent_scope_id, offset);
-    let node = make_if_test_anchor(id.clone(), offset, raw);
+    let id = if_test_node_id(parent_scope_id, offset.0);
+    let node = make_if_test_anchor(id.clone(), offset, source_index);
     let idx = arena.push_node(node);
     arena.append_child(container, ElementHandle::Node(idx));
-    state.if_test_anchor_by_offset.insert(offset, id);
+    state.if_test_anchor_by_offset.insert(offset.0, id);
 }
 
 /// Place the IfStatement's test anchor inside the consequent it
@@ -72,21 +77,21 @@ fn attach_test_anchor_to_consequent(
     arena: &mut BuildArena,
     state: &mut BuildState,
     consequent: &SerializedScope,
-    offset: u32,
+    offset: Utf16CodeUnitOffset,
     fallback_container: Container,
-    raw: &str,
+    source_index: &SourceIndex<'_>,
 ) {
-    if state.if_test_anchor_by_offset.contains_key(&offset) {
+    if state.if_test_anchor_by_offset.contains_key(&offset.0) {
         return;
     }
     let body_sg = state.subgraph_by_scope.get(consequent.id.value()).copied();
     if let Some(body_sg) = body_sg {
         let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
-        let id = if_test_node_id(parent_id, offset);
-        let node = make_if_test_anchor(id.clone(), offset, raw);
+        let id = if_test_node_id(parent_id, offset.0);
+        let node = make_if_test_anchor(id.clone(), offset, source_index);
         let idx = arena.push_node(node);
         arena.prepend_child(Container::Subgraph(body_sg), ElementHandle::Node(idx));
-        state.if_test_anchor_by_offset.insert(offset, id);
+        state.if_test_anchor_by_offset.insert(offset.0, id);
         return;
     }
     if state
@@ -96,7 +101,14 @@ fn attach_test_anchor_to_consequent(
         return;
     }
     let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
-    push_if_test_anchor(arena, state, parent_id, offset, fallback_container, raw);
+    push_if_test_anchor(
+        arena,
+        state,
+        parent_id,
+        offset,
+        fallback_container,
+        source_index,
+    );
 }
 
 pub fn build_children(
@@ -140,10 +152,7 @@ pub fn build_children(
         }
         if group.len() < 2 {
             let lone = group[0];
-            let lone_offset = lone
-                .block_context
-                .as_ref()
-                .map(|c| c.parent_span_offset().0);
+            let lone_offset = lone.block_context.as_ref().map(|c| c.parent_span_offset());
             build_scope(arena, state, ctx, lone, container);
             if let Some(offset) = lone_offset {
                 attach_test_anchor_to_consequent(
@@ -152,7 +161,7 @@ pub fn build_children(
                     lone,
                     offset,
                     container,
-                    &ctx.ir.raw,
+                    &ctx.source_index,
                 );
             }
             i = j;
@@ -162,10 +171,10 @@ pub fn build_children(
         let offset = child
             .block_context
             .as_ref()
-            .map(|c| c.parent_span_offset().0)
-            .unwrap_or(0);
+            .map(|c| c.parent_span_offset())
+            .unwrap_or(Utf16CodeUnitOffset(0));
         let parent_id = child.upper.as_ref().map(|s| s.value()).unwrap_or("");
-        let container_id = if_container_subgraph_id(parent_id, offset);
+        let container_id = if_container_subgraph_id(parent_id, offset.0);
         let has_else = group
             .iter()
             .any(|v| v.block_context.as_ref().map(|c| c.key()) == Some("alternate"));
@@ -173,7 +182,7 @@ pub fn build_children(
             r#type: SubgraphTypeTag::Subgraph,
             id: container_id,
             kind: OwnedSubgraphKind::IfElseContainer,
-            line: line_for_offset(&ctx.ir.raw, offset),
+            line: line_for_offset(&ctx.source_index, offset),
             end_line: None,
             direction: Direction::RL,
             extras: OwnedExtras::IfElseContainer { has_else },
@@ -191,9 +200,10 @@ pub fn build_children(
         // Attach each IfStatement's test anchor to the consequent it
         // gates. Distinct `parentSpanOffset` values within the group
         // correspond to distinct IfStatement nodes.
-        let mut seen_offsets: std::collections::HashSet<u32> = std::collections::HashSet::new();
+        let mut seen_offsets: std::collections::HashSet<Utf16CodeUnitOffset> =
+            std::collections::HashSet::new();
         for g in &group {
-            let off = g.block_context.as_ref().map(|c| c.parent_span_offset().0);
+            let off = g.block_context.as_ref().map(|c| c.parent_span_offset());
             let key = g.block_context.as_ref().map(|c| c.key());
             let Some(off) = off else { continue };
             if seen_offsets.contains(&off) {
@@ -209,7 +219,7 @@ pub fn build_children(
                 g,
                 off,
                 Container::Subgraph(container_idx),
-                &ctx.ir.raw,
+                &ctx.source_index,
             );
         }
 

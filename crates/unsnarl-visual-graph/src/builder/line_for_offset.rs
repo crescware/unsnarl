@@ -1,21 +1,14 @@
-//! Counts UTF-16 code units up to `offset`, scanning for `\n`
-//! (code unit 10). The IR contract carries `offset` as a UTF-16
-//! code unit count (see `unsnarl_ir::primitive::span_from_offset`),
-//! so the same UTF-16 stepping keeps the result aligned with the IR
-//! side tables.
+//! Returns the 1-based line number for a UTF-16 code-unit `offset`
+//! into the source string carried by `source_index`. Backed by
+//! [`unsnarl_ir::primitive::SourceIndex`]'s precomputed line-start
+//! table, so the lookup is `O(log lines)` per call rather than the
+//! linear-scan shape it had before.
 
-pub fn line_for_offset(raw: &str, offset: u32) -> u32 {
-    let offset = offset as usize;
-    let mut line: u32 = 1;
-    for (consumed, unit) in raw.encode_utf16().enumerate() {
-        if consumed >= offset {
-            break;
-        }
-        if unit == 10 {
-            line += 1;
-        }
-    }
-    line
+use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
+
+pub fn line_for_offset(source_index: &SourceIndex<'_>, offset: Utf16CodeUnitOffset) -> u32 {
+    let _t = super::timing::TimingScope::start("line_for_offset");
+    source_index.line_for_utf16_offset(offset)
 }
 
 #[cfg(test)]
