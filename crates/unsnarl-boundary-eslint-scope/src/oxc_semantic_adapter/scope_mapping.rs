@@ -119,6 +119,15 @@ pub(crate) struct ScopeMappingResult {
     /// any TypeScript type-only subtree). Scopes that are merged into
     /// their parent (catch body block today) carry `Some(parent_ir)`.
     pub(crate) translation: IndexVec<OxcScopeId, Option<ScopeId>>,
+    /// For each IR switch scope, the synthetic per-`SwitchCase` Block
+    /// scopes' spans + ir ids. Downstream passes (`reference_mapping`,
+    /// `variable_mapping`) use this to re-parent any reference /
+    /// binding whose `Scoping`-side `scope_id` is the switch scope but
+    /// whose source position lies inside a specific `case` — eslint-
+    /// scope puts those rows on the case's `Block` scope, while
+    /// `oxc_semantic` keeps them on the bare switch. Cases are listed
+    /// in source order.
+    pub(crate) switch_cases: HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 }
 
 /// Per-`SwitchStatement` record: each case's span and the synthetic
@@ -240,9 +249,15 @@ pub(crate) fn build_scopes<'a>(
         }
     }
 
+    let switch_cases: HashMap<ScopeId, Vec<(Span, ScopeId)>> = switch_info
+        .into_iter()
+        .filter_map(|(oxc_id, info)| translation[oxc_id].map(|ir| (ir, info.cases)))
+        .collect();
+
     ScopeMappingResult {
         scopes,
         translation,
+        switch_cases,
     }
 }
 

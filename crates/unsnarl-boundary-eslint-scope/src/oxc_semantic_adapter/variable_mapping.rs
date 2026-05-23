@@ -80,12 +80,13 @@
 //! emitting rows so downstream consumers that index `variables`
 //! positionally see the same order as the parity baseline.
 
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 
 use oxc_ast::ast::{ClassType, FunctionType};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::{Scoping, Semantic};
+use oxc_span::Span;
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
 
@@ -136,6 +137,7 @@ pub(crate) fn build_variables(
     scopes: &mut IndexVec<ScopeId, ScopeData>,
     definitions: &mut IndexVec<DefinitionId, DefinitionData>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) -> VariableMappingResult {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
@@ -183,16 +185,44 @@ pub(crate) fn build_variables(
                 continue;
             }
             let identifiers = build_identifiers(scoping, symbol_id, &name);
+            // `oxc_semantic` keeps every per-`SwitchCase` binding on the
+            // enclosing `SwitchStatement` scope. The eslint-scope model
+            // — mirrored by `super::scope_mapping`'s synthetic case
+            // `Block` scopes — pulls them down to the case scope. Route
+            // the binding to the case scope whose span encloses the
+            // symbol's declaration site.
+            let target_scope = reparent_binding_to_switch_case(
+                ir_scope,
+                scoping.symbol_span(symbol_id),
+                scopes,
+                switch_cases,
+            );
             let var_id = variables.push(VariableData::new(
                 name.clone(),
-                ir_scope,
+                target_scope,
                 identifiers,
                 Vec::new(),
                 Vec::new(),
             ));
-            scopes[ir_scope].insert_into_set(name, var_id);
-            scopes[ir_scope].variables.push(var_id);
+            scopes[target_scope].insert_into_set(name, var_id);
+            scopes[target_scope].variables.push(var_id);
             symbol_to_variable[symbol_id] = Some(var_id);
+        }
+    }
+
+    // Per-case `variables` lists must end up in declaration order;
+    // re-parenting above can interleave cases. Re-sort each case's
+    // binding list by symbol declaration span so the output matches
+    // the parity baseline.
+    for cases in switch_cases.values() {
+        for (_, case_ir) in cases {
+            scopes[*case_ir].variables.sort_by_key(|v| {
+                variables[*v]
+                    .identifiers
+                    .first()
+                    .map(|i| i.span.start)
+                    .unwrap_or(0)
+            });
         }
     }
 
@@ -201,6 +231,46 @@ pub(crate) fn build_variables(
         symbol_to_variable,
         synthetic_unresolved,
     }
+}
+
+/// Reparent a binding to the eslint-scope-equivalent switch scope
+/// when `oxc_semantic` places it on either the bare `SwitchStatement`
+/// scope (binding inside a case body) or the switch's parent (a
+/// hoisted `var` whose declaration site lies between cases).
+///
+/// Three shapes are handled, all triggered by `span ⊆ switch_span`:
+///
+/// 1. `ir_scope = switch_ir`, `span ⊆ case_span` → return case scope.
+/// 2. `ir_scope = switch_ir.upper`, `span ⊆ case_span` → return case
+///    scope.
+/// 3. `ir_scope = switch_ir.upper`, `span ⊄ any case_span` → return
+///    switch scope.
+///
+/// Mirrors `super::reference_mapping::reparent_to_switch_case`.
+fn reparent_binding_to_switch_case(
+    ir_scope: ScopeId,
+    span: Span,
+    scopes: &IndexVec<ScopeId, ScopeData>,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
+) -> ScopeId {
+    for (&switch_ir, cases) in switch_cases {
+        let switch_span = scopes[switch_ir].block.span;
+        if span.start < switch_span.start || span.end > switch_span.end {
+            continue;
+        }
+        let switch_upper = scopes[switch_ir].upper;
+        let is_relevant = ir_scope == switch_ir || Some(ir_scope) == switch_upper;
+        if !is_relevant {
+            continue;
+        }
+        for (case_span, case_ir) in cases {
+            if case_span.start <= span.start && span.end <= case_span.end {
+                return *case_ir;
+            }
+        }
+        return switch_ir;
+    }
+    ir_scope
 }
 
 /// If `anchor` is the `Function` node of a named function expression,

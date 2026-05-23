@@ -63,8 +63,15 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
     let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
+    let switch_cases = scope_mapping.switch_cases;
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
-    let var_result = build_variables(&ret.semantic, &mut scopes, &mut definitions, &translation);
+    let var_result = build_variables(
+        &ret.semantic,
+        &mut scopes,
+        &mut definitions,
+        &translation,
+        &switch_cases,
+    );
     let mut variables = var_result.variables;
     let symbol_to_variable = var_result.symbol_to_variable;
     let synthetic_unresolved = var_result.synthetic_unresolved;
@@ -76,6 +83,7 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
         &symbol_to_variable,
         &translation,
         &synthetic_unresolved,
+        &switch_cases,
     );
     body(&Built {
         scopes,

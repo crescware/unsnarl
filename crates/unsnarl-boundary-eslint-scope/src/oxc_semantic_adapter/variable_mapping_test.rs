@@ -55,11 +55,18 @@ fn with_arena(
     let scope_mapping = build_scopes(&ret.semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
+    let switch_cases = scope_mapping.switch_cases;
     let mut definitions: IndexVec<
         unsnarl_ir::ids::DefinitionId,
         unsnarl_ir::scope::DefinitionData,
     > = IndexVec::new();
-    let result = build_variables(&ret.semantic, &mut scopes, &mut definitions, &translation);
+    let result = build_variables(
+        &ret.semantic,
+        &mut scopes,
+        &mut definitions,
+        &translation,
+        &switch_cases,
+    );
     body(&scopes, &result.variables);
 }
 

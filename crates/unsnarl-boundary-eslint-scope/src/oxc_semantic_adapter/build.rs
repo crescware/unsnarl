@@ -51,9 +51,15 @@ pub(crate) fn build<'a>(
     let scope_mapping = scope_mapping::build_scopes(&semantic, source_type, language);
     let mut scopes = scope_mapping.scopes;
     let translation = scope_mapping.translation;
+    let switch_cases = scope_mapping.switch_cases;
     let mut definitions: IndexVec<DefinitionId, DefinitionData> = IndexVec::new();
-    let variable_mapping =
-        variable_mapping::build_variables(&semantic, &mut scopes, &mut definitions, &translation);
+    let variable_mapping = variable_mapping::build_variables(
+        &semantic,
+        &mut scopes,
+        &mut definitions,
+        &translation,
+        &switch_cases,
+    );
     let mut variables = variable_mapping.variables;
     let symbol_to_variable = variable_mapping.symbol_to_variable;
     let synthetic_unresolved = variable_mapping.synthetic_unresolved;
@@ -65,6 +71,7 @@ pub(crate) fn build<'a>(
         &symbol_to_variable,
         &translation,
         &synthetic_unresolved,
+        &switch_cases,
     );
     definition_mapping::build_definitions(
         &semantic,

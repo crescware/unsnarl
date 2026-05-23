@@ -75,7 +75,7 @@ use oxc_ast::ast::{BindingIdentifier, BindingPattern, FormalParameter};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::Semantic;
-use oxc_span::GetSpan;
+use oxc_span::{GetSpan, Span};
 use oxc_syntax::reference::ReferenceFlags as OxcReferenceFlags;
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
@@ -99,6 +99,7 @@ use unsnarl_oxc_parity::AstType;
 /// this pass translate `oxc_semantic`'s resolved-reference symbol
 /// references into the matching `VariableId` without re-walking the
 /// scope tree.
+#[allow(clippy::too_many_arguments)]
 pub(crate) fn build_references(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
@@ -107,6 +108,7 @@ pub(crate) fn build_references(
     symbol_to_variable: &IndexVec<SymbolId, Option<VariableId>>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
     synthetic_unresolved: &HashSet<SymbolId>,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) -> IndexVec<ReferenceId, ReferenceData> {
     let scoping = semantic.scoping();
     let nodes = semantic.nodes();
@@ -122,6 +124,7 @@ pub(crate) fn build_references(
                     continue;
                 };
                 let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
                 let flags = convert_flags(oxc_ref.flags());
                 let new_id = references.push(ReferenceData {
                     identifier,
@@ -150,6 +153,7 @@ pub(crate) fn build_references(
                     continue;
                 };
                 let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+                let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
                 let flags = convert_flags(oxc_ref.flags());
                 let var_id = ensure_implicit_global(
                     scopes,
@@ -185,6 +189,7 @@ pub(crate) fn build_references(
         &mut references,
         symbol_to_variable,
         translation,
+        switch_cases,
     );
 
     // `Scoping::root_unresolved_references` is keyed on a
@@ -209,6 +214,7 @@ pub(crate) fn build_references(
                 continue;
             };
             let identifier = build_identifier(nodes.kind(oxc_ref.node_id()));
+            let from = reparent_to_switch_case(from, identifier.span, scopes, switch_cases);
             let flags = convert_flags(oxc_ref.flags());
 
             let synth_args = if name == "arguments" {
@@ -260,6 +266,7 @@ pub(crate) fn build_references(
         &mut implicit_globals,
         translation,
         root,
+        switch_cases,
     );
 
     mark_variable_declarator_init_reads(semantic, &mut references);
@@ -449,6 +456,52 @@ fn push_through_chain(
     scopes[root].through.push(ref_id);
 }
 
+/// Reparent a reference to the eslint-scope-equivalent switch scope
+/// when `oxc_semantic`'s `scope_id` lands on either the bare
+/// `SwitchStatement` scope (so the case body lives one level too high)
+/// or the switch's own parent (so the discriminant or case-test lives
+/// one level too high).
+///
+/// Three shapes are handled, all triggered by `span ⊆ switch_span`:
+///
+/// 1. `from = switch_ir`, `span ⊆ case_span` → return case scope. This
+///    is the per-`SwitchCase` re-parenting introduced in commit
+///    `54499542`.
+/// 2. `from = switch_ir.upper`, `span ⊆ case_span` → return case
+///    scope. Covers `case <Expr>:` test identifiers that `oxc_semantic`
+///    classifies in the switch's parent rather than the switch scope.
+/// 3. `from = switch_ir.upper`, `span ⊄ any case_span` → return
+///    switch scope. Covers the `switch (Expr) { ... }` discriminant,
+///    which `oxc_semantic` classifies in the switch's parent.
+///
+/// All other shapes (deeper descendants, references outside the
+/// switch entirely) return `from` unchanged.
+fn reparent_to_switch_case(
+    from: ScopeId,
+    span: Span,
+    scopes: &IndexVec<ScopeId, ScopeData>,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
+) -> ScopeId {
+    for (&switch_ir, cases) in switch_cases {
+        let switch_span = scopes[switch_ir].block.span;
+        if span.start < switch_span.start || span.end > switch_span.end {
+            continue;
+        }
+        let switch_upper = scopes[switch_ir].upper;
+        let is_relevant = from == switch_ir || Some(from) == switch_upper;
+        if !is_relevant {
+            continue;
+        }
+        for (case_span, case_ir) in cases {
+            if case_span.start <= span.start && span.end <= case_span.end {
+                return *case_ir;
+            }
+        }
+        return switch_ir;
+    }
+    from
+}
+
 /// Walk every `VariableDeclarator` node and emit a write reference
 /// with `init = true` for each declarator whose `id` slot is itself a
 /// `BindingIdentifier` and whose declarator has an `init` expression.
@@ -463,6 +516,7 @@ fn push_through_chain(
 /// no reference row is created for nested binding identifiers — the
 /// parity baseline therefore carries no synthetic init write for the
 /// pattern's leaf bindings.
+#[allow(clippy::too_many_arguments)]
 fn synthesise_init_references(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
@@ -470,6 +524,7 @@ fn synthesise_init_references(
     references: &mut IndexVec<ReferenceId, ReferenceData>,
     symbol_to_variable: &IndexVec<SymbolId, Option<VariableId>>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) {
     let nodes = semantic.nodes();
     for node in nodes.iter() {
@@ -496,6 +551,7 @@ fn synthesise_init_references(
             binding.name.as_str().to_string(),
             binding.span,
         );
+        let from = reparent_to_switch_case(from, binding.span, scopes, switch_cases);
         let new_id = references.push(ReferenceData {
             identifier,
             from,
@@ -526,6 +582,7 @@ fn synthesise_parameter_property_references(
     implicit_globals: &mut HashMap<String, VariableId>,
     translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
     root: ScopeId,
+    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
 ) {
     let nodes = semantic.nodes();
     for node in nodes.iter() {
@@ -546,6 +603,7 @@ fn synthesise_parameter_property_references(
                 binding.name.as_str().to_string(),
                 binding.span,
             );
+            let from = reparent_to_switch_case(from, binding.span, scopes, switch_cases);
             let var_id = ensure_implicit_global(
                 scopes,
                 variables,
