@@ -1,20 +1,28 @@
 //! `uns` CLI argument definitions.
+//!
+//! The struct shape mirrors the TS parity surface
+//! (`ts/src/cli/parsed-cli-options.ts`) via `#[derive(Serialize)]`
+//! with `camelCase` field names. The actual argv parsing is hand-
+//! rolled in [`parse_argv`] — we used to lean on `clap::Parser`
+//! derive but that pulled ~190KB of `__text` into the release
+//! binary (Command tree builder, help renderer, validator, error
+//! formatter), all paid on every `uns` invocation.
 
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
-use clap::Parser;
 use serde::Serialize;
 use unsnarl_ir::NestingDepth;
-use unsnarl_root_query::{parse_root_queries, GenerationCount, ParsedRootQuery};
-
-use crate::cli::run_cli::derive_output_basename;
+use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
 
 pub mod cli_color_theme;
 pub mod cli_format;
 pub mod cli_language;
 pub mod cli_mermaid_renderer;
 pub mod collect_plugins;
+pub mod help_text;
 pub mod highlight;
+pub mod parse_argv;
+pub mod parse_error;
 pub mod parse_generation_count;
 
 pub use cli_color_theme::CliColorTheme;
@@ -22,286 +30,125 @@ pub use cli_format::CliFormat;
 pub use cli_language::CliLanguage;
 pub use cli_mermaid_renderer::CliMermaidRenderer;
 pub use highlight::Highlight;
+pub use parse_error::{ParseError, ParseErrorKind};
 
-use collect_plugins::parse_plugin_occurrence;
-use parse_generation_count::{parse_generation_count, parse_nesting_depth};
-
-#[derive(Parser, Debug, Serialize)]
-#[command(
-    name = "unsnarl",
-    bin_name = "uns",
-    version,
-    about = "Generate visual graphs from JavaScript / TypeScript source",
-    disable_version_flag = true
-)]
+#[derive(Debug, Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Args {
-    /// Input file
+    /// Input file (positional, optional).
     pub file: Option<PathBuf>,
-
-    /// Emitter format (mermaid, ir, json, markdown, stats)
-    #[arg(
-        short = 'f',
-        long = "format",
-        value_name = "id",
-        value_enum,
-        default_value = "mermaid"
-    )]
+    /// Emitter format. Default: `Mermaid`.
     pub format: CliFormat,
-
-    /// Disable pretty-printed JSON output
-    #[arg(long = "no-pretty-json", action = clap::ArgAction::SetFalse)]
+    /// Pretty-print JSON. Default: `true`; `--no-pretty-json` flips it.
     pub pretty_json: bool,
-
-    /// Layout engine for Mermaid output
-    #[arg(long = "mermaid-renderer", value_name = "renderer", value_enum)]
+    /// Layout engine override for Mermaid output.
     pub mermaid_renderer: Option<CliMermaidRenderer>,
-
-    /// Color theme for Mermaid output (dark, light)
-    #[arg(
-        long = "color-theme",
-        value_name = "theme",
-        value_enum,
-        default_value = "dark"
-    )]
+    /// Color theme for Mermaid output. Default: `Dark`.
     pub color_theme: CliColorTheme,
-
-    /// Read from stdin
-    #[arg(long = "stdin", action = clap::ArgAction::SetTrue)]
+    /// Read from stdin instead of a file.
     pub stdin: bool,
-
-    /// Language for stdin input
-    #[arg(
-        long = "stdin-lang",
-        value_name = "lang",
-        value_enum,
-        default_value = "ts"
-    )]
+    /// Language label applied to stdin input. Default: `Ts`.
     pub stdin_lang: CliLanguage,
-
-    /// Comma-separated root queries (repeatable)
-    #[arg(
-        short = 'r',
-        long = "roots",
-        value_name = "queries",
-        action = clap::ArgAction::Append
-    )]
+    /// Raw `-r` / `--roots` strings, folded into [`Self::roots`] by
+    /// [`Self::finalize`].
     #[serde(skip)]
-    raw_roots: Vec<String>,
-
-    /// Parsed `-r` / `--roots` queries. The clap-facing `raw_roots`
-    /// field is folded into this typed `Vec<ParsedRootQuery>` by
-    /// `finalize`.
-    #[arg(skip)]
+    pub(super) raw_roots: Vec<String>,
+    /// Typed parsed-root-query list. Populated by [`Self::finalize`].
     pub roots: Vec<ParsedRootQuery>,
-
-    /// Highlight matching nodes and adjacent edges (defaults to the -r/--roots queries).
-    ///
-    /// Tri-state:
-    /// - `None`          : flag absent
-    /// - `Some(None)`    : flag given with no value (follow `-r/--roots`)
-    /// - `Some(Some(s))` : flag given with inline value (parsed by `finalize`)
-    #[arg(
-        short = 'H',
-        long = "highlight",
-        value_name = "queries",
-        num_args = 0..=1,
-    )]
+    /// `-H` / `--highlight` raw value: `None` = absent, `Some(None)`
+    /// = present with no value, `Some(Some(s))` = present with an
+    /// inline value. Folded into [`Self::highlight`] by
+    /// [`Self::finalize`].
     #[serde(skip)]
-    raw_highlight: Option<Option<String>>,
-
-    /// Parsed `-H` / `--highlight` value. Populated by `finalize`.
-    #[arg(skip)]
+    pub(super) raw_highlight: Option<Option<String>>,
+    /// Typed highlight selection. Populated by [`Self::finalize`].
     pub highlight: Highlight,
-
-    /// Descendants generations
-    #[arg(
-        short = 'A',
-        long = "descendants",
-        value_name = "N",
-        value_parser = parse_generation_count
-    )]
+    /// `-A` / `--descendants` generations.
     pub descendants: Option<GenerationCount>,
-
-    /// Ancestors generations
-    #[arg(
-        short = 'B',
-        long = "ancestors",
-        value_name = "N",
-        value_parser = parse_generation_count
-    )]
+    /// `-B` / `--ancestors` generations.
     pub ancestors: Option<GenerationCount>,
-
-    /// Context generations (-A and -B shorthand)
-    #[arg(
-        short = 'C',
-        long = "context",
-        value_name = "N",
-        value_parser = parse_generation_count
-    )]
+    /// `-C` / `--context` generations (`-A` / `-B` shorthand).
     pub context: Option<GenerationCount>,
-
-    /// Sugar: set both --depth-function and --depth-block to <N>
-    #[arg(
-        long = "depth",
-        value_name = "N",
-        value_parser = parse_nesting_depth
-    )]
+    /// `--depth` sugar: seeds `--depth-function` and `--depth-block`.
     pub depth: Option<NestingDepth>,
-
-    /// Max function-scope nesting depth before scopes collapse to a single node
-    #[arg(
-        long = "depth-function",
-        value_name = "N",
-        value_parser = parse_nesting_depth
-    )]
+    /// Max function-scope nesting depth before scopes collapse.
     pub depth_function: Option<NestingDepth>,
-
-    /// Max block-scope nesting depth (applies to if/for/while/switch/try-catch-finally/block) before scopes collapse to a single node
-    #[arg(
-        long = "depth-block",
-        value_name = "N",
-        value_parser = parse_nesting_depth
-    )]
+    /// Max block-scope nesting depth before scopes collapse.
     pub depth_block: Option<NestingDepth>,
-
-    /// Write output to <dir>/<auto-name>.<ext>
-    #[arg(
-        short = 'o',
-        long = "out-dir",
-        value_name = "dir",
-        conflicts_with = "out_file"
-    )]
+    /// `-o` / `--out-dir` (write `<dir>/<auto-name>.<ext>`).
     pub out_dir: Option<PathBuf>,
-
-    /// Write output to <path> (full file path, no auto-naming)
-    #[arg(long = "out-file", value_name = "path")]
+    /// `--out-file` (write `<path>`, no auto-naming).
     pub out_file: Option<PathBuf>,
-
-    /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C` (or the
-    /// positional input file when no roots are given). Populated by
-    /// `finalize` when `-o` / `--out-dir` is set; otherwise `None`. Feeds
-    /// the emitter's `<dir>/<basename>.<ext>` filename.
-    #[arg(skip)]
+    /// Basename derived from `-r` query tokens + `-A` / `-B` / `-C`
+    /// (or the positional input file when no roots are given).
+    /// Populated by [`Self::finalize`] when `-o` / `--out-dir` is
+    /// set; otherwise `None`. Feeds the emitter's
+    /// `<dir>/<basename>.<ext>` filename.
     pub derived_basename: Option<String>,
-
-    /// Annotate Mermaid labels with the underlying NODE_KIND / SUBGRAPH_KIND
-    #[arg(long = "debug", action = clap::ArgAction::SetTrue)]
+    /// `--debug` Mermaid label annotation.
     pub debug: bool,
-
-    /// Stream diagnostic and timing logs to stderr.
-    ///
-    /// Diagnostic-only and intentionally absent from the TS parity
-    /// surface; `#[serde(skip)]` keeps it out of the serialized
-    /// `Args` snapshot that mirrors `parsed-cli-options.ts`.
-    #[arg(long = "verbose", action = clap::ArgAction::SetTrue)]
+    /// `--verbose` diagnostic stream. Skipped from serialization so
+    /// it stays out of the `parsed-cli-options.ts` parity snapshot.
     #[serde(skip)]
     pub verbose: bool,
-
-    /// Enable plugin(s). Repeat the flag or comma-delimit for multiple. The 'unsnarl-plugin-' prefix may be omitted.
-    ///
-    /// Stored per-occurrence as the validated list returned by
-    /// `collect_plugins`. `finalize` folds the per-occurrence lists into
-    /// the public `plugins` field.
-    #[arg(
-        long = "plugin",
-        value_name = "names",
-        action = clap::ArgAction::Append,
-        value_parser = parse_plugin_occurrence,
-    )]
+    /// Raw per-occurrence plugin lists collected from each `--plugin`
+    /// flag, folded into [`Self::plugins`] by [`Self::finalize`].
     #[serde(skip)]
-    plugin_occurrences: Vec<Vec<String>>,
-
-    /// Flattened-and-deduped plugin list folded from
-    /// `plugin_occurrences`. Populated by `finalize` after clap parsing.
-    #[arg(skip)]
+    pub(super) plugin_occurrences: Vec<Vec<String>>,
+    /// Flattened-and-deduped plugin list.
     pub plugins: Vec<String>,
+}
 
-    /// Show version
-    #[arg(short = 'v', long = "version", action = clap::ArgAction::Version)]
-    #[serde(skip)]
-    pub version: (),
+impl Default for Args {
+    fn default() -> Self {
+        Self {
+            file: None,
+            format: CliFormat::Mermaid,
+            pretty_json: true,
+            mermaid_renderer: None,
+            color_theme: CliColorTheme::Dark,
+            stdin: false,
+            stdin_lang: CliLanguage::Ts,
+            raw_roots: Vec::new(),
+            roots: Vec::new(),
+            raw_highlight: None,
+            highlight: Highlight::Absent,
+            descendants: None,
+            ancestors: None,
+            context: None,
+            depth: None,
+            depth_function: None,
+            depth_block: None,
+            out_dir: None,
+            out_file: None,
+            derived_basename: None,
+            debug: false,
+            verbose: false,
+            plugin_occurrences: Vec::new(),
+            plugins: Vec::new(),
+        }
+    }
 }
 
 impl Args {
-    // Inherent `parse` / `try_parse_from` shadow the same-named methods
-    // provided by the derived `clap::Parser` impl. This makes it
-    // impossible to obtain an `Args` without running `finalize`: the
-    // `Parser` trait methods are still reachable via fully qualified
-    // syntax (`<Args as clap::Parser>::parse()`), but a plain
-    // `Args::parse()` call resolves to the inherent method.
-    pub fn try_parse_from<I, T>(itr: I) -> Result<Self, clap::Error>
+    /// Inherent parser entry, equivalent to the previous
+    /// clap-derived `try_parse_from`. The full parsing + finalisation
+    /// pipeline lives in [`parse_argv::parse_argv`].
+    pub fn try_parse_from<I, T>(itr: I) -> Result<Self, ParseError>
     where
         I: IntoIterator<Item = T>,
-        T: Into<std::ffi::OsString> + Clone,
+        T: Into<std::ffi::OsString>,
     {
-        let mut args = <Self as clap::Parser>::try_parse_from(itr)?;
-        args.finalize()?;
-        Ok(args)
+        parse_argv::parse_argv(itr)
     }
 
+    /// Inherent parser shortcut for `main`. Mirrors the previous
+    /// clap-derived `Args::parse` (which delegated to
+    /// `Error::exit`): if parsing fails, render the message and exit
+    /// with the appropriate code rather than returning to the caller.
     pub fn parse() -> Self {
         Self::try_parse_from(std::env::args_os()).unwrap_or_else(|e| e.exit())
     }
-
-    fn finalize(&mut self) -> Result<(), clap::Error> {
-        let raw_plugins = std::mem::take(&mut self.plugin_occurrences);
-        for occurrence in raw_plugins {
-            for name in occurrence {
-                if !self.plugins.contains(&name) {
-                    self.plugins.push(name);
-                }
-            }
-        }
-        let raw_roots = std::mem::take(&mut self.raw_roots);
-        for raw in raw_roots {
-            match parse_root_queries(&raw) {
-                Ok(qs) => self.roots.extend(qs),
-                Err(msg) => return Err(value_validation_error(&msg)),
-            }
-        }
-        let raw_highlight = std::mem::take(&mut self.raw_highlight);
-        self.highlight = match raw_highlight {
-            None => Highlight::Absent,
-            Some(None) => Highlight::NoValue,
-            Some(Some(raw)) => match parse_root_queries(&raw) {
-                Ok(qs) => Highlight::Value(qs),
-                Err(msg) => return Err(value_validation_error(&msg)),
-            },
-        };
-        if self.out_dir.is_some() {
-            // `-o` writes to `<dir>/<auto-basename>.<ext>`, so it needs
-            // either a positional file (basename comes from it) or at
-            // least one `-r` query (basename comes from the root tokens).
-            // `--stdin` removes the positional path, leaving `-r` as the
-            // only remaining basename source.
-            if self.stdin && self.roots.is_empty() {
-                return Err(value_validation_error(
-                    "--out-dir requires either -r/--roots or an input file path",
-                ));
-            }
-            let input_path = if self.stdin {
-                Path::new("")
-            } else {
-                self.file.as_deref().unwrap_or_else(|| Path::new(""))
-            };
-            self.derived_basename = Some(derive_output_basename(
-                &self.roots,
-                self.descendants,
-                self.ancestors,
-                self.context,
-                input_path,
-            ));
-        }
-        Ok(())
-    }
-}
-
-fn value_validation_error(message: &str) -> clap::Error {
-    clap::Error::raw(
-        clap::error::ErrorKind::ValueValidation,
-        format!("{message}\n"),
-    )
 }
 
 #[cfg(test)]
