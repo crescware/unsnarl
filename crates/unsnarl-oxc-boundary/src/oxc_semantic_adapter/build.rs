@@ -9,7 +9,7 @@ use oxc_semantic::SemanticBuilder;
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::ids::{DefinitionId, ScopeId};
-use unsnarl_ir::primitive::span_from_offset;
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::DefinitionData;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
@@ -125,6 +125,7 @@ fn collect_var_detected_diagnostics(
     semantic: &oxc_semantic::Semantic<'_>,
     raw: &str,
 ) -> Vec<Diagnostic> {
+    let index = SourceIndex::build(raw);
     let mut out = Vec::new();
     for node in semantic.nodes().iter() {
         let AstKind::VariableDeclaration(decl) = node.kind() else {
@@ -136,7 +137,7 @@ fn collect_var_detected_diagnostics(
         out.push(Diagnostic {
             kind: DiagnosticKind::VarDetected,
             message: "var declaration detected; rendered as node only (no edges).".to_string(),
-            span: span_from_offset(raw, decl.span.start as usize),
+            span: index.span_at(decl.span.start as usize),
         });
     }
     out
