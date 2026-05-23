@@ -1,11 +1,15 @@
 //! Top-level orchestration: drive `SemanticBuilder` and stitch the
 //! per-entity mappings into a single [`EslintScopeAnalysisResult`].
 
-use oxc_ast::ast::Program;
+use oxc_ast::ast::{Program, VariableDeclarationKind};
+use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::SemanticBuilder;
 
+use unsnarl_ir::diagnostic::Diagnostic;
+use unsnarl_ir::diagnostic_kind::DiagnosticKind;
 use unsnarl_ir::ids::{DefinitionId, ScopeId};
+use unsnarl_ir::primitive::span_from_offset;
 use unsnarl_ir::scope::DefinitionData;
 use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
@@ -14,6 +18,16 @@ use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::parser::SourceType;
 
 use super::{definition_mapping, reference_mapping, scope_mapping, variable_mapping};
+
+/// Adapter output bundle: the IR arena plus any diagnostics
+/// (currently `VarDetected` warnings) collected during the build.
+/// Returned to [`super::build_from_program`]'s caller so the boundary
+/// can dispatch the diagnostics to its `AnalysisVisitor::on_diagnostic`
+/// callback.
+pub struct BuildOutput {
+    pub analysis: EslintScopeAnalysisResult,
+    pub diagnostics: Vec<Diagnostic>,
+}
 
 /// Phase 2 entry point. Wires the scope / variable / reference /
 /// definition mapping passes into the arena.
@@ -30,8 +44,8 @@ pub(crate) fn build<'a>(
     program: &Program<'a>,
     source_type: SourceType,
     language: Language,
-    _raw: &'a str,
-) -> EslintScopeAnalysisResult {
+    raw: &'a str,
+) -> BuildOutput {
     let ret = SemanticBuilder::new().build(program);
     let semantic = ret.semantic;
     let scope_mapping = scope_mapping::build_scopes(&semantic, source_type, language);
@@ -58,13 +72,52 @@ pub(crate) fn build<'a>(
         &mut definitions,
         &symbol_to_variable,
     );
-    EslintScopeAnalysisResult {
-        arena: IrArena {
-            scopes,
-            variables,
-            references,
-            definitions,
+    let diagnostics = collect_var_detected_diagnostics(&semantic, raw);
+    BuildOutput {
+        analysis: EslintScopeAnalysisResult {
+            arena: IrArena {
+                scopes,
+                variables,
+                references,
+                definitions,
+            },
+            global_scope: ScopeId::from_usize(0),
         },
-        global_scope: ScopeId::from_usize(0),
+        diagnostics,
     }
 }
+
+/// Walk every `VariableDeclaration` AST node and emit a
+/// `DiagnosticKind::VarDetected` warning for each `var` declaration.
+///
+/// Mirrors the boundary's hand-rolled
+/// `hoisting::handle_variable_declaration` and `declare_for_left`
+/// helpers, which both push the same diagnostic onto
+/// `ScopeBuilderState::diagnostics` when a `var` head is encountered.
+/// `for (var ...; ...)`'s init and `for (var ... in/of ...)`'s left
+/// slot are both ordinary `VariableDeclaration` nodes on the AST, so
+/// a single walk covers every site without double-counting.
+fn collect_var_detected_diagnostics(
+    semantic: &oxc_semantic::Semantic<'_>,
+    raw: &str,
+) -> Vec<Diagnostic> {
+    let mut out = Vec::new();
+    for node in semantic.nodes().iter() {
+        let AstKind::VariableDeclaration(decl) = node.kind() else {
+            continue;
+        };
+        if !matches!(decl.kind, VariableDeclarationKind::Var) {
+            continue;
+        }
+        out.push(Diagnostic {
+            kind: DiagnosticKind::VarDetected,
+            message: "var declaration detected; rendered as node only (no edges).".to_string(),
+            span: span_from_offset(raw, decl.span.start as usize),
+        });
+    }
+    out
+}
+
+#[cfg(test)]
+#[path = "build_test.rs"]
+mod build_test;

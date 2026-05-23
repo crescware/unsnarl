@@ -18,7 +18,6 @@ use oxc_ast::ast::Program;
 
 use unsnarl_ir::Language;
 
-use crate::analysis_result::EslintScopeAnalysisResult;
 use crate::parser::SourceType;
 
 pub(crate) mod build;
@@ -26,6 +25,8 @@ pub(crate) mod definition_mapping;
 pub(crate) mod reference_mapping;
 pub(crate) mod scope_mapping;
 pub(crate) mod variable_mapping;
+
+pub use build::BuildOutput;
 
 /// Run `oxc_semantic` against `program` and adapt the result into the
 /// unsnarl boundary's [`EslintScopeAnalysisResult`].
@@ -51,6 +52,6 @@ pub fn build_from_program<'a>(
     source_type: SourceType,
     language: Language,
     raw: &'a str,
-) -> EslintScopeAnalysisResult {
+) -> BuildOutput {
     build::build(program, source_type, language, raw)
 }
