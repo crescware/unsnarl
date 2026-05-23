@@ -53,12 +53,24 @@
 //! this map to resolve `scope_id` references coming out of `Scoping`
 //! and skip any rows whose scope is `None`.
 //!
+//! ## SwitchCase synthesis
+//!
+//! `oxc_semantic` does not allocate a scope per `SwitchCase` — the
+//! cases share their enclosing `SwitchStatement`'s scope. eslint-scope,
+//! by contrast, creates a separate `Block` scope per case (anchored
+//! to the `SwitchCase` AST node) so block-scoped declarations stay
+//! contained within their case. This module synthesises those `Block`
+//! scopes immediately after each `SwitchStatement` IR row is emitted:
+//! the cases occupy the next `cases.len()` IR ids. Any oxc-derived
+//! scope whose `Scoping` parent is the `SwitchStatement` is re-routed
+//! to the case whose span encloses its anchor (computed in
+//! [`upper_for`]), keeping each case's nested scopes parented to the
+//! synthetic case row instead of the bare switch.
+//!
 //! ## Known divergences (deferred to follow-up commits)
 //!
 //! 1. **`FunctionExpressionName`**: not synthesised here (see above).
-//! 2. **`SwitchCase`**: eslint-scope creates a per-`SwitchCase` Block
-//!    scope; `oxc_semantic` does not. Synthesis is a follow-up.
-//! 3. **`ClassFieldInitializer`**: eslint-scope creates a per-field
+//! 2. **`ClassFieldInitializer`**: eslint-scope creates a per-field
 //!    initializer scope; `oxc_semantic` does not. Synthesis is a
 //!    follow-up.
 //!
@@ -66,14 +78,19 @@
 //! the comment is kept in code so reviewers see the exact scope of
 //! this commit's coverage rather than discovering it from test output.
 
+use std::collections::HashMap;
+
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::{AstNodes, Scoping, Semantic};
+use oxc_span::{GetSpan, Span};
 use oxc_syntax::scope::{ScopeFlags, ScopeId as OxcScopeId};
 
 use unsnarl_ir::ids::ScopeId;
+use unsnarl_ir::primitive::AstNode;
 use unsnarl_ir::scope::ScopeData;
 use unsnarl_ir::scope_type::ScopeType;
+use unsnarl_oxc_parity::AstType;
 
 use crate::materialise::ast_node_of;
 use crate::parser::SourceType;
@@ -90,13 +107,28 @@ pub(crate) struct ScopeMappingResult {
     pub(crate) translation: IndexVec<OxcScopeId, Option<ScopeId>>,
 }
 
+/// Per-`SwitchStatement` record: each case's span and the synthetic
+/// IR scope id allocated for it. Used by [`upper_for`] to redirect
+/// oxc-derived children of the switch to the matching case.
+struct SwitchInfo {
+    cases: Vec<(Span, ScopeId)>,
+}
+
 /// Walk `semantic.scoping()`'s scope tree and produce the
 /// `unsnarl_ir` arena rows alongside the `OxcScopeId → IrScopeId`
 /// translation table. Most scopes are emitted 1:1, but a small set of
-/// shapes (currently the catch body `BlockStatement`) are merged into
-/// their parent's IR row; the translation records the routing so
-/// downstream passes can convert `Scoping`-side scope ids without
-/// re-deriving the merge predicate.
+/// shapes are remapped:
+///
+/// - `CatchClause` + catch-body `BlockStatement`: merged into a single
+///   `Catch` IR row.
+/// - TypeScript type-only scopes (`TSModuleDeclaration` /
+///   `TSTypeAliasDeclaration` / `TSInterfaceDeclaration` /
+///   `TSConditionalType` / `TSMappedType`): dropped entirely along
+///   with any descendants.
+/// - `SwitchStatement`: one synthetic `Block` IR row per
+///   `SwitchCase` is emitted immediately after the switch's row, and
+///   nested scopes are re-parented to the case whose span contains
+///   them.
 pub(crate) fn build_scopes<'a>(
     semantic: &Semantic<'a>,
     source_type: SourceType,
@@ -105,12 +137,13 @@ pub(crate) fn build_scopes<'a>(
     let nodes = semantic.nodes();
     let total = scoping.scopes_len();
     let mut translation: IndexVec<OxcScopeId, Option<ScopeId>> = IndexVec::with_capacity(total);
-    let mut next_ir = 0usize;
+    let mut scopes: IndexVec<ScopeId, ScopeData> = IndexVec::with_capacity(total);
+    let mut switch_info: HashMap<OxcScopeId, SwitchInfo> = HashMap::new();
+    let root_is_strict = matches!(source_type, SourceType::Module);
+
     for oxc_id in scoping.scope_descendants_from_root() {
         debug_assert_eq!(translation.len(), oxc_id.index());
         let parent_routing = scoping.scope_parent_id(oxc_id).map(|p| translation[p]);
-        // Inherited filter: a child of a filtered subtree is itself
-        // filtered. `Some(None)` means the parent is filtered out.
         if matches!(parent_routing, Some(None)) {
             translation.push(None);
             continue;
@@ -127,33 +160,15 @@ pub(crate) fn build_scopes<'a>(
             translation.push(Some(parent_ir));
             continue;
         }
-        translation.push(Some(ScopeId::from_usize(next_ir)));
-        next_ir += 1;
-    }
-
-    let mut scopes: IndexVec<ScopeId, ScopeData> = IndexVec::with_capacity(next_ir);
-    let root_is_strict = matches!(source_type, SourceType::Module);
-    for oxc_id in scoping.scope_descendants_from_root() {
-        let Some(routing) = translation[oxc_id] else {
-            continue;
-        };
-        // Merged scopes share their IR id with their parent; only the
-        // first time we see that IR id (i.e. the parent) do we emit a
-        // row. Subsequent merged-in children fall through here.
-        if routing.index() < scopes.len() {
-            continue;
-        }
-        let node_id = scoping.get_node_id(oxc_id);
-        let kind = nodes.kind(node_id);
+        let new_id = ScopeId::from_usize(scopes.len());
         let block = ast_node_of(&kind);
         let flags = scoping.scope_flags(oxc_id);
         let ty = derive_scope_type(flags, &kind, source_type);
-        let upper = scoping.scope_parent_id(oxc_id).and_then(|p| translation[p]);
+        let upper = upper_for(oxc_id, scoping, nodes, &translation, &switch_info);
         let is_strict = match upper {
             Some(upper_id) => scopes[upper_id].is_strict,
             None => root_is_strict,
         };
-        let new_id = ScopeId::from_usize(scopes.len());
         let variable_scope = if is_var_creating(flags) {
             new_id
         } else if let Some(upper_id) = upper {
@@ -173,6 +188,34 @@ pub(crate) fn build_scopes<'a>(
             Vec::new(),
             false,
         ));
+        translation.push(Some(new_id));
+
+        if let AstKind::SwitchStatement(switch) = kind {
+            let switch_ir = new_id;
+            let switch_is_strict = scopes[switch_ir].is_strict;
+            let switch_var_scope = scopes[switch_ir].variable_scope;
+            let mut cases = Vec::with_capacity(switch.cases.len());
+            for case in &switch.cases {
+                let case_ir = ScopeId::from_usize(scopes.len());
+                scopes.push(ScopeData::new(
+                    ScopeType::Block,
+                    switch_is_strict,
+                    Some(switch_ir),
+                    Vec::new(),
+                    switch_var_scope,
+                    AstNode {
+                        r#type: AstType::SwitchCase,
+                        span: case.span,
+                    },
+                    Vec::new(),
+                    Vec::new(),
+                    Vec::new(),
+                    false,
+                ));
+                cases.push((case.span, case_ir));
+            }
+            switch_info.insert(oxc_id, SwitchInfo { cases });
+        }
     }
 
     for raw_index in 0..scopes.len() {
@@ -186,6 +229,32 @@ pub(crate) fn build_scopes<'a>(
         scopes,
         translation,
     }
+}
+
+/// Compute the IR `upper` for a non-merged, non-filtered oxc scope.
+///
+/// For most scopes the upper is the parent's translated IR id. When
+/// the parent's anchor is a `SwitchStatement`, the upper is rewired
+/// to the synthetic case `Block` scope whose span encloses this
+/// scope's anchor (see [`build_scopes`]'s `SwitchCase` synthesis).
+fn upper_for(
+    oxc_id: OxcScopeId,
+    scoping: &Scoping,
+    nodes: &AstNodes<'_>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+    switch_info: &HashMap<OxcScopeId, SwitchInfo>,
+) -> Option<ScopeId> {
+    let parent_oxc = scoping.scope_parent_id(oxc_id)?;
+    let parent_ir = translation[parent_oxc]?;
+    if let Some(info) = switch_info.get(&parent_oxc) {
+        let anchor_span = nodes.kind(scoping.get_node_id(oxc_id)).span();
+        for (case_span, case_ir) in &info.cases {
+            if case_span.start <= anchor_span.start && anchor_span.end <= case_span.end {
+                return Some(*case_ir);
+            }
+        }
+    }
+    Some(parent_ir)
 }
 
 /// Derive the eslint-scope `ScopeType` for a scope from its anchor

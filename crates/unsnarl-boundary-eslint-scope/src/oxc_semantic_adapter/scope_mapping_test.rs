@@ -180,6 +180,58 @@ fn switch_statement_creates_switch_scope() {
     );
 }
 
+/// eslint-scope creates one `Block` scope per `SwitchCase`, anchored
+/// to the `SwitchCase` AST node. `oxc_semantic` does not, so the
+/// adapter synthesises these rows immediately after each
+/// `SwitchStatement` scope it emits.
+#[test]
+fn switch_statement_synthesises_one_block_per_case() {
+    with_scopes(
+        "switch (k) { case 1: break; case 2: break; default: break; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            let switch = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[switch].r#type, ScopeType::Switch));
+            // Three synthetic case scopes hang off the switch.
+            assert_eq!(scopes[switch].child_scopes.len(), 3);
+            for &case_id in &scopes[switch].child_scopes {
+                assert!(matches!(scopes[case_id].r#type, ScopeType::Block));
+                assert!(scopes[case_id].variable_scope == root());
+                assert!(scopes[case_id].upper == Some(switch));
+            }
+        },
+    );
+}
+
+/// A scope nested inside a `case` consequent (here a `BlockStatement`
+/// around `let x`) must be parented to the synthetic case row, not
+/// the bare `Switch` row that `oxc_semantic` would otherwise pick as
+/// its `upper`.
+#[test]
+fn switch_case_nested_block_attaches_to_synthetic_case_scope() {
+    with_scopes(
+        "switch (k) { case 1: { let x; break; } default: break; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            let switch = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[switch].r#type, ScopeType::Switch));
+            assert_eq!(scopes[switch].child_scopes.len(), 2);
+            // The first case (the `case 1:` arm) carries the nested
+            // `{ let x; ... }` BlockStatement scope as its sole child.
+            let case_one = scopes[switch].child_scopes[0];
+            assert_eq!(scopes[case_one].child_scopes.len(), 1);
+            let inner = scopes[case_one].child_scopes[0];
+            assert!(matches!(scopes[inner].r#type, ScopeType::Block));
+            assert!(scopes[inner].upper == Some(case_one));
+            // The `default:` arm has no nested scopes.
+            let case_two = scopes[switch].child_scopes[1];
+            assert!(scopes[case_two].child_scopes.is_empty());
+        },
+    );
+}
+
 #[test]
 fn with_statement_creates_with_scope_in_sloppy_mode() {
     with_scopes(
