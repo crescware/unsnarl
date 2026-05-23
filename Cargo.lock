@@ -1076,7 +1076,6 @@ dependencies = [
  "tracing-subscriber",
  "unsnarl-analyzer",
  "unsnarl-annotations",
- "unsnarl-boundary-eslint-scope",
  "unsnarl-emitter",
  "unsnarl-emitter-ir",
  "unsnarl-emitter-json",
@@ -1084,6 +1083,7 @@ dependencies = [
  "unsnarl-emitter-mermaid",
  "unsnarl-emitter-stats",
  "unsnarl-ir",
+ "unsnarl-oxc-boundary",
  "unsnarl-plugin",
  "unsnarl-plugin-react",
  "unsnarl-root-query",
@@ -1103,8 +1103,8 @@ dependencies = [
  "serde_json",
  "tracing",
  "unsnarl-annotations",
- "unsnarl-boundary-eslint-scope",
  "unsnarl-ir",
+ "unsnarl-oxc-boundary",
  "unsnarl-oxc-parity",
 ]
 
@@ -1115,24 +1115,6 @@ dependencies = [
  "serde",
  "serde_json",
  "unsnarl-ir",
-]
-
-[[package]]
-name = "unsnarl-boundary-eslint-scope"
-version = "0.3.1"
-dependencies = [
- "oxc_allocator",
- "oxc_ast",
- "oxc_ast_visit",
- "oxc_diagnostics",
- "oxc_index",
- "oxc_parser",
- "oxc_semantic",
- "oxc_span",
- "oxc_syntax",
- "tracing",
- "unsnarl-ir",
- "unsnarl-oxc-parity",
 ]
 
 [[package]]
@@ -1157,9 +1139,9 @@ dependencies = [
  "tracing",
  "unsnarl-analyzer",
  "unsnarl-annotations",
- "unsnarl-boundary-eslint-scope",
  "unsnarl-emitter",
  "unsnarl-ir",
+ "unsnarl-oxc-boundary",
  "unsnarl-oxc-parity",
 ]
 
@@ -1213,6 +1195,24 @@ dependencies = [
  "oxc_span",
  "serde",
  "serde_json",
+ "unsnarl-oxc-parity",
+]
+
+[[package]]
+name = "unsnarl-oxc-boundary"
+version = "0.3.1"
+dependencies = [
+ "oxc_allocator",
+ "oxc_ast",
+ "oxc_ast_visit",
+ "oxc_diagnostics",
+ "oxc_index",
+ "oxc_parser",
+ "oxc_semantic",
+ "oxc_span",
+ "oxc_syntax",
+ "tracing",
+ "unsnarl-ir",
  "unsnarl-oxc-parity",
 ]
 

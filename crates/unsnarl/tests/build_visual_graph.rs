@@ -2,7 +2,7 @@
 //!
 //! Lives outside `crates/unsnarl-visual-graph/src/builder/` (which
 //! would be the natural sibling location) because each test feeds
-//! source through `unsnarl-boundary-eslint-scope::parser::OxcParser`,
+//! source through `unsnarl-oxc-boundary::parser::OxcParser`,
 //! `unsnarl-analyzer::run_analysis`, and
 //! `unsnarl-emitter-ir::FlatSerializer` before invoking
 //! `build_visual_graph` — those crates sit above unsnarl-visual-graph
@@ -15,13 +15,11 @@
 
 use oxc_allocator::Allocator;
 use unsnarl_analyzer::run_analysis;
-use unsnarl_boundary_eslint_scope::parser::{
-    default_source_type_for, OxcParser, ParseOptions, SourceType,
-};
 use unsnarl_emitter::{IRSerializer, SerializeContext, SerializeSourceMeta};
 use unsnarl_emitter_ir::FlatSerializer;
 use unsnarl_ir::serialized::SerializedIR;
 use unsnarl_ir::Language;
+use unsnarl_oxc_boundary::parser::{default_source_type_for, OxcParser, ParseOptions, SourceType};
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
 use unsnarl_visual_graph::node_kind::NodeKind;

@@ -19,10 +19,10 @@ use oxc_ast::ast::{
     IdentifierReference,
 };
 
-use unsnarl_boundary_eslint_scope::declare::collect_binding_identifiers;
-use unsnarl_boundary_eslint_scope::resolve::resolve_in_scope_chain;
 use unsnarl_ir::ids::{ScopeId, VariableId};
 use unsnarl_ir::IrArena;
+use unsnarl_oxc_boundary::declare::collect_binding_identifiers;
+use unsnarl_oxc_boundary::resolve::resolve_in_scope_chain;
 
 pub fn all_binding_variables(
     pattern: &BindingPattern<'_>,

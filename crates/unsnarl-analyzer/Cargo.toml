@@ -9,7 +9,7 @@ repository.workspace = true
 [dependencies]
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
-unsnarl-boundary-eslint-scope = { workspace = true }
+unsnarl-oxc-boundary = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 oxc_ast = { workspace = true }
 oxc_ast_visit = { workspace = true }

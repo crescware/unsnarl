@@ -1,6 +1,6 @@
 //! Shared test helpers for the analyzer crate.
 //!
-//! Mirrors the role of `unsnarl-boundary-eslint-scope/src/testing.rs`
+//! Mirrors the role of `unsnarl-oxc-boundary/src/testing.rs`
 //! within this crate. Most analyzer-side `*_test.rs` files build
 //! `PathEntry` fixtures from `(AstType, span)` tuples and compare
 //! returned `PredicateContainer` / `ReferenceCompletion` rows by
@@ -84,11 +84,11 @@ pub(crate) fn parse_and_analyze_ts<'a>(
     source: &'a str,
 ) -> (
     Program<'a>,
-    unsnarl_boundary_eslint_scope::analysis_result::EslintScopeAnalysisResult,
+    unsnarl_oxc_boundary::analysis_result::EslintScopeAnalysisResult,
 ) {
-    use unsnarl_boundary_eslint_scope::analyze::{analyze, AnalyzeOptions};
-    use unsnarl_boundary_eslint_scope::parser::SourceType as BoundarySourceType;
-    use unsnarl_boundary_eslint_scope::visitor::AnalysisVisitor;
+    use unsnarl_oxc_boundary::analyze::{analyze, AnalyzeOptions};
+    use unsnarl_oxc_boundary::parser::SourceType as BoundarySourceType;
+    use unsnarl_oxc_boundary::visitor::AnalysisVisitor;
     let source_type = SourceType::ts();
     let ParserReturn {
         program,

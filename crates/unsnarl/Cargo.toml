@@ -16,7 +16,7 @@ path = "src/lib.rs"
 [dependencies]
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
-unsnarl-boundary-eslint-scope = { workspace = true }
+unsnarl-oxc-boundary = { workspace = true }
 unsnarl-analyzer = { workspace = true }
 unsnarl-root-query = { workspace = true }
 unsnarl-visual-graph = { workspace = true }

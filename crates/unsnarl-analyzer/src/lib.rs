@@ -3,7 +3,7 @@
 //!
 //! Entry point [`run_analysis`] runs three phases in order — nesting
 //! depths, an eslint-scope-compatible scope build via
-//! `unsnarl_boundary_eslint_scope`, and a second walk driven by
+//! `unsnarl_oxc_boundary`, and a second walk driven by
 //! [`build_analysis_visitor::BuildAnalysisVisitor`] — and returns an
 //! [`AnalyzedSource`] whose [`AnnotationsImpl`] satisfies the
 //! `unsnarl_annotations::Annotations` lookup trait that serializers

@@ -35,13 +35,13 @@ use oxc_span::Span;
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
-use unsnarl_boundary_eslint_scope::materialise::ast_node_of;
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_ir::primitive::{AstNode, SourceIndex};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::{IrArena, ReferenceId, ScopeId};
+use unsnarl_oxc_boundary::materialise::ast_node_of;
 use unsnarl_oxc_parity::AstType;
 
 use crate::annotations_impl::AnnotationsImpl;
