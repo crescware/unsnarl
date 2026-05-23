@@ -112,6 +112,24 @@ pub(crate) struct VariableMappingResult {
     /// bindings but never allocates a `VariableData` for them — see
     /// the module header).
     pub(crate) synthetic_unresolved: HashSet<SymbolId>,
+    /// For each class *declaration* that received a synthesised inner
+    /// `ClassName` binding, the outer `VariableId` (the binding in the
+    /// class scope's parent that `oxc_semantic` knows about) and the
+    /// inner `VariableId` (synthesised inside the class scope so
+    /// references from method bodies resolve to it instead of the
+    /// outer one). The class scope's `block.span` is read off
+    /// `scopes[class_scope].block.span` at use time.
+    pub(crate) inner_class_names: Vec<InnerClassName>,
+}
+
+/// One synthesised inner `ClassName` binding, recorded so the
+/// reference-mapping pass can re-resolve references inside the class
+/// scope from the outer binding to the inner one.
+pub(crate) struct InnerClassName {
+    /// IR id of the class scope that owns the inner binding.
+    pub(crate) class_scope: ScopeId,
+    /// IR id of the inner `ClassName` variable.
+    pub(crate) inner: VariableId,
 }
 
 /// Walk `semantic.scoping()`'s symbol table and produce the
@@ -147,6 +165,7 @@ pub(crate) fn build_variables(
             .take(scoping.symbols_len())
             .collect();
     let mut synthetic_unresolved: HashSet<SymbolId> = HashSet::new();
+    let mut inner_class_names: Vec<InnerClassName> = Vec::new();
 
     for oxc_scope_id in scoping.scope_descendants_from_root() {
         let Some(ir_scope) = translation[oxc_scope_id] else {
@@ -161,7 +180,7 @@ pub(crate) fn build_variables(
             push_implicit_arguments(scopes, &mut variables, ir_scope);
         }
         if let Some((name, span, class_span)) = inner_class_declaration_name(&anchor) {
-            push_inner_class_name(
+            let inner = push_inner_class_name(
                 scopes,
                 &mut variables,
                 definitions,
@@ -170,6 +189,10 @@ pub(crate) fn build_variables(
                 span,
                 class_span,
             );
+            inner_class_names.push(InnerClassName {
+                class_scope: ir_scope,
+                inner,
+            });
         }
 
         let mut bindings: Vec<SymbolId> = scoping.iter_bindings_in(oxc_scope_id).collect();
@@ -230,6 +253,7 @@ pub(crate) fn build_variables(
         variables,
         symbol_to_variable,
         synthetic_unresolved,
+        inner_class_names,
     }
 }
 
@@ -326,7 +350,8 @@ fn inner_class_declaration_name<'a>(
 
 /// Synthesise the inner `ClassName` binding plus its `ClassName`
 /// definition for a class declaration, mirroring the hand-rolled
-/// `enter_class` helper.
+/// `enter_class` helper. Returns the new `VariableId` so the caller
+/// can record it for the reference-mapping rebind pass.
 fn push_inner_class_name(
     scopes: &mut IndexVec<ScopeId, ScopeData>,
     variables: &mut IndexVec<VariableId, VariableData>,
@@ -335,7 +360,7 @@ fn push_inner_class_name(
     name: &str,
     id_span: oxc_span::Span,
     class_span: oxc_span::Span,
-) {
+) -> VariableId {
     let identifier = AstIdentifier::new(AstType::Identifier, name.to_string(), id_span);
     let var_id = variables.push(VariableData::new(
         name.to_string(),
@@ -360,6 +385,7 @@ fn push_inner_class_name(
         imported_name: None,
     });
     variables[var_id].defs.push(def_id);
+    var_id
 }
 
 fn push_implicit_arguments(

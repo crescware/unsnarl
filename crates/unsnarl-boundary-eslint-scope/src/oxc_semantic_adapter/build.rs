@@ -63,6 +63,7 @@ pub(crate) fn build<'a>(
     let mut variables = variable_mapping.variables;
     let symbol_to_variable = variable_mapping.symbol_to_variable;
     let synthetic_unresolved = variable_mapping.synthetic_unresolved;
+    let inner_class_names = variable_mapping.inner_class_names;
     let references = reference_mapping::build_references(
         &semantic,
         &mut scopes,
@@ -72,6 +73,7 @@ pub(crate) fn build<'a>(
         &translation,
         &synthetic_unresolved,
         &switch_cases,
+        &inner_class_names,
     );
     definition_mapping::build_definitions(
         &semantic,

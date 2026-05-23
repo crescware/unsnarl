@@ -75,6 +75,7 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
     let mut variables = var_result.variables;
     let symbol_to_variable = var_result.symbol_to_variable;
     let synthetic_unresolved = var_result.synthetic_unresolved;
+    let inner_class_names = var_result.inner_class_names;
     let references = build_references(
         &ret.semantic,
         &mut scopes,
@@ -84,6 +85,7 @@ fn with_arena(code: &str, language: Language, source_type: SourceType, body: imp
         &translation,
         &synthetic_unresolved,
         &switch_cases,
+        &inner_class_names,
     );
     body(&Built {
         scopes,
