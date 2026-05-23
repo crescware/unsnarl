@@ -1,18 +1,32 @@
 //! String ID for a serialized Scope row.
+//!
+//! Internally stores an `Arc<str>` so that the heavy clone traffic
+//! through `serialize_reference` / `serialize_variable` /
+//! `serialize_scope` is reduced to an atomic refcount bump rather
+//! than a fresh heap allocation per id. The newtype keeps the ID's
+//! identity visible at every call site; consumers never touch the
+//! `Arc<str>` directly.
 
-use serde::Serialize;
+use std::sync::Arc;
 
-#[derive(Clone, Serialize)]
-#[serde(transparent)]
-pub struct SerializedScopeId(String);
+use serde::{Serialize, Serializer};
+
+#[derive(Clone)]
+pub struct SerializedScopeId(Arc<str>);
 
 impl SerializedScopeId {
     pub fn new(value: String) -> Self {
         assert!(!value.is_empty(), "SerializedScopeId must be non-empty");
-        Self(value)
+        Self(Arc::from(value))
     }
 
     pub fn value(&self) -> &str {
         &self.0
+    }
+}
+
+impl Serialize for SerializedScopeId {
+    fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        serializer.serialize_str(&self.0)
     }
 }
