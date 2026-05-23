@@ -310,11 +310,92 @@ pub(crate) fn build_references(
 
     mark_variable_declarator_init_reads(semantic, &mut references);
 
+    reparent_decorator_references(semantic, scopes, variables, &mut references, translation);
+
     rebind_inner_class_name_references(scopes, variables, &mut references, inner_class_names);
 
     sort_reference_lists_by_source_order(scopes, variables, &references);
 
     references
+}
+
+/// Reparent references that appear in a class decorator (`@dec`) from
+/// the class's enclosing scope (where `oxc_semantic` places them) to
+/// the class scope itself (where the hand-rolled walker places them,
+/// matching the parity baseline).
+///
+/// `oxc_semantic` evaluates decorators in the class's parent scope —
+/// they execute before the class body is opened — so `@dec class C {}`
+/// emits the `dec` reference with `scope_id = module`. The hand-rolled
+/// walker, by contrast, runs the decorator visit while inside the
+/// `Class` scope (the visitor pushes the class scope before walking
+/// the AST node's decorators), so the parity baseline records the
+/// reference with `from = class_scope`.
+///
+/// Walk every `Class` AST node, find its scope (via the
+/// `node_id → scope_id` projection over `Scoping::scope_descendants_from_root`),
+/// then walk references whose identifier span lies inside any
+/// decorator's span and rebind `ReferenceData::from` to the class
+/// scope. Move the entry on the relevant scope's `references` list
+/// accordingly.
+fn reparent_decorator_references(
+    semantic: &Semantic<'_>,
+    scopes: &mut IndexVec<ScopeId, ScopeData>,
+    variables: &mut IndexVec<VariableId, VariableData>,
+    references: &mut IndexVec<ReferenceId, ReferenceData>,
+    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
+) {
+    let scoping = semantic.scoping();
+    let nodes = semantic.nodes();
+    // Build node_id → IR scope id for nodes that anchor a scope.
+    let mut node_to_ir_scope: std::collections::HashMap<oxc_semantic::NodeId, ScopeId> =
+        std::collections::HashMap::new();
+    for oxc_scope_id in scoping.scope_descendants_from_root() {
+        let Some(ir) = translation[oxc_scope_id] else {
+            continue;
+        };
+        let anchor = scoping.get_node_id(oxc_scope_id);
+        node_to_ir_scope.entry(anchor).or_insert(ir);
+    }
+    // Collect (class_ir_scope, decorator_span) pairs.
+    let mut decorator_spans: Vec<(ScopeId, Span)> = Vec::new();
+    for node in nodes.iter() {
+        let AstKind::Class(class) = node.kind() else {
+            continue;
+        };
+        let Some(&class_ir) = node_to_ir_scope.get(&node.id()) else {
+            continue;
+        };
+        for decorator in &class.decorators {
+            decorator_spans.push((class_ir, decorator.span));
+        }
+    }
+    if decorator_spans.is_empty() {
+        return;
+    }
+    // Snapshot to avoid holding immutable borrow during the mutation
+    // loop.
+    let snapshots: Vec<(ReferenceId, ScopeId, Span)> = references
+        .iter_enumerated()
+        .map(|(id, r)| (id, r.from, r.identifier.span))
+        .collect();
+    for (ref_id, old_from, span) in snapshots {
+        for (class_ir, dec_span) in &decorator_spans {
+            if dec_span.start <= span.start && span.end <= dec_span.end {
+                if old_from == *class_ir {
+                    break;
+                }
+                scopes[old_from].references.retain(|&r| r != ref_id);
+                scopes[*class_ir].references.push(ref_id);
+                references[ref_id].from = *class_ir;
+                // Note: `through` is only populated for unresolved /
+                // implicit-global refs, which already include the
+                // class scope on their chain; no fixup needed.
+                let _ = variables;
+                break;
+            }
+        }
+    }
 }
 
 /// Redirect references whose identifier sits inside a class declaration
