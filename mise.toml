@@ -86,6 +86,11 @@ description = "Run the full 5-format x 6-variant matrix (30 sweeps) against ts/s
 depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity-all.ts"
 
+[tasks."regen:fixtures"]
+description = "Regenerate every expected.* / preview.md baseline under ts/integration/fixtures/ by running the Rust CLI (uns). After completion, `git diff` should be empty if the Rust pipeline faithfully reproduces the vitest-generated snapshots."
+depends = ["build"]
+run = "deno run --allow-read --allow-write --allow-run scripts/regen-fixtures.ts"
+
 [tasks."cov"]
 description = "Build the workspace with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under target/coverage/. Use `-- --filter <regex>` to filter report rows by filename, and forward any other args (e.g. `--test parity`, `-p unsnarl-analyzer`) verbatim to both the build and run phases of `cargo test --workspace` (e.g. `mise run cov -- --test parity`, `mise run cov -- --filter build_analysis_visitor.rs`). Requires `rustup component add llvm-tools-preview`."
 run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/cov.ts"
