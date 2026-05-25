@@ -43,11 +43,6 @@ pretty_assertions = { workspace = true }
 regex = { workspace = true }
 
 [[test]]
-name = "parity"
-path = "tests/parity.rs"
-harness = false
-
-[[test]]
 name = "cli_parity"
 path = "tests/cli_parity.rs"
 harness = false

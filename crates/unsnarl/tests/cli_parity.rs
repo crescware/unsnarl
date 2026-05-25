@@ -1,15 +1,8 @@
 //! End-to-end CLI parity harness.
 //!
-//! Companion to `tests/parity.rs`. Whereas the in-process parity
-//! harness drives the pipeline through `emit_*_text` helpers — which
-//! bypass the `crates/unsnarl/src/cli/` argument layer, the
-//! `crates/unsnarl/src/run.rs` orchestration, and the
-//! `Box<dyn Emitter>` trait-dispatch path that the production
-//! binary actually takes — this harness invokes the `uns` binary
-//! itself as a subprocess for each baseline. The coverage report
-//! therefore lights up the CLI-only code paths (args parsing,
-//! emitter selection, stdout / output-path handling) that the
-//! in-process harness cannot reach.
+//! Invokes the `uns` binary itself as a subprocess for each
+//! baseline, covering the CLI-only code paths (args parsing,
+//! emitter selection, stdout / output-path handling).
 //!
 //! Scope: baseline + variant. Every fixture root that carries
 //! `input.*` plus one of the five `expected.*` siblings yields one
@@ -53,17 +46,12 @@ fn workspace_root() -> PathBuf {
 }
 
 fn fixtures_root() -> PathBuf {
-    workspace_root().join("ts/integration/fixtures")
+    workspace_root().join("integration/fixtures")
 }
 
-fn ts_root() -> PathBuf {
-    workspace_root().join("ts")
-}
-
-/// Root of the per-fixture `variants.json` manifests, mirrored from
-/// `tests/parity.rs::fixture_variants_root`. The fixtures tree is
-/// treated as immutable; the manifests live alongside the in-process
-/// parity harness and are shared verbatim with this CLI harness.
+/// Root of the per-fixture `variants.json` manifests. The fixtures
+/// tree is treated as immutable; the manifests live alongside the
+/// harness.
 fn fixture_variants_root() -> PathBuf {
     workspace_root().join("crates/unsnarl/tests/fixture-variants")
 }
@@ -192,9 +180,9 @@ impl VariantKind {
     }
 }
 
-/// Subset of the depth shapes accepted by `parity.rs::parse_depths`
-/// that the CLI surface can reconstruct. The full per-kind form is
-/// intentionally rejected (see module docs) — it has no CLI flag.
+/// Subset of depth shapes the CLI surface can reconstruct. The full
+/// per-kind form is intentionally rejected (see module docs) — it
+/// has no CLI flag.
 enum DepthsSpec {
     Uniform(u32),
     FunctionBlock { function: u32, block: u32 },
@@ -280,12 +268,8 @@ fn read_variants(root: &Path, dir: &Path) -> Vec<VariantSpec> {
     let Ok(text) = fs::read_to_string(&manifest) else {
         return Vec::new();
     };
-    parse_variants_json(&text).unwrap_or_else(|e| {
-        panic!(
-            "failed to parse {}: {e}\nSee tests/parity.rs for the manifest schema.",
-            manifest.display()
-        )
-    })
+    parse_variants_json(&text)
+        .unwrap_or_else(|e| panic!("failed to parse {}: {e}", manifest.display()))
 }
 
 fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
@@ -418,7 +402,7 @@ fn parse_highlight(slug: &str, v: &serde_json::Value) -> Result<HighlightSpec, S
     }
 }
 
-/// Mirrors `parity.rs::discover_plugin_slugs`. Scans `dir` for
+/// Scans `dir` for
 /// `plugin-<slug>` sibling subdirectories and returns the slugs in
 /// stable (sorted) order. The slug is the directory name with the
 /// `plugin-` prefix stripped — the same post-strip plugin short name
@@ -474,9 +458,9 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<CliCase>) {
             });
         }
         // Manifest-driven variants (pruned / depth / highlight and their
-        // combinations). Same baseline set as parity.rs: Ir is omitted
-        // because pruning / depth / highlight only narrow the downstream
-        // VisualGraph and the IR snapshot matches the parent baseline.
+        // combinations). Ir is omitted because pruning / depth / highlight
+        // only narrow the downstream VisualGraph and the parent IR stays
+        // identical.
         for variant in read_variants(root, dir) {
             let variant_dir = dir.join(variant.dir_name());
             if !variant_dir.is_dir() {
@@ -507,8 +491,7 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<CliCase>) {
             }
         }
         // Plugin variants are auto-discovered. Plugin transforms
-        // reshape the IR itself, so the IR baseline IS per-variant —
-        // match parity.rs and include it.
+        // reshape the IR itself, so the IR baseline IS per-variant.
         for plugin_slug in discover_plugin_slugs(dir) {
             let variant_dir = dir.join(format!("plugin-{plugin_slug}"));
             for baseline in [
@@ -554,17 +537,11 @@ fn collect_cases() -> Vec<CliCase> {
 fn run_case(case: &CliCase) -> Result<(), Failed> {
     let expected = fs::read_to_string(&case.expected)
         .map_err(|e| Failed::from(format!("read expected {}: {e}", case.expected.display())))?;
-    // Run with cwd set to the project root and feed the input as a
-    // relative path so the CLI's recorded `source` field matches the
-    // parity baselines, which embed paths shaped like
-    // `integration/fixtures/.../input.ts` — the
-    // `relative(PROJECT_ROOT, ...)` form the baselines were captured
-    // under.
-    let ts = ts_root();
-    let rel_input = case.input.strip_prefix(&ts).unwrap_or(&case.input);
+    let ws = workspace_root();
+    let rel_input = case.input.strip_prefix(&ws).unwrap_or(&case.input);
     let mut command = Command::new(UNS_BIN);
     command
-        .current_dir(&ts)
+        .current_dir(&ws)
         .arg("-f")
         .arg(case.baseline.cli_format());
     for arg in &case.extra_args {
