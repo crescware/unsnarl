@@ -11,8 +11,8 @@ use unsnarl_visual_graph::visual_subgraph::{
 };
 
 use super::emit_plain_subgraph;
+use crate::mermaid_fixtures::{base_const_binding, base_plain_subgraph, base_render_state};
 use crate::strategy::MermaidStrategy;
-use crate::testing::{base_const_binding, base_plain_subgraph, base_render_state};
 
 fn node(id: &str) -> VisualElement {
     VisualNode::from(BindingVisualNode {

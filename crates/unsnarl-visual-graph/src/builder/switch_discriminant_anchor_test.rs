@@ -6,9 +6,9 @@ use unsnarl_ir::serialized::serialized_scope::{SerializedBlock, SerializedScope}
 use unsnarl_oxc_parity::AstType;
 
 use crate::builder::arena::{BuildArena, SubgraphIdx};
+use crate::builder::builder_fixtures::{base_serialized_scope, scope_id};
 use crate::builder::state::{BuildState, LoopTestAnchorPosition};
 use crate::builder::switch_discriminant_anchor::attach_switch_discriminant_anchor;
-use crate::builder::testing::{base_serialized_scope, scope_id};
 use crate::direction::Direction;
 use crate::visual_node::{SyntheticNodeKind, SyntheticVisualNode, VisualNode};
 use crate::visual_subgraph::ControlVisualSubgraph;

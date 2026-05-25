@@ -7,7 +7,7 @@ use unsnarl_ir::serialized::SerializedVariable;
 use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
 use super::make_variable_node;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_def, base_serialized_variable, base_simple_def, definition_name, definition_node,
     reference_id, scope_id, span, span_offset_line, variable_id,
 };

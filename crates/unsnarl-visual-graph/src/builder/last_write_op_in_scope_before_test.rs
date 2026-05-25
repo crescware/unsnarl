@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use unsnarl_ir::serialized::SerializedScope;
 
 use super::last_write_op_in_scope_before;
-use crate::builder::testing::{base_serialized_scope, base_write_op, scope_id};
+use crate::builder::builder_fixtures::{base_serialized_scope, base_write_op, scope_id};
 use crate::builder::write_op::WriteOp;
 
 fn scopes() -> [SerializedScope; 4] {

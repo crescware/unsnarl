@@ -7,7 +7,7 @@
 use oxc_allocator::Allocator;
 use oxc_ast::ast::{Expression, Statement};
 
-use crate::testing::parse_ts;
+use crate::analyzer_fixtures::parse_ts;
 
 use super::format_case_test;
 

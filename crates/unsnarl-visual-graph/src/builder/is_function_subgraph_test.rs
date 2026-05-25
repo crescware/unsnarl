@@ -3,7 +3,7 @@
 use unsnarl_ir::scope_type::ScopeType;
 
 use super::is_function_subgraph;
-use crate::builder::testing::base_serialized_scope;
+use crate::builder::builder_fixtures::base_serialized_scope;
 
 #[test]
 fn function_scope_is_subgraph() {

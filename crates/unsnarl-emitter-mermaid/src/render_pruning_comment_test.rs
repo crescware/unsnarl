@@ -1,7 +1,7 @@
 use unsnarl_visual_graph::visual_graph_pruning::{PruningRoot, VisualGraphPruning};
 
 use super::render_pruning_comment;
-use crate::testing::base_graph;
+use crate::mermaid_fixtures::base_graph;
 
 #[test]
 fn does_nothing_when_graph_pruning_is_none() {

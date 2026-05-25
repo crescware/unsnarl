@@ -5,7 +5,7 @@ use unsnarl_visual_graph::visual_node::{
 use unsnarl_visual_graph::visual_subgraph::{OwnedVisualSubgraph, VisualSubgraph};
 
 use super::render_top_level_nodes;
-use crate::testing::{
+use crate::mermaid_fixtures::{
     base_const_binding, base_function_subgraph, base_graph, base_render_state,
     base_simple_synthetic,
 };

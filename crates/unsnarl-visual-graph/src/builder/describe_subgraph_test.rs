@@ -8,7 +8,7 @@ use unsnarl_ir::serialized::SerializedVariable;
 use unsnarl_oxc_parity::AstType;
 
 use super::describe_subgraph;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_serialized_scope, base_serialized_variable, case_clause_block_context, scope_id,
     span_offset_line, variable_id,
 };

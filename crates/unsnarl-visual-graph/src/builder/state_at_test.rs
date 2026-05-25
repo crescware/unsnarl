@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 
 use super::state_at;
-use crate::builder::testing::base_write_op;
+use crate::builder::builder_fixtures::base_write_op;
 use crate::builder::write_op::WriteOp;
 
 fn ops_by_v() -> HashMap<String, Vec<WriteOp>> {

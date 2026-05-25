@@ -2,8 +2,8 @@ use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_oxc_parity::AstType;
 
+use crate::analyzer_fixtures::ast_node;
 use crate::path_entry::PathEntry;
-use crate::testing::ast_node;
 
 use super::block_context_of;
 
@@ -66,7 +66,7 @@ fn falls_back_to_parent_span_offset_zero_when_start_is_zero() {
 
 #[test]
 fn includes_if_chain_root_offset_when_path_indicates_else_if_chain() {
-    use crate::testing::ast_node_with_end;
+    use crate::analyzer_fixtures::ast_node_with_end;
     let outer = ast_node_with_end(AstType::IfStatement, 5, 100);
     let inner = ast_node_with_end(AstType::IfStatement, 40, 80);
     let path = vec![
@@ -106,7 +106,7 @@ fn parent_span_offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
     // serialised `parentSpanOffset` must use the UTF-16 value per
     // the IR contract.
     let raw = "// —\nif (true) {}\n";
-    let parent = crate::testing::ast_node(AstType::IfStatement, 7);
+    let parent = crate::analyzer_fixtures::ast_node(AstType::IfStatement, 7);
     let ctx = block_context_of(
         Some(&parent),
         Some("consequent"),
@@ -128,7 +128,7 @@ fn parent_span_offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
 
 #[test]
 fn if_chain_root_offset_is_in_utf16_code_units_when_source_contains_non_ascii() {
-    use crate::testing::ast_node_with_end;
+    use crate::analyzer_fixtures::ast_node_with_end;
     // Same trick: shift everything past a leading em-dash so the
     // byte/UTF-16 difference is observable on both `parentSpanOffset`
     // and `ifChainRootOffset`.
@@ -139,7 +139,10 @@ fn if_chain_root_offset_is_in_utf16_code_units_when_source_contains_non_ascii() 
     let outer = ast_node_with_end(AstType::IfStatement, 7, 200);
     let inner = ast_node_with_end(AstType::IfStatement, 22, 100);
     let path = vec![
-        PathEntry::new(crate::testing::ast_node(AstType::Program, 0), None),
+        PathEntry::new(
+            crate::analyzer_fixtures::ast_node(AstType::Program, 0),
+            None,
+        ),
         PathEntry::new(outer, Some("body")),
         PathEntry::new(inner.clone(), Some("alternate")),
     ];

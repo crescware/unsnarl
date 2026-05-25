@@ -5,7 +5,7 @@ use oxc_span::Span;
 use unsnarl_ir::reference::HeadExpression;
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
-use crate::testing::parse_ts;
+use crate::analyzer_fixtures::parse_ts;
 
 use super::build_head_expression;
 

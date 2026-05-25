@@ -5,7 +5,7 @@ use std::collections::HashMap;
 use unsnarl_ir::serialized::SerializedScope;
 
 use super::find_enclosing_subgraph_scope;
-use crate::builder::testing::{base_serialized_scope, scope_id};
+use crate::builder::builder_fixtures::{base_serialized_scope, scope_id};
 
 fn ancestor_chain() -> [SerializedScope; 3] {
     let grand = base_serialized_scope("grand");

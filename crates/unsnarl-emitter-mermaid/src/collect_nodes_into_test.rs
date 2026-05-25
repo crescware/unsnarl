@@ -5,7 +5,7 @@ use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
 
 use super::collect_nodes_into;
-use crate::testing::{base_const_binding, base_function_subgraph};
+use crate::mermaid_fixtures::{base_const_binding, base_function_subgraph};
 
 fn node(id: &str) -> VisualElement {
     VisualNode::from(BindingVisualNode {

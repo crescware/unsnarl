@@ -4,7 +4,9 @@ use unsnarl_visual_graph::visual_node::{
 };
 
 use super::render_synthetic_node_block;
-use crate::testing::{base_const_binding, base_graph, base_render_state, base_simple_synthetic};
+use crate::mermaid_fixtures::{
+    base_const_binding, base_graph, base_render_state, base_simple_synthetic,
+};
 
 const MODULE_ROOT_ID: &str = "module_root";
 

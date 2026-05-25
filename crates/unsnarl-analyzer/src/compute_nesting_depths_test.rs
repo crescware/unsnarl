@@ -2,7 +2,7 @@ use oxc_allocator::Allocator;
 
 use unsnarl_ir::nesting_kind::NestingDepth;
 
-use crate::testing::parse_ts;
+use crate::analyzer_fixtures::parse_ts;
 
 use super::compute_nesting_depths;
 

@@ -1,7 +1,7 @@
 use oxc_allocator::Allocator;
 use oxc_ast::ast::{Expression, Statement};
 
-use crate::testing::parse_and_analyze_ts;
+use crate::analyzer_fixtures::parse_and_analyze_ts;
 
 use super::{all_binding_variables, assignment_target_variables};
 

@@ -7,7 +7,7 @@ use unsnarl_visual_graph::visual_subgraph::{
 };
 
 use super::collect_wrapped_owner_ids;
-use crate::testing::{base_const_binding, base_function_subgraph, base_plain_subgraph};
+use crate::mermaid_fixtures::{base_const_binding, base_function_subgraph, base_plain_subgraph};
 
 fn function_subgraph_with(owner_node_id: &str, elements: Vec<VisualElement>) -> VisualElement {
     let sg = OwnedVisualSubgraph {

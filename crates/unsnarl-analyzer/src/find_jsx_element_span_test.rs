@@ -6,8 +6,8 @@
 
 use unsnarl_oxc_parity::AstType;
 
+use crate::analyzer_fixtures::{ast_node, ast_node_with_end};
 use crate::path_entry::PathEntry;
-use crate::testing::{ast_node, ast_node_with_end};
 
 use super::find_jsx_element_span;
 

@@ -5,7 +5,7 @@ use unsnarl_visual_graph::visual_node::{
 };
 
 use super::node_head;
-use crate::testing::{
+use crate::mermaid_fixtures::{
     base_const_binding, base_import_binding_default, base_import_binding_named,
     base_import_binding_namespace, base_let_binding, base_simple_binding, base_simple_synthetic,
     base_var_binding, base_write_op,

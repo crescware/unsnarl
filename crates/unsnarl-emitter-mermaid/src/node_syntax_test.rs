@@ -3,7 +3,7 @@ use unsnarl_visual_graph::visual_node::{
 };
 
 use super::node_syntax;
-use crate::testing::{base_simple_synthetic, base_write_op};
+use crate::mermaid_fixtures::{base_simple_synthetic, base_write_op};
 
 #[test]
 fn write_op_uses_stadium_brackets() {
@@ -55,7 +55,7 @@ fn default_kind_uses_square_brackets() {
     let n: VisualNode = BindingVisualNode {
         name: "x".to_string(),
         line: 4,
-        ..crate::testing::base_const_binding()
+        ..crate::mermaid_fixtures::base_const_binding()
     }
     .into();
     let got = node_syntax(&n, false);

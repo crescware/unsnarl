@@ -6,11 +6,11 @@ use unsnarl_ir::serialized::SerializedVariable;
 
 use super::ensure_throw_use_node;
 use crate::builder::arena::{BuildArena, ElementHandle, NodeIdx, SubgraphIdx};
-use crate::builder::state::BuildState;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_serialized_reference, empty_serialized_ir, jsx_container,
     reference_id, scope_id, span_offset_line, throw_completion, variable_id,
 };
+use crate::builder::state::BuildState;
 use crate::direction::Direction;
 use crate::visual_node::{SyntheticNodeKind, VisualNode};
 use crate::visual_subgraph::{OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};

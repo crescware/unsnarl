@@ -30,7 +30,7 @@ pub mod root_candidate_kinds;
 pub mod root_query_resolution;
 
 #[cfg(test)]
-mod test_helpers;
+mod prune_fixtures;
 
 pub use format_resolution_notice::format_resolution_notice;
 pub use prune_options::{PerQueryMatch, PruneOptions, PruneResult};

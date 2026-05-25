@@ -1,7 +1,7 @@
 use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
 
 use super::emit_node;
-use crate::testing::{base_const_binding, base_render_state};
+use crate::mermaid_fixtures::{base_const_binding, base_render_state};
 
 #[test]
 fn appends_indent_id_syntax_as_a_single_line() {

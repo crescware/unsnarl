@@ -3,8 +3,8 @@ use unsnarl_ir::reference::PredicateContainer;
 use unsnarl_ir::{Utf16CodeUnitOffset, Utf8ByteOffset};
 use unsnarl_oxc_parity::{AstType, PredicateContainerType};
 
+use crate::analyzer_fixtures::ast_node;
 use crate::path_entry::PathEntry;
-use crate::testing::ast_node;
 
 /// ASCII-source wrapper: the existing tests construct synthetic
 /// `AstNode`s whose `span.start` values are simple integers, and the

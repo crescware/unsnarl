@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::prune::test_helpers::{const_binding_node, function_subgraph};
+use crate::prune::prune_fixtures::{const_binding_node, function_subgraph};
 use crate::visual_node::SyntheticVisualNode;
 
 fn non_candidate_node(id: &str) -> VisualNode {

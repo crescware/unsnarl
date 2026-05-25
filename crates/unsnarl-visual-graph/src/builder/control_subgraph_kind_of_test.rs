@@ -4,7 +4,7 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
 
 use super::control_subgraph_kind_of;
-use crate::builder::testing::{base_serialized_scope, other_block_context};
+use crate::builder::builder_fixtures::{base_serialized_scope, other_block_context};
 use crate::visual_subgraph::ControlSubgraphKind;
 
 fn check_scope_type(t: ScopeType) -> Option<ControlSubgraphKind> {

@@ -1,7 +1,7 @@
 use unsnarl_visual_graph::visual_subgraph::{OwnedVisualSubgraph, VisualSubgraph};
 
 use super::line_range_label;
-use crate::testing::base_function_subgraph;
+use crate::mermaid_fixtures::base_function_subgraph;
 
 fn subgraph(line: u32, end_line: Option<u32>) -> VisualSubgraph {
     OwnedVisualSubgraph {

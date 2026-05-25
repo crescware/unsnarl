@@ -3,7 +3,7 @@ use unsnarl_visual_graph::visual_node::{
 };
 
 use super::node_label;
-use crate::testing::{base_const_binding, base_simple_binding, base_simple_synthetic};
+use crate::mermaid_fixtures::{base_const_binding, base_simple_binding, base_simple_synthetic};
 
 #[test]
 fn if_test_emits_if_with_line_only() {

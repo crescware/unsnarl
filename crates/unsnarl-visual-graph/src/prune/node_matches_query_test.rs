@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::prune::test_helpers::{const_binding_node_with_end, return_use_node, write_op_node};
+use crate::prune::prune_fixtures::{const_binding_node_with_end, return_use_node, write_op_node};
 
 fn const_binding(line: u32, name: &str) -> VisualNode {
     const_binding_node_with_end("n1", name, line, None)

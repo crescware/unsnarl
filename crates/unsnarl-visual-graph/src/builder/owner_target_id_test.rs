@@ -3,7 +3,7 @@
 use std::collections::HashMap;
 
 use super::owner_target_id;
-use crate::builder::testing::base_write_op;
+use crate::builder::builder_fixtures::base_write_op;
 
 fn ops_by_owner() -> HashMap<String, Vec<crate::builder::write_op::WriteOp>> {
     let mut op1 = base_write_op();

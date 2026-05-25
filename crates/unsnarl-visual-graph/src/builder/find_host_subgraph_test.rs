@@ -7,9 +7,11 @@ use std::collections::HashMap;
 use unsnarl_ir::serialized::SerializedScope;
 
 use crate::builder::arena::{BuildArena, SubgraphIdx};
+use crate::builder::builder_fixtures::{
+    base_serialized_reference, base_serialized_scope, scope_id,
+};
 use crate::builder::find_host_subgraph::find_host_subgraph;
 use crate::builder::state::BuildState;
-use crate::builder::testing::{base_serialized_reference, base_serialized_scope, scope_id};
 use crate::direction::Direction;
 use crate::visual_subgraph::OwnedVisualSubgraph;
 

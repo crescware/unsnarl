@@ -4,12 +4,12 @@ use unsnarl_ir::serialized::SerializedReference;
 
 use super::resolve_read_target_id;
 use crate::builder::arena::{BuildArena, ElementHandle, SubgraphIdx};
-use crate::builder::module_root_id::MODULE_ROOT_ID;
-use crate::builder::state::BuildState;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_serialized_reference, empty_serialized_ir, normal_completion,
     reference_id, return_completion, scope_id, throw_completion,
 };
+use crate::builder::module_root_id::MODULE_ROOT_ID;
+use crate::builder::state::BuildState;
 use crate::direction::Direction;
 use crate::visual_subgraph::OwnedVisualSubgraph;
 

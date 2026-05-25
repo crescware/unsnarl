@@ -5,8 +5,8 @@ use oxc_span::Span;
 use unsnarl_ir::reference::HeadExpression;
 use unsnarl_oxc_parity::AstType;
 
+use crate::analyzer_fixtures::{ast_node_with_end, parse_ts};
 use crate::path_entry::PathEntry;
-use crate::testing::{ast_node_with_end, parse_ts};
 
 use super::{build_expression_statement_container, nearest_expression_statement};
 
