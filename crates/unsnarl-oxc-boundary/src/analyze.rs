@@ -13,7 +13,7 @@ use unsnarl_ir::Language;
 
 use crate::analysis_result::ScopeAnalysisResult;
 use crate::oxc_semantic_adapter::build_from_program;
-use crate::parser::{default_source_type_for, OxcParser, ParseError, ParseOptions, SourceType};
+use crate::parser::{OxcParser, ParseError, ParseOptions, SourceType};
 use crate::visitor::AnalysisVisitor;
 
 /// Options accepted by [`analyze`].
@@ -38,18 +38,6 @@ pub fn analyze<'a>(
         visitor.on_diagnostic(diag);
     }
     output.analysis
-}
-
-pub fn parse_and_analyze(
-    code: &str,
-    language: Language,
-) -> Result<ScopeAnalysisResult, ParseError> {
-    parse_and_analyze_with(
-        code,
-        language,
-        default_source_type_for(language),
-        &mut NoopVisitor,
-    )
 }
 
 pub fn parse_and_analyze_with<V: AnalysisVisitor>(
@@ -85,7 +73,9 @@ pub fn parse_and_analyze_with<V: AnalysisVisitor>(
     ))
 }
 
+#[cfg(test)]
 pub(crate) struct NoopVisitor;
+#[cfg(test)]
 impl AnalysisVisitor for NoopVisitor {}
 
 #[cfg(test)]
