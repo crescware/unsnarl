@@ -1,12 +1,11 @@
 //! `uns` CLI argument definitions.
 //!
-//! The struct shape mirrors the TS parity surface
-//! (`ts/src/cli/parsed-cli-options.ts`) via `#[derive(Serialize)]`
-//! with `camelCase` field names. The actual argv parsing is hand-
-//! rolled in [`parse_argv`] — we used to lean on `clap::Parser`
-//! derive but that pulled ~190KB of `__text` into the release
-//! binary (Command tree builder, help renderer, validator, error
-//! formatter), all paid on every `uns` invocation.
+//! The struct shape uses `#[derive(Serialize)]` with `camelCase`
+//! field names. The actual argv parsing is hand-rolled in
+//! [`parse_argv`] — we used to lean on `clap::Parser` derive but
+//! that pulled ~190KB of `__text` into the release binary (Command
+//! tree builder, help renderer, validator, error formatter), all
+//! paid on every `uns` invocation.
 
 use std::path::PathBuf;
 

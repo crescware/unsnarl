@@ -281,11 +281,6 @@ cargo build --release -p unsnarl
 
 The release binary lands at `target/release/uns`.
 
-A TypeScript reference implementation lives under `ts/` and is kept
-building so the Rust output can be compared against it byte-for-byte by
-the parity benches. See `ts/CLAUDE.md` for that subtree's own
-verification command.
-
 Project-wide conventions (file naming, sibling test files, dead-code
 policy, derive policy) are documented under `docs/`.
 
@@ -305,15 +300,10 @@ Workspace tasks are defined in `mise.toml` and invoked via
 | Task                       | Description                                                                                                                |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
 | `build`                    | Release-build the `uns` CLI binary to `target/release/uns`.                                                                |
-| `parity`                   | Run the parity harness against `ts/integration/fixtures/**/expected.ir.json`.                                              |
+| `parity`                   | Run the parity harness against `integration/fixtures/**/expected.*`.                                                       |
 | `emit:ir`                  | Convenience runner for `uns -f ir` on the forwarded arguments.                                                             |
-| `bench:ir-parity`          | Run `-f ir` against every `ts/src/**/*.ts(x)` and compare Rust vs TS byte-for-byte; per-file timings under `target/`.      |
-| `bench:json-parity`        | Same sweep for `-f json` (visual-graph JSON).                                                                              |
-| `bench:mermaid-parity`     | Same sweep for `-f mermaid` (CLI defaults: elk + dark theme).                                                              |
-| `bench:markdown-parity`    | Same sweep for `-f markdown` (same mermaid render wrapped in markdown).                                                    |
-| `bench:stats-parity`       | Same sweep for `-f stats`.                                                                                                 |
-| `bench:variant-parity`     | Single-shot variant sweep: `mise run bench:variant-parity -- <format> <variant>`.                                          |
-| `bench:variant-parity-all` | Full 5-format × 6-variant matrix (30 sweeps).                                                                              |
+| `bench:node-modules`       | Run `uns` against every `.js`/`.ts` file under `fixtures/bench/node_modules` and rank by per-file wall-clock time.         |
+| `regen:fixtures`           | Regenerate every `expected.*` / `preview.md` baseline under `integration/fixtures/` via the Rust CLI.                      |
 | `cov`                      | Build with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under `target/coverage/`. |
 | `check:no-allow-dead-code` | Scan the source tree for forbidden `#[allow(dead_code)]` / `#[expect(dead_code)]` attributes (see `docs/dead-code-policy.md`). |
 | `bump`                     | Align every version field (Cargo + npm) AND both `publishConfig.tag` entries to the argument: `mise run bump -- 0.3.1`. The tag is derived from the semver pre-release id (no prerelease → `latest`, `-rc.*` → `rc`, anything else → `beta`). |
@@ -328,5 +318,4 @@ Workspace tasks are defined in `mise.toml` and invoked via
 - **Parser / AST**: [oxc][oxc] (`oxc_parser` / `oxc_ast` / `oxc_ast_visit`).
 - **Task runner**: [mise](https://mise.jdx.dev/) pins the toolchain and exposes the workspace tasks above.
 - **Helper scripts**: Deno TypeScript modules under `scripts/`.
-- **Reference implementation**: TypeScript port under `ts/`, kept in lockstep for IR-byte parity.
 - **Lint / format / test**: `cargo clippy -D warnings`, `cargo fmt`, `cargo test --workspace`.

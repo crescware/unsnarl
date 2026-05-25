@@ -29,5 +29,3 @@ lives in the per-implementation CLAUDE.md.
 ```bash
 cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
 ```
-
-See `ts/CLAUDE.md` for the TypeScript implementation's verification command.

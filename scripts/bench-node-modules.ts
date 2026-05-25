@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
 // Run `uns` (default formatter) against every `.js` / `.ts` file under
-// `ts/node_modules` (excluding `*.d.ts`) and rank them by per-file
+// `fixtures/bench/node_modules` (excluding `*.d.ts`) and rank them by per-file
 // wall-clock time in milliseconds. Sequential by design so the
 // timings are not contaminated by parallel CPU contention.
 //
@@ -13,7 +13,8 @@ const SCRIPT_PATH = new URL(import.meta.url).pathname;
 const REPO_ROOT = SCRIPT_PATH.split("/").slice(0, -2).join("/");
 
 const UNS_BIN = `${REPO_ROOT}/target/release/uns`;
-const TARGET_DIR = `${REPO_ROOT}/ts/node_modules`;
+const BENCH_PKG = `${REPO_ROOT}/fixtures/bench`;
+const TARGET_DIR = `${BENCH_PKG}/node_modules`;
 const WORK = `${REPO_ROOT}/target/node-modules-bench`;
 const TOP_N = 50;
 
@@ -26,17 +27,31 @@ function ensureFile(path: string, hint: string) {
     Deno.exit(1);
   }
 }
-function ensureDir(path: string, hint: string) {
+
+function dirExists(path: string): boolean {
   try {
-    const s = Deno.statSync(path);
-    if (!s.isDirectory) throw new Error("not a directory");
+    return Deno.statSync(path).isDirectory;
   } catch {
-    console.error(`missing ${path} -- ${hint}`);
+    return false;
+  }
+}
+
+ensureFile(UNS_BIN, "run `mise run build` first");
+
+if (!dirExists(TARGET_DIR)) {
+  console.error("fixtures/bench/node_modules not found — running pnpm install …");
+  const install = new Deno.Command("pnpm", {
+    args: ["install"],
+    cwd: BENCH_PKG,
+    stdout: "inherit",
+    stderr: "inherit",
+  });
+  const { success } = await install.output();
+  if (!success) {
+    console.error("pnpm install failed in fixtures/bench/");
     Deno.exit(1);
   }
 }
-ensureFile(UNS_BIN, "run `mise run build` first");
-ensureDir(TARGET_DIR, "run `pnpm -C ts install` first");
 
 function rmrf(path: string) {
   try {
@@ -74,8 +89,7 @@ for (const abs of files) {
   i++;
   // Run `uns` with stdout / stderr discarded so the I/O cost is
   // dominated by the analyser itself rather than terminal pipe
-  // buffering. The per-file wall clock is taken around the spawn
-  // exactly the same way `scripts/bench-parity.ts` does it.
+  // buffering.
   const start = performance.now();
   const out = await new Deno.Command(UNS_BIN, {
     args: [abs],
