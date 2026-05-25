@@ -107,7 +107,13 @@ function readVariants(fixtureRelPath: string): VariantSpec[] {
   } catch {
     return [];
   }
-  const parsed = JSON.parse(text);
+  let parsed: Record<string, unknown>;
+  try {
+    parsed = JSON.parse(text);
+  } catch (e) {
+    console.error(`invalid JSON in ${manifestPath}: ${e}`);
+    Deno.exit(1);
+  }
   const arr = parsed.variants as Array<Record<string, unknown>>;
   return arr.map((v) => ({
     kind: (v.kind as string) ?? "pruned",

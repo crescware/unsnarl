@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "@oxc-project/types": "0.128.0"
+  }
+}

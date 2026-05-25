@@ -15,3 +15,7 @@ pub mod oxc_semantic_adapter;
 pub mod parser;
 pub mod resolve;
 pub mod visitor;
+
+#[cfg(test)]
+#[path = "ast_type_coverage_test.rs"]
+mod ast_type_coverage_test;
