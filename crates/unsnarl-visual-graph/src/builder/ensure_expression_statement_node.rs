@@ -8,8 +8,7 @@
 use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::serialized::SerializedReference;
 
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
+use crate::visual_node::SyntheticVisualNode;
 
 use super::arena::{BuildArena, Container, ElementHandle};
 use super::expression_statement_node_id::expression_statement_node_id;
@@ -38,17 +37,9 @@ pub fn ensure_expression_statement_node(
     } else {
         None
     };
-    let node = VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.clone(),
-        kind: SyntheticNodeKind::SyntheticExpressionStatement,
-        name,
-        line: start_line,
-        end_line,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    });
+    let mut n = SyntheticVisualNode::expression_statement(id.clone(), name, start_line);
+    n.end_line = end_line;
+    let node = n.into();
     let idx = arena.push_node(node);
     arena.append_child(target, ElementHandle::Node(idx));
     state

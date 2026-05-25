@@ -5,7 +5,7 @@
 
 use serde::Serialize;
 use unsnarl_ir::language::Language;
-use unsnarl_ir::serialized::serialized_ir::SerializedIrVersion;
+use unsnarl_ir::serialized::serialized_ir::{SerializedIrVersion, SERIALIZED_IR_VERSION};
 
 use crate::direction::Direction;
 use crate::visual_boundary_edge::VisualBoundaryEdge;
@@ -29,4 +29,28 @@ pub struct VisualGraph {
     #[serde(rename = "boundaryEdges")]
     pub boundary_edges: Vec<VisualBoundaryEdge>,
     pub pruning: Option<VisualGraphPruning>,
+}
+
+impl VisualGraph {
+    pub fn new(
+        path: impl Into<String>,
+        language: Language,
+        direction: Direction,
+        elements: Vec<VisualElement>,
+        edges: Vec<VisualEdge>,
+        boundary_edges: Vec<VisualBoundaryEdge>,
+    ) -> Self {
+        Self {
+            version: SERIALIZED_IR_VERSION,
+            source: VisualGraphSource {
+                path: path.into(),
+                language,
+            },
+            direction,
+            elements,
+            edges,
+            boundary_edges,
+            pruning: None,
+        }
+    }
 }

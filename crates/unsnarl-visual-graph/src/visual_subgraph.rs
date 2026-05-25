@@ -135,11 +135,331 @@ pub struct ControlVisualSubgraph {
     pub extras: ControlExtras,
 }
 
+impl OwnedVisualSubgraph {
+    fn base(
+        id: impl Into<String>,
+        line: u32,
+        kind: OwnedSubgraphKind,
+        extras: OwnedExtras,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self {
+            r#type: SubgraphTypeTag::Subgraph,
+            id: id.into(),
+            kind,
+            line,
+            end_line: None,
+            direction,
+            extras,
+            elements,
+        }
+    }
+
+    pub fn function(
+        id: impl Into<String>,
+        line: u32,
+        owner_node_id: Option<String>,
+        owner_name: impl Into<String>,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::Function,
+            OwnedExtras::Function {
+                owner_node_id,
+                owner_name: owner_name.into(),
+            },
+            elements,
+            direction,
+        )
+    }
+
+    pub fn class(
+        id: impl Into<String>,
+        line: u32,
+        class_name: Option<String>,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::Class,
+            OwnedExtras::Class { class_name },
+            elements,
+            direction,
+        )
+    }
+
+    pub fn if_else_container(
+        id: impl Into<String>,
+        line: u32,
+        has_else: bool,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::IfElseContainer,
+            OwnedExtras::IfElseContainer { has_else },
+            elements,
+            direction,
+        )
+    }
+
+    pub fn return_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::Return,
+            OwnedExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn throw_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::Throw,
+            OwnedExtras::None {},
+            elements,
+            direction,
+        )
+    }
+}
+
+impl ControlVisualSubgraph {
+    fn base(
+        id: impl Into<String>,
+        line: u32,
+        kind: ControlSubgraphKind,
+        extras: ControlExtras,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self {
+            r#type: SubgraphTypeTag::Subgraph,
+            id: id.into(),
+            line,
+            end_line: None,
+            direction,
+            elements,
+            kind,
+            extras,
+        }
+    }
+
+    pub fn case(
+        id: impl Into<String>,
+        line: u32,
+        case_test: Option<String>,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Case,
+            ControlExtras::Case { case_test },
+            elements,
+            direction,
+        )
+    }
+
+    pub fn if_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::If,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn else_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Else,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn switch(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Switch,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn try_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Try,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn catch(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Catch,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn finally(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Finally,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn for_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::For,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn while_subgraph(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::While,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn do_while(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::DoWhile,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    pub fn block(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            ControlSubgraphKind::Block,
+            ControlExtras::None {},
+            elements,
+            direction,
+        )
+    }
+}
+
 #[derive(Clone, Serialize)]
 #[serde(untagged)]
 pub enum VisualSubgraph {
     Owned(OwnedVisualSubgraph),
     Control(ControlVisualSubgraph),
+}
+
+impl From<OwnedVisualSubgraph> for VisualSubgraph {
+    fn from(s: OwnedVisualSubgraph) -> Self {
+        Self::Owned(s)
+    }
+}
+
+impl From<ControlVisualSubgraph> for VisualSubgraph {
+    fn from(s: ControlVisualSubgraph) -> Self {
+        Self::Control(s)
+    }
 }
 
 impl VisualSubgraph {

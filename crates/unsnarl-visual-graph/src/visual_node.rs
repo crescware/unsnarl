@@ -79,6 +79,149 @@ pub struct BindingVisualNode {
     pub extras: BindingExtras,
 }
 
+impl BindingVisualNode {
+    fn base(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+        kind: BindingNodeKind,
+        extras: BindingExtras,
+    ) -> Self {
+        Self {
+            r#type: NodeTypeTag::Node,
+            id: id.into(),
+            name: name.into(),
+            line,
+            end_line: None,
+            is_jsx_element: false,
+            unused: false,
+            kind,
+            extras,
+        }
+    }
+
+    pub fn const_binding(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::ConstBinding,
+            BindingExtras::Variable {
+                init_is_function: false,
+            },
+        )
+    }
+
+    pub fn var_binding(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::VarBinding,
+            BindingExtras::Variable {
+                init_is_function: false,
+            },
+        )
+    }
+
+    pub fn let_binding(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::LetBinding,
+            BindingExtras::Variable {
+                init_is_function: false,
+            },
+        )
+    }
+
+    pub fn function_declaration(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::FunctionDeclaration,
+            BindingExtras::None {},
+        )
+    }
+
+    pub fn class_declaration(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::ClassDeclaration,
+            BindingExtras::None {},
+        )
+    }
+
+    pub fn formal_parameter(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::FormalParameter,
+            BindingExtras::None {},
+        )
+    }
+
+    pub fn catch_parameter(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::CatchParameter,
+            BindingExtras::None {},
+        )
+    }
+
+    pub fn named_import_binding(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        imported_name: impl Into<String>,
+        line: u32,
+    ) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::NamedImportBinding,
+            BindingExtras::NamedImport {
+                imported_name: imported_name.into(),
+            },
+        )
+    }
+
+    pub fn default_import_binding(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+    ) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::DefaultImportBinding,
+            BindingExtras::None {},
+        )
+    }
+
+    pub fn namespace_import_binding(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+    ) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::NamespaceImportBinding,
+            BindingExtras::None {},
+        )
+    }
+}
+
 /// `kind` for a [`SyntheticVisualNode`]. The set is the subset of
 /// `NodeKind` that the various `ensure-*` / anchor / WriteOp
 /// builders produce (everything that is *not* a variable
@@ -115,6 +258,188 @@ pub enum SyntheticExtras {
     },
 }
 
+impl SyntheticVisualNode {
+    fn base(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+        kind: SyntheticNodeKind,
+        extras: SyntheticExtras,
+    ) -> Self {
+        Self {
+            r#type: NodeTypeTag::Node,
+            id: id.into(),
+            kind,
+            name: name.into(),
+            line,
+            end_line: None,
+            is_jsx_element: false,
+            unused: false,
+            extras,
+        }
+    }
+
+    pub fn write_reference(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::WriteReference,
+            SyntheticExtras::WriteOp {
+                declaration_kind: None,
+            },
+        )
+    }
+
+    pub fn return_argument_reference(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+    ) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::ReturnArgumentReference,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn throw_argument_reference(
+        id: impl Into<String>,
+        name: impl Into<String>,
+        line: u32,
+    ) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::ThrowArgumentReference,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn module_source(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticModuleSource,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn module_sink(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticModuleSink,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn import_intermediate(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticImportIntermediate,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn expression_statement(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticExpressionStatement,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn if_statement_test(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "if-test",
+            line,
+            SyntheticNodeKind::SyntheticIfStatementTest,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn switch_discriminant(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "switch-discriminant",
+            line,
+            SyntheticNodeKind::SyntheticSwitchStatementDiscriminant,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn while_statement_test(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "while-test",
+            line,
+            SyntheticNodeKind::SyntheticWhileStatementTest,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn do_while_statement_test(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "do-while-test",
+            line,
+            SyntheticNodeKind::SyntheticDoWhileStatementTest,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn for_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForStatementHeader,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn for_in_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForInStatementHeader,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn for_of_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForOfStatementHeader,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn beyond_depth(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "...",
+            line,
+            SyntheticNodeKind::SyntheticBeyondDepth,
+            SyntheticExtras::None {},
+        )
+    }
+}
+
 /// Node shape produced by every synthetic builder — `kind` sits
 /// directly after `id`, then the rest of the common fields, then
 /// the optional tail.
@@ -140,6 +465,18 @@ pub struct SyntheticVisualNode {
 pub enum VisualNode {
     Binding(BindingVisualNode),
     Synthetic(SyntheticVisualNode),
+}
+
+impl From<BindingVisualNode> for VisualNode {
+    fn from(n: BindingVisualNode) -> Self {
+        Self::Binding(n)
+    }
+}
+
+impl From<SyntheticVisualNode> for VisualNode {
+    fn from(n: SyntheticVisualNode) -> Self {
+        Self::Synthetic(n)
+    }
 }
 
 impl VisualNode {

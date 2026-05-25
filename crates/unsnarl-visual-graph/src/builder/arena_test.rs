@@ -8,73 +8,31 @@
 use super::{BuildArena, Container, ElementHandle};
 use crate::direction::Direction;
 use crate::visual_element::VisualElement;
-use crate::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use crate::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,
-    SyntheticVisualNode, VisualNode,
-};
-use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedExtras, OwnedSubgraphKind,
-    OwnedVisualSubgraph, VisualSubgraph,
-};
+use crate::visual_node::{BindingVisualNode, SyntheticVisualNode, VisualNode};
+use crate::visual_subgraph::{ControlVisualSubgraph, OwnedVisualSubgraph, VisualSubgraph};
 
 fn binding_node(id: &str, name: &str) -> VisualNode {
-    VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        name: name.to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    })
+    BindingVisualNode::const_binding(id, name, 1).into()
 }
 
-fn synthetic_node(id: &str, name: &str, kind: SyntheticNodeKind) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        kind,
-        name: name.to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    })
+fn if_test_node(id: &str) -> VisualNode {
+    SyntheticVisualNode::if_statement_test(id, 1).into()
 }
 
 fn owned_subgraph(id: &str) -> VisualSubgraph {
-    VisualSubgraph::Owned(OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
+    let sg = OwnedVisualSubgraph {
         end_line: Some(3),
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: None,
-            owner_name: "fn".to_string(),
-        },
-        elements: Vec::new(),
-    })
+        ..OwnedVisualSubgraph::function(id, 1, None, "fn", Vec::new(), Direction::RL)
+    };
+    sg.into()
 }
 
 fn control_subgraph(id: &str) -> VisualSubgraph {
-    VisualSubgraph::Control(ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        line: 1,
+    let sg = ControlVisualSubgraph {
         end_line: Some(2),
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::Block,
-        extras: ControlExtras::None {},
-    })
+        ..ControlVisualSubgraph::block(id, 1, Vec::new(), Direction::RL)
+    };
+    sg.into()
 }
 
 #[test]
@@ -110,11 +68,7 @@ fn prepend_child_places_handle_at_index_zero() {
     let mut arena = BuildArena::new();
     let sg = arena.push_subgraph(control_subgraph("sg"));
     let body = arena.push_node(binding_node("body", "body"));
-    let anchor = arena.push_node(synthetic_node(
-        "test-anchor",
-        "if-test",
-        SyntheticNodeKind::SyntheticIfStatementTest,
-    ));
+    let anchor = arena.push_node(if_test_node("test-anchor"));
     arena.append_child(Container::Subgraph(sg), ElementHandle::Node(body));
     arena.prepend_child(Container::Subgraph(sg), ElementHandle::Node(anchor));
     arena.append_child(Container::Root, ElementHandle::Subgraph(sg));

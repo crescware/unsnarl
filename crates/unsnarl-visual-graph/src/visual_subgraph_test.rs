@@ -5,22 +5,19 @@
 
 use super::*;
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
 
 #[test]
 fn function_subgraph_emits_kind_early_and_elements_last() {
     let sg = OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_scope_1".to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 7,
         end_line: Some(9),
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_scope_0_compute_81".to_string()),
-            owner_name: "compute".to_string(),
-        },
-        elements: Vec::new(),
+        ..OwnedVisualSubgraph::function(
+            "s_scope_1",
+            7,
+            Some("n_scope_0_compute_81".to_string()),
+            "compute",
+            Vec::new(),
+            Direction::RL,
+        )
     };
     let text = serde_json::to_string_pretty(&sg).expect("serialize");
     assert_eq!(
@@ -42,16 +39,14 @@ fn function_subgraph_emits_kind_early_and_elements_last() {
 #[test]
 fn class_subgraph_carries_class_name_before_elements() {
     let sg = OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_scope_2".to_string(),
-        kind: OwnedSubgraphKind::Class,
-        line: 1,
         end_line: Some(4),
-        direction: Direction::RL,
-        extras: OwnedExtras::Class {
-            class_name: Some("Foo".to_string()),
-        },
-        elements: Vec::new(),
+        ..OwnedVisualSubgraph::class(
+            "s_scope_2",
+            1,
+            Some("Foo".to_string()),
+            Vec::new(),
+            Direction::RL,
+        )
     };
     let value: serde_json::Value =
         serde_json::from_str(&serde_json::to_string(&sg).expect("serialize")).expect("json");
@@ -62,14 +57,14 @@ fn class_subgraph_carries_class_name_before_elements() {
 #[test]
 fn if_else_container_carries_has_else_before_elements() {
     let sg = OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "cont_if_scope_3_107".to_string(),
-        kind: OwnedSubgraphKind::IfElseContainer,
-        line: 6,
         end_line: Some(10),
-        direction: Direction::RL,
-        extras: OwnedExtras::IfElseContainer { has_else: true },
-        elements: Vec::new(),
+        ..OwnedVisualSubgraph::if_else_container(
+            "cont_if_scope_3_107",
+            6,
+            true,
+            Vec::new(),
+            Direction::RL,
+        )
     };
     let text = serde_json::to_string_pretty(&sg).expect("serialize");
     assert_eq!(
@@ -89,16 +84,7 @@ fn if_else_container_carries_has_else_before_elements() {
 
 #[test]
 fn return_subgraph_emits_no_extras_just_kind_then_elements() {
-    let sg = OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_return_xyz".to_string(),
-        kind: OwnedSubgraphKind::Return,
-        line: 15,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::None {},
-        elements: Vec::new(),
-    };
+    let sg = OwnedVisualSubgraph::return_subgraph("s_return_xyz", 15, Vec::new(), Direction::RL);
     let text = serde_json::to_string_pretty(&sg).expect("serialize");
     assert_eq!(
         text,
@@ -117,14 +103,8 @@ fn return_subgraph_emits_no_extras_just_kind_then_elements() {
 #[test]
 fn control_subgraph_places_elements_before_kind() {
     let sg = ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_scope_3".to_string(),
-        line: 5,
         end_line: Some(10),
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::If,
-        extras: ControlExtras::None {},
+        ..ControlVisualSubgraph::if_subgraph("s_scope_3", 5, Vec::new(), Direction::RL)
     };
     let text = serde_json::to_string_pretty(&sg).expect("serialize");
     assert_eq!(
@@ -144,16 +124,14 @@ fn control_subgraph_places_elements_before_kind() {
 #[test]
 fn case_subgraph_emits_case_test_after_kind() {
     let sg = ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_scope_4".to_string(),
-        line: 4,
         end_line: Some(6),
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::Case,
-        extras: ControlExtras::Case {
-            case_test: Some("\"a\"".to_string()),
-        },
+        ..ControlVisualSubgraph::case(
+            "s_scope_4",
+            4,
+            Some("\"a\"".to_string()),
+            Vec::new(),
+            Direction::RL,
+        )
     };
     let text = serde_json::to_string_pretty(&sg).expect("serialize");
     assert_eq!(
@@ -173,16 +151,7 @@ fn case_subgraph_emits_case_test_after_kind() {
 
 #[test]
 fn default_case_subgraph_emits_case_test_null() {
-    let sg = ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_default".to_string(),
-        line: 9,
-        end_line: None,
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::Case,
-        extras: ControlExtras::Case { case_test: None },
-    };
+    let sg = ControlVisualSubgraph::case("s_default", 9, None, Vec::new(), Direction::RL);
     let text = serde_json::to_string(&sg).expect("serialize");
     assert!(
         text.contains(r#""caseTest":null"#),

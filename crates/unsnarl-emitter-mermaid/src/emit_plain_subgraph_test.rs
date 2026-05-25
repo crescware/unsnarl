@@ -15,39 +15,41 @@ use crate::strategy::MermaidStrategy;
 use crate::testing::{base_const_binding, base_plain_subgraph, base_render_state};
 
 fn node(id: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+    VisualNode::from(BindingVisualNode {
         id: id.to_string(),
         ..base_const_binding()
-    }))
+    })
+    .into()
 }
 
 fn if_subgraph(id: &str, elements: Vec<VisualElement>) -> VisualSubgraph {
-    let sg = ControlVisualSubgraph {
+    ControlVisualSubgraph {
         id: id.to_string(),
         elements,
         ..base_plain_subgraph(ControlSubgraphKind::If)
-    };
-    VisualSubgraph::Control(sg)
+    }
+    .into()
 }
 
 fn else_subgraph(id: &str) -> VisualSubgraph {
-    let sg = ControlVisualSubgraph {
+    ControlVisualSubgraph {
         id: id.to_string(),
         elements: Vec::new(),
         ..base_plain_subgraph(ControlSubgraphKind::Else)
-    };
-    VisualSubgraph::Control(sg)
+    }
+    .into()
 }
 
 #[test]
 fn emits_subgraph_open_direction_line_child_nodes_and_close() {
     let mut state = base_render_state();
-    let sg = VisualSubgraph::Control(ControlVisualSubgraph {
+    let sg: VisualSubgraph = ControlVisualSubgraph {
         id: "s_x".to_string(),
         direction: Direction::TB,
         elements: vec![node("n_a"), node("n_b")],
         ..base_plain_subgraph(ControlSubgraphKind::If)
-    });
+    }
+    .into();
     emit_plain_subgraph(&mut state, &sg, "  ", 1);
     assert_eq!(state.lines[0], "  subgraph s_x[\"if L1\"]");
     assert_eq!(state.lines[1], "    direction TB");
@@ -58,10 +60,7 @@ fn emits_subgraph_open_direction_line_child_nodes_and_close() {
 #[test]
 fn emits_child_nodes_before_nested_subgraphs() {
     let mut state = base_render_state();
-    let sg = if_subgraph(
-        "outer",
-        vec![VisualElement::Subgraph(else_subgraph("inner")), node("n_a")],
-    );
+    let sg = if_subgraph("outer", vec![else_subgraph("inner").into(), node("n_a")]);
     emit_plain_subgraph(&mut state, &sg, "  ", 1);
     let node_idx = state
         .lines
@@ -139,10 +138,7 @@ fn records_the_subgraph_id_under_its_one_based_depth_in_nest_class_map() {
 #[test]
 fn recurses_into_nested_subgraphs_with_depth_plus_one() {
     let mut state = base_render_state();
-    let sg = if_subgraph(
-        "outer",
-        vec![VisualElement::Subgraph(else_subgraph("inner"))],
-    );
+    let sg = if_subgraph("outer", vec![else_subgraph("inner").into()]);
     emit_plain_subgraph(&mut state, &sg, "  ", 1);
     assert_eq!(
         state.nest_class_map.get(&0),

@@ -1,29 +1,33 @@
 use std::collections::HashMap;
 
-use unsnarl_visual_graph::visual_node::{BindingNodeKind, SyntheticNodeKind, VisualNode};
+use unsnarl_visual_graph::visual_node::{
+    BindingNodeKind, BindingVisualNode, SyntheticNodeKind, SyntheticVisualNode, VisualNode,
+};
 
 use super::collect_import_sources;
 use crate::testing::{base_simple_binding, base_simple_synthetic};
 
 fn synthetic(id: &str, kind: SyntheticNodeKind) -> VisualNode {
-    VisualNode::Synthetic(unsnarl_visual_graph::visual_node::SyntheticVisualNode {
+    SyntheticVisualNode {
         id: id.to_string(),
         ..base_simple_synthetic(kind)
-    })
+    }
+    .into()
 }
 
 fn binding(id: &str, kind: BindingNodeKind) -> VisualNode {
-    VisualNode::Binding(unsnarl_visual_graph::visual_node::BindingVisualNode {
+    BindingVisualNode {
         id: id.to_string(),
         ..base_simple_binding(kind)
-    })
+    }
+    .into()
 }
 
 #[test]
 fn collects_ids_of_module_source_and_import_intermediate_nodes() {
     let a = synthetic("mod_a", SyntheticNodeKind::SyntheticModuleSource);
     let b = synthetic("import_b", SyntheticNodeKind::SyntheticImportIntermediate);
-    let x = VisualNode::Binding(crate::testing::base_const_binding());
+    let x: VisualNode = crate::testing::base_const_binding().into();
     let mut map: HashMap<String, &VisualNode> = HashMap::new();
     map.insert("mod_a".to_string(), &a);
     map.insert("import_b".to_string(), &b);
@@ -43,7 +47,7 @@ fn excludes_other_synthetic_kinds() {
 
 #[test]
 fn excludes_non_synthetic_kinds() {
-    let x = VisualNode::Binding(crate::testing::base_const_binding());
+    let x: VisualNode = crate::testing::base_const_binding().into();
     let f = binding("n_f", BindingNodeKind::FunctionDeclaration);
     let mut map: HashMap<String, &VisualNode> = HashMap::new();
     map.insert("n_x".to_string(), &x);

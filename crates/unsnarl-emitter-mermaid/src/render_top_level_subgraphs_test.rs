@@ -8,10 +8,11 @@ use super::render_top_level_subgraphs;
 use crate::testing::{base_const_binding, base_graph, base_plain_subgraph, base_render_state};
 
 fn subgraph(id: &str, kind: ControlSubgraphKind) -> VisualElement {
-    VisualElement::Subgraph(VisualSubgraph::Control(ControlVisualSubgraph {
+    VisualSubgraph::from(ControlVisualSubgraph {
         id: id.to_string(),
         ..base_plain_subgraph(kind)
-    }))
+    })
+    .into()
 }
 
 #[test]
@@ -35,12 +36,11 @@ fn delegates_to_emit_subgraph_for_each_top_level_subgraph() {
 fn ignores_top_level_node_elements() {
     let mut state = base_render_state();
     let mut g = base_graph();
-    g.elements = vec![VisualElement::Node(VisualNode::Binding(
-        BindingVisualNode {
-            id: "n_a".to_string(),
-            ..base_const_binding()
-        },
-    ))];
+    g.elements = vec![VisualNode::from(BindingVisualNode {
+        id: "n_a".to_string(),
+        ..base_const_binding()
+    })
+    .into()];
     render_top_level_subgraphs(&mut state, &g);
     assert!(state.lines.is_empty());
 }

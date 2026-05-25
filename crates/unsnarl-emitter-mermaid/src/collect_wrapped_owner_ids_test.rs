@@ -18,7 +18,7 @@ fn function_subgraph_with(owner_node_id: &str, elements: Vec<VisualElement>) -> 
         elements,
         ..base_function_subgraph()
     };
-    VisualElement::Subgraph(VisualSubgraph::Owned(sg))
+    VisualSubgraph::from(sg).into()
 }
 
 #[test]
@@ -36,9 +36,8 @@ fn captures_owner_node_id_of_every_function_subgraph() {
 
 #[test]
 fn non_function_subgraphs_carry_no_owner_node_id_and_are_skipped() {
-    let if_sg = VisualElement::Subgraph(VisualSubgraph::Control(base_plain_subgraph(
-        ControlSubgraphKind::If,
-    )));
+    let if_sg: VisualElement =
+        VisualSubgraph::from(base_plain_subgraph(ControlSubgraphKind::If)).into();
     let mut out: HashSet<String> = HashSet::new();
     collect_wrapped_owner_ids(&[if_sg], &mut out);
     assert!(out.is_empty());
@@ -58,10 +57,11 @@ fn recurses_into_nested_subgraphs() {
 #[test]
 fn plain_top_level_nodes_are_skipped_without_traversal_error() {
     let elements = vec![
-        VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+        VisualNode::from(BindingVisualNode {
             id: "n_a".to_string(),
             ..base_const_binding()
-        })),
+        })
+        .into(),
         function_subgraph_with("n_b", Vec::new()),
     ];
     let mut out: HashSet<String> = HashSet::new();

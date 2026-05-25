@@ -23,11 +23,7 @@ fn node_with_end(id: &str, name: &str, line: u32, end: u32) -> VisualNode {
 }
 
 fn edge(from: &str, to: &str, label: &str) -> VisualEdge {
-    VisualEdge {
-        from: from.to_string(),
-        to: to.to_string(),
-        label: label.to_string(),
-    }
+    VisualEdge::new(from, to, label)
 }
 
 fn raw_line(n: u32) -> ParsedRootQuery {

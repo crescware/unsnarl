@@ -12,24 +12,21 @@ use crate::builder::testing::{
     reference_id, return_completion, scope_id, span_offset_line, variable_id,
 };
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
 use crate::visual_node::{SyntheticNodeKind, VisualNode};
-use crate::visual_subgraph::{OwnedExtras, OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};
+use crate::visual_subgraph::{OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};
 
 fn push_host(arena: &mut BuildArena) -> SubgraphIdx {
-    arena.push_subgraph(VisualSubgraph::Owned(OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_fn".to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_owner".to_string()),
-            owner_name: "owner".to_string(),
-        },
-        elements: Vec::new(),
-    }))
+    arena.push_subgraph(
+        OwnedVisualSubgraph::function(
+            "s_fn",
+            1,
+            Some("n_owner".to_string()),
+            "owner",
+            Vec::new(),
+            Direction::RL,
+        )
+        .into(),
+    )
 }
 
 fn state_with_host(arena: &mut BuildArena) -> (BuildState, SubgraphIdx) {

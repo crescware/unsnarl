@@ -17,9 +17,8 @@ use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::SerializedScope;
 
 use crate::direction::Direction;
-use crate::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
-use crate::visual_subgraph::{OwnedExtras, OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};
+use crate::visual_node::{SyntheticVisualNode, VisualNode};
+use crate::visual_subgraph::OwnedVisualSubgraph;
 
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::branch_container_key::branch_container_key;
@@ -35,17 +34,7 @@ fn make_if_test_anchor(
     offset: Utf16CodeUnitOffset,
     source_index: &SourceIndex<'_>,
 ) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id,
-        kind: SyntheticNodeKind::SyntheticIfStatementTest,
-        name: "if-test".to_string(),
-        line: line_for_offset(source_index, offset),
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    })
+    SyntheticVisualNode::if_statement_test(id, line_for_offset(source_index, offset)).into()
 }
 
 fn push_if_test_anchor(
@@ -178,16 +167,14 @@ pub fn build_children(
         let has_else = group
             .iter()
             .any(|v| v.block_context.as_ref().map(|c| c.key()) == Some("alternate"));
-        let descriptor = VisualSubgraph::Owned(OwnedVisualSubgraph {
-            r#type: SubgraphTypeTag::Subgraph,
-            id: container_id,
-            kind: OwnedSubgraphKind::IfElseContainer,
-            line: line_for_offset(&ctx.source_index, offset),
-            end_line: None,
-            direction: Direction::RL,
-            extras: OwnedExtras::IfElseContainer { has_else },
-            elements: Vec::new(),
-        });
+        let descriptor = OwnedVisualSubgraph::if_else_container(
+            container_id,
+            line_for_offset(&ctx.source_index, offset),
+            has_else,
+            Vec::new(),
+            Direction::RL,
+        )
+        .into();
         let container_idx: SubgraphIdx = arena.push_subgraph(descriptor);
         arena.append_child(container, ElementHandle::Subgraph(container_idx));
 

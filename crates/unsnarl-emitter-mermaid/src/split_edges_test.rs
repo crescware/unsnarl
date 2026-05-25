@@ -3,14 +3,9 @@ use std::collections::HashSet;
 use unsnarl_visual_graph::visual_edge::VisualEdge;
 
 use super::split_edges;
-use crate::testing::base_edge;
 
 fn edge(from: &str, to: &str) -> VisualEdge {
-    VisualEdge {
-        from: from.to_string(),
-        to: to.to_string(),
-        ..base_edge()
-    }
+    VisualEdge::new(from, to, "read")
 }
 
 fn set_of(ids: &[&str]) -> HashSet<String> {

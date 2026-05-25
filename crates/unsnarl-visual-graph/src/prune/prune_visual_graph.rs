@@ -21,7 +21,7 @@ use crate::prune::prune_options::{PerQueryMatch, PruneOptions, PruneResult};
 use crate::prune::rebuild_elements::rebuild_elements;
 use crate::visual_boundary_edge::VisualBoundaryEdge;
 use crate::visual_edge::VisualEdge;
-use crate::visual_graph::{VisualGraph, VisualGraphSource};
+use crate::visual_graph::VisualGraph;
 use crate::visual_graph_pruning::{PruningRoot, VisualGraphPruning};
 
 enum Bucket {
@@ -211,28 +211,25 @@ pub fn prune_visual_graph(graph: &VisualGraph, options: &PruneOptions) -> PruneR
         })
         .collect();
 
-    let pruned = VisualGraph {
-        version: graph.version,
-        source: VisualGraphSource {
-            path: graph.source.path.clone(),
-            language: graph.source.language,
-        },
-        direction: graph.direction,
-        elements: new_elements,
-        edges: new_edges,
-        boundary_edges: surviving_boundary,
-        pruning: Some(VisualGraphPruning {
-            roots: per_query
-                .iter()
-                .map(|p| PruningRoot {
-                    query: query_raw(&p.query).to_string(),
-                    matched: p.matched,
-                })
-                .collect(),
-            descendants: options.descendants,
-            ancestors: options.ancestors,
-        }),
-    };
+    let mut pruned = VisualGraph::new(
+        graph.source.path.clone(),
+        graph.source.language,
+        graph.direction,
+        new_elements,
+        new_edges,
+        surviving_boundary,
+    );
+    pruned.pruning = Some(VisualGraphPruning {
+        roots: per_query
+            .iter()
+            .map(|p| PruningRoot {
+                query: query_raw(&p.query).to_string(),
+                matched: p.matched,
+            })
+            .collect(),
+        descendants: options.descendants,
+        ancestors: options.ancestors,
+    });
 
     PruneResult {
         graph: pruned,
@@ -292,18 +289,16 @@ fn clone_query(q: &ParsedRootQuery) -> ParsedRootQuery {
 }
 
 fn clone_graph(graph: &VisualGraph) -> VisualGraph {
-    VisualGraph {
-        version: graph.version,
-        source: VisualGraphSource {
-            path: graph.source.path.clone(),
-            language: graph.source.language,
-        },
-        direction: graph.direction,
-        elements: graph.elements.clone(),
-        edges: graph.edges.clone(),
-        boundary_edges: graph.boundary_edges.clone(),
-        pruning: graph.pruning.clone(),
-    }
+    let mut g = VisualGraph::new(
+        graph.source.path.clone(),
+        graph.source.language,
+        graph.direction,
+        graph.elements.clone(),
+        graph.edges.clone(),
+        graph.boundary_edges.clone(),
+    );
+    g.pruning = graph.pruning.clone();
+    g
 }
 
 #[cfg(test)]

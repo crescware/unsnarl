@@ -9,17 +9,19 @@ use crate::testing::{base_const_binding, base_graph, base_render_state, base_sim
 const MODULE_ROOT_ID: &str = "module_root";
 
 fn synthetic(id: &str, kind: SyntheticNodeKind) -> VisualElement {
-    VisualElement::Node(VisualNode::Synthetic(SyntheticVisualNode {
+    VisualNode::from(SyntheticVisualNode {
         id: id.to_string(),
         ..base_simple_synthetic(kind)
-    }))
+    })
+    .into()
 }
 
 fn binding(id: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+    VisualNode::from(BindingVisualNode {
         id: id.to_string(),
         ..base_const_binding()
-    }))
+    })
+    .into()
 }
 
 /// Splits a rendered node line on `[` or `(` and returns the head id.

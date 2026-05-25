@@ -2,27 +2,14 @@
 //! `unused ` prefix surfaces only when `node.unused` is true; the
 //! default (`unused: false`) emits no prefix.
 
-use unsnarl_visual_graph::visual_element_type::NodeTypeTag;
-use unsnarl_visual_graph::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, VisualNode,
-};
+use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
 
 use super::format_label;
 
 fn node(name: &str, line: u32, unused: bool) -> VisualNode {
-    VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n1".to_string(),
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    })
+    let mut n = BindingVisualNode::const_binding("n1", name, line);
+    n.unused = unused;
+    n.into()
 }
 
 #[test]

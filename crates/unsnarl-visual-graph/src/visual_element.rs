@@ -15,6 +15,18 @@ pub enum VisualElement {
     Subgraph(VisualSubgraph),
 }
 
+impl From<VisualNode> for VisualElement {
+    fn from(n: VisualNode) -> Self {
+        Self::Node(n)
+    }
+}
+
+impl From<VisualSubgraph> for VisualElement {
+    fn from(s: VisualSubgraph) -> Self {
+        Self::Subgraph(s)
+    }
+}
+
 impl VisualElement {
     pub fn id(&self) -> &str {
         match self {

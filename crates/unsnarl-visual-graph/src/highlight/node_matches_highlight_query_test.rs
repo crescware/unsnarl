@@ -2,56 +2,20 @@ use super::*;
 
 use unsnarl_ir::SourceLine;
 
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,
-    SyntheticVisualNode, VisualNode,
-};
+use crate::visual_node::{BindingVisualNode, SyntheticVisualNode, VisualNode};
 
 fn variable(name: &str, line: u32, end_line: Option<u32>) -> VisualNode {
-    VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n".to_string(),
-        name: name.to_string(),
-        line,
-        end_line,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    })
+    let mut n = BindingVisualNode::const_binding("n", name, line);
+    n.end_line = end_line;
+    n.into()
 }
 
 fn return_use(name: &str, line: u32) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n".to_string(),
-        kind: SyntheticNodeKind::ReturnArgumentReference,
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    })
+    SyntheticVisualNode::return_argument_reference("n", name, line).into()
 }
 
 fn write_op(name: &str, line: u32) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n".to_string(),
-        kind: SyntheticNodeKind::WriteReference,
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::WriteOp {
-            declaration_kind: None,
-        },
-    })
+    SyntheticVisualNode::write_reference("n", name, line).into()
 }
 
 #[test]

@@ -3,56 +3,31 @@
 use super::find_node_by_id;
 use crate::direction::Direction;
 use crate::visual_element::VisualElement;
-use crate::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use crate::visual_node::{BindingExtras, BindingNodeKind, BindingVisualNode, VisualNode};
-use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedExtras, OwnedSubgraphKind,
-    OwnedVisualSubgraph, VisualSubgraph,
-};
+use crate::visual_node::{BindingVisualNode, VisualNode};
+use crate::visual_subgraph::{ControlVisualSubgraph, OwnedVisualSubgraph, VisualSubgraph};
 
 fn leaf(id: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        name: id.to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    }))
+    VisualNode::from(BindingVisualNode::const_binding(id, id, 1)).into()
 }
 
 fn function_subgraph(id: &str, elements: Vec<VisualElement>) -> VisualElement {
-    VisualElement::Subgraph(VisualSubgraph::Owned(OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_owner".to_string()),
-            owner_name: "owner".to_string(),
-        },
+    VisualElement::Subgraph(VisualSubgraph::from(OwnedVisualSubgraph::function(
+        id,
+        1,
+        Some("n_owner".to_string()),
+        "owner",
         elements,
-    }))
+        Direction::RL,
+    )))
 }
 
 fn if_subgraph(id: &str, elements: Vec<VisualElement>) -> VisualElement {
-    VisualElement::Subgraph(VisualSubgraph::Control(ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
+    VisualElement::Subgraph(VisualSubgraph::from(ControlVisualSubgraph::if_subgraph(
+        id,
+        1,
         elements,
-        kind: ControlSubgraphKind::If,
-        extras: ControlExtras::None {},
-    }))
+        Direction::RL,
+    )))
 }
 
 fn build_elements() -> Vec<VisualElement> {

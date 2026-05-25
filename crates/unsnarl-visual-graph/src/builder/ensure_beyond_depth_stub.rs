@@ -5,8 +5,7 @@
 //! one boundary marker per visible parent instead of one per hidden
 //! child.
 
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
+use crate::visual_node::SyntheticVisualNode;
 
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::sanitize::sanitize;
@@ -24,17 +23,9 @@ pub fn ensure_beyond_depth_stub(
     let stub_id = format!("beyond_depth_{}", sanitize(&parent_id));
     let line = arena.subgraph(parent).descriptor.line();
     let end_line = arena.subgraph(parent).descriptor.end_line();
-    let node = VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: stub_id.clone(),
-        kind: SyntheticNodeKind::SyntheticBeyondDepth,
-        name: "...".to_string(),
-        line,
-        end_line,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    });
+    let mut n = SyntheticVisualNode::beyond_depth(stub_id.clone(), line);
+    n.end_line = end_line;
+    let node = n.into();
     let node_idx = arena.push_node(node);
     arena.append_child(Container::Subgraph(parent), ElementHandle::Node(node_idx));
     state

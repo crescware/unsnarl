@@ -9,11 +9,7 @@ use unsnarl_visual_graph::visual_edge::VisualEdge;
 use super::collect_highlight_edge_indices;
 
 fn e(from: &str, to: &str) -> VisualEdge {
-    VisualEdge {
-        from: from.to_string(),
-        to: to.to_string(),
-        label: String::new(),
-    }
+    VisualEdge::new(from, to, "")
 }
 
 fn set_of(ids: &[&str]) -> HashSet<String> {

@@ -17,11 +17,7 @@ pub fn push_edge(
     if !emitted_edges.insert(key) {
         return;
     }
-    edges.push(VisualEdge {
-        from: from.to_string(),
-        to: to.to_string(),
-        label: label.to_string(),
-    });
+    edges.push(VisualEdge::new(from, to, label));
 }
 
 #[cfg(test)]

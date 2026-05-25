@@ -20,9 +20,8 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::direction::Direction;
 use crate::visual_edge::VisualEdge;
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_graph::{VisualGraph, VisualGraphSource};
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
+use crate::visual_graph::VisualGraph;
+use crate::visual_node::SyntheticVisualNode;
 
 use super::arena::{BuildArena, Container, ElementHandle};
 use super::branch_container_key::branch_container_key;
@@ -231,17 +230,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
 
     let needs_module_root = state.edges.iter().any(|e| e.to == MODULE_ROOT_ID);
     if needs_module_root {
-        let node = VisualNode::Synthetic(SyntheticVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: MODULE_ROOT_ID.to_string(),
-            kind: SyntheticNodeKind::SyntheticModuleSink,
-            name: "module".to_string(),
-            line: 0,
-            end_line: None,
-            is_jsx_element: false,
-            unused: false,
-            extras: SyntheticExtras::None {},
-        });
+        let node = SyntheticVisualNode::module_sink(MODULE_ROOT_ID, "module", 0).into();
         let idx = arena.push_node(node);
         arena.append_child(Container::Root, ElementHandle::Node(idx));
     }
@@ -276,18 +265,14 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         arena.finalize_root()
     };
     unsnarl_instrumentation::drain_and_emit!("build_visual_graph::timing");
-    VisualGraph {
-        version: unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION,
-        source: VisualGraphSource {
-            path: ir.source.path.clone(),
-            language: ir.source.language,
-        },
-        direction: Direction::RL,
+    VisualGraph::new(
+        ir.source.path.clone(),
+        ir.source.language,
+        Direction::RL,
         elements,
-        edges: state.edges,
-        boundary_edges: Vec::new(),
-        pruning: None,
-    }
+        state.edges,
+        Vec::new(),
+    )
 }
 
 fn emit_let_chain_edges(state: &mut BuildState, ctx: &BuilderContext<'_>) {
@@ -663,33 +648,19 @@ fn emit_module_and_intermediate(
 
     for key in &module_nodes_order {
         let m = &module_nodes[key];
-        let node = VisualNode::Synthetic(SyntheticVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: m.id.clone(),
-            kind: SyntheticNodeKind::SyntheticModuleSource,
-            name: m.source.clone(),
-            line: m.line,
-            end_line: None,
-            is_jsx_element: false,
-            unused: false,
-            extras: SyntheticExtras::None {},
-        });
+        let node =
+            SyntheticVisualNode::module_source(m.id.clone(), m.source.clone(), m.line).into();
         let idx = arena.push_node(node);
         arena.append_child(Container::Root, ElementHandle::Node(idx));
     }
     for key in &intermediates_order {
         let inter = &intermediates[key];
-        let node = VisualNode::Synthetic(SyntheticVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: inter.id.clone(),
-            kind: SyntheticNodeKind::SyntheticImportIntermediate,
-            name: inter.name.clone(),
-            line: inter.line,
-            end_line: None,
-            is_jsx_element: false,
-            unused: false,
-            extras: SyntheticExtras::None {},
-        });
+        let node = SyntheticVisualNode::import_intermediate(
+            inter.id.clone(),
+            inter.name.clone(),
+            inter.line,
+        )
+        .into();
         let idx = arena.push_node(node);
         arena.append_child(Container::Root, ElementHandle::Node(idx));
     }
@@ -837,10 +808,6 @@ fn redirect_edges_into_collapsed(
         if !seen.insert(key) {
             continue;
         }
-        edges.push(VisualEdge {
-            from,
-            to,
-            label: e.label,
-        });
+        edges.push(VisualEdge::new(from, to, e.label));
     }
 }

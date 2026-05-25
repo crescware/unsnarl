@@ -11,8 +11,7 @@ use unsnarl_ir::serialized::SerializedDefinition;
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::VariableDeclarationKind;
 
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
+use crate::visual_node::{SyntheticExtras, SyntheticVisualNode};
 
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::build_children::build_children;
@@ -130,17 +129,10 @@ pub fn build_scope(
                     _ => None,
                 });
             let id = write_op_node_id(&op.ref_id);
-            let node = VisualNode::Synthetic(SyntheticVisualNode {
-                r#type: NodeTypeTag::Node,
-                id: id.clone(),
-                kind: SyntheticNodeKind::WriteReference,
-                name: op.var_name.clone(),
-                line: op.line,
-                end_line: None,
-                is_jsx_element: false,
-                unused: false,
-                extras: SyntheticExtras::WriteOp { declaration_kind },
-            });
+            let mut n =
+                SyntheticVisualNode::write_reference(id.clone(), op.var_name.clone(), op.line);
+            n.extras = SyntheticExtras::WriteOp { declaration_kind };
+            let node = n.into();
             let node_idx = arena.push_node(node);
             state
                 .node_id_origin_scope
