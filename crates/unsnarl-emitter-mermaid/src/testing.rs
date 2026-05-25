@@ -12,18 +12,13 @@
 use std::collections::{HashMap, HashSet};
 
 use unsnarl_ir::language::Language;
-use unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION;
 use unsnarl_visual_graph::direction::Direction;
-use unsnarl_visual_graph::visual_edge::VisualEdge;
-use unsnarl_visual_graph::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use unsnarl_visual_graph::visual_graph::{VisualGraph, VisualGraphSource};
+use unsnarl_visual_graph::visual_graph::VisualGraph;
 use unsnarl_visual_graph::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,
-    SyntheticVisualNode,
+    BindingNodeKind, BindingVisualNode, SyntheticNodeKind, SyntheticVisualNode,
 };
 use unsnarl_visual_graph::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedExtras, OwnedSubgraphKind,
-    OwnedVisualSubgraph,
+    ControlSubgraphKind, ControlVisualSubgraph, OwnedVisualSubgraph,
 };
 
 use crate::render_state::RenderState;
@@ -32,213 +27,91 @@ use crate::theme::DARK_THEME;
 
 // ---- Nodes ----------------------------------------------------------------
 
-/// `ConstBinding` variant.
 pub fn base_const_binding() -> BindingVisualNode {
-    BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_v".to_string(),
-        name: "x".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    }
+    BindingVisualNode::const_binding("n_v", "x", 1)
 }
 
-/// `VarBinding` variant. Mirrors `baseVarBindingNode()`.
 pub fn base_var_binding() -> BindingVisualNode {
-    BindingVisualNode {
-        kind: BindingNodeKind::VarBinding,
-        ..base_const_binding()
-    }
+    BindingVisualNode::var_binding("n_v", "x", 1)
 }
 
-/// `LetBinding` variant. Mirrors `baseLetBindingNode()`.
 pub fn base_let_binding() -> BindingVisualNode {
-    BindingVisualNode {
-        kind: BindingNodeKind::LetBinding,
-        ..base_const_binding()
-    }
+    BindingVisualNode::let_binding("n_v", "x", 1)
 }
 
-/// `WriteReference` synthetic node. Mirrors `baseWriteOpNode()`.
 pub fn base_write_op() -> SyntheticVisualNode {
-    SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_v".to_string(),
-        kind: SyntheticNodeKind::WriteReference,
-        name: "x".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::WriteOp {
-            declaration_kind: None,
-        },
-    }
+    SyntheticVisualNode::write_reference("n_v", "x", 1)
 }
 
-/// Base shape for synthetic kinds with no extras tail. Mirrors the
-/// split between `BindingVisualNode` and `SyntheticVisualNode`; the
-/// binding counterpart is `base_simple_binding` above.
 pub fn base_simple_synthetic(kind: SyntheticNodeKind) -> SyntheticVisualNode {
     SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_v".to_string(),
         kind,
-        name: "x".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
+        ..SyntheticVisualNode::return_argument_reference("n_v", "x", 1)
     }
 }
 
-/// Base shape for binding kinds that carry no extras tail
-/// (FunctionDeclaration / ClassDeclaration / FormalParameter /
-/// CatchParameter / SyntheticImplicitGlobal /
-/// DefaultImportBinding / NamespaceImportBinding).
-///
-/// For Var / Const / Let / NamedImport, prefer the dedicated
-/// constructors below — those carry the correct extras shape.
 pub fn base_simple_binding(kind: BindingNodeKind) -> BindingVisualNode {
     BindingVisualNode {
         kind,
-        extras: BindingExtras::None {},
-        ..base_const_binding()
+        ..BindingVisualNode::formal_parameter("n_v", "x", 1)
     }
 }
 
-/// `NamedImportBinding` with the supplied `importedName`.
 pub fn base_import_binding_named(imported_name: &str) -> BindingVisualNode {
-    BindingVisualNode {
-        kind: BindingNodeKind::NamedImportBinding,
-        extras: BindingExtras::NamedImport {
-            imported_name: imported_name.to_string(),
-        },
-        ..base_const_binding()
-    }
+    BindingVisualNode::named_import_binding("n_v", "x", imported_name, 1)
 }
 
-/// `DefaultImportBinding`. Mirrors `baseImportBindingDefault()`.
 pub fn base_import_binding_default() -> BindingVisualNode {
-    base_simple_binding(BindingNodeKind::DefaultImportBinding)
+    BindingVisualNode::default_import_binding("n_v", "x", 1)
 }
 
-/// `NamespaceImportBinding`. Mirrors `baseImportBindingNamespace()`.
 pub fn base_import_binding_namespace() -> BindingVisualNode {
-    base_simple_binding(BindingNodeKind::NamespaceImportBinding)
+    BindingVisualNode::namespace_import_binding("n_v", "x", 1)
 }
 
 // ---- Subgraphs ------------------------------------------------------------
 
-/// `Function` subgraph (owned shape).
 pub fn base_function_subgraph() -> OwnedVisualSubgraph {
-    OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_x".to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_owner".to_string()),
-            owner_name: "owner".to_string(),
-        },
-        elements: Vec::new(),
-    }
+    OwnedVisualSubgraph::function(
+        "s_x",
+        1,
+        Some("n_owner".to_string()),
+        "owner",
+        Vec::new(),
+        Direction::RL,
+    )
 }
 
-/// `Case` subgraph (control shape) with `caseTest: null`.
 pub fn base_case_subgraph() -> ControlVisualSubgraph {
-    ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_x".to_string(),
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::Case,
-        extras: ControlExtras::Case { case_test: None },
-    }
+    ControlVisualSubgraph::case("s_x", 1, None, Vec::new(), Direction::RL)
 }
 
-/// `Class` subgraph (owned shape) with `className: null`.
 pub fn base_class_subgraph() -> OwnedVisualSubgraph {
-    OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_x".to_string(),
-        kind: OwnedSubgraphKind::Class,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::Class { class_name: None },
-        elements: Vec::new(),
-    }
+    OwnedVisualSubgraph::class("s_x", 1, None, Vec::new(), Direction::RL)
 }
 
-/// `IfElseContainer` subgraph (owned shape) with `hasElse: false`.
 pub fn base_if_else_container_subgraph() -> OwnedVisualSubgraph {
-    OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_x".to_string(),
-        kind: OwnedSubgraphKind::IfElseContainer,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::IfElseContainer { has_else: false },
-        elements: Vec::new(),
-    }
+    OwnedVisualSubgraph::if_else_container("s_x", 1, false, Vec::new(), Direction::RL)
 }
 
-/// Subgraphs whose shape uses the "control" field order (elements
-/// before kind) and no extras tail — `Switch` / `If` / `Else` /
-/// `Try` / `Catch` / `Finally` / `For` / `While` / `DoWhile` /
-/// `Block`. Mirrors `basePlainSubgraph(kind)`.
 pub fn base_plain_subgraph(kind: ControlSubgraphKind) -> ControlVisualSubgraph {
     ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_x".to_string(),
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        elements: Vec::new(),
         kind,
-        extras: ControlExtras::None {},
+        ..ControlVisualSubgraph::block("s_x", 1, Vec::new(), Direction::RL)
     }
 }
 
 // ---- Edges / Graphs ------------------------------------------------------
 
-/// Mirrors `baseEdge()`.
-pub fn base_edge() -> VisualEdge {
-    VisualEdge {
-        from: "a".to_string(),
-        to: "b".to_string(),
-        label: "read".to_string(),
-    }
-}
-
-/// Mirrors `baseGraph()` — empty `elements` / `edges` / `boundary_edges`
-/// with `pruning = None`, language Ts, direction RL.
 pub fn base_graph() -> VisualGraph {
-    VisualGraph {
-        version: SERIALIZED_IR_VERSION,
-        source: VisualGraphSource {
-            path: "input.ts".to_string(),
-            language: Language::Ts,
-        },
-        direction: Direction::RL,
-        elements: Vec::new(),
-        edges: Vec::new(),
-        boundary_edges: Vec::new(),
-        pruning: None,
-    }
+    VisualGraph::new(
+        "input.ts",
+        Language::Ts,
+        Direction::RL,
+        Vec::new(),
+        Vec::new(),
+        Vec::new(),
+    )
 }
 
 // ---- RenderState ---------------------------------------------------------

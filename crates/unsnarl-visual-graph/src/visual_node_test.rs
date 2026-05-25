@@ -11,19 +11,7 @@ use crate::visual_element::VisualElement;
 
 #[test]
 fn binding_shape_orders_kind_after_common_fields() {
-    let node = BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_scope_0_a_15".to_string(),
-        name: "a".to_string(),
-        line: 2,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    };
+    let node = BindingVisualNode::const_binding("n_scope_0_a_15", "a", 2);
     let text = serde_json::to_string_pretty(&node).expect("serialize");
     assert_eq!(
         text,
@@ -43,17 +31,7 @@ fn binding_shape_orders_kind_after_common_fields() {
 
 #[test]
 fn binding_shape_with_no_extras_emits_just_kind() {
-    let node = BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_scope_0_compute_81".to_string(),
-        name: "compute".to_string(),
-        line: 7,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::FunctionDeclaration,
-        extras: BindingExtras::None {},
-    };
+    let node = BindingVisualNode::function_declaration("n_scope_0_compute_81", "compute", 7);
     let value: serde_json::Value =
         serde_json::from_str(&serde_json::to_string(&node).expect("serialize")).expect("json");
     assert_eq!(value["kind"], "FunctionDeclaration");
@@ -63,19 +41,8 @@ fn binding_shape_with_no_extras_emits_just_kind() {
 
 #[test]
 fn binding_shape_named_import_carries_imported_name() {
-    let node = BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_scope_0_renamed_0".to_string(),
-        name: "renamed".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::NamedImportBinding,
-        extras: BindingExtras::NamedImport {
-            imported_name: "other".to_string(),
-        },
-    };
+    let node =
+        BindingVisualNode::named_import_binding("n_scope_0_renamed_0", "renamed", "other", 1);
     let value: serde_json::Value =
         serde_json::from_str(&serde_json::to_string(&node).expect("serialize")).expect("json");
     assert_eq!(value["importedName"], "other");
@@ -84,15 +51,8 @@ fn binding_shape_named_import_carries_imported_name() {
 #[test]
 fn synthetic_shape_orders_kind_immediately_after_id() {
     let node = SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "expr_stmt_571".to_string(),
-        kind: SyntheticNodeKind::SyntheticExpressionStatement,
-        name: "console.log()".to_string(),
-        line: 23,
         end_line: Some(41),
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
+        ..SyntheticVisualNode::expression_statement("expr_stmt_571", "console.log()", 23)
     };
     let text = serde_json::to_string_pretty(&node).expect("serialize");
     assert_eq!(
@@ -113,17 +73,10 @@ fn synthetic_shape_orders_kind_immediately_after_id() {
 #[test]
 fn synthetic_write_op_carries_declaration_kind_after_unused() {
     let node = SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "wr_ref_3".to_string(),
-        kind: SyntheticNodeKind::WriteReference,
-        name: "label".to_string(),
-        line: 5,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
         extras: SyntheticExtras::WriteOp {
             declaration_kind: Some(VariableDeclarationKind::Let),
         },
+        ..SyntheticVisualNode::write_reference("wr_ref_3", "label", 5)
     };
     let value: serde_json::Value =
         serde_json::from_str(&serde_json::to_string(&node).expect("serialize")).expect("json");
@@ -133,19 +86,8 @@ fn synthetic_write_op_carries_declaration_kind_after_unused() {
 
 #[test]
 fn untagged_visual_node_enum_round_trips_via_serde_json() {
-    let element = VisualElement::Node(VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_x".to_string(),
-        name: "x".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    }));
+    let element: VisualElement =
+        VisualNode::from(BindingVisualNode::const_binding("n_x", "x", 1)).into();
     let value: serde_json::Value =
         serde_json::from_str(&serde_json::to_string(&element).expect("serialize")).expect("json");
     assert_eq!(value["type"], "node");
@@ -154,17 +96,11 @@ fn untagged_visual_node_enum_round_trips_via_serde_json() {
 
 #[test]
 fn end_line_serializes_as_null_when_none() {
-    let element = VisualElement::Node(VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "if_test_scope_3_107".to_string(),
-        kind: SyntheticNodeKind::SyntheticIfStatementTest,
-        name: "if-test".to_string(),
-        line: 6,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    }));
+    let element: VisualElement = VisualNode::from(SyntheticVisualNode::if_statement_test(
+        "if_test_scope_3_107",
+        6,
+    ))
+    .into();
     let text = serde_json::to_string(&element).expect("serialize");
     assert!(
         text.contains(r#""endLine":null"#),
@@ -174,17 +110,8 @@ fn end_line_serializes_as_null_when_none() {
 
 #[test]
 fn empty_extras_dict_does_not_appear_in_output() {
-    let element = VisualElement::Node(VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: "n_param".to_string(),
-        name: "p".to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::FormalParameter,
-        extras: BindingExtras::None {},
-    }));
+    let element: VisualElement =
+        VisualNode::from(BindingVisualNode::formal_parameter("n_param", "p", 1)).into();
     let text = serde_json::to_string(&element).expect("serialize");
     assert!(
         !text.contains("{}"),

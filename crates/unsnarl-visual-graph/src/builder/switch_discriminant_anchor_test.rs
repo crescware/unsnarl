@@ -10,23 +10,13 @@ use crate::builder::state::{BuildState, LoopTestAnchorPosition};
 use crate::builder::switch_discriminant_anchor::attach_switch_discriminant_anchor;
 use crate::builder::testing::{base_serialized_scope, scope_id};
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
 use crate::visual_node::{SyntheticNodeKind, SyntheticVisualNode, VisualNode};
-use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, VisualSubgraph,
-};
+use crate::visual_subgraph::ControlVisualSubgraph;
 
 fn switch_subgraph_idx(arena: &mut BuildArena) -> SubgraphIdx {
-    arena.push_subgraph(VisualSubgraph::Control(ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_switch".to_string(),
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind: ControlSubgraphKind::Switch,
-        extras: ControlExtras::None {},
-    }))
+    arena.push_subgraph(
+        ControlVisualSubgraph::switch("s_switch", 1, Vec::new(), Direction::RL).into(),
+    )
 }
 
 fn pending_synthetic_node<'a>(

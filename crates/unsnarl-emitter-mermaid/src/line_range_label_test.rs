@@ -1,14 +1,15 @@
-use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
+use unsnarl_visual_graph::visual_subgraph::{OwnedVisualSubgraph, VisualSubgraph};
 
 use super::line_range_label;
 use crate::testing::base_function_subgraph;
 
 fn subgraph(line: u32, end_line: Option<u32>) -> VisualSubgraph {
-    VisualSubgraph::Owned(unsnarl_visual_graph::visual_subgraph::OwnedVisualSubgraph {
+    OwnedVisualSubgraph {
         line,
         end_line,
         ..base_function_subgraph()
-    })
+    }
+    .into()
 }
 
 #[test]

@@ -1,6 +1,6 @@
 use unsnarl_visual_graph::visual_node::{BindingNodeKind, BindingVisualNode, VisualNode};
 use unsnarl_visual_graph::visual_subgraph::{
-    ControlSubgraphKind, OwnedExtras, OwnedVisualSubgraph, VisualSubgraph,
+    ControlSubgraphKind, ControlVisualSubgraph, OwnedExtras, OwnedVisualSubgraph, VisualSubgraph,
 };
 
 use super::emit_subgraph;
@@ -9,23 +9,24 @@ use crate::testing::{
 };
 
 fn function_owner() -> VisualNode {
-    VisualNode::Binding(BindingVisualNode {
+    BindingVisualNode {
         id: "n_owner".to_string(),
         name: "f".to_string(),
         ..base_simple_binding(BindingNodeKind::FunctionDeclaration)
-    })
+    }
+    .into()
 }
 
 fn function_subgraph(id: &str, owner_node_id: Option<&str>) -> VisualSubgraph {
-    let sg = OwnedVisualSubgraph {
+    OwnedVisualSubgraph {
         id: id.to_string(),
         extras: OwnedExtras::Function {
             owner_node_id: owner_node_id.map(str::to_string),
             owner_name: "f".to_string(),
         },
         ..base_function_subgraph()
-    };
-    VisualSubgraph::Owned(sg)
+    }
+    .into()
 }
 
 #[test]
@@ -54,12 +55,11 @@ fn function_without_an_owner_node_in_the_map_falls_back_to_plain_emission() {
 #[test]
 fn non_function_subgraphs_are_emitted_plainly_without_a_wrapper() {
     let mut state = base_render_state();
-    let sg = VisualSubgraph::Control(
-        unsnarl_visual_graph::visual_subgraph::ControlVisualSubgraph {
-            id: "s_if".to_string(),
-            ..base_plain_subgraph(ControlSubgraphKind::If)
-        },
-    );
+    let sg: VisualSubgraph = ControlVisualSubgraph {
+        id: "s_if".to_string(),
+        ..base_plain_subgraph(ControlSubgraphKind::If)
+    }
+    .into();
     emit_subgraph(&mut state, &sg, "  ", 1);
     assert!(state
         .lines
@@ -109,12 +109,11 @@ fn the_owner_node_line_appears_inside_the_wrapper_before_the_function_body_subgr
 #[test]
 fn non_function_subgraphs_occupy_a_palette_slot_at_the_supplied_depth() {
     let mut state = base_render_state();
-    let sg = VisualSubgraph::Control(
-        unsnarl_visual_graph::visual_subgraph::ControlVisualSubgraph {
-            id: "s_if".to_string(),
-            ..base_plain_subgraph(ControlSubgraphKind::If)
-        },
-    );
+    let sg: VisualSubgraph = ControlVisualSubgraph {
+        id: "s_if".to_string(),
+        ..base_plain_subgraph(ControlSubgraphKind::If)
+    }
+    .into();
     emit_subgraph(&mut state, &sg, "  ", 3);
     assert_eq!(
         state.nest_class_map.get(&2),

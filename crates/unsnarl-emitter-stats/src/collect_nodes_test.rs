@@ -4,46 +4,28 @@
 
 use unsnarl_visual_graph::direction::Direction;
 use unsnarl_visual_graph::visual_element::VisualElement;
-use unsnarl_visual_graph::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use unsnarl_visual_graph::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, VisualNode,
-};
-use unsnarl_visual_graph::visual_subgraph::{
-    OwnedExtras, OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph,
-};
+use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
+use unsnarl_visual_graph::visual_subgraph::OwnedVisualSubgraph;
 
 use super::collect_nodes;
 
 fn node(id: &str, line: u32) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        name: id.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    }))
+    VisualElement::from(VisualNode::from(BindingVisualNode::const_binding(
+        id, id, line,
+    )))
 }
 
 fn sg(id: &str, elements: Vec<VisualElement>) -> VisualElement {
-    VisualElement::Subgraph(VisualSubgraph::Owned(OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
-        end_line: None,
-        direction: Direction::TB,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_owner".to_string()),
-            owner_name: "owner".to_string(),
-        },
-        elements,
-    }))
+    VisualElement::from(unsnarl_visual_graph::visual_subgraph::VisualSubgraph::from(
+        OwnedVisualSubgraph::function(
+            id,
+            1,
+            Some("n_owner".to_string()),
+            "owner",
+            elements,
+            Direction::TB,
+        ),
+    ))
 }
 
 fn ids(out: &[&VisualNode]) -> Vec<String> {

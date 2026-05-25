@@ -7,9 +7,8 @@
 use unsnarl_ir::serialized::{SerializedCompletion, SerializedReference};
 
 use crate::direction::Direction;
-use crate::visual_element_type::{NodeTypeTag, SubgraphTypeTag};
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode, VisualNode};
-use crate::visual_subgraph::{OwnedExtras, OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};
+use crate::visual_node::SyntheticVisualNode;
+use crate::visual_subgraph::OwnedVisualSubgraph;
 
 use super::arena::{BuildArena, Container, ElementHandle};
 use super::context::BuilderContext;
@@ -48,16 +47,14 @@ pub fn ensure_throw_use_node(
         } else {
             None
         };
-        let descriptor = VisualSubgraph::Owned(OwnedVisualSubgraph {
-            r#type: SubgraphTypeTag::Subgraph,
-            id: throw_subgraph_id(enclosing_fn_var_id, &container_key),
-            kind: OwnedSubgraphKind::Throw,
-            line: start_line,
-            end_line,
-            direction: Direction::RL,
-            extras: OwnedExtras::None {},
-            elements: Vec::new(),
-        });
+        let mut sg = OwnedVisualSubgraph::throw_subgraph(
+            throw_subgraph_id(enclosing_fn_var_id, &container_key),
+            start_line,
+            Vec::new(),
+            Direction::RL,
+        );
+        sg.end_line = end_line;
+        let descriptor = sg.into();
         let idx = arena.push_subgraph(descriptor);
         arena.append_child(Container::Subgraph(host), ElementHandle::Subgraph(idx));
         state
@@ -83,17 +80,10 @@ pub fn ensure_throw_use_node(
             Some(line) if line != start_line => Some(line),
             _ => None,
         };
-        let node = VisualNode::Synthetic(SyntheticVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: id.clone(),
-            kind: SyntheticNodeKind::ThrowArgumentReference,
-            name,
-            line: start_line,
-            end_line,
-            is_jsx_element: r.jsx_element.is_some(),
-            unused: false,
-            extras: SyntheticExtras::None {},
-        });
+        let mut n = SyntheticVisualNode::throw_argument_reference(id.clone(), name, start_line);
+        n.end_line = end_line;
+        n.is_jsx_element = r.jsx_element.is_some();
+        let node = n.into();
         let node_idx = arena.push_node(node);
         arena.append_child(Container::Subgraph(sg_idx), ElementHandle::Node(node_idx));
         state

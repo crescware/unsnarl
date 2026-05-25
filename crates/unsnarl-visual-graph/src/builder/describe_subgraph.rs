@@ -12,10 +12,8 @@ use unsnarl_ir::scope::block_context::BlockContext;
 use unsnarl_ir::serialized::{SerializedScope, SerializedVariable};
 
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
 use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedExtras, OwnedSubgraphKind,
-    OwnedVisualSubgraph, VisualSubgraph,
+    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedVisualSubgraph, VisualSubgraph,
 };
 
 use super::control_subgraph_kind_of::control_subgraph_kind_of;
@@ -43,19 +41,16 @@ pub fn describe_subgraph(
             .unwrap_or_else(|| scope.block.span.line.0);
         let owner_node_id = owner_var_id.as_ref().map(|v| node_id(v));
         let owner_name = owner_var.map(|v| v.name().to_string()).unwrap_or_default();
-        return VisualSubgraph::Owned(OwnedVisualSubgraph {
-            r#type: SubgraphTypeTag::Subgraph,
+        let mut sg = OwnedVisualSubgraph::function(
             id,
-            kind: OwnedSubgraphKind::Function,
-            line: start_line,
-            end_line,
-            direction: Direction::RL,
-            extras: OwnedExtras::Function {
-                owner_node_id,
-                owner_name,
-            },
-            elements: Vec::new(),
-        });
+            start_line,
+            owner_node_id,
+            owner_name,
+            Vec::new(),
+            Direction::RL,
+        );
+        sg.end_line = end_line;
+        return sg.into();
     }
 
     if is_class_subgraph(scope) {
@@ -68,18 +63,15 @@ pub fn describe_subgraph(
             .first()
             .and_then(|id| variable_map.get(id.value()).copied())
             .map(|v| v.name().to_string());
-        return VisualSubgraph::Owned(OwnedVisualSubgraph {
-            r#type: SubgraphTypeTag::Subgraph,
+        let mut sg = OwnedVisualSubgraph::class(
             id,
-            kind: OwnedSubgraphKind::Class,
-            line: scope.block.span.line.0,
-            end_line,
-            direction: Direction::RL,
-            extras: OwnedExtras::Class {
-                class_name: inner_name,
-            },
-            elements: Vec::new(),
-        });
+            scope.block.span.line.0,
+            inner_name,
+            Vec::new(),
+            Direction::RL,
+        );
+        sg.end_line = end_line;
+        return sg.into();
     }
 
     let kind = control_subgraph_kind_of(scope)
@@ -96,16 +88,13 @@ pub fn describe_subgraph(
         _ => ControlExtras::None {},
     };
 
-    VisualSubgraph::Control(ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id,
-        line: scope.block.span.line.0,
-        end_line,
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind,
+    let mut sg = ControlVisualSubgraph {
         extras,
-    })
+        ..ControlVisualSubgraph::block(id, scope.block.span.line.0, Vec::new(), Direction::RL)
+    };
+    sg.kind = kind;
+    sg.end_line = end_line;
+    sg.into()
 }
 
 #[cfg(test)]

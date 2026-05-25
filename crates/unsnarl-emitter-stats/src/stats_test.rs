@@ -7,42 +7,24 @@
 
 use unsnarl_emitter::Emitter;
 use unsnarl_ir::language::Language;
-use unsnarl_ir::serialized::serialized_ir::SerializedIrVersion;
 use unsnarl_visual_graph::boundary_edge_direction::BoundaryEdgeDirectionOut;
 use unsnarl_visual_graph::direction::Direction;
 use unsnarl_visual_graph::visual_boundary_edge::VisualBoundaryEdge;
 use unsnarl_visual_graph::visual_edge::VisualEdge;
 use unsnarl_visual_graph::visual_element::VisualElement;
-use unsnarl_visual_graph::visual_element_type::NodeTypeTag;
-use unsnarl_visual_graph::visual_graph::{VisualGraph, VisualGraphSource};
-use unsnarl_visual_graph::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, VisualNode,
-};
+use unsnarl_visual_graph::visual_graph::VisualGraph;
+use unsnarl_visual_graph::visual_node::BindingVisualNode;
 
 use super::{render_stats, StatsEmitter};
 
 fn node(id: &str, name: &str, line: u32, unused: bool) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    }))
+    let mut n = BindingVisualNode::const_binding(id, name, line);
+    n.unused = unused;
+    VisualElement::from(unsnarl_visual_graph::visual_node::VisualNode::from(n))
 }
 
 fn edge(from: &str, to: &str) -> VisualEdge {
-    VisualEdge {
-        from: from.to_string(),
-        to: to.to_string(),
-        label: "read".to_string(),
-    }
+    VisualEdge::new(from, to, "read")
 }
 
 fn graph(
@@ -50,18 +32,14 @@ fn graph(
     edges: Vec<VisualEdge>,
     boundary_edges: Vec<VisualBoundaryEdge>,
 ) -> VisualGraph {
-    VisualGraph {
-        version: SerializedIrVersion(1),
-        source: VisualGraphSource {
-            path: "x.ts".to_string(),
-            language: Language::Ts,
-        },
-        direction: Direction::TB,
+    VisualGraph::new(
+        "x.ts",
+        Language::Ts,
+        Direction::TB,
         elements,
         edges,
         boundary_edges,
-        pruning: None,
-    }
+    )
 }
 
 #[test]

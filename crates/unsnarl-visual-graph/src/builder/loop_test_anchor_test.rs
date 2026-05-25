@@ -13,23 +13,23 @@ use crate::builder::loop_test_anchor::attach_loop_test_anchor;
 use crate::builder::state::{BuildState, LoopTestAnchorPosition};
 use crate::builder::testing::{base_serialized_scope, other_block_context, scope_id};
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
 use crate::visual_node::{SyntheticNodeKind, SyntheticVisualNode, VisualNode};
-use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, VisualSubgraph,
-};
+use crate::visual_subgraph::{ControlSubgraphKind, ControlVisualSubgraph};
 
 fn body_subgraph_idx(arena: &mut BuildArena, kind: ControlSubgraphKind) -> SubgraphIdx {
-    arena.push_subgraph(VisualSubgraph::Control(ControlVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: "s_body".to_string(),
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        elements: Vec::new(),
-        kind,
-        extras: ControlExtras::None {},
-    }))
+    let sg = match kind {
+        ControlSubgraphKind::For => {
+            ControlVisualSubgraph::for_subgraph("s_body", 1, Vec::new(), Direction::RL)
+        }
+        ControlSubgraphKind::While => {
+            ControlVisualSubgraph::while_subgraph("s_body", 1, Vec::new(), Direction::RL)
+        }
+        ControlSubgraphKind::DoWhile => {
+            ControlVisualSubgraph::do_while("s_body", 1, Vec::new(), Direction::RL)
+        }
+        _ => ControlVisualSubgraph::block("s_body", 1, Vec::new(), Direction::RL),
+    };
+    arena.push_subgraph(sg.into())
 }
 
 fn pending_synthetic_node<'a>(

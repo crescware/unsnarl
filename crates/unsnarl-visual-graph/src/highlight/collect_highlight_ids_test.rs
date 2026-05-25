@@ -1,79 +1,34 @@
 use super::*;
 
 use unsnarl_ir::language::Language;
-use unsnarl_ir::serialized::serialized_ir::SERIALIZED_IR_VERSION;
 use unsnarl_ir::SourceLine;
 
 use crate::direction::Direction;
-use crate::visual_boundary_edge::VisualBoundaryEdge;
-use crate::visual_edge::VisualEdge;
 use crate::visual_element::VisualElement;
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_graph::{VisualGraph, VisualGraphSource};
-use crate::visual_node::{
-    BindingExtras, BindingNodeKind, BindingVisualNode, SyntheticExtras, SyntheticNodeKind,
-    SyntheticVisualNode, VisualNode,
-};
+use crate::visual_graph::VisualGraph;
+use crate::visual_node::{BindingVisualNode, SyntheticVisualNode, VisualNode};
 
 fn variable_node(id: &str, name: &str, line: u32) -> VisualNode {
-    VisualNode::Binding(BindingVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        kind: BindingNodeKind::ConstBinding,
-        extras: BindingExtras::Variable {
-            init_is_function: false,
-        },
-    })
+    BindingVisualNode::const_binding(id, name, line).into()
 }
 
 fn return_use_node(id: &str, name: &str, line: u32) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        kind: SyntheticNodeKind::ReturnArgumentReference,
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    })
+    SyntheticVisualNode::return_argument_reference(id, name, line).into()
 }
 
 fn write_op_node(id: &str, name: &str, line: u32) -> VisualNode {
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        kind: SyntheticNodeKind::WriteReference,
-        name: name.to_string(),
-        line,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::WriteOp {
-            declaration_kind: None,
-        },
-    })
+    SyntheticVisualNode::write_reference(id, name, line).into()
 }
 
 fn graph_of(nodes: Vec<VisualNode>) -> VisualGraph {
-    VisualGraph {
-        version: SERIALIZED_IR_VERSION,
-        source: VisualGraphSource {
-            path: "x.ts".to_string(),
-            language: Language::Ts,
-        },
-        direction: Direction::RL,
-        elements: nodes.into_iter().map(VisualElement::Node).collect(),
-        edges: Vec::<VisualEdge>::new(),
-        boundary_edges: Vec::<VisualBoundaryEdge>::new(),
-        pruning: None,
-    }
+    VisualGraph::new(
+        "x.ts",
+        Language::Ts,
+        Direction::RL,
+        nodes.into_iter().map(VisualElement::Node).collect(),
+        Vec::new(),
+        Vec::new(),
+    )
 }
 
 #[test]

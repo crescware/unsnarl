@@ -6,7 +6,6 @@
 use unsnarl_ir::serialized::{SerializedDefinition, SerializedVariable, SimpleDefType};
 use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
-use crate::visual_element_type::NodeTypeTag;
 use crate::visual_node::{BindingExtras, BindingNodeKind, BindingVisualNode, VisualNode};
 
 pub fn make_variable_node(v: &SerializedVariable) -> VisualNode {
@@ -31,58 +30,46 @@ pub fn make_variable_node(v: &SerializedVariable) -> VisualNode {
             .unwrap_or_else(|| name_span_line(def))
     };
 
-    let common = |kind: BindingNodeKind, extras: BindingExtras| -> VisualNode {
-        VisualNode::Binding(BindingVisualNode {
-            r#type: NodeTypeTag::Node,
-            id: super::node_id::node_id(v.id.value()),
-            name: v.name().to_string(),
-            line,
-            end_line: None,
-            is_jsx_element: false,
-            unused: false,
-            kind,
-            extras,
-        })
-    };
+    let id = super::node_id::node_id(v.id.value());
+    let name = v.name().to_string();
 
-    match def {
-        SerializedDefinition::ImportBindingNamed(d) => common(
-            BindingNodeKind::NamedImportBinding,
-            BindingExtras::NamedImport {
-                imported_name: d.imported_name().to_string(),
-            },
-        ),
-        SerializedDefinition::ImportBindingDefault(_) => common(
-            BindingNodeKind::DefaultImportBinding,
-            BindingExtras::None {},
-        ),
-        SerializedDefinition::ImportBindingNamespace(_) => common(
-            BindingNodeKind::NamespaceImportBinding,
-            BindingExtras::None {},
-        ),
+    let node = match def {
+        SerializedDefinition::ImportBindingNamed(d) => {
+            BindingVisualNode::named_import_binding(id, name, d.imported_name().to_string(), line)
+        }
+        SerializedDefinition::ImportBindingDefault(_) => {
+            BindingVisualNode::default_import_binding(id, name, line)
+        }
+        SerializedDefinition::ImportBindingNamespace(_) => {
+            BindingVisualNode::namespace_import_binding(id, name, line)
+        }
         SerializedDefinition::Variable(d) => {
             let init_is_function = matches!(
                 d.init().map(|n| &n.r#type),
                 Some(AstType::ArrowFunctionExpression) | Some(AstType::FunctionExpression)
             );
-            let kind = match d.declaration_kind() {
-                VariableDeclarationKind::Const => BindingNodeKind::ConstBinding,
-                VariableDeclarationKind::Let => BindingNodeKind::LetBinding,
-                VariableDeclarationKind::Var => BindingNodeKind::VarBinding,
+            let mut n = match d.declaration_kind() {
+                VariableDeclarationKind::Const => {
+                    BindingVisualNode::const_binding(&id, &name, line)
+                }
+                VariableDeclarationKind::Let => BindingVisualNode::let_binding(&id, &name, line),
+                VariableDeclarationKind::Var => BindingVisualNode::var_binding(&id, &name, line),
             };
-            common(kind, BindingExtras::Variable { init_is_function })
+            n.extras = BindingExtras::Variable { init_is_function };
+            n
         }
-        SerializedDefinition::Simple(s) => {
-            let kind = match s.r#type {
-                SimpleDefType::FunctionName => BindingNodeKind::FunctionDeclaration,
-                SimpleDefType::ClassName => BindingNodeKind::ClassDeclaration,
-                SimpleDefType::Parameter => BindingNodeKind::FormalParameter,
-                SimpleDefType::CatchClause => BindingNodeKind::CatchParameter,
-                SimpleDefType::ImplicitGlobalVariable => BindingNodeKind::SyntheticImplicitGlobal,
-            };
-            common(kind, BindingExtras::None {})
-        }
-    }
+        SerializedDefinition::Simple(s) => match s.r#type {
+            SimpleDefType::FunctionName => BindingVisualNode::function_declaration(id, name, line),
+            SimpleDefType::ClassName => BindingVisualNode::class_declaration(id, name, line),
+            SimpleDefType::Parameter => BindingVisualNode::formal_parameter(id, name, line),
+            SimpleDefType::CatchClause => BindingVisualNode::catch_parameter(id, name, line),
+            SimpleDefType::ImplicitGlobalVariable => BindingVisualNode {
+                kind: BindingNodeKind::SyntheticImplicitGlobal,
+                ..BindingVisualNode::formal_parameter(id, name, line)
+            },
+        },
+    };
+    node.into()
 }
 
 fn name_span_line(def: &SerializedDefinition) -> u32 {

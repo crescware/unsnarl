@@ -8,25 +8,27 @@ use super::collect_nodes_into;
 use crate::testing::{base_const_binding, base_function_subgraph};
 
 fn node(id: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+    VisualNode::from(BindingVisualNode {
         id: id.to_string(),
         ..base_const_binding()
-    }))
+    })
+    .into()
 }
 
 fn node_named(id: &str, name: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+    VisualNode::from(BindingVisualNode {
         id: id.to_string(),
         name: name.to_string(),
         ..base_const_binding()
-    }))
+    })
+    .into()
 }
 
 fn subgraph(id: &str, elements: Vec<VisualElement>) -> VisualElement {
     let mut sg = base_function_subgraph();
     sg.id = id.to_string();
     sg.elements = elements;
-    VisualElement::Subgraph(VisualSubgraph::Owned(sg))
+    VisualSubgraph::from(sg).into()
 }
 
 #[test]

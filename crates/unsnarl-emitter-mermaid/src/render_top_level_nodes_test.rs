@@ -2,7 +2,7 @@ use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_node::{
     BindingVisualNode, SyntheticNodeKind, SyntheticVisualNode, VisualNode,
 };
-use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
+use unsnarl_visual_graph::visual_subgraph::{OwnedVisualSubgraph, VisualSubgraph};
 
 use super::render_top_level_nodes;
 use crate::testing::{
@@ -13,17 +13,19 @@ use crate::testing::{
 const MODULE_ROOT_ID: &str = "module_root";
 
 fn synthetic(id: &str, kind: SyntheticNodeKind) -> VisualElement {
-    VisualElement::Node(VisualNode::Synthetic(SyntheticVisualNode {
+    VisualNode::from(SyntheticVisualNode {
         id: id.to_string(),
         ..base_simple_synthetic(kind)
-    }))
+    })
+    .into()
 }
 
 fn binding(id: &str) -> VisualElement {
-    VisualElement::Node(VisualNode::Binding(BindingVisualNode {
+    VisualNode::from(BindingVisualNode {
         id: id.to_string(),
         ..base_const_binding()
-    }))
+    })
+    .into()
 }
 
 #[test]
@@ -74,12 +76,11 @@ fn ignores_top_level_subgraph_elements() {
     let mut state = base_render_state();
     let mut g = base_graph();
     let sg = base_function_subgraph();
-    g.elements = vec![VisualElement::Subgraph(VisualSubgraph::Owned(
-        unsnarl_visual_graph::visual_subgraph::OwnedVisualSubgraph {
-            id: "sg".to_string(),
-            ..sg
-        },
-    ))];
+    g.elements = vec![VisualSubgraph::from(OwnedVisualSubgraph {
+        id: "sg".to_string(),
+        ..sg
+    })
+    .into()];
     render_top_level_nodes(&mut state, &g);
     assert!(state.lines.is_empty());
 }

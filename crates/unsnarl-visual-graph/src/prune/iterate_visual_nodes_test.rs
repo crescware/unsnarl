@@ -1,23 +1,12 @@
 use super::*;
 
 use crate::prune::test_helpers::{const_binding_node, function_subgraph};
-use crate::visual_element_type::NodeTypeTag;
-use crate::visual_node::{SyntheticExtras, SyntheticNodeKind, SyntheticVisualNode};
+use crate::visual_node::SyntheticVisualNode;
 
 fn non_candidate_node(id: &str) -> VisualNode {
     // SyntheticBeyondDepth is not in ROOT_CANDIDATE_KINDS, so it
     // must not be yielded.
-    VisualNode::Synthetic(SyntheticVisualNode {
-        r#type: NodeTypeTag::Node,
-        id: id.to_string(),
-        kind: SyntheticNodeKind::SyntheticBeyondDepth,
-        name: id.to_string(),
-        line: 1,
-        end_line: None,
-        is_jsx_element: false,
-        unused: false,
-        extras: SyntheticExtras::None {},
-    })
+    SyntheticVisualNode::beyond_depth(id, 1).into()
 }
 
 #[test]

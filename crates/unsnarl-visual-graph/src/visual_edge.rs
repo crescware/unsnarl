@@ -8,3 +8,13 @@ pub struct VisualEdge {
     pub to: String,
     pub label: String,
 }
+
+impl VisualEdge {
+    pub fn new(from: impl Into<String>, to: impl Into<String>, label: impl Into<String>) -> Self {
+        Self {
+            from: from.into(),
+            to: to.into(),
+            label: label.into(),
+        }
+    }
+}

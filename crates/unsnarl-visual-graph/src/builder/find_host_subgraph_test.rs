@@ -11,23 +11,20 @@ use crate::builder::find_host_subgraph::find_host_subgraph;
 use crate::builder::state::BuildState;
 use crate::builder::testing::{base_serialized_reference, base_serialized_scope, scope_id};
 use crate::direction::Direction;
-use crate::visual_element_type::SubgraphTypeTag;
-use crate::visual_subgraph::{OwnedExtras, OwnedSubgraphKind, OwnedVisualSubgraph, VisualSubgraph};
+use crate::visual_subgraph::OwnedVisualSubgraph;
 
 fn push_function_subgraph(arena: &mut BuildArena, id: &str) -> SubgraphIdx {
-    arena.push_subgraph(VisualSubgraph::Owned(OwnedVisualSubgraph {
-        r#type: SubgraphTypeTag::Subgraph,
-        id: id.to_string(),
-        kind: OwnedSubgraphKind::Function,
-        line: 1,
-        end_line: None,
-        direction: Direction::RL,
-        extras: OwnedExtras::Function {
-            owner_node_id: Some("n_owner".to_string()),
-            owner_name: "owner".to_string(),
-        },
-        elements: Vec::new(),
-    }))
+    arena.push_subgraph(
+        OwnedVisualSubgraph::function(
+            id,
+            1,
+            Some("n_owner".to_string()),
+            "owner",
+            Vec::new(),
+            Direction::RL,
+        )
+        .into(),
+    )
 }
 
 fn build_scope_chain() -> [SerializedScope; 3] {
