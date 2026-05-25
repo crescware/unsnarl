@@ -2,7 +2,8 @@ use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::BlockContext;
 use unsnarl_oxc_parity::AstType;
 
-use crate::testing::{ast_node, entry};
+use crate::path_entry::PathEntry;
+use crate::testing::ast_node;
 
 use super::block_context_of;
 
@@ -69,9 +70,9 @@ fn includes_if_chain_root_offset_when_path_indicates_else_if_chain() {
     let outer = ast_node_with_end(AstType::IfStatement, 5, 100);
     let inner = ast_node_with_end(AstType::IfStatement, 40, 80);
     let path = vec![
-        entry(ast_node(AstType::Program, 0), None),
-        entry(outer, Some("body")),
-        entry(inner.clone(), Some("alternate")),
+        PathEntry::new(ast_node(AstType::Program, 0), None),
+        PathEntry::new(outer, Some("body")),
+        PathEntry::new(inner.clone(), Some("alternate")),
     ];
     // Pad to >= 100 bytes of ASCII so the byte offsets pre-converted
     // through `span_from_offset` are in-range and map 1:1 to UTF-16.
@@ -138,9 +139,9 @@ fn if_chain_root_offset_is_in_utf16_code_units_when_source_contains_non_ascii() 
     let outer = ast_node_with_end(AstType::IfStatement, 7, 200);
     let inner = ast_node_with_end(AstType::IfStatement, 22, 100);
     let path = vec![
-        entry(crate::testing::ast_node(AstType::Program, 0), None),
-        entry(outer, Some("body")),
-        entry(inner.clone(), Some("alternate")),
+        PathEntry::new(crate::testing::ast_node(AstType::Program, 0), None),
+        PathEntry::new(outer, Some("body")),
+        PathEntry::new(inner.clone(), Some("alternate")),
     ];
     let ctx = block_context_of(
         Some(&inner),

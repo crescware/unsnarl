@@ -428,10 +428,7 @@ fn push_inner_class_name(
     let def_id = definitions.push(DefinitionData {
         r#type: DefinitionType::ClassName,
         name: identifier,
-        node: AstNode {
-            r#type: AstType::ClassDeclaration,
-            span: class_span,
-        },
+        node: AstNode::new(AstType::ClassDeclaration, class_span),
         parent: None,
         init: None,
         declaration_kind: None,

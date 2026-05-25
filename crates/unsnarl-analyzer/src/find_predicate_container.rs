@@ -35,10 +35,7 @@ pub fn find_predicate_container(
         let ty = &entry.node.r#type;
         if let Some(container_type) = predicate_container_for(ty, cur_key) {
             let offset = index.span_at(Utf8ByteOffset(entry.node.span.start)).offset;
-            return Some(PredicateContainer {
-                r#type: container_type,
-                offset,
-            });
+            return Some(PredicateContainer::new(container_type, offset));
         }
         cur_key = entry.key;
     }
@@ -47,10 +44,7 @@ pub fn find_predicate_container(
     let offset = index
         .span_at(parent_offset.unwrap_or(Utf8ByteOffset(0)))
         .offset;
-    Some(PredicateContainer {
-        r#type: container_type,
-        offset,
-    })
+    Some(PredicateContainer::new(container_type, offset))
 }
 
 fn predicate_container_for(ty: &AstType, key: Option<&str>) -> Option<PredicateContainerType> {

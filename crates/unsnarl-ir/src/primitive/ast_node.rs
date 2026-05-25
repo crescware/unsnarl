@@ -14,3 +14,9 @@ pub struct AstNode {
     pub r#type: AstType,
     pub span: Span,
 }
+
+impl AstNode {
+    pub fn new(r#type: AstType, span: Span) -> Self {
+        Self { r#type, span }
+    }
+}

@@ -662,10 +662,7 @@ fn ensure_implicit_global(
     ));
     scopes[root].insert_into_set(name.to_string(), var_id);
     scopes[root].variables.push(var_id);
-    let node = AstNode {
-        r#type: first_occurrence.r#type.clone(),
-        span: first_occurrence.span,
-    };
+    let node = AstNode::new(first_occurrence.r#type.clone(), first_occurrence.span);
     let def_id = definitions.push(DefinitionData {
         r#type: DefinitionType::ImplicitGlobalVariable,
         name: first_occurrence.clone(),

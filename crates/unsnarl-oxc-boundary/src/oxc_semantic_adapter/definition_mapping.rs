@@ -122,30 +122,21 @@ fn build_definition(
             nodes,
             identifier,
             node_id,
-            AstNode {
-                r#type: AstType::ImportSpecifier,
-                span: s.span,
-            },
+            AstNode::new(AstType::ImportSpecifier, s.span),
             Some(module_export_name(&s.imported)),
         )),
         AstKind::ImportDefaultSpecifier(s) => Some(build_import_def(
             nodes,
             identifier,
             node_id,
-            AstNode {
-                r#type: AstType::ImportDefaultSpecifier,
-                span: s.span,
-            },
+            AstNode::new(AstType::ImportDefaultSpecifier, s.span),
             None,
         )),
         AstKind::ImportNamespaceSpecifier(s) => Some(build_import_def(
             nodes,
             identifier,
             node_id,
-            AstNode {
-                r#type: AstType::ImportNamespaceSpecifier,
-                span: s.span,
-            },
+            AstNode::new(AstType::ImportNamespaceSpecifier, s.span),
             None,
         )),
         _ => None,
@@ -158,17 +149,11 @@ fn build_variable_def(
     node_id: oxc_syntax::node::NodeId,
     vd: &oxc_ast::ast::VariableDeclarator<'_>,
 ) -> DefinitionData {
-    let declarator_node = AstNode {
-        r#type: AstType::VariableDeclarator,
-        span: vd.span,
-    };
+    let declarator_node = AstNode::new(AstType::VariableDeclarator, vd.span);
     let init = vd.init.as_ref().map(ast_node_of_expression);
     let (parent, declaration_kind) = match nodes.parent_kind(node_id) {
         AstKind::VariableDeclaration(decl) => (
-            Some(AstNode {
-                r#type: AstType::VariableDeclaration,
-                span: decl.span,
-            }),
+            Some(AstNode::new(AstType::VariableDeclaration, decl.span)),
             ir_variable_declaration_kind(decl.kind),
         ),
         _ => (None, None),
@@ -192,10 +177,7 @@ fn build_function_name_def(
     DefinitionData {
         r#type: DefinitionType::FunctionName,
         name: identifier,
-        node: AstNode {
-            r#type: function_ast_type(f),
-            span: f.span,
-        },
+        node: AstNode::new(function_ast_type(f), f.span),
         parent: None,
         init: None,
         declaration_kind: None,
@@ -212,10 +194,7 @@ fn build_class_name_def(identifier: AstIdentifier, c: &oxc_ast::ast::Class<'_>) 
     DefinitionData {
         r#type: DefinitionType::ClassName,
         name: identifier,
-        node: AstNode {
-            r#type: ty,
-            span: c.span,
-        },
+        node: AstNode::new(ty, c.span),
         parent: None,
         init: None,
         declaration_kind: None,
@@ -269,10 +248,7 @@ fn build_import_def(
 ) -> DefinitionData {
     let (parent, import_source) = match nodes.parent_kind(node_id) {
         AstKind::ImportDeclaration(decl) => (
-            Some(AstNode {
-                r#type: AstType::ImportDeclaration,
-                span: decl.span,
-            }),
+            Some(AstNode::new(AstType::ImportDeclaration, decl.span)),
             Some(decl.source.value.as_str().to_string()),
         ),
         _ => (None, None),
@@ -296,16 +272,10 @@ fn enclosing_function_node(
     for ancestor in nodes.ancestor_kinds(node_id) {
         match ancestor {
             AstKind::Function(f) => {
-                return Some(AstNode {
-                    r#type: function_ast_type(f),
-                    span: f.span,
-                });
+                return Some(AstNode::new(function_ast_type(f), f.span));
             }
             AstKind::ArrowFunctionExpression(arrow) => {
-                return Some(AstNode {
-                    r#type: AstType::ArrowFunctionExpression,
-                    span: arrow.span,
-                });
+                return Some(AstNode::new(AstType::ArrowFunctionExpression, arrow.span));
             }
             _ => {}
         }
@@ -319,10 +289,7 @@ fn enclosing_catch_clause_node(
 ) -> Option<AstNode> {
     for ancestor in nodes.ancestor_kinds(node_id) {
         if let AstKind::CatchClause(c) = ancestor {
-            return Some(AstNode {
-                r#type: AstType::CatchClause,
-                span: c.span,
-            });
+            return Some(AstNode::new(AstType::CatchClause, c.span));
         }
     }
     None

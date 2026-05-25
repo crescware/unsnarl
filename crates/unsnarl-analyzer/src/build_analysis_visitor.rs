@@ -305,10 +305,9 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         let key = self.current_key();
         let node = self.ast_node_of_kind(&kind);
         self.path.push(PathFrame { kind, arrow_body });
-        self.path_entries.push(PathEntry {
-            node,
-            key,
-            arrow_body,
+        self.path_entries.push(match arrow_body {
+            None => PathEntry::new(node, key),
+            Some(ab) => PathEntry::with_arrow_body(node, key, ab.span, ab.is_block),
         });
     }
 

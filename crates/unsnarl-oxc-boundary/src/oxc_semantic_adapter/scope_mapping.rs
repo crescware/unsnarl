@@ -209,10 +209,7 @@ pub(crate) fn build_scopes<'a>(
                     Some(switch_ir),
                     Vec::new(),
                     switch_var_scope,
-                    AstNode {
-                        r#type: AstType::SwitchCase,
-                        span: case.span,
-                    },
+                    AstNode::new(AstType::SwitchCase, case.span),
                     Vec::new(),
                     Vec::new(),
                     Vec::new(),

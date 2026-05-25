@@ -11,8 +11,6 @@
 
 #![cfg(test)]
 
-use oxc_allocator::Allocator;
-
 use unsnarl_ir::diagnostic::Diagnostic;
 use unsnarl_ir::ids::{ScopeId, VariableId};
 use unsnarl_ir::DefinitionType;
@@ -20,12 +18,9 @@ use unsnarl_ir::IrArena;
 use unsnarl_ir::Language;
 
 use crate::analysis_result::ScopeAnalysisResult;
-use crate::analyze::{analyze, AnalyzeOptions};
-use crate::parser::{default_source_type_for, OxcParser, ParseOptions, SourceType};
+use crate::analyze::parse_and_analyze_with;
+use crate::parser::{default_source_type_for, SourceType};
 use crate::visitor::AnalysisVisitor;
-
-pub(crate) struct NoopVisitor;
-impl AnalysisVisitor for NoopVisitor {}
 
 /// Captures every diagnostic the scope-builder emits during
 /// `analyze`. Diagnostics flow through `AnalysisVisitor::on_diagnostic`,
@@ -62,28 +57,13 @@ pub(crate) fn analyze_source_as(
     language: Language,
     source_type: SourceType,
 ) -> ScopeAnalysisResult {
-    let allocator = Allocator::default();
-    let parsed = OxcParser
-        .parse(
-            &allocator,
-            code,
-            &ParseOptions {
-                language,
-                source_path: format!("input.{}", language_extension(language)),
-                source_type,
-            },
-        )
-        .expect("test source must parse cleanly");
-    let mut visitor = NoopVisitor;
-    analyze(
-        &parsed.program,
-        &AnalyzeOptions {
-            source_type: parsed.source_type,
-            language,
-            raw: parsed.raw,
-        },
-        &mut visitor,
+    parse_and_analyze_with(
+        code,
+        language,
+        source_type,
+        &mut crate::analyze::NoopVisitor,
     )
+    .expect("test source must parse cleanly")
 }
 
 /// Run the scope-builder and return both the analysis result and the
@@ -92,38 +72,15 @@ pub(crate) fn analyze_source_with_diagnostics(
     code: &str,
     language: Language,
 ) -> (ScopeAnalysisResult, Vec<Diagnostic>) {
-    let allocator = Allocator::default();
-    let parsed = OxcParser
-        .parse(
-            &allocator,
-            code,
-            &ParseOptions {
-                language,
-                source_path: format!("input.{}", language_extension(language)),
-                source_type: default_source_type_for(language),
-            },
-        )
-        .expect("test source must parse cleanly");
     let mut visitor = DiagnosticCapturingVisitor::new();
-    let result = analyze(
-        &parsed.program,
-        &AnalyzeOptions {
-            source_type: parsed.source_type,
-            language,
-            raw: parsed.raw,
-        },
+    let result = parse_and_analyze_with(
+        code,
+        language,
+        default_source_type_for(language),
         &mut visitor,
-    );
+    )
+    .expect("test source must parse cleanly");
     (result, visitor.diagnostics)
-}
-
-fn language_extension(language: Language) -> &'static str {
-    match language {
-        Language::Js => "js",
-        Language::Jsx => "jsx",
-        Language::Ts => "ts",
-        Language::Tsx => "tsx",
-    }
 }
 
 /// Variable names live in a scope, ordered by `variables` insertion.
