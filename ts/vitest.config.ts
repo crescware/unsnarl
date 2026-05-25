@@ -18,14 +18,6 @@ export default defineConfig({
       {
         extends: true,
         test: {
-          name: "fixtures",
-          environment: "jsdom",
-          include: ["integration/fixtures/**/*.test.ts"],
-        },
-      },
-      {
-        extends: true,
-        test: {
           name: "parity",
           environment: "node",
           include: ["parity/**/*.test.ts"],

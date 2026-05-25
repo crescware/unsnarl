@@ -11,7 +11,7 @@ const config = {
         // entry so knip walks its imports (the compat-* contract types) and
         // does not report them as unused.
         "src/boundary/eslint-scope/contract/contract-assertion.ts",
-        "integration/**/*.test.ts",
+        "integration/*.test.ts",
         "parity/**/*.test.ts",
       ],
       ignore: [
@@ -28,12 +28,7 @@ const config = {
         "!integration/fixtures/**",
         "parity/**/*.{ts,tsx}",
       ],
-      ignoreDependencies: [
-        // type-fest is pulled in solely because `mermaid`'s bundled `.d.ts` files
-        // reference types from it. No `project` source imports type-fest directly,
-        // so knip's source-graph scan reports it as "Unused devDependencies".
-        "type-fest",
-      ],
+      ignoreDependencies: [],
     },
     "scripts/no-to-be": {
       entry: ["**/*.test.ts"],
