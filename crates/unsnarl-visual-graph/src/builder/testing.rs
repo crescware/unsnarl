@@ -39,11 +39,11 @@ pub(crate) fn span(offset: u32) -> Span {
 
 /// Build a `Span` at an explicit `(line, column, offset)`.
 pub(crate) fn span_at(line: u32, column: u32, offset: u32) -> Span {
-    Span {
-        line: SourceLine(line),
-        column: SourceColumn(column),
-        offset: Utf16CodeUnitOffset(offset),
-    }
+    Span::new(
+        SourceLine(line),
+        SourceColumn(column),
+        Utf16CodeUnitOffset(offset),
+    )
 }
 
 /// Wrap a string as a `SerializedScopeId`.
@@ -52,7 +52,7 @@ pub(crate) fn span_at(line: u32, column: u32, offset: u32) -> Span {
 /// `""` scope id (rare, exercised by a few formatter helpers) build
 /// a `SerializedScope` directly instead.
 pub(crate) fn scope_id(value: &str) -> SerializedScopeId {
-    SerializedScopeId::new(value.to_string())
+    SerializedScopeId::new(value)
 }
 
 /// Returns a `Block` scope with empty variables / references /
@@ -165,10 +165,7 @@ pub(crate) fn predicate_container(
     r#type: PredicateContainerType,
     offset: u32,
 ) -> PredicateContainer {
-    PredicateContainer {
-        r#type,
-        offset: Utf16CodeUnitOffset(offset),
-    }
+    PredicateContainer::new(r#type, Utf16CodeUnitOffset(offset))
 }
 
 /// Build a [`Span`] from `(offset, line)`; the column equals the
@@ -213,12 +210,12 @@ pub(crate) fn base_simple_def(r#type: SimpleDefType) -> SerializedDefinition {
 
 /// Wrap a string as a `SerializedVariableId`.
 pub(crate) fn variable_id(value: &str) -> SerializedVariableId {
-    SerializedVariableId::new(value.to_string())
+    SerializedVariableId::new(value)
 }
 
 /// Wrap a string as a `SerializedReferenceId`.
 pub(crate) fn reference_id(value: &str) -> SerializedReferenceId {
-    SerializedReferenceId::new(value.to_string())
+    SerializedReferenceId::new(value)
 }
 
 /// Builds a `Let`-declared variable named `x` in scope `s` with one

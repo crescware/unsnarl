@@ -14,11 +14,11 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::DefinitionType;
 use unsnarl_ir::Language;
 
-use crate::analyze::{analyze, AnalyzeOptions};
+use crate::analyze::{analyze, AnalyzeOptions, NoopVisitor};
 use crate::parser::{default_source_type_for, OxcParser, ParseOptions, SourceType};
 use crate::testing::{
     analyze_source, analyze_source_as, analyze_source_with_diagnostics, assert_single_def_type,
-    collect_all_scopes, find_variable_in_scope, variable_names_in_scope, NoopVisitor,
+    collect_all_scopes, find_variable_in_scope, variable_names_in_scope,
 };
 
 #[test]

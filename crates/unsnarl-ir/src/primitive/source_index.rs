@@ -94,11 +94,11 @@ impl<'a> SourceIndex<'a> {
             self.raw[line_start_byte..clamped].encode_utf16().count() as u32
         };
 
-        Span {
-            line: SourceLine((line_idx + 1) as u32),
-            column: SourceColumn(column_utf16 + overshoot),
-            offset: Utf16CodeUnitOffset(line_start_utf16 + column_utf16 + overshoot),
-        }
+        Span::new(
+            SourceLine((line_idx + 1) as u32),
+            SourceColumn(column_utf16 + overshoot),
+            Utf16CodeUnitOffset(line_start_utf16 + column_utf16 + overshoot),
+        )
     }
 
     /// Resolve a UTF-16 code-unit offset (the encoding IR fields

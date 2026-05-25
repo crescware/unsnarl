@@ -68,10 +68,7 @@ pub fn ast_type_of(kind: &AstKind<'_>) -> AstType {
 }
 
 pub fn ast_node_of(kind: &AstKind<'_>) -> AstNode {
-    AstNode {
-        r#type: ast_type_of(kind),
-        span: kind.span(),
-    }
+    AstNode::new(ast_type_of(kind), kind.span())
 }
 
 /// Convert an `oxc_ast::Expression` to the boundary's lifetime-free
@@ -130,7 +127,7 @@ pub fn ast_node_of_expression(expr: &Expression<'_>) -> AstNode {
         Expression::PrivateFieldExpression(n) => (AstType::MemberExpression, n.span),
         Expression::V8IntrinsicExpression(n) => (AstType::V8IntrinsicExpression, n.span),
     };
-    AstNode { r#type: ty, span }
+    AstNode::new(ty, span)
 }
 
 #[cfg(test)]

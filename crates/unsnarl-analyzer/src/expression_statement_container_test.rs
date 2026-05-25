@@ -5,27 +5,28 @@ use oxc_span::Span;
 use unsnarl_ir::reference::HeadExpression;
 use unsnarl_oxc_parity::AstType;
 
-use crate::testing::{ast_node_with_end, entry, parse_ts};
+use crate::path_entry::PathEntry;
+use crate::testing::{ast_node_with_end, parse_ts};
 
 use super::{build_expression_statement_container, nearest_expression_statement};
 
 #[test]
 fn nearest_expression_statement_finds_innermost_when_multiple_on_path() {
     let path = vec![
-        entry(ast_node_with_end(AstType::Program, 0, 100), None),
-        entry(
+        PathEntry::new(ast_node_with_end(AstType::Program, 0, 100), None),
+        PathEntry::new(
             ast_node_with_end(AstType::ExpressionStatement, 10, 80),
             Some("body"),
         ),
-        entry(
+        PathEntry::new(
             ast_node_with_end(AstType::ArrowFunctionExpression, 20, 70),
             Some("expression"),
         ),
-        entry(
+        PathEntry::new(
             ast_node_with_end(AstType::ExpressionStatement, 30, 60),
             Some("body"),
         ),
-        entry(
+        PathEntry::new(
             ast_node_with_end(AstType::Identifier, 30, 33),
             Some("expression"),
         ),
@@ -38,12 +39,12 @@ fn nearest_expression_statement_finds_innermost_when_multiple_on_path() {
 #[test]
 fn nearest_expression_statement_returns_none_when_path_has_no_expression_statement() {
     let path = vec![
-        entry(ast_node_with_end(AstType::Program, 0, 100), None),
-        entry(
+        PathEntry::new(ast_node_with_end(AstType::Program, 0, 100), None),
+        PathEntry::new(
             ast_node_with_end(AstType::IfStatement, 10, 80),
             Some("body"),
         ),
-        entry(ast_node_with_end(AstType::Identifier, 13, 14), Some("test")),
+        PathEntry::new(ast_node_with_end(AstType::Identifier, 13, 14), Some("test")),
     ];
     assert!(nearest_expression_statement(&path).is_none());
 }

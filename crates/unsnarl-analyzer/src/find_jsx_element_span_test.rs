@@ -6,7 +6,8 @@
 
 use unsnarl_oxc_parity::AstType;
 
-use crate::testing::{ast_node, ast_node_with_end, entry};
+use crate::path_entry::PathEntry;
+use crate::testing::{ast_node, ast_node_with_end};
 
 use super::find_jsx_element_span;
 
@@ -18,8 +19,8 @@ fn empty_path_returns_none() {
 #[test]
 fn opening_element_with_jsx_element_grandparent_returns_element_span() {
     let path = vec![
-        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
-        entry(
+        PathEntry::new(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        PathEntry::new(
             ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
             Some("openingElement"),
         ),
@@ -31,7 +32,7 @@ fn opening_element_with_jsx_element_grandparent_returns_element_span() {
 
 #[test]
 fn opening_element_at_path_root_returns_none() {
-    let path = vec![entry(
+    let path = vec![PathEntry::new(
         ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
         Some("openingElement"),
     )];
@@ -41,8 +42,8 @@ fn opening_element_at_path_root_returns_none() {
 #[test]
 fn opening_element_without_jsx_element_grandparent_returns_none() {
     let path = vec![
-        entry(ast_node(AstType::Program, 0), None),
-        entry(
+        PathEntry::new(ast_node(AstType::Program, 0), None),
+        PathEntry::new(
             ast_node_with_end(AstType::JSXOpeningElement, 10, 20),
             Some("openingElement"),
         ),
@@ -53,12 +54,12 @@ fn opening_element_without_jsx_element_grandparent_returns_none() {
 #[test]
 fn member_expression_segment_is_walked_through() {
     let path = vec![
-        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
-        entry(
+        PathEntry::new(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        PathEntry::new(
             ast_node_with_end(AstType::JSXOpeningElement, 10, 30),
             Some("openingElement"),
         ),
-        entry(
+        PathEntry::new(
             ast_node_with_end(AstType::JSXMemberExpression, 11, 22),
             Some("name"),
         ),
@@ -71,12 +72,12 @@ fn member_expression_segment_is_walked_through() {
 #[test]
 fn unrelated_innermost_entry_returns_none() {
     let path = vec![
-        entry(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
-        entry(
+        PathEntry::new(ast_node_with_end(AstType::JSXElement, 10, 40), Some("body")),
+        PathEntry::new(
             ast_node_with_end(AstType::JSXOpeningElement, 10, 30),
             Some("openingElement"),
         ),
-        entry(
+        PathEntry::new(
             ast_node_with_end(AstType::JSXAttribute, 12, 28),
             Some("attribute"),
         ),

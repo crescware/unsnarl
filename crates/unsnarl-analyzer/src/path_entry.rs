@@ -25,6 +25,32 @@ pub struct PathEntry {
     pub arrow_body: Option<ArrowBodyInfo>,
 }
 
+impl PathEntry {
+    pub fn new(node: AstNode, key: Option<&'static str>) -> Self {
+        Self {
+            node,
+            key,
+            arrow_body: None,
+        }
+    }
+
+    pub fn with_arrow_body(
+        node: AstNode,
+        key: Option<&'static str>,
+        body_span: Span,
+        is_block: bool,
+    ) -> Self {
+        Self {
+            node,
+            key,
+            arrow_body: Some(ArrowBodyInfo {
+                span: body_span,
+                is_block,
+            }),
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 pub struct ArrowBodyInfo {
     pub span: Span,

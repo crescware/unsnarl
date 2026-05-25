@@ -15,9 +15,10 @@ use serde::{Serialize, Serializer};
 pub struct SerializedReferenceId(Arc<str>);
 
 impl SerializedReferenceId {
-    pub fn new(value: String) -> Self {
-        assert!(!value.is_empty(), "SerializedReferenceId must be non-empty");
-        Self(Arc::from(value))
+    pub fn new(value: impl Into<Arc<str>>) -> Self {
+        let arc: Arc<str> = value.into();
+        assert!(!arc.is_empty(), "SerializedReferenceId must be non-empty");
+        Self(arc)
     }
 
     pub fn value(&self) -> &str {

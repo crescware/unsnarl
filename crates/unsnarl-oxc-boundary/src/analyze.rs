@@ -6,13 +6,14 @@
 //! through the supplied [`AnalysisVisitor::on_diagnostic`] callback,
 //! and returns the resulting [`ScopeAnalysisResult`].
 
+use oxc_allocator::Allocator;
 use oxc_ast::ast::Program;
 
 use unsnarl_ir::Language;
 
 use crate::analysis_result::ScopeAnalysisResult;
 use crate::oxc_semantic_adapter::build_from_program;
-use crate::parser::SourceType;
+use crate::parser::{OxcParser, ParseError, ParseOptions, SourceType};
 use crate::visitor::AnalysisVisitor;
 
 /// Options accepted by [`analyze`].
@@ -38,6 +39,44 @@ pub fn analyze<'a>(
     }
     output.analysis
 }
+
+pub fn parse_and_analyze_with<V: AnalysisVisitor>(
+    code: &str,
+    language: Language,
+    source_type: SourceType,
+    visitor: &mut V,
+) -> Result<ScopeAnalysisResult, ParseError> {
+    let allocator = Allocator::default();
+    let extension = match language {
+        Language::Js => "js",
+        Language::Jsx => "jsx",
+        Language::Ts => "ts",
+        Language::Tsx => "tsx",
+    };
+    let parsed = OxcParser.parse(
+        &allocator,
+        code,
+        &ParseOptions {
+            language,
+            source_path: format!("input.{extension}"),
+            source_type,
+        },
+    )?;
+    Ok(analyze(
+        &parsed.program,
+        &AnalyzeOptions {
+            source_type: parsed.source_type,
+            language,
+            raw: parsed.raw,
+        },
+        visitor,
+    ))
+}
+
+#[cfg(test)]
+pub(crate) struct NoopVisitor;
+#[cfg(test)]
+impl AnalysisVisitor for NoopVisitor {}
 
 #[cfg(test)]
 #[path = "analyze_test.rs"]

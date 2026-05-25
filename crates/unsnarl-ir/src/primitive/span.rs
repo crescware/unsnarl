@@ -30,6 +30,16 @@ pub struct Span {
     pub offset: Utf16CodeUnitOffset,
 }
 
+impl Span {
+    pub fn new(line: SourceLine, column: SourceColumn, offset: Utf16CodeUnitOffset) -> Self {
+        Self {
+            line,
+            column,
+            offset,
+        }
+    }
+}
+
 /// The `oxc_parser` crate produces UTF-8 byte offsets, but the
 /// emitted IR carries UTF-16 code-unit offsets so the on-disk shape
 /// matches JavaScript-string indexing semantics. This function
@@ -55,11 +65,11 @@ pub fn span_from_offset(raw: &str, offset: Utf8ByteOffset) -> Span {
     let overshoot = offset_usize.saturating_sub(bytes.len());
     let column_utf16 = raw[line_start_byte..limit].encode_utf16().count() + overshoot;
     let offset_utf16 = raw[..limit].encode_utf16().count() + overshoot;
-    Span {
-        line: SourceLine(line),
-        column: SourceColumn(u32::try_from(column_utf16).unwrap_or(0)),
-        offset: Utf16CodeUnitOffset(u32::try_from(offset_utf16).unwrap_or(u32::MAX)),
-    }
+    Span::new(
+        SourceLine(line),
+        SourceColumn(u32::try_from(column_utf16).unwrap_or(0)),
+        Utf16CodeUnitOffset(u32::try_from(offset_utf16).unwrap_or(u32::MAX)),
+    )
 }
 
 #[cfg(test)]

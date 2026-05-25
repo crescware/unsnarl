@@ -17,44 +17,12 @@ use oxc_span::{SourceType, Span};
 use unsnarl_ir::primitive::AstNode;
 use unsnarl_oxc_parity::AstType;
 
-use crate::path_entry::PathEntry;
-
 pub(crate) fn ast_node(ty: AstType, start: u32) -> AstNode {
-    AstNode {
-        r#type: ty,
-        span: Span::new(start, start),
-    }
+    AstNode::new(ty, Span::new(start, start))
 }
 
 pub(crate) fn ast_node_with_end(ty: AstType, start: u32, end: u32) -> AstNode {
-    AstNode {
-        r#type: ty,
-        span: Span::new(start, end),
-    }
-}
-
-pub(crate) fn entry(node: AstNode, key: Option<&'static str>) -> PathEntry {
-    PathEntry {
-        node,
-        key,
-        arrow_body: None,
-    }
-}
-
-pub(crate) fn entry_with_arrow_body(
-    node: AstNode,
-    key: Option<&'static str>,
-    body_span: Span,
-    is_block: bool,
-) -> PathEntry {
-    PathEntry {
-        node,
-        key,
-        arrow_body: Some(crate::path_entry::ArrowBodyInfo {
-            span: body_span,
-            is_block,
-        }),
-    }
+    AstNode::new(ty, Span::new(start, end))
 }
 
 /// Parse `source` as TypeScript and return the resulting program /
@@ -89,21 +57,11 @@ pub(crate) fn parse_and_analyze_ts<'a>(
     use unsnarl_oxc_boundary::analyze::{analyze, AnalyzeOptions};
     use unsnarl_oxc_boundary::parser::SourceType as BoundarySourceType;
     use unsnarl_oxc_boundary::visitor::AnalysisVisitor;
-    let source_type = SourceType::ts();
-    let ParserReturn {
-        program,
-        errors,
-        panicked,
-        ..
-    } = Parser::new(allocator, source, source_type).parse();
-    assert!(!panicked, "parser panicked on test source");
-    assert!(
-        errors.is_empty(),
-        "parser reported errors on test source: {errors:?}"
-    );
+    let program = parse_ts(allocator, source);
     struct NoopVisitor;
     impl AnalysisVisitor for NoopVisitor {}
     let mut visitor = NoopVisitor;
+    let source_type = SourceType::ts();
     let boundary_source_type = if source_type.is_module() {
         BoundarySourceType::Module
     } else {

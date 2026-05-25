@@ -11,3 +11,9 @@ pub struct PredicateContainer {
     pub r#type: PredicateContainerType,
     pub offset: Utf16CodeUnitOffset,
 }
+
+impl PredicateContainer {
+    pub fn new(r#type: PredicateContainerType, offset: Utf16CodeUnitOffset) -> Self {
+        Self { r#type, offset }
+    }
+}
