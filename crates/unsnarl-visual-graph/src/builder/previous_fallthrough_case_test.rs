@@ -11,7 +11,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 use super::previous_fallthrough_case;
-use crate::builder::testing::{base_serialized_scope, scope_id};
+use crate::builder::builder_fixtures::{base_serialized_scope, scope_id};
 
 fn case_scope(id: &str, parent_span_offset: u32, falls_through: bool) -> SerializedScope {
     let mut s = base_serialized_scope(id);

@@ -7,7 +7,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 use super::read_origins;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_serialized_scope, base_write_op, case_clause_block_context,
     empty_serialized_ir, other_block_context, scope_id,
 };

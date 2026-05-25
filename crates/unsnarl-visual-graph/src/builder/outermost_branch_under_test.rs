@@ -6,7 +6,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 use super::outermost_branch_under;
-use crate::builder::testing::{base_serialized_scope, other_block_context, scope_id};
+use crate::builder::builder_fixtures::{base_serialized_scope, other_block_context, scope_id};
 
 fn build_scopes() -> [SerializedScope; 4] {
     let root = base_serialized_scope("root");

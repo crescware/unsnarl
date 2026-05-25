@@ -7,11 +7,11 @@
 
 pub mod analysis_result;
 pub mod analyze;
+#[cfg(test)]
+pub(crate) mod boundary_fixtures;
 pub mod declare;
 pub mod materialise;
 pub mod oxc_semantic_adapter;
 pub mod parser;
 pub mod resolve;
-#[cfg(test)]
-pub(crate) mod testing;
 pub mod visitor;

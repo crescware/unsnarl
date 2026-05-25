@@ -6,7 +6,7 @@ use unsnarl_visual_graph::visual_subgraph::{
 };
 
 use super::subgraph_label;
-use crate::testing::{
+use crate::mermaid_fixtures::{
     base_case_subgraph, base_class_subgraph, base_const_binding, base_function_subgraph,
     base_if_else_container_subgraph,
 };

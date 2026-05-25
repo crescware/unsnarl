@@ -1,7 +1,7 @@
 use oxc_allocator::Allocator;
 use oxc_ast::ast::Statement;
 
-use crate::testing::parse_ts;
+use crate::analyzer_fixtures::parse_ts;
 
 use super::is_control_exit;
 

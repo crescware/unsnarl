@@ -7,11 +7,11 @@ use unsnarl_oxc_parity::AstType;
 
 use super::build_children;
 use crate::builder::arena::{BuildArena, Container, ElementHandle, NodeIdx, SubgraphIdx};
-use crate::builder::state::BuildState;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_serialized_scope, empty_serialized_ir, other_block_context,
     scope_id, span_offset_line,
 };
+use crate::builder::state::BuildState;
 use crate::visual_node::{SyntheticNodeKind, VisualNode};
 use crate::visual_subgraph::{ControlSubgraphKind, OwnedExtras, OwnedSubgraphKind, VisualSubgraph};
 

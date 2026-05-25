@@ -5,7 +5,7 @@ use std::collections::HashSet;
 use unsnarl_ir::SourceLine;
 
 use crate::prune::collect_ids::collect_ids;
-use crate::prune::test_helpers::{
+use crate::prune::prune_fixtures::{
     const_binding_node_with_end, function_subgraph, graph_of, if_else_container_subgraph,
     return_subgraph, return_use_node, write_op_node,
 };

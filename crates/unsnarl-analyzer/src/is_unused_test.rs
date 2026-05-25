@@ -5,7 +5,7 @@ use oxc_span::Span;
 use unsnarl_ir::ids::{DefinitionId, VariableId};
 use unsnarl_ir::IrArena;
 
-use crate::testing::parse_and_analyze_ts;
+use crate::analyzer_fixtures::parse_and_analyze_ts;
 
 use super::is_unused;
 

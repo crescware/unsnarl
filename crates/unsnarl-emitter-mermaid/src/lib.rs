@@ -35,6 +35,6 @@ pub mod subgraph_label;
 pub mod theme;
 
 #[cfg(test)]
-pub(crate) mod testing;
+pub(crate) mod mermaid_fixtures;
 
 pub use mermaid::MermaidEmitter;

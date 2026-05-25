@@ -4,7 +4,7 @@ use unsnarl_visual_graph::visual_subgraph::{
 };
 
 use super::emit_subgraph;
-use crate::testing::{
+use crate::mermaid_fixtures::{
     base_function_subgraph, base_plain_subgraph, base_render_state, base_simple_binding,
 };
 

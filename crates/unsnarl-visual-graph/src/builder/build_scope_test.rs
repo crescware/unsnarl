@@ -10,11 +10,11 @@ use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
 use super::build_scope;
 use crate::builder::arena::{BuildArena, Container, ElementHandle, NodeIdx, SubgraphIdx};
-use crate::builder::state::BuildState;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_def, base_serialized_scope, base_serialized_variable, base_write_op,
     empty_serialized_ir, other_block_context, scope_id, span_offset_line, variable_id,
 };
+use crate::builder::state::BuildState;
 use crate::builder::write_op::WriteOp;
 use crate::visual_node::{BindingNodeKind, SyntheticExtras, SyntheticNodeKind, VisualNode};
 use crate::visual_subgraph::{ControlSubgraphKind, OwnedSubgraphKind, VisualSubgraph};

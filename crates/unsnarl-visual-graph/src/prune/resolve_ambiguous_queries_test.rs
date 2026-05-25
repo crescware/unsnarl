@@ -2,7 +2,7 @@ use super::*;
 
 use unsnarl_ir::SourceLine;
 
-use crate::prune::test_helpers::{const_binding_node_with_end, graph_of, write_op_node};
+use crate::prune::prune_fixtures::{const_binding_node_with_end, graph_of, write_op_node};
 use crate::visual_element::VisualElement;
 use crate::visual_node::VisualNode;
 

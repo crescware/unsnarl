@@ -8,7 +8,7 @@ use std::collections::HashMap;
 use unsnarl_oxc_parity::PredicateContainerType;
 
 use super::{predicate_target_id, PredicateAnchorMaps};
-use crate::builder::testing::{base_serialized_reference, predicate_container};
+use crate::builder::builder_fixtures::{base_serialized_reference, predicate_container};
 
 fn empty_maps() -> [HashMap<u32, String>; 5] {
     Default::default()

@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::prune::test_helpers::{const_binding_node, function_subgraph};
+use crate::prune::prune_fixtures::{const_binding_node, function_subgraph};
 
 #[test]
 fn returns_top_level_node_ids() {

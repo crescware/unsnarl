@@ -7,7 +7,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 use super::is_branch_scope;
-use crate::builder::testing::{base_serialized_scope, other_block_context};
+use crate::builder::builder_fixtures::{base_serialized_scope, other_block_context};
 
 fn scope_with_context(ctx: Option<BlockContext>) -> SerializedScope {
     let mut scope = base_serialized_scope("s");

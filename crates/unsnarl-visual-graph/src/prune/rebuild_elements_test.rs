@@ -1,6 +1,6 @@
 use super::*;
 
-use crate::prune::test_helpers::{const_binding_node, function_subgraph};
+use crate::prune::prune_fixtures::{const_binding_node, function_subgraph};
 
 fn keep(ids: &[&str]) -> HashSet<String> {
     ids.iter().map(|s| s.to_string()).collect()

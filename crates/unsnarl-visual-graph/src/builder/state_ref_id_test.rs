@@ -1,7 +1,7 @@
 //! Sibling tests for [`state_ref_id`].
 
 use super::state_ref_id;
-use crate::builder::testing::{
+use crate::builder::builder_fixtures::{
     base_builder_context, base_serialized_reference, base_write_op, empty_serialized_ir,
     reference_id, span_offset_line,
 };

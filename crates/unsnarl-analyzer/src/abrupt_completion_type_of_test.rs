@@ -3,7 +3,7 @@ use oxc_ast::ast::Statement;
 
 use unsnarl_ir::completion::CompletionType;
 
-use crate::testing::parse_ts;
+use crate::analyzer_fixtures::parse_ts;
 
 use super::abrupt_completion_type_of;
 

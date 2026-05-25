@@ -54,7 +54,7 @@ pub mod reference_call_receiver;
 pub mod run_analysis;
 
 #[cfg(test)]
-pub(crate) mod testing;
+pub(crate) mod analyzer_fixtures;
 
 pub use abrupt_completion_type_of::abrupt_completion_type_of;
 pub use analyzed_source::AnalyzedSource;

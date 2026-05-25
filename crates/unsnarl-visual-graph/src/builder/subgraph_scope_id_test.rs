@@ -1,7 +1,7 @@
 //! Sibling tests for [`subgraph_scope_id`].
 
 use super::subgraph_scope_id;
-use crate::builder::testing::base_serialized_scope;
+use crate::builder::builder_fixtures::base_serialized_scope;
 
 #[test]
 fn alphanumeric_scope_id_pass_through() {

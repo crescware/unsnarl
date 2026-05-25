@@ -4,7 +4,7 @@ use unsnarl_visual_graph::boundary_edge_direction::{
 use unsnarl_visual_graph::visual_boundary_edge::VisualBoundaryEdge;
 
 use super::render_boundary_edges;
-use crate::testing::base_graph;
+use crate::mermaid_fixtures::base_graph;
 
 #[test]
 fn does_nothing_when_boundary_edges_is_empty() {

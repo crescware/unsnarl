@@ -5,7 +5,7 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_oxc_parity::AstType;
 
 use super::nesting_kind_of;
-use crate::builder::testing::{base_serialized_scope, other_block_context};
+use crate::builder::builder_fixtures::{base_serialized_scope, other_block_context};
 
 #[test]
 fn function_scope_returns_function() {

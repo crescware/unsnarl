@@ -6,8 +6,8 @@ use unsnarl_ir::serialized::SerializedHeadExpression;
 
 use super::ensure_expression_statement_node;
 use crate::builder::arena::{BuildArena, Container, ElementHandle};
+use crate::builder::builder_fixtures::{base_serialized_reference, reference_id, span_offset_line};
 use crate::builder::state::BuildState;
-use crate::builder::testing::{base_serialized_reference, reference_id, span_offset_line};
 use crate::visual_element::VisualElement;
 use crate::visual_node::{SyntheticNodeKind, VisualNode};
 use unsnarl_ir::serialized::SerializedReference;

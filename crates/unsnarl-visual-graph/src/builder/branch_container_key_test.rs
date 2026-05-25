@@ -11,7 +11,7 @@ use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
 use super::branch_container_key;
-use crate::builder::testing::{base_serialized_scope, other_block_context, scope_id};
+use crate::builder::builder_fixtures::{base_serialized_scope, other_block_context, scope_id};
 
 fn scope_with(upper: Option<&str>, ctx: Option<BlockContext>) -> SerializedScope {
     let mut s = base_serialized_scope("inner");

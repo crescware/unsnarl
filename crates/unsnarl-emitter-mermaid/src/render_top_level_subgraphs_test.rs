@@ -5,7 +5,9 @@ use unsnarl_visual_graph::visual_subgraph::{
 };
 
 use super::render_top_level_subgraphs;
-use crate::testing::{base_const_binding, base_graph, base_plain_subgraph, base_render_state};
+use crate::mermaid_fixtures::{
+    base_const_binding, base_graph, base_plain_subgraph, base_render_state,
+};
 
 fn subgraph(id: &str, kind: ControlSubgraphKind) -> VisualElement {
     VisualSubgraph::from(ControlVisualSubgraph {
