@@ -65,7 +65,7 @@ fn workspace_root() -> PathBuf {
 }
 
 fn fixtures_root() -> PathBuf {
-    workspace_root().join("ts/integration/fixtures")
+    workspace_root().join("integration/fixtures")
 }
 
 /// Root of the per-fixture `variants.json` manifests consumed by
@@ -204,15 +204,15 @@ fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
             .to_string_lossy()
             .replace('\\', "/")
             .to_string();
-        // Source path the IR records: relative to the project root
+        // Source path the IR records: relative to the workspace root
         // (the parent-of-parent of the fixtures root), matching the
         // baseline snapshots' `relative(PROJECT_ROOT, ...)` shape.
-        let ts_root = root
+        let ws_root = root
             .parent()
             .and_then(Path::parent)
-            .expect("fixtures live under ts/integration/fixtures");
+            .expect("fixtures live under integration/fixtures");
         let rel_source = input
-            .strip_prefix(ts_root)
+            .strip_prefix(ws_root)
             .unwrap_or(&input)
             .to_string_lossy()
             .replace('\\', "/")

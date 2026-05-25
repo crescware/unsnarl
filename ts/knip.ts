@@ -25,7 +25,6 @@ const config = {
       project: [
         "src/**/*.{ts,tsx}",
         "integration/**/*.{ts,tsx}",
-        "!integration/fixtures/**",
         "parity/**/*.{ts,tsx}",
       ],
       ignoreDependencies: [],

@@ -43,7 +43,7 @@ description = "Align every version field (Cargo.toml [workspace.package].version
 run = "deno run --allow-read --allow-write --allow-run scripts/bump-version.ts"
 
 [tasks."parity"]
-description = "Run the parity harness against ts/integration/fixtures/**/expected.ir.json (Step 12 baseline)."
+description = "Run the parity harness against integration/fixtures/**/expected.ir.json."
 run = "cargo test --workspace --test parity"
 
 [tasks."emit:ir"]
@@ -87,7 +87,7 @@ depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/bench-parity-all.ts"
 
 [tasks."regen:fixtures"]
-description = "Regenerate every expected.* / preview.md baseline under ts/integration/fixtures/ by running the Rust CLI (uns). After completion, `git diff` should be empty if the Rust pipeline faithfully reproduces the vitest-generated snapshots."
+description = "Regenerate every expected.* / preview.md baseline under integration/fixtures/ by running the Rust CLI (uns). After completion, `git diff` should be empty."
 depends = ["build"]
 run = "deno run --allow-read --allow-write --allow-run scripts/regen-fixtures.ts"
 

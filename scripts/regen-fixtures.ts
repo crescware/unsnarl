@@ -1,6 +1,6 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
 // Regenerate every `expected.*` / `preview.md` baseline under
-// `ts/integration/fixtures/` by running the Rust CLI (`uns`).
+// `integration/fixtures/` by running the Rust CLI (`uns`).
 //
 // Walks the fixture tree for directories that contain an `input.*`
 // file, then for each fixture:
@@ -23,9 +23,8 @@
 const SCRIPT_PATH = new URL(import.meta.url).pathname;
 const REPO_ROOT = SCRIPT_PATH.split("/").slice(0, -2).join("/");
 
-const TS_ROOT = `${REPO_ROOT}/ts`;
 const RUST_BIN = `${REPO_ROOT}/target/release/uns`;
-const FIXTURES_ROOT = `${TS_ROOT}/integration/fixtures`;
+const FIXTURES_ROOT = `${REPO_ROOT}/integration/fixtures`;
 const VARIANTS_ROOT = `${REPO_ROOT}/crates/unsnarl/tests/fixture-variants`;
 
 function ensureFile(path: string, hint: string) {
@@ -198,7 +197,7 @@ function* walkFixtures(dir: string): Generator<string> {
 async function runUns(args: string[]): Promise<boolean> {
   const proc = await new Deno.Command(RUST_BIN, {
     args,
-    cwd: TS_ROOT,
+    cwd: REPO_ROOT,
     stdout: "null",
     stderr: "piped",
   }).output();
@@ -221,7 +220,7 @@ let i = 0;
 for (const dir of fixtureDirs) {
   i++;
   const inputPath = findInputFile(dir)!;
-  const relInput = inputPath.slice(TS_ROOT.length + 1);
+  const relInput = inputPath.slice(REPO_ROOT.length + 1);
   const relDir = dir.slice(FIXTURES_ROOT.length + 1);
 
   for (const b of BASE_BASELINES) {

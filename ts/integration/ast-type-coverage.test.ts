@@ -14,7 +14,8 @@ import { OxcParser } from "../src/parser/oxc-parser.js";
 import { sourceTypeFromPath } from "../src/pipeline/parse/source-type-from-path.js";
 
 const PROJECT_ROOT = process.cwd();
-const FIXTURE_DIR = join(PROJECT_ROOT, "integration", "fixtures");
+const WORKSPACE_ROOT = join(PROJECT_ROOT, "..");
+const FIXTURE_DIR = join(WORKSPACE_ROOT, "integration", "fixtures");
 
 function languageFromExt(ext: string): Language | null {
   switch (ext) {
