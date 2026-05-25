@@ -359,16 +359,6 @@ impl SyntheticVisualNode {
         )
     }
 
-    pub fn implicit_global(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
-        Self::base(
-            id,
-            name,
-            line,
-            SyntheticNodeKind::SyntheticBeyondDepth,
-            SyntheticExtras::None {},
-        )
-    }
-
     pub fn if_statement_test(id: impl Into<String>, line: u32) -> Self {
         Self::base(
             id,
