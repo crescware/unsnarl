@@ -10,17 +10,8 @@ export default defineConfig({
           environment: "node",
           exclude: [
             "**/node_modules/**",
-            "integration/fixtures/**",
             "parity/**",
           ],
-        },
-      },
-      {
-        extends: true,
-        test: {
-          name: "fixtures",
-          environment: "jsdom",
-          include: ["integration/fixtures/**/*.test.ts"],
         },
       },
       {

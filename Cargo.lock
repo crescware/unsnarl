@@ -1222,6 +1222,7 @@ dependencies = [
  "oxc_semantic",
  "oxc_span",
  "oxc_syntax",
+ "serde_json",
  "tracing",
  "unsnarl-instrumentation",
  "unsnarl-ir",
@@ -1232,6 +1233,7 @@ dependencies = [
 name = "unsnarl-oxc-parity"
 version = "0.3.3"
 dependencies = [
+ "regex",
  "serde",
 ]
 

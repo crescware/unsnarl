@@ -8,3 +8,6 @@ repository.workspace = true
 
 [dependencies]
 serde = { workspace = true }
+
+[build-dependencies]
+regex = { workspace = true }

@@ -20,3 +20,6 @@ oxc_diagnostics = { workspace = true }
 oxc_index = { workspace = true }
 unsnarl-instrumentation = { workspace = true }
 tracing = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

@@ -56,6 +56,8 @@ pub use variable_declaration_kind::VariableDeclarationKind;
 
 pub const UNKNOWN_AST_TYPE: &str = "UnknownAstType";
 
+include!(concat!(env!("OUT_DIR"), "/generated_parity.rs"));
+
 #[derive(Clone, Serialize)]
 pub enum AstType {
     AccessorProperty,
@@ -406,3 +408,7 @@ pub fn as_ast_type(raw: &str) -> AstType {
         _ => AstType::UnknownAstType,
     }
 }
+
+#[cfg(test)]
+#[path = "ast_type_parity_test.rs"]
+mod ast_type_parity_test;

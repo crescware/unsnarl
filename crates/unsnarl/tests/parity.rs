@@ -1,59 +1,40 @@
-//! Parity harness.
+//! End-to-end CLI parity harness.
 //!
-//! Walks the fixtures tree (see [`fixtures_root`]) for directories
-//! that contain `input.{ts,tsx,js,jsx,mjs,cjs}` plus one of the
-//! `expected.*` sibling baselines, and dynamically generates one
-//! `libtest-mimic` test per (fixture, baseline) pair.
+//! Invokes the `uns` binary itself as a subprocess for each
+//! baseline, covering the CLI-only code paths (args parsing,
+//! emitter selection, stdout / output-path handling).
 //!
-//! Each test feeds the input through the matching in-process
-//! pipeline helper (`emit_ir_text` for `expected.ir.json`,
-//! `emit_json_text` for `expected.json`) and compares the rendered
-//! text to the on-disk baseline via `pretty_assertions::StrComparison`.
-//! The on-disk baselines are treated as the source of truth; the
-//! `expected.*` files are never written back from Rust.
+//! Scope: baseline + variant. Every fixture root that carries
+//! `input.*` plus one of the five `expected.*` siblings yields one
+//! subprocess invocation per format. The same variant tree the
+//! in-process harness consumes from
+//! `crates/unsnarl/tests/fixture-variants/<rel>/variants.json` (and
+//! `plugin-<slug>/` auto-discovery) is also walked here; each
+//! variant entry is translated into the equivalent
+//! `-r` / `-A` / `-B` / `--depth*` / `-H` / `--plugin` invocation,
+//! and the variant directory's baselines (`Json`/`Mermaid`/
+//! `Markdown`/`Stats` for non-plugin variants — `Ir` is intentionally
+//! omitted because pruning / depth / highlight only narrow the
+//! downstream `VisualGraph` and the parent IR stays identical — plus
+//! `Ir` for plugin variants because plugin transforms reshape the IR
+//! itself) are compared byte-for-byte to the subprocess stdout.
 //!
-//! ## Pruning / depth / highlight / plugin variants
-//!
-//! Some fixtures additionally carry sibling `pruned-<slug>/`,
-//! `depth-<slug>/`, `pruned-depth-<slug>/`, `highlight-<slug>/`,
-//! `pruned-highlight-<slug>/`, or `plugin-<slug>/` directories
-//! whose expected baselines reflect a pruned, depth-collapsed,
-//! highlighted, plugin-applied, or combined visual graph.
-//!
-//! The harness reads the per-variant options from a `variants.json`
-//! manifest at the mirrored path under
-//! `crates/unsnarl/tests/fixture-variants/` (see
-//! [`fixture_variants_root`]). The fixtures tree is treated as
-//! immutable, so the manifests live alongside the harness rather
-//! than under it. Each manifest entry yields a
-//! [`PruningRunOptions`] / [`NestingDepths`] /
-//! [`HighlightRunOptions`] tuple that the harness runs the pipeline
-//! against before comparing the variant's baseline.
-//!
-//! `plugin-<slug>/` variants do **not** use a manifest. They are
-//! auto-discovered by scanning the fixture root for `plugin-*`
-//! sibling subdirectories and resolving `<slug>` directly against
-//! the default plugin registry (slug = post-strip plugin short
-//! name, e.g. `plugin-react` → activate `react`).
+//! Per-kind depth variants (the programmatic-only form documented in
+//! `format_depth_query.rs`) are intentionally rejected at manifest
+//! parse time: the CLI surface exposes only `--depth`,
+//! `--depth-function`, and `--depth-block`, so a per-kind manifest
+//! cannot be reconstructed from CLI flags. If such an entry ever
+//! appears, the parser panics loudly rather than silently dropping
+//! the case.
 
 use std::fs;
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use libtest_mimic::{Arguments, Failed, Trial};
 use pretty_assertions::StrComparison;
-use unsnarl_emitter_mermaid::strategy::MermaidStrategy;
-use unsnarl_emitter_mermaid::theme::DARK_THEME;
-use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_plugin::UnsnarlPlugin;
-use unsnarl_root_query::{parse_root_queries, ParsedRootQuery};
-use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
-use unsnarl::pipeline::plugin::default_registry;
-use unsnarl::pipeline::prune::PruningRunOptions;
-use unsnarl::pipeline::{
-    emit_ir_text, emit_json_text, emit_markdown_text, emit_mermaid_text, emit_stats_text,
-    language_for_path, PipelineRunOptions,
-};
+const UNS_BIN: &str = env!("CARGO_BIN_EXE_uns");
 
 fn workspace_root() -> PathBuf {
     let manifest_dir = env!("CARGO_MANIFEST_DIR");
@@ -65,16 +46,68 @@ fn workspace_root() -> PathBuf {
 }
 
 fn fixtures_root() -> PathBuf {
-    workspace_root().join("ts/integration/fixtures")
+    workspace_root().join("integration/fixtures")
 }
 
-/// Root of the per-fixture `variants.json` manifests consumed by
-/// this harness. Lives alongside the harness because the fixtures
-/// tree is treated as immutable. Layout mirrors the fixture tree
-/// exactly: a fixture at `<fixtures-root>/<rel>` reads its manifest
-/// from `crates/unsnarl/tests/fixture-variants/<rel>/variants.json`.
+/// Root of the per-fixture `variants.json` manifests. The fixtures
+/// tree is treated as immutable; the manifests live alongside the
+/// harness.
 fn fixture_variants_root() -> PathBuf {
     workspace_root().join("crates/unsnarl/tests/fixture-variants")
+}
+
+#[derive(Clone, Copy)]
+enum Baseline {
+    Ir,
+    Json,
+    Mermaid,
+    Markdown,
+    Stats,
+}
+
+impl Baseline {
+    fn file_name(self) -> &'static str {
+        match self {
+            Self::Ir => "expected.ir.json",
+            Self::Json => "expected.json",
+            Self::Mermaid => "expected.mermaid",
+            Self::Markdown => "preview.md",
+            Self::Stats => "expected.stats",
+        }
+    }
+
+    fn cli_format(self) -> &'static str {
+        match self {
+            Self::Ir => "ir",
+            Self::Json => "json",
+            Self::Mermaid => "mermaid",
+            Self::Markdown => "markdown",
+            Self::Stats => "stats",
+        }
+    }
+
+    fn test_suffix(self) -> &'static str {
+        self.cli_format()
+    }
+}
+
+struct CliCase {
+    name: String,
+    input: PathBuf,
+    expected: PathBuf,
+    baseline: Baseline,
+    /// Extra CLI flags appended after `-f <format>` and before the
+    /// input path. Empty for baseline cases; populated from a
+    /// `variants.json` entry or a `plugin-<slug>/` auto-discovery
+    /// for variant cases.
+    extra_args: Vec<String>,
+}
+
+fn is_supported_input(name: &str) -> bool {
+    matches!(
+        Path::new(name).extension().and_then(|e| e.to_str()),
+        Some("ts") | Some("tsx") | Some("js") | Some("jsx") | Some("mjs") | Some("cjs")
+    )
 }
 
 fn find_input_file(dir: &Path) -> Option<PathBuf> {
@@ -90,266 +123,13 @@ fn find_input_file(dir: &Path) -> Option<PathBuf> {
         if !name.starts_with("input.") {
             continue;
         }
-        if language_for_path(name).is_some() {
+        if is_supported_input(name) {
             return Some(path);
         }
     }
     None
 }
 
-/// Which baseline a [`FixtureCase`] checks against.
-#[derive(Clone, Copy)]
-enum Baseline {
-    /// `expected.ir.json` baseline.
-    Ir,
-    /// `expected.json` baseline (visual-graph JSON).
-    Json,
-    /// `expected.mermaid` baseline. The harness renders with the
-    /// CLI defaults (elk strategy + dark theme, `--debug` off) so
-    /// the test bytes match the on-disk baselines.
-    Mermaid,
-    /// `preview.md` baseline. Same CLI defaults as `Mermaid` — the
-    /// markdown emitter embeds the mermaid render inside a fenced
-    /// ```mermaid block.
-    Markdown,
-    /// `expected.stats` baseline. One TSV row per visual-graph node
-    /// followed by a `<N> total` summary; the emitter has no CLI
-    /// knobs to thread.
-    Stats,
-}
-
-impl Baseline {
-    fn file_name(self) -> &'static str {
-        match self {
-            Self::Ir => "expected.ir.json",
-            Self::Json => "expected.json",
-            Self::Mermaid => "expected.mermaid",
-            Self::Markdown => "preview.md",
-            Self::Stats => "expected.stats",
-        }
-    }
-
-    fn test_suffix(self) -> &'static str {
-        match self {
-            Self::Ir => "ir",
-            Self::Json => "json",
-            Self::Mermaid => "mermaid",
-            Self::Markdown => "markdown",
-            Self::Stats => "stats",
-        }
-    }
-}
-
-/// One fixture × one baseline test case (fixture root with
-/// `input.*` + the matching `expected.*` baseline). When `pruning`
-/// / `depths` / `highlight` are `Some`, or `plugins` is non-empty,
-/// the pipeline is run with those options before comparing against
-/// the variant's baseline.
-struct FixtureCase {
-    name: String,
-    input: PathBuf,
-    expected: PathBuf,
-    rel_source_path: String,
-    baseline: Baseline,
-    pruning: Option<PruningRunOptions>,
-    depths: Option<NestingDepths>,
-    highlight: Option<HighlightRunOptions>,
-    /// Post-strip plugin short names to activate via the default
-    /// pipeline registry. Empty for baseline / non-plugin variants.
-    plugins: Vec<String>,
-}
-
-fn collect_fixtures() -> Vec<FixtureCase> {
-    let root = fixtures_root();
-    let mut out = Vec::new();
-    visit_dir(&root, &root, &mut out);
-    out.sort_by(|a, b| a.name.cmp(&b.name));
-    out
-}
-
-/// Scan `dir` for `plugin-<slug>` sibling subdirectories and
-/// return the slugs in stable (sorted) order. The slug is the
-/// directory name with the `plugin-` prefix stripped — the same
-/// post-strip plugin short name the CLI produces from
-/// `--plugin <name>`.
-fn discover_plugin_slugs(dir: &Path) -> Vec<String> {
-    let Ok(entries) = fs::read_dir(dir) else {
-        return Vec::new();
-    };
-    let mut slugs: Vec<String> = entries
-        .flatten()
-        .filter_map(|entry| {
-            if !entry.path().is_dir() {
-                return None;
-            }
-            let name = entry.file_name();
-            let name = name.to_string_lossy();
-            name.strip_prefix("plugin-").map(|s| s.to_string())
-        })
-        .collect();
-    slugs.sort();
-    slugs
-}
-
-fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<FixtureCase>) {
-    let Ok(entries) = fs::read_dir(dir) else {
-        return;
-    };
-    let entries: Vec<_> = entries.flatten().collect();
-    // First, check whether this directory itself is a fixture root.
-    if let Some(input) = find_input_file(dir) {
-        let rel_name = dir
-            .strip_prefix(root)
-            .unwrap_or(dir)
-            .to_string_lossy()
-            .replace('\\', "/")
-            .to_string();
-        // Source path the IR records: relative to the project root
-        // (the parent-of-parent of the fixtures root), matching the
-        // baseline snapshots' `relative(PROJECT_ROOT, ...)` shape.
-        let ts_root = root
-            .parent()
-            .and_then(Path::parent)
-            .expect("fixtures live under ts/integration/fixtures");
-        let rel_source = input
-            .strip_prefix(ts_root)
-            .unwrap_or(&input)
-            .to_string_lossy()
-            .replace('\\', "/")
-            .to_string();
-        for baseline in [
-            Baseline::Ir,
-            Baseline::Json,
-            Baseline::Mermaid,
-            Baseline::Markdown,
-            Baseline::Stats,
-        ] {
-            let expected = dir.join(baseline.file_name());
-            if !expected.is_file() {
-                continue;
-            }
-            out.push(FixtureCase {
-                name: format!("{rel_name}::{}", baseline.test_suffix()),
-                input: input.clone(),
-                expected,
-                rel_source_path: rel_source.clone(),
-                baseline,
-                pruning: None,
-                depths: None,
-                highlight: None,
-                plugins: Vec::new(),
-            });
-        }
-        // Generate variant cases from a `variants.json` manifest
-        // at the mirrored path under
-        // `crates/unsnarl/tests/fixture-variants/`. Each variant
-        // entry pulls in every baseline that exists under the
-        // variant directory. The baseline list intentionally
-        // excludes `Ir`: pruning / depth / highlight only narrow
-        // the downstream `VisualGraph`, so the IR snapshot matches
-        // the parent baseline and no per-variant IR fixture is
-        // recorded.
-        for variant in read_variants(root, dir) {
-            let variant_dir = dir.join(variant.dir_name());
-            if !variant_dir.is_dir() {
-                continue;
-            }
-            for baseline in [
-                Baseline::Json,
-                Baseline::Mermaid,
-                Baseline::Markdown,
-                Baseline::Stats,
-            ] {
-                let expected = variant_dir.join(baseline.file_name());
-                if !expected.is_file() {
-                    continue;
-                }
-                let pruning = variant.pruning();
-                let depths = variant.depths.clone();
-                let highlight = variant.highlight();
-                out.push(FixtureCase {
-                    name: format!(
-                        "{rel_name}/{}::{}",
-                        variant.dir_name(),
-                        baseline.test_suffix()
-                    ),
-                    input: input.clone(),
-                    expected,
-                    rel_source_path: rel_source.clone(),
-                    baseline,
-                    pruning,
-                    depths,
-                    highlight,
-                    plugins: Vec::new(),
-                });
-            }
-        }
-        // Plugin variants are auto-discovered: any sibling subdir
-        // named `plugin-<slug>` resolves `<slug>` against the
-        // bundled plugin set (the same names the CLI's
-        // `collect_plugins` accepts after stripping the
-        // `unsnarl-plugin-` prefix). No manifest entry is needed —
-        // the slug uniquely identifies which plugin to activate.
-        //
-        // Unlike pruning / depth / highlight variants the IR
-        // baseline IS per-variant because plugin transforms reshape
-        // the IR itself; each plugin variant directory therefore
-        // records its own `expected.ir.json`.
-        for plugin_slug in discover_plugin_slugs(dir) {
-            let variant_dir = dir.join(format!("plugin-{plugin_slug}"));
-            for baseline in [
-                Baseline::Ir,
-                Baseline::Json,
-                Baseline::Mermaid,
-                Baseline::Markdown,
-                Baseline::Stats,
-            ] {
-                let expected = variant_dir.join(baseline.file_name());
-                if !expected.is_file() {
-                    continue;
-                }
-                out.push(FixtureCase {
-                    name: format!(
-                        "{rel_name}/plugin-{plugin_slug}::{}",
-                        baseline.test_suffix()
-                    ),
-                    input: input.clone(),
-                    expected,
-                    rel_source_path: rel_source.clone(),
-                    baseline,
-                    pruning: None,
-                    depths: None,
-                    highlight: None,
-                    plugins: vec![plugin_slug.clone()],
-                });
-            }
-        }
-    }
-    for entry in entries {
-        let path = entry.path();
-        if path.is_dir() {
-            visit_dir(root, &path, out);
-        }
-    }
-}
-
-/// Per-fixture variant declared in `variants.json`.
-///
-/// One entry per variant sibling directory. `kind` selects whether
-/// the variant directory is `pruned-<slug>/`, `depth-<slug>/`,
-/// `pruned-depth-<slug>/`, `highlight-<slug>/`, or
-/// `pruned-highlight-<slug>/`; the field defaults to `pruned` for
-/// backward compatibility with the original manifests (which only
-/// described pruning variants).
-///
-/// `plugin-<slug>/` variants are deliberately **not** part of this
-/// enum: their only parameter is the plugin name to activate, the
-/// slug already encodes that (slug = post-strip plugin short name),
-/// and the CLI const at
-/// `crates/unsnarl/src/cli/args/collect_plugins.rs` already
-/// validates the membership. Plugin variants are auto-discovered
-/// by scanning for `plugin-<slug>/` subdirs and resolving `<slug>`
-/// against the default registry — no manifest entry is needed.
 #[derive(Clone, Copy)]
 enum VariantKind {
     Pruned,
@@ -391,16 +171,23 @@ impl VariantKind {
         )
     }
 
+    fn needs_depths(self) -> bool {
+        matches!(self, Self::Depth | Self::PrunedDepth)
+    }
+
     fn needs_highlight(self) -> bool {
         matches!(self, Self::Highlight | Self::PrunedHighlight)
     }
 }
 
-/// `highlight` field on a variant:
-/// - `Roots` -> `-H` with no inline value (the highlight follows
-///   `pruning.roots`; only meaningful alongside a pruned variant).
-/// - `Queries(raw)` -> `-H <raw>`. The raw string is fed verbatim to
-///   `parse_root_queries`, matching the grammar the CLI accepts.
+/// Subset of depth shapes the CLI surface can reconstruct. The full
+/// per-kind form is intentionally rejected (see module docs) — it
+/// has no CLI flag.
+enum DepthsSpec {
+    Uniform(u32),
+    FunctionBlock { function: u32, block: u32 },
+}
+
 enum HighlightSpec {
     Roots,
     Queries(String),
@@ -412,7 +199,7 @@ struct VariantSpec {
     roots: Option<String>,
     descendants: Option<u32>,
     ancestors: Option<u32>,
-    depths: Option<NestingDepths>,
+    depths: Option<DepthsSpec>,
     highlight: Option<HighlightSpec>,
 }
 
@@ -421,45 +208,54 @@ impl VariantSpec {
         format!("{}-{}", self.kind.dir_prefix(), self.slug)
     }
 
-    fn pruning(&self) -> Option<PruningRunOptions> {
-        if !self.kind.needs_pruning() {
-            return None;
+    /// Convert the variant into the CLI flag sequence the in-process
+    /// `PipelineRunOptions` would otherwise carry. The flag order
+    /// mirrors the CLI's docstring ordering (`-r`, `-A`, `-B`,
+    /// `--depth*`, `-H`); the binary is order-insensitive so this is
+    /// only for readability when a test fails.
+    fn build_cli_args(&self) -> Vec<String> {
+        let mut args = Vec::new();
+        if self.kind.needs_pruning() {
+            let roots = self.roots.as_deref().unwrap_or_else(|| {
+                panic!("variant {}: kind requires 'roots'", self.slug);
+            });
+            args.push("-r".into());
+            args.push(roots.into());
+            let descendants = self.descendants.unwrap_or_else(|| {
+                panic!("variant {}: kind requires 'descendants'", self.slug);
+            });
+            let ancestors = self.ancestors.unwrap_or_else(|| {
+                panic!("variant {}: kind requires 'ancestors'", self.slug);
+            });
+            args.push("-A".into());
+            args.push(descendants.to_string());
+            args.push("-B".into());
+            args.push(ancestors.to_string());
         }
-        let roots = self
-            .roots
-            .as_deref()
-            .unwrap_or_else(|| panic!("variant {}: missing 'roots' for kind 'pruned'", self.slug));
-        let queries: Vec<ParsedRootQuery> = parse_root_queries(roots).unwrap_or_else(|e| {
-            panic!(
-                "variant {}: parse_root_queries({}) failed: {e}",
-                self.slug, roots
-            )
-        });
-        Some(PruningRunOptions {
-            roots: queries,
-            descendants: self.descendants.unwrap_or_else(|| {
-                panic!("variant {}: missing 'descendants'", self.slug);
-            }),
-            ancestors: self.ancestors.unwrap_or_else(|| {
-                panic!("variant {}: missing 'ancestors'", self.slug);
-            }),
-        })
-    }
-
-    fn highlight(&self) -> Option<HighlightRunOptions> {
-        let spec = self.highlight.as_ref()?;
-        Some(match spec {
-            HighlightSpec::Roots => HighlightRunOptions::Roots,
-            HighlightSpec::Queries(raw) => {
-                let queries: Vec<ParsedRootQuery> = parse_root_queries(raw).unwrap_or_else(|e| {
-                    panic!(
-                        "variant {}: parse_root_queries({}) failed: {e}",
-                        self.slug, raw
-                    )
-                });
-                HighlightRunOptions::Queries(queries)
+        if let Some(d) = &self.depths {
+            match d {
+                DepthsSpec::Uniform(n) => {
+                    args.push("--depth".into());
+                    args.push(n.to_string());
+                }
+                DepthsSpec::FunctionBlock { function, block } => {
+                    args.push("--depth-function".into());
+                    args.push(function.to_string());
+                    args.push("--depth-block".into());
+                    args.push(block.to_string());
+                }
             }
-        })
+        }
+        if let Some(h) = &self.highlight {
+            match h {
+                HighlightSpec::Roots => args.push("-H".into()),
+                HighlightSpec::Queries(raw) => {
+                    args.push("-H".into());
+                    args.push(raw.clone());
+                }
+            }
+        }
+        args
     }
 }
 
@@ -472,21 +268,10 @@ fn read_variants(root: &Path, dir: &Path) -> Vec<VariantSpec> {
     let Ok(text) = fs::read_to_string(&manifest) else {
         return Vec::new();
     };
-    parse_variants_json(&text).unwrap_or_else(|e| {
-        panic!(
-            "failed to parse {}: {e}\nThe manifest must be a JSON object \
-             {{\"variants\": [{{\"kind\": ..., \"slug\": ..., \
-             \"roots\": ..., \"descendants\": ..., \"ancestors\": ..., \
-             \"depths\": ..., \"highlight\": ...}}, ...]}}.",
-            manifest.display()
-        )
-    })
+    parse_variants_json(&text)
+        .unwrap_or_else(|e| panic!("failed to parse {}: {e}", manifest.display()))
 }
 
-/// Minimal JSON manifest parser. The schema is fixed (`variants[]`
-/// of `{kind?, slug, roots?, descendants?, ancestors?, depths?, highlight?}`)
-/// so a hand-written parser avoids pulling `serde` into the dev-dep
-/// surface beyond the `serde_json::Value` already in use.
 fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
     let value: serde_json::Value = serde_json::from_str(text).map_err(|e| e.to_string())?;
     let arr = value
@@ -527,7 +312,7 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
                 kind.dir_prefix()
             ));
         }
-        if matches!(kind, VariantKind::Depth | VariantKind::PrunedDepth) && depths.is_none() {
+        if kind.needs_depths() && depths.is_none() {
             return Err(format!(
                 "variant {slug}: kind '{}' requires 'depths'",
                 kind.dir_prefix()
@@ -552,12 +337,36 @@ fn parse_variants_json(text: &str) -> Result<Vec<VariantSpec>, String> {
     Ok(out)
 }
 
-/// Parse the `highlight` field. Two shapes are accepted:
-/// `{"mode": "roots"}` for the `-H` no-value form (the highlight
-/// follows `pruning.roots`), and `{"mode": "queries", "raw": "<raw>"}`
-/// for `-H <raw>`. The raw string is fed verbatim to
-/// `parse_root_queries` so multi-token strings (`"a,L7"`) round-trip
-/// unchanged.
+fn parse_depths(slug: &str, v: &serde_json::Value) -> Result<DepthsSpec, String> {
+    let obj = v
+        .as_object()
+        .ok_or_else(|| format!("variant {slug}: 'depths' must be an object"))?;
+    if let Some(n) = obj.get("uniform") {
+        let value = n.as_u64().ok_or_else(|| {
+            format!("variant {slug}: 'depths.uniform' must be a non-negative integer")
+        })?;
+        return Ok(DepthsSpec::Uniform(value as u32));
+    }
+    if obj.contains_key("function") && obj.contains_key("block") && obj.len() == 2 {
+        let function = obj["function"].as_u64().ok_or_else(|| {
+            format!("variant {slug}: 'depths.function' must be a non-negative integer")
+        })?;
+        let block = obj["block"].as_u64().ok_or_else(|| {
+            format!("variant {slug}: 'depths.block' must be a non-negative integer")
+        })?;
+        return Ok(DepthsSpec::FunctionBlock {
+            function: function as u32,
+            block: block as u32,
+        });
+    }
+    Err(format!(
+        "variant {slug}: 'depths' uses the per-kind form, which has no CLI \
+         equivalent (the CLI exposes only --depth, --depth-function, and \
+         --depth-block). Per-kind cases are unit-tested directly in \
+         crates/unsnarl-emitter-markdown/src/format_depth_query/."
+    ))
+}
+
 fn parse_highlight(slug: &str, v: &serde_json::Value) -> Result<HighlightSpec, String> {
     let obj = v
         .as_object()
@@ -593,127 +402,175 @@ fn parse_highlight(slug: &str, v: &serde_json::Value) -> Result<HighlightSpec, S
     }
 }
 
-/// Parse the `depths` field. Supports either a uniform shorthand
-/// (`{"uniform": N}`), a function-vs-block split
-/// (`{"function": N, "block": N}` — matches the CLI flag surface),
-/// or a fully per-kind object listing every `NestingKind`. Other
-/// shapes are rejected so a typo cannot silently leak default
-/// values into a test case.
-fn parse_depths(slug: &str, v: &serde_json::Value) -> Result<NestingDepths, String> {
-    let obj = v
-        .as_object()
-        .ok_or_else(|| format!("variant {slug}: 'depths' must be an object"))?;
-    let to_depth = |key: &str, n: &serde_json::Value| -> Result<NestingDepth, String> {
-        let n = n.as_u64().ok_or_else(|| {
-            format!("variant {slug}: 'depths.{key}' must be a non-negative integer")
-        })?;
-        Ok(NestingDepth(n as u32))
+/// Scans `dir` for
+/// `plugin-<slug>` sibling subdirectories and returns the slugs in
+/// stable (sorted) order. The slug is the directory name with the
+/// `plugin-` prefix stripped — the same post-strip plugin short name
+/// the CLI's `--plugin` flag accepts.
+fn discover_plugin_slugs(dir: &Path) -> Vec<String> {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return Vec::new();
     };
-    if let Some(n) = obj.get("uniform") {
-        let value = to_depth("uniform", n)?;
-        return Ok(NestingDepths::uniform(value));
-    }
-    if obj.contains_key("function") && obj.contains_key("block") && obj.len() == 2 {
-        let function = to_depth("function", &obj["function"])?;
-        let block = to_depth("block", &obj["block"])?;
-        return Ok(NestingDepths {
-            function,
-            r#if: block,
-            r#for: block,
-            r#while: block,
-            switch: block,
-            try_catch_finally: block,
-            block,
-        });
-    }
-    let mut depths = NestingDepths::uniform(NestingDepth(0));
-    let expected_keys = [
-        "function",
-        "if",
-        "for",
-        "while",
-        "switch",
-        "try-catch-finally",
-        "block",
-    ];
-    for key in expected_keys {
-        let n = obj.get(key).ok_or_else(|| {
-            format!("variant {slug}: 'depths.{key}' is required for per-kind form")
-        })?;
-        let value = to_depth(key, n)?;
-        match key {
-            "function" => depths.function = value,
-            "if" => depths.r#if = value,
-            "for" => depths.r#for = value,
-            "while" => depths.r#while = value,
-            "switch" => depths.switch = value,
-            "try-catch-finally" => depths.try_catch_finally = value,
-            "block" => depths.block = value,
-            _ => unreachable!(),
-        }
-    }
-    if obj.len() != expected_keys.len() {
-        return Err(format!(
-            "variant {slug}: 'depths' object has unexpected keys; \
-             allowed shapes are {{\"uniform\": N}}, \
-             {{\"function\": N, \"block\": N}}, \
-             or a full per-kind object listing every NestingKind"
-        ));
-    }
-    Ok(depths)
+    let mut slugs: Vec<String> = entries
+        .flatten()
+        .filter_map(|entry| {
+            if !entry.path().is_dir() {
+                return None;
+            }
+            let name = entry.file_name();
+            let name = name.to_string_lossy();
+            name.strip_prefix("plugin-").map(|s| s.to_string())
+        })
+        .collect();
+    slugs.sort();
+    slugs
 }
 
-fn run_case(case: &FixtureCase) -> Result<(), Failed> {
-    let code = fs::read_to_string(&case.input)
-        .map_err(|e| Failed::from(format!("read input {}: {e}", case.input.display())))?;
+fn visit_dir(root: &Path, dir: &Path, out: &mut Vec<CliCase>) {
+    let Ok(entries) = fs::read_dir(dir) else {
+        return;
+    };
+    let entries: Vec<_> = entries.flatten().collect();
+    if let Some(input) = find_input_file(dir) {
+        let rel_name = dir
+            .strip_prefix(root)
+            .unwrap_or(dir)
+            .to_string_lossy()
+            .replace('\\', "/")
+            .to_string();
+        for baseline in [
+            Baseline::Ir,
+            Baseline::Json,
+            Baseline::Mermaid,
+            Baseline::Markdown,
+            Baseline::Stats,
+        ] {
+            let expected = dir.join(baseline.file_name());
+            if !expected.is_file() {
+                continue;
+            }
+            out.push(CliCase {
+                name: format!("{rel_name}::{}", baseline.test_suffix()),
+                input: input.clone(),
+                expected,
+                baseline,
+                extra_args: Vec::new(),
+            });
+        }
+        // Manifest-driven variants (pruned / depth / highlight and their
+        // combinations). Ir is omitted because pruning / depth / highlight
+        // only narrow the downstream VisualGraph and the parent IR stays
+        // identical.
+        for variant in read_variants(root, dir) {
+            let variant_dir = dir.join(variant.dir_name());
+            if !variant_dir.is_dir() {
+                continue;
+            }
+            let extra = variant.build_cli_args();
+            for baseline in [
+                Baseline::Json,
+                Baseline::Mermaid,
+                Baseline::Markdown,
+                Baseline::Stats,
+            ] {
+                let expected = variant_dir.join(baseline.file_name());
+                if !expected.is_file() {
+                    continue;
+                }
+                out.push(CliCase {
+                    name: format!(
+                        "{rel_name}/{}::{}",
+                        variant.dir_name(),
+                        baseline.test_suffix()
+                    ),
+                    input: input.clone(),
+                    expected,
+                    baseline,
+                    extra_args: extra.clone(),
+                });
+            }
+        }
+        // Plugin variants are auto-discovered. Plugin transforms
+        // reshape the IR itself, so the IR baseline IS per-variant.
+        for plugin_slug in discover_plugin_slugs(dir) {
+            let variant_dir = dir.join(format!("plugin-{plugin_slug}"));
+            for baseline in [
+                Baseline::Ir,
+                Baseline::Json,
+                Baseline::Mermaid,
+                Baseline::Markdown,
+                Baseline::Stats,
+            ] {
+                let expected = variant_dir.join(baseline.file_name());
+                if !expected.is_file() {
+                    continue;
+                }
+                out.push(CliCase {
+                    name: format!(
+                        "{rel_name}/plugin-{plugin_slug}::{}",
+                        baseline.test_suffix()
+                    ),
+                    input: input.clone(),
+                    expected,
+                    baseline,
+                    extra_args: vec!["--plugin".into(), plugin_slug.clone()],
+                });
+            }
+        }
+    }
+    for entry in entries {
+        let path = entry.path();
+        if path.is_dir() {
+            visit_dir(root, &path, out);
+        }
+    }
+}
+
+fn collect_cases() -> Vec<CliCase> {
+    let root = fixtures_root();
+    let mut out = Vec::new();
+    visit_dir(&root, &root, &mut out);
+    out.sort_by(|a, b| a.name.cmp(&b.name));
+    out
+}
+
+fn run_case(case: &CliCase) -> Result<(), Failed> {
     let expected = fs::read_to_string(&case.expected)
         .map_err(|e| Failed::from(format!("read expected {}: {e}", case.expected.display())))?;
-    let language = language_for_path(case.rel_source_path.as_str()).ok_or_else(|| {
-        Failed::from(format!("unsupported language for {}", case.rel_source_path))
-    })?;
-    let registry = default_registry();
-    let plugins: Vec<&dyn UnsnarlPlugin> = registry
-        .activate_all(&case.plugins)
-        .map_err(|e| Failed::from(format!("activate plugins: {e}")))?;
-    let run = PipelineRunOptions {
-        pruning: case.pruning.as_ref(),
-        depths: case.depths.as_ref(),
-        highlight: case.highlight.as_ref(),
-        plugins: &plugins,
-    };
-    let actual = match case.baseline {
-        Baseline::Ir => emit_ir_text(&code, &case.rel_source_path, language, true, &plugins)
-            .map_err(|e| Failed::from(format!("emit_ir_text failed: {e:?}")))?,
-        Baseline::Json => emit_json_text(&code, &case.rel_source_path, language, true, run)
-            .map_err(|e| Failed::from(format!("emit_json_text failed: {e:?}")))?,
-        Baseline::Mermaid => emit_mermaid_text(
-            &code,
-            &case.rel_source_path,
-            language,
-            MermaidStrategy::Elk,
-            &DARK_THEME,
-            false,
-            run,
-        )
-        .map_err(|e| Failed::from(format!("emit_mermaid_text failed: {e:?}")))?,
-        Baseline::Markdown => emit_markdown_text(
-            &code,
-            &case.rel_source_path,
-            language,
-            MermaidStrategy::Elk,
-            &DARK_THEME,
-            false,
-            run,
-        )
-        .map_err(|e| Failed::from(format!("emit_markdown_text failed: {e:?}")))?,
-        Baseline::Stats => emit_stats_text(&code, &case.rel_source_path, language, run)
-            .map_err(|e| Failed::from(format!("emit_stats_text failed: {e:?}")))?,
-    };
+    let ws = workspace_root();
+    let rel_input = case.input.strip_prefix(&ws).unwrap_or(&case.input);
+    let mut command = Command::new(UNS_BIN);
+    command
+        .current_dir(&ws)
+        .arg("-f")
+        .arg(case.baseline.cli_format());
+    for arg in &case.extra_args {
+        command.arg(arg);
+    }
+    // `-H` is declared `num_args = 0..=1` in `cli/args.rs`, so a
+    // bare `uns ... -H <input>` would let clap grab `<input>` as the
+    // `-H` value. Pin positional handling with the standard `--`
+    // separator so the input path is unambiguous regardless of
+    // which flags `extra_args` carries.
+    command.arg("--").arg(rel_input);
+    let output = command
+        .output()
+        .map_err(|e| Failed::from(format!("spawn {UNS_BIN}: {e}")))?;
+    if !output.status.success() {
+        let stderr = String::from_utf8_lossy(&output.stderr);
+        return Err(Failed::from(format!(
+            "{} exited with {} for {}\nargs: {:?}\nstderr:\n{}",
+            UNS_BIN, output.status, case.name, case.extra_args, stderr
+        )));
+    }
+    let actual = String::from_utf8(output.stdout)
+        .map_err(|e| Failed::from(format!("invalid utf-8 stdout for {}: {e}", case.name)))?;
     if actual != expected {
         return Err(Failed::from(format!(
-            "{} mismatch for {}\n{}",
+            "{} mismatch for {}\nargs: {:?}\n{}",
             case.baseline.test_suffix(),
             case.name,
+            case.extra_args,
             StrComparison::new(&expected, &actual)
         )));
     }
@@ -722,7 +579,7 @@ fn run_case(case: &FixtureCase) -> Result<(), Failed> {
 
 fn main() {
     let args = Arguments::from_args();
-    let cases = collect_fixtures();
+    let cases = collect_cases();
     let trials: Vec<Trial> = cases
         .into_iter()
         .map(|case| {
