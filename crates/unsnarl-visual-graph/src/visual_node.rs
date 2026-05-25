@@ -399,8 +399,34 @@ impl SyntheticVisualNode {
         )
     }
 
-    pub fn for_statement_header(id: impl Into<String>, line: u32, kind: SyntheticNodeKind) -> Self {
-        Self::base(id, "for-test", line, kind, SyntheticExtras::None {})
+    pub fn for_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForStatementHeader,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn for_in_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForInStatementHeader,
+            SyntheticExtras::None {},
+        )
+    }
+
+    pub fn for_of_statement_header(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "for-test",
+            line,
+            SyntheticNodeKind::SyntheticForOfStatementHeader,
+            SyntheticExtras::None {},
+        )
     }
 
     pub fn beyond_depth(id: impl Into<String>, line: u32) -> Self {

@@ -23,7 +23,7 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::AstType;
 
-use crate::visual_node::{SyntheticNodeKind, SyntheticVisualNode};
+use crate::visual_node::SyntheticVisualNode;
 
 use super::arena::{BuildArena, SubgraphIdx};
 use super::loop_test_node_id::{do_while_test_node_id, for_test_node_id, while_test_node_id};
@@ -40,16 +40,17 @@ pub fn attach_loop_test_anchor(
         if state.for_test_anchor_by_offset.contains_key(&offset) {
             return;
         }
-        let kind = match scope.block.r#type {
-            AstType::ForStatement => SyntheticNodeKind::SyntheticForStatementHeader,
-            AstType::ForInStatement => SyntheticNodeKind::SyntheticForInStatementHeader,
-            _ => SyntheticNodeKind::SyntheticForOfStatementHeader,
-        };
         let parent_id = scope.upper.as_ref().map(|s| s.value()).unwrap_or("");
         let id = for_test_node_id(parent_id, offset);
-        let node =
-            SyntheticVisualNode::for_statement_header(id.clone(), scope.block.span.line.0, kind)
-                .into();
+        let line = scope.block.span.line.0;
+        let node = match scope.block.r#type {
+            AstType::ForStatement => SyntheticVisualNode::for_statement_header(id.clone(), line),
+            AstType::ForInStatement => {
+                SyntheticVisualNode::for_in_statement_header(id.clone(), line)
+            }
+            _ => SyntheticVisualNode::for_of_statement_header(id.clone(), line),
+        }
+        .into();
         let node_idx = arena.push_node(node);
         state.pending_loop_test_anchors.push(PendingLoopTestAnchor {
             subgraph: sg,
