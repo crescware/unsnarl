@@ -96,7 +96,7 @@ function listInstrumentedTestObjects(): string[] {
   //   - `debug/deps/`: the per-target test binaries (one per
   //     `cargo test` target) plus their dep .rmeta / .d files.
   //   - `debug/` itself: workspace `[[bin]]` binaries (e.g.
-  //     `target/cov-build/debug/uns`) that `tests/cli_parity.rs`
+  //     `target/cov-build/debug/uns`) that `tests/parity.rs`
   //     spawns as subprocesses. Without these in the `-object`
   //     set, the profraw they emit during the e2e sweep would
   //     merge cleanly but render as 0% in the final report.
