@@ -1,7 +1,7 @@
 //! Shared test helpers for the analyzer crate.
 //!
-//! Mirrors the role of `unsnarl-oxc-boundary/src/testing.rs` within
-//! this crate. Most analyzer-side `*_test.rs` files build
+//! Mirrors the role of `unsnarl-oxc-boundary/src/boundary_fixtures.rs`
+//! within this crate. Most analyzer-side `*_test.rs` files build
 //! `PathEntry` fixtures from `(AstType, span)` tuples and compare
 //! returned `PredicateContainer` / `ReferenceCompletion` rows by
 //! destructuring; the helpers here keep that scaffolding from being

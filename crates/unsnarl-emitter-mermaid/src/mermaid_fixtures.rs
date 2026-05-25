@@ -116,8 +116,7 @@ pub fn base_graph() -> VisualGraph {
 
 // ---- RenderState ---------------------------------------------------------
 
-/// Mirrors `baseRenderState()` — dark theme, dagre strategy, every
-/// collection empty.
+/// Dark theme, dagre strategy, every collection empty.
 ///
 /// `'a` stays free here so the caller can populate `node_map` with
 /// borrows that live in the test scope; the empty `HashMap` does not
