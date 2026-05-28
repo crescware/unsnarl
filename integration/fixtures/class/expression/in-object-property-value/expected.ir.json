@@ -39,6 +39,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -83,6 +84,7 @@
         "parentSpanOffset": 9,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -178,6 +180,16 @@
           "callee": {
             "kind": "identifier",
             "name": "callMe"
+          },
+          "startSpan": {
+            "line": 1,
+            "column": 0,
+            "offset": 0
+          },
+          "endSpan": {
+            "line": 1,
+            "column": 25,
+            "offset": 25
           }
         }
       }

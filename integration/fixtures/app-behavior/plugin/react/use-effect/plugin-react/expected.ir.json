@@ -1,0 +1,1049 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx",
+    "language": "tsx"
+  },
+  "raw": "import { useEffect } from \"react\";\n\nconst Counter = ({ start, step }: { start: number; step: number }) => {\n  useEffect(() => {\n    const next = start + step;\n    console.log(next);\n  }, [start, step]);\n  return <button>{start}</button>;\n};\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 10,
+          "column": 0,
+          "offset": 241
+        }
+      },
+      "variables": [
+        "scope#0:useEffect@9",
+        "scope#0:Counter@42",
+        "scope#0:console@163",
+        "scope#0:button@213"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [
+        "ref#5",
+        "ref#9"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 3,
+          "column": 16,
+          "offset": 52
+        },
+        "endSpan": {
+          "line": 9,
+          "column": 1,
+          "offset": 239
+        }
+      },
+      "variables": [
+        "scope#1:start@55",
+        "scope#1:step@62"
+      ],
+      "references": [
+        "ref#1",
+        "ref#7",
+        "ref#8",
+        "ref#9",
+        "ref#10"
+      ],
+      "through": [
+        "ref#5",
+        "ref#9"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 4,
+          "column": 12,
+          "offset": 120
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 3,
+          "offset": 185
+        }
+      },
+      "variables": [
+        "scope#2:next@138"
+      ],
+      "references": [
+        "ref#2",
+        "ref#3",
+        "ref#4",
+        "ref#5",
+        "ref#6"
+      ],
+      "through": [
+        "ref#5"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "statementOffset": 110,
+        "callStartOffset": 110,
+        "callEndOffset": 201,
+        "argIndex": 0
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 2,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:useEffect@9",
+      "name": "useEffect",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "useEffect",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "ImportBinding",
+          "importKind": "named",
+          "importedName": "useEffect",
+          "importSource": "react"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:Counter@42",
+      "name": "Counter",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 6,
+          "offset": 42
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "Counter",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 42
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 3,
+              "column": 6,
+              "offset": 42
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 36
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 52
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@163",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 6,
+          "column": 4,
+          "offset": 163
+        }
+      ],
+      "references": [
+        "ref#5"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 6,
+              "column": 4,
+              "offset": 163
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 6,
+              "column": 4,
+              "offset": 163
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:button@213",
+      "name": "button",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 8,
+          "column": 10,
+          "offset": 213
+        }
+      ],
+      "references": [
+        "ref#9"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "button",
+            "span": {
+              "line": 8,
+              "column": 10,
+              "offset": 213
+            }
+          },
+          "node": {
+            "type": "JSXIdentifier",
+            "span": {
+              "line": 8,
+              "column": 10,
+              "offset": 213
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:start@55",
+      "name": "start",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 19,
+          "offset": 55
+        }
+      ],
+      "references": [
+        "ref#3",
+        "ref#7",
+        "ref#10"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "start",
+            "span": {
+              "line": 3,
+              "column": 19,
+              "offset": 55
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 52
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:step@62",
+      "name": "step",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 26,
+          "offset": 62
+        }
+      ],
+      "references": [
+        "ref#4",
+        "ref#8"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "step",
+            "span": {
+              "line": 3,
+              "column": 26,
+              "offset": 62
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 16,
+              "offset": 52
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:next@138",
+      "name": "next",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 5,
+          "column": 10,
+          "offset": 138
+        }
+      ],
+      "references": [
+        "ref#2",
+        "ref#6"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "next",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 138
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 5,
+              "column": 10,
+              "offset": 138
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 5,
+              "column": 4,
+              "offset": 132
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "BinaryExpression",
+            "span": {
+              "line": 5,
+              "column": 17,
+              "offset": 145
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "Counter",
+        "span": {
+          "line": 3,
+          "column": 6,
+          "offset": 42
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:Counter@42",
+      "owners": [
+        "scope#0:Counter@42"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "useEffect",
+        "span": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:useEffect@9",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "next",
+        "span": {
+          "line": 5,
+          "column": 10,
+          "offset": 138
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:next@138",
+      "owners": [
+        "scope#2:next@138"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "start",
+        "span": {
+          "line": 5,
+          "column": 17,
+          "offset": 145
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:start@55",
+      "owners": [
+        "scope#2:next@138"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "step",
+        "span": {
+          "line": 5,
+          "column": 25,
+          "offset": 153
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#1:step@62",
+      "owners": [
+        "scope#2:next@138"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 6,
+          "column": 4,
+          "offset": 163
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#0:console@163",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 163
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 22,
+          "offset": 181
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 163
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 21,
+            "offset": 180
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#6",
+      "identifier": {
+        "name": "next",
+        "span": {
+          "line": 6,
+          "column": 16,
+          "offset": 175
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:next@138",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 6,
+          "column": 4,
+          "offset": 163
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 22,
+          "offset": 181
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 163
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 21,
+            "offset": 180
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#7",
+      "identifier": {
+        "name": "start",
+        "span": {
+          "line": 7,
+          "column": 6,
+          "offset": 188
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:start@55",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#8",
+      "identifier": {
+        "name": "step",
+        "span": {
+          "line": 7,
+          "column": 13,
+          "offset": 195
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:step@62",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 2,
+          "offset": 110
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 20,
+          "offset": 202
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#9",
+      "identifier": {
+        "name": "button",
+        "span": {
+          "line": 8,
+          "column": 10,
+          "offset": 213
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:button@213",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 8,
+          "column": 2,
+          "offset": 205
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 34,
+          "offset": 237
+        }
+      },
+      "jsxElement": {
+        "startSpan": {
+          "line": 8,
+          "column": 9,
+          "offset": 212
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 33,
+          "offset": 236
+        }
+      },
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#10",
+      "identifier": {
+        "name": "start",
+        "span": {
+          "line": 8,
+          "column": 18,
+          "offset": 221
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:start@55",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 8,
+          "column": 2,
+          "offset": 205
+        },
+        "endSpan": {
+          "line": 8,
+          "column": 34,
+          "offset": 237
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:Counter@42"
+  ],
+  "diagnostics": []
+}

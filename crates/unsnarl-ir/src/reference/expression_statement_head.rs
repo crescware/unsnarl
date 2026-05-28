@@ -24,11 +24,27 @@ pub enum HeadExpression {
         object: Box<HeadExpression>,
         property: String,
     },
+    /// `start_offset` / `end_offset` carry the **enclosing
+    /// CallExpression**'s span (UTF-8 byte). In a chained call
+    /// expression (`a.b().c(cb)`) every nested `CallExpression`
+    /// shares its `span.start` with the chain root, so consumers
+    /// that need to identify which call in the chain a position
+    /// targets must compare both ends. Populated by
+    /// `analyzer::build_head_expression` at construction time and
+    /// translated to UTF-16 [`crate::primitive::Span`]s by the flat
+    /// serializer.
     Call {
         callee: Box<HeadExpression>,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
+    /// `start_offset` / `end_offset` carry the **enclosing
+    /// NewExpression**'s span (UTF-8 byte). Same identification
+    /// rationale as [`Self::Call`].
     New {
         callee: Box<HeadExpression>,
+        start_offset: Utf8ByteOffset,
+        end_offset: Utf8ByteOffset,
     },
     Await {
         argument: Box<HeadExpression>,

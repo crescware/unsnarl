@@ -82,6 +82,7 @@ pub(crate) fn base_serialized_scope(id: &str) -> SerializedScope {
         through: Vec::new(),
         function_expression_scope: false,
         block_context: None,
+        callback_argument: None,
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),
@@ -322,5 +323,6 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
         branch_scopes_by_container,
         depths: None,
         source_index: unsnarl_ir::primitive::SourceIndex::build(&ir.raw),
+        expression_statement_containers_by_offset: HashMap::new(),
     }
 }

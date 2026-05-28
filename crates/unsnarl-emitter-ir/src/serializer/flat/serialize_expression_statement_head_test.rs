@@ -46,47 +46,62 @@ fn recurses_through_a_member_head_and_keeps_the_property_name() {
 }
 
 #[test]
-fn recurses_through_a_call_head() {
+fn recurses_through_a_call_head_and_emits_call_span_pair() {
+    let raw = "foo()";
     let head = HeadExpression::Call {
         callee: Box::new(HeadExpression::identifier("foo".to_string())),
+        start_offset: Utf8ByteOffset(0),
+        end_offset: Utf8ByteOffset(5),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "call",
-            "callee": {"kind": "identifier", "name": "foo"}
+            "callee": {"kind": "identifier", "name": "foo"},
+            "startSpan": {"line": 1, "column": 0, "offset": 0},
+            "endSpan": {"line": 1, "column": 5, "offset": 5}
         })
     );
 }
 
 #[test]
-fn recurses_through_a_new_head() {
+fn recurses_through_a_new_head_and_emits_new_span_pair() {
+    let raw = "new C()";
     let head = HeadExpression::New {
         callee: Box::new(HeadExpression::identifier("C".to_string())),
+        start_offset: Utf8ByteOffset(0),
+        end_offset: Utf8ByteOffset(7),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "new",
-            "callee": {"kind": "identifier", "name": "C"}
+            "callee": {"kind": "identifier", "name": "C"},
+            "startSpan": {"line": 1, "column": 0, "offset": 0},
+            "endSpan": {"line": 1, "column": 7, "offset": 7}
         })
     );
 }
 
 #[test]
 fn recurses_through_an_await_head() {
+    let raw = "await go()";
     let head = HeadExpression::Await {
         argument: Box::new(HeadExpression::Call {
             callee: Box::new(HeadExpression::identifier("go".to_string())),
+            start_offset: Utf8ByteOffset(6),
+            end_offset: Utf8ByteOffset(10),
         }),
     };
     assert_eq!(
-        json(&serialize_head_expression(&head, &SourceIndex::build(""))),
+        json(&serialize_head_expression(&head, &SourceIndex::build(raw))),
         serde_json::json!({
             "kind": "await",
             "argument": {
                 "kind": "call",
-                "callee": {"kind": "identifier", "name": "go"}
+                "callee": {"kind": "identifier", "name": "go"},
+                "startSpan": {"line": 1, "column": 6, "offset": 6},
+                "endSpan": {"line": 1, "column": 10, "offset": 10}
             }
         })
     );

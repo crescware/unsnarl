@@ -50,6 +50,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -101,6 +102,7 @@
         "parentSpanOffset": 52,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -150,6 +152,7 @@
         "parentSpanOffset": 52,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -196,6 +199,7 @@
         "parentSpanOffset": 52,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -730,6 +734,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {
@@ -809,6 +823,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {
@@ -888,6 +912,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {

@@ -37,6 +37,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -91,6 +92,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -139,6 +141,7 @@
         "parentSpanOffset": 12,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -193,6 +196,7 @@
         "parentSpanOffset": 40,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -245,6 +249,7 @@
         "parentSpanOffset": 44,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -731,6 +736,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }
@@ -780,6 +795,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }
@@ -829,6 +854,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }

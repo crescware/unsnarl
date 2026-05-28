@@ -48,97 +48,106 @@
       "elements": [
         {
           "type": "subgraph",
-          "id": "s_scope_2",
-          "kind": "function",
-          "line": 3,
-          "endLine": 6,
-          "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "elements": [
-            {
-              "type": "node",
-              "id": "n_scope_2_value_82",
-              "name": "value",
-              "line": 3,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "FormalParameter"
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_100",
-              "kind": "SyntheticExpressionStatement",
-              "name": "console.log()",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_142",
-              "kind": "SyntheticExpressionStatement",
-              "name": "console.log()",
-              "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            }
-          ]
-        },
-        {
-          "type": "subgraph",
-          "id": "s_scope_3",
-          "kind": "function",
-          "line": 7,
-          "endLine": 10,
-          "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "elements": [
-            {
-              "type": "node",
-              "id": "n_scope_3_error_202",
-              "name": "error",
-              "line": 7,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "FormalParameter"
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_220",
-              "kind": "SyntheticExpressionStatement",
-              "name": "console.error()",
-              "line": 8,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_265",
-              "kind": "SyntheticExpressionStatement",
-              "name": "console.error()",
-              "line": 9,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            }
-          ]
-        },
-        {
-          "type": "node",
           "id": "expr_stmt_47",
-          "kind": "SyntheticExpressionStatement",
-          "name": "await Promise.resolve().then().catch()",
+          "kind": "call-proxy",
           "line": 2,
           "endLine": 10,
-          "isJsxElement": false,
-          "unused": false
+          "direction": "RL",
+          "callName": "await Promise.resolve().then().catch()",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 3,
+              "endLine": 6,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "Promise.resolve().then",
+                "argIndex": 0
+              },
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_2_value_82",
+                  "name": "value",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "FormalParameter"
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_100",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.log()",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_142",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.log()",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "kind": "function",
+              "line": 7,
+              "endLine": 10,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "Promise.resolve().then().catch",
+                "argIndex": 0
+              },
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_3_error_202",
+                  "name": "error",
+                  "line": 7,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "FormalParameter"
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_220",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.error()",
+                  "line": 8,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_265",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.error()",
+                  "line": 9,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
         }
       ]
     }

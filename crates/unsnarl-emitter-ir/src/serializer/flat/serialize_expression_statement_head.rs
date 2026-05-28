@@ -52,11 +52,23 @@ pub fn serialize_head_expression(
             serialize_head_expression(object, index),
             property.clone(),
         ),
-        HeadExpression::Call { callee } => SerializedHeadExpression::Call {
+        HeadExpression::Call {
+            callee,
+            start_offset,
+            end_offset,
+        } => SerializedHeadExpression::Call {
             callee: Box::new(serialize_head_expression(callee, index)),
+            start_span: timed_span_at(index, *start_offset),
+            end_span: timed_span_at(index, *end_offset),
         },
-        HeadExpression::New { callee } => SerializedHeadExpression::New {
+        HeadExpression::New {
+            callee,
+            start_offset,
+            end_offset,
+        } => SerializedHeadExpression::New {
             callee: Box::new(serialize_head_expression(callee, index)),
+            start_span: timed_span_at(index, *start_offset),
+            end_span: timed_span_at(index, *end_offset),
         },
         HeadExpression::Await { argument } => SerializedHeadExpression::Await {
             argument: Box::new(serialize_head_expression(argument, index)),

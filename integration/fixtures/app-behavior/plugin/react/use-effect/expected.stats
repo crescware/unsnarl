@@ -1,0 +1,12 @@
+1	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:0 console
+1	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:0 button
+1	1	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:1 useEffect
+1	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:1 react
+0	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:3 unused Counter
+3	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:3 start
+2	0	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:3 step
+1	2	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:5 next
+0	2	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:6 console.log()
+0	1	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:8 button
+0	1	integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx:8 start
+10	7	11 total

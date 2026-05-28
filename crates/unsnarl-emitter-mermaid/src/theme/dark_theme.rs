@@ -1,8 +1,8 @@
 //! The built-in dark color theme.
 
 use super::color_theme::{
-    BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,
-    VarNodeColors,
+    BoundaryStubColors, ColorTheme, EdgeTargetSubgraphColors, ElkEmptyPlaceholderColors,
+    HighlightColors, NestPaletteEntry, VarNodeColors,
 };
 
 pub static DARK_THEME: ColorTheme = ColorTheme {
@@ -44,6 +44,7 @@ pub static DARK_THEME: ColorTheme = ColorTheme {
             stroke: "transparent",
         },
     ],
+    edge_target_subgraph: EdgeTargetSubgraphColors { stroke: "#888" },
     highlight: HighlightColors {
         fill: "#facc15",
         stroke: "#facc15",

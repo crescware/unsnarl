@@ -41,6 +41,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -83,6 +84,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -135,6 +137,7 @@
         "parentSpanOffset": 30,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -184,6 +187,7 @@
         "parentSpanOffset": 34,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -477,6 +481,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 4,
+            "offset": 61
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 18,
+            "offset": 75
           }
         }
       }
@@ -526,6 +540,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 4,
+            "offset": 61
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 18,
+            "offset": 75
           }
         }
       }

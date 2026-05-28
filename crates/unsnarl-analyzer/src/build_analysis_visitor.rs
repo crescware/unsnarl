@@ -33,9 +33,9 @@ use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
+use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf16CodeUnitOffset, Utf8ByteOffset};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
-use unsnarl_ir::scope::BlockContext;
+use unsnarl_ir::scope::{BlockContext, CallbackArgument};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::{IrArena, ReferenceId, ScopeId};
 use unsnarl_oxc_boundary::materialise::ast_node_of;
@@ -90,6 +90,17 @@ pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
     span_to_scope: &'arena HashMap<(u32, u32), ScopeId>,
     span_to_ref: &'arena HashMap<(u32, u32), ReferenceId>,
     key_stack: Vec<Option<&'static str>>,
+    /// Pushed *only* when entering an argument slot of a
+    /// `CallExpression` / `NewExpression`; popped on the way out.
+    /// Consequently the stack is **not** strictly parallel with
+    /// `key_stack` -- visiting the call's `callee` /
+    /// `type_arguments` does not push a `None` placeholder, so a
+    /// raw `last()` would leak the enclosing arg's index into the
+    /// callee subtree. `callback_argument_for` defends against that
+    /// by additionally checking `current_key() == Some("arguments")`
+    /// before reading the top. Kept separate from `key_stack` so
+    /// existing `&'static str` keys keep their lifetime guarantees.
+    arg_index_stack: Vec<Option<usize>>,
     path: Vec<PathFrame<'a>>,
     /// Parallel to `path`, kept in lock-step on push / pop. Holds
     /// the lifetime-free `(AstNode, key, arrow_body)` triple that the
@@ -127,6 +138,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             span_to_scope,
             span_to_ref,
             key_stack: Vec::new(),
+            arg_index_stack: Vec::new(),
             path: Vec::new(),
             path_entries: Vec::new(),
             program_normalised_start,
@@ -145,8 +157,73 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         self.key_stack.last().copied().flatten()
     }
 
+    fn current_arg_index(&self) -> Option<usize> {
+        self.arg_index_stack.last().copied().flatten()
+    }
+
     fn parent_ast_node(&self) -> Option<&AstNode> {
         self.path_entries.last().map(|e| &e.node)
+    }
+
+    /// Walk the path stack upward to find the nearest enclosing
+    /// `ExpressionStatement` and return its start offset in UTF-16
+    /// code units. Skip synthetic arrow-body expression statements,
+    /// mirroring the existing handling in
+    /// [`Self::fire_reference`].
+    fn enclosing_expression_statement_offset(&self) -> Option<Utf16CodeUnitOffset> {
+        self.path
+            .iter()
+            .enumerate()
+            .rev()
+            .find_map(|(i, f)| match &f.kind {
+                AstKind::ExpressionStatement(es) => {
+                    if is_synthetic_arrow_body_expression_statement(&self.path, i) {
+                        None
+                    } else {
+                        Some(self.index.span_at(Utf8ByteOffset(es.span.start)).offset)
+                    }
+                }
+                _ => None,
+            })
+    }
+
+    /// Build a [`CallbackArgument`] annotation when a function scope
+    /// is the `arg_index`-th argument of an enclosing
+    /// `CallExpression` / `NewExpression` that itself sits inside an
+    /// `ExpressionStatement`. Returns `None` otherwise.
+    fn callback_argument_for(
+        &self,
+        scope_type: ScopeType,
+        parent_node: Option<&AstNode>,
+    ) -> Option<CallbackArgument> {
+        if !matches!(scope_type, ScopeType::Function) {
+            return None;
+        }
+        let parent = parent_node?;
+        if !matches!(
+            parent.r#type,
+            AstType::CallExpression | AstType::NewExpression
+        ) {
+            return None;
+        }
+        // The function must sit in the parent call's `arguments`
+        // slot. Without this guard the function scope of a callee
+        // (e.g. the IIFE in `outer((function(){})())`) would inherit
+        // the outer call's `arg_index_stack` top and be misannotated
+        // as `outer`'s arg.
+        if self.current_key() != Some("arguments") {
+            return None;
+        }
+        let arg_index = self.current_arg_index()?;
+        let statement_offset = self.enclosing_expression_statement_offset()?;
+        let call_start_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
+        let call_end_offset = self.index.span_at(Utf8ByteOffset(parent.span.end)).offset;
+        Some(CallbackArgument::new(
+            statement_offset,
+            call_start_offset,
+            call_end_offset,
+            arg_index as u32,
+        ))
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches
@@ -193,11 +270,13 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             let block_context = block_context_of(parent_node, key, &self.path_entries, self.index);
             (block_context, false, false)
         };
+        let callback_argument = self.callback_argument_for(scope_type, parent_node);
         let abrupt_statements = collect_abrupt_statements(kind, self.index);
         self.annotations.set_scope(
             scope_id,
             ScopeAnnotation {
                 block_context,
+                callback_argument,
                 falls_through,
                 exits_function,
                 nesting_depths,
@@ -734,7 +813,11 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
         self.visit_expression(&it.callee);
         self.key_stack.pop();
         self.key_stack.push(Some("arguments"));
-        self.visit_arguments(&it.arguments);
+        for (i, arg) in it.arguments.iter().enumerate() {
+            self.arg_index_stack.push(Some(i));
+            self.visit_argument(arg);
+            self.arg_index_stack.pop();
+        }
         self.key_stack.pop();
         self.pop_path();
     }
@@ -750,7 +833,11 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_ts_type_parameter_instantiation(type_parameters);
         }
         self.key_stack.push(Some("arguments"));
-        self.visit_arguments(&it.arguments);
+        for (i, arg) in it.arguments.iter().enumerate() {
+            self.arg_index_stack.push(Some(i));
+            self.visit_argument(arg);
+            self.arg_index_stack.pop();
+        }
         self.key_stack.pop();
         self.pop_path();
     }

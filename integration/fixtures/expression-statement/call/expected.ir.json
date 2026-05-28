@@ -40,6 +40,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -222,6 +223,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 15
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 14,
+            "offset": 29
           }
         }
       }
@@ -271,6 +282,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 15
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 14,
+            "offset": 29
           }
         }
       }

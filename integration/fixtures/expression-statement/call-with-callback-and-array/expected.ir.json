@@ -1,0 +1,503 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/call-with-callback-and-array/input.ts",
+    "language": "ts"
+  },
+  "raw": "const seed = 42;\nrun(() => {\n  console.log(seed);\n}, [seed]);\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 0,
+          "offset": 62
+        }
+      },
+      "variables": [
+        "scope#0:seed@6",
+        "scope#0:run@17",
+        "scope#0:console@31"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#4"
+      ],
+      "through": [
+        "ref#1",
+        "ref#2"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 2,
+          "column": 4,
+          "offset": 21
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 1,
+          "offset": 51
+        }
+      },
+      "variables": [],
+      "references": [
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [
+        "ref#2"
+      ],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "statementOffset": 17,
+        "callStartOffset": 17,
+        "callEndOffset": 60,
+        "argIndex": 0
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:seed@6",
+      "name": "seed",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#3",
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "seed",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 13,
+              "offset": 13
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:run@17",
+      "name": "run",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 0,
+          "offset": 17
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "run",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 17
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 17
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:console@31",
+      "name": "console",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 2,
+          "offset": 31
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "console",
+            "span": {
+              "line": 3,
+              "column": 2,
+              "offset": 31
+            }
+          },
+          "node": {
+            "type": "Identifier",
+            "span": {
+              "line": 3,
+              "column": 2,
+              "offset": 31
+            }
+          },
+          "parent": null,
+          "type": "ImplicitGlobalVariable"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "seed",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:seed@6",
+      "owners": [
+        "scope#0:seed@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "run",
+        "span": {
+          "line": 2,
+          "column": 0,
+          "offset": 17
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:run@17",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 0,
+          "offset": 17
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 11,
+          "offset": 61
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "run"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 17
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 60
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "console",
+        "span": {
+          "line": 3,
+          "column": 2,
+          "offset": 31
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:console@31",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 2,
+          "offset": 31
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 20,
+          "offset": 49
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 31
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 19,
+            "offset": 48
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "seed",
+        "span": {
+          "line": 3,
+          "column": 14,
+          "offset": 43
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#0:seed@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 2,
+          "offset": 31
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 20,
+          "offset": 49
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "console"
+            },
+            "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 31
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 19,
+            "offset": 48
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "seed",
+        "span": {
+          "line": 4,
+          "column": 4,
+          "offset": 54
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:seed@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 2,
+          "column": 0,
+          "offset": 17
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 11,
+          "offset": 61
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "run"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 17
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 60
+          }
+        }
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

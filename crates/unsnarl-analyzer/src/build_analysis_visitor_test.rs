@@ -398,3 +398,131 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
          label `value`, not the auto-walker's `arguments` carryover"
     );
 }
+
+fn callback_arg_for_first_function_scope(source: &str) -> serde_json::Value {
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let fn_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Function))
+        .map(|(id, _)| id)
+        .expect("a Function scope must exist");
+
+    let ann = analyzed.annotations.of_scope(fn_scope);
+    serde_json::to_value(&ann.callback_argument).expect("callback_argument serialises to JSON")
+}
+
+#[test]
+fn callback_argument_is_set_for_a_function_passed_as_a_direct_call_argument() {
+    let value = callback_arg_for_first_function_scope("run(() => {});\n");
+    assert!(
+        !value.is_null(),
+        "a function literal directly in arg 0 of an ExpressionStatement-level call must carry a callback_argument: {value}"
+    );
+    assert_eq!(value["argIndex"], 0);
+    // `run(() => {})` spans bytes 0..14 in the source string.
+    assert_eq!(value["callStartOffset"], 0);
+    assert_eq!(value["callEndOffset"], 13);
+}
+
+#[test]
+fn callback_argument_uses_zero_based_index_for_later_argument_slots() {
+    // The arrow is arg 1 of `run`, not arg 0.
+    let value = callback_arg_for_first_function_scope("run(a, () => {});\n");
+    assert_eq!(value["argIndex"], 1);
+}
+
+#[test]
+fn callback_argument_is_absent_when_call_sits_inside_a_variable_declarator() {
+    // Not an ExpressionStatement: the annotation must not fire.
+    let value = callback_arg_for_first_function_scope("const x = run(() => {});\n");
+    assert!(
+        value.is_null(),
+        "a call inside a VariableDeclarator must not produce a callback_argument: {value}"
+    );
+}
+
+#[test]
+fn callback_argument_does_not_leak_into_the_callee_of_an_inner_call() {
+    // Regression: `outer((function(){})())` puts a function expression
+    // in the *callee* slot of the inner CallExpression, which itself
+    // sits in arg 0 of the outer call. The arg_index_stack top remains
+    // `Some(0)` while traversing into the inner callee, so without an
+    // explicit `current_key == Some("arguments")` guard the IIFE
+    // function scope would be misannotated as `outer`'s arg 0.
+    let value = callback_arg_for_first_function_scope("outer((function () {})());\n");
+    assert!(
+        value.is_null(),
+        "an IIFE function in callee position must not be annotated as the outer call's arg: {value}"
+    );
+}
+
+#[test]
+fn callback_argument_is_set_for_a_constructor_callback() {
+    // Annotation must fire for `NewExpression` parents too -- the
+    // analyzer treats `new Service(cb)` the same as `service(cb)`
+    // for callback-arg purposes.
+    let value = callback_arg_for_first_function_scope("new Service(() => {});\n");
+    assert!(!value.is_null());
+    assert_eq!(value["argIndex"], 0);
+    // `new Service(() => {})` spans bytes 0..21 in the source string.
+    assert_eq!(value["callStartOffset"], 0);
+    assert_eq!(value["callEndOffset"], 21);
+}
+
+#[test]
+fn callback_argument_distinguishes_calls_in_a_chain_by_end_offset() {
+    // Every nested `CallExpression` in `a().b().c(cb)` shares its
+    // `span.start` with `a` (offset 0), so the start offset alone
+    // cannot identify *which* call a callback belongs to. The
+    // matching `(start, end)` pair however does -- the inner `a()`
+    // ends at the first `)`, `b()` at the second, `c(cb)` at the
+    // outermost `)`. Two callbacks in the same chain must produce
+    // two distinct `callEndOffset` values.
+    let source = "Promise.resolve().then((value) => {}).catch((error) => {});\n";
+    let values: Vec<serde_json::Value> = callback_args_for_function_scopes(source)
+        .into_iter()
+        .filter(|v| !v.is_null())
+        .collect();
+    assert_eq!(
+        values.len(),
+        2,
+        "expected two annotated callbacks: {values:?}"
+    );
+    let starts: Vec<&serde_json::Value> = values.iter().map(|v| &v["callStartOffset"]).collect();
+    assert!(
+        starts.iter().all(|s| *s == starts[0]),
+        "every nested CallExpression in a chain shares span.start: {starts:?}",
+    );
+    let ends: std::collections::HashSet<u64> = values
+        .iter()
+        .filter_map(|v| v["callEndOffset"].as_u64())
+        .collect();
+    assert_eq!(
+        ends.len(),
+        2,
+        "the two callbacks must have distinct callEndOffsets: {values:?}",
+    );
+}
+
+fn callback_args_for_function_scopes(source: &str) -> Vec<serde_json::Value> {
+    use unsnarl_ir::scope_type::ScopeType;
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+    analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .filter(|(_, s)| matches!(s.r#type, ScopeType::Function))
+        .map(|(id, _)| {
+            let ann = analyzed.annotations.of_scope(id);
+            serde_json::to_value(&ann.callback_argument)
+                .expect("callback_argument serialises to JSON")
+        })
+        .collect()
+}

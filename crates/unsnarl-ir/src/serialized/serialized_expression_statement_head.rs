@@ -28,11 +28,26 @@ pub enum SerializedHeadExpression {
         object: Box<SerializedHeadExpression>,
         property: String,
     },
+    /// `start_span` / `end_span` carry the **enclosing
+    /// CallExpression**'s span. They are emitted so consumers
+    /// (notably the visual-graph builder's callback-arg labeller)
+    /// can match a call node inside a chained expression
+    /// (`a.b().c(cb)`) where every nested `CallExpression` shares
+    /// the same `start.offset` with the chain root.
+    #[serde(rename_all = "camelCase")]
     Call {
         callee: Box<SerializedHeadExpression>,
+        start_span: Span,
+        end_span: Span,
     },
+    /// `start_span` / `end_span` carry the **enclosing
+    /// NewExpression**'s span. Same identification rationale as
+    /// [`Self::Call`].
+    #[serde(rename_all = "camelCase")]
     New {
         callee: Box<SerializedHeadExpression>,
+        start_span: Span,
+        end_span: Span,
     },
     Await {
         argument: Box<SerializedHeadExpression>,

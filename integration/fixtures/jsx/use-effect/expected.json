@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx/use-effect/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_useEffect_9",
+      "name": "useEffect",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "useEffect"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Comp_42",
+      "name": "Comp",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_107",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 11,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Comp_42",
+      "ownerName": "Comp",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_name_52",
+          "name": "name",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "expr_stmt_85",
+          "kind": "call-proxy",
+          "line": 4,
+          "endLine": 9,
+          "direction": "RL",
+          "callName": "useEffect()",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 4,
+              "endLine": 9,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useEffect",
+                "argIndex": 0
+              },
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_3",
+                  "kind": "function",
+                  "line": 6,
+                  "endLine": 8,
+                  "direction": "RL",
+                  "ownerNodeId": null,
+                  "ownerName": "",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "expr_stmt_161",
+                      "kind": "SyntheticExpressionStatement",
+                      "name": "console.log()",
+                      "line": 7,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_107",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.log()",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_react",
+      "kind": "SyntheticModuleSource",
+      "name": "react",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_useEffect_9",
+      "to": "expr_stmt_85",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_107",
+      "to": "expr_stmt_107",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_name_52",
+      "to": "expr_stmt_107",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_107",
+      "to": "expr_stmt_161",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_name_52",
+      "to": "expr_stmt_161",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_name_52",
+      "to": "expr_stmt_85",
+      "label": "read"
+    },
+    {
+      "from": "mod_react",
+      "to": "n_scope_0_useEffect_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

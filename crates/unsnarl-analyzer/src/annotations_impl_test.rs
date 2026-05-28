@@ -80,6 +80,7 @@ fn set_scope_overrides_default() {
         sid(3),
         ScopeAnnotation {
             block_context: None,
+            callback_argument: None,
             falls_through: true,
             exits_function: false,
             nesting_depths: NestingDepths::uniform(NestingDepth(2)),

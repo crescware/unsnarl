@@ -41,6 +41,8 @@ fn member_renders_with_dot() {
 fn call_appends_parens() {
     let head = SerializedHeadExpression::Call {
         callee: Box::new(SerializedHeadExpression::identifier("run".to_string())),
+        start_span: span_at(1, 0, 0),
+        end_span: span_at(1, 5, 5),
     };
     assert_eq!(
         render_head_expression(&head, &SourceIndex::build("")),
@@ -52,6 +54,8 @@ fn call_appends_parens() {
 fn new_renders_with_new_keyword() {
     let head = SerializedHeadExpression::New {
         callee: Box::new(SerializedHeadExpression::identifier("Set".to_string())),
+        start_span: span_at(1, 0, 0),
+        end_span: span_at(1, 9, 9),
     };
     assert_eq!(
         render_head_expression(&head, &SourceIndex::build("")),

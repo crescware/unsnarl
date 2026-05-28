@@ -45,6 +45,7 @@ fn base_scope() -> SerializedScope {
         through: Vec::new(),
         function_expression_scope: false,
         block_context: None,
+        callback_argument: None,
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),

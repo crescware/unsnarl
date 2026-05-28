@@ -37,6 +37,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -89,6 +90,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -142,6 +144,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -195,6 +198,7 @@
         "parentSpanOffset": 20,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -248,6 +252,7 @@
         "parentSpanOffset": 45,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -301,6 +306,7 @@
         "parentSpanOffset": 74,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -359,6 +365,7 @@
         "parentSpanOffset": 107,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -1106,6 +1113,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1155,6 +1172,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1204,6 +1231,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1253,6 +1290,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1302,6 +1349,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1351,6 +1408,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }
@@ -1400,6 +1467,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 12,
+            "offset": 185
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 47,
+            "offset": 220
           }
         }
       }

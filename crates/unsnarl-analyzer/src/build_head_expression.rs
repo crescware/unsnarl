@@ -63,12 +63,16 @@ fn try_build(node: &Expression<'_>) -> Option<HeadExpression> {
             let callee_head = try_build_callee(&call.callee)?;
             Some(HeadExpression::Call {
                 callee: Box::new(callee_head),
+                start_offset: Utf8ByteOffset(call.span.start),
+                end_offset: Utf8ByteOffset(call.span.end),
             })
         }
         Expression::NewExpression(new_expr) => {
             let callee_head = try_build_callee(&new_expr.callee)?;
             Some(HeadExpression::New {
                 callee: Box::new(callee_head),
+                start_offset: Utf8ByteOffset(new_expr.span.start),
+                end_offset: Utf8ByteOffset(new_expr.span.end),
             })
         }
         Expression::AwaitExpression(aw) => {

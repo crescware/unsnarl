@@ -49,7 +49,18 @@ fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<Str
             // back to the live node_map entry in that case.
             let owner_node_id = sg.owner_node_id();
             if owner_node_id.is_none() {
-                out.push_str("(anonymous)<br/>");
+                // Callback-argument header takes precedence over
+                // the bare `(anonymous)` fallback so the subgraph
+                // is self-identifying without having to scan the
+                // surrounding diagram for the matching call proxy.
+                if let Some((callee, arg_index)) = sg.callback_arg() {
+                    escape_into(out, callee);
+                    out.push_str("(args[");
+                    out.push_str(&arg_index.to_string());
+                    out.push_str("])<br/>");
+                } else {
+                    out.push_str("(anonymous)<br/>");
+                }
                 line_range_label_into(out, sg);
                 return;
             }
@@ -62,6 +73,19 @@ fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<Str
                 }
             }
             out.push_str("()<br/>");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::CallProxy => {
+            // The proxy subgraph reuses the leaf-node label the
+            // pre-subgraph implementation would have produced
+            // (`render_head_expression`'s rendering of the head,
+            // e.g. `run()` or `console.log()`). Falling back to the
+            // empty string keeps the layout robust when the build
+            // path bypasses `describe_subgraph` (test fixtures
+            // primarily).
+            let name = sg.call_name().unwrap_or("");
+            escape_into(out, name);
+            out.push_str("<br/>");
             line_range_label_into(out, sg);
         }
         SubgraphKind::Class => match sg.class_name() {

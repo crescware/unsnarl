@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/callback-between-blocks/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_console_24",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_run_47",
+      "name": "run",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 4,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_before_10",
+          "name": "before",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_24",
+          "kind": "SyntheticExpressionStatement",
+          "name": "console.log()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "block"
+    },
+    {
+      "type": "subgraph",
+      "id": "expr_stmt_47",
+      "kind": "call-proxy",
+      "line": 5,
+      "endLine": 7,
+      "direction": "RL",
+      "callName": "run()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 5,
+          "endLine": 7,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "run",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_61",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_3",
+      "line": 8,
+      "endLine": 11,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_3_after_105",
+          "name": "after",
+          "line": 9,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "expr_stmt_118",
+          "kind": "SyntheticExpressionStatement",
+          "name": "console.log()",
+          "line": 10,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "block"
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_24",
+      "to": "expr_stmt_24",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_before_10",
+      "to": "expr_stmt_24",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_run_47",
+      "to": "expr_stmt_47",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_24",
+      "to": "expr_stmt_61",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_24",
+      "to": "expr_stmt_118",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_after_105",
+      "to": "expr_stmt_118",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

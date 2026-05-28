@@ -50,7 +50,13 @@ fn function_subgraph_returns_kind_function_with_owner_metadata() {
     let mut variables: HashMap<&str, &SerializedVariable> = HashMap::new();
     variables.insert("ownerVar", &owner);
 
-    let sg = describe_subgraph(&scope, &owners, &variables);
+    let sg = describe_subgraph(
+        &scope,
+        &owners,
+        &variables,
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    );
     let VisualSubgraph::Owned(s) = sg else {
         panic!("expected owned subgraph");
     };
@@ -88,7 +94,13 @@ fn function_subgraph_falls_back_to_scope_block_span_line_when_owner_has_no_ident
     owners.insert("fn".to_string(), "o".to_string());
     let mut variables: HashMap<&str, &SerializedVariable> = HashMap::new();
     variables.insert("o", &owner);
-    let VisualSubgraph::Owned(s) = describe_subgraph(&scope, &owners, &variables) else {
+    let VisualSubgraph::Owned(s) = describe_subgraph(
+        &scope,
+        &owners,
+        &variables,
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected owned");
     };
     assert_eq!(s.line, 7);
@@ -98,8 +110,13 @@ fn function_subgraph_falls_back_to_scope_block_span_line_when_owner_has_no_ident
 fn function_subgraph_without_owner_var_renders_anonymous() {
     let mut scope = base_serialized_scope("fn");
     scope.r#type = ScopeType::Function;
-    let VisualSubgraph::Owned(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Owned(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected owned");
     };
     assert!(matches!(s.kind, OwnedSubgraphKind::Function));
@@ -119,8 +136,13 @@ fn control_subgraph_for() {
     let mut scope = base_serialized_scope("ctrl");
     scope.r#type = ScopeType::For;
     scope.block = block(AstType::BlockStatement, 0, 1, 10, 3);
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     assert!(matches!(s.kind, ControlSubgraphKind::For));
@@ -134,8 +156,13 @@ fn control_subgraph_catch() {
     let mut scope = base_serialized_scope("ctrl");
     scope.r#type = ScopeType::Catch;
     scope.block = block(AstType::BlockStatement, 0, 1, 10, 3);
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     assert!(matches!(s.kind, ControlSubgraphKind::Catch));
@@ -146,8 +173,13 @@ fn control_subgraph_switch() {
     let mut scope = base_serialized_scope("ctrl");
     scope.r#type = ScopeType::Switch;
     scope.block = block(AstType::BlockStatement, 0, 1, 10, 3);
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     assert!(matches!(s.kind, ControlSubgraphKind::Switch));
@@ -164,8 +196,13 @@ fn case_subgraph_captures_case_test_from_block_context() {
         0,
         Some("x === 1"),
     ));
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     assert!(matches!(s.kind, ControlSubgraphKind::Case));
@@ -185,8 +222,13 @@ fn case_subgraph_keeps_case_test_null_when_default() {
         0,
         None,
     ));
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     let ControlExtras::Case { case_test } = &s.extras else {
@@ -198,8 +240,13 @@ fn case_subgraph_keeps_case_test_null_when_default() {
 #[test]
 fn plain_block_scope_renders_as_generic_block() {
     let scope = base_serialized_scope("plain");
-    let VisualSubgraph::Control(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Control(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected control");
     };
     assert!(matches!(s.kind, ControlSubgraphKind::Block));
@@ -223,7 +270,13 @@ fn class_scope_with_class_name_binding_picks_inner_identifier() {
     let mut variables: HashMap<&str, &SerializedVariable> = HashMap::new();
     variables.insert("innerNameVar", &inner);
 
-    let VisualSubgraph::Owned(s) = describe_subgraph(&scope, &HashMap::new(), &variables) else {
+    let VisualSubgraph::Owned(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &variables,
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected owned");
     };
     assert_eq!(s.id, "s_clsScope");
@@ -243,8 +296,13 @@ fn class_scope_with_no_variables_yields_class_name_null() {
     scope.r#type = ScopeType::Class;
     scope.block = block(AstType::ClassExpression, 0, 1, 10, 1);
     scope.variables = Vec::new();
-    let VisualSubgraph::Owned(s) = describe_subgraph(&scope, &HashMap::new(), &HashMap::new())
-    else {
+    let VisualSubgraph::Owned(s) = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    ) else {
         panic!("expected owned");
     };
     let OwnedExtras::Class { class_name } = s.extras else {
@@ -258,5 +316,11 @@ fn class_scope_with_no_variables_yields_class_name_null() {
 fn panics_when_scope_is_module() {
     let mut scope = base_serialized_scope("mod");
     scope.r#type = ScopeType::Module;
-    let _ = describe_subgraph(&scope, &HashMap::new(), &HashMap::new());
+    let _ = describe_subgraph(
+        &scope,
+        &HashMap::new(),
+        &HashMap::new(),
+        &HashMap::new(),
+        &unsnarl_ir::primitive::SourceIndex::build(""),
+    );
 }

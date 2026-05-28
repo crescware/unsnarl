@@ -3,6 +3,5 @@
 0	1	integration/fixtures/iteration-statement/classic-for/closure-let-binding/input.ts:2 for-test
 2	0	integration/fixtures/iteration-statement/classic-for/closure-let-binding/input.ts:2 q
 1	1	integration/fixtures/iteration-statement/classic-for/closure-let-binding/input.ts:2 q
-0	2	integration/fixtures/iteration-statement/classic-for/closure-let-binding/input.ts:3 fns.push()
 0	2	integration/fixtures/iteration-statement/classic-for/closure-let-binding/input.ts:5 console.log()
-6	6	7 total
+6	4	6 total

@@ -40,6 +40,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -86,6 +87,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -132,6 +134,12 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": {
+        "statementOffset": 47,
+        "callStartOffset": 53,
+        "callEndOffset": 189,
+        "argIndex": 0
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -176,6 +184,12 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": {
+        "statementOffset": 47,
+        "callStartOffset": 53,
+        "callEndOffset": 315,
+        "argIndex": 0
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -434,12 +448,42 @@
                         "name": "Promise"
                       },
                       "property": "resolve"
+                    },
+                    "startSpan": {
+                      "line": 2,
+                      "column": 8,
+                      "offset": 53
+                    },
+                    "endSpan": {
+                      "line": 2,
+                      "column": 25,
+                      "offset": 70
                     }
                   },
                   "property": "then"
+                },
+                "startSpan": {
+                  "line": 2,
+                  "column": 8,
+                  "offset": 53
+                },
+                "endSpan": {
+                  "line": 6,
+                  "column": 6,
+                  "offset": 189
                 }
               },
               "property": "catch"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 8,
+              "offset": 53
+            },
+            "endSpan": {
+              "line": 10,
+              "column": 6,
+              "offset": 315
             }
           }
         }
@@ -490,6 +534,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 6,
+            "offset": 100
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 40,
+            "offset": 134
           }
         }
       }
@@ -539,6 +593,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 6,
+            "offset": 100
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 40,
+            "offset": 134
           }
         }
       }
@@ -588,6 +652,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 6,
+            "offset": 142
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 45,
+            "offset": 181
           }
         }
       }
@@ -637,6 +711,16 @@
               "name": "console"
             },
             "property": "error"
+          },
+          "startSpan": {
+            "line": 8,
+            "column": 6,
+            "offset": 220
+          },
+          "endSpan": {
+            "line": 8,
+            "column": 43,
+            "offset": 257
           }
         }
       }
@@ -686,6 +770,16 @@
               "name": "console"
             },
             "property": "error"
+          },
+          "startSpan": {
+            "line": 8,
+            "column": 6,
+            "offset": 220
+          },
+          "endSpan": {
+            "line": 8,
+            "column": 43,
+            "offset": 257
           }
         }
       }
@@ -735,6 +829,16 @@
               "name": "console"
             },
             "property": "error"
+          },
+          "startSpan": {
+            "line": 9,
+            "column": 6,
+            "offset": 265
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 48,
+            "offset": 307
           }
         }
       }

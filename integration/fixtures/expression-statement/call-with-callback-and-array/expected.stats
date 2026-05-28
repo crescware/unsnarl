@@ -1,0 +1,5 @@
+1	0	integration/fixtures/expression-statement/call-with-callback-and-array/input.ts:0 run
+1	0	integration/fixtures/expression-statement/call-with-callback-and-array/input.ts:0 console
+2	0	integration/fixtures/expression-statement/call-with-callback-and-array/input.ts:1 seed
+0	2	integration/fixtures/expression-statement/call-with-callback-and-array/input.ts:3 console.log()
+4	2	4 total

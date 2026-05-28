@@ -11,6 +11,8 @@ use serde::Serialize;
 pub enum SubgraphKind {
     #[serde(rename = "function")]
     Function,
+    #[serde(rename = "call-proxy")]
+    CallProxy,
     #[serde(rename = "class")]
     Class,
     #[serde(rename = "switch")]
@@ -51,6 +53,7 @@ impl SubgraphKind {
     pub fn as_str(self) -> &'static str {
         match self {
             Self::Function => "function",
+            Self::CallProxy => "call-proxy",
             Self::Class => "class",
             Self::Switch => "switch",
             Self::Case => "case",

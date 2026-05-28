@@ -11,7 +11,9 @@ use std::collections::HashMap;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::primitive::SourceIndex;
-use unsnarl_ir::serialized::{SerializedIR, SerializedScope, SerializedVariable};
+use unsnarl_ir::serialized::{
+    SerializedExpressionStatementContainer, SerializedIR, SerializedScope, SerializedVariable,
+};
 
 use super::write_op::WriteOp;
 
@@ -62,4 +64,16 @@ pub struct BuilderContext<'a> {
     /// such as `line_for_offset(offset)` resolve in `O(log lines)`
     /// rather than re-scanning `raw` from byte 0 each call.
     pub source_index: SourceIndex<'a>,
+    /// `ExpressionStatement start offset → first borrowed
+    /// SerializedExpressionStatementContainer found in any
+    /// reference inside the IR whose `expression_statement_container`
+    /// targets that offset`.
+    ///
+    /// Built once per fixture by scanning `ir.references`. Consumed
+    /// by [`super::describe_subgraph`] to synthesise the
+    /// `callbackArg.callee` text on function subgraphs whose scope
+    /// carries a [`unsnarl_ir::scope::CallbackArgument`] -- no need
+    /// to re-walk the references list per scope.
+    pub expression_statement_containers_by_offset:
+        HashMap<u32, &'a SerializedExpressionStatementContainer>,
 }

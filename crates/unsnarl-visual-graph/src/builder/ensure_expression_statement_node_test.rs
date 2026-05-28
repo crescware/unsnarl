@@ -42,6 +42,8 @@ fn console_log_head() -> SerializedHeadExpression {
             }),
             property: "log".to_string(),
         }),
+        start_span: span_offset_line(0, 1),
+        end_span: span_offset_line(14, 1),
     }
 }
 
@@ -141,9 +143,13 @@ fn renders_awaited_chain() {
                         }),
                         property: "resolve".to_string(),
                     }),
+                    start_span: span_offset_line(6, 1),
+                    end_span: span_offset_line(23, 1),
                 }),
                 property: "then".to_string(),
             }),
+            start_span: span_offset_line(6, 1),
+            end_span: span_offset_line(31, 1),
         }),
     };
     let r = ref_with_head("r1", 0, 50, 1, 5, head);

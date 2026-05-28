@@ -37,6 +37,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -91,6 +92,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -139,6 +141,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -193,6 +196,7 @@
         "parentSpanOffset": 31,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -241,6 +245,7 @@
         "parentSpanOffset": 35,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -295,6 +300,7 @@
         "parentSpanOffset": 66,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -343,6 +349,7 @@
         "parentSpanOffset": 72,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -397,6 +404,7 @@
         "parentSpanOffset": 103,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -445,6 +453,7 @@
         "parentSpanOffset": 111,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -499,6 +508,7 @@
         "parentSpanOffset": 142,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -547,6 +557,7 @@
         "parentSpanOffset": 152,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -601,6 +612,7 @@
         "parentSpanOffset": 183,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -655,6 +667,7 @@
         "parentSpanOffset": 195,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -1642,6 +1655,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1691,6 +1714,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1740,6 +1773,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1789,6 +1832,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1838,6 +1891,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1887,6 +1950,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }
@@ -1936,6 +2009,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 12,
+            "offset": 240
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 47,
+            "offset": 275
           }
         }
       }

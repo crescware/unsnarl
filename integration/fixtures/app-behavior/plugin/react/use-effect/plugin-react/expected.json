@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/app-behavior/plugin/react/use-effect/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_useEffect_9",
+      "name": "useEffect",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "useEffect"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Counter_42",
+      "name": "Counter",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_163",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_button_213",
+      "name": "button",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 9,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_Counter_42",
+      "ownerName": "Counter",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_start_55",
+          "name": "start",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_step_62",
+          "name": "step",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "expr_stmt_110",
+          "kind": "call-proxy",
+          "line": 4,
+          "endLine": 7,
+          "direction": "RL",
+          "callName": "useEffect()",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 4,
+              "endLine": 7,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useEffect",
+                "argIndex": 0
+              },
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_2_next_138",
+                  "name": "next",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "ConstBinding",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "node",
+                  "id": "expr_stmt_163",
+                  "kind": "SyntheticExpressionStatement",
+                  "name": "console.log()",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_Counter_42_205_237",
+          "kind": "return",
+          "line": 8,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_9",
+              "kind": "ReturnArgumentReference",
+              "name": "button",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_10",
+              "kind": "ReturnArgumentReference",
+              "name": "start",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod_react",
+      "kind": "SyntheticModuleSource",
+      "name": "react",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_useEffect_9",
+      "to": "expr_stmt_110",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_1_start_55",
+      "to": "n_scope_2_next_138",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_step_62",
+      "to": "n_scope_2_next_138",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_console_163",
+      "to": "expr_stmt_163",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_next_138",
+      "to": "expr_stmt_163",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_start_55",
+      "to": "expr_stmt_110",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_step_62",
+      "to": "expr_stmt_110",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_button_213",
+      "to": "ret_use_ref_9",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_start_55",
+      "to": "ret_use_ref_10",
+      "label": "read"
+    },
+    {
+      "from": "mod_react",
+      "to": "n_scope_0_useEffect_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

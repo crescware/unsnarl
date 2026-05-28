@@ -1,8 +1,8 @@
 //! The built-in light color theme.
 
 use super::color_theme::{
-    BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,
-    VarNodeColors,
+    BoundaryStubColors, ColorTheme, EdgeTargetSubgraphColors, ElkEmptyPlaceholderColors,
+    HighlightColors, NestPaletteEntry, VarNodeColors,
 };
 
 pub static LIGHT_THEME: ColorTheme = ColorTheme {
@@ -44,6 +44,7 @@ pub static LIGHT_THEME: ColorTheme = ColorTheme {
             stroke: "transparent",
         },
     ],
+    edge_target_subgraph: EdgeTargetSubgraphColors { stroke: "#555" },
     highlight: HighlightColors {
         fill: "#fde047",
         stroke: "#ca8a04",

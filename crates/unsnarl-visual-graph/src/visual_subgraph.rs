@@ -28,6 +28,8 @@ use crate::visual_element_type::SubgraphTypeTag;
 pub enum OwnedSubgraphKind {
     #[serde(rename = "function")]
     Function,
+    #[serde(rename = "call-proxy")]
+    CallProxy,
     #[serde(rename = "class")]
     Class,
     #[serde(rename = "return")]
@@ -40,7 +42,9 @@ pub enum OwnedSubgraphKind {
 
 /// Tail fields the "owned" shape carries *before* `elements`.
 /// Function/Class/IfElseContainer each have their own. Return /
-/// Throw carry none.
+/// Throw carry none. `CallProxy` carries the rendered call head
+/// text used as the subgraph's display name (e.g. `"run()"`,
+/// `"console.log()"`).
 #[derive(Clone, Serialize)]
 #[serde(untagged)]
 pub enum OwnedExtras {
@@ -59,6 +63,29 @@ pub enum OwnedExtras {
         #[serde(rename = "hasElse")]
         has_else: bool,
     },
+    CallProxy {
+        #[serde(rename = "callName")]
+        call_name: String,
+    },
+}
+
+/// Callback-argument annotation attached to a `Function`-kind
+/// `OwnedVisualSubgraph`.
+///
+/// Populated by [`super::builder::describe_subgraph`] when the
+/// underlying function scope carries a
+/// [`unsnarl_ir::scope::CallbackArgument`] -- i.e. when the scope
+/// is the `arg_index`-th argument of an `ExpressionStatement`-level
+/// call. `callee` is the callee text (e.g. `"run"`,
+/// `"console.log"`, `"Promise.resolve().then"`) without trailing
+/// argument parens, so the mermaid emitter can synthesize the
+/// self-contained header `<callee>(args[<arg_index>])<br/>L_start-end`
+/// without revisiting the IR head expression at label time.
+#[derive(Clone, Serialize)]
+pub struct FunctionCallbackArg {
+    pub callee: String,
+    #[serde(rename = "argIndex")]
+    pub arg_index: u32,
 }
 
 /// "Owned" subgraph: kind appears right after id, extras sit just
@@ -75,6 +102,16 @@ pub struct OwnedVisualSubgraph {
     pub direction: Direction,
     #[serde(flatten)]
     pub extras: OwnedExtras,
+    /// Set only when `kind == Function` and the underlying scope is
+    /// a direct argument of an ExpressionStatement-level call. Kept
+    /// as a separate field (rather than smuggled into `extras`) so
+    /// `OwnedExtras::Function` keeps its existing
+    /// `{ ownerNodeId, ownerName }` shape, and so existing
+    /// `OwnedVisualSubgraph::function(...)` callers do not have to
+    /// change at every site -- they default to `None` via the
+    /// `base()` helper.
+    #[serde(rename = "callbackArg", skip_serializing_if = "Option::is_none")]
+    pub callback_arg: Option<FunctionCallbackArg>,
     pub elements: Vec<VisualElement>,
 }
 
@@ -152,6 +189,7 @@ impl OwnedVisualSubgraph {
             end_line: None,
             direction,
             extras,
+            callback_arg: None,
             elements,
         }
     }
@@ -171,6 +209,32 @@ impl OwnedVisualSubgraph {
             OwnedExtras::Function {
                 owner_node_id,
                 owner_name: owner_name.into(),
+            },
+            elements,
+            direction,
+        )
+    }
+
+    /// Synthetic call-proxy subgraph wrapping the callback bodies
+    /// of an `ExpressionStatement`-level call. The subgraph's id
+    /// matches the id the leaf proxy node would otherwise have
+    /// (`expr_stmt_<offset>`), so edges from the call's callee /
+    /// non-callback identifier arguments terminate on this
+    /// subgraph's border just as they would have terminated on
+    /// the leaf node.
+    pub fn call_proxy(
+        id: impl Into<String>,
+        line: u32,
+        call_name: impl Into<String>,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::CallProxy,
+            OwnedExtras::CallProxy {
+                call_name: call_name.into(),
             },
             elements,
             direction,
@@ -516,6 +580,7 @@ impl VisualSubgraph {
         match self {
             Self::Owned(s) => match s.kind {
                 OwnedSubgraphKind::Function => SubgraphKind::Function,
+                OwnedSubgraphKind::CallProxy => SubgraphKind::CallProxy,
                 OwnedSubgraphKind::Class => SubgraphKind::Class,
                 OwnedSubgraphKind::Return => SubgraphKind::Return,
                 OwnedSubgraphKind::Throw => SubgraphKind::Throw,
@@ -592,6 +657,37 @@ impl VisualSubgraph {
                 _ => None,
             },
             Self::Owned(_) => None,
+        }
+    }
+
+    /// `callName` (JSON field), present only on `CallProxy`
+    /// subgraphs. The text reproduces what the leaf
+    /// `expr_stmt_<offset>` node's label would otherwise have
+    /// shown (`render_head_expression`'s output, e.g. `"run()"`,
+    /// `"console.log()"`), so the mermaid emitter can use it as
+    /// the subgraph header.
+    pub fn call_name(&self) -> Option<&str> {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::CallProxy { call_name } => Some(call_name.as_str()),
+                _ => None,
+            },
+            Self::Control(_) => None,
+        }
+    }
+
+    /// `callbackArg` (JSON field), present only on `Function`
+    /// subgraphs whose underlying scope is a direct argument of an
+    /// `ExpressionStatement`-level call. Returns `(callee,
+    /// arg_index)` for label synthesis; `None` for plain anonymous /
+    /// named functions.
+    pub fn callback_arg(&self) -> Option<(&str, u32)> {
+        match self {
+            Self::Owned(s) => s
+                .callback_arg
+                .as_ref()
+                .map(|c| (c.callee.as_str(), c.arg_index)),
+            Self::Control(_) => None,
         }
     }
 

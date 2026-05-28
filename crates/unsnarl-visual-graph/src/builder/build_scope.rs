@@ -83,8 +83,13 @@ pub fn build_scope(
         let mut body_container = container;
         let mut body_subgraph: Option<SubgraphIdx> = None;
         if subgraph_here {
-            let sg_descriptor =
-                describe_subgraph(scope, &ctx.subgraph_owner_var, &ctx.variable_map);
+            let sg_descriptor = describe_subgraph(
+                scope,
+                &ctx.subgraph_owner_var,
+                &ctx.variable_map,
+                &ctx.expression_statement_containers_by_offset,
+                &ctx.source_index,
+            );
             let idx = arena.push_subgraph(sg_descriptor);
             arena.append_child(container, ElementHandle::Subgraph(idx));
             body_container = Container::Subgraph(idx);

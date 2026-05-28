@@ -43,6 +43,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -93,6 +94,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -144,6 +146,7 @@
         "parentSpanOffset": 28,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -406,6 +409,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 51
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 24,
+            "offset": 73
           }
         }
       }
@@ -455,6 +468,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 51
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 24,
+            "offset": 73
           }
         }
       }
@@ -504,6 +527,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 51
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 24,
+            "offset": 73
           }
         }
       }
@@ -553,6 +586,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 51
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 24,
+            "offset": 73
           }
         }
       }
@@ -602,6 +645,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 0,
+            "offset": 77
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 14,
+            "offset": 91
           }
         }
       }
@@ -651,6 +704,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 0,
+            "offset": 77
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 14,
+            "offset": 91
           }
         }
       }

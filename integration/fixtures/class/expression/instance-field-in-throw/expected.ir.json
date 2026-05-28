@@ -37,6 +37,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -79,6 +80,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -125,6 +127,7 @@
         "parentSpanOffset": 36,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -284,6 +287,16 @@
           "callee": {
             "kind": "identifier",
             "name": "failWith"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 0,
+            "offset": 72
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 11,
+            "offset": 83
           }
         }
       }
