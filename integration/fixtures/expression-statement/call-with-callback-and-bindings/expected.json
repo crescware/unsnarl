@@ -1,0 +1,124 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/call-with-callback-and-bindings/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_6",
+      "name": "a",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_19",
+      "name": "b",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_c_32",
+      "name": "c",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_run_39",
+      "name": "run",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_58",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 5,
+      "endLine": 7,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_58",
+          "kind": "SyntheticExpressionStatement",
+          "name": "console.log()",
+          "line": 6,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_39",
+      "kind": "SyntheticExpressionStatement",
+      "name": "run()",
+      "line": 4,
+      "endLine": 10,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_run_39",
+      "to": "expr_stmt_39",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_58",
+      "to": "expr_stmt_58",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_6",
+      "to": "expr_stmt_58",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_19",
+      "to": "expr_stmt_39",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_c_32",
+      "to": "expr_stmt_39",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
