@@ -1,0 +1,138 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_classify_9",
+      "name": "classify",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_out_172",
+      "name": "out",
+      "line": 14,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 12,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_classify_9",
+      "ownerName": "classify",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_x_18",
+          "name": "x",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 2,
+          "endLine": 11,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "switch_discriminant_scope_1_33",
+              "kind": "SyntheticSwitchStatementDiscriminant",
+              "name": "switch-discriminant",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 3,
+              "endLine": 6,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 4,
+                  "endLine": 6,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "bc_break_81",
+                      "kind": "SyntheticBreakStatement",
+                      "name": "break outer",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ],
+                  "kind": "block"
+                }
+              ],
+              "kind": "case",
+              "caseTest": "1"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_5",
+              "line": 7,
+              "endLine": 8,
+              "direction": "RL",
+              "elements": [],
+              "kind": "case",
+              "caseTest": "2"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_6",
+              "line": 9,
+              "endLine": 10,
+              "direction": "RL",
+              "elements": [],
+              "kind": "case",
+              "caseTest": null
+            }
+          ],
+          "kind": "switch"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_x_18",
+      "to": "switch_discriminant_scope_1_33",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_classify_9",
+      "to": "n_scope_0_out_172",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

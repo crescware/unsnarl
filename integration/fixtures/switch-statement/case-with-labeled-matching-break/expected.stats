@@ -1,0 +1,6 @@
+1	0	integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts:1 classify
+1	0	integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts:1 x
+0	1	integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts:2 switch-discriminant
+0	0	integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts:5 break outer
+0	1	integration/fixtures/switch-statement/case-with-labeled-matching-break/input.ts:14 unused out
+2	2	5 total
