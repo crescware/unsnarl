@@ -33,18 +33,18 @@ pub fn render_call_callee(
     source_index: &SourceIndex<'_>,
 ) -> Option<String> {
     match head {
-        SerializedHeadExpression::Call { callee } => {
+        SerializedHeadExpression::Call { callee, .. } => {
             Some(render_head_expression(callee, source_index))
         }
-        SerializedHeadExpression::New { callee } => Some(format!(
+        SerializedHeadExpression::New { callee, .. } => Some(format!(
             "new {}",
             render_head_expression(callee, source_index)
         )),
         SerializedHeadExpression::Await { argument } => match argument.as_ref() {
-            SerializedHeadExpression::Call { callee } => {
+            SerializedHeadExpression::Call { callee, .. } => {
                 Some(render_head_expression(callee, source_index))
             }
-            SerializedHeadExpression::New { callee } => Some(format!(
+            SerializedHeadExpression::New { callee, .. } => Some(format!(
                 "new {}",
                 render_head_expression(callee, source_index)
             )),

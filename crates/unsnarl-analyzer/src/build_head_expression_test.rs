@@ -72,8 +72,15 @@ fn call_expression_collapses_to_call_head() {
     let program = parse_ts(&alloc, "foo();");
     let head = build_head_expression(Some(expression_of(&program)), fallback_span(&program));
     match head {
-        HeadExpression::Call { callee } => {
-            assert!(matches!(*callee, HeadExpression::Identifier { name } if name == "foo"))
+        HeadExpression::Call {
+            callee,
+            start_offset,
+            end_offset,
+        } => {
+            assert!(matches!(*callee, HeadExpression::Identifier { name } if name == "foo"));
+            // "foo()" lives at offsets 0..5 in the source string.
+            assert_eq!(start_offset.0, 0);
+            assert_eq!(end_offset.0, 5);
         }
         _ => panic!("expected call head"),
     }
@@ -85,8 +92,15 @@ fn new_expression_collapses_to_new_head() {
     let program = parse_ts(&alloc, "new Foo();");
     let head = build_head_expression(Some(expression_of(&program)), fallback_span(&program));
     match head {
-        HeadExpression::New { callee } => {
-            assert!(matches!(*callee, HeadExpression::Identifier { name } if name == "Foo"))
+        HeadExpression::New {
+            callee,
+            start_offset,
+            end_offset,
+        } => {
+            assert!(matches!(*callee, HeadExpression::Identifier { name } if name == "Foo"));
+            // "new Foo()" lives at offsets 0..9 in the source string.
+            assert_eq!(start_offset.0, 0);
+            assert_eq!(end_offset.0, 9);
         }
         _ => panic!("expected new head"),
     }

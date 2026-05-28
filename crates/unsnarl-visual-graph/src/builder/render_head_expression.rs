@@ -20,10 +20,10 @@ pub fn render_head_expression(
                 render_head_expression(object, source_index)
             )
         }
-        SerializedHeadExpression::Call { callee } => {
+        SerializedHeadExpression::Call { callee, .. } => {
             format!("{}()", render_head_expression(callee, source_index))
         }
-        SerializedHeadExpression::New { callee } => {
+        SerializedHeadExpression::New { callee, .. } => {
             format!("new {}()", render_head_expression(callee, source_index))
         }
         SerializedHeadExpression::Await { argument } => {

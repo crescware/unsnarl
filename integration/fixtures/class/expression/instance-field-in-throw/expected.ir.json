@@ -287,6 +287,16 @@
           "callee": {
             "kind": "identifier",
             "name": "failWith"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 0,
+            "offset": 72
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 11,
+            "offset": 83
           }
         }
       }

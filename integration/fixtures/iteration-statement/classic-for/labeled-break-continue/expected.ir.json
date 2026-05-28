@@ -736,6 +736,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }
@@ -785,6 +795,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }
@@ -834,6 +854,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 151
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 21,
+            "offset": 168
           }
         }
       }

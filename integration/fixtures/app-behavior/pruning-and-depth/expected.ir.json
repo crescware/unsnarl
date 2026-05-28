@@ -714,6 +714,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 6,
+            "offset": 94
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 20,
+            "offset": 108
           }
         }
       }
@@ -763,6 +773,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 6,
+            "offset": 94
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 20,
+            "offset": 108
           }
         }
       }
@@ -808,6 +828,16 @@
           "callee": {
             "kind": "identifier",
             "name": "inner"
+          },
+          "startSpan": {
+            "line": 13,
+            "column": 2,
+            "offset": 147
+          },
+          "endSpan": {
+            "line": 13,
+            "column": 9,
+            "offset": 154
           }
         }
       }
@@ -853,6 +883,16 @@
           "callee": {
             "kind": "identifier",
             "name": "callerOf"
+          },
+          "startSpan": {
+            "line": 20,
+            "column": 0,
+            "offset": 198
+          },
+          "endSpan": {
+            "line": 20,
+            "column": 10,
+            "offset": 208
           }
         }
       }
@@ -898,6 +938,16 @@
           "callee": {
             "kind": "identifier",
             "name": "unrelated"
+          },
+          "startSpan": {
+            "line": 21,
+            "column": 0,
+            "offset": 210
+          },
+          "endSpan": {
+            "line": 21,
+            "column": 11,
+            "offset": 221
           }
         }
       }

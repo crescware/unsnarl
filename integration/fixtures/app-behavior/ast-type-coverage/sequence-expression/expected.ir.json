@@ -422,6 +422,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 2,
+            "offset": 38
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 16,
+            "offset": 52
           }
         }
       }
@@ -471,6 +481,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 2,
+            "offset": 38
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 16,
+            "offset": 52
           }
         }
       }

@@ -543,6 +543,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }
@@ -590,6 +600,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }
@@ -637,6 +657,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }
@@ -684,6 +714,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }
@@ -733,6 +773,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 163
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 21,
+            "offset": 180
           }
         }
       }
@@ -782,6 +832,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 163
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 21,
+            "offset": 180
           }
         }
       }
@@ -827,6 +887,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }
@@ -872,6 +942,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 110
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 19,
+            "offset": 201
           }
         }
       }

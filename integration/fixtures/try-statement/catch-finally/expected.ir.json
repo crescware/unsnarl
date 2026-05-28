@@ -734,6 +734,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {
@@ -813,6 +823,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {
@@ -892,6 +912,16 @@
               "callee": {
                 "kind": "identifier",
                 "name": "Number"
+              },
+              "startSpan": {
+                "line": 7,
+                "column": 10,
+                "offset": 84
+              },
+              "endSpan": {
+                "line": 7,
+                "column": 21,
+                "offset": 95
               }
             },
             "startSpan": {

@@ -19,12 +19,16 @@ fn member(object: SerializedHeadExpression, property: &str) -> SerializedHeadExp
 fn call(callee: SerializedHeadExpression) -> SerializedHeadExpression {
     SerializedHeadExpression::Call {
         callee: Box::new(callee),
+        start_span: span(),
+        end_span: span(),
     }
 }
 
 fn new_expr(callee: SerializedHeadExpression) -> SerializedHeadExpression {
     SerializedHeadExpression::New {
         callee: Box::new(callee),
+        start_span: span(),
+        end_span: span(),
     }
 }
 

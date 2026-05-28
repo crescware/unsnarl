@@ -308,6 +308,16 @@
           "callee": {
             "kind": "identifier",
             "name": "run"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 0,
+            "offset": 23
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 59
           }
         }
       }
@@ -357,6 +367,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 37
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 20,
+            "offset": 55
           }
         }
       }
@@ -406,6 +426,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 2,
+            "offset": 37
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 20,
+            "offset": 55
           }
         }
       }

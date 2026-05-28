@@ -172,6 +172,16 @@
           "callee": {
             "kind": "identifier",
             "name": "foo"
+          },
+          "startSpan": {
+            "line": 2,
+            "column": 2,
+            "offset": 19
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 7,
+            "offset": 24
           }
         }
       }

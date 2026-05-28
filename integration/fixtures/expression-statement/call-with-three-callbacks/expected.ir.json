@@ -576,6 +576,16 @@
           "callee": {
             "kind": "identifier",
             "name": "run"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 0,
+            "offset": 39
+          },
+          "endSpan": {
+            "line": 14,
+            "column": 1,
+            "offset": 150
           }
         }
       }
@@ -625,6 +635,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 18,
+            "offset": 72
           }
         }
       }
@@ -674,6 +694,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 6,
+            "column": 4,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 18,
+            "offset": 72
           }
         }
       }
@@ -723,6 +753,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 9,
+            "column": 4,
+            "offset": 93
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 18,
+            "offset": 107
           }
         }
       }
@@ -772,6 +812,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 9,
+            "column": 4,
+            "offset": 93
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 18,
+            "offset": 107
           }
         }
       }
@@ -821,6 +871,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 12,
+            "column": 4,
+            "offset": 128
+          },
+          "endSpan": {
+            "line": 12,
+            "column": 18,
+            "offset": 142
           }
         }
       }
@@ -870,6 +930,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 12,
+            "column": 4,
+            "offset": 128
+          },
+          "endSpan": {
+            "line": 12,
+            "column": 18,
+            "offset": 142
           }
         }
       }

@@ -474,6 +474,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 4,
+            "offset": 122
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 18,
+            "offset": 136
           }
         }
       }
@@ -523,6 +533,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 4,
+            "offset": 122
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 18,
+            "offset": 136
           }
         }
       }

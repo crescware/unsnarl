@@ -892,6 +892,16 @@
           "callee": {
             "kind": "identifier",
             "name": "f1"
+          },
+          "startSpan": {
+            "line": 21,
+            "column": 0,
+            "offset": 311
+          },
+          "endSpan": {
+            "line": 21,
+            "column": 4,
+            "offset": 315
           }
         }
       }

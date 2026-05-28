@@ -260,6 +260,16 @@
           "callee": {
             "kind": "identifier",
             "name": "C"
+          },
+          "startSpan": {
+            "line": 3,
+            "column": 4,
+            "offset": 22
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 11,
+            "offset": 29
           }
         }
       }
@@ -305,6 +315,16 @@
           "callee": {
             "kind": "identifier",
             "name": "C"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 0,
+            "offset": 38
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 7,
+            "offset": 45
           }
         }
       }

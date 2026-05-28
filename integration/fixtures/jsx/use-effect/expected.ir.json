@@ -447,6 +447,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 85
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 12,
+            "offset": 211
           }
         }
       }
@@ -496,6 +506,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 107
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 31,
+            "offset": 134
           }
         }
       }
@@ -545,6 +565,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 107
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 31,
+            "offset": 134
           }
         }
       }
@@ -594,6 +624,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 6,
+            "offset": 161
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 35,
+            "offset": 190
           }
         }
       }
@@ -643,6 +683,16 @@
               "name": "console"
             },
             "property": "log"
+          },
+          "startSpan": {
+            "line": 7,
+            "column": 6,
+            "offset": 161
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 35,
+            "offset": 190
           }
         }
       }
@@ -688,6 +738,16 @@
           "callee": {
             "kind": "identifier",
             "name": "useEffect"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 2,
+            "offset": 85
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 12,
+            "offset": 211
           }
         }
       }
