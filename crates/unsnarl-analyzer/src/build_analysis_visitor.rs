@@ -45,6 +45,7 @@ use crate::annotations_impl::AnnotationsImpl;
 use crate::block_context_of::block_context_of;
 use crate::case_exits_function::case_exits_function;
 use crate::case_falls_through::case_falls_through;
+use crate::collect_abrupt_statements::collect_abrupt_statements;
 use crate::expression_statement_container::build_expression_statement_container;
 use crate::find_completion::find_completion;
 use crate::find_jsx_element_span::find_jsx_element_span;
@@ -192,6 +193,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             let block_context = block_context_of(parent_node, key, &self.path_entries, self.index);
             (block_context, false, false)
         };
+        let abrupt_statements = collect_abrupt_statements(kind, self.index);
         self.annotations.set_scope(
             scope_id,
             ScopeAnnotation {
@@ -199,6 +201,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                 falls_through,
                 exits_function,
                 nesting_depths,
+                abrupt_statements,
             },
         );
     }

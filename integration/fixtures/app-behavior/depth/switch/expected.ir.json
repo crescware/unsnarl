@@ -50,7 +50,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -99,7 +100,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -146,7 +148,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 26,
+            "column": 4,
+            "offset": 501
+          },
+          "endSpan": {
+            "line": 26,
+            "column": 10,
+            "offset": 507
+          }
+        }
+      ]
     },
     {
       "id": "scope#3",
@@ -195,7 +213,8 @@
         "switch": 2,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#4",
@@ -242,7 +261,23 @@
         "switch": 2,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 24,
+            "column": 8,
+            "offset": 484
+          },
+          "endSpan": {
+            "line": 24,
+            "column": 14,
+            "offset": 490
+          }
+        }
+      ]
     },
     {
       "id": "scope#5",
@@ -291,7 +326,8 @@
         "switch": 3,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#6",
@@ -338,7 +374,23 @@
         "switch": 3,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 22,
+            "column": 12,
+            "offset": 459
+          },
+          "endSpan": {
+            "line": 22,
+            "column": 18,
+            "offset": 465
+          }
+        }
+      ]
     },
     {
       "id": "scope#7",
@@ -387,7 +439,8 @@
         "switch": 4,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#8",
@@ -434,7 +487,23 @@
         "switch": 4,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 20,
+            "column": 16,
+            "offset": 426
+          },
+          "endSpan": {
+            "line": 20,
+            "column": 22,
+            "offset": 432
+          }
+        }
+      ]
     },
     {
       "id": "scope#9",
@@ -483,7 +552,8 @@
         "switch": 5,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#10",
@@ -530,7 +600,23 @@
         "switch": 5,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 18,
+            "column": 20,
+            "offset": 385
+          },
+          "endSpan": {
+            "line": 18,
+            "column": 26,
+            "offset": 391
+          }
+        }
+      ]
     },
     {
       "id": "scope#11",
@@ -579,7 +665,8 @@
         "switch": 6,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#12",
@@ -627,7 +714,23 @@
         "switch": 6,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 16,
+            "column": 24,
+            "offset": 336
+          },
+          "endSpan": {
+            "line": 16,
+            "column": 30,
+            "offset": 342
+          }
+        }
+      ]
     }
   ],
   "variables": [

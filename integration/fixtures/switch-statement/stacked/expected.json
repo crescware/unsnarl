@@ -83,6 +83,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "bc_break_97",
+              "kind": "SyntheticBreakStatement",
+              "name": "break",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "case",

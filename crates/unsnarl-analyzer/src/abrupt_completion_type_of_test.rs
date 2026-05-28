@@ -184,7 +184,10 @@ fn if_without_alternate_yields_none() {
 }
 
 #[test]
-fn labeled_statement_pre_existing_limitation_yields_none() {
+fn labeled_statement_around_return_inherits_return_completion() {
+    // ECMA §14.13.4 step 2: the wrapper inherits its body's
+    // completion record. `outer: return;` therefore propagates the
+    // Return completion up through the labelled wrapper.
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "function f() { outer: return; }");
     let func = match first_stmt(&program) {
@@ -198,5 +201,71 @@ fn labeled_statement_pre_existing_limitation_yields_none() {
         .statements
         .last()
         .expect("test source has at least one statement in the function body");
-    assert!(abrupt_completion_type_of(labeled).is_none());
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Return]));
+}
+
+#[test]
+fn labeled_statement_around_throw_inherits_throw_completion() {
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: throw 1; }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Throw]));
+}
+
+#[test]
+fn labeled_statement_around_block_with_return_inherits_return_completion() {
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { return; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Return]));
+}
+
+#[test]
+fn labeled_statement_with_matching_break_target_does_not_yet_collapse_pending_issue_97_part_2() {
+    // ECMA §14.13.4 step 3 says a Break / Continue completion whose
+    // `[[Target]]` matches the labelled statement's label set must
+    // collapse to Normal. Resolving `[[Target]]` against the
+    // enclosing label set requires a layer the call site does not
+    // currently maintain, so this is deferred to issue #97 Part 2.
+    // Until then the wrapper just inherits Break from the body,
+    // which this test pins; it will need to flip to `is_none()`
+    // when Part 2 lands.
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { break outer; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Break]));
 }

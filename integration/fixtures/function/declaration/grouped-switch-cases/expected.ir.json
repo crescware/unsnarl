@@ -45,7 +45,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -90,7 +91,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -144,7 +146,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#3",
@@ -187,7 +190,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#4",
@@ -230,7 +234,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#5",
@@ -273,7 +278,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#6",
@@ -316,7 +322,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#7",
@@ -361,7 +368,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 10,
+            "column": 6,
+            "offset": 183
+          },
+          "endSpan": {
+            "line": 10,
+            "column": 12,
+            "offset": 189
+          }
+        }
+      ]
     },
     {
       "id": "scope#8",
@@ -404,7 +427,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#9",
@@ -449,7 +473,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 14,
+            "column": 6,
+            "offset": 251
+          },
+          "endSpan": {
+            "line": 14,
+            "column": 12,
+            "offset": 257
+          }
+        }
+      ]
     },
     {
       "id": "scope#10",
@@ -494,7 +534,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 17,
+            "column": 6,
+            "offset": 295
+          },
+          "endSpan": {
+            "line": 17,
+            "column": 12,
+            "offset": 301
+          }
+        }
+      ]
     }
   ],
   "variables": [

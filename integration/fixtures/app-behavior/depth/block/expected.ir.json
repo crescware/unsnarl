@@ -47,7 +47,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -98,7 +99,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 1
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -150,7 +152,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 2
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#3",
@@ -202,7 +205,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 3
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#4",
@@ -254,7 +258,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 4
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#5",
@@ -306,7 +311,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 5
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#6",
@@ -363,7 +369,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 6
-      }
+      },
+      "abruptStatements": []
     }
   ],
   "variables": [

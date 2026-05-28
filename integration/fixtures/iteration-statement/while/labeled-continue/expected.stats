@@ -1,0 +1,4 @@
+0	0	integration/fixtures/iteration-statement/while/labeled-continue/input.ts:1 while-test
+0	0	integration/fixtures/iteration-statement/while/labeled-continue/input.ts:2 while-test
+0	0	integration/fixtures/iteration-statement/while/labeled-continue/input.ts:3 continue outer
+0	0	3 total

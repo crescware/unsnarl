@@ -113,7 +113,9 @@ pub fn node_head_into(out: &mut String, n: &VisualNode) {
         | NodeKind::SyntheticForInStatementHeader
         | NodeKind::SyntheticForOfStatementHeader
         | NodeKind::SyntheticModuleSink
-        | NodeKind::SyntheticExpressionStatement => {
+        | NodeKind::SyntheticExpressionStatement
+        | NodeKind::SyntheticBreakStatement
+        | NodeKind::SyntheticContinueStatement => {
             escape_into(out, n.name());
         }
         NodeKind::SyntheticBeyondDepth => {

@@ -47,7 +47,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     }
   ],
   "variables": [

@@ -1,0 +1,113 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/while/bare-continue/input.ts",
+    "language": "ts"
+  },
+  "raw": "while (true) {\n  if (1) continue;\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 36
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 1,
+          "column": 13,
+          "offset": 13
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 35
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "WhileStatement",
+        "key": "body",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 1,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": [
+        {
+          "type": "continue",
+          "target": null,
+          "span": {
+            "line": 2,
+            "column": 9,
+            "offset": 24
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 18,
+            "offset": 33
+          }
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "references": [],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

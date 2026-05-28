@@ -76,6 +76,12 @@ fn node_of_kind(kind: NodeKind) -> VisualNode {
         NodeKind::SyntheticBeyondDepth => VisualNode::Synthetic(base_simple_synthetic(
             SyntheticNodeKind::SyntheticBeyondDepth,
         )),
+        NodeKind::SyntheticBreakStatement => VisualNode::Synthetic(base_simple_synthetic(
+            SyntheticNodeKind::SyntheticBreakStatement,
+        )),
+        NodeKind::SyntheticContinueStatement => VisualNode::Synthetic(base_simple_synthetic(
+            SyntheticNodeKind::SyntheticContinueStatement,
+        )),
     }
 }
 

@@ -12,14 +12,17 @@ flowchart RL
     subgraph s_scope_2["case a + b L7-9"]
       direction RL
       wr_ref_7(["let label<br/>L8"])
+      bc_break_116["break<br/>L9"]
     end
     subgraph s_scope_3["case a * b L10-12"]
       direction RL
       wr_ref_10(["let label<br/>L11"])
+      bc_break_164["break<br/>L12"]
     end
     subgraph s_scope_4["case Number.MAX_SAFE_INTEGER L13-15"]
       direction RL
       wr_ref_12(["let label<br/>L14"])
+      bc_break_256["break<br/>L15"]
     end
     subgraph s_scope_5["default L16-17"]
       direction RL

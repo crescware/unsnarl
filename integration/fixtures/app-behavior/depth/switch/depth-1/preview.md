@@ -50,6 +50,7 @@ flowchart RL
     switch_discriminant_scope_0_14{"switch ()<br/>L3"}
     subgraph s_scope_2["case 1 L4-26"]
       direction RL
+      bc_break_501["break<br/>L26"]
       beyond_depth_s_scope_2((...))
     end
   end

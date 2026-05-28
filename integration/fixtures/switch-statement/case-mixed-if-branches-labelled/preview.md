@@ -50,7 +50,7 @@ flowchart RL
             end
             subgraph s_scope_5["else L8-10"]
               direction RL
-              elk_empty_s_scope_5["No nodes"]
+              bc_break_181["break outer<br/>L9"]
             end
           end
         end
@@ -85,6 +85,4 @@ flowchart RL
   classDef nestL6 fill:#3f5175,stroke:transparent;
   class s_scope_4 nestL6;
   class s_scope_5 nestL6;
-  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
-  class elk_empty_s_scope_5 elkEmptyPlaceholder;
 ```

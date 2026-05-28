@@ -5,5 +5,7 @@
 0	1	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:2 for-test
 2	0	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:2 s
 1	1	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:2 s
+0	0	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:3 continue outer_loop
+0	0	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:4 break outer_loop
 0	3	integration/fixtures/iteration-statement/classic-for/labeled-break-continue/input.ts:5 console.log()
-7	7	8 total
+7	7	10 total

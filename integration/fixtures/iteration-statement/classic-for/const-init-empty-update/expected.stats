@@ -2,4 +2,5 @@
 0	0	integration/fixtures/iteration-statement/classic-for/const-init-empty-update/input.ts:3 for-test
 1	0	integration/fixtures/iteration-statement/classic-for/const-init-empty-update/input.ts:3 j
 0	2	integration/fixtures/iteration-statement/classic-for/const-init-empty-update/input.ts:4 console.log()
-2	2	4 total
+0	0	integration/fixtures/iteration-statement/classic-for/const-init-empty-update/input.ts:5 break
+2	2	5 total

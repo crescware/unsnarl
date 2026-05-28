@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/while/labeled-continue/input.ts",
+    "language": "ts"
+  },
+  "raw": "outer: while (true) {\n  while (true) {\n    continue outer;\n  }\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 6,
+          "column": 0,
+          "offset": 65
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 1,
+          "column": 20,
+          "offset": 20
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 1,
+          "offset": 64
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "WhileStatement",
+        "key": "body",
+        "parentSpanOffset": 7,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 1,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "BlockStatement",
+        "span": {
+          "line": 2,
+          "column": 15,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 3,
+          "offset": 62
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "WhileStatement",
+        "key": "body",
+        "parentSpanOffset": 24,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 2,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": [
+        {
+          "type": "continue",
+          "target": "outer",
+          "span": {
+            "line": 3,
+            "column": 4,
+            "offset": 43
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 19,
+            "offset": 58
+          }
+        }
+      ]
+    }
+  ],
+  "variables": [],
+  "references": [],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

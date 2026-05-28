@@ -4,6 +4,7 @@ use serde::Serialize;
 
 use crate::nesting_kind::NestingDepths;
 use crate::primitive::Span;
+use crate::scope::abrupt_statement::AbruptStatement;
 use crate::scope::block_context::BlockContext;
 use crate::scope_type::ScopeType;
 use crate::serialized::reference_id::SerializedReferenceId;
@@ -37,6 +38,7 @@ pub struct SerializedScope {
     pub falls_through: bool,
     pub exits_function: bool,
     pub nesting_depths: NestingDepths,
+    pub abrupt_statements: Vec<AbruptStatement>,
 }
 
 #[cfg(test)]

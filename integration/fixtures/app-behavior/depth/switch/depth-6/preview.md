@@ -50,31 +50,37 @@ flowchart RL
     switch_discriminant_scope_0_14{"switch ()<br/>L3"}
     subgraph s_scope_2["case 1 L4-26"]
       direction RL
+      bc_break_501["break<br/>L26"]
       subgraph s_scope_3["switch L5-25"]
         direction RL
         switch_discriminant_scope_2_41{"switch ()<br/>L5"}
         subgraph s_scope_4["case 1 L6-24"]
           direction RL
+          bc_break_484["break<br/>L24"]
           subgraph s_scope_5["switch L7-23"]
             direction RL
             switch_discriminant_scope_4_76{"switch ()<br/>L7"}
             subgraph s_scope_6["case 1 L8-22"]
               direction RL
+              bc_break_459["break<br/>L22"]
               subgraph s_scope_7["switch L9-21"]
                 direction RL
                 switch_discriminant_scope_6_119{"switch ()<br/>L9"}
                 subgraph s_scope_8["case 1 L10-20"]
                   direction RL
+                  bc_break_426["break<br/>L20"]
                   subgraph s_scope_9["switch L11-19"]
                     direction RL
                     switch_discriminant_scope_8_170{"switch ()<br/>L11"}
                     subgraph s_scope_10["case 1 L12-18"]
                       direction RL
+                      bc_break_385["break<br/>L18"]
                       subgraph s_scope_11["switch L13-17"]
                         direction RL
                         switch_discriminant_scope_10_229{"switch ()<br/>L13"}
                         subgraph s_scope_12["case 1 L14-16"]
                           direction RL
+                          bc_break_336["break<br/>L16"]
                           expr_stmt_296["console.log()<br/>L15"]
                         end
                       end

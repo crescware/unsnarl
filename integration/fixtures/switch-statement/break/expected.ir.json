@@ -52,7 +52,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -101,7 +102,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -146,7 +148,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 7,
+            "column": 4,
+            "offset": 88
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 10,
+            "offset": 94
+          }
+        }
+      ]
     },
     {
       "id": "scope#3",
@@ -191,7 +209,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 10,
+            "column": 4,
+            "offset": 131
+          },
+          "endSpan": {
+            "line": 10,
+            "column": 10,
+            "offset": 137
+          }
+        }
+      ]
     },
     {
       "id": "scope#4",
@@ -236,7 +270,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     }
   ],
   "variables": [

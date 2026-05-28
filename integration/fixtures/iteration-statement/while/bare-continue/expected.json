@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/iteration-statement/while/bare-continue/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "node",
+          "id": "while_test_scope_0_0",
+          "kind": "SyntheticWhileStatementTest",
+          "name": "while-test",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "bc_continue_24",
+          "kind": "SyntheticContinueStatement",
+          "name": "continue",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ],
+      "kind": "while"
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": null
+}

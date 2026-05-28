@@ -35,6 +35,8 @@ pub enum NodeKind {
     SyntheticImportIntermediate,
     SyntheticExpressionStatement,
     SyntheticBeyondDepth,
+    SyntheticBreakStatement,
+    SyntheticContinueStatement,
 }
 
 impl NodeKind {
@@ -70,6 +72,8 @@ impl NodeKind {
             Self::SyntheticImportIntermediate => "SyntheticImportIntermediate",
             Self::SyntheticExpressionStatement => "SyntheticExpressionStatement",
             Self::SyntheticBeyondDepth => "SyntheticBeyondDepth",
+            Self::SyntheticBreakStatement => "SyntheticBreakStatement",
+            Self::SyntheticContinueStatement => "SyntheticContinueStatement",
         }
     }
 }

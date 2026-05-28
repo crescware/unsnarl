@@ -29,6 +29,7 @@ flowchart RL
         subgraph s_scope_7["case &quot;fri&quot; L8-10"]
           direction RL
           wr_ref_2(["let ret<br/>L9"])
+          bc_break_183["break<br/>L10"]
         end
         subgraph s_scope_8["case &quot;sat&quot; L11"]
           direction RL
@@ -37,10 +38,12 @@ flowchart RL
         subgraph s_scope_9["case &quot;sun&quot; L12-14"]
           direction RL
           wr_ref_3(["let ret<br/>L13"])
+          bc_break_251["break<br/>L14"]
         end
         subgraph s_scope_10["default L15-17"]
           direction RL
           wr_ref_4(["let ret<br/>L16"])
+          bc_break_295["break<br/>L17"]
         end
       end
       subgraph s_return_scope_0_getDayType_9_308_319["return L19"]
