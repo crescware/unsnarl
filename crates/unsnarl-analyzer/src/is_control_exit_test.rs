@@ -140,3 +140,39 @@ fn if_statement_without_alternate_returns_false() {
     };
     assert!(!is_control_exit(inner));
 }
+
+#[test]
+fn labeled_statement_around_return_returns_true() {
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: return; }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(is_control_exit(labeled));
+}
+
+#[test]
+fn labeled_statement_around_block_with_throw_returns_true() {
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { throw 1; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(is_control_exit(labeled));
+}

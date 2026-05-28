@@ -1,0 +1,7 @@
+1	0	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:0 Error
+1	0	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:1 classify
+1	0	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:1 x
+0	1	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:2 switch-discriminant
+0	1	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:10 Error
+0	1	integration/fixtures/switch-statement/case-with-labeled-abrupt/input.ts:16 unused out
+3	3	6 total
