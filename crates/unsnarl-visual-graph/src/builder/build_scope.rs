@@ -7,6 +7,7 @@
 //! children are walked, and loop-test / switch-discriminant anchors
 //! are staged for end-of-build placement.
 
+use unsnarl_ir::scope::AbruptStatementType;
 use unsnarl_ir::serialized::SerializedDefinition;
 use unsnarl_ir::serialized::SerializedScope;
 use unsnarl_oxc_parity::VariableDeclarationKind;
@@ -134,6 +135,34 @@ pub fn build_scope(
             n.extras = SyntheticExtras::WriteOp { declaration_kind };
             let node = n.into();
             let node_idx = arena.push_node(node);
+            state
+                .node_id_origin_scope
+                .insert(id, scope.id.value().to_string());
+            arena.append_child(body_container, ElementHandle::Node(node_idx));
+        }
+    }
+    {
+        let _t = TimingScope::start("build_scope::abrupt_statements_loop");
+        for stmt in &scope.abrupt_statements {
+            let kw = match stmt.r#type {
+                AbruptStatementType::Break => "break",
+                AbruptStatementType::Continue => "continue",
+            };
+            let label = match stmt.target.as_deref() {
+                Some(t) => format!("{kw} {t}"),
+                None => kw.to_string(),
+            };
+            let id = format!("bc_{kw}_{}", stmt.span.offset.0);
+            let line = stmt.span.line.0;
+            let node = match stmt.r#type {
+                AbruptStatementType::Break => {
+                    SyntheticVisualNode::break_statement(id.clone(), label, line)
+                }
+                AbruptStatementType::Continue => {
+                    SyntheticVisualNode::continue_statement(id.clone(), label, line)
+                }
+            };
+            let node_idx = arena.push_node(node.into());
             state
                 .node_id_origin_scope
                 .insert(id, scope.id.value().to_string());

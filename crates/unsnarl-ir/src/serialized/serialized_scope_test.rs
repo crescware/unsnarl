@@ -37,6 +37,7 @@ fn serialized_scope_field_order() {
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),
+        abrupt_statements: Vec::new(),
     };
     let json =
         serde_json::to_string(&scope).expect("SerializedScope serialises to JSON via serde derive");
@@ -62,6 +63,7 @@ fn serialized_scope_field_order() {
             "fallsThrough",
             "exitsFunction",
             "nestingDepths",
+            "abruptStatements",
         ]
     );
 }

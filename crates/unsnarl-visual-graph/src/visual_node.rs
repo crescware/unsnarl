@@ -243,6 +243,8 @@ pub enum SyntheticNodeKind {
     SyntheticImportIntermediate,
     SyntheticExpressionStatement,
     SyntheticBeyondDepth,
+    SyntheticBreakStatement,
+    SyntheticContinueStatement,
 }
 
 /// Extras tail for [`SyntheticVisualNode`]. The only synthetic node
@@ -438,6 +440,31 @@ impl SyntheticVisualNode {
             SyntheticExtras::None {},
         )
     }
+
+    /// `break` or `break <label>` synthetic node. `name` is the
+    /// pre-formatted label (`"break"` or `"break outer"`); the
+    /// emitter writes it verbatim plus the trailing line stamp.
+    pub fn break_statement(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticBreakStatement,
+            SyntheticExtras::None {},
+        )
+    }
+
+    /// `continue` or `continue <label>` synthetic node. See
+    /// [`Self::break_statement`] for the `name` convention.
+    pub fn continue_statement(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            SyntheticNodeKind::SyntheticContinueStatement,
+            SyntheticExtras::None {},
+        )
+    }
 }
 
 /// Node shape produced by every synthetic builder — `kind` sits
@@ -549,6 +576,10 @@ impl VisualNode {
                     NodeKind::SyntheticExpressionStatement
                 }
                 SyntheticNodeKind::SyntheticBeyondDepth => NodeKind::SyntheticBeyondDepth,
+                SyntheticNodeKind::SyntheticBreakStatement => NodeKind::SyntheticBreakStatement,
+                SyntheticNodeKind::SyntheticContinueStatement => {
+                    NodeKind::SyntheticContinueStatement
+                }
             },
         }
     }

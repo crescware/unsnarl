@@ -4,7 +4,8 @@
 1	0	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:2 label
 0	1	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:4 switch-discriminant
 0	1	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:6 if-test
+0	0	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:9 break
 1	1	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:12 label
 0	1	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:15 label
 0	1	integration/fixtures/switch-statement/case-mixed-if-branches/input.ts:18 unused result
-5	5	9 total
+5	5	10 total

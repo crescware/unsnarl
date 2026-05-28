@@ -1,2 +1,3 @@
 0	0	integration/fixtures/iteration-statement/classic-for/all-clauses-omitted/input.ts:1 for-test
-0	0	1 total
+0	0	integration/fixtures/iteration-statement/classic-for/all-clauses-omitted/input.ts:2 break
+0	0	2 total

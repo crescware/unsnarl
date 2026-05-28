@@ -178,6 +178,7 @@ pub fn serialize_scope(
         falls_through: ann.falls_through,
         exits_function: ann.exits_function,
         nesting_depths: ann.nesting_depths.clone(),
+        abrupt_statements: ann.abrupt_statements.clone(),
     };
     record_elapsed_ns(&T_BUILD_NS, t);
     out

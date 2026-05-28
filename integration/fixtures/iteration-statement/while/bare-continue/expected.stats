@@ -1,2 +1,3 @@
 0	0	integration/fixtures/iteration-statement/while/bare-continue/input.ts:1 while-test
-0	0	1 total
+0	0	integration/fixtures/iteration-statement/while/bare-continue/input.ts:2 continue
+0	0	2 total

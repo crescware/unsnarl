@@ -6,8 +6,11 @@
 1	0	integration/fixtures/switch-statement/expression/input.ts:4 target
 0	1	integration/fixtures/switch-statement/expression/input.ts:6 switch-discriminant
 1	1	integration/fixtures/switch-statement/expression/input.ts:8 label
+0	0	integration/fixtures/switch-statement/expression/input.ts:9 break
 1	1	integration/fixtures/switch-statement/expression/input.ts:11 label
+0	0	integration/fixtures/switch-statement/expression/input.ts:12 break
 1	1	integration/fixtures/switch-statement/expression/input.ts:14 label
+0	0	integration/fixtures/switch-statement/expression/input.ts:15 break
 1	1	integration/fixtures/switch-statement/expression/input.ts:17 label
 0	4	integration/fixtures/switch-statement/expression/input.ts:20 unused result
-12	12	12 total
+12	12	15 total

@@ -2,8 +2,11 @@
 1	0	integration/fixtures/switch-statement/numeric/input.ts:2 code
 0	1	integration/fixtures/switch-statement/numeric/input.ts:4 switch-discriminant
 1	1	integration/fixtures/switch-statement/numeric/input.ts:6 label
+0	0	integration/fixtures/switch-statement/numeric/input.ts:7 break
 1	1	integration/fixtures/switch-statement/numeric/input.ts:9 label
+0	0	integration/fixtures/switch-statement/numeric/input.ts:10 break
 1	1	integration/fixtures/switch-statement/numeric/input.ts:12 label
+0	0	integration/fixtures/switch-statement/numeric/input.ts:13 break
 1	1	integration/fixtures/switch-statement/numeric/input.ts:15 label
 0	4	integration/fixtures/switch-statement/numeric/input.ts:18 unused result
-9	9	8 total
+9	9	11 total

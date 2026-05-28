@@ -44,14 +44,17 @@ flowchart RL
     subgraph s_scope_2["case RED L9-11"]
       direction RL
       wr_ref_8(["let label<br/>L10"])
+      bc_break_143["break<br/>L11"]
     end
     subgraph s_scope_3["case GREEN L12-14"]
       direction RL
       wr_ref_10(["let label<br/>L13"])
+      bc_break_189["break<br/>L14"]
     end
     subgraph s_scope_4["case BLUE L15-17"]
       direction RL
       wr_ref_12(["let label<br/>L16"])
+      bc_break_233["break<br/>L17"]
     end
     subgraph s_scope_5["default L18-19"]
       direction RL

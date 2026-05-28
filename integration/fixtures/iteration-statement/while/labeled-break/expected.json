@@ -39,6 +39,16 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false
+            },
+            {
+              "type": "node",
+              "id": "bc_break_43",
+              "kind": "SyntheticBreakStatement",
+              "name": "break outer",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "while"

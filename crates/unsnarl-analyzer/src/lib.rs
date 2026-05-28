@@ -38,6 +38,7 @@ pub mod build_analysis_visitor;
 pub mod build_head_expression;
 pub mod case_exits_function;
 pub mod case_falls_through;
+pub mod collect_abrupt_statements;
 pub mod compute_nesting_depths;
 pub mod expression_statement_container;
 pub mod find_completion;
@@ -63,6 +64,7 @@ pub use block_context_of::block_context_of;
 pub use build_head_expression::build_head_expression;
 pub use case_exits_function::case_exits_function;
 pub use case_falls_through::case_falls_through;
+pub use collect_abrupt_statements::collect_abrupt_statements;
 pub use compute_nesting_depths::compute_nesting_depths;
 pub use expression_statement_container::{
     build_expression_statement_container, nearest_expression_statement,

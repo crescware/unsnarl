@@ -106,6 +106,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "bc_break_143",
+              "kind": "SyntheticBreakStatement",
+              "name": "break",
+              "line": 11,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "case",
@@ -128,6 +138,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "bc_break_189",
+              "kind": "SyntheticBreakStatement",
+              "name": "break",
+              "line": 14,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "case",
@@ -150,6 +170,16 @@
               "isJsxElement": false,
               "unused": false,
               "declarationKind": "let"
+            },
+            {
+              "type": "node",
+              "id": "bc_break_233",
+              "kind": "SyntheticBreakStatement",
+              "name": "break",
+              "line": 17,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "case",

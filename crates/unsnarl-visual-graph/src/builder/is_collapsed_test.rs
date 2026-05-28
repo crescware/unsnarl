@@ -48,6 +48,7 @@ fn base_scope() -> SerializedScope {
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),
+        abrupt_statements: Vec::new(),
     }
 }
 

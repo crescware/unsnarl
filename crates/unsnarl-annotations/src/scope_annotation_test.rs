@@ -9,10 +9,11 @@ fn emits_keys_in_declared_order() {
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),
+        abrupt_statements: Vec::new(),
     };
     let json = serde_json::to_string(&ann).expect("ScopeAnnotation serialises to JSON");
     assert_eq!(
         json,
-        r#"{"blockContext":null,"fallsThrough":false,"exitsFunction":false,"nestingDepths":{"function":0,"if":0,"for":0,"while":0,"switch":0,"try-catch-finally":0,"block":0}}"#
+        r#"{"blockContext":null,"fallsThrough":false,"exitsFunction":false,"nestingDepths":{"function":0,"if":0,"for":0,"while":0,"switch":0,"try-catch-finally":0,"block":0},"abruptStatements":[]}"#
     );
 }

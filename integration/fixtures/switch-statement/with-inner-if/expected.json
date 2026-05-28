@@ -93,6 +93,16 @@
               "direction": "RL",
               "elements": [
                 {
+                  "type": "node",
+                  "id": "bc_break_189",
+                  "kind": "SyntheticBreakStatement",
+                  "name": "break",
+                  "line": 10,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
                   "type": "subgraph",
                   "id": "cont_if_scope_3_91",
                   "kind": "if-else-container",
@@ -176,6 +186,16 @@
                   "isJsxElement": false,
                   "unused": false,
                   "declarationKind": "let"
+                },
+                {
+                  "type": "node",
+                  "id": "bc_break_235",
+                  "kind": "SyntheticBreakStatement",
+                  "name": "break",
+                  "line": 13,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
                 }
               ],
               "kind": "case",

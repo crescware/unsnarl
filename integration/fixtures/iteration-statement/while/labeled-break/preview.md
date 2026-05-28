@@ -21,6 +21,7 @@ flowchart RL
     subgraph s_scope_2["while L2-4"]
       direction RL
       while_test_scope_1_24["while ()<br/>L2"]
+      bc_break_43["break outer<br/>L3"]
     end
   end
   classDef nestL1 fill:#11192a,stroke:transparent;

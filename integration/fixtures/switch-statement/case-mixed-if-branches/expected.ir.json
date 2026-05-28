@@ -49,7 +49,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -95,7 +96,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -143,7 +145,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#3",
@@ -191,7 +194,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#4",
@@ -234,7 +238,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#5",
@@ -277,7 +282,23 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "break",
+          "target": null,
+          "span": {
+            "line": 9,
+            "column": 8,
+            "offset": 174
+          },
+          "endSpan": {
+            "line": 9,
+            "column": 14,
+            "offset": 180
+          }
+        }
+      ]
     },
     {
       "id": "scope#6",
@@ -322,7 +343,8 @@
         "switch": 1,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     }
   ],
   "variables": [

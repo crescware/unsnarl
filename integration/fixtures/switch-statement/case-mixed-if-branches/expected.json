@@ -127,7 +127,18 @@
                       "line": 8,
                       "endLine": 10,
                       "direction": "RL",
-                      "elements": [],
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "bc_break_174",
+                          "kind": "SyntheticBreakStatement",
+                          "name": "break",
+                          "line": 9,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ],
                       "kind": "else"
                     }
                   ]

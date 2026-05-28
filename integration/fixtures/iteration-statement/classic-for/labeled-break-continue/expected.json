@@ -110,6 +110,26 @@
                   "elements": [
                     {
                       "type": "node",
+                      "id": "bc_continue_91",
+                      "kind": "SyntheticContinueStatement",
+                      "name": "continue outer_loop",
+                      "line": 3,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    },
+                    {
+                      "type": "node",
+                      "id": "bc_break_129",
+                      "kind": "SyntheticBreakStatement",
+                      "name": "break outer_loop",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    },
+                    {
+                      "type": "node",
                       "id": "expr_stmt_151",
                       "kind": "SyntheticExpressionStatement",
                       "name": "console.log()",

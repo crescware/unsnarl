@@ -3,4 +3,6 @@
 0	1	integration/fixtures/app-behavior/depth/switch/input.ts:3 switch-discriminant
 0	1	integration/fixtures/app-behavior/depth/switch/input.ts:5 switch-discriminant
 0	2	integration/fixtures/app-behavior/depth/switch/input.ts:6 ...
-4	4	5 total
+0	0	integration/fixtures/app-behavior/depth/switch/input.ts:24 break
+0	0	integration/fixtures/app-behavior/depth/switch/input.ts:26 break
+4	4	7 total

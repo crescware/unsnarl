@@ -39,6 +39,16 @@
               "endLine": null,
               "isJsxElement": false,
               "unused": false
+            },
+            {
+              "type": "node",
+              "id": "bc_continue_43",
+              "kind": "SyntheticContinueStatement",
+              "name": "continue outer",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
             }
           ],
           "kind": "while"

@@ -83,6 +83,7 @@ fn set_scope_overrides_default() {
             falls_through: true,
             exits_function: false,
             nesting_depths: NestingDepths::uniform(NestingDepth(2)),
+            abrupt_statements: Vec::new(),
         },
     );
     assert!(store.of_scope(sid(3)).falls_through);

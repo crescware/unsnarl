@@ -37,14 +37,17 @@ flowchart RL
     subgraph s_scope_2["case 0 L5-7"]
       direction RL
       wr_ref_3(["let label<br/>L6"])
+      bc_break_83["break<br/>L7"]
     end
     subgraph s_scope_3["case 1 L8-10"]
       direction RL
       wr_ref_4(["let label<br/>L9"])
+      bc_break_123["break<br/>L10"]
     end
     subgraph s_scope_4["case 2 L11-13"]
       direction RL
       wr_ref_5(["let label<br/>L12"])
+      bc_break_163["break<br/>L13"]
     end
     subgraph s_scope_5["default L14-15"]
       direction RL

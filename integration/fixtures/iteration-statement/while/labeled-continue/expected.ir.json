@@ -43,7 +43,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#1",
@@ -88,7 +89,8 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": []
     },
     {
       "id": "scope#2",
@@ -131,7 +133,23 @@
         "switch": 0,
         "try-catch-finally": 0,
         "block": 0
-      }
+      },
+      "abruptStatements": [
+        {
+          "type": "continue",
+          "target": "outer",
+          "span": {
+            "line": 3,
+            "column": 4,
+            "offset": 43
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 19,
+            "offset": 58
+          }
+        }
+      ]
     }
   ],
   "variables": [],

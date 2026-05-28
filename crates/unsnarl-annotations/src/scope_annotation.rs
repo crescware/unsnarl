@@ -10,7 +10,7 @@
 use serde::Serialize;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
-use unsnarl_ir::scope::BlockContext;
+use unsnarl_ir::scope::{AbruptStatement, BlockContext};
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
@@ -19,6 +19,7 @@ pub struct ScopeAnnotation {
     pub falls_through: bool,
     pub exits_function: bool,
     pub nesting_depths: NestingDepths,
+    pub abrupt_statements: Vec<AbruptStatement>,
 }
 
 #[cfg(test)]
