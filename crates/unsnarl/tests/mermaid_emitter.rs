@@ -362,6 +362,64 @@ fn a_case_predicate_ref_still_falls_back_to_module_root() {
     assert!(out.contains("module_root((module))"));
 }
 
+// A function expression handed straight to a call (`memo(() => …)`,
+// `useCallback(() => …)`, `wrap(() => …)`) is not the variable's direct
+// initializer — the initializer is the *call*, not the function — so the
+// builder never registers an owner variable for the inner function scope.
+// `enclosing_function_var` is therefore `None`, and `resolve_read_target_id`
+// short-circuits every `read` reference inside the function onto the single
+// `module_root` fallback node instead of hosting them in a per-return node.
+// With a large body (a component returning a wide JSX tree) this turns
+// `module_root` into a high-degree hub that every interior read points at.
+#[test]
+fn reads_inside_a_call_argument_function_expression_all_collapse_onto_module_root() {
+    let out = emit_lang(
+        &[
+            r#"import { memo } from "react";"#,
+            r#"import { Box, Text } from "ui";"#,
+            "export const Panel = memo((title: string, body: string) => {",
+            "  return (",
+            "    <Box label={title}>",
+            "      <Text>{body}</Text>",
+            "    </Box>",
+            "  );",
+            "});",
+        ]
+        .join("\n"),
+        Language::Tsx,
+    );
+    assert!(out.contains("module_root((module))"));
+    // Box, Text, title, body all read into the same fallback node.
+    assert_eq!(count_matches(&out, r"-->\|read\| module_root"), 4);
+    // None of those reads were hosted in a return-use node.
+    assert!(!out.contains("ret_use_ref"));
+}
+
+// Control: the identical body, bound directly to the variable instead of
+// being wrapped in a call. Now the function expression *is* the initializer,
+// the owner variable is registered, and the return reads land in per-return
+// `ret_use_ref` nodes — nothing collapses onto `module_root`.
+#[test]
+fn reads_inside_a_directly_bound_function_expression_are_hosted_not_collapsed() {
+    let out = emit_lang(
+        &[
+            r#"import { Box, Text } from "ui";"#,
+            "export const Panel = (title: string, body: string) => {",
+            "  return (",
+            "    <Box label={title}>",
+            "      <Text>{body}</Text>",
+            "    </Box>",
+            "  );",
+            "};",
+        ]
+        .join("\n"),
+        Language::Tsx,
+    );
+    assert!(!out.contains("module_root((module))"));
+    assert_eq!(count_matches(&out, r"-->\|read\| module_root"), 0);
+    assert!(out.contains("ret_use_ref"));
+}
+
 #[test]
 fn subgraphs_try_catch_finally_blocks_with_line_numbers() {
     let code = [
