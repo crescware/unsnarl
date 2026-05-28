@@ -31,4 +31,6 @@ flowchart RL
   class expr_stmt_23 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
+  classDef edgeTargetSubgraph stroke:#888;
+  class expr_stmt_23 edgeTargetSubgraph;
 ```

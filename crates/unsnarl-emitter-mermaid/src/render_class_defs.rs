@@ -1,7 +1,9 @@
 //! Emits the trailing `classDef` / `class` lines that style boundary
-//! stubs, var nodes, and per-depth nest fills.
+//! stubs, var nodes, per-depth nest fills, and the visible-border
+//! treatment for subgraphs whose perimeter is the terminus of an
+//! ordinary edge.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use crate::theme::ColorTheme;
 
@@ -9,6 +11,7 @@ pub fn render_class_defs(
     stub_ids: &[String],
     var_ids: &[String],
     nest_class_map: &HashMap<usize, Vec<String>>,
+    edge_target_subgraph_ids: &HashSet<String>,
     theme: &ColorTheme,
     lines: &mut Vec<String>,
 ) {
@@ -39,6 +42,43 @@ pub fn render_class_defs(
         }
     }
     emit_nest_class_defs(nest_class_map, theme, lines);
+    emit_edge_target_subgraph_class_def(edge_target_subgraph_ids, nest_class_map, theme, lines);
+}
+
+/// When at least one subgraph is an edge terminus, emit a
+/// single `classDef edgeTargetSubgraph` plus per-id `class`
+/// assignments. The class is applied *in addition to* the
+/// per-depth `nestL<N>` class on the same id; Mermaid merges
+/// styles across multiple `class` lines so the fill stays
+/// per-depth while the stroke comes from this class. Subgraph ids
+/// are iterated in the depth-then-emit-order the `nestL<N>`
+/// classDefs already use so the new `class` lines line up under
+/// their matching `class … nestL<N>` line, keeping the on-disk
+/// output deterministic.
+fn emit_edge_target_subgraph_class_def(
+    edge_target_subgraph_ids: &HashSet<String>,
+    nest_class_map: &HashMap<usize, Vec<String>>,
+    theme: &ColorTheme,
+    lines: &mut Vec<String>,
+) {
+    if edge_target_subgraph_ids.is_empty() {
+        return;
+    }
+    lines.push(format!(
+        "  classDef edgeTargetSubgraph stroke:{};",
+        theme.edge_target_subgraph.stroke
+    ));
+    let palette_length = theme.nest_palette.len();
+    for slot in 0..palette_length {
+        let Some(ids) = nest_class_map.get(&slot) else {
+            continue;
+        };
+        for id in ids {
+            if edge_target_subgraph_ids.contains(id) {
+                lines.push(format!("  class {id} edgeTargetSubgraph;"));
+            }
+        }
+    }
 }
 
 fn emit_nest_class_defs(

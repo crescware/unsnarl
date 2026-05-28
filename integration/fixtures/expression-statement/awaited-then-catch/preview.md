@@ -61,4 +61,6 @@ flowchart RL
   classDef nestL4 fill:#2d3b57,stroke:transparent;
   class s_scope_2 nestL4;
   class s_scope_3 nestL4;
+  classDef edgeTargetSubgraph stroke:#888;
+  class expr_stmt_47 edgeTargetSubgraph;
 ```

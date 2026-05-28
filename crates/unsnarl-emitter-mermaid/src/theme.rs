@@ -11,8 +11,8 @@ pub mod light_theme;
 pub mod nest_palette_index;
 
 pub use color_theme::{
-    BoundaryStubColors, ColorTheme, ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry,
-    VarNodeColors,
+    BoundaryStubColors, ColorTheme, EdgeTargetSubgraphColors, ElkEmptyPlaceholderColors,
+    HighlightColors, NestPaletteEntry, VarNodeColors,
 };
 pub use dark_theme::DARK_THEME;
 pub use light_theme::LIGHT_THEME;

@@ -25,6 +25,17 @@ pub struct NestPaletteEntry {
     pub stroke: &'static str,
 }
 
+/// Stroke applied as a *second* class to subgraphs that appear as
+/// the terminus of at least one ordinary edge in the rendered
+/// graph (e.g. a `CallProxy` subgraph receiving `read,call` from
+/// its callee binding). Subgraphs that no edge terminates on keep
+/// the per-depth `nestL<N>` class's transparent stroke and remain
+/// border-less, so the visible border becomes a positive signal of
+/// "an edge actually lands here".
+pub struct EdgeTargetSubgraphColors {
+    pub stroke: &'static str,
+}
+
 pub struct HighlightColors {
     pub fill: &'static str,
     pub stroke: &'static str,
@@ -41,6 +52,7 @@ pub struct ColorTheme {
     /// theme must provide at least one palette entry so cycling has
     /// a target.
     pub nest_palette: &'static [NestPaletteEntry],
+    pub edge_target_subgraph: EdgeTargetSubgraphColors,
     pub highlight: HighlightColors,
 }
 
