@@ -300,7 +300,7 @@ fn expr_stmt_container(
 }
 
 #[test]
-fn pre_pass_wraps_callback_children_in_a_single_call_proxy_subgraph() {
+fn sibling_callbacks_for_the_same_statement_share_one_call_proxy_wrapper() {
     let mut ir = empty_serialized_ir();
     let stmt_offset: u32 = 100;
     let cb_a = callback_fn_scope("cbA", "outer", stmt_offset, 0);
@@ -361,7 +361,7 @@ fn pre_pass_wraps_callback_children_in_a_single_call_proxy_subgraph() {
 }
 
 #[test]
-fn pre_pass_falls_through_when_no_matching_container_is_registered() {
+fn falls_through_to_default_handling_when_no_matching_container_is_registered() {
     let mut ir = empty_serialized_ir();
     let stmt_offset: u32 = 200;
     let cb = callback_fn_scope("cb", "outer", stmt_offset, 0);
@@ -392,7 +392,7 @@ fn pre_pass_falls_through_when_no_matching_container_is_registered() {
 }
 
 #[test]
-fn pre_pass_materialises_one_wrapper_per_distinct_statement_offset() {
+fn distinct_statement_offsets_get_distinct_call_proxy_wrappers() {
     let mut ir = empty_serialized_ir();
     let cb_a = callback_fn_scope("cbA", "outer", 100, 0);
     let cb_b = callback_fn_scope("cbB", "outer", 200, 0);
@@ -429,6 +429,110 @@ fn pre_pass_materialises_one_wrapper_per_distinct_statement_offset() {
     assert_eq!(
         call_names,
         vec!["first()".to_string(), "second()".to_string()]
+    );
+}
+
+#[test]
+fn call_proxy_wrapper_lands_at_first_callback_position_preserving_sibling_order() {
+    // Regression: a previous implementation pre-walked `children`
+    // and appended every CallProxy wrapper before the main child
+    // loop ever started, so a `[before, callback, after]` child
+    // sequence collapsed into `[wrapper, before, after]` because
+    // the wrapper was appended first regardless of the callback's
+    // source-order position. The wrapper must now appear at the
+    // position of its first callback child so the surrounding
+    // non-callback siblings keep their relative order.
+    let mut ir = empty_serialized_ir();
+    let stmt_offset: u32 = 100;
+    let before = for_scope("before", "outer");
+    let cb = callback_fn_scope("cb", "outer", stmt_offset, 0);
+    let after = for_scope("after", "outer");
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("before"), scope_id("cb"), scope_id("after")];
+    ir.scopes.push(outer);
+    ir.scopes.push(before);
+    ir.scopes.push(cb);
+    ir.scopes.push(after);
+
+    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "run");
+    let mut ctx = base_builder_context(&ir);
+    ctx.expression_statement_containers_by_offset
+        .insert(stmt_offset, &container);
+
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    let sgs = root_subgraphs(&arena);
+    assert_eq!(
+        sgs.len(),
+        3,
+        "expected [before, wrapper, after] -- got {} root subgraphs",
+        sgs.len()
+    );
+    let kinds: Vec<&'static str> = sgs
+        .iter()
+        .map(|idx| match descriptor_of(&arena, *idx) {
+            VisualSubgraph::Owned(o) => match o.kind {
+                OwnedSubgraphKind::CallProxy => "call-proxy",
+                OwnedSubgraphKind::Function => "function",
+                _ => "other-owned",
+            },
+            VisualSubgraph::Control(c) => match c.kind {
+                ControlSubgraphKind::For => "for",
+                _ => "other-control",
+            },
+        })
+        .collect();
+    assert_eq!(
+        kinds,
+        vec!["for", "call-proxy", "for"],
+        "wrapper must appear between the two `for` siblings, not before them",
+    );
+}
+
+#[test]
+fn callback_at_the_end_appends_wrapper_after_earlier_siblings() {
+    // Single-callback variant of the order-preservation regression:
+    // `[before, callback]` must render as `[before, wrapper]`, not
+    // `[wrapper, before]`. Catches a reordering that would survive
+    // the multi-sibling test if the implementation happened to
+    // append wrappers first only when *multiple* callbacks share a
+    // statement.
+    let mut ir = empty_serialized_ir();
+    let stmt_offset: u32 = 200;
+    let before = for_scope("before", "outer");
+    let cb = callback_fn_scope("cb", "outer", stmt_offset, 0);
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("before"), scope_id("cb")];
+    ir.scopes.push(outer);
+    ir.scopes.push(before);
+    ir.scopes.push(cb);
+
+    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "tail");
+    let mut ctx = base_builder_context(&ir);
+    ctx.expression_statement_containers_by_offset
+        .insert(stmt_offset, &container);
+
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    let sgs = root_subgraphs(&arena);
+    assert_eq!(sgs.len(), 2);
+    assert!(
+        matches!(
+            descriptor_of(&arena, sgs[0]),
+            VisualSubgraph::Control(c) if matches!(c.kind, ControlSubgraphKind::For)
+        ),
+        "first sibling must be the `before` For scope",
+    );
+    assert!(
+        matches!(
+            descriptor_of(&arena, sgs[1]),
+            VisualSubgraph::Owned(o) if matches!(o.kind, OwnedSubgraphKind::CallProxy)
+        ),
+        "second sibling must be the CallProxy wrapper",
     );
 }
 

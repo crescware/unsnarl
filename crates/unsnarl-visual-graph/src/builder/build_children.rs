@@ -13,7 +13,7 @@
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::SerializedScope;
@@ -39,6 +39,55 @@ fn make_if_test_anchor(
     source_index: &SourceIndex<'_>,
 ) -> VisualNode {
     SyntheticVisualNode::if_statement_test(id, line_for_offset(source_index, offset)).into()
+}
+
+/// Look up (or create on first sight) the `CallProxy` wrapper
+/// subgraph for the ExpressionStatement at `stmt_offset`. Returns
+/// `None` when the statement has no `ExpressionStatementContainer`
+/// registered -- callers should fall through to default handling
+/// in that case.
+///
+/// First-sight allocation appends the wrapper to `container` at
+/// the call site, so the wrapper lands in the same source-order
+/// position as the first callback child belonging to that
+/// statement. Subsequent callbacks for the same statement reuse
+/// the cached subgraph index and only emit themselves as wrapper
+/// children.
+fn ensure_call_proxy_wrapper(
+    arena: &mut BuildArena,
+    state: &mut BuildState,
+    ctx: &BuilderContext<'_>,
+    container: Container,
+    call_proxy_by_stmt_offset: &mut HashMap<u32, SubgraphIdx>,
+    stmt_offset: u32,
+) -> Option<SubgraphIdx> {
+    if let Some(&idx) = call_proxy_by_stmt_offset.get(&stmt_offset) {
+        return Some(idx);
+    }
+    let container_ref = ctx
+        .expression_statement_containers_by_offset
+        .get(&stmt_offset)
+        .copied()?;
+    let id = expression_statement_node_id(stmt_offset);
+    let name = render_head_expression(&container_ref.head, &ctx.source_index);
+    let start_line = container_ref.start_span.line.0;
+    let end_line = if container_ref.end_span.line.0 != start_line {
+        Some(container_ref.end_span.line.0)
+    } else {
+        None
+    };
+    let mut sg =
+        OwnedVisualSubgraph::call_proxy(id.clone(), start_line, name, Vec::new(), Direction::RL);
+    sg.end_line = end_line;
+    let idx = arena.push_subgraph(sg.into());
+    arena.append_child(container, ElementHandle::Subgraph(idx));
+    // Wire the offset cache so the downstream
+    // `ensure_expression_statement_node` call (during reference
+    // traversal) returns this wrapper subgraph's id instead of
+    // emitting a separate leaf `expr_stmt_<offset>` node.
+    state.expression_statement_by_offset.insert(stmt_offset, id);
+    call_proxy_by_stmt_offset.insert(stmt_offset, idx);
+    Some(idx)
 }
 
 fn push_if_test_anchor(
@@ -119,73 +168,48 @@ pub fn build_children(
         .filter_map(|id| ctx.scope_map.get(id.value()).copied())
         .collect();
 
-    // Pre-pass: for each unique ExpressionStatement offset that
-    // hosts at least one callback-arg child, materialise a single
-    // `CallProxy` subgraph that will contain every callback child
-    // of that statement. This must happen *before* the main child
-    // loop so that
-    //   1. `build_scope` on each callback child can be routed into
-    //      the wrapper rather than the parent container, and
-    //   2. `ensure_expression_statement_node` (called later during
-    //      reference traversal) returns the wrapper's id instead
-    //      of allocating a separate leaf node, so edges from the
-    //      callee binding and from non-callback identifier args
-    //      terminate on the wrapper's border.
+    // `ExpressionStatement start offset → CallProxy wrapper`.
+    // Populated lazily inside the main loop: the wrapper is
+    // appended to `container` at the position of its *first*
+    // callback-arg child, and every subsequent callback child
+    // belonging to the same ExpressionStatement is routed into the
+    // existing wrapper. Allocating at first-sight (rather than in a
+    // separate pre-pass over `children`) preserves the source order
+    // of sibling scopes that interleave with the callback statement
+    // -- `[block, callback, block]` now renders as
+    // `[block, wrapper, block]` instead of being reordered to
+    // `[wrapper, block, block]` by a pre-pass that always appends
+    // wrappers first.
     let mut call_proxy_by_stmt_offset: HashMap<u32, SubgraphIdx> = HashMap::new();
-    let mut seen_stmt_offsets: HashSet<u32> = HashSet::new();
-    for child in &children {
-        let Some(cb) = child.callback_argument.as_ref() else {
-            continue;
-        };
-        let stmt_offset = cb.statement_offset().0;
-        if !seen_stmt_offsets.insert(stmt_offset) {
-            continue;
-        }
-        let Some(container_ref) = ctx
-            .expression_statement_containers_by_offset
-            .get(&stmt_offset)
-            .copied()
-        else {
-            continue;
-        };
-        let id = expression_statement_node_id(stmt_offset);
-        let name = render_head_expression(&container_ref.head, &ctx.source_index);
-        let start_line = container_ref.start_span.line.0;
-        let end_line = if container_ref.end_span.line.0 != start_line {
-            Some(container_ref.end_span.line.0)
-        } else {
-            None
-        };
-        let mut sg = OwnedVisualSubgraph::call_proxy(
-            id.clone(),
-            start_line,
-            name,
-            Vec::new(),
-            Direction::RL,
-        );
-        sg.end_line = end_line;
-        let idx = arena.push_subgraph(sg.into());
-        arena.append_child(container, ElementHandle::Subgraph(idx));
-        // Pre-populate the offset cache so the downstream
-        // `ensure_expression_statement_node` call (during reference
-        // traversal) returns this wrapper subgraph's id instead of
-        // emitting a separate leaf `expr_stmt_<offset>` node.
-        state.expression_statement_by_offset.insert(stmt_offset, id);
-        call_proxy_by_stmt_offset.insert(stmt_offset, idx);
-    }
 
     let mut i = 0;
     while i < children.len() {
         let child = children[i];
-        // Route callback-arg children into the matching wrapper
-        // subgraph (if it was created above) instead of the parent
-        // container.
+        // Callback-arg children route into a `CallProxy` wrapper.
+        // The wrapper is created on first sight (so it lands at the
+        // first callback's source position) and reused for any
+        // later siblings that share the same statement offset.
         if let Some(cb) = child.callback_argument.as_ref() {
-            if let Some(&wrapper_idx) = call_proxy_by_stmt_offset.get(&cb.statement_offset().0) {
+            let stmt_offset = cb.statement_offset().0;
+            if let Some(wrapper_idx) = ensure_call_proxy_wrapper(
+                arena,
+                state,
+                ctx,
+                container,
+                &mut call_proxy_by_stmt_offset,
+                stmt_offset,
+            ) {
                 build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
                 i += 1;
                 continue;
             }
+            // No matching ExpressionStatementContainer was registered
+            // (e.g. the analyzer fired the annotation but no
+            // reference inside that statement reached the
+            // visual-graph layer to populate the container map).
+            // Fall through to default handling so the function scope
+            // still lands somewhere instead of being silently
+            // dropped.
         }
         let ckey = branch_container_key(child);
         let Some(key) = ckey.as_deref() else {

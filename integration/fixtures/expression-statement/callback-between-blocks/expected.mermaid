@@ -1,0 +1,35 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_console_24["global console"]
+  n_scope_0_run_47["global run"]
+  subgraph s_scope_1["block L1-4"]
+    direction RL
+    n_scope_1_before_10["before<br/>L2"]
+    expr_stmt_24["console.log()<br/>L3"]
+  end
+  subgraph expr_stmt_47["run()<br/>L5-7"]
+    direction RL
+    subgraph s_scope_2["run(args[0])<br/>L5-7"]
+      direction RL
+      expr_stmt_61["console.log()<br/>L6"]
+    end
+  end
+  subgraph s_scope_3["block L8-11"]
+    direction RL
+    n_scope_3_after_105["after<br/>L9"]
+    expr_stmt_118["console.log()<br/>L10"]
+  end
+  n_scope_0_console_24 -->|read| expr_stmt_24
+  n_scope_1_before_10 -->|read| expr_stmt_24
+  n_scope_0_run_47 -->|read,call| expr_stmt_47
+  n_scope_0_console_24 -->|read| expr_stmt_61
+  n_scope_0_console_24 -->|read| expr_stmt_118
+  n_scope_3_after_105 -->|read| expr_stmt_118
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+  class expr_stmt_47 nestL1;
+  class s_scope_3 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
+  classDef edgeTargetSubgraph stroke:#888;
+  class expr_stmt_47 edgeTargetSubgraph;
