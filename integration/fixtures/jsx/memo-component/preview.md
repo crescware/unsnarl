@@ -1,0 +1,45 @@
+# integration/fixtures/jsx/memo-component/input.tsx
+
+## Input
+
+```tsx
+import { memo } from "react";
+import { Box, Text } from "ui";
+
+export const Panel = memo((title: string, body: string) => {
+  return (
+    <Box label={title}>
+      <Text>{body}</Text>
+    </Box>
+  );
+});
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_memo_9["import memo<br/>L1"]
+  n_scope_0_Box_39["import Box<br/>L2"]
+  n_scope_0_Text_44["import Text<br/>L2"]
+  n_scope_0_Panel_76["unused Panel<br/>L4"]
+  subgraph s_scope_1["(anonymous)<br/>L4-10"]
+    direction RL
+    n_scope_1_title_90["title<br/>L4"]
+    n_scope_1_body_105["body<br/>L4"]
+  end
+  n_scope_0_memo_9 -->|read,call| n_scope_0_Panel_76
+  n_scope_0_Box_39 -->|read| module_root
+  n_scope_1_title_90 -->|read| module_root
+  n_scope_0_Text_44 -->|read| module_root
+  n_scope_1_body_105 -->|read| module_root
+  module_root((module))
+  mod_react["module react<br/>L1"]
+  mod_ui["module ui<br/>L2"]
+  mod_react -->|read| n_scope_0_memo_9
+  mod_ui -->|read| n_scope_0_Box_39
+  mod_ui -->|read| n_scope_0_Text_44
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class s_scope_1 nestL1;
+```
