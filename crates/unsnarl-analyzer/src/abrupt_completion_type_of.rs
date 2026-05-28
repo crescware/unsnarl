@@ -2,8 +2,15 @@
 //! statement's termination.
 //!
 //! Returns `None` when any path through the statement can fall
-//! through to a normal completion. `LabeledStatement` is
-//! intentionally not resolved.
+//! through to a normal completion. `LabeledStatement` is handled
+//! transparently — the wrapper inherits its body's completion set
+//! per ECMA §14.13.4 step 2 ("Let result be the result of
+//! evaluating LabelledItem"). The label-matching collapse in
+//! step 3 ("If result.[[Type]] is break or continue and
+//! result.[[Target]] is in S, set result.[[Type]] to normal") is
+//! tracked separately in #97 (Part 2) because resolving
+//! `[[Target]]` against the enclosing label set requires a layer
+//! the call site does not currently maintain.
 //!
 //! Set membership uses `Vec` rather than a hash set because the
 //! value space is fixed-size (four `CompletionType` variants) and
@@ -32,6 +39,7 @@ pub fn abrupt_completion_type_of(node: &Statement<'_>) -> Option<Vec<CompletionT
             }
             Some(out)
         }
+        Statement::LabeledStatement(ls) => abrupt_completion_type_of(&ls.body),
         _ => None,
     }
 }
