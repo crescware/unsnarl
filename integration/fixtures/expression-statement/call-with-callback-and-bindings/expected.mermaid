@@ -5,15 +5,19 @@ flowchart RL
   n_scope_0_c_32["c<br/>L3"]
   n_scope_0_run_39["global run"]
   n_scope_0_console_58["global console"]
-  subgraph s_scope_1["run(args[0])<br/>L5-7"]
+  subgraph expr_stmt_39["run()<br/>L4-10"]
     direction RL
-    expr_stmt_58["console.log()<br/>L6"]
+    subgraph s_scope_1["run(args[0])<br/>L5-7"]
+      direction RL
+      expr_stmt_58["console.log()<br/>L6"]
+    end
   end
   n_scope_0_run_39 -->|read,call| expr_stmt_39
   n_scope_0_console_58 -->|read| expr_stmt_58
   n_scope_0_a_6 -->|read| expr_stmt_58
   n_scope_0_b_19 -->|read| expr_stmt_39
   n_scope_0_c_32 -->|read| expr_stmt_39
-  expr_stmt_39["run()<br/>L4-10"]
   classDef nestL1 fill:#11192a,stroke:transparent;
-  class s_scope_1 nestL1;
+  class expr_stmt_39 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;

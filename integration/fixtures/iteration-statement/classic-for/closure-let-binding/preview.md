@@ -24,10 +24,12 @@ flowchart RL
     wr_ref_3(["let q<br/>L2"])
     subgraph s_scope_2["block L2-4"]
       direction RL
-      expr_stmt_66["fns.push()<br/>L3"]
-      subgraph s_scope_3["fns.push(args[0])<br/>L3"]
+      subgraph expr_stmt_66["fns.push()<br/>L3"]
         direction RL
-        elk_empty_s_scope_3["No nodes"]
+        subgraph s_scope_3["fns.push(args[0])<br/>L3"]
+          direction RL
+          elk_empty_s_scope_3["No nodes"]
+        end
       end
     end
   end
@@ -43,7 +45,9 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_2 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class s_scope_3 nestL3;
+  class expr_stmt_66 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_3 nestL4;
   classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
   class elk_empty_s_scope_3 elkEmptyPlaceholder;
 ```

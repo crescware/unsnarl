@@ -28,18 +28,20 @@ flowchart RL
     n_scope_0_run_22["unused run()<br/>L1"]
     subgraph s_scope_1["run()<br/>L1-11"]
       direction RL
-      expr_stmt_47["await Promise.resolve().then().catch()<br/>L2-10"]
-      subgraph s_scope_2["Promise.resolve().then().catch(args[0])<br/>L3-6"]
+      subgraph expr_stmt_47["await Promise.resolve().then().catch()<br/>L2-10"]
         direction RL
-        n_scope_2_value_82["value<br/>L3"]
-        expr_stmt_100["console.log()<br/>L4"]
-        expr_stmt_142["console.log()<br/>L5"]
-      end
-      subgraph s_scope_3["Promise.resolve().then().catch(args[0])<br/>L7-10"]
-        direction RL
-        n_scope_3_error_202["error<br/>L7"]
-        expr_stmt_220["console.error()<br/>L8"]
-        expr_stmt_265["console.error()<br/>L9"]
+        subgraph s_scope_2["Promise.resolve().then().catch(args[0])<br/>L3-6"]
+          direction RL
+          n_scope_2_value_82["value<br/>L3"]
+          expr_stmt_100["console.log()<br/>L4"]
+          expr_stmt_142["console.log()<br/>L5"]
+        end
+        subgraph s_scope_3["Promise.resolve().then().catch(args[0])<br/>L7-10"]
+          direction RL
+          n_scope_3_error_202["error<br/>L7"]
+          expr_stmt_220["console.error()<br/>L8"]
+          expr_stmt_265["console.error()<br/>L9"]
+        end
       end
     end
   end
@@ -55,6 +57,8 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class s_scope_2 nestL3;
-  class s_scope_3 nestL3;
+  class expr_stmt_47 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
 ```

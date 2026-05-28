@@ -61,91 +61,92 @@
     },
     {
       "type": "subgraph",
-      "id": "s_scope_1",
-      "kind": "function",
-      "line": 5,
-      "endLine": 7,
-      "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
-      "callbackArg": {
-        "callee": "run",
-        "argIndex": 0
-      },
-      "elements": [
-        {
-          "type": "node",
-          "id": "expr_stmt_58",
-          "kind": "SyntheticExpressionStatement",
-          "name": "console.log()",
-          "line": 6,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false
-        }
-      ]
-    },
-    {
-      "type": "subgraph",
-      "id": "s_scope_2",
-      "kind": "function",
-      "line": 8,
-      "endLine": 10,
-      "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
-      "callbackArg": {
-        "callee": "run",
-        "argIndex": 1
-      },
-      "elements": [
-        {
-          "type": "node",
-          "id": "expr_stmt_93",
-          "kind": "SyntheticExpressionStatement",
-          "name": "console.log()",
-          "line": 9,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false
-        }
-      ]
-    },
-    {
-      "type": "subgraph",
-      "id": "s_scope_3",
-      "kind": "function",
-      "line": 11,
-      "endLine": 13,
-      "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
-      "callbackArg": {
-        "callee": "run",
-        "argIndex": 2
-      },
-      "elements": [
-        {
-          "type": "node",
-          "id": "expr_stmt_128",
-          "kind": "SyntheticExpressionStatement",
-          "name": "console.log()",
-          "line": 12,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false
-        }
-      ]
-    },
-    {
-      "type": "node",
       "id": "expr_stmt_39",
-      "kind": "SyntheticExpressionStatement",
-      "name": "run()",
+      "kind": "call-proxy",
       "line": 4,
       "endLine": 14,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "callName": "run()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 5,
+          "endLine": 7,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "run",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_58",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 6,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 8,
+          "endLine": 10,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "run",
+            "argIndex": 1
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_93",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 9,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "kind": "function",
+          "line": 11,
+          "endLine": 13,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "run",
+            "argIndex": 2
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_128",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 12,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
     }
   ],
   "edges": [

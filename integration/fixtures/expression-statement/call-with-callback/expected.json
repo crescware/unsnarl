@@ -39,39 +39,40 @@
     },
     {
       "type": "subgraph",
-      "id": "s_scope_1",
-      "kind": "function",
+      "id": "expr_stmt_23",
+      "kind": "call-proxy",
       "line": 2,
       "endLine": 4,
       "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
-      "callbackArg": {
-        "callee": "run",
-        "argIndex": 0
-      },
+      "callName": "run()",
       "elements": [
         {
-          "type": "node",
-          "id": "expr_stmt_37",
-          "kind": "SyntheticExpressionStatement",
-          "name": "console.log()",
-          "line": 3,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 2,
+          "endLine": 4,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "run",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_37",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
         }
       ]
-    },
-    {
-      "type": "node",
-      "id": "expr_stmt_23",
-      "kind": "SyntheticExpressionStatement",
-      "name": "run()",
-      "line": 2,
-      "endLine": 4,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [

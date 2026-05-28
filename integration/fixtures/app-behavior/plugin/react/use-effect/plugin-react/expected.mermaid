@@ -10,11 +10,13 @@ flowchart RL
       direction RL
       n_scope_1_start_55["start<br/>L3"]
       n_scope_1_step_62["step<br/>L3"]
-      expr_stmt_110["useEffect()<br/>L4-7"]
-      subgraph s_scope_2["useEffect(args[0])<br/>L4-7"]
+      subgraph expr_stmt_110["useEffect()<br/>L4-7"]
         direction RL
-        n_scope_2_next_138["next<br/>L5"]
-        expr_stmt_163["console.log()<br/>L6"]
+        subgraph s_scope_2["useEffect(args[0])<br/>L4-7"]
+          direction RL
+          n_scope_2_next_138["next<br/>L5"]
+          expr_stmt_163["console.log()<br/>L6"]
+        end
       end
       subgraph s_return_scope_0_Counter_42_205_237["return L8"]
         direction RL
@@ -39,5 +41,7 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class s_scope_2 nestL3;
+  class expr_stmt_110 nestL3;
   class s_return_scope_0_Counter_42_205_237 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;

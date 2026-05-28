@@ -3,7 +3,6 @@
 1	0	integration/fixtures/jsx/use-effect/input.tsx:1 react
 0	0	integration/fixtures/jsx/use-effect/input.tsx:3 unused Comp
 3	0	integration/fixtures/jsx/use-effect/input.tsx:3 name
-0	2	integration/fixtures/jsx/use-effect/input.tsx:4 useEffect()
 0	2	integration/fixtures/jsx/use-effect/input.tsx:5 console.log()
 0	2	integration/fixtures/jsx/use-effect/input.tsx:7 console.log()
-7	7	8 total
+7	5	7 total

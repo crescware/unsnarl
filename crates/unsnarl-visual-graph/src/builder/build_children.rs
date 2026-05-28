@@ -13,6 +13,8 @@
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
 
+use std::collections::HashMap;
+
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::SerializedScope;
 
@@ -24,9 +26,11 @@ use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
 use super::context::BuilderContext;
+use super::expression_statement_node_id::expression_statement_node_id;
 use super::if_container_subgraph_id::if_container_subgraph_id;
 use super::if_test_node_id::if_test_node_id;
 use super::line_for_offset::line_for_offset;
+use super::render_head_expression::render_head_expression;
 use super::state::BuildState;
 
 fn make_if_test_anchor(
@@ -115,9 +119,74 @@ pub fn build_children(
         .filter_map(|id| ctx.scope_map.get(id.value()).copied())
         .collect();
 
+    // Pre-pass: for each unique ExpressionStatement offset that
+    // hosts at least one callback-arg child, materialise a single
+    // `CallProxy` subgraph that will contain every callback child
+    // of that statement. This must happen *before* the main child
+    // loop so that
+    //   1. `build_scope` on each callback child can be routed into
+    //      the wrapper rather than the parent container, and
+    //   2. `ensure_expression_statement_node` (called later during
+    //      reference traversal) returns the wrapper's id instead
+    //      of allocating a separate leaf node, so edges from the
+    //      callee binding and from non-callback identifier args
+    //      terminate on the wrapper's border.
+    let mut call_proxy_by_stmt_offset: HashMap<u32, SubgraphIdx> = HashMap::new();
+    let mut seen_stmt_offsets: HashMap<u32, ()> = HashMap::new();
+    for child in &children {
+        let Some(cb) = child.callback_argument.as_ref() else {
+            continue;
+        };
+        let stmt_offset = cb.statement_offset().0;
+        if seen_stmt_offsets.insert(stmt_offset, ()).is_some() {
+            continue;
+        }
+        let Some(container_ref) = ctx
+            .expression_statement_containers_by_offset
+            .get(&stmt_offset)
+            .copied()
+        else {
+            continue;
+        };
+        let id = expression_statement_node_id(stmt_offset);
+        let name = render_head_expression(&container_ref.head, &ctx.source_index);
+        let start_line = container_ref.start_span.line.0;
+        let end_line = if container_ref.end_span.line.0 != start_line {
+            Some(container_ref.end_span.line.0)
+        } else {
+            None
+        };
+        let mut sg = OwnedVisualSubgraph::call_proxy(
+            id.clone(),
+            start_line,
+            name,
+            Vec::new(),
+            Direction::RL,
+        );
+        sg.end_line = end_line;
+        let idx = arena.push_subgraph(sg.into());
+        arena.append_child(container, ElementHandle::Subgraph(idx));
+        // Pre-populate the offset cache so the downstream
+        // `ensure_expression_statement_node` call (during reference
+        // traversal) returns this wrapper subgraph's id instead of
+        // emitting a separate leaf `expr_stmt_<offset>` node.
+        state.expression_statement_by_offset.insert(stmt_offset, id);
+        call_proxy_by_stmt_offset.insert(stmt_offset, idx);
+    }
+
     let mut i = 0;
     while i < children.len() {
         let child = children[i];
+        // Route callback-arg children into the matching wrapper
+        // subgraph (if it was created above) instead of the parent
+        // container.
+        if let Some(cb) = child.callback_argument.as_ref() {
+            if let Some(&wrapper_idx) = call_proxy_by_stmt_offset.get(&cb.statement_offset().0) {
+                build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                i += 1;
+                continue;
+            }
+        }
         let ckey = branch_container_key(child);
         let Some(key) = ckey.as_deref() else {
             build_scope(arena, state, ctx, child, container);

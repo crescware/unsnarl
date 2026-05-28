@@ -75,28 +75,29 @@
           "elements": [
             {
               "type": "subgraph",
-              "id": "s_scope_3",
-              "kind": "function",
-              "line": 3,
-              "endLine": 3,
-              "direction": "RL",
-              "ownerNodeId": null,
-              "ownerName": "",
-              "callbackArg": {
-                "callee": "fns.push",
-                "argIndex": 0
-              },
-              "elements": []
-            },
-            {
-              "type": "node",
               "id": "expr_stmt_66",
-              "kind": "SyntheticExpressionStatement",
-              "name": "fns.push()",
+              "kind": "call-proxy",
               "line": 3,
               "endLine": null,
-              "isJsxElement": false,
-              "unused": false
+              "direction": "RL",
+              "callName": "fns.push()",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_3",
+                  "kind": "function",
+                  "line": 3,
+                  "endLine": 3,
+                  "direction": "RL",
+                  "ownerNodeId": null,
+                  "ownerName": "",
+                  "callbackArg": {
+                    "callee": "fns.push",
+                    "argIndex": 0
+                  },
+                  "elements": []
+                }
+              ]
             }
           ],
           "kind": "block"

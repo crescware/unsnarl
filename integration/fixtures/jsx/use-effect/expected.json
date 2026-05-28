@@ -60,61 +60,62 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_2",
-          "kind": "function",
+          "id": "expr_stmt_85",
+          "kind": "call-proxy",
           "line": 4,
           "endLine": 9,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useEffect",
-            "argIndex": 0
-          },
+          "callName": "useEffect()",
           "elements": [
             {
               "type": "subgraph",
-              "id": "s_scope_3",
+              "id": "s_scope_2",
               "kind": "function",
-              "line": 6,
-              "endLine": 8,
+              "line": 4,
+              "endLine": 9,
               "direction": "RL",
               "ownerNodeId": null,
               "ownerName": "",
+              "callbackArg": {
+                "callee": "useEffect",
+                "argIndex": 0
+              },
               "elements": [
                 {
+                  "type": "subgraph",
+                  "id": "s_scope_3",
+                  "kind": "function",
+                  "line": 6,
+                  "endLine": 8,
+                  "direction": "RL",
+                  "ownerNodeId": null,
+                  "ownerName": "",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "expr_stmt_161",
+                      "kind": "SyntheticExpressionStatement",
+                      "name": "console.log()",
+                      "line": 7,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                },
+                {
                   "type": "node",
-                  "id": "expr_stmt_161",
+                  "id": "expr_stmt_107",
                   "kind": "SyntheticExpressionStatement",
                   "name": "console.log()",
-                  "line": 7,
+                  "line": 5,
                   "endLine": null,
                   "isJsxElement": false,
                   "unused": false
                 }
               ]
-            },
-            {
-              "type": "node",
-              "id": "expr_stmt_107",
-              "kind": "SyntheticExpressionStatement",
-              "name": "console.log()",
-              "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
             }
           ]
-        },
-        {
-          "type": "node",
-          "id": "expr_stmt_85",
-          "kind": "SyntheticExpressionStatement",
-          "name": "useEffect()",
-          "line": 4,
-          "endLine": 9,
-          "isJsxElement": false,
-          "unused": false
         }
       ]
     },

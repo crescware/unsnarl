@@ -3,13 +3,17 @@ flowchart RL
   n_scope_0_label_6["label<br/>L1"]
   n_scope_0_run_23["global run"]
   n_scope_0_console_37["global console"]
-  subgraph s_scope_1["run(args[0])<br/>L2-4"]
+  subgraph expr_stmt_23["run()<br/>L2-4"]
     direction RL
-    expr_stmt_37["console.log()<br/>L3"]
+    subgraph s_scope_1["run(args[0])<br/>L2-4"]
+      direction RL
+      expr_stmt_37["console.log()<br/>L3"]
+    end
   end
   n_scope_0_run_23 -->|read,call| expr_stmt_23
   n_scope_0_console_37 -->|read| expr_stmt_37
   n_scope_0_label_6 -->|read| expr_stmt_37
-  expr_stmt_23["run()<br/>L2-4"]
   classDef nestL1 fill:#11192a,stroke:transparent;
-  class s_scope_1 nestL1;
+  class expr_stmt_23 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
