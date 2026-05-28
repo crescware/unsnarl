@@ -90,14 +90,16 @@ pub(crate) struct BuildAnalysisVisitor<'a, 'arena> {
     span_to_scope: &'arena HashMap<(u32, u32), ScopeId>,
     span_to_ref: &'arena HashMap<(u32, u32), ReferenceId>,
     key_stack: Vec<Option<&'static str>>,
-    /// Parallel to `key_stack` for the limited case of
-    /// `CallExpression` / `NewExpression` argument slots. When the
-    /// current visit is inside one such call's argument list, the top
-    /// of this stack holds the zero-based index of the argument
-    /// currently being visited; outside such a list (or while visiting
-    /// the call's other parts -- type parameters, callee, ...) the top
-    /// is `None`. Kept separate from `key_stack` so existing
-    /// `&'static str` keys keep their lifetime guarantees.
+    /// Pushed *only* when entering an argument slot of a
+    /// `CallExpression` / `NewExpression`; popped on the way out.
+    /// Consequently the stack is **not** strictly parallel with
+    /// `key_stack` -- visiting the call's `callee` /
+    /// `type_arguments` does not push a `None` placeholder, so a
+    /// raw `last()` would leak the enclosing arg's index into the
+    /// callee subtree. `callback_argument_for` defends against that
+    /// by additionally checking `current_key() == Some("arguments")`
+    /// before reading the top. Kept separate from `key_stack` so
+    /// existing `&'static str` keys keep their lifetime guarantees.
     arg_index_stack: Vec<Option<usize>>,
     path: Vec<PathFrame<'a>>,
     /// Parallel to `path`, kept in lock-step on push / pop. Holds
@@ -202,6 +204,14 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             parent.r#type,
             AstType::CallExpression | AstType::NewExpression
         ) {
+            return None;
+        }
+        // The function must sit in the parent call's `arguments`
+        // slot. Without this guard the function scope of a callee
+        // (e.g. the IIFE in `outer((function(){})())`) would inherit
+        // the outer call's `arg_index_stack` top and be misannotated
+        // as `outer`'s arg.
+        if self.current_key() != Some("arguments") {
             return None;
         }
         let arg_index = self.current_arg_index()?;

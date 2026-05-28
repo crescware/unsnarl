@@ -29,3 +29,7 @@ pub fn collect_edge_target_subgraph_ids(
     }
     out
 }
+
+#[cfg(test)]
+#[path = "collect_edge_target_subgraph_ids_test.rs"]
+mod collect_edge_target_subgraph_ids_test;

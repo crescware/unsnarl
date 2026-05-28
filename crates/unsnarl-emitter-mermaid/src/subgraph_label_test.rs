@@ -1,8 +1,10 @@
 use std::collections::HashMap;
 
+use unsnarl_visual_graph::direction::Direction;
 use unsnarl_visual_graph::visual_node::{BindingVisualNode, VisualNode};
 use unsnarl_visual_graph::visual_subgraph::{
-    ControlExtras, ControlVisualSubgraph, OwnedExtras, OwnedVisualSubgraph, VisualSubgraph,
+    ControlExtras, ControlVisualSubgraph, FunctionCallbackArg, OwnedExtras, OwnedVisualSubgraph,
+    VisualSubgraph,
 };
 
 use super::subgraph_label;
@@ -153,6 +155,115 @@ fn debug_true_appends_subgraph_kind_to_the_standard_label() {
     assert_eq!(
         subgraph_label(&sg, &empty_map(), true),
         "myFn()<br/>L2-5<br/>function"
+    );
+}
+
+#[test]
+fn function_with_no_owner_falls_back_to_anonymous_label_when_callback_arg_is_absent() {
+    let sg: VisualSubgraph = OwnedVisualSubgraph {
+        line: 3,
+        end_line: Some(7),
+        extras: OwnedExtras::Function {
+            owner_node_id: None,
+            owner_name: String::new(),
+        },
+        ..base_function_subgraph()
+    }
+    .into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), false),
+        "(anonymous)<br/>L3-7"
+    );
+}
+
+#[test]
+fn function_with_no_owner_uses_callback_arg_header_when_present() {
+    let sg: VisualSubgraph = OwnedVisualSubgraph {
+        line: 3,
+        end_line: Some(7),
+        extras: OwnedExtras::Function {
+            owner_node_id: None,
+            owner_name: String::new(),
+        },
+        callback_arg: Some(FunctionCallbackArg {
+            callee: "run".to_string(),
+            arg_index: 0,
+        }),
+        ..base_function_subgraph()
+    }
+    .into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), false),
+        "run(args[0])<br/>L3-7"
+    );
+}
+
+#[test]
+fn function_callback_arg_label_renders_higher_arg_indices_verbatim() {
+    let sg: VisualSubgraph = OwnedVisualSubgraph {
+        line: 9,
+        extras: OwnedExtras::Function {
+            owner_node_id: None,
+            owner_name: String::new(),
+        },
+        callback_arg: Some(FunctionCallbackArg {
+            callee: "scheduler.run".to_string(),
+            arg_index: 2,
+        }),
+        ..base_function_subgraph()
+    }
+    .into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), false),
+        "scheduler.run(args[2])<br/>L9"
+    );
+}
+
+#[test]
+fn function_owner_present_ignores_callback_arg() {
+    // When an owner binding is available the function label uses
+    // the owner name; the `callback_arg` field exists only to
+    // disambiguate anonymous callbacks, so it must not override a
+    // named owner.
+    let sg: VisualSubgraph = OwnedVisualSubgraph {
+        line: 2,
+        end_line: Some(5),
+        extras: OwnedExtras::Function {
+            owner_node_id: Some("n_owner".to_string()),
+            owner_name: "myFn".to_string(),
+        },
+        callback_arg: Some(FunctionCallbackArg {
+            callee: "outer".to_string(),
+            arg_index: 0,
+        }),
+        ..base_function_subgraph()
+    }
+    .into();
+    assert_eq!(subgraph_label(&sg, &empty_map(), false), "myFn()<br/>L2-5");
+}
+
+#[test]
+fn call_proxy_label_uses_call_name() {
+    let sg: VisualSubgraph =
+        OwnedVisualSubgraph::call_proxy("expr_stmt_42", 4, "run()", Vec::new(), Direction::RL)
+            .into();
+    assert_eq!(subgraph_label(&sg, &empty_map(), false), "run()<br/>L4");
+}
+
+#[test]
+fn call_proxy_label_includes_end_line_when_call_spans_multiple_lines() {
+    let mut sg = OwnedVisualSubgraph::call_proxy(
+        "expr_stmt_50",
+        2,
+        "console.log()",
+        Vec::new(),
+        Direction::RL,
+    );
+    sg.end_line = Some(6);
+    let sg: VisualSubgraph = sg.into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), false),
+        "console.log()<br/>L2-6"
     );
 }
 

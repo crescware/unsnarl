@@ -18,3 +18,7 @@ pub fn collect_subgraph_ids(elements: &[VisualElement], out: &mut HashSet<String
         }
     }
 }
+
+#[cfg(test)]
+#[path = "collect_subgraph_ids_test.rs"]
+mod collect_subgraph_ids_test;

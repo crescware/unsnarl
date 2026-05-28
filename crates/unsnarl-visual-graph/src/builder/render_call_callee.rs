@@ -53,3 +53,7 @@ pub fn render_call_callee(
         _ => None,
     }
 }
+
+#[cfg(test)]
+#[path = "render_call_callee_test.rs"]
+mod render_call_callee_test;

@@ -13,7 +13,7 @@
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::SerializedScope;
@@ -132,13 +132,13 @@ pub fn build_children(
     //      callee binding and from non-callback identifier args
     //      terminate on the wrapper's border.
     let mut call_proxy_by_stmt_offset: HashMap<u32, SubgraphIdx> = HashMap::new();
-    let mut seen_stmt_offsets: HashMap<u32, ()> = HashMap::new();
+    let mut seen_stmt_offsets: HashSet<u32> = HashSet::new();
     for child in &children {
         let Some(cb) = child.callback_argument.as_ref() else {
             continue;
         };
         let stmt_offset = cb.statement_offset().0;
-        if seen_stmt_offsets.insert(stmt_offset, ()).is_some() {
+        if !seen_stmt_offsets.insert(stmt_offset) {
             continue;
         }
         let Some(container_ref) = ctx

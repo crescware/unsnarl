@@ -398,3 +398,70 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
          label `value`, not the auto-walker's `arguments` carryover"
     );
 }
+
+fn callback_arg_for_first_function_scope(source: &str) -> serde_json::Value {
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+
+    let fn_scope = analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .find(|(_, s)| matches!(s.r#type, unsnarl_ir::scope_type::ScopeType::Function))
+        .map(|(id, _)| id)
+        .expect("a Function scope must exist");
+
+    let ann = analyzed.annotations.of_scope(fn_scope);
+    serde_json::to_value(&ann.callback_argument).expect("callback_argument serialises to JSON")
+}
+
+#[test]
+fn callback_argument_is_set_for_a_function_passed_as_a_direct_call_argument() {
+    let value = callback_arg_for_first_function_scope("run(() => {});\n");
+    assert!(
+        !value.is_null(),
+        "a function literal directly in arg 0 of an ExpressionStatement-level call must carry a callback_argument: {value}"
+    );
+    assert_eq!(value["argIndex"], 0);
+    assert_eq!(value["callParentType"], "CallExpression");
+}
+
+#[test]
+fn callback_argument_uses_zero_based_index_for_later_argument_slots() {
+    // The arrow is arg 1 of `run`, not arg 0.
+    let value = callback_arg_for_first_function_scope("run(a, () => {});\n");
+    assert_eq!(value["argIndex"], 1);
+}
+
+#[test]
+fn callback_argument_is_absent_when_call_sits_inside_a_variable_declarator() {
+    // Not an ExpressionStatement: the annotation must not fire.
+    let value = callback_arg_for_first_function_scope("const x = run(() => {});\n");
+    assert!(
+        value.is_null(),
+        "a call inside a VariableDeclarator must not produce a callback_argument: {value}"
+    );
+}
+
+#[test]
+fn callback_argument_does_not_leak_into_the_callee_of_an_inner_call() {
+    // Regression: `outer((function(){})())` puts a function expression
+    // in the *callee* slot of the inner CallExpression, which itself
+    // sits in arg 0 of the outer call. The arg_index_stack top remains
+    // `Some(0)` while traversing into the inner callee, so without an
+    // explicit `current_key == Some("arguments")` guard the IIFE
+    // function scope would be misannotated as `outer`'s arg 0.
+    let value = callback_arg_for_first_function_scope("outer((function () {})());\n");
+    assert!(
+        value.is_null(),
+        "an IIFE function in callee position must not be annotated as the outer call's arg: {value}"
+    );
+}
+
+#[test]
+fn callback_argument_records_new_expression_parent_type_for_constructor_callbacks() {
+    let value = callback_arg_for_first_function_scope("new Service(() => {});\n");
+    assert_eq!(value["argIndex"], 0);
+    assert_eq!(value["callParentType"], "NewExpression");
+}

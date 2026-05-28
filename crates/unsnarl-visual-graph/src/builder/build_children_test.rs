@@ -1,8 +1,12 @@
 //! Sibling tests for [`build_children`].
 
+use unsnarl_ir::primitive::Utf16CodeUnitOffset;
+use unsnarl_ir::scope::CallbackArgument;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::SerializedBlock;
-use unsnarl_ir::serialized::SerializedScope;
+use unsnarl_ir::serialized::{
+    SerializedExpressionStatementContainer, SerializedHeadExpression, SerializedScope,
+};
 use unsnarl_oxc_parity::AstType;
 
 use super::build_children;
@@ -262,6 +266,168 @@ fn two_adjacent_ifs_with_different_offsets_are_not_merged() {
             SyntheticNodeKind::SyntheticIfStatementTest
         ));
     }
+}
+
+fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) -> SerializedScope {
+    let mut s = scope_with_upper(id, upper);
+    s.r#type = ScopeType::Function;
+    s.block = block(stmt_offset, 1, stmt_offset + 10, 3);
+    s.callback_argument = Some(CallbackArgument::new(
+        Utf16CodeUnitOffset(stmt_offset),
+        Utf16CodeUnitOffset(stmt_offset),
+        AstType::CallExpression,
+        arg_index,
+    ));
+    s
+}
+
+fn expr_stmt_container(
+    start: u32,
+    end: u32,
+    callee_name: &str,
+) -> SerializedExpressionStatementContainer {
+    SerializedExpressionStatementContainer {
+        start_span: span_offset_line(start, 1),
+        end_span: span_offset_line(end, 3),
+        head: SerializedHeadExpression::Call {
+            callee: Box::new(SerializedHeadExpression::identifier(
+                callee_name.to_string(),
+            )),
+        },
+    }
+}
+
+#[test]
+fn pre_pass_wraps_callback_children_in_a_single_call_proxy_subgraph() {
+    let mut ir = empty_serialized_ir();
+    let stmt_offset: u32 = 100;
+    let cb_a = callback_fn_scope("cbA", "outer", stmt_offset, 0);
+    let cb_b = callback_fn_scope("cbB", "outer", stmt_offset, 1);
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("cbA"), scope_id("cbB")];
+    ir.scopes.push(outer);
+    ir.scopes.push(cb_a);
+    ir.scopes.push(cb_b);
+
+    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "run");
+    let mut ctx = base_builder_context(&ir);
+    ctx.expression_statement_containers_by_offset
+        .insert(stmt_offset, &container);
+
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    // Exactly one root subgraph -- the CallProxy wrapping both callbacks.
+    let sgs = root_subgraphs(&arena);
+    assert_eq!(sgs.len(), 1, "expected a single root subgraph");
+    let VisualSubgraph::Owned(o) = descriptor_of(&arena, sgs[0]) else {
+        panic!("expected owned subgraph");
+    };
+    assert!(matches!(o.kind, OwnedSubgraphKind::CallProxy));
+    let OwnedExtras::CallProxy { call_name } = &o.extras else {
+        panic!("expected CallProxy extras");
+    };
+    assert_eq!(call_name, "run()");
+
+    // Both function scopes were routed into the wrapper.
+    let wrapper_children: Vec<SubgraphIdx> = arena
+        .subgraph(sgs[0])
+        .children
+        .iter()
+        .filter_map(|h| match h {
+            ElementHandle::Subgraph(idx) => Some(*idx),
+            _ => None,
+        })
+        .collect();
+    assert_eq!(wrapper_children.len(), 2);
+    for child in wrapper_children {
+        let VisualSubgraph::Owned(c) = descriptor_of(&arena, child) else {
+            panic!("expected owned child");
+        };
+        assert!(matches!(c.kind, OwnedSubgraphKind::Function));
+    }
+
+    // The expression-statement offset cache has been pre-populated so
+    // downstream `ensure_expression_statement_node` reuses the
+    // wrapper's id instead of allocating a separate leaf node.
+    let cached = state
+        .expression_statement_by_offset
+        .get(&stmt_offset)
+        .expect("offset must be cached");
+    assert_eq!(cached, &format!("expr_stmt_{stmt_offset}"));
+}
+
+#[test]
+fn pre_pass_falls_through_when_no_matching_container_is_registered() {
+    let mut ir = empty_serialized_ir();
+    let stmt_offset: u32 = 200;
+    let cb = callback_fn_scope("cb", "outer", stmt_offset, 0);
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("cb")];
+    ir.scopes.push(outer);
+    ir.scopes.push(cb);
+
+    // Deliberately omit the container from
+    // `expression_statement_containers_by_offset`.
+    let ctx = base_builder_context(&ir);
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    // No CallProxy wrapper; the function scope lands directly in
+    // the parent container and the offset cache is left untouched
+    // for `ensure_expression_statement_node` to handle later.
+    let sgs = root_subgraphs(&arena);
+    assert_eq!(sgs.len(), 1);
+    let VisualSubgraph::Owned(o) = descriptor_of(&arena, sgs[0]) else {
+        panic!("expected owned");
+    };
+    assert!(matches!(o.kind, OwnedSubgraphKind::Function));
+    assert!(!state
+        .expression_statement_by_offset
+        .contains_key(&stmt_offset));
+}
+
+#[test]
+fn pre_pass_materialises_one_wrapper_per_distinct_statement_offset() {
+    let mut ir = empty_serialized_ir();
+    let cb_a = callback_fn_scope("cbA", "outer", 100, 0);
+    let cb_b = callback_fn_scope("cbB", "outer", 200, 0);
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("cbA"), scope_id("cbB")];
+    ir.scopes.push(outer);
+    ir.scopes.push(cb_a);
+    ir.scopes.push(cb_b);
+
+    let c100 = expr_stmt_container(100, 120, "first");
+    let c200 = expr_stmt_container(200, 220, "second");
+    let mut ctx = base_builder_context(&ir);
+    ctx.expression_statement_containers_by_offset
+        .insert(100, &c100);
+    ctx.expression_statement_containers_by_offset
+        .insert(200, &c200);
+
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    let sgs = root_subgraphs(&arena);
+    assert_eq!(sgs.len(), 2);
+    let call_names: Vec<String> = sgs
+        .iter()
+        .filter_map(|idx| match descriptor_of(&arena, *idx) {
+            VisualSubgraph::Owned(o) => match o.extras {
+                OwnedExtras::CallProxy { call_name } => Some(call_name),
+                _ => None,
+            },
+            _ => None,
+        })
+        .collect();
+    assert_eq!(
+        call_names,
+        vec!["first()".to_string(), "second()".to_string()]
+    );
 }
 
 #[test]
