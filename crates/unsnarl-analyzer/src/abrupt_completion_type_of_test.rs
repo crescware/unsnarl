@@ -244,15 +244,12 @@ fn labeled_statement_around_block_with_return_inherits_return_completion() {
 }
 
 #[test]
-fn labeled_statement_with_matching_break_target_does_not_yet_collapse_pending_issue_97_part_2() {
-    // ECMA §14.13.4 step 3 says a Break / Continue completion whose
-    // `[[Target]]` matches the labelled statement's label set must
-    // collapse to Normal. Resolving `[[Target]]` against the
-    // enclosing label set requires a layer the call site does not
-    // currently maintain, so this is deferred to issue #97 Part 2.
-    // Until then the wrapper just inherits Break from the body,
-    // which this test pins; it will need to flip to `is_none()`
-    // when Part 2 lands.
+fn labeled_statement_with_matching_break_target_collapses_to_normal() {
+    // ECMA §14.13.4 step 3: a Break completion whose
+    // `[[Target]]` matches the labelled statement's label
+    // collapses to Normal. `outer: { break outer; }` therefore has
+    // a normal completion (the labelled wrapper "absorbs" the
+    // break) and `abrupt_completion_type_of` returns `None`.
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "function f() { outer: { break outer; } }");
     let func = match first_stmt(&program) {
@@ -266,6 +263,124 @@ fn labeled_statement_with_matching_break_target_does_not_yet_collapse_pending_is
         .statements
         .last()
         .expect("test source has at least one statement in the function body");
+    assert!(abrupt_completion_type_of(labeled).is_none());
+}
+
+#[test]
+fn labeled_statement_with_matching_continue_target_collapses_to_normal() {
+    let alloc = Allocator::default();
+    let program = parse_ts(
+        &alloc,
+        "function f() { outer: for (;;) { continue outer; } }",
+    );
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(abrupt_completion_type_of(labeled).is_none());
+}
+
+#[test]
+fn labeled_statement_with_non_matching_break_target_propagates() {
+    // ECMA §14.13.4 step 3 only collapses when `[[Target]]` matches
+    // this LabelledStatement's label. A break targeting some other
+    // label propagates the Break completion through unchanged.
+    // (oxc's parser is permissive about label semantic validity;
+    // the analyzer just walks what it gets.)
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: break inner; }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     let res = abrupt_completion_type_of(labeled).expect("Some");
     assert!(types_match(&res, &[CompletionType::Break]));
+}
+
+#[test]
+fn nested_labeled_outer_collapses_outer_break() {
+    // `outer: { inner: { break outer; } }`. The inner label does
+    // not match `outer`, so the break propagates up to the outer
+    // labelled wrapper, which absorbs it.
+    let alloc = Allocator::default();
+    let program = parse_ts(
+        &alloc,
+        "function f() { outer: { inner: { break outer; } } }",
+    );
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(abrupt_completion_type_of(labeled).is_none());
+}
+
+#[test]
+fn nested_labeled_inner_collapses_inner_break() {
+    // `outer: { inner: { break inner; } }`. The inner labelled
+    // wrapper absorbs the matching break, so the outer wrapper
+    // sees a normal completion from its body and also returns
+    // None.
+    let alloc = Allocator::default();
+    let program = parse_ts(
+        &alloc,
+        "function f() { outer: { inner: { break inner; } } }",
+    );
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(abrupt_completion_type_of(labeled).is_none());
+}
+
+#[test]
+fn labeled_statement_collapses_only_matching_branch_of_if() {
+    // `outer: if (x) break outer; else return;`. Both branches
+    // are abrupt; the matching break collapses but the return
+    // propagates, so the wrapper returns Some([Return]).
+    let alloc = Allocator::default();
+    let program = parse_ts(
+        &alloc,
+        "function f() { outer: if (x) break outer; else return; }",
+    );
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Return]));
 }
