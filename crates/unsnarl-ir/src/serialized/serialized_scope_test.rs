@@ -38,8 +38,11 @@ fn serialized_scope_field_order() {
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),
     };
-    let json = serde_json::to_string(&scope).unwrap();
-    let object_start = json.find('{').unwrap();
+    let json =
+        serde_json::to_string(&scope).expect("SerializedScope serialises to JSON via serde derive");
+    let object_start = json
+        .find('{')
+        .expect("serialised JSON begins with an object");
     let keys = extract_top_level_keys(&json[object_start..]);
     assert_eq!(
         keys,
@@ -82,7 +85,7 @@ fn extract_top_level_keys(json: &str) -> Vec<String> {
             if c == b'"' {
                 if depth == 0 && expect_key {
                     let key = std::str::from_utf8(&bytes[string_start + 1..i])
-                        .unwrap()
+                        .expect("slice carved from a UTF-8 source string is still UTF-8")
                         .to_string();
                     keys.push(key);
                     expect_key = false;

@@ -38,7 +38,13 @@ fn function_with_known_owner_node_id_is_wrapped_in_wrap_id_subgraph() {
     emit_subgraph(&mut state, &sg, "  ", 1);
     assert_eq!(state.lines[0], "  subgraph wrap_s_fn[\" \"]");
     assert_eq!(state.lines[1], "    direction TB");
-    assert_eq!(state.lines.last().unwrap(), "  end");
+    assert_eq!(
+        state
+            .lines
+            .last()
+            .expect("emitter wrote at least one line before the closing brace"),
+        "  end"
+    );
 }
 
 #[test]

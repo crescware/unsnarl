@@ -7,7 +7,8 @@ fn parse(text: &str) -> ParsedRootQuery {
 }
 
 fn assert_err_contains(eq: &ParsedRootQuery, needle: &str) {
-    let err = validate_endpoint_query(eq).unwrap_err();
+    let err = validate_endpoint_query(eq)
+        .expect_err("assert_err_contains is only called with inputs that must fail validation");
     let msg = &err[0].message;
     assert!(
         msg.contains(needle),

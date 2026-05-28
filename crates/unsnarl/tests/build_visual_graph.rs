@@ -219,35 +219,35 @@ fn unused_declarations_carry_unused_flag_but_used_do_not() {
 #[test]
 fn let_is_emitted_as_let_binding_node() {
     let g = build_ts("let a = 1;\n");
-    let a = node_by_name(&g, "a").unwrap();
+    let a = node_by_name(&g, "a").expect("test source declares the named node");
     assert!(matches!(a.kind(), NodeKind::LetBinding));
 }
 
 #[test]
 fn const_is_emitted_as_const_binding_node() {
     let g = build_ts("const b = 2;\n");
-    let b = node_by_name(&g, "b").unwrap();
+    let b = node_by_name(&g, "b").expect("test source declares the named node");
     assert!(matches!(b.kind(), NodeKind::ConstBinding));
 }
 
 #[test]
 fn const_initialised_by_function_expression_is_init_is_function() {
     let g = build_ts("const fn = function () {};\n");
-    let n = node_by_name(&g, "fn").unwrap();
+    let n = node_by_name(&g, "fn").expect("test source declares the named node");
     assert!(n.init_is_function());
 }
 
 #[test]
 fn implicit_global_variable_kept_as_node_for_direct_read() {
     let g = build_ts("function f() { return globalThing; }\n");
-    let n = node_by_name(&g, "globalThing").unwrap();
+    let n = node_by_name(&g, "globalThing").expect("test source declares the named node");
     assert!(matches!(n.kind(), NodeKind::SyntheticImplicitGlobal));
 }
 
 #[test]
 fn implicit_global_variable_kept_for_receiver_only() {
     let g = build_ts("const x = Object.keys({});\n");
-    let n = node_by_name(&g, "Object").unwrap();
+    let n = node_by_name(&g, "Object").expect("test source declares the named node");
     assert!(matches!(n.kind(), NodeKind::SyntheticImplicitGlobal));
 }
 
@@ -378,7 +378,7 @@ fn if_without_else_has_no_if_else_container_predicate_flows_to_anchor() {
     assert_eq!(if_s.line(), 3);
     let anchor = find_nodes(&g, NodeKind::SyntheticIfStatementTest)[0];
     assert_eq!(anchor.line(), 3);
-    let flag = node_by_name(&g, "flag").unwrap();
+    let flag = node_by_name(&g, "flag").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -470,8 +470,8 @@ fn member_write_routes_through_synthetic_expr_stmt_for_base_reference() {
 #[test]
 fn const_initialised_from_other_variable_produces_one_read_edge_from_source() {
     let g = build_ts("const a = 1;\nconst b = a;\n");
-    let a = node_by_name(&g, "a").unwrap();
-    let b = node_by_name(&g, "b").unwrap();
+    let a = node_by_name(&g, "a").expect("test source declares the named node");
+    let b = node_by_name(&g, "b").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -481,8 +481,8 @@ fn const_initialised_from_other_variable_produces_one_read_edge_from_source() {
 #[test]
 fn call_expressions_produce_read_call_edges() {
     let g = build_ts("function f() {}\nconst x = f();\n");
-    let f = node_by_name(&g, "f").unwrap();
-    let x = node_by_name(&g, "x").unwrap();
+    let f = node_by_name(&g, "f").expect("test source declares the named node");
+    let x = node_by_name(&g, "x").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -504,7 +504,7 @@ fn after_if_else_both_branches_feed_post_merge_read_of_same_variable() {
         ]
         .join("\n"),
     );
-    let result = node_by_name(&g, "result").unwrap();
+    let result = node_by_name(&g, "result").expect("test source declares the named node");
     let reads: Vec<_> = edges_to(&g, result.id())
         .into_iter()
         .filter(|e| e.label == "read")
@@ -531,7 +531,7 @@ fn if_without_else_keeps_edge_from_pre_if_state() {
         ]
         .join("\n"),
     );
-    let result = node_by_name(&g, "result").unwrap();
+    let result = node_by_name(&g, "result").expect("test source declares the named node");
     let reads: Vec<_> = edges_to(&g, result.id())
         .into_iter()
         .filter(|e| e.label == "read")
@@ -593,7 +593,7 @@ fn single_line_return_subgraph_leaves_end_line_null() {
 #[test]
 fn ownerless_refs_flow_into_return_use_via_read_edges() {
     let g = build_ts("function f(a) { return a; }\n");
-    let a = node_by_name(&g, "a").unwrap();
+    let a = node_by_name(&g, "a").expect("test source declares the named node");
     let ret = find_subgraphs(&g, SubgraphKind::Return)[0];
     let ret_use = ret
         .elements()
@@ -632,7 +632,7 @@ fn default_imports_get_single_module_source_and_read_edge_to_local_binding() {
     let g = build_ts("import def from 'lib';\nvoid def;\n");
     let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
     assert_eq!(module_source.name(), "lib");
-    let def = node_by_name(&g, "def").unwrap();
+    let def = node_by_name(&g, "def").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -646,7 +646,7 @@ fn renamed_named_imports_introduce_intermediate_carrying_original_name() {
     assert_eq!(intermediates.len(), 1);
     assert_eq!(intermediates[0].name(), "other");
     let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
-    let renamed = node_by_name(&g, "renamed").unwrap();
+    let renamed = node_by_name(&g, "renamed").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -665,7 +665,7 @@ fn namespace_imports_point_directly_from_module_to_local_binding() {
         0
     );
     let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
-    let ns = node_by_name(&g, "ns").unwrap();
+    let ns = node_by_name(&g, "ns").expect("test source declares the named node");
     assert!(g
         .edges
         .iter()
@@ -684,7 +684,7 @@ fn switch_discriminant_identifier_feeds_switch_discriminant_anchor() {
         ]
         .join("\n"),
     );
-    let k = node_by_name(&g, "k").unwrap();
+    let k = node_by_name(&g, "k").expect("test source declares the named node");
     let anchor = find_nodes(&g, NodeKind::SyntheticSwitchStatementDiscriminant)[0];
     assert!(g
         .edges
@@ -695,7 +695,7 @@ fn switch_discriminant_identifier_feeds_switch_discriminant_anchor() {
 #[test]
 fn bare_if_predicate_identifier_feeds_if_test_anchor() {
     let g = build_ts(&["let v = 0;", "const flag = true;", "if (flag) { v = 1; }"].join("\n"));
-    let flag = node_by_name(&g, "flag").unwrap();
+    let flag = node_by_name(&g, "flag").expect("test source declares the named node");
     let anchor = find_nodes(&g, NodeKind::SyntheticIfStatementTest)[0];
     assert!(g
         .edges
@@ -711,11 +711,11 @@ fn top_level_expression_statement_gets_own_node_with_call_head_and_line() {
     let expr_node = find_nodes(&g, NodeKind::SyntheticExpressionStatement)[0];
     assert_eq!(expr_node.name(), "console.log()");
     assert_eq!(expr_node.line(), 2);
-    let a = node_by_name(&g, "a").unwrap();
+    let a = node_by_name(&g, "a").expect("test source declares the named node");
     assert!(edges_from(&g, a.id())
         .iter()
         .any(|e| e.to == expr_node.id()));
-    let console_node = node_by_name(&g, "console").unwrap();
+    let console_node = node_by_name(&g, "console").expect("test source declares the named node");
     assert!(edges_from(&g, console_node.id())
         .iter()
         .any(|e| e.to == expr_node.id()));
@@ -748,7 +748,7 @@ fn var_declared_variables_emit_node_but_no_edges() {
 #[test]
 fn unused_var_node_is_not_flagged_unused() {
     let g = build_ts("var w = 0;\n");
-    let var_node = node_by_name(&g, "w").unwrap();
+    let var_node = node_by_name(&g, "w").expect("test source declares the named node");
     assert!(!var_node.unused());
 }
 
@@ -757,7 +757,7 @@ fn unused_var_node_is_not_flagged_unused() {
 #[test]
 fn same_logical_read_is_emitted_only_once_per_destination() {
     let g = build_ts("function f(a) { return a + a; }\n");
-    let a = node_by_name(&g, "a").unwrap();
+    let a = node_by_name(&g, "a").expect("test source declares the named node");
     let ret = find_subgraphs(&g, SubgraphKind::Return)[0];
     let uses: Vec<_> = ret
         .elements()

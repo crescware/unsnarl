@@ -69,7 +69,10 @@ fn node_id_of(out: &str, name: &str) -> String {
     let caps = re
         .captures(out)
         .unwrap_or_else(|| panic!("node for {name:?} not found in:\n{out}"));
-    caps.get(1).unwrap().as_str().to_string()
+    caps.get(1)
+        .expect("regex pattern guarantees capture group 1 when matched")
+        .as_str()
+        .to_string()
 }
 
 // ---- Top-level identification ---------------------------------------------

@@ -8,7 +8,8 @@ use regex::Regex;
 fn extract_enum_variants(lib_rs: &str) -> Vec<String> {
     let mut variants = Vec::new();
     let mut in_enum = false;
-    let variant_re = Regex::new(r"^\s+([A-Z][A-Za-z0-9]+),?\s*$").unwrap();
+    let variant_re = Regex::new(r"^\s+([A-Z][A-Za-z0-9]+),?\s*$")
+        .expect("AstType variant regex is a static literal and must compile");
     for line in lib_rs.lines() {
         if line.contains("pub enum AstType {") {
             in_enum = true;
@@ -52,8 +53,10 @@ const OXC_TYPE_ALIAS_EXPANSIONS: &[(&str, &[&str])] = &[
 ];
 
 fn extract_oxc_types(types_dts: &str) -> (Vec<String>, Vec<String>) {
-    let literal_re = Regex::new(r#"(?m)^\s+type:\s*"([^"]+)";"#).unwrap();
-    let alias_re = Regex::new(r"(?m)^\s+type:\s*([A-Z][A-Za-z0-9]+);").unwrap();
+    let literal_re = Regex::new(r#"(?m)^\s+type:\s*"([^"]+)";"#)
+        .expect("oxc types.d.ts literal type regex is a static literal and must compile");
+    let alias_re = Regex::new(r"(?m)^\s+type:\s*([A-Z][A-Za-z0-9]+);")
+        .expect("oxc types.d.ts alias regex is a static literal and must compile");
     let alias_map: std::collections::HashMap<&str, &[&str]> =
         OXC_TYPE_ALIAS_EXPANSIONS.iter().copied().collect();
 
@@ -81,8 +84,9 @@ fn extract_oxc_types(types_dts: &str) -> (Vec<String>, Vec<String>) {
 }
 
 fn main() {
-    let manifest_dir = env::var("CARGO_MANIFEST_DIR").unwrap();
-    let out_dir = env::var("OUT_DIR").unwrap();
+    let manifest_dir =
+        env::var("CARGO_MANIFEST_DIR").expect("Cargo guarantees CARGO_MANIFEST_DIR in build.rs");
+    let out_dir = env::var("OUT_DIR").expect("Cargo guarantees OUT_DIR in build.rs");
 
     let lib_rs_path = Path::new(&manifest_dir).join("src/lib.rs");
     let lib_rs = fs::read_to_string(&lib_rs_path).expect("cannot read src/lib.rs");
@@ -122,7 +126,8 @@ fn main() {
     }
     code.push_str("];\n");
 
-    fs::write(dest, code).unwrap();
+    fs::write(&dest, code)
+        .unwrap_or_else(|e| panic!("failed to write generated parity table to {dest:?}: {e}"));
 
     println!("cargo:rerun-if-changed=src/lib.rs");
     println!("cargo:rerun-if-changed={}", types_dts_path.display());

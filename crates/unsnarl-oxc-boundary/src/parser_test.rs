@@ -41,7 +41,7 @@ fn parses_a_simple_ts_program_into_an_estree_compatible_program_node() {
                 source_type: default_source_type_for(Language::Ts),
             },
         )
-        .unwrap();
+        .expect("test source is hand-written valid TS and must parse");
 
     assert!(matches!(parsed.source_type, SourceType::Module));
     assert_eq!(parsed.raw, code);
@@ -66,7 +66,7 @@ fn parses_tsx_with_jsx_elements() {
                 source_type: default_source_type_for(Language::Tsx),
             },
         )
-        .unwrap();
+        .expect("test source is hand-written valid TS and must parse");
 
     let program = &parsed.program;
     assert_eq!(program.body.len(), 1);
@@ -87,7 +87,7 @@ fn parses_js_with_esm_import() {
                 source_type: SourceType::Module,
             },
         )
-        .unwrap();
+        .expect("test source is hand-written valid TS and must parse");
 
     let program = &parsed.program;
     assert!(is_import_declaration(&program.body[0]));
@@ -108,7 +108,7 @@ fn preserves_an_explicitly_requested_source_type_regardless_of_the_language_exte
                 source_type: SourceType::Script,
             },
         )
-        .unwrap();
+        .expect("test source is hand-written valid TS and must parse");
     assert!(matches!(parsed.source_type, SourceType::Script));
 }
 

@@ -17,7 +17,8 @@ fn serialized_ir_top_level_field_order() {
         unused_variable_ids: Vec::new(),
         diagnostics: Vec::new(),
     };
-    let json = serde_json::to_string(&ir).unwrap();
+    let json =
+        serde_json::to_string(&ir).expect("SerializedIR serialises to JSON via serde derive");
     assert_eq!(
         json,
         r#"{"version":1,"source":{"path":"input.ts","language":"ts"},"raw":"","scopes":[],"variables":[],"references":[],"unusedVariableIds":[],"diagnostics":[]}"#

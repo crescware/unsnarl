@@ -8,7 +8,7 @@ use crate::path_entry::PathEntry;
 use super::block_context_of;
 
 fn serialize(ctx: &BlockContext) -> serde_json::Value {
-    serde_json::to_value(ctx).unwrap()
+    serde_json::to_value(ctx).expect("BlockContext serialises to JSON via serde derive")
 }
 
 #[test]

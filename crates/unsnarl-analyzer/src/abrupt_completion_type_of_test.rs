@@ -34,7 +34,13 @@ fn return_statement_inside_function_yields_return() {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let stmt = func.body.as_ref().unwrap().statements.last().unwrap();
+    let stmt = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     let res = abrupt_completion_type_of(stmt).expect("Some");
     assert!(types_match(&res, &[CompletionType::Return]));
 }
@@ -55,7 +61,10 @@ fn break_statement_yields_break() {
     let outer = first_stmt(&program);
     let body = match outer {
         Statement::ForStatement(f) => match &f.body {
-            Statement::BlockStatement(b) => b.body.last().unwrap(),
+            Statement::BlockStatement(b) => b
+                .body
+                .last()
+                .expect("test source has at least one statement in the block body"),
             other => other,
         },
         _ => unreachable!(),
@@ -71,7 +80,10 @@ fn continue_statement_yields_continue() {
     let outer = first_stmt(&program);
     let body = match outer {
         Statement::ForStatement(f) => match &f.body {
-            Statement::BlockStatement(b) => b.body.last().unwrap(),
+            Statement::BlockStatement(b) => b
+                .body
+                .last()
+                .expect("test source has at least one statement in the block body"),
             other => other,
         },
         _ => unreachable!(),
@@ -121,7 +133,13 @@ fn if_with_return_and_throw_yields_both() {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let if_stmt = func.body.as_ref().unwrap().statements.last().unwrap();
+    let if_stmt = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     let res = abrupt_completion_type_of(if_stmt).expect("Some");
     assert!(types_match(
         &res,
@@ -137,7 +155,13 @@ fn if_with_only_consequent_abrupt_yields_none() {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let if_stmt = func.body.as_ref().unwrap().statements.last().unwrap();
+    let if_stmt = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     assert!(abrupt_completion_type_of(if_stmt).is_none());
 }
 
@@ -149,7 +173,13 @@ fn if_without_alternate_yields_none() {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let if_stmt = func.body.as_ref().unwrap().statements.last().unwrap();
+    let if_stmt = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     assert!(abrupt_completion_type_of(if_stmt).is_none());
 }
 
@@ -161,6 +191,12 @@ fn labeled_statement_pre_existing_limitation_yields_none() {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let labeled = func.body.as_ref().unwrap().statements.last().unwrap();
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
     assert!(abrupt_completion_type_of(labeled).is_none());
 }

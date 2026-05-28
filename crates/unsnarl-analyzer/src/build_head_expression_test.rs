@@ -96,11 +96,21 @@ fn new_expression_collapses_to_new_head() {
 fn await_expression_collapses_to_await_head() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "async function f() { await foo; }");
-    let func = match program.body.first().unwrap() {
+    let func = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let stmt = func.body.as_ref().unwrap().statements.first().unwrap();
+    let stmt = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .first()
+        .expect("function body has at least one statement (test source)");
     let expr = match stmt {
         Statement::ExpressionStatement(es) => &es.expression,
         _ => unreachable!(),

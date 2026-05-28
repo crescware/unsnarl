@@ -2,7 +2,8 @@ use super::*;
 use crate::generation_count::GenerationCount;
 
 fn assert_err_contains(text: &str, needle: &str) {
-    let err = parse_direction_token(text).unwrap_err();
+    let err = parse_direction_token(text)
+        .expect_err("assert_err_contains is only called with inputs that must fail parsing");
     let msg = &err[0].message;
     assert!(
         msg.contains(needle),

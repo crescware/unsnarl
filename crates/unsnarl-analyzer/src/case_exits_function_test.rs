@@ -8,23 +8,46 @@ use super::case_exits_function;
 fn case_consequent_from_function<'a>(
     program: &'a oxc_ast::ast::Program<'a>,
 ) -> &'a [Statement<'a>] {
-    let func = match program.body.first().unwrap() {
+    let func = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let switch = match func.body.as_ref().unwrap().statements.first().unwrap() {
+    let switch = match func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .first()
+        .expect("function body has at least one statement (test source)")
+    {
         Statement::SwitchStatement(s) => s,
         _ => unreachable!(),
     };
-    &switch.cases.first().unwrap().consequent
+    &switch
+        .cases
+        .first()
+        .expect("switch statement in test source has at least one case")
+        .consequent
 }
 
 fn case_consequent_top_level<'a>(program: &'a oxc_ast::ast::Program<'a>) -> &'a [Statement<'a>] {
-    let switch = match program.body.first().unwrap() {
+    let switch = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::SwitchStatement(s) => s,
         _ => unreachable!(),
     };
-    &switch.cases.first().unwrap().consequent
+    &switch
+        .cases
+        .first()
+        .expect("switch statement in test source has at least one case")
+        .consequent
 }
 
 #[test]
@@ -59,7 +82,11 @@ fn ends_in_break_does_not_exit_function() {
 fn ends_in_continue_does_not_exit_function() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "for (;;) switch (x) { case 1: continue; }");
-    let outer = match program.body.first().unwrap() {
+    let outer = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::ForStatement(f) => f,
         _ => unreachable!(),
     };
@@ -68,7 +95,11 @@ fn ends_in_continue_does_not_exit_function() {
         _ => unreachable!(),
     };
     assert!(!case_exits_function(
-        &switch.cases.first().unwrap().consequent
+        &switch
+            .cases
+            .first()
+            .expect("switch statement in test source has at least one case")
+            .consequent
     ));
 }
 
@@ -105,11 +136,22 @@ fn ends_in_if_return_continue_does_not_exit_function() {
         &alloc,
         "function f() { for (;;) switch (x) { case 1: if (y) return; else continue; } }",
     );
-    let func = match program.body.first().unwrap() {
+    let func = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let for_stmt = match func.body.as_ref().unwrap().statements.first().unwrap() {
+    let for_stmt = match func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .first()
+        .expect("function body has at least one statement (test source)")
+    {
         Statement::ForStatement(f) => f,
         _ => unreachable!(),
     };
@@ -118,7 +160,11 @@ fn ends_in_if_return_continue_does_not_exit_function() {
         _ => unreachable!(),
     };
     assert!(!case_exits_function(
-        &switch.cases.first().unwrap().consequent
+        &switch
+            .cases
+            .first()
+            .expect("switch statement in test source has at least one case")
+            .consequent
     ));
 }
 

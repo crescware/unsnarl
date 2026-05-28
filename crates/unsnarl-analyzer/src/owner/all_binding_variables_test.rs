@@ -9,11 +9,18 @@ use super::{all_binding_variables, assignment_target_variables};
 fn simple_identifier_binding_resolves_to_single_variable() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a = 1;");
-    let var_decl = match program.body.first().unwrap() {
+    let var_decl = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     assert_eq!(vars.len(), 1);
     assert_eq!(result.arena.variables[vars[0]].name(), "a");
@@ -23,11 +30,18 @@ fn simple_identifier_binding_resolves_to_single_variable() {
 fn array_pattern_binding_resolves_each_element() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let [a, b, c] = [1, 2, 3];");
-    let var_decl = match program.body.first().unwrap() {
+    let var_decl = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     let names: Vec<&str> = vars
         .iter()
@@ -40,11 +54,18 @@ fn array_pattern_binding_resolves_each_element() {
 fn object_pattern_binding_resolves_each_property() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let { a, b } = obj;");
-    let var_decl = match program.body.first().unwrap() {
+    let var_decl = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     let names: Vec<&str> = vars
         .iter()
@@ -57,11 +78,18 @@ fn object_pattern_binding_resolves_each_property() {
 fn nested_destructuring_collects_all_leaves() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let { a: [x, y], b: { z } } = obj;");
-    let var_decl = match program.body.first().unwrap() {
+    let var_decl = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     let names: Vec<&str> = vars
         .iter()
@@ -74,11 +102,18 @@ fn nested_destructuring_collects_all_leaves() {
 fn rest_element_is_included() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let [a, ...rest] = arr;");
-    let var_decl = match program.body.first().unwrap() {
+    let var_decl = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     let names: Vec<&str> = vars
         .iter()
@@ -101,16 +136,27 @@ fn unresolved_names_are_skipped() {
     // the pattern with a non-existent name.
     let alloc2 = Allocator::default();
     let (program2, _) = parse_and_analyze_ts(&alloc2, "let q = 1;");
-    let var_decl = match program2.body.first().unwrap() {
+    let var_decl = match program2
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
-    let declarator = var_decl.declarations.first().unwrap();
+    let declarator = var_decl
+        .declarations
+        .first()
+        .expect("test variable declaration has at least one declarator");
     // Use the first program's arena/scope so `q` doesn't resolve.
     let vars = all_binding_variables(&declarator.id, result.global_scope, &result.arena);
     assert!(vars.is_empty());
     // Sanity: `a` does resolve in the first arena.
-    let var_decl_a = match program.body.first().unwrap() {
+    let var_decl_a = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::VariableDeclaration(d) => d,
         _ => unreachable!(),
     };
@@ -126,7 +172,11 @@ fn unresolved_names_are_skipped() {
 fn assignment_target_identifier_resolves_to_single_variable() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a = 1; a = 2;");
-    let assign = match program.body.get(1).unwrap() {
+    let assign = match program
+        .body
+        .get(1)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::AssignmentExpression(a) => a,
             _ => unreachable!(),
@@ -142,7 +192,11 @@ fn assignment_target_identifier_resolves_to_single_variable() {
 fn assignment_target_array_destructuring_resolves_each_element() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a; let b; [a, b] = arr;");
-    let assign = match program.body.get(2).unwrap() {
+    let assign = match program
+        .body
+        .get(2)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::AssignmentExpression(a) => a,
             _ => unreachable!(),
@@ -161,7 +215,11 @@ fn assignment_target_array_destructuring_resolves_each_element() {
 fn assignment_target_object_destructuring_resolves_each_property() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a; let b; ({ a, b } = obj);");
-    let assign = match program.body.get(2).unwrap() {
+    let assign = match program
+        .body
+        .get(2)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::ParenthesizedExpression(p) => match &p.expression {
                 Expression::AssignmentExpression(a) => a,
@@ -188,7 +246,11 @@ fn assignment_target_member_expression_is_skipped() {
     // for member-target assignments.
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let obj = {}; obj.prop = 1;");
-    let assign = match program.body.get(1).unwrap() {
+    let assign = match program
+        .body
+        .get(1)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::AssignmentExpression(a) => a,
             _ => unreachable!(),
@@ -203,7 +265,11 @@ fn assignment_target_member_expression_is_skipped() {
 fn assignment_target_array_rest_is_collected() {
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a; let rest; [a, ...rest] = arr;");
-    let assign = match program.body.get(2).unwrap() {
+    let assign = match program
+        .body
+        .get(2)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::AssignmentExpression(a) => a,
             _ => unreachable!(),
@@ -223,7 +289,11 @@ fn assignment_target_object_rest_is_collected() {
     let alloc = Allocator::default();
     let (program, result) =
         parse_and_analyze_ts(&alloc, "let a; let rest; ({ a, ...rest } = obj);");
-    let assign = match program.body.get(2).unwrap() {
+    let assign = match program
+        .body
+        .get(2)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::ParenthesizedExpression(p) => match &p.expression {
                 Expression::AssignmentExpression(a) => a,
@@ -250,7 +320,11 @@ fn duplicate_names_are_deduped() {
     // a doubly-bound destructuring target.
     let alloc = Allocator::default();
     let (program, result) = parse_and_analyze_ts(&alloc, "let a; let a2; [a, a] = [1, 2];");
-    let assign = match program.body.get(2).unwrap() {
+    let assign = match program
+        .body
+        .get(2)
+        .expect("test source has at least N+1 top-level statements")
+    {
         Statement::ExpressionStatement(es) => match &es.expression {
             Expression::AssignmentExpression(a) => a,
             _ => unreachable!(),

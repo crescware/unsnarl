@@ -151,7 +151,8 @@ fn parses_direction_without_level() {
 
 #[test]
 fn parses_direction_with_level() {
-    let r = parse_root_query_ast("foo..+a3", &SCOPE_FULL).unwrap();
+    let r = parse_root_query_ast("foo..+a3", &SCOPE_FULL)
+        .expect("syntactically valid direction-with-level input must parse");
     match r {
         RootQuery::Direction { dir, level, .. } => {
             assert_eq!(dir, Direction::After);
@@ -160,7 +161,8 @@ fn parses_direction_with_level() {
         other => panic!("expected Direction, got {other:?}"),
     }
 
-    let r = parse_root_query_ast("foo..+a0", &SCOPE_FULL).unwrap();
+    let r = parse_root_query_ast("foo..+a0", &SCOPE_FULL)
+        .expect("syntactically valid direction-with-level input must parse");
     match r {
         RootQuery::Direction { dir, level, .. } => {
             assert_eq!(dir, Direction::After);
@@ -197,7 +199,8 @@ fn rejects_invalid_direction_tokens() {
 #[test]
 fn point_only_rejects_path_with_syntax_error_only() {
     let r = parse_root_query_ast("foo..bar", &ROOT_QUERY_SCOPE_POINT_ONLY);
-    let err = r.unwrap_err();
+    let err =
+        r.expect_err("input is constructed to violate SCOPE_POINT_ONLY constraints and must error");
     let msg = &err[0].message;
     assert!(
         msg.contains("unexpected '..'"),
