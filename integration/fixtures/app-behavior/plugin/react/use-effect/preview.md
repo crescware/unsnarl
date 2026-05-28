@@ -30,7 +30,7 @@ flowchart RL
       n_scope_1_start_55["start<br/>L3"]
       n_scope_1_step_62["step<br/>L3"]
       expr_stmt_110["useEffect()<br/>L4-7"]
-      subgraph s_scope_2["(anonymous)<br/>L4-7"]
+      subgraph s_scope_2["useEffect(args[0])<br/>L4-7"]
         direction RL
         n_scope_2_next_138["next<br/>L5"]
         expr_stmt_163["console.log()<br/>L6"]

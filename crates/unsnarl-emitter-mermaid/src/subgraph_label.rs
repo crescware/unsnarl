@@ -49,7 +49,18 @@ fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<Str
             // back to the live node_map entry in that case.
             let owner_node_id = sg.owner_node_id();
             if owner_node_id.is_none() {
-                out.push_str("(anonymous)<br/>");
+                // Callback-argument header takes precedence over
+                // the bare `(anonymous)` fallback so the subgraph
+                // is self-identifying without having to scan the
+                // surrounding diagram for the matching call proxy.
+                if let Some((callee, arg_index)) = sg.callback_arg() {
+                    escape_into(out, callee);
+                    out.push_str("(args[");
+                    out.push_str(&arg_index.to_string());
+                    out.push_str("])<br/>");
+                } else {
+                    out.push_str("(anonymous)<br/>");
+                }
                 line_range_label_into(out, sg);
                 return;
             }

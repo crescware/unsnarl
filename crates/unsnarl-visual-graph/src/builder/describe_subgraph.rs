@@ -8,24 +8,34 @@
 
 use std::collections::HashMap;
 
+use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::block_context::BlockContext;
-use unsnarl_ir::serialized::{SerializedScope, SerializedVariable};
+use unsnarl_ir::serialized::{
+    SerializedExpressionStatementContainer, SerializedScope, SerializedVariable,
+};
 
 use crate::direction::Direction;
 use crate::visual_subgraph::{
-    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, OwnedVisualSubgraph, VisualSubgraph,
+    ControlExtras, ControlSubgraphKind, ControlVisualSubgraph, FunctionCallbackArg,
+    OwnedVisualSubgraph, VisualSubgraph,
 };
 
 use super::control_subgraph_kind_of::control_subgraph_kind_of;
 use super::is_class_subgraph::is_class_subgraph;
 use super::is_function_subgraph::is_function_subgraph;
 use super::node_id::node_id;
+use super::render_call_callee::render_call_callee;
 use super::subgraph_scope_id::subgraph_scope_id;
 
 pub fn describe_subgraph(
     scope: &SerializedScope,
     subgraph_owner_var: &HashMap<String, String>,
     variable_map: &HashMap<&str, &SerializedVariable>,
+    expression_statement_containers_by_offset: &HashMap<
+        u32,
+        &SerializedExpressionStatementContainer,
+    >,
+    source_index: &SourceIndex<'_>,
 ) -> VisualSubgraph {
     let id = subgraph_scope_id(scope);
     let end_line = Some(scope.block.end_span.line.0);
@@ -50,6 +60,28 @@ pub fn describe_subgraph(
             Direction::RL,
         );
         sg.end_line = end_line;
+        // When the scope is the i-th argument of an
+        // ExpressionStatement-level call (per the analyzer's
+        // `CallbackArgument` annotation), attach `callbackArg` so
+        // the mermaid emitter can label the subgraph as
+        // `<callee>(args[<i>])`. Look the callee text up via the
+        // statement-offset → container map; skip silently when the
+        // matching container's head is not a recognised call shape
+        // (e.g. an `AssignmentExpression` wrapper) -- the subgraph
+        // then keeps the existing `(anonymous)` rendering.
+        if let Some(cb) = scope.callback_argument.as_ref() {
+            if let Some(container) = expression_statement_containers_by_offset
+                .get(&cb.statement_offset().0)
+                .copied()
+            {
+                if let Some(callee) = render_call_callee(&container.head, source_index) {
+                    sg.callback_arg = Some(FunctionCallbackArg {
+                        callee,
+                        arg_index: cb.arg_index(),
+                    });
+                }
+            }
+        }
         return sg.into();
     }
 

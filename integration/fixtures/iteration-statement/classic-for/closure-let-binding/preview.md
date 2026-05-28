@@ -25,7 +25,7 @@ flowchart RL
     subgraph s_scope_2["block L2-4"]
       direction RL
       expr_stmt_66["fns.push()<br/>L3"]
-      subgraph s_scope_3["(anonymous)<br/>L3"]
+      subgraph s_scope_3["fns.push(args[0])<br/>L3"]
         direction RL
         elk_empty_s_scope_3["No nodes"]
       end

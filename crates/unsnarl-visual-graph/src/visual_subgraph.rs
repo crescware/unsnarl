@@ -61,6 +61,25 @@ pub enum OwnedExtras {
     },
 }
 
+/// Callback-argument annotation attached to a `Function`-kind
+/// `OwnedVisualSubgraph`.
+///
+/// Populated by [`super::builder::describe_subgraph`] when the
+/// underlying function scope carries a
+/// [`unsnarl_ir::scope::CallbackArgument`] -- i.e. when the scope
+/// is the `arg_index`-th argument of an `ExpressionStatement`-level
+/// call. `callee` is the callee text (e.g. `"run"`,
+/// `"console.log"`, `"Promise.resolve().then"`) without trailing
+/// argument parens, so the mermaid emitter can synthesize the
+/// self-contained header `<callee>(args[<arg_index>])<br/>L_start-end`
+/// without revisiting the IR head expression at label time.
+#[derive(Clone, Serialize)]
+pub struct FunctionCallbackArg {
+    pub callee: String,
+    #[serde(rename = "argIndex")]
+    pub arg_index: u32,
+}
+
 /// "Owned" subgraph: kind appears right after id, extras sit just
 /// before `elements`.
 #[derive(Clone, Serialize)]
@@ -75,6 +94,16 @@ pub struct OwnedVisualSubgraph {
     pub direction: Direction,
     #[serde(flatten)]
     pub extras: OwnedExtras,
+    /// Set only when `kind == Function` and the underlying scope is
+    /// a direct argument of an ExpressionStatement-level call. Kept
+    /// as a separate field (rather than smuggled into `extras`) so
+    /// `OwnedExtras::Function` keeps its existing
+    /// `{ ownerNodeId, ownerName }` shape, and so existing
+    /// `OwnedVisualSubgraph::function(...)` callers do not have to
+    /// change at every site -- they default to `None` via the
+    /// `base()` helper.
+    #[serde(rename = "callbackArg", skip_serializing_if = "Option::is_none")]
+    pub callback_arg: Option<FunctionCallbackArg>,
     pub elements: Vec<VisualElement>,
 }
 
@@ -152,6 +181,7 @@ impl OwnedVisualSubgraph {
             end_line: None,
             direction,
             extras,
+            callback_arg: None,
             elements,
         }
     }
@@ -592,6 +622,21 @@ impl VisualSubgraph {
                 _ => None,
             },
             Self::Owned(_) => None,
+        }
+    }
+
+    /// `callbackArg` (JSON field), present only on `Function`
+    /// subgraphs whose underlying scope is a direct argument of an
+    /// `ExpressionStatement`-level call. Returns `(callee,
+    /// arg_index)` for label synthesis; `None` for plain anonymous /
+    /// named functions.
+    pub fn callback_arg(&self) -> Option<(&str, u32)> {
+        match self {
+            Self::Owned(s) => s
+                .callback_arg
+                .as_ref()
+                .map(|c| (c.callee.as_str(), c.arg_index)),
+            Self::Control(_) => None,
         }
     }
 

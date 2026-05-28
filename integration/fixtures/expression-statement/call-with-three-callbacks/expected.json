@@ -68,6 +68,10 @@
       "direction": "RL",
       "ownerNodeId": null,
       "ownerName": "",
+      "callbackArg": {
+        "callee": "run",
+        "argIndex": 0
+      },
       "elements": [
         {
           "type": "node",
@@ -90,6 +94,10 @@
       "direction": "RL",
       "ownerNodeId": null,
       "ownerName": "",
+      "callbackArg": {
+        "callee": "run",
+        "argIndex": 1
+      },
       "elements": [
         {
           "type": "node",
@@ -112,6 +120,10 @@
       "direction": "RL",
       "ownerNodeId": null,
       "ownerName": "",
+      "callbackArg": {
+        "callee": "run",
+        "argIndex": 2
+      },
       "elements": [
         {
           "type": "node",

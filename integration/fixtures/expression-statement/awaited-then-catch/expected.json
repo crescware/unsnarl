@@ -55,6 +55,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "Promise.resolve().then().catch",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",
@@ -97,6 +101,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "Promise.resolve().then().catch",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

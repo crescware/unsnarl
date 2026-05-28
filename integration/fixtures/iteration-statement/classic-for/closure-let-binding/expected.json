@@ -82,6 +82,10 @@
               "direction": "RL",
               "ownerNodeId": null,
               "ownerName": "",
+              "callbackArg": {
+                "callee": "fns.push",
+                "argIndex": 0
+              },
               "elements": []
             },
             {

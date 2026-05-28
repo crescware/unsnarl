@@ -87,6 +87,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useEffect",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

@@ -48,6 +48,7 @@ pub mod predicate_target_id;
 pub mod previous_fallthrough_case;
 pub mod push_edge;
 pub mod read_origins;
+pub mod render_call_callee;
 pub mod render_head_expression;
 pub mod resolve_read_target_id;
 pub mod ret_use_node_id;

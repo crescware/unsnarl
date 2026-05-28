@@ -30,7 +30,7 @@ flowchart RL
       direction RL
       n_scope_1_name_52["name<br/>L3"]
       expr_stmt_85["useEffect()<br/>L4-9"]
-      subgraph s_scope_2["(anonymous)<br/>L4-9"]
+      subgraph s_scope_2["useEffect(args[0])<br/>L4-9"]
         direction RL
         expr_stmt_107["console.log()<br/>L5"]
         subgraph s_scope_3["(anonymous)<br/>L6-8"]
