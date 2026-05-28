@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/imports/top-level-await-js/input.js",
+    "language": "js"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_x_9",
+      "name": "x",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "x"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_y_35",
+      "name": "y",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "mod_node_fs",
+      "kind": "SyntheticModuleSource",
+      "name": "node:fs",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_9",
+      "to": "n_scope_0_y_35",
+      "label": "read,call"
+    },
+    {
+      "from": "mod_node_fs",
+      "to": "n_scope_0_x_9",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

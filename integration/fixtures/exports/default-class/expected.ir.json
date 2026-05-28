@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/exports/default-class/input.ts",
+    "language": "ts"
+  },
+  "raw": "export default class Foo {}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 0,
+          "offset": 28
+        }
+      },
+      "variables": [
+        "scope#0:Foo@21"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    },
+    {
+      "id": "scope#1",
+      "type": "class",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "ClassDeclaration",
+        "span": {
+          "line": 1,
+          "column": 15,
+          "offset": 15
+        },
+        "endSpan": {
+          "line": 1,
+          "column": 27,
+          "offset": 27
+        }
+      },
+      "variables": [
+        "scope#1:Foo@21"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ExportDefaultDeclaration",
+        "key": "declaration",
+        "parentSpanOffset": 0,
+        "ifChainRootOffset": null
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:Foo@21",
+      "name": "Foo",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 21,
+          "offset": 21
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "Foo",
+            "span": {
+              "line": 1,
+              "column": 21,
+              "offset": 21
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:Foo@21",
+      "name": "Foo",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 21,
+          "offset": 21
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "Foo",
+            "span": {
+              "line": 1,
+              "column": 21,
+              "offset": 21
+            }
+          },
+          "node": {
+            "type": "ClassDeclaration",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
+          },
+          "parent": null,
+          "type": "ClassName"
+        }
+      ]
+    }
+  ],
+  "references": [],
+  "unusedVariableIds": [
+    "scope#0:Foo@21",
+    "scope#1:Foo@21"
+  ],
+  "diagnostics": []
+}

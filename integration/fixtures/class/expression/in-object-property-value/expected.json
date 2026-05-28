@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/class/expression/in-object-property-value/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_callMe_0",
+      "name": "callMe",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "class",
+      "line": 1,
+      "endLine": 1,
+      "direction": "RL",
+      "className": null,
+      "elements": []
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_0",
+      "kind": "SyntheticExpressionStatement",
+      "name": "callMe()",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_callMe_0",
+      "to": "expr_stmt_0",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

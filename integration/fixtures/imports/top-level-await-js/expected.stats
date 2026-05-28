@@ -1,0 +1,4 @@
+1	1	integration/fixtures/imports/top-level-await-js/input.js:1 x
+1	0	integration/fixtures/imports/top-level-await-js/input.js:1 node:fs
+0	1	integration/fixtures/imports/top-level-await-js/input.js:2 unused y
+2	2	3 total

@@ -1,0 +1,6 @@
+0	0	integration/fixtures/class/declaration/private-field-assignment/input.ts:1 unused C
+0	0	integration/fixtures/class/declaration/private-field-assignment/input.ts:1 unused C
+1	0	integration/fixtures/class/declaration/private-field-assignment/input.ts:3 obj
+1	0	integration/fixtures/class/declaration/private-field-assignment/input.ts:3 x
+0	2	integration/fixtures/class/declaration/private-field-assignment/input.ts:4 obj.o = x
+2	2	5 total
