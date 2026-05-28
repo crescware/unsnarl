@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/call-with-callback/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_label_6",
+      "name": "label",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_run_23",
+      "name": "run",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_37",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_37",
+          "kind": "SyntheticExpressionStatement",
+          "name": "console.log()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_23",
+      "kind": "SyntheticExpressionStatement",
+      "name": "run()",
+      "line": 2,
+      "endLine": 4,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_run_23",
+      "to": "expr_stmt_23",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_37",
+      "to": "expr_stmt_37",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_label_6",
+      "to": "expr_stmt_37",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

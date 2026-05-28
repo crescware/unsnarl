@@ -1,0 +1,97 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/call-with-callback-and-array/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_seed_6",
+      "name": "seed",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_run_17",
+      "name": "run",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_31",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 2,
+      "endLine": 4,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "elements": [
+        {
+          "type": "node",
+          "id": "expr_stmt_31",
+          "kind": "SyntheticExpressionStatement",
+          "name": "console.log()",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_17",
+      "kind": "SyntheticExpressionStatement",
+      "name": "run()",
+      "line": 2,
+      "endLine": 4,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_run_17",
+      "to": "expr_stmt_17",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_31",
+      "to": "expr_stmt_31",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_seed_6",
+      "to": "expr_stmt_31",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_seed_6",
+      "to": "expr_stmt_17",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
