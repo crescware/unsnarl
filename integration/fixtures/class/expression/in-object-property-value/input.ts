@@ -1,0 +1,1 @@
+callMe({ key: class {} });

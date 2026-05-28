@@ -1,0 +1,219 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/imports/top-level-await-js/input.js",
+    "language": "js"
+  },
+  "raw": "import { x } from \"node:fs\";\nconst y = await x();\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "global",
+      "isStrict": false,
+      "upper": null,
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 50
+        }
+      },
+      "variables": [
+        "scope#0:x@9",
+        "scope#0:y@35"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      }
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:x@9",
+      "name": "x",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "x",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "ImportSpecifier",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "parent": {
+            "type": "ImportDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "ImportBinding",
+          "importKind": "named",
+          "importedName": "x",
+          "importSource": "node:fs"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:y@35",
+      "name": "y",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 35
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "y",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 35
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 35
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 29
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "AwaitExpression",
+            "span": {
+              "line": 2,
+              "column": 10,
+              "offset": 39
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "y",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 35
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:y@35",
+      "owners": [
+        "scope#0:y@35"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "x",
+        "span": {
+          "line": 2,
+          "column": 16,
+          "offset": 45
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:x@9",
+      "owners": [
+        "scope#0:y@35"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:y@35"
+  ],
+  "diagnostics": []
+}

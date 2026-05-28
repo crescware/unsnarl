@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/exports/default-class/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_Foo_21",
+      "name": "Foo",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ClassDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "class",
+      "line": 1,
+      "endLine": 1,
+      "direction": "RL",
+      "className": "Foo",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_Foo_21",
+          "name": "Foo",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "ClassDeclaration"
+        }
+      ]
+    }
+  ],
+  "edges": [],
+  "boundaryEdges": [],
+  "pruning": null
+}
