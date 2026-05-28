@@ -1,0 +1,21 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_outer_0["global outer"]
+  n_scope_0_inner_6["global inner"]
+  n_scope_0_console_22["global console"]
+  subgraph expr_stmt_0["outer()<br/>L1-3"]
+    direction RL
+    subgraph s_scope_1["(anonymous)<br/>L1-3"]
+      direction RL
+      expr_stmt_22["console.log()<br/>L2"]
+    end
+  end
+  n_scope_0_outer_0 -->|read,call| expr_stmt_0
+  n_scope_0_inner_6 -->|read,call| expr_stmt_0
+  n_scope_0_console_22 -->|read| expr_stmt_22
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class expr_stmt_0 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef edgeTargetSubgraph stroke:#888;
+  class expr_stmt_0 edgeTargetSubgraph;

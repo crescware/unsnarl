@@ -147,8 +147,8 @@
       "blockContext": null,
       "callbackArgument": {
         "statementOffset": 110,
-        "callOffset": 110,
-        "callParentType": "CallExpression",
+        "callStartOffset": 110,
+        "callEndOffset": 201,
         "argIndex": 0
       },
       "fallsThrough": false,

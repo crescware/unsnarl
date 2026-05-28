@@ -216,11 +216,12 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         }
         let arg_index = self.current_arg_index()?;
         let statement_offset = self.enclosing_expression_statement_offset()?;
-        let call_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
+        let call_start_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
+        let call_end_offset = self.index.span_at(Utf8ByteOffset(parent.span.end)).offset;
         Some(CallbackArgument::new(
             statement_offset,
-            call_offset,
-            parent.r#type.clone(),
+            call_start_offset,
+            call_end_offset,
             arg_index as u32,
         ))
     }

@@ -95,8 +95,8 @@
       "blockContext": null,
       "callbackArgument": {
         "statementOffset": 39,
-        "callOffset": 39,
-        "callParentType": "CallExpression",
+        "callStartOffset": 39,
+        "callEndOffset": 150,
         "argIndex": 0
       },
       "fallsThrough": false,
@@ -142,8 +142,8 @@
       "blockContext": null,
       "callbackArgument": {
         "statementOffset": 39,
-        "callOffset": 39,
-        "callParentType": "CallExpression",
+        "callStartOffset": 39,
+        "callEndOffset": 150,
         "argIndex": 1
       },
       "fallsThrough": false,
@@ -189,8 +189,8 @@
       "blockContext": null,
       "callbackArgument": {
         "statementOffset": 39,
-        "callOffset": 39,
-        "callParentType": "CallExpression",
+        "callStartOffset": 39,
+        "callEndOffset": 150,
         "argIndex": 2
       },
       "fallsThrough": false,

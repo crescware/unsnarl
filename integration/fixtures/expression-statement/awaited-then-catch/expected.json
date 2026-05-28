@@ -65,7 +65,7 @@
               "ownerNodeId": null,
               "ownerName": "",
               "callbackArg": {
-                "callee": "Promise.resolve().then().catch",
+                "callee": "Promise.resolve().then",
                 "argIndex": 0
               },
               "elements": [

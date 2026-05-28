@@ -21,10 +21,11 @@ use crate::visual_subgraph::{
 };
 
 use super::control_subgraph_kind_of::control_subgraph_kind_of;
+use super::find_call_callee_in_head::find_call_callee_in_head;
 use super::is_class_subgraph::is_class_subgraph;
 use super::is_function_subgraph::is_function_subgraph;
 use super::node_id::node_id;
-use super::render_call_callee::render_call_callee;
+use super::render_head_expression::render_head_expression;
 use super::subgraph_scope_id::subgraph_scope_id;
 
 pub fn describe_subgraph(
@@ -64,19 +65,28 @@ pub fn describe_subgraph(
         // ExpressionStatement-level call (per the analyzer's
         // `CallbackArgument` annotation), attach `callbackArg` so
         // the mermaid emitter can label the subgraph as
-        // `<callee>(args[<i>])`. Look the callee text up via the
-        // statement-offset → container map; skip silently when the
-        // matching container's head is not a recognised call shape
-        // (e.g. an `AssignmentExpression` wrapper) -- the subgraph
-        // then keeps the existing `(anonymous)` rendering.
+        // `<callee>(args[<i>])`. The annotation carries the
+        // enclosing call's `(start, end)` span pair; the matching
+        // `Call`/`New` node inside the statement's head provides the
+        // callee subtree to render. Chained shapes such as
+        // `a.b().c(cb)` resolve to the specific call's callee
+        // because the end offset disambiguates every nested call
+        // sharing the chain root's `span.start`. Skip silently when
+        // no matching call is found (e.g. an unrecognised parent
+        // shape that fell back to `Raw`); the subgraph then keeps
+        // the existing `(anonymous)` rendering.
         if let Some(cb) = scope.callback_argument.as_ref() {
             if let Some(container) = expression_statement_containers_by_offset
                 .get(&cb.statement_offset().0)
                 .copied()
             {
-                if let Some(callee) = render_call_callee(&container.head, source_index) {
+                if let Some(callee_node) = find_call_callee_in_head(
+                    &container.head,
+                    cb.call_start_offset(),
+                    cb.call_end_offset(),
+                ) {
                     sg.callback_arg = Some(FunctionCallbackArg {
-                        callee,
+                        callee: render_head_expression(callee_node, source_index),
                         arg_index: cb.arg_index(),
                     });
                 }

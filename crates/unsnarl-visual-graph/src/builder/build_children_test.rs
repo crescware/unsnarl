@@ -275,7 +275,7 @@ fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) ->
     s.callback_argument = Some(CallbackArgument::new(
         Utf16CodeUnitOffset(stmt_offset),
         Utf16CodeUnitOffset(stmt_offset),
-        AstType::CallExpression,
+        Utf16CodeUnitOffset(stmt_offset + 20),
         arg_index,
     ));
     s

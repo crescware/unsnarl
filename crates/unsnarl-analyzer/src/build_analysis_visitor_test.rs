@@ -424,7 +424,9 @@ fn callback_argument_is_set_for_a_function_passed_as_a_direct_call_argument() {
         "a function literal directly in arg 0 of an ExpressionStatement-level call must carry a callback_argument: {value}"
     );
     assert_eq!(value["argIndex"], 0);
-    assert_eq!(value["callParentType"], "CallExpression");
+    // `run(() => {})` spans bytes 0..14 in the source string.
+    assert_eq!(value["callStartOffset"], 0);
+    assert_eq!(value["callEndOffset"], 13);
 }
 
 #[test]
@@ -460,8 +462,67 @@ fn callback_argument_does_not_leak_into_the_callee_of_an_inner_call() {
 }
 
 #[test]
-fn callback_argument_records_new_expression_parent_type_for_constructor_callbacks() {
+fn callback_argument_is_set_for_a_constructor_callback() {
+    // Annotation must fire for `NewExpression` parents too -- the
+    // analyzer treats `new Service(cb)` the same as `service(cb)`
+    // for callback-arg purposes.
     let value = callback_arg_for_first_function_scope("new Service(() => {});\n");
+    assert!(!value.is_null());
     assert_eq!(value["argIndex"], 0);
-    assert_eq!(value["callParentType"], "NewExpression");
+    // `new Service(() => {})` spans bytes 0..21 in the source string.
+    assert_eq!(value["callStartOffset"], 0);
+    assert_eq!(value["callEndOffset"], 21);
+}
+
+#[test]
+fn callback_argument_distinguishes_calls_in_a_chain_by_end_offset() {
+    // Every nested `CallExpression` in `a().b().c(cb)` shares its
+    // `span.start` with `a` (offset 0), so the start offset alone
+    // cannot identify *which* call a callback belongs to. The
+    // matching `(start, end)` pair however does -- the inner `a()`
+    // ends at the first `)`, `b()` at the second, `c(cb)` at the
+    // outermost `)`. Two callbacks in the same chain must produce
+    // two distinct `callEndOffset` values.
+    let source = "Promise.resolve().then((value) => {}).catch((error) => {});\n";
+    let values: Vec<serde_json::Value> = callback_args_for_function_scopes(source)
+        .into_iter()
+        .filter(|v| !v.is_null())
+        .collect();
+    assert_eq!(
+        values.len(),
+        2,
+        "expected two annotated callbacks: {values:?}"
+    );
+    let starts: Vec<&serde_json::Value> = values.iter().map(|v| &v["callStartOffset"]).collect();
+    assert!(
+        starts.iter().all(|s| *s == starts[0]),
+        "every nested CallExpression in a chain shares span.start: {starts:?}",
+    );
+    let ends: std::collections::HashSet<u64> = values
+        .iter()
+        .filter_map(|v| v["callEndOffset"].as_u64())
+        .collect();
+    assert_eq!(
+        ends.len(),
+        2,
+        "the two callbacks must have distinct callEndOffsets: {values:?}",
+    );
+}
+
+fn callback_args_for_function_scopes(source: &str) -> Vec<serde_json::Value> {
+    use unsnarl_ir::scope_type::ScopeType;
+    let allocator = Allocator::default();
+    let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
+    let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
+    analyzed
+        .arena
+        .scopes
+        .iter_enumerated()
+        .filter(|(_, s)| matches!(s.r#type, ScopeType::Function))
+        .map(|(id, _)| {
+            let ann = analyzed.annotations.of_scope(id);
+            serde_json::to_value(&ann.callback_argument)
+                .expect("callback_argument serialises to JSON")
+        })
+        .collect()
 }

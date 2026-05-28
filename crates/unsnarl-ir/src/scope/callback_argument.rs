@@ -11,15 +11,20 @@
 //!
 //! `statement_offset` matches the `start_span.offset` of the
 //! enclosing `ExpressionStatement` (the same offset used to key the
-//! synthetic call-proxy element). `call_offset` is the
-//! `CallExpression`'s own start offset (`statement_offset` and
-//! `call_offset` coincide when the statement's direct expression is
-//! the call itself; they differ when the call sits inside an
-//! `AwaitExpression`, a member chain, etc.). `arg_index` is the
-//! zero-based slot in the call's `arguments` list.
+//! synthetic call-proxy element). `call_start_offset` /
+//! `call_end_offset` carry the enclosing `CallExpression` /
+//! `NewExpression`'s own span; the **pair** is required to identify
+//! "which call in the chain" because a chained shape such as
+//! `a.b().c(cb)` has every nested `CallExpression` sharing the chain
+//! root's `span.start`, so `call_start_offset` alone does not
+//! disambiguate. Consumers look up the matching `Call` / `New` node
+//! inside the corresponding `ExpressionStatementContainer.head` (whose
+//! own `Call` / `New` variants carry the same span pair) and render
+//! its `callee` subtree directly -- no callee text is duplicated into
+//! this annotation. `arg_index` is the zero-based slot in the call's
+//! `arguments` list.
 
 use serde::Serialize;
-use unsnarl_oxc_parity::AstType;
 
 use crate::primitive::Utf16CodeUnitOffset;
 
@@ -27,22 +32,22 @@ use crate::primitive::Utf16CodeUnitOffset;
 #[serde(rename_all = "camelCase")]
 pub struct CallbackArgument {
     pub statement_offset: Utf16CodeUnitOffset,
-    pub call_offset: Utf16CodeUnitOffset,
-    pub call_parent_type: AstType,
+    pub call_start_offset: Utf16CodeUnitOffset,
+    pub call_end_offset: Utf16CodeUnitOffset,
     pub arg_index: u32,
 }
 
 impl CallbackArgument {
     pub fn new(
         statement_offset: Utf16CodeUnitOffset,
-        call_offset: Utf16CodeUnitOffset,
-        call_parent_type: AstType,
+        call_start_offset: Utf16CodeUnitOffset,
+        call_end_offset: Utf16CodeUnitOffset,
         arg_index: u32,
     ) -> Self {
         Self {
             statement_offset,
-            call_offset,
-            call_parent_type,
+            call_start_offset,
+            call_end_offset,
             arg_index,
         }
     }
@@ -51,12 +56,12 @@ impl CallbackArgument {
         self.statement_offset
     }
 
-    pub fn call_offset(&self) -> Utf16CodeUnitOffset {
-        self.call_offset
+    pub fn call_start_offset(&self) -> Utf16CodeUnitOffset {
+        self.call_start_offset
     }
 
-    pub fn call_parent_type(&self) -> &AstType {
-        &self.call_parent_type
+    pub fn call_end_offset(&self) -> Utf16CodeUnitOffset {
+        self.call_end_offset
     }
 
     pub fn arg_index(&self) -> u32 {

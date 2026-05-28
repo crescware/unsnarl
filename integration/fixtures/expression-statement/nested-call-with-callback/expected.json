@@ -1,0 +1,92 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/nested-call-with-callback/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_outer_0",
+      "name": "outer",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_inner_6",
+      "name": "inner",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_22",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "expr_stmt_0",
+      "kind": "call-proxy",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "callName": "outer()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 1,
+          "endLine": 3,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "elements": [
+            {
+              "type": "node",
+              "id": "expr_stmt_22",
+              "kind": "SyntheticExpressionStatement",
+              "name": "console.log()",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_outer_0",
+      "to": "expr_stmt_0",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_inner_6",
+      "to": "expr_stmt_0",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_console_22",
+      "to": "expr_stmt_22",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
