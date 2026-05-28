@@ -27,12 +27,20 @@ fn break_continue_return_throw_yield_true() {
         // For each shape, the relevant statement is nested; navigate to it.
         let exit = match stmt {
             Statement::ForStatement(f) => match &f.body {
-                Statement::BlockStatement(b) => is_control_exit(b.body.last().unwrap()),
+                Statement::BlockStatement(b) => is_control_exit(
+                    b.body
+                        .last()
+                        .expect("test source has at least one statement in the block body"),
+                ),
                 other => is_control_exit(other),
             },
             Statement::FunctionDeclaration(f) => {
                 let body = f.body.as_ref().expect("body");
-                is_control_exit(body.statements.last().unwrap())
+                is_control_exit(
+                    body.statements
+                        .last()
+                        .expect("test source has at least one statement in the function body"),
+                )
             }
             other => is_control_exit(other),
         };
@@ -86,7 +94,10 @@ fn if_statement_both_branches_exit_returns_true() {
         _ => unreachable!(),
     };
     let inner = match &for_stmt.body {
-        Statement::BlockStatement(b) => b.body.last().unwrap(),
+        Statement::BlockStatement(b) => b
+            .body
+            .last()
+            .expect("test source has at least one statement in the block body"),
         _ => unreachable!(),
     };
     assert!(is_control_exit(inner));
@@ -102,7 +113,10 @@ fn if_statement_only_one_branch_exits_returns_false() {
         _ => unreachable!(),
     };
     let inner = match &for_stmt.body {
-        Statement::BlockStatement(b) => b.body.last().unwrap(),
+        Statement::BlockStatement(b) => b
+            .body
+            .last()
+            .expect("test source has at least one statement in the block body"),
         _ => unreachable!(),
     };
     assert!(!is_control_exit(inner));
@@ -118,7 +132,10 @@ fn if_statement_without_alternate_returns_false() {
         _ => unreachable!(),
     };
     let inner = match &for_stmt.body {
-        Statement::BlockStatement(b) => b.body.last().unwrap(),
+        Statement::BlockStatement(b) => b
+            .body
+            .last()
+            .expect("test source has at least one statement in the block body"),
         _ => unreachable!(),
     };
     assert!(!is_control_exit(inner));

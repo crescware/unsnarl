@@ -53,7 +53,13 @@ fn emits_subgraph_open_direction_line_child_nodes_and_close() {
     emit_plain_subgraph(&mut state, &sg, "  ", 1);
     assert_eq!(state.lines[0], "  subgraph s_x[\"if L1\"]");
     assert_eq!(state.lines[1], "    direction TB");
-    assert_eq!(state.lines.last().unwrap(), "  end");
+    assert_eq!(
+        state
+            .lines
+            .last()
+            .expect("emitter wrote at least one line before the closing brace"),
+        "  end"
+    );
     assert_eq!(state.lines.len(), 5);
 }
 

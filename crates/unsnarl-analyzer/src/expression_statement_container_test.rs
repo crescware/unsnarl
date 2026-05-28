@@ -53,7 +53,11 @@ fn nearest_expression_statement_returns_none_when_path_has_no_expression_stateme
 fn build_container_uses_statement_span_and_head_from_expression() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "foo;");
-    let stmt = match program.body.first().unwrap() {
+    let stmt = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::ExpressionStatement(es) => es,
         _ => unreachable!(),
     };
@@ -70,7 +74,11 @@ fn build_container_uses_statement_span_and_head_from_expression() {
 fn build_container_falls_back_to_raw_when_expression_is_unrecognised() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "1 + 2;");
-    let stmt = match program.body.first().unwrap() {
+    let stmt = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::ExpressionStatement(es) => es,
         _ => unreachable!(),
     };

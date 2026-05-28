@@ -13,3 +13,6 @@ unsnarl-ir = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 unsnarl-instrumentation = { workspace = true }
 tracing = { workspace = true }
+
+[lints]
+workspace = true

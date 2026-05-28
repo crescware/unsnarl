@@ -18,7 +18,9 @@ fn parse_full(text: &str) -> RootQuery {
 fn rejects_zero_line_in_each_form() {
     for input in ["0", "0..foo", "foo..0", "0..+a"] {
         let r = validate_root_query(&parse_full(input));
-        let err = r.unwrap_err();
+        let err = r.expect_err(
+            "validate_root_query is fed inputs (zero-line variants) that must fail validation",
+        );
         assert!(
             err[0].message.contains("line must be >= 1"),
             "expected 'line must be >= 1' for {input:?}, got {:?}",

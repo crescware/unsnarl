@@ -8,7 +8,7 @@ fn flags_emits_keys_in_declared_order() {
         call: false,
         receiver: false,
     };
-    let json = serde_json::to_string(&flags).unwrap();
+    let json = serde_json::to_string(&flags).expect("ReferenceAnnotationFlags serialises to JSON");
     assert_eq!(json, r#"{"call":false,"receiver":false}"#);
 }
 

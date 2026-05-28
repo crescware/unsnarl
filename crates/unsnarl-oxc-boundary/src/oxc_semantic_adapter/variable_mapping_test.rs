@@ -137,7 +137,11 @@ fn function_scope_synthesises_arguments_binding() {
             assert!(names.contains("b"));
             // The synthesised `arguments` has no identifier occurrences
             // and no defs, matching the parity baseline.
-            let arg_id = scopes[f_scope].set().get("arguments").copied().unwrap();
+            let arg_id = scopes[f_scope]
+                .set()
+                .get("arguments")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
             assert!(variables[arg_id].identifiers.is_empty());
             assert!(variables[arg_id].defs.is_empty());
             assert!(variables[arg_id].scope == f_scope);
@@ -200,8 +204,16 @@ fn nested_function_each_get_their_own_arguments() {
             assert!(scopes[outer].set().contains_key("arguments"));
             let inner = scopes[outer].child_scopes[0];
             assert!(scopes[inner].set().contains_key("arguments"));
-            let outer_args = scopes[outer].set().get("arguments").copied().unwrap();
-            let inner_args = scopes[inner].set().get("arguments").copied().unwrap();
+            let outer_args = scopes[outer]
+                .set()
+                .get("arguments")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
+            let inner_args = scopes[inner]
+                .set()
+                .get("arguments")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
             assert_ne!(outer_args, inner_args);
             // Each `arguments` is anchored to its declaring function scope.
             assert!(variables[outer_args].scope == outer);
@@ -223,7 +235,11 @@ fn var_redeclaration_collapses_to_single_variable_with_two_identifier_occurrence
                 .map(|&id| variables[id].name())
                 .collect();
             assert_eq!(names.iter().filter(|n| **n == "x").count(), 1);
-            let var_id = scopes[root()].set().get("x").copied().unwrap();
+            let var_id = scopes[root()]
+                .set()
+                .get("x")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
             // Both `var x;` occurrences are recorded against the same
             // VariableData; the parity baseline carries one
             // identifier per declaration site.
@@ -431,7 +447,7 @@ fn class_declaration_creates_class_named_binding_in_outer_scope() {
                 var_id.is_some(),
                 "expected `C` to be declared in the module scope",
             );
-            let var_id = var_id.unwrap();
+            let var_id = var_id.expect("var_id is asserted Some on the immediately preceding line");
             assert!(variables[var_id].scope == root());
             assert_eq!(variables[var_id].identifiers.len(), 1);
             assert_eq!(variables[var_id].identifiers[0].name(), "C");
@@ -464,7 +480,11 @@ fn var_in_switch_case_stays_in_enclosing_function_scope() {
                 "`var x` declared inside `case 1:` must hoist into the enclosing function \
                  scope (got {names:?})",
             );
-            let var_id = scopes[fn_scope].set().get("x").copied().unwrap();
+            let var_id = scopes[fn_scope]
+                .set()
+                .get("x")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
             assert!(variables[var_id].scope == fn_scope);
             // The synthetic case-Block scopes must not list `x`.
             let switch_scope = scopes[fn_scope]
@@ -516,7 +536,11 @@ fn lexical_binding_directly_under_case_reparents_to_case_block_scope() {
                 "case-local `let x` must live in the synthetic case Block scope \
                  (got {case_names:?})",
             );
-            let var_id = scopes[case_one].set().get("x").copied().unwrap();
+            let var_id = scopes[case_one]
+                .set()
+                .get("x")
+                .copied()
+                .expect("test fixture declares the named binding in the indexed scope");
             assert!(variables[var_id].scope == case_one);
         },
     );

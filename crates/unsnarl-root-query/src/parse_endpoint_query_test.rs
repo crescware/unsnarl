@@ -2,7 +2,8 @@ use super::*;
 use unsnarl_ir::SourceLine;
 
 fn assert_err_contains(text: &str, needle: &str) {
-    let err = parse_endpoint_query(text).unwrap_err();
+    let err = parse_endpoint_query(text)
+        .expect_err("assert_err_contains is only called with inputs that must fail parsing");
     let msg = &err[0].message;
     assert!(
         msg.contains(needle),
@@ -236,7 +237,9 @@ fn syntactically_accepts_zero_line_forms() {
 #[test]
 fn syntactically_accepts_descending_ranges() {
     for input in ["5-1", "L5-1", "l5-1"] {
-        match parse_endpoint_query(input).unwrap() {
+        match parse_endpoint_query(input).expect(
+            "descending-range input must parse syntactically (semantic rejection comes later)",
+        ) {
             ParsedRootQuery::Range { start, end, .. } => {
                 assert_eq!((start, end), (SourceLine(5), SourceLine(1)));
             }

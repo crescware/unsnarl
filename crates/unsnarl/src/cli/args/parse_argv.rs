@@ -238,7 +238,9 @@ fn handle_short(
     body: &str,
 ) -> Result<usize, ParseError> {
     let mut chars = body.chars();
-    let name = chars.next().unwrap();
+    let name = chars
+        .next()
+        .expect("caller gates handle_short on a non-empty short body (parse_argv loop)");
     let tail: String = chars.collect();
     // Attached value: `-XV` → V is value, `-X=V` → V is value.
     let attached_value: Option<String> = if tail.is_empty() {

@@ -64,6 +64,15 @@ regex = "1"
 tracing = "0.1"
 tracing-subscriber = "0.3"
 
+# Deny `.unwrap()` workspace-wide (both production and tests).
+# Bare `.unwrap()` discards the assumption being asserted — when it
+# panics the trace points only at a line number. `.expect("...")`
+# (or `?` when the failure is recoverable) forces the author to name
+# the invariant being relied on, which is the information a failing
+# test or production stack trace actually needs.
+[workspace.lints.clippy]
+unwrap_used = "deny"
+
 # Release profile tuned for `uns` startup latency. Limited to
 # compiler-level optimizations that do not discard information from
 # the artifact: `lto = "thin"` lets the linker inline and dead-code-

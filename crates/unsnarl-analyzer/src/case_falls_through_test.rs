@@ -32,16 +32,31 @@ fn ends_in_break_does_not_fall_through() {
 fn ends_in_return_does_not_fall_through() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "function f() { switch (x) { case 1: return; } }");
-    let func = match program.body.first().unwrap() {
+    let func = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::FunctionDeclaration(f) => f,
         _ => unreachable!(),
     };
-    let switch = match func.body.as_ref().unwrap().statements.first().unwrap() {
+    let switch = match func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .first()
+        .expect("function body has at least one statement (test source)")
+    {
         Statement::SwitchStatement(s) => s,
         _ => unreachable!(),
     };
     assert!(!case_falls_through(
-        &switch.cases.first().unwrap().consequent
+        &switch
+            .cases
+            .first()
+            .expect("switch statement in test source has at least one case")
+            .consequent
     ));
 }
 
@@ -56,7 +71,11 @@ fn ends_in_throw_does_not_fall_through() {
 fn ends_in_continue_does_not_fall_through() {
     let alloc = Allocator::default();
     let program = parse_ts(&alloc, "for (;;) switch (x) { case 1: continue; }");
-    let outer = match program.body.first().unwrap() {
+    let outer = match program
+        .body
+        .first()
+        .expect("test source has at least one top-level statement")
+    {
         Statement::ForStatement(f) => f,
         _ => unreachable!(),
     };
@@ -65,7 +84,11 @@ fn ends_in_continue_does_not_fall_through() {
         _ => unreachable!(),
     };
     assert!(!case_falls_through(
-        &switch.cases.first().unwrap().consequent
+        &switch
+            .cases
+            .first()
+            .expect("switch statement in test source has at least one case")
+            .consequent
     ));
 }
 

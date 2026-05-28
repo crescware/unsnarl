@@ -50,7 +50,11 @@ fn finalize_one_node(arena: BuildArena) -> Option<VisualNode> {
     if elements.is_empty() {
         return None;
     }
-    match elements.into_iter().next().unwrap() {
+    match elements
+        .into_iter()
+        .next()
+        .expect("test fixture produces at least one element")
+    {
         VisualElement::Node(n) => Some(n),
         _ => None,
     }

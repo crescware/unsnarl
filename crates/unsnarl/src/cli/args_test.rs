@@ -11,7 +11,9 @@ fn parse(argv: &[&str]) -> Args {
 }
 
 fn parse_err_exit_code(argv: &[&str]) -> i32 {
-    Args::try_parse_from(argv).unwrap_err().exit_code()
+    Args::try_parse_from(argv)
+        .expect_err("test argv is constructed to fail parsing")
+        .exit_code()
 }
 
 #[test]
@@ -391,7 +393,7 @@ fn stdin_with_out_file_is_accepted_without_roots() {
 #[test]
 fn derived_basename_serializes_as_camel_case_field_under_out_dir() {
     let args = parse(&["uns", "-r", "render", "-o", "build", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(
         v["derivedBasename"],
         serde_json::Value::String("render".into())
@@ -401,7 +403,7 @@ fn derived_basename_serializes_as_camel_case_field_under_out_dir() {
 #[test]
 fn derived_basename_serializes_as_null_when_absent() {
     let args = parse(&["uns", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["derivedBasename"], serde_json::Value::Null);
 }
 
@@ -473,7 +475,7 @@ fn plugin_serializes_as_flat_string_array() {
         "unsnarl-plugin-react",
         "x.ts",
     ]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["plugins"], serde_json::json!(["react"]));
 }
 
@@ -492,36 +494,41 @@ fn verbose_flag() {
 #[test]
 fn verbose_field_is_excluded_from_serialization() {
     let args = parse(&["uns", "--verbose", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert!(v.get("verbose").is_none());
 }
 
 #[test]
 fn unknown_flag_yields_exit_code_2() {
-    let err = Args::try_parse_from(["uns", "--unknown"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--unknown"])
+        .expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.exit_code(), 2);
 }
 
 #[test]
 fn version_short_lowercase_uses_display_version() {
-    let err = Args::try_parse_from(["uns", "-v"]).unwrap_err();
+    let err =
+        Args::try_parse_from(["uns", "-v"]).expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.kind(), ParseErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn version_long_uses_display_version() {
-    let err = Args::try_parse_from(["uns", "--version"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--version"])
+        .expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.kind(), ParseErrorKind::DisplayVersion);
     assert_eq!(err.exit_code(), 0);
 }
 
 #[test]
 fn help_short_and_long_use_display_help() {
-    let err = Args::try_parse_from(["uns", "-h"]).unwrap_err();
+    let err =
+        Args::try_parse_from(["uns", "-h"]).expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.kind(), ParseErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
-    let err = Args::try_parse_from(["uns", "--help"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "--help"])
+        .expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.kind(), ParseErrorKind::DisplayHelp);
     assert_eq!(err.exit_code(), 0);
 }
@@ -529,21 +536,21 @@ fn help_short_and_long_use_display_help() {
 #[test]
 fn highlight_serializes_as_false_when_absent() {
     let args = parse(&["uns", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["highlight"], serde_json::Value::Bool(false));
 }
 
 #[test]
 fn highlight_serializes_as_true_when_no_inline_value() {
     let args = parse(&["uns", "x.ts", "-H"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["highlight"], serde_json::Value::Bool(true));
 }
 
 #[test]
 fn highlight_serializes_as_parsed_root_query_array_when_inline_value_given() {
     let args = parse(&["uns", "--highlight=foo,bar"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(
         v["highlight"],
         serde_json::json!([
@@ -565,7 +572,7 @@ fn enum_fields_serialize_as_lowercase_strings() {
         "light",
         "--stdin",
     ]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["format"], serde_json::Value::String("mermaid".into()));
     assert_eq!(v["stdinLang"], serde_json::Value::String("tsx".into()));
     assert_eq!(
@@ -578,22 +585,24 @@ fn enum_fields_serialize_as_lowercase_strings() {
 #[test]
 fn mermaid_renderer_serializes_as_null_when_default() {
     let args = parse(&["uns", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert_eq!(v["mermaidRenderer"], serde_json::Value::Null);
 }
 
 #[test]
 fn version_field_is_excluded_from_serialization() {
     let args = parse(&["uns", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
     assert!(v.get("version").is_none());
 }
 
 #[test]
 fn parsed_args_match_ts_field_names_in_camel_case() {
     let args = parse(&["uns", "x.ts"]);
-    let v = serde_json::to_value(&args).unwrap();
-    let obj = v.as_object().unwrap();
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
+    let obj = v
+        .as_object()
+        .expect("Args serialises into a JSON object (not a primitive or array)");
     for key in [
         "file",
         "format",

@@ -13,3 +13,6 @@ unsnarl-analyzer = { workspace = true }
 unsnarl-ir = { workspace = true }
 unsnarl-root-query = { workspace = true }
 unsnarl-visual-graph = { workspace = true }
+
+[lints]
+workspace = true

@@ -10,3 +10,6 @@ repository.workspace = true
 unsnarl-ir = { workspace = true }
 unsnarl-annotations = { workspace = true }
 unsnarl-visual-graph = { workspace = true }
+
+[lints]
+workspace = true

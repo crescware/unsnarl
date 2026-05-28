@@ -80,7 +80,8 @@ fn rejects_empty_token_in_middle() {
 
 #[test]
 fn propagates_offending_token_in_error() {
-    let err = parse_root_queries("10,foo-bar").unwrap_err();
+    let err = parse_root_queries("10,foo-bar")
+        .expect_err("input contains an invalid token and must produce a parse error");
     assert!(
         err.contains("foo-bar"),
         "expected error to mention 'foo-bar', got {err:?}",

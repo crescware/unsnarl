@@ -2,7 +2,8 @@ use super::*;
 use unsnarl_ir::SourceLine;
 
 fn assert_err_contains(text: &str, needle: &str) {
-    let err = parse_root_query(text).unwrap_err();
+    let err = parse_root_query(text)
+        .expect_err("assert_err_contains is only called with inputs that must fail parsing");
     assert!(
         err.contains(needle),
         "expected error for {text:?} to contain {needle:?}, got {err:?}",

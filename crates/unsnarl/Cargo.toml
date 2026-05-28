@@ -46,3 +46,6 @@ regex = { workspace = true }
 name = "parity"
 path = "tests/parity.rs"
 harness = false
+
+[lints]
+workspace = true

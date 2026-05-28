@@ -22,3 +22,6 @@ tracing = { workspace = true }
 oxc_allocator = { workspace = true }
 oxc_parser = { workspace = true }
 serde_json = { workspace = true }
+
+[lints]
+workspace = true

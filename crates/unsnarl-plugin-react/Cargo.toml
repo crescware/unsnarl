@@ -10,3 +10,6 @@ repository.workspace = true
 unsnarl-ir = { workspace = true }
 unsnarl-oxc-parity = { workspace = true }
 unsnarl-plugin = { workspace = true }
+
+[lints]
+workspace = true

@@ -113,7 +113,11 @@ fn arrow_initializer_self_recursion_via_body_span_lookup() {
     // Locate the arrow's span from the AST: walk to the VariableDeclarator
     // and read its init's span.
     let arrow_span = {
-        let decl = match program.body.first().unwrap() {
+        let decl = match program
+            .body
+            .first()
+            .expect("test source has at least one top-level statement")
+        {
             Statement::VariableDeclaration(d) => d,
             _ => unreachable!(),
         };
@@ -144,7 +148,11 @@ fn external_read_through_variable_declarator_init_marks_used() {
     let (program, result) = parse_and_analyze_ts(&alloc, "const a = () => null; a();");
     let a = find_var(&result.arena, "a");
     let arrow_span = {
-        let decl = match program.body.first().unwrap() {
+        let decl = match program
+            .body
+            .first()
+            .expect("test source has at least one top-level statement")
+        {
             Statement::VariableDeclaration(d) => d,
             _ => unreachable!(),
         };

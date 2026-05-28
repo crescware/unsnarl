@@ -187,7 +187,8 @@ fn stats_format_routes_to_stats_emitter() {
 
 #[test]
 fn unknown_format_is_rejected_by_clap_before_dispatch() {
-    let err = Args::try_parse_from(["uns", "-f", "bogus", "x.ts"]).unwrap_err();
+    let err = Args::try_parse_from(["uns", "-f", "bogus", "x.ts"])
+        .expect_err("test argv is constructed to fail parsing");
     assert_eq!(err.exit_code(), 2);
 }
 

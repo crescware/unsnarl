@@ -35,7 +35,7 @@ fn analyze_completes_for_trivial_source() {
                 source_type: default_source_type_for(Language::Ts),
             },
         )
-        .unwrap();
+        .expect("trivial test source parses cleanly under the default options");
     let mut visitor = NoopVisitor;
     let _ = analyze(
         &parsed.program,
@@ -79,7 +79,7 @@ fn root_block_span_skips_leading_comments() {
                 source_type: default_source_type_for(Language::Ts),
             },
         )
-        .unwrap();
+        .expect("trivial test source parses cleanly under the default options");
     let mut visitor = NoopVisitor;
     let r = analyze(
         &parsed.program,
@@ -108,7 +108,7 @@ fn script_source_seeds_global_scope() {
                 source_type: default_source_type_for(Language::Js),
             },
         )
-        .unwrap();
+        .expect("trivial test source parses cleanly under the default options");
     let mut visitor = NoopVisitor;
     let r = analyze(
         &parsed.program,
