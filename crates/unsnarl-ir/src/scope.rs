@@ -19,12 +19,14 @@ use crate::scope_type::ScopeType;
 pub mod abrupt_statement;
 pub mod block_context;
 pub mod block_context_kind;
+pub mod callback_argument;
 pub mod definition;
 pub mod variable;
 
 pub use abrupt_statement::{AbruptStatement, AbruptStatementType};
 pub use block_context::{BlockContext, CaseClauseBlockContext, OtherBlockContext};
 pub use block_context_kind::BlockContextKind;
+pub use callback_argument::CallbackArgument;
 pub use definition::{Definition, DefinitionData};
 pub use variable::{Variable, VariableData};
 

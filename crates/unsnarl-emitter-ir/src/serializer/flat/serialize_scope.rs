@@ -175,6 +175,7 @@ pub fn serialize_scope(
         through,
         function_expression_scope: s.function_expression_scope,
         block_context: ann.block_context.clone(),
+        callback_argument: ann.callback_argument.clone(),
         falls_through: ann.falls_through,
         exits_function: ann.exits_function,
         nesting_depths: ann.nesting_depths.clone(),

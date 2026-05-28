@@ -47,6 +47,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -91,6 +92,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -141,6 +143,7 @@
         "parentSpanOffset": 41,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -193,6 +196,7 @@
         "parentSpanOffset": 57,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -233,6 +237,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -271,6 +276,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

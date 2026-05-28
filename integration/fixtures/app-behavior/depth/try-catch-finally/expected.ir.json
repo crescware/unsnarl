@@ -38,6 +38,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -87,6 +88,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -136,6 +138,7 @@
         "parentSpanOffset": 8,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -185,6 +188,7 @@
         "parentSpanOffset": 18,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -234,6 +238,7 @@
         "parentSpanOffset": 30,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -283,6 +288,7 @@
         "parentSpanOffset": 44,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -335,6 +341,7 @@
         "parentSpanOffset": 60,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -385,6 +392,7 @@
         "parentSpanOffset": 60,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -435,6 +443,7 @@
         "parentSpanOffset": 44,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -485,6 +494,7 @@
         "parentSpanOffset": 30,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -535,6 +545,7 @@
         "parentSpanOffset": 18,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -585,6 +596,7 @@
         "parentSpanOffset": 8,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -635,6 +647,7 @@
         "parentSpanOffset": 0,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

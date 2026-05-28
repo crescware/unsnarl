@@ -89,6 +89,7 @@ fn empty_reference_annotation() -> ReferenceAnnotation {
 fn empty_scope_annotation() -> ScopeAnnotation {
     ScopeAnnotation {
         block_context: None,
+        callback_argument: None,
         falls_through: false,
         exits_function: false,
         nesting_depths: NestingDepths::uniform(NestingDepth(0)),

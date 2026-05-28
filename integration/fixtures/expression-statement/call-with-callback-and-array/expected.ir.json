@@ -44,6 +44,7 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -87,6 +88,12 @@
       ],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": {
+        "statementOffset": 17,
+        "callOffset": 17,
+        "callParentType": "CallExpression",
+        "argIndex": 0
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

@@ -35,6 +35,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -81,6 +82,7 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -136,6 +138,7 @@
         "parentSpanOffset": 25,
         "ifChainRootOffset": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -180,6 +183,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"mon\""
       },
+      "callbackArgument": null,
       "fallsThrough": true,
       "exitsFunction": false,
       "nestingDepths": {
@@ -224,6 +228,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"tue\""
       },
+      "callbackArgument": null,
       "fallsThrough": true,
       "exitsFunction": false,
       "nestingDepths": {
@@ -268,6 +273,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"wed\""
       },
+      "callbackArgument": null,
       "fallsThrough": true,
       "exitsFunction": false,
       "nestingDepths": {
@@ -312,6 +318,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"thu\""
       },
+      "callbackArgument": null,
       "fallsThrough": true,
       "exitsFunction": false,
       "nestingDepths": {
@@ -358,6 +365,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"fri\""
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -417,6 +425,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"sat\""
       },
+      "callbackArgument": null,
       "fallsThrough": true,
       "exitsFunction": false,
       "nestingDepths": {
@@ -463,6 +472,7 @@
         "parentSpanOffset": 45,
         "caseTest": "\"sun\""
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -524,6 +534,7 @@
         "parentSpanOffset": 45,
         "caseTest": null
       },
+      "callbackArgument": null,
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

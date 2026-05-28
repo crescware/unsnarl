@@ -10,12 +10,13 @@
 use serde::Serialize;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
-use unsnarl_ir::scope::{AbruptStatement, BlockContext};
+use unsnarl_ir::scope::{AbruptStatement, BlockContext, CallbackArgument};
 
 #[derive(Serialize)]
 #[serde(rename_all = "camelCase")]
 pub struct ScopeAnnotation {
     pub block_context: Option<BlockContext>,
+    pub callback_argument: Option<CallbackArgument>,
     pub falls_through: bool,
     pub exits_function: bool,
     pub nesting_depths: NestingDepths,
