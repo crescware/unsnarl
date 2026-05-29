@@ -189,16 +189,18 @@ pub fn build_children(
         // later siblings that share the same statement offset.
         if child.callback_argument.is_some() {
             // The CallProxy wrapper is a rendering construct that
-            // reuses the `expr_stmt_<offset>` leaf, so it fires only
-            // for a callback whose enclosing call sits at
-            // `ExpressionStatement` level. That correlation is a
-            // visual-layer concern: resolve it here from the
-            // `ExpressionStatement` spans the builder already owns,
+            // reuses the `expr_stmt_<offset>` leaf, so it fires when
+            // the callback's block span is contained by some registered
+            // (non-synthetic) `ExpressionStatement` -- that is what
+            // `enclosing` actually tests, not "is this callback's own
+            // call statement-level?". The two coincide when the
+            // callback's own call is the nearest enclosing statement,
+            // but a variable-bound / returned callback nested inside an
+            // outer statement-level call's body is also contained and so
+            // also routes into that outer statement's wrapper. That
+            // correlation is a visual-layer concern: resolve it here from
+            // the `ExpressionStatement` spans the builder already owns,
             // rather than reading it off the IR annotation.
-            // Variable-bound / returned / non-statement callbacks have
-            // no enclosing `ExpressionStatement` and skip the wrapper
-            // -- their `<callee>(args[N])` label is attached by
-            // `describe_subgraph` instead.
             if let Some(statement) = ctx
                 .expression_statement_index
                 .enclosing(child.block.span.offset.0, child.block.end_span.offset.0)
@@ -215,9 +217,10 @@ pub fn build_children(
                 i += 1;
                 continue;
             }
-            // No enclosing `ExpressionStatement` contains this
-            // callback (variable-bound / returned / non-statement
-            // callback), so it gets no CallProxy wrapper -- only the
+            // No registered `ExpressionStatement` contains this
+            // callback's block span (e.g. a top-level variable-bound or
+            // returned callback with no enclosing statement-level call),
+            // so it gets no CallProxy wrapper -- only the
             // `<callee>(args[N])` label from `describe_subgraph`. Fall
             // through to default handling.
         }
