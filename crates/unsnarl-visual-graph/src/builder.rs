@@ -24,6 +24,7 @@ pub mod ensure_throw_use_node;
 pub mod expression_statement_node_id;
 pub mod find_call_callee_in_head;
 pub mod find_enclosing_subgraph_scope;
+pub mod find_host_scope_id;
 pub mod find_host_subgraph;
 pub mod find_node_by_id;
 pub mod if_container_subgraph_id;

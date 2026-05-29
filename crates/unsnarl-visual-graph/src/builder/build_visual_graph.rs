@@ -31,6 +31,7 @@ use super::edge_label_of_ref::edge_label_of_ref;
 use super::enclosing_function_var::enclosing_function_var_borrowed;
 use super::ensure_expression_statement_node::ensure_expression_statement_node;
 use super::expression_statement_node_id::expression_statement_node_id;
+use super::find_host_scope_id::find_host_scope_id;
 use super::find_host_subgraph::find_host_subgraph;
 use super::intermediate_key::intermediate_key;
 use super::is_ancestor_scope::is_ancestor_scope;
@@ -547,6 +548,15 @@ fn emit_reference_edges(
                 &ctx.subgraph_owner_var,
             );
             let host = find_host_subgraph(r, enclosing_fn_var_id, &ctx.scope_map, state);
+            // Only the owner-var-less path needs the host scope id as
+            // a subgraph key; computing it is an extra scope walk, so
+            // it stays gated behind `enclosing_fn_var_id.is_none()`
+            // and never burdens the hot owner-var path.
+            let enclosing_fn_scope_id = if enclosing_fn_var_id.is_none() {
+                find_host_scope_id(r, &ctx.scope_map, state)
+            } else {
+                None
+            };
             let target_container = match host {
                 Some(sg) => Container::Subgraph(sg),
                 None => Container::Root,
@@ -564,6 +574,7 @@ fn emit_reference_edges(
                 ctx,
                 expr_stmt_id.as_deref(),
                 enclosing_fn_var_id,
+                enclosing_fn_scope_id,
                 r,
             );
             for from_id in &from_ids {

@@ -2,7 +2,17 @@
 //! Return subgraph and a return-use node inside it, returning the
 //! node id. Returns `None` when the reference's completion is not
 //! `Return` (the function does nothing then) or when no host
-//! subgraph could be found (the surrounding scope was collapsed).
+//! subgraph could be found (the surrounding scope was collapsed, or
+//! the `return` is at the module top level).
+//!
+//! The wrapping subgraph is keyed by `enclosing_fn_var_id` when the
+//! enclosing function is owned by a variable, preserving the
+//! existing subgraph ids byte-for-byte. When there is no owner var
+//! (a function expression passed as a call argument and bound to a
+//! variable, `const Panel = wrap(arrow)`), it falls back to
+//! `enclosing_fn_scope_id` -- the host scope id from
+//! [`super::find_host_scope_id::find_host_scope_id`], which is the
+//! very container this Return subgraph is appended into.
 
 use unsnarl_ir::serialized::{SerializedCompletion, SerializedReference};
 
@@ -21,7 +31,8 @@ pub fn ensure_return_use_node(
     arena: &mut BuildArena,
     state: &mut BuildState,
     ctx: &BuilderContext<'_>,
-    enclosing_fn_var_id: &str,
+    enclosing_fn_var_id: Option<&str>,
+    enclosing_fn_scope_id: Option<&str>,
     r: &SerializedReference,
 ) -> Option<String> {
     let SerializedCompletion::Return {
@@ -31,11 +42,12 @@ pub fn ensure_return_use_node(
     else {
         return None;
     };
-    let host = find_host_subgraph(r, Some(enclosing_fn_var_id), &ctx.scope_map, state)?;
+    let host = find_host_subgraph(r, enclosing_fn_var_id, &ctx.scope_map, state)?;
+    let host_key = enclosing_fn_var_id.or(enclosing_fn_scope_id)?;
     let container_key = format!("{}-{}", start_span.offset.0, end_span.offset.0);
     let existing = state
         .return_subgraphs_by_fn
-        .get(enclosing_fn_var_id)
+        .get(host_key)
         .and_then(|m| m.get(&container_key).copied());
     let sg_idx = if let Some(idx) = existing {
         idx
@@ -48,7 +60,7 @@ pub fn ensure_return_use_node(
             None
         };
         let mut sg = OwnedVisualSubgraph::return_subgraph(
-            return_subgraph_id(enclosing_fn_var_id, &container_key),
+            return_subgraph_id(host_key, &container_key),
             start_line,
             Vec::new(),
             Direction::RL,
@@ -59,7 +71,7 @@ pub fn ensure_return_use_node(
         arena.append_child(Container::Subgraph(host), ElementHandle::Subgraph(idx));
         state
             .return_subgraphs_by_fn
-            .entry(enclosing_fn_var_id.to_string())
+            .entry(host_key.to_string())
             .or_default()
             .insert(container_key, idx);
         idx

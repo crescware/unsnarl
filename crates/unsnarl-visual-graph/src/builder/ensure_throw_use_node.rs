@@ -1,6 +1,8 @@
 //! Twin of [`super::ensure_return_use_node::ensure_return_use_node`]
 //! for `throw` completions. See that module's doc for the full
-//! rationale; the only differences are the discriminator
+//! rationale -- including the `enclosing_fn_var_id` /
+//! `enclosing_fn_scope_id` host-key fallback for owner-var-less
+//! callbacks. The only differences here are the discriminator
 //! (`SerializedCompletion::Throw`), the wrapping subgraph kind
 //! (`Throw`), and the node kind (`ThrowArgumentReference`).
 
@@ -21,7 +23,8 @@ pub fn ensure_throw_use_node(
     arena: &mut BuildArena,
     state: &mut BuildState,
     ctx: &BuilderContext<'_>,
-    enclosing_fn_var_id: &str,
+    enclosing_fn_var_id: Option<&str>,
+    enclosing_fn_scope_id: Option<&str>,
     r: &SerializedReference,
 ) -> Option<String> {
     let SerializedCompletion::Throw {
@@ -31,11 +34,12 @@ pub fn ensure_throw_use_node(
     else {
         return None;
     };
-    let host = find_host_subgraph(r, Some(enclosing_fn_var_id), &ctx.scope_map, state)?;
+    let host = find_host_subgraph(r, enclosing_fn_var_id, &ctx.scope_map, state)?;
+    let host_key = enclosing_fn_var_id.or(enclosing_fn_scope_id)?;
     let container_key = format!("{}-{}", start_span.offset.0, end_span.offset.0);
     let existing = state
         .throw_subgraphs_by_fn
-        .get(enclosing_fn_var_id)
+        .get(host_key)
         .and_then(|m| m.get(&container_key).copied());
     let sg_idx = if let Some(idx) = existing {
         idx
@@ -48,7 +52,7 @@ pub fn ensure_throw_use_node(
             None
         };
         let mut sg = OwnedVisualSubgraph::throw_subgraph(
-            throw_subgraph_id(enclosing_fn_var_id, &container_key),
+            throw_subgraph_id(host_key, &container_key),
             start_line,
             Vec::new(),
             Direction::RL,
@@ -59,7 +63,7 @@ pub fn ensure_throw_use_node(
         arena.append_child(Container::Subgraph(host), ElementHandle::Subgraph(idx));
         state
             .throw_subgraphs_by_fn
-            .entry(enclosing_fn_var_id.to_string())
+            .entry(host_key.to_string())
             .or_default()
             .insert(container_key, idx);
         idx

@@ -7,8 +7,8 @@ use unsnarl_ir::serialized::SerializedVariable;
 use super::ensure_throw_use_node;
 use crate::builder::arena::{BuildArena, ElementHandle, NodeIdx, SubgraphIdx};
 use crate::builder::builder_fixtures::{
-    base_builder_context, base_serialized_reference, empty_serialized_ir, jsx_container,
-    reference_id, scope_id, span_offset_line, throw_completion, variable_id,
+    base_builder_context, base_serialized_reference, base_serialized_scope, empty_serialized_ir,
+    jsx_container, reference_id, scope_id, span_offset_line, throw_completion, variable_id,
 };
 use crate::builder::state::BuildState;
 use crate::direction::Direction;
@@ -74,7 +74,7 @@ fn returns_none_when_no_host_subgraph_exists() {
     let mut arena = BuildArena::new();
     let r = throw_ref("r", 0, 10, 1, 1);
     assert_eq!(
-        ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r),
+        ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r),
         None
     );
 }
@@ -88,7 +88,7 @@ fn returns_none_when_completion_is_not_throw() {
     let mut r = base_serialized_reference();
     r.id = reference_id("r1");
     assert_eq!(
-        ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r),
+        ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r),
         None
     );
     assert!(arena.subgraph(host).children.is_empty());
@@ -113,7 +113,7 @@ fn creates_throw_subgraph_and_throw_use_node() {
     r.identifier = SerializedReferenceIdentifier::new("x".to_string(), span_offset_line(0, 3));
     r.resolved = Some(variable_id("v"));
     r.completion = throw_completion(0, 50, 3, 5);
-    let id = ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r);
+    let id = ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r);
     assert_eq!(id.as_deref(), Some("throw_use_r1"));
     assert_eq!(arena.subgraph(host).children.len(), 1);
     let throw_idx = first_subgraph_child(&arena, host);
@@ -147,7 +147,7 @@ fn uses_identifier_name_when_variable_is_not_resolved() {
         SerializedReferenceIdentifier::new("literal".to_string(), span_offset_line(0, 1));
     r.resolved = None;
     r.completion = throw_completion(0, 10, 1, 1);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r);
     let throw_idx = first_subgraph_child(&arena, host);
     let node_idx = first_node_child(&arena, throw_idx);
     let VisualNode::Synthetic(n) = arena.node(node_idx).clone() else {
@@ -164,8 +164,8 @@ fn groups_refs_with_same_throw_completion_offsets_into_one_subgraph() {
     let (mut state, host) = state_with_host(&mut arena);
     let r1 = throw_ref("r1", 0, 50, 3, 5);
     let r2 = throw_ref("r2", 0, 50, 3, 5);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r1);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r2);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r1);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r2);
     assert_eq!(arena.subgraph(host).children.len(), 1);
     let throw_idx = first_subgraph_child(&arena, host);
     let ids: Vec<String> = arena
@@ -188,8 +188,8 @@ fn different_throw_completion_offsets_create_separate_subgraphs() {
     let (mut state, host) = state_with_host(&mut arena);
     let r1 = throw_ref("r1", 0, 10, 1, 1);
     let r2 = throw_ref("r2", 20, 30, 1, 1);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r1);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r2);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r1);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r2);
     assert_eq!(arena.subgraph(host).children.len(), 2);
 }
 
@@ -200,8 +200,8 @@ fn does_not_duplicate_throw_use_node_when_called_twice_with_same_ref_id() {
     let mut arena = BuildArena::new();
     let (mut state, host) = state_with_host(&mut arena);
     let r = throw_ref("r1", 0, 10, 1, 1);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r);
     let throw_idx = first_subgraph_child(&arena, host);
     assert_eq!(arena.subgraph(throw_idx).children.len(), 1);
 }
@@ -217,7 +217,7 @@ fn sets_is_jsx_element_and_end_line_when_reference_has_jsx_element() {
     r.identifier = SerializedReferenceIdentifier::new("Foo".to_string(), span_offset_line(0, 2));
     r.jsx_element = Some(jsx_container(0, 30, 2, 5));
     r.completion = throw_completion(0, 30, 2, 5);
-    ensure_throw_use_node(&mut arena, &mut state, &ctx, "fnVar", &r);
+    ensure_throw_use_node(&mut arena, &mut state, &ctx, Some("fnVar"), None, &r);
     let throw_idx = first_subgraph_child(&arena, host);
     let node_idx = first_node_child(&arena, throw_idx);
     let VisualNode::Synthetic(n) = arena.node(node_idx).clone() else {
@@ -225,4 +225,43 @@ fn sets_is_jsx_element_and_end_line_when_reference_has_jsx_element() {
     };
     assert!(n.is_jsx_element);
     assert_eq!(n.end_line, Some(5));
+}
+
+/// Owner-var-less callback: the host is found via the scope-direct
+/// walk (`subgraph_by_scope`), and the wrapping Throw subgraph is
+/// keyed *and named* by that host scope id rather than an owner var.
+fn state_with_scope_host(arena: &mut BuildArena) -> (BuildState, SubgraphIdx) {
+    let host = push_host(arena);
+    let mut state = BuildState::new();
+    state.subgraph_by_scope.insert("scope".to_string(), host);
+    (state, host)
+}
+
+#[test]
+fn keys_and_names_subgraph_by_scope_id_when_no_owner_var() {
+    let mut ir = empty_serialized_ir();
+    ir.scopes.push(base_serialized_scope("scope"));
+    let ctx = base_builder_context(&ir);
+    let mut arena = BuildArena::new();
+    let (mut state, host) = state_with_scope_host(&mut arena);
+    let r = throw_ref("r1", 12, 34, 1, 2);
+    let id = ensure_throw_use_node(&mut arena, &mut state, &ctx, None, Some("scope"), &r);
+    assert_eq!(id.as_deref(), Some("throw_use_r1"));
+    assert!(state.throw_subgraphs_by_fn.contains_key("scope"));
+    let throw_idx = first_subgraph_child(&arena, host);
+    let VisualSubgraph::Owned(sg) = arena.subgraph(throw_idx).descriptor.clone() else {
+        panic!("expected owned");
+    };
+    assert_eq!(sg.id, "s_throw_scope_12_34");
+}
+
+#[test]
+fn returns_none_without_owner_var_and_without_host() {
+    let ir = empty_serialized_ir();
+    let ctx = base_builder_context(&ir);
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    let r = throw_ref("r1", 0, 10, 1, 1);
+    let id = ensure_throw_use_node(&mut arena, &mut state, &ctx, None, None, &r);
+    assert_eq!(id, None);
 }
