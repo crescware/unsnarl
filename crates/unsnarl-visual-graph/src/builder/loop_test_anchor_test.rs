@@ -122,6 +122,58 @@ fn for_scope_with_no_upper_falls_back_to_empty_parent_in_the_id() {
     assert_eq!(node.id, "for_test__10");
 }
 
+#[test]
+fn for_in_scope_selects_for_in_header_kind_keeping_first_position_and_offset_key() {
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    let sg = body_subgraph_idx(&mut arena, ControlSubgraphKind::For);
+    let mut scope = for_scope_at(Some("scope_0"), 34, 3);
+    scope.block.r#type = AstType::ForInStatement;
+
+    attach_loop_test_anchor(&mut arena, &mut state, &scope, sg);
+
+    assert_eq!(state.pending_loop_test_anchors.len(), 1);
+    let pending = state.pending_loop_test_anchors[0];
+    assert!(pending.position == LoopTestAnchorPosition::First);
+
+    let node = pending_synthetic_node(&arena, &state, 0);
+    assert_eq!(node.id, "for_test_scope_0_34");
+    assert!(node.kind == SyntheticNodeKind::SyntheticForInStatementHeader);
+    assert_eq!(node.name, "for-test");
+    assert_eq!(node.line, 3);
+
+    assert_eq!(
+        state.for_test_anchor_by_offset.get(&34).map(String::as_str),
+        Some("for_test_scope_0_34")
+    );
+}
+
+#[test]
+fn for_of_scope_selects_for_of_header_kind_keeping_first_position_and_offset_key() {
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    let sg = body_subgraph_idx(&mut arena, ControlSubgraphKind::For);
+    let mut scope = for_scope_at(Some("scope_0"), 34, 3);
+    scope.block.r#type = AstType::ForOfStatement;
+
+    attach_loop_test_anchor(&mut arena, &mut state, &scope, sg);
+
+    assert_eq!(state.pending_loop_test_anchors.len(), 1);
+    let pending = state.pending_loop_test_anchors[0];
+    assert!(pending.position == LoopTestAnchorPosition::First);
+
+    let node = pending_synthetic_node(&arena, &state, 0);
+    assert_eq!(node.id, "for_test_scope_0_34");
+    assert!(node.kind == SyntheticNodeKind::SyntheticForOfStatementHeader);
+    assert_eq!(node.name, "for-test");
+    assert_eq!(node.line, 3);
+
+    assert_eq!(
+        state.for_test_anchor_by_offset.get(&34).map(String::as_str),
+        Some("for_test_scope_0_34")
+    );
+}
+
 fn while_body_scope(parent_span_offset: u32, block_line: u32) -> SerializedScope {
     let mut scope = base_serialized_scope("while_body");
     scope.r#type = ScopeType::Block;
