@@ -39,6 +39,14 @@ pub fn base_let_binding() -> BindingVisualNode {
     BindingVisualNode::let_binding("n_v", "x", 1)
 }
 
+pub fn base_using_binding() -> BindingVisualNode {
+    BindingVisualNode::using_binding("n_v", "x", 1)
+}
+
+pub fn base_await_using_binding() -> BindingVisualNode {
+    BindingVisualNode::await_using_binding("n_v", "x", 1)
+}
+
 pub fn base_write_op() -> SyntheticVisualNode {
     SyntheticVisualNode::write_reference("n_v", "x", 1)
 }

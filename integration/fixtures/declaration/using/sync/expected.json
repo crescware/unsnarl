@@ -1,0 +1,55 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/using/sync/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_a_6",
+      "name": "a",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "UsingBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_acquire_10",
+      "name": "acquire",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_21",
+      "kind": "SyntheticExpressionStatement",
+      "name": "a.release()",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_acquire_10",
+      "to": "n_scope_0_a_6",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_a_6",
+      "to": "expr_stmt_21",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

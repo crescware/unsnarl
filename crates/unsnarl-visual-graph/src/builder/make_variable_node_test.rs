@@ -188,6 +188,26 @@ fn let_is_emitted_as_let_binding_node() {
 }
 
 #[test]
+fn using_is_emitted_as_using_binding_node() {
+    let mut v = base_serialized_variable();
+    v.defs = vec![base_def(VariableDeclarationKind::Using)];
+    let VisualNode::Binding(b) = make_variable_node(&v) else {
+        panic!("expected binding");
+    };
+    assert!(matches!(b.kind, BindingNodeKind::UsingBinding));
+}
+
+#[test]
+fn await_using_is_emitted_as_await_using_binding_node() {
+    let mut v = base_serialized_variable();
+    v.defs = vec![base_def(VariableDeclarationKind::AwaitUsing)];
+    let VisualNode::Binding(b) = make_variable_node(&v) else {
+        panic!("expected binding");
+    };
+    assert!(matches!(b.kind, BindingNodeKind::AwaitUsingBinding));
+}
+
+#[test]
 fn named_import_binding_propagates_imported_name() {
     let def = SerializedDefinition::ImportBindingNamed(ImportBindingNamedDef::new(
         definition_name("renamed", span(0)),
