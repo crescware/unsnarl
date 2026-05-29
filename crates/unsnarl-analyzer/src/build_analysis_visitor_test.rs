@@ -399,75 +399,76 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
     );
 }
 
-/// Owned summary of a scope's `callback_argument` for assertions:
-/// `(arg_index, rendered_callee)`. `None` when the scope carries no
-/// annotation.
-type CbArgSummary = (u32, String);
-
-/// Render a callee [`HeadExpression`] to a compact string for
-/// assertions -- a test-local stand-in for the visual-graph
-/// `render_head_expression` (the analyzer crate does not depend on
-/// the visual-graph layer). Covers the shapes these tests exercise.
-fn render_callee(head: &unsnarl_ir::reference::HeadExpression) -> String {
-    use unsnarl_ir::reference::HeadExpression;
-    match head {
-        HeadExpression::Identifier { name } => name.clone(),
-        HeadExpression::Member { object, property } => {
-            format!("{}.{property}", render_callee(object))
-        }
-        HeadExpression::Call { callee, .. } => format!("{}()", render_callee(callee)),
-        HeadExpression::New { callee, .. } => format!("new {}()", render_callee(callee)),
-        _ => "<other>".to_string(),
-    }
-}
-
-fn summarize(cb: &unsnarl_ir::scope::CallbackArgument) -> CbArgSummary {
-    (cb.arg_index, render_callee(&cb.callee))
-}
-
-fn callback_arg_summaries_for_function_scopes(source: &str) -> Vec<Option<CbArgSummary>> {
+/// Run the analyzer and hand `f` the `callback_argument` annotation
+/// of every `Function` scope, in source order (`None` where a scope
+/// carries no annotation). Borrows from the live `Analyzed`, so the
+/// callee subtree is inspected structurally without cloning or
+/// rendering it to a string.
+fn with_callback_args<R>(
+    source: &str,
+    f: impl FnOnce(Vec<Option<&unsnarl_ir::scope::CallbackArgument>>) -> R,
+) -> R {
     use unsnarl_ir::scope_type::ScopeType;
     let allocator = Allocator::default();
     let ParserReturn { program, .. } = Parser::new(&allocator, source, SourceType::ts()).parse();
     let analyzed = run_analysis(&program, BoundarySourceType::Script, Language::Ts, source);
-    analyzed
+    let args: Vec<Option<&unsnarl_ir::scope::CallbackArgument>> = analyzed
         .arena
         .scopes
         .iter_enumerated()
         .filter(|(_, s)| matches!(s.r#type, ScopeType::Function))
-        .map(|(id, _)| {
-            analyzed
-                .annotations
-                .of_scope(id)
-                .callback_argument
-                .as_ref()
-                .map(summarize)
-        })
-        .collect()
+        .map(|(id, _)| analyzed.annotations.of_scope(id).callback_argument.as_ref())
+        .collect();
+    f(args)
 }
 
-fn callback_arg_for_first_function_scope(source: &str) -> Option<CbArgSummary> {
-    callback_arg_summaries_for_function_scopes(source)
-        .into_iter()
-        .next()
-        .flatten()
+/// The name of a callee that is a bare `Identifier`, else `None`.
+fn identifier_name(head: &unsnarl_ir::reference::HeadExpression) -> Option<&str> {
+    match head {
+        unsnarl_ir::reference::HeadExpression::Identifier { name } => Some(name),
+        _ => None,
+    }
+}
+
+/// A callee `Member`'s `(object, property)`, else `None`.
+fn member_parts(
+    head: &unsnarl_ir::reference::HeadExpression,
+) -> Option<(&unsnarl_ir::reference::HeadExpression, &str)> {
+    match head {
+        unsnarl_ir::reference::HeadExpression::Member { object, property } => {
+            Some((object, property))
+        }
+        _ => None,
+    }
+}
+
+/// A `Call`'s callee subtree, else `None`.
+fn call_callee(
+    head: &unsnarl_ir::reference::HeadExpression,
+) -> Option<&unsnarl_ir::reference::HeadExpression> {
+    match head {
+        unsnarl_ir::reference::HeadExpression::Call { callee, .. } => Some(callee),
+        _ => None,
+    }
 }
 
 #[test]
 fn callback_argument_is_set_for_a_function_passed_as_a_direct_call_argument() {
-    let value = callback_arg_for_first_function_scope("run(() => {});\n");
-    let (arg_index, callee) =
-        value.expect("a function literal in arg 0 of a call must carry a callback_argument");
-    assert_eq!(arg_index, 0);
-    assert_eq!(callee, "run");
+    with_callback_args("run(() => {});\n", |args| {
+        let cb =
+            args[0].expect("a function literal in arg 0 of a call must carry a callback_argument");
+        assert_eq!(cb.arg_index, 0);
+        assert_eq!(identifier_name(&cb.callee), Some("run"));
+    });
 }
 
 #[test]
 fn callback_argument_uses_zero_based_index_for_later_argument_slots() {
     // The arrow is arg 1 of `run`, not arg 0.
-    let (arg_index, _) = callback_arg_for_first_function_scope("run(a, () => {});\n")
-        .expect("arg 1 callback must be annotated");
-    assert_eq!(arg_index, 1);
+    with_callback_args("run(a, () => {});\n", |args| {
+        let cb = args[0].expect("arg 1 callback must be annotated");
+        assert_eq!(cb.arg_index, 1);
+    });
 }
 
 #[test]
@@ -477,11 +478,11 @@ fn callback_argument_is_set_for_a_callback_bound_to_a_variable() {
     // call-argument function -- the structural fact does not depend on
     // statement position. (Whether a CallProxy wrapper is rendered is
     // decided later in the visual-graph layer, not encoded here.)
-    let value = callback_arg_for_first_function_scope("const x = run(() => {});\n");
-    let (arg_index, callee) =
-        value.expect("a variable-bound callback must still carry a callback_argument");
-    assert_eq!(arg_index, 0);
-    assert_eq!(callee, "run");
+    with_callback_args("const x = run(() => {});\n", |args| {
+        let cb = args[0].expect("a variable-bound callback must still carry a callback_argument");
+        assert_eq!(cb.arg_index, 0);
+        assert_eq!(identifier_name(&cb.callee), Some("run"));
+    });
 }
 
 #[test]
@@ -492,11 +493,14 @@ fn callback_argument_does_not_leak_into_the_callee_of_an_inner_call() {
     // `Some(0)` while traversing into the inner callee, so without an
     // explicit `current_key == Some("arguments")` guard the IIFE
     // function scope would be misannotated as `outer`'s arg 0.
-    let value = callback_arg_for_first_function_scope("outer((function () {})());\n");
-    assert!(
-        value.is_none(),
-        "an IIFE function in callee position must not be annotated as the outer call's arg: {value:?}"
-    );
+    with_callback_args("outer((function () {})());\n", |args| {
+        let cb = args[0];
+        assert!(
+            cb.is_none(),
+            "an IIFE function in callee position must not be annotated as the outer call's arg: {:?}",
+            cb.map(|c| c.arg_index)
+        );
+    });
 }
 
 #[test]
@@ -504,31 +508,52 @@ fn callback_argument_is_set_for_a_constructor_callback() {
     // Annotation must fire for `NewExpression` parents too -- the
     // analyzer treats `new Service(cb)` the same as `service(cb)`
     // for callback-arg purposes.
-    let value = callback_arg_for_first_function_scope("new Service(() => {});\n");
-    let (arg_index, callee) = value.expect("a constructor callback must be annotated");
-    assert_eq!(arg_index, 0);
-    assert_eq!(callee, "Service");
+    with_callback_args("new Service(() => {});\n", |args| {
+        let cb = args[0].expect("a constructor callback must be annotated");
+        assert_eq!(cb.arg_index, 0);
+        assert_eq!(identifier_name(&cb.callee), Some("Service"));
+    });
 }
 
 #[test]
 fn callback_argument_captures_distinct_callees_for_calls_in_a_chain() {
-    // Each callback now carries its own call's `callee` head, so two
-    // callbacks in the same chain are distinguished by their callee
-    // text rather than by a `(start, end)` offset pair. `.then(cb)`
-    // resolves to `Promise.resolve().then`; `.catch(cb)` resolves to
-    // `Promise.resolve().then().catch`.
+    // Each callback carries its own call's `callee` head, so two
+    // callbacks in the same chain are distinguished by the structure of
+    // that subtree rather than by a `(start, end)` offset pair.
+    // `.then(cb)`'s callee is `Promise.resolve().then`; `.catch(cb)`'s
+    // callee is `Promise.resolve().then().catch` -- i.e. its object
+    // chain nests the *prior* `.then()` call, which is the regression
+    // this guards: a callback must capture its own call, not the chain
+    // root's.
     let source = "Promise.resolve().then((value) => {}).catch((error) => {});\n";
-    let callees: Vec<String> = callback_arg_summaries_for_function_scopes(source)
-        .into_iter()
-        .flatten()
-        .map(|(_, callee)| callee)
-        .collect();
-    assert_eq!(
-        callees,
-        vec![
-            "Promise.resolve().then".to_string(),
-            "Promise.resolve().then().catch".to_string(),
-        ],
-        "each chained callback must capture its own call's callee"
-    );
+    with_callback_args(source, |args| {
+        let callees: Vec<&unsnarl_ir::reference::HeadExpression> =
+            args.iter().flatten().map(|cb| &cb.callee).collect();
+        assert_eq!(callees.len(), 2, "expected two annotated callbacks");
+
+        // First callback (`.then`): `Promise.resolve().then`.
+        let (then_obj, then_prop) =
+            member_parts(callees[0]).expect("`.then`'s callee is a member access");
+        assert_eq!(then_prop, "then");
+        let resolve_call =
+            call_callee(then_obj).expect("`.then`'s object is the `Promise.resolve()` call");
+        let (promise, resolve_prop) =
+            member_parts(resolve_call).expect("`Promise.resolve` is a member access");
+        assert_eq!(resolve_prop, "resolve");
+        assert_eq!(identifier_name(promise), Some("Promise"));
+
+        // Second callback (`.catch`): `Promise.resolve().then().catch`.
+        // The discriminating fact is that its object is the `.then(...)`
+        // call, not the chain root.
+        let (catch_obj, catch_prop) =
+            member_parts(callees[1]).expect("`.catch`'s callee is a member access");
+        assert_eq!(catch_prop, "catch");
+        let then_call = call_callee(catch_obj).expect("`.catch`'s object is the `.then()` call");
+        let (_, inner_then_prop) =
+            member_parts(then_call).expect("`.catch`'s object chain ends at the prior `.then`");
+        assert_eq!(
+            inner_then_prop, "then",
+            "each chained callback must capture its own call's callee"
+        );
+    });
 }
