@@ -4,10 +4,10 @@
 //! by [`super::scope_mapping::build_scopes`] and
 //! [`super::variable_mapping::build_variables`], and assert properties
 //! of the resulting variables list and scope-side `set` / `variables`
-//! cross-links. Characterization-style: pins the 1:1 walk shape plus
-//! the implicit-`arguments` synthesis. Ordering and TypeScript-only-
-//! scope filtering are deferred (see the module header for the full
-//! list).
+//! cross-links. Characterization-style: pins the 1:1 walk shape, the
+//! implicit-`arguments` synthesis, and the per-scope source-order
+//! emission. TypeScript-only-scope filtering is deferred (see the
+//! module header for the full list).
 
 use std::collections::HashSet;
 
@@ -189,6 +189,62 @@ fn bindings_in_a_scope_follow_declaration_order() {
                 .map(|&v| variables[v].name())
                 .collect();
             assert_eq!(names, vec!["a", "b", "c", "d"]);
+        },
+    );
+}
+
+/// The per-scope sort applies in every scope, not just the root, and
+/// the synthesised `arguments` binding is prepended ahead of the
+/// sorted real bindings. The parameter names are written in
+/// non-alphabetical source order, so a dropped sort (raw HashMap
+/// order) and an alphabetical sort would both be caught.
+#[test]
+fn non_root_scope_bindings_follow_source_order_after_arguments() {
+    with_arena(
+        "function f(zebra, alpha, mango) {}",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let f_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[f_scope].r#type, ScopeType::Function));
+            let names: Vec<&str> = scopes[f_scope]
+                .variables
+                .iter()
+                .map(|&v| variables[v].name())
+                .collect();
+            assert_eq!(names, vec!["arguments", "zebra", "alpha", "mango"]);
+        },
+    );
+}
+
+/// Bindings reparented into a synthetic per-`SwitchCase` Block scope
+/// must surface in source order. The two `let`s share one case and are
+/// written in non-alphabetical source order, so an alphabetical or raw
+/// HashMap ordering would be caught.
+///
+/// The order is established solely by the per-scope sort
+/// (`variable_mapping.rs:193`): the switch scope's bindings are
+/// span-sorted before reparenting, and each case occupies one
+/// contiguous span range, so a case's bindings arrive already in source
+/// order. This test pins that reparented case-local bindings stay
+/// source-ordered.
+#[test]
+fn switch_case_block_bindings_follow_source_order() {
+    with_arena(
+        "switch (k) { case 1: let zebra = 1; let alpha = 2; break; default: break; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes, variables| {
+            let switch_scope = scopes[root()].child_scopes[0];
+            assert!(matches!(scopes[switch_scope].r#type, ScopeType::Switch));
+            let case_one = scopes[switch_scope].child_scopes[0];
+            assert!(matches!(scopes[case_one].r#type, ScopeType::Block));
+            let names: Vec<&str> = scopes[case_one]
+                .variables
+                .iter()
+                .map(|&v| variables[v].name())
+                .collect();
+            assert_eq!(names, vec!["zebra", "alpha"]);
         },
     );
 }
