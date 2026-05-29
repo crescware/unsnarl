@@ -206,6 +206,10 @@ fn render_mermaid(
     out
 }
 
+#[cfg(test)]
+#[path = "mermaid_test.rs"]
+mod mermaid_test;
+
 fn collect_var_node_ids(elements: &[VisualElement]) -> Vec<String> {
     let mut ids: Vec<String> = Vec::new();
     walk_collect_kind(elements, NodeKind::VarBinding, &mut ids);
