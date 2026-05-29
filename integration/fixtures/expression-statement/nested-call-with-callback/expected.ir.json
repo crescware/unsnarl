@@ -88,10 +88,12 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 0,
-        "callStartOffset": 6,
-        "callEndOffset": 56,
-        "argIndex": 0
+        "callee": {
+          "kind": "identifier",
+          "name": "inner"
+        },
+        "argIndex": 0,
+        "statementOffset": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

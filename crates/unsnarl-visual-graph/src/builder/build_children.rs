@@ -190,26 +190,34 @@ pub fn build_children(
         // first callback's source position) and reused for any
         // later siblings that share the same statement offset.
         if let Some(cb) = child.callback_argument.as_ref() {
-            let stmt_offset = cb.statement_offset().0;
-            if let Some(wrapper_idx) = ensure_call_proxy_wrapper(
-                arena,
-                state,
-                ctx,
-                container,
-                &mut call_proxy_by_stmt_offset,
-                stmt_offset,
-            ) {
-                build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
-                i += 1;
-                continue;
+            // The CallProxy wrapper is an ExpressionStatement-specific
+            // mechanism (it reuses the `expr_stmt_<offset>` leaf), so
+            // it fires only when `statement_offset` is present.
+            // Variable-bound / returned / nested callbacks carry
+            // `None` and skip the wrapper -- their
+            // `<callee>(args[N])` label is attached by
+            // `describe_subgraph` instead.
+            if let Some(stmt_offset) = cb.statement_offset {
+                if let Some(wrapper_idx) = ensure_call_proxy_wrapper(
+                    arena,
+                    state,
+                    ctx,
+                    container,
+                    &mut call_proxy_by_stmt_offset,
+                    stmt_offset.0,
+                ) {
+                    build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                    i += 1;
+                    continue;
+                }
+                // No matching ExpressionStatementContainer was
+                // registered (e.g. the analyzer fired the annotation
+                // but no reference inside that statement reached the
+                // visual-graph layer to populate the container map).
+                // Fall through to default handling so the function
+                // scope still lands somewhere instead of being
+                // silently dropped.
             }
-            // No matching ExpressionStatementContainer was registered
-            // (e.g. the analyzer fired the annotation but no
-            // reference inside that statement reached the
-            // visual-graph layer to populate the container map).
-            // Fall through to default handling so the function scope
-            // still lands somewhere instead of being silently
-            // dropped.
         }
         let ckey = branch_container_key(child);
         let Some(key) = ckey.as_deref() else {

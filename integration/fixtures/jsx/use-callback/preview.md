@@ -24,10 +24,10 @@ flowchart RL
     subgraph s_scope_1["C()<br/>L3-7"]
       direction RL
       n_scope_1_fnA_64["unused fnA<br/>L4"]
-      subgraph s_scope_2["(anonymous)<br/>L4"]
+      subgraph s_scope_2["useCallback(args[0])<br/>L4"]
         direction RL
         n_scope_2_arr_83["arr<br/>L4"]
-        subgraph s_scope_3["(anonymous)<br/>L4"]
+        subgraph s_scope_3["arr.map(args[0])<br/>L4"]
           direction RL
           n_scope_3_n_110["n<br/>L4"]
           subgraph s_return_scope_0_C_44_116_121["return L4"]
@@ -46,7 +46,7 @@ flowchart RL
         subgraph s_scope_4["fnB()<br/>L5"]
           direction RL
           n_scope_4_arr_144["arr<br/>L5"]
-          subgraph s_scope_5["(anonymous)<br/>L5"]
+          subgraph s_scope_5["arr.map(args[0])<br/>L5"]
             direction RL
             n_scope_5_n_171["n<br/>L5"]
             subgraph s_return_scope_1_fnB_137_177_182["return L5"]

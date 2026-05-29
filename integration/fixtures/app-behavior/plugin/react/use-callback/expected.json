@@ -78,6 +78,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useCallback",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

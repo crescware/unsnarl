@@ -135,10 +135,33 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 47,
-        "callStartOffset": 53,
-        "callEndOffset": 189,
-        "argIndex": 0
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "Promise"
+              },
+              "property": "resolve"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 8,
+              "offset": 53
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 25,
+              "offset": 70
+            }
+          },
+          "property": "then"
+        },
+        "argIndex": 0,
+        "statementOffset": 47
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -185,10 +208,50 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 47,
-        "callStartOffset": 53,
-        "callEndOffset": 315,
-        "argIndex": 0
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "call",
+                "callee": {
+                  "kind": "member",
+                  "object": {
+                    "kind": "identifier",
+                    "name": "Promise"
+                  },
+                  "property": "resolve"
+                },
+                "startSpan": {
+                  "line": 2,
+                  "column": 8,
+                  "offset": 53
+                },
+                "endSpan": {
+                  "line": 2,
+                  "column": 25,
+                  "offset": 70
+                }
+              },
+              "property": "then"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 8,
+              "offset": 53
+            },
+            "endSpan": {
+              "line": 6,
+              "column": 6,
+              "offset": 189
+            }
+          },
+          "property": "catch"
+        },
+        "argIndex": 0,
+        "statementOffset": 47
       },
       "fallsThrough": false,
       "exitsFunction": false,

@@ -54,7 +54,6 @@ fn function_subgraph_returns_kind_function_with_owner_metadata() {
         &scope,
         &owners,
         &variables,
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     );
     let VisualSubgraph::Owned(s) = sg else {
@@ -98,7 +97,6 @@ fn function_subgraph_falls_back_to_scope_block_span_line_when_owner_has_no_ident
         &scope,
         &owners,
         &variables,
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected owned");
@@ -112,7 +110,6 @@ fn function_subgraph_without_owner_var_renders_anonymous() {
     scope.r#type = ScopeType::Function;
     let VisualSubgraph::Owned(s) = describe_subgraph(
         &scope,
-        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
@@ -140,7 +137,6 @@ fn control_subgraph_for() {
         &scope,
         &HashMap::new(),
         &HashMap::new(),
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected control");
@@ -160,7 +156,6 @@ fn control_subgraph_catch() {
         &scope,
         &HashMap::new(),
         &HashMap::new(),
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected control");
@@ -175,7 +170,6 @@ fn control_subgraph_switch() {
     scope.block = block(AstType::BlockStatement, 0, 1, 10, 3);
     let VisualSubgraph::Control(s) = describe_subgraph(
         &scope,
-        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
@@ -198,7 +192,6 @@ fn case_subgraph_captures_case_test_from_block_context() {
     ));
     let VisualSubgraph::Control(s) = describe_subgraph(
         &scope,
-        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
@@ -226,7 +219,6 @@ fn case_subgraph_keeps_case_test_null_when_default() {
         &scope,
         &HashMap::new(),
         &HashMap::new(),
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected control");
@@ -242,7 +234,6 @@ fn plain_block_scope_renders_as_generic_block() {
     let scope = base_serialized_scope("plain");
     let VisualSubgraph::Control(s) = describe_subgraph(
         &scope,
-        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
@@ -274,7 +265,6 @@ fn class_scope_with_class_name_binding_picks_inner_identifier() {
         &scope,
         &HashMap::new(),
         &variables,
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected owned");
@@ -300,7 +290,6 @@ fn class_scope_with_no_variables_yields_class_name_null() {
         &scope,
         &HashMap::new(),
         &HashMap::new(),
-        &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),
     ) else {
         panic!("expected owned");
@@ -318,7 +307,6 @@ fn panics_when_scope_is_module() {
     scope.r#type = ScopeType::Module;
     let _ = describe_subgraph(
         &scope,
-        &HashMap::new(),
         &HashMap::new(),
         &HashMap::new(),
         &unsnarl_ir::primitive::SourceIndex::build(""),

@@ -6,10 +6,10 @@ use crate::nesting_kind::NestingDepths;
 use crate::primitive::Span;
 use crate::scope::abrupt_statement::AbruptStatement;
 use crate::scope::block_context::BlockContext;
-use crate::scope::callback_argument::CallbackArgument;
 use crate::scope_type::ScopeType;
 use crate::serialized::reference_id::SerializedReferenceId;
 use crate::serialized::scope_id::SerializedScopeId;
+use crate::serialized::serialized_callback_argument::SerializedCallbackArgument;
 use crate::serialized::variable_id::SerializedVariableId;
 use unsnarl_oxc_parity::AstType;
 
@@ -36,7 +36,7 @@ pub struct SerializedScope {
     pub through: Vec<SerializedReferenceId>,
     pub function_expression_scope: bool,
     pub block_context: Option<BlockContext>,
-    pub callback_argument: Option<CallbackArgument>,
+    pub callback_argument: Option<SerializedCallbackArgument>,
     pub falls_through: bool,
     pub exits_function: bool,
     pub nesting_depths: NestingDepths,

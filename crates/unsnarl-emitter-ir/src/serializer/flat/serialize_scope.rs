@@ -7,11 +7,12 @@ use unsnarl_annotations::Annotations;
 use unsnarl_instrumentation::{count_if_verbose, record_elapsed_ns, timing_start, verbose};
 use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::serialized::{
-    SerializedBlock, SerializedReferenceId, SerializedScope, SerializedScopeId,
-    SerializedVariableId,
+    SerializedBlock, SerializedCallbackArgument, SerializedReferenceId, SerializedScope,
+    SerializedScopeId, SerializedVariableId,
 };
 use unsnarl_ir::{IrArena, ReferenceId, ScopeId, VariableId};
 
+use crate::serializer::flat::serialize_expression_statement_head::serialize_head_expression;
 use crate::serializer::flat::span_of::span_of_node;
 
 // Per-sub-phase accumulators. All `record_elapsed_ns` / `count_if_verbose`
@@ -175,7 +176,14 @@ pub fn serialize_scope(
         through,
         function_expression_scope: s.function_expression_scope,
         block_context: ann.block_context.clone(),
-        callback_argument: ann.callback_argument.clone(),
+        callback_argument: ann
+            .callback_argument
+            .as_ref()
+            .map(|cb| SerializedCallbackArgument {
+                callee: serialize_head_expression(&cb.callee, index),
+                arg_index: cb.arg_index,
+                statement_offset: cb.statement_offset,
+            }),
         falls_through: ann.falls_through,
         exits_function: ann.exits_function,
         nesting_depths: ann.nesting_depths.clone(),

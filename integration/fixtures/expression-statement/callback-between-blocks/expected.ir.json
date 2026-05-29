@@ -138,10 +138,12 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 47,
-        "callStartOffset": 47,
-        "callEndOffset": 93,
-        "argIndex": 0
+        "callee": {
+          "kind": "identifier",
+          "name": "run"
+        },
+        "argIndex": 0,
+        "statementOffset": 47
       },
       "fallsThrough": false,
       "exitsFunction": false,

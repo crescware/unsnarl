@@ -54,6 +54,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "inner",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

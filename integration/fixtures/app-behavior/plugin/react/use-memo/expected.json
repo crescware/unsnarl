@@ -78,6 +78,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useMemo",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

@@ -1,11 +1,11 @@
 //! Sibling tests for [`build_children`].
 
 use unsnarl_ir::primitive::Utf16CodeUnitOffset;
-use unsnarl_ir::scope::CallbackArgument;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::SerializedBlock;
 use unsnarl_ir::serialized::{
-    SerializedExpressionStatementContainer, SerializedHeadExpression, SerializedScope,
+    SerializedCallbackArgument, SerializedExpressionStatementContainer, SerializedHeadExpression,
+    SerializedScope,
 };
 use unsnarl_oxc_parity::AstType;
 
@@ -272,12 +272,11 @@ fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) ->
     let mut s = scope_with_upper(id, upper);
     s.r#type = ScopeType::Function;
     s.block = block(stmt_offset, 1, stmt_offset + 10, 3);
-    s.callback_argument = Some(CallbackArgument::new(
-        Utf16CodeUnitOffset(stmt_offset),
-        Utf16CodeUnitOffset(stmt_offset),
-        Utf16CodeUnitOffset(stmt_offset + 20),
+    s.callback_argument = Some(SerializedCallbackArgument {
+        callee: SerializedHeadExpression::identifier("cb".to_string()),
         arg_index,
-    ));
+        statement_offset: Some(Utf16CodeUnitOffset(stmt_offset)),
+    });
     s
 }
 

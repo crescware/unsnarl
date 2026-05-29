@@ -141,7 +141,14 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "callbackArgument": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "identifier",
+          "name": "useCallback"
+        },
+        "argIndex": 0,
+        "statementOffset": null
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -182,7 +189,14 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "callbackArgument": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "identifier",
+          "name": "useCallback"
+        },
+        "argIndex": 0,
+        "statementOffset": null
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {
@@ -223,7 +237,14 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "callbackArgument": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "identifier",
+          "name": "useCallback"
+        },
+        "argIndex": 0,
+        "statementOffset": null
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

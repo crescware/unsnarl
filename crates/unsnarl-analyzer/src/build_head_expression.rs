@@ -122,6 +122,19 @@ fn try_build_callee<'a>(callee: &Expression<'a>) -> Option<HeadExpression> {
     try_build(callee)
 }
 
+/// Build the `HeadExpression` for a call's / new's `callee` subtree
+/// directly (e.g. `run`, `console.log`, `Promise.resolve().then`).
+///
+/// Used by the analyzer's `CallbackArgument` annotation so the
+/// callback-arg labeller can render `<callee>(args[N])` without
+/// recovering the callee from a surrounding
+/// `ExpressionStatementContainer.head`. Unrecognised callee shapes
+/// (computed member, an arrow IIFE callee, etc.) fall back to
+/// `HeadExpression::Raw` over the callee's own span.
+pub fn build_callee_head(callee: &Expression<'_>, fallback: Span) -> HeadExpression {
+    try_build(callee).unwrap_or_else(|| raw_from_expression(Some(callee), fallback))
+}
+
 fn try_build_assignment_target(
     target: &oxc_ast::ast::AssignmentTarget<'_>,
 ) -> Option<HeadExpression> {

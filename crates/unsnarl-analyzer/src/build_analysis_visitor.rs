@@ -28,7 +28,7 @@ use oxc_ast::ast::{
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
-use oxc_span::Span;
+use oxc_span::{GetSpan, Span};
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
@@ -43,6 +43,7 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::annotations_impl::AnnotationsImpl;
 use crate::block_context_of::block_context_of;
+use crate::build_head_expression::build_callee_head;
 use crate::case_exits_function::case_exits_function;
 use crate::case_falls_through::case_falls_through;
 use crate::collect_abrupt_statements::collect_abrupt_statements;
@@ -189,8 +190,15 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 
     /// Build a [`CallbackArgument`] annotation when a function scope
     /// is the `arg_index`-th argument of an enclosing
-    /// `CallExpression` / `NewExpression` that itself sits inside an
-    /// `ExpressionStatement`. Returns `None` otherwise.
+    /// `CallExpression` / `NewExpression`. Returns `None` otherwise.
+    ///
+    /// The annotation is self-contained: it captures the enclosing
+    /// call's `callee` head subtree directly, so the labeller can
+    /// render `<callee>(args[N])` for **any** call-argument function,
+    /// not just those at `ExpressionStatement` level. `statement_offset`
+    /// is the CallProxy wrapper key and is `Some` only when the call
+    /// sits inside an `ExpressionStatement`; variable-bound / returned /
+    /// nested callbacks carry `None` and receive only the label.
     fn callback_argument_for(
         &self,
         scope_type: ScopeType,
@@ -214,15 +222,21 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         if self.current_key() != Some("arguments") {
             return None;
         }
-        let arg_index = self.current_arg_index()?;
-        let statement_offset = self.enclosing_expression_statement_offset()?;
-        let call_start_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
-        let call_end_offset = self.index.span_at(Utf8ByteOffset(parent.span.end)).offset;
+        let arg_index = self.current_arg_index()? as u32;
+        // The parent path frame is the enclosing call; read its
+        // `callee` subtree directly so the label does not depend on a
+        // surrounding `ExpressionStatement` head being present.
+        let callee = match self.path.last().map(|f| &f.kind) {
+            Some(AstKind::CallExpression(call)) => &call.callee,
+            Some(AstKind::NewExpression(new_expr)) => &new_expr.callee,
+            _ => return None,
+        };
+        let callee_head = build_callee_head(callee, callee.span());
+        let statement_offset = self.enclosing_expression_statement_offset();
         Some(CallbackArgument::new(
+            callee_head,
+            arg_index,
             statement_offset,
-            call_start_offset,
-            call_end_offset,
-            arg_index as u32,
         ))
     }
 

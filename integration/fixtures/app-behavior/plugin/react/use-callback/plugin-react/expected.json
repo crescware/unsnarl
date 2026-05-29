@@ -67,6 +67,10 @@
           "direction": "RL",
           "ownerNodeId": "n_scope_1_inc_98",
           "ownerName": "inc",
+          "callbackArg": {
+            "callee": "useCallback",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",

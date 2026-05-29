@@ -70,10 +70,14 @@ pub struct BuilderContext<'a> {
     /// targets that offset`.
     ///
     /// Built once per fixture by scanning `ir.references`. Consumed
-    /// by [`super::describe_subgraph`] to synthesise the
-    /// `callbackArg.callee` text on function subgraphs whose scope
-    /// carries a [`unsnarl_ir::scope::CallbackArgument`] -- no need
-    /// to re-walk the references list per scope.
+    /// by the CallProxy wrapper builder
+    /// (`build_children::ensure_call_proxy_wrapper`) to render the
+    /// wrapper subgraph's `callName` and span lines for an
+    /// `ExpressionStatement`-level call -- no need to re-walk the
+    /// references list per scope. (The `callbackArg.callee` label is
+    /// now self-contained in the scope's
+    /// [`unsnarl_ir::scope::CallbackArgument`] and no longer reads
+    /// this map.)
     pub expression_statement_containers_by_offset:
         HashMap<u32, &'a SerializedExpressionStatementContainer>,
 }
