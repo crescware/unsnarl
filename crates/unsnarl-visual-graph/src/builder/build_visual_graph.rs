@@ -30,6 +30,7 @@ use super::context::{BuildVisualGraphOptions, BuilderContext};
 use super::edge_label_of_ref::edge_label_of_ref;
 use super::enclosing_function_var::enclosing_function_var_borrowed;
 use super::ensure_expression_statement_node::ensure_expression_statement_node;
+use super::expression_statement_index::ExpressionStatementIndex;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::find_host_scope_id::find_host_scope_id;
 use super::find_host_subgraph::find_host_subgraph;
@@ -195,17 +196,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         arr.sort_by_key(|s| s.block.span.offset.0);
     }
 
-    let mut expression_statement_containers_by_offset: HashMap<
-        u32,
-        &unsnarl_ir::serialized::SerializedExpressionStatementContainer,
-    > = HashMap::new();
-    for r in &ir.references {
-        if let Some(c) = r.expression_statement_container.as_ref() {
-            expression_statement_containers_by_offset
-                .entry(c.start_span.offset.0)
-                .or_insert(c);
-        }
-    }
+    let expression_statement_index = ExpressionStatementIndex::build(&ir.references);
 
     let ctx = BuilderContext {
         ir,
@@ -219,7 +210,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         branch_scopes_by_container,
         depths: opts.depths.clone(),
         source_index: SourceIndex::build(&ir.raw),
-        expression_statement_containers_by_offset,
+        expression_statement_index,
     };
     let mut state = BuildState::new();
     let mut arena = BuildArena::new();

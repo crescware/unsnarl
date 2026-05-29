@@ -323,6 +323,7 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
         branch_scopes_by_container,
         depths: None,
         source_index: unsnarl_ir::primitive::SourceIndex::build(&ir.raw),
-        expression_statement_containers_by_offset: HashMap::new(),
+        expression_statement_index:
+            super::expression_statement_index::ExpressionStatementIndex::empty(),
     }
 }

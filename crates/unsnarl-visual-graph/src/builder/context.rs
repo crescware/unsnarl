@@ -11,10 +11,9 @@ use std::collections::HashMap;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
 use unsnarl_ir::primitive::SourceIndex;
-use unsnarl_ir::serialized::{
-    SerializedExpressionStatementContainer, SerializedIR, SerializedScope, SerializedVariable,
-};
+use unsnarl_ir::serialized::{SerializedIR, SerializedScope, SerializedVariable};
 
+use super::expression_statement_index::ExpressionStatementIndex;
 use super::write_op::WriteOp;
 
 /// Optional knobs the caller hands to `build_visual_graph`.
@@ -64,24 +63,13 @@ pub struct BuilderContext<'a> {
     /// such as `line_for_offset(offset)` resolve in `O(log lines)`
     /// rather than re-scanning `raw` from byte 0 each call.
     pub source_index: SourceIndex<'a>,
-    /// `ExpressionStatement start offset → first borrowed
-    /// SerializedExpressionStatementContainer found in any
-    /// reference inside the IR whose `expression_statement_container`
-    /// targets that offset`.
-    ///
-    /// Built once per fixture by scanning `ir.references`. Owns the
-    /// visual layer's whole notion of "where the ExpressionStatements
-    /// are", consumed by `build_children`:
-    /// - `enclosing_statement_offset` correlates a callback function
-    ///   scope to the statement that hosts its CallProxy wrapper
-    ///   (span containment), and
-    /// - `ensure_call_proxy_wrapper` renders that wrapper's `callName`
-    ///   and span lines.
-    ///
-    /// Keeping this correlation here -- rather than as an offset baked
-    /// into the IR `callbackArgument` -- is what lets the IR carry only
-    /// the structural `{ callee, argIndex }` and the visual layer carry
-    /// the layout.
-    pub expression_statement_containers_by_offset:
-        HashMap<u32, &'a SerializedExpressionStatementContainer>,
+    /// Where the (non-synthetic) `ExpressionStatement`s are. Consumed
+    /// by `build_children` to correlate a callback function scope to
+    /// the statement hosting its CallProxy wrapper (`enclosing`, span
+    /// containment) and to render that wrapper's `callName` / span
+    /// lines. See [`ExpressionStatementIndex`] for why this correlation
+    /// lives in the visual layer rather than baked into the IR
+    /// `callbackArgument`, and why synthetic arrow-body statements are
+    /// absent from it.
+    pub expression_statement_index: ExpressionStatementIndex<'a>,
 }
