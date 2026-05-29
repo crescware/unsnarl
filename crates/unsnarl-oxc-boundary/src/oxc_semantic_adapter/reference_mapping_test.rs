@@ -8,8 +8,9 @@
 //! variables / definitions. Characterization-style: pins the 1:1
 //! walk plus the adapter-only behaviours (synthetic-`arguments`
 //! resolution, implicit-global synthesis with `through` chain,
-//! `init = false` everywhere because `oxc_semantic` doesn't emit a
-//! reference for the binding side of `var x = 0`).
+//! synthesised `init = true` declarator writes and the immediate-child
+//! init-read flag, decorator reparenting, and the final source-order
+//! sort of the per-scope / per-variable reference lists).
 
 use oxc_allocator::Allocator;
 use oxc_index::IndexVec;
@@ -556,4 +557,214 @@ fn nested_same_named_class_resolves_inner_reference_to_innermost_inner_name() {
             .iter()
             .all(|&id| b.references[id].identifier.name() != "C"));
     });
+}
+
+/// `mark_variable_declarator_init_reads` stamps `init = true` only on a
+/// read whose identifier is the *immediate* `init` of a
+/// `VariableDeclarator`. An identifier nested inside a wrapping
+/// expression (`a + 1`) keeps `init = false`.
+#[test]
+fn init_read_flag_marks_only_immediate_child_identifier() {
+    with_arena(
+        "let a = 1; let b = a; let c = a + 1;",
+        Language::Js,
+        SourceType::Module,
+        |b| {
+            // The reads of `a` are `let b = a` (immediate init child) and
+            // `let c = a + 1` (nested under a BinaryExpression). Exclude
+            // the synthetic `init` WRITE at the `a` binding itself.
+            let mut a_reads: Vec<_> = b
+                .references
+                .iter()
+                .filter(|r| {
+                    r.identifier.name() == "a"
+                        && (r.flags & ReferenceFlags::READ).0 != 0
+                        && (r.flags & ReferenceFlags::WRITE).0 == 0
+                })
+                .collect();
+            a_reads.sort_by_key(|r| r.identifier.span.start);
+            assert_eq!(a_reads.len(), 2);
+            assert!(
+                a_reads[0].init,
+                "immediate-child `a` in `let b = a` must carry init = true"
+            );
+            assert!(
+                !a_reads[1].init,
+                "nested `a` in `let c = a + 1` must keep init = false"
+            );
+        },
+    );
+}
+
+/// A class decorator reference is recorded by `oxc_semantic` in the
+/// class's enclosing scope; `reparent_decorator_references` moves it to
+/// the class scope when the identifier span lies inside the decorator's
+/// span. A reference outside any decorator span is left in place.
+#[test]
+fn decorator_reference_is_reparented_into_class_scope() {
+    with_arena(
+        "@dec\nclass C {}\nother;",
+        Language::Ts,
+        SourceType::Module,
+        |b| {
+            let class_scope = b.scopes[root()].child_scopes[0];
+            // The `dec` reference (inside the decorator span) is moved to
+            // the class scope and removed from the module scope.
+            let dec = b
+                .references
+                .iter()
+                .find(|r| r.identifier.name() == "dec")
+                .expect("expected a `dec` decorator reference");
+            assert_eq!(dec.from, class_scope);
+            assert!(b.scopes[class_scope]
+                .references
+                .iter()
+                .any(|&id| b.references[id].identifier.name() == "dec"));
+            assert!(b.scopes[root()]
+                .references
+                .iter()
+                .all(|&id| b.references[id].identifier.name() != "dec"));
+            // `other`, outside the decorator span, stays in the module
+            // scope.
+            let other = b
+                .references
+                .iter()
+                .find(|r| r.identifier.name() == "other")
+                .expect("expected an `other` reference");
+            assert_eq!(other.from, root());
+        },
+    );
+}
+
+/// `sort_reference_lists_by_source_order` leaves every scope's
+/// `references` list and every variable's `references` list ordered by
+/// the identifier's source offset, even though the multi-pass walk
+/// inserts them out of order. In `let x = 1; x;` the resolved loop
+/// inserts the `x;` read first, then the synthesis pass inserts the
+/// declarator's init write at the earlier offset.
+#[test]
+fn reference_lists_are_sorted_by_source_offset() {
+    with_arena("let x = 1; x;", Language::Js, SourceType::Module, |b| {
+        let refs = &b.scopes[root()].references;
+        assert_eq!(refs.len(), 2);
+        let spans: Vec<u32> = refs
+            .iter()
+            .map(|&id| b.references[id].identifier.span.start)
+            .collect();
+        assert!(
+            spans[0] < spans[1],
+            "scope.references must be ascending by source offset, got {spans:?}"
+        );
+        // The earlier entry is the declarator init write; the later one
+        // is the trailing read.
+        assert!(b.references[refs[0]].init);
+        assert!(!b.references[refs[1]].init);
+        // The variable's reference list is sorted the same way.
+        let var_id = b.scopes[root()].set().get("x").copied().expect("x exists");
+        let var_spans: Vec<u32> = b.variables[var_id]
+            .references
+            .iter()
+            .map(|&id| b.references[id].identifier.span.start)
+            .collect();
+        let mut sorted = var_spans.clone();
+        sorted.sort_unstable();
+        assert_eq!(var_spans, sorted);
+    });
+}
+
+/// Reparenting a reference into a synthesised per-case Block scope
+/// (`reparent_to_switch_case`) does not disturb the final source-order
+/// sort. In `case 1: a; b; a;` the resolved loop groups by symbol and
+/// inserts the two `a` reads before the `b` read, but the case scope's
+/// `references` list ends up in source order (`a`, `b`, `a`).
+#[test]
+fn switch_case_reparenting_preserves_source_order() {
+    with_arena(
+        "let a = 1; let b = 2; switch (0) { case 1: a; b; a; }",
+        Language::Js,
+        SourceType::Module,
+        |b| {
+            let switch_scope = b.scopes[root()].child_scopes[0];
+            let case_scope = b.scopes[switch_scope].child_scopes[0];
+            // All three case-body reads were reparented into the case
+            // scope.
+            for r in b.references.iter() {
+                if matches!(r.identifier.name(), "a" | "b")
+                    && (r.flags & ReferenceFlags::WRITE).0 == 0
+                {
+                    assert_eq!(r.from, case_scope);
+                }
+            }
+            let ordered: Vec<(&str, u32)> = b.scopes[case_scope]
+                .references
+                .iter()
+                .map(|&id| {
+                    (
+                        b.references[id].identifier.name(),
+                        b.references[id].identifier.span.start,
+                    )
+                })
+                .collect();
+            let spans: Vec<u32> = ordered.iter().map(|&(_, s)| s).collect();
+            let mut sorted = spans.clone();
+            sorted.sort_unstable();
+            assert_eq!(
+                spans, sorted,
+                "case scope references must be source-ordered"
+            );
+            assert_eq!(
+                ordered.iter().map(|&(n, _)| n).collect::<Vec<_>>(),
+                vec!["a", "b", "a"],
+            );
+        },
+    );
+}
+
+/// `sort_reference_lists_by_source_order` sorts each scope's `through`
+/// list as well, not only its `references`. Through entries are pushed
+/// per category: the named-function-expression self-name `inner`
+/// (re-emitted as an implicit global on the `synthetic_unresolved`
+/// branch of the resolved loop) is pushed before the plain unresolved
+/// global `glob` (the later unresolved loop). For
+/// `function outer() { glob; const f = function inner() { return inner; }; }`
+/// both implicit globals walk the `through` chain up through `outer`, so
+/// `outer.through` is inserted in category order `[inner, glob]` but the
+/// trailing sort leaves it in source order `[glob, inner]`.
+#[test]
+fn through_lists_are_sorted_by_source_offset() {
+    with_arena(
+        "function outer() { glob; const f = function inner() { return inner; }; }",
+        Language::Js,
+        SourceType::Script,
+        |b| {
+            let outer = b.scopes[root()].child_scopes[0];
+            let ordered: Vec<(&str, u32)> = b.scopes[outer]
+                .through
+                .iter()
+                .map(|&id| {
+                    (
+                        b.references[id].identifier.name(),
+                        b.references[id].identifier.span.start,
+                    )
+                })
+                .collect();
+            // Only the two implicit globals (`glob`, `inner`) populate a
+            // `through` entry passing through `outer`; resolved bindings
+            // (`outer`, `f`) do not.
+            assert_eq!(ordered.len(), 2);
+            let spans: Vec<u32> = ordered.iter().map(|&(_, s)| s).collect();
+            let mut sorted = spans.clone();
+            sorted.sort_unstable();
+            assert_eq!(
+                spans, sorted,
+                "scope.through must be ascending by source offset, got {ordered:?}"
+            );
+            // Source order is `glob` then `inner` — the reverse of the
+            // per-category insertion order, so this pins that the sort ran.
+            assert_eq!(
+                ordered.iter().map(|&(n, _)| n).collect::<Vec<_>>(),
+                vec!["glob", "inner"],
+            );
+        },
+    );
 }

@@ -38,15 +38,12 @@
 //!
 //! ## `init` flag
 //!
-//! `oxc_semantic` does not emit a reference for the binding side of
-//! `var x = 0` — the declaration carries the init directly. This pass
-//! walks `VariableDeclarator` AST nodes after the regular reference
-//! loop and synthesises a write reference with `init = true` at each
-//! binding inside a declarator that has an `init` expression, looking
-//! each binding identifier's symbol up via `symbol_to_variable` so the
-//! synthesised reference resolves to the right `VariableData`.
-//! Destructuring patterns are flattened to their constituent binding
-//! identifiers (one `init` write per leaf).
+//! `oxc_semantic` emits no reference for the binding side of `var x = 0`
+//! — the declaration carries the init directly — so a post-pass
+//! synthesises a write reference with `init = true` at each plain
+//! `VariableDeclarator` binding that has an `init` expression (see
+//! `synthesise_init_references`), and stamps the read sitting at the
+//! init-expression position (see `mark_variable_declarator_init_reads`).
 
 use oxc_ast::ast::{BindingIdentifier, BindingPattern, FormalParameter};
 use oxc_ast::AstKind;
@@ -323,21 +320,12 @@ pub(crate) fn build_references(
     references
 }
 
-/// Reparent references that appear in a class decorator (`@dec`) from
-/// the class's enclosing scope (where `oxc_semantic` places them) to
-/// the class scope itself, matching the parity baseline.
-///
-/// `oxc_semantic` evaluates decorators in the class's parent scope —
-/// they execute before the class body is opened — so `@dec class C {}`
-/// emits the `dec` reference with `scope_id = module`. The parity
-/// baseline records the reference with `from = class_scope`.
-///
-/// Walk every `Class` AST node, find its scope (via the
-/// `node_id → scope_id` projection over `Scoping::scope_descendants_from_root`),
-/// then walk references whose identifier span lies inside any
-/// decorator's span and rebind `ReferenceData::from` to the class
-/// scope. Move the entry on the relevant scope's `references` list
-/// accordingly.
+/// Reparent class-decorator references from the class's enclosing scope
+/// — where `oxc_semantic` records them, because decorators evaluate
+/// before the class body is opened — to the class scope itself, matching
+/// the parity baseline. A reference is moved (along with its entry on the
+/// owning scope's `references` list) when its identifier span lies inside
+/// a decorator's span.
 fn reparent_decorator_references(
     semantic: &Semantic<'_>,
     scopes: &mut IndexVec<ScopeId, ScopeData>,
@@ -471,18 +459,14 @@ fn rebind_inner_class_name_references(
 /// Sort each scope's `references` / `through` list and each variable's
 /// `references` list by the underlying identifier's source offset.
 ///
-/// The parity baseline lists references in source order. The adapter
-/// walks `Scoping`'s symbol-keyed reference tables first, then runs
-/// separate AST-walking synthesis passes
-/// (`synthesise_init_references`,
-/// `synthesise_parameter_property_references`) and a sorted unresolved
-/// loop afterwards, so per-scope and per-variable lists end up
-/// interleaved by category rather than by source position. The IR
-/// emitter [`unsnarl_emitter_ir::serializer::flat`] renumbers
-/// references by source offset before serialization but preserves
-/// these lists' order, so without this final sort the serialized
-/// output's `scope.references` / `scope.through` / `variable.references`
-/// lists would emit out-of-order ids relative to the parity baseline.
+/// The parity baseline lists references in source order, but the
+/// symbol-keyed reference walk plus the later AST-walking synthesis
+/// passes leave these lists interleaved by category rather than by
+/// source position. The IR emitter
+/// [`unsnarl_emitter_ir::serializer::flat`] preserves these lists'
+/// order, so without this final sort the serialized
+/// `scope.references` / `scope.through` / `variable.references` lists
+/// would emit out-of-order ids relative to the parity baseline.
 fn sort_reference_lists_by_source_order(
     scopes: &mut IndexVec<ScopeId, ScopeData>,
     variables: &mut IndexVec<VariableId, VariableData>,
@@ -498,19 +482,13 @@ fn sort_reference_lists_by_source_order(
     }
 }
 
-/// Stamp `init = true` on read references that sit directly in the
-/// `init` slot of a [`oxc_ast::ast::VariableDeclarator`].
+/// Stamp `init = true` on a read reference whose identifier is the
+/// *immediate* `init` of a [`oxc_ast::ast::VariableDeclarator`].
 ///
-/// The references this pass targets come from
-/// [`oxc_semantic::Scoping`]'s resolved-reference table (the regular
-/// Loop 1 above) or from the `unresolved` loop, both of which default
-/// `init` to `false`. Walk every `VariableDeclarator` in the program,
-/// look up the identifier at the immediate `init` position, and stamp
-/// the matching `ReferenceData::init` to `true`.
-///
-/// Only the immediate-child identifier case is handled: identifiers
-/// nested inside a wrapping expression (`const x = a + b`) keep
-/// `init = false`, matching the parity baseline (which only flags
+/// References from the resolved- and unresolved-reference loops default
+/// `init` to `false`. Only the immediate-child identifier is flagged;
+/// an identifier nested inside a wrapping expression (`const x = a + b`)
+/// stays `false`, matching the parity baseline (which flags only
 /// identifiers whose immediate parent is a `VariableDeclarator`).
 fn mark_variable_declarator_init_reads(
     semantic: &oxc_semantic::Semantic<'_>,
@@ -772,15 +750,14 @@ fn is_ancestor_or_self(
     false
 }
 
-/// Walk every `VariableDeclarator` node and emit a write reference
-/// with `init = true` for each declarator whose `id` slot is itself a
-/// `BindingIdentifier` and whose declarator has an `init` expression.
+/// Emit a write reference with `init = true` for each
+/// `VariableDeclarator` whose `id` slot is itself a `BindingIdentifier`
+/// and whose declarator has an `init` expression.
 ///
-/// Destructuring patterns (`var [a, b] = ...`, `var { a } = ...`,
-/// `var [{ c }] = ...`, …) are deliberately skipped: the parity
-/// baseline records no reference row for nested binding identifiers
-/// reached through a pattern step, so no synthetic init write is
-/// emitted for the pattern's leaf bindings either.
+/// Destructuring patterns are deliberately skipped: the parity baseline
+/// records no reference row for binding identifiers reached through a
+/// pattern step, so no synthetic init write is emitted for the pattern's
+/// leaf bindings either.
 #[allow(clippy::too_many_arguments)]
 fn synthesise_init_references(
     semantic: &Semantic<'_>,
