@@ -6,9 +6,9 @@
 //! shows one merged container per chain.
 //!
 //! For each `if` / `else if` arm the matching test anchor is
-//! placed at the head of the consequent it gates (or, when the
-//! consequent did not materialise as a subgraph and the body did
-//! not collapse, into the surrounding container). The `else`
+//! placed at the head of the consequent subgraph it gates. When the
+//! consequent collapsed past the depth threshold it has no subgraph
+//! to host the anchor, so the anchor is dropped. The `else`
 //! (alternate) branch carries no test of its own. An `if`-only
 //! statement (no `else`) is treated as a lone branch and rendered
 //! without the `IfElseContainer` wrapping.
@@ -88,67 +88,32 @@ fn ensure_call_proxy_wrapper(
     idx
 }
 
-fn push_if_test_anchor(
-    arena: &mut BuildArena,
-    state: &mut BuildState,
-    parent_scope_id: &str,
-    offset: Utf16CodeUnitOffset,
-    container: Container,
-    source_index: &SourceIndex<'_>,
-) {
-    if state.if_test_anchor_by_offset.contains_key(&offset.0) {
-        return;
-    }
-    let id = if_test_node_id(parent_scope_id, offset.0);
-    let node = make_if_test_anchor(id.clone(), offset, source_index);
-    let idx = arena.push_node(node);
-    arena.append_child(container, ElementHandle::Node(idx));
-    state.if_test_anchor_by_offset.insert(offset.0, id);
-}
-
-/// Place the IfStatement's test anchor inside the consequent it
-/// gates. `else` is the fallback path and carries no test. When the
-/// consequent did not materialise as a subgraph (e.g. it was a bare
-/// statement and we collapsed it into the surrounding scope), fall
-/// back to the supplied container unless the consequent collapsed
-/// past the depth threshold — in that case the anchor must not leak
-/// into the surviving outer container.
+/// Place the IfStatement's test anchor at the head of the consequent
+/// subgraph it gates. `else` is the fallback path and carries no
+/// test. A consequent that collapsed past the depth threshold builds
+/// no subgraph (`should_subgraph` is always true for a non-collapsed
+/// if-branch Block scope, so `subgraph_by_scope` misses only when the
+/// scope collapsed); with nowhere to host the anchor it is dropped
+/// rather than leaking into the surrounding container.
 fn attach_test_anchor_to_consequent(
     arena: &mut BuildArena,
     state: &mut BuildState,
     consequent: &SerializedScope,
     offset: Utf16CodeUnitOffset,
-    fallback_container: Container,
     source_index: &SourceIndex<'_>,
 ) {
     if state.if_test_anchor_by_offset.contains_key(&offset.0) {
         return;
     }
-    let body_sg = state.subgraph_by_scope.get(consequent.id.value()).copied();
-    if let Some(body_sg) = body_sg {
-        let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
-        let id = if_test_node_id(parent_id, offset.0);
-        let node = make_if_test_anchor(id.clone(), offset, source_index);
-        let idx = arena.push_node(node);
-        arena.prepend_child(Container::Subgraph(body_sg), ElementHandle::Node(idx));
-        state.if_test_anchor_by_offset.insert(offset.0, id);
+    let Some(body_sg) = state.subgraph_by_scope.get(consequent.id.value()).copied() else {
         return;
-    }
-    if state
-        .collapsed_root_by_scope
-        .contains_key(consequent.id.value())
-    {
-        return;
-    }
+    };
     let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
-    push_if_test_anchor(
-        arena,
-        state,
-        parent_id,
-        offset,
-        fallback_container,
-        source_index,
-    );
+    let id = if_test_node_id(parent_id, offset.0);
+    let node = make_if_test_anchor(id.clone(), offset, source_index);
+    let idx = arena.push_node(node);
+    arena.prepend_child(Container::Subgraph(body_sg), ElementHandle::Node(idx));
+    state.if_test_anchor_by_offset.insert(offset.0, id);
 }
 
 pub fn build_children(
@@ -250,14 +215,7 @@ pub fn build_children(
             let lone_offset = lone.block_context.as_ref().map(|c| c.parent_span_offset());
             build_scope(arena, state, ctx, lone, container);
             if let Some(offset) = lone_offset {
-                attach_test_anchor_to_consequent(
-                    arena,
-                    state,
-                    lone,
-                    offset,
-                    container,
-                    &ctx.source_index,
-                );
+                attach_test_anchor_to_consequent(arena, state, lone, offset, &ctx.source_index);
             }
             i = j;
             continue;
@@ -306,14 +264,7 @@ pub fn build_children(
                 continue;
             }
             seen_offsets.insert(off);
-            attach_test_anchor_to_consequent(
-                arena,
-                state,
-                g,
-                off,
-                Container::Subgraph(container_idx),
-                &ctx.source_index,
-            );
+            attach_test_anchor_to_consequent(arena, state, g, off, &ctx.source_index);
         }
 
         let container_line = arena.subgraph(container_idx).descriptor.line();
