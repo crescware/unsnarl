@@ -64,14 +64,13 @@
 //!
 //! ## Binding ordering
 //!
-//! `Scoping::iter_bindings_in` returns bindings by iterating the
-//! underlying `hashbrown::HashMap`, which does not preserve insertion
-//! order. The parity baseline appends each scope's `variables` array
-//! in declaration-site order (post-hoisting: var / function / class
-//! declarations land in source order). Sort the per-scope binding
-//! list by `Scoping::symbol_span(sid).start` before emitting rows so
-//! downstream consumers that index `variables` positionally see the
-//! same order as the parity baseline.
+//! `Scoping::iter_bindings_in` yields bindings in `hashbrown::HashMap`
+//! order, which is not source order. Each scope's emitted `variables`
+//! must instead match the parity baseline's declaration-site
+//! (post-hoisting source) order, because downstream consumers index
+//! `variables` positionally; the synthesised `arguments` binding leads
+//! its function scope's list. This ordering invariant is locked by the
+//! ordering tests in `variable_mapping_test.rs`, not by this prose.
 
 use std::collections::{HashMap, HashSet};
 
@@ -188,6 +187,9 @@ pub(crate) fn build_variables(
         }
 
         let mut bindings: Vec<SymbolId> = scoping.iter_bindings_in(oxc_scope_id).collect();
+        // Emit in source order: `iter_bindings_in` is HashMap-ordered,
+        // so sort by declaration span to match the parity baseline.
+        // The resulting per-scope order is locked by the sibling test.
         bindings.sort_by_key(|sid| scoping.symbol_span(*sid).start);
         for symbol_id in bindings {
             let name = scoping.symbol_name(symbol_id).to_string();
