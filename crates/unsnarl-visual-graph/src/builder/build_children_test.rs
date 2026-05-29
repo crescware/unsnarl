@@ -1,5 +1,6 @@
 //! Sibling tests for [`build_children`].
 
+use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::SerializedBlock;
 use unsnarl_ir::serialized::{
@@ -265,6 +266,43 @@ fn two_adjacent_ifs_with_different_offsets_are_not_merged() {
             s.kind,
             SyntheticNodeKind::SyntheticIfStatementTest
         ));
+    }
+}
+
+#[test]
+fn collapsed_consequent_drops_the_if_test_anchor() {
+    // A consequent gated past the depth ceiling collapses, so
+    // `build_scope` records it as collapsed and builds no subgraph.
+    // With no subgraph to host the if-test anchor, the anchor must be
+    // dropped rather than leaking into the surrounding container.
+    let mut ir = empty_serialized_ir();
+    let mut cons = if_branch("c", "outer", "consequent", 5);
+    cons.nesting_depths = NestingDepths::uniform(NestingDepth(2));
+    let mut outer = base_serialized_scope("outer");
+    outer.child_scopes = vec![scope_id("c")];
+    ir.scopes.push(outer);
+    ir.scopes.push(cons);
+
+    let mut ctx = base_builder_context(&ir);
+    ctx.depths = Some(NestingDepths::uniform(NestingDepth(1)));
+    let mut arena = BuildArena::new();
+    let mut state = BuildState::new();
+    build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);
+
+    // The collapsed consequent built no subgraph and no if-test
+    // anchor was registered anywhere.
+    assert!(root_subgraphs(&arena).is_empty());
+    assert!(state.if_test_anchor_by_offset.is_empty());
+    // No SyntheticIfStatementTest node leaked into the root container.
+    for h in &arena.root_children {
+        if let ElementHandle::Node(idx) = h {
+            if let VisualNode::Synthetic(s) = arena.node(*idx).clone() {
+                assert!(!matches!(
+                    s.kind,
+                    SyntheticNodeKind::SyntheticIfStatementTest
+                ));
+            }
+        }
     }
 }
 
