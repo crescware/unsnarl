@@ -9,6 +9,7 @@ use serde::Serialize;
 
 use unsnarl_oxc_parity::AstType;
 
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Utf16CodeUnitOffset;
 
 #[derive(Clone, Serialize)]
@@ -28,15 +29,9 @@ impl CaseClauseBlockContext {
         parent_span_offset: Utf16CodeUnitOffset,
         case_test: Option<String>,
     ) -> Self {
-        assert!(
-            !key.is_empty(),
-            "CaseClauseBlockContext.key must be non-empty"
-        );
+        assert_non_empty(&key, "CaseClauseBlockContext.key");
         if let Some(t) = case_test.as_deref() {
-            assert!(
-                !t.is_empty(),
-                "CaseClauseBlockContext.case_test, when present, must be non-empty"
-            );
+            assert_non_empty(t, "CaseClauseBlockContext.case_test, when present");
         }
         Self {
             kind: super::block_context_kind::BlockContextKind::CaseClause,
@@ -85,7 +80,7 @@ impl OtherBlockContext {
         parent_span_offset: Utf16CodeUnitOffset,
         if_chain_root_offset: Option<Utf16CodeUnitOffset>,
     ) -> Self {
-        assert!(!key.is_empty(), "OtherBlockContext.key must be non-empty");
+        assert_non_empty(&key, "OtherBlockContext.key");
         Self {
             kind: super::block_context_kind::BlockContextKind::Other,
             parent_type,

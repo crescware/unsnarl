@@ -1,6 +1,7 @@
 //! Variable row. Cross-entity links go through arena IDs.
 
 use crate::ids::{DefinitionId, ReferenceId, ScopeId};
+use crate::non_empty::assert_non_empty;
 use crate::primitive::AstIdentifier;
 
 pub struct VariableData {
@@ -19,7 +20,7 @@ impl VariableData {
         references: Vec<ReferenceId>,
         defs: Vec<DefinitionId>,
     ) -> Self {
-        assert!(!name.is_empty(), "VariableData.name must be non-empty");
+        assert_non_empty(&name, "VariableData.name");
         Self {
             name,
             scope,

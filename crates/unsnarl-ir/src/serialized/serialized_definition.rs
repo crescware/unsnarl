@@ -13,6 +13,7 @@ use serde::Serialize;
 use unsnarl_oxc_parity::{AstType, VariableDeclarationKind};
 
 use crate::import_kind::ImportKind;
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Span;
 
 #[derive(Serialize)]
@@ -23,7 +24,7 @@ pub struct DefinitionName {
 
 impl DefinitionName {
     pub fn new(name: String, span: Span) -> Self {
-        assert!(!name.is_empty(), "DefinitionName.name must be non-empty");
+        assert_non_empty(&name, "DefinitionName.name");
         Self { name, span }
     }
 
@@ -147,14 +148,8 @@ impl ImportBindingNamedDef {
         imported_name: String,
         import_source: String,
     ) -> Self {
-        assert!(
-            !imported_name.is_empty(),
-            "ImportBindingNamedDef.imported_name must be non-empty"
-        );
-        assert!(
-            !import_source.is_empty(),
-            "ImportBindingNamedDef.import_source must be non-empty"
-        );
+        assert_non_empty(&imported_name, "ImportBindingNamedDef.imported_name");
+        assert_non_empty(&import_source, "ImportBindingNamedDef.import_source");
         Self {
             name,
             node,
@@ -209,10 +204,7 @@ impl ImportBindingDefaultDef {
         parent: Option<DefinitionNode>,
         import_source: String,
     ) -> Self {
-        assert!(
-            !import_source.is_empty(),
-            "ImportBindingDefaultDef.import_source must be non-empty"
-        );
+        assert_non_empty(&import_source, "ImportBindingDefaultDef.import_source");
         Self {
             name,
             node,
@@ -262,10 +254,7 @@ impl ImportBindingNamespaceDef {
         parent: Option<DefinitionNode>,
         import_source: String,
     ) -> Self {
-        assert!(
-            !import_source.is_empty(),
-            "ImportBindingNamespaceDef.import_source must be non-empty"
-        );
+        assert_non_empty(&import_source, "ImportBindingNamespaceDef.import_source");
         Self {
             name,
             node,

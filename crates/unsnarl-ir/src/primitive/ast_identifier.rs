@@ -4,6 +4,8 @@ use oxc_span::Span;
 
 use unsnarl_oxc_parity::AstType;
 
+use crate::non_empty::assert_non_empty;
+
 #[derive(Clone)]
 pub struct AstIdentifier {
     pub r#type: AstType,
@@ -13,7 +15,7 @@ pub struct AstIdentifier {
 
 impl AstIdentifier {
     pub fn new(r#type: AstType, name: String, span: Span) -> Self {
-        assert!(!name.is_empty(), "AstIdentifier.name must be non-empty");
+        assert_non_empty(&name, "AstIdentifier.name");
         Self { r#type, name, span }
     }
 

@@ -41,6 +41,7 @@ pub mod ids;
 pub mod import_kind;
 pub mod language;
 pub mod nesting_kind;
+mod non_empty;
 pub mod primitive;
 pub mod reference;
 pub mod scope;

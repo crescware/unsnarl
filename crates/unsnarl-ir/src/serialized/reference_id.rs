@@ -11,13 +11,15 @@ use std::sync::Arc;
 
 use serde::{Serialize, Serializer};
 
+use crate::non_empty::assert_non_empty;
+
 #[derive(Clone)]
 pub struct SerializedReferenceId(Arc<str>);
 
 impl SerializedReferenceId {
     pub fn new(value: impl Into<Arc<str>>) -> Self {
         let arc: Arc<str> = value.into();
-        assert!(!arc.is_empty(), "SerializedReferenceId must be non-empty");
+        assert_non_empty(&arc, "SerializedReferenceId");
         Self(arc)
     }
 

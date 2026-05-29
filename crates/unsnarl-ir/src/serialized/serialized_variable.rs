@@ -7,6 +7,7 @@
 
 use serde::Serialize;
 
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Span;
 use crate::serialized::reference_id::SerializedReferenceId;
 use crate::serialized::scope_id::SerializedScopeId;
@@ -32,10 +33,7 @@ impl SerializedVariable {
         references: Vec<SerializedReferenceId>,
         defs: Vec<SerializedDefinition>,
     ) -> Self {
-        assert!(
-            !name.is_empty(),
-            "SerializedVariable.name must be non-empty"
-        );
+        assert_non_empty(&name, "SerializedVariable.name");
         Self {
             id,
             name,
