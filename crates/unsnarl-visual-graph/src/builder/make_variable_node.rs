@@ -54,6 +54,12 @@ pub fn make_variable_node(v: &SerializedVariable) -> VisualNode {
                 }
                 VariableDeclarationKind::Let => BindingVisualNode::let_binding(&id, &name, line),
                 VariableDeclarationKind::Var => BindingVisualNode::var_binding(&id, &name, line),
+                VariableDeclarationKind::Using => {
+                    BindingVisualNode::using_binding(&id, &name, line)
+                }
+                VariableDeclarationKind::AwaitUsing => {
+                    BindingVisualNode::await_using_binding(&id, &name, line)
+                }
             };
             n.extras = BindingExtras::Variable { init_is_function };
             n

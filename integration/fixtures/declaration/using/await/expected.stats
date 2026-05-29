@@ -1,0 +1,5 @@
+1	0	integration/fixtures/declaration/using/await/input.ts:0 acquire
+0	0	integration/fixtures/declaration/using/await/input.ts:1 unused main
+1	1	integration/fixtures/declaration/using/await/input.ts:2 a
+0	1	integration/fixtures/declaration/using/await/input.ts:3 a.release()
+2	2	4 total

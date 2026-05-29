@@ -192,6 +192,46 @@ fn var_redeclaration_yields_two_definitions_on_one_variable() {
 }
 
 #[test]
+fn using_declaration_carries_using_kind() {
+    with_arena(
+        "using x = acquire();",
+        Language::Js,
+        SourceType::Module,
+        |b| {
+            let var = find_var(b, root(), "x").expect("x");
+            let def = &b.definitions[var.defs[0]];
+            assert!(matches!(def.r#type, DefinitionType::Variable));
+            assert!(matches!(
+                def.declaration_kind,
+                Some(IrVariableDeclarationKind::Using),
+            ));
+            assert!(def.init.is_some());
+        },
+    );
+}
+
+#[test]
+fn await_using_declaration_carries_await_using_kind() {
+    // `await using` needs an async context; a module's top-level await
+    // supplies one, keeping the binding in the root scope.
+    with_arena(
+        "await using x = acquire();",
+        Language::Js,
+        SourceType::Module,
+        |b| {
+            let var = find_var(b, root(), "x").expect("x");
+            let def = &b.definitions[var.defs[0]];
+            assert!(matches!(def.r#type, DefinitionType::Variable));
+            assert!(matches!(
+                def.declaration_kind,
+                Some(IrVariableDeclarationKind::AwaitUsing),
+            ));
+            assert!(def.init.is_some());
+        },
+    );
+}
+
+#[test]
 fn function_declaration_emits_function_name_definition() {
     with_arena(
         "function f(a) { return a; }",

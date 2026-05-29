@@ -3,9 +3,10 @@ use unsnarl_visual_graph::visual_node::{BindingNodeKind, SyntheticNodeKind, Visu
 
 use super::renders_in_synthetic_block;
 use crate::mermaid_fixtures::{
-    base_const_binding, base_import_binding_default, base_import_binding_named,
-    base_import_binding_namespace, base_let_binding, base_simple_binding, base_simple_synthetic,
-    base_var_binding, base_write_op,
+    base_await_using_binding, base_const_binding, base_import_binding_default,
+    base_import_binding_named, base_import_binding_namespace, base_let_binding,
+    base_simple_binding, base_simple_synthetic, base_using_binding, base_var_binding,
+    base_write_op,
 };
 
 fn node_of_kind(kind: NodeKind) -> VisualNode {
@@ -13,6 +14,8 @@ fn node_of_kind(kind: NodeKind) -> VisualNode {
         NodeKind::ConstBinding => VisualNode::Binding(base_const_binding()),
         NodeKind::LetBinding => VisualNode::Binding(base_let_binding()),
         NodeKind::VarBinding => VisualNode::Binding(base_var_binding()),
+        NodeKind::UsingBinding => VisualNode::Binding(base_using_binding()),
+        NodeKind::AwaitUsingBinding => VisualNode::Binding(base_await_using_binding()),
         NodeKind::WriteReference => VisualNode::Synthetic(base_write_op()),
         NodeKind::DefaultImportBinding => VisualNode::Binding(base_import_binding_default()),
         NodeKind::NamedImportBinding => VisualNode::Binding(base_import_binding_named("imported")),
@@ -129,6 +132,16 @@ fn const_binding_does_not_render_in_synthetic_block() {
 #[test]
 fn let_binding_does_not_render_in_synthetic_block() {
     check(NodeKind::LetBinding, false);
+}
+
+#[test]
+fn using_binding_does_not_render_in_synthetic_block() {
+    check(NodeKind::UsingBinding, false);
+}
+
+#[test]
+fn await_using_binding_does_not_render_in_synthetic_block() {
+    check(NodeKind::AwaitUsingBinding, false);
 }
 
 #[test]

@@ -154,7 +154,7 @@ fn build_variable_def(
     let (parent, declaration_kind) = match nodes.parent_kind(node_id) {
         AstKind::VariableDeclaration(decl) => (
             Some(AstNode::new(AstType::VariableDeclaration, decl.span)),
-            ir_variable_declaration_kind(decl.kind),
+            Some(ir_variable_declaration_kind(decl.kind)),
         ),
         _ => (None, None),
     };
@@ -306,14 +306,13 @@ fn function_ast_type(f: &oxc_ast::ast::Function<'_>) -> AstType {
     }
 }
 
-fn ir_variable_declaration_kind(
-    kind: VariableDeclarationKind,
-) -> Option<IrVariableDeclarationKind> {
+fn ir_variable_declaration_kind(kind: VariableDeclarationKind) -> IrVariableDeclarationKind {
     match kind {
-        VariableDeclarationKind::Var => Some(IrVariableDeclarationKind::Var),
-        VariableDeclarationKind::Let => Some(IrVariableDeclarationKind::Let),
-        VariableDeclarationKind::Const => Some(IrVariableDeclarationKind::Const),
-        VariableDeclarationKind::Using | VariableDeclarationKind::AwaitUsing => None,
+        VariableDeclarationKind::Var => IrVariableDeclarationKind::Var,
+        VariableDeclarationKind::Let => IrVariableDeclarationKind::Let,
+        VariableDeclarationKind::Const => IrVariableDeclarationKind::Const,
+        VariableDeclarationKind::Using => IrVariableDeclarationKind::Using,
+        VariableDeclarationKind::AwaitUsing => IrVariableDeclarationKind::AwaitUsing,
     }
 }
 

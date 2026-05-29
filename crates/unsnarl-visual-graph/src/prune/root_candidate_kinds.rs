@@ -13,6 +13,8 @@ pub fn is_root_candidate_kind(kind: NodeKind) -> bool {
         NodeKind::VarBinding
             | NodeKind::ConstBinding
             | NodeKind::LetBinding
+            | NodeKind::UsingBinding
+            | NodeKind::AwaitUsingBinding
             | NodeKind::FunctionDeclaration
             | NodeKind::ClassDeclaration
             | NodeKind::FormalParameter

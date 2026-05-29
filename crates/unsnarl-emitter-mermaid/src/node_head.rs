@@ -102,6 +102,24 @@ pub fn node_head_into(out: &mut String, n: &VisualNode) {
                 escape_into(out, n.name());
             }
         }
+        NodeKind::UsingBinding => {
+            if n.init_is_function() {
+                escape_into(out, n.name());
+                out.push_str("()");
+            } else {
+                out.push_str("using ");
+                escape_into(out, n.name());
+            }
+        }
+        NodeKind::AwaitUsingBinding => {
+            if n.init_is_function() {
+                escape_into(out, n.name());
+                out.push_str("()");
+            } else {
+                out.push_str("await using ");
+                escape_into(out, n.name());
+            }
+        }
         NodeKind::FormalParameter
         | NodeKind::ReturnArgumentReference
         | NodeKind::ThrowArgumentReference

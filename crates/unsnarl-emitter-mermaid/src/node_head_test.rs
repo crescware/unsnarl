@@ -6,9 +6,10 @@ use unsnarl_visual_graph::visual_node::{
 
 use super::node_head;
 use crate::mermaid_fixtures::{
-    base_const_binding, base_import_binding_default, base_import_binding_named,
-    base_import_binding_namespace, base_let_binding, base_simple_binding, base_simple_synthetic,
-    base_var_binding, base_write_op,
+    base_await_using_binding, base_const_binding, base_import_binding_default,
+    base_import_binding_named, base_import_binding_namespace, base_let_binding,
+    base_simple_binding, base_simple_synthetic, base_using_binding, base_var_binding,
+    base_write_op,
 };
 
 #[test]
@@ -201,6 +202,39 @@ fn const_binding_has_no_prefix() {
     }
     .into();
     assert_eq!(node_head(&n), "x");
+}
+
+#[test]
+fn using_binding_prepends_using() {
+    let n: VisualNode = BindingVisualNode {
+        name: "x".to_string(),
+        ..base_using_binding()
+    }
+    .into();
+    assert_eq!(node_head(&n), "using x");
+}
+
+#[test]
+fn await_using_binding_prepends_await_using() {
+    let n: VisualNode = BindingVisualNode {
+        name: "x".to_string(),
+        ..base_await_using_binding()
+    }
+    .into();
+    assert_eq!(node_head(&n), "await using x");
+}
+
+#[test]
+fn using_binding_initialized_with_a_function_uses_paren_format() {
+    let n: VisualNode = BindingVisualNode {
+        name: "f".to_string(),
+        extras: BindingExtras::Variable {
+            init_is_function: true,
+        },
+        ..base_using_binding()
+    }
+    .into();
+    assert_eq!(node_head(&n), "f()");
 }
 
 #[test]

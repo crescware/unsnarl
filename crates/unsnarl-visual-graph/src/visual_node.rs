@@ -25,6 +25,8 @@ pub enum BindingNodeKind {
     VarBinding,
     ConstBinding,
     LetBinding,
+    UsingBinding,
+    AwaitUsingBinding,
     FunctionDeclaration,
     ClassDeclaration,
     FormalParameter,
@@ -130,6 +132,30 @@ impl BindingVisualNode {
             name,
             line,
             BindingNodeKind::LetBinding,
+            BindingExtras::Variable {
+                init_is_function: false,
+            },
+        )
+    }
+
+    pub fn using_binding(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::UsingBinding,
+            BindingExtras::Variable {
+                init_is_function: false,
+            },
+        )
+    }
+
+    pub fn await_using_binding(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            name,
+            line,
+            BindingNodeKind::AwaitUsingBinding,
             BindingExtras::Variable {
                 init_is_function: false,
             },
@@ -535,6 +561,8 @@ impl VisualNode {
                 BindingNodeKind::VarBinding => NodeKind::VarBinding,
                 BindingNodeKind::ConstBinding => NodeKind::ConstBinding,
                 BindingNodeKind::LetBinding => NodeKind::LetBinding,
+                BindingNodeKind::UsingBinding => NodeKind::UsingBinding,
+                BindingNodeKind::AwaitUsingBinding => NodeKind::AwaitUsingBinding,
                 BindingNodeKind::FunctionDeclaration => NodeKind::FunctionDeclaration,
                 BindingNodeKind::ClassDeclaration => NodeKind::ClassDeclaration,
                 BindingNodeKind::FormalParameter => NodeKind::FormalParameter,
