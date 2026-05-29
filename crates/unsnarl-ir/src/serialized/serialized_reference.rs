@@ -2,6 +2,7 @@
 
 use serde::Serialize;
 
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Span;
 use crate::reference::predicate_container::PredicateContainer;
 use crate::serialized::reference_id::SerializedReferenceId;
@@ -17,10 +18,7 @@ pub struct SerializedReferenceIdentifier {
 
 impl SerializedReferenceIdentifier {
     pub fn new(name: String, span: Span) -> Self {
-        assert!(
-            !name.is_empty(),
-            "SerializedReferenceIdentifier.name must be non-empty"
-        );
+        assert_non_empty(&name, "SerializedReferenceIdentifier.name");
         Self { name, span }
     }
 

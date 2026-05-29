@@ -8,6 +8,7 @@
 
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Utf8ByteOffset;
 
 pub struct HeadOperand {
@@ -68,18 +69,12 @@ pub enum HeadExpression {
 
 impl HeadExpression {
     pub fn identifier(name: String) -> Self {
-        assert!(
-            !name.is_empty(),
-            "HeadExpression::Identifier.name must be non-empty"
-        );
+        assert_non_empty(&name, "HeadExpression::Identifier.name");
         Self::Identifier { name }
     }
 
     pub fn member(object: HeadExpression, property: String) -> Self {
-        assert!(
-            !property.is_empty(),
-            "HeadExpression::Member.property must be non-empty"
-        );
+        assert_non_empty(&property, "HeadExpression::Member.property");
         Self::Member {
             object: Box::new(object),
             property,

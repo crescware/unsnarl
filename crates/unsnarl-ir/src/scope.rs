@@ -13,6 +13,7 @@
 use std::collections::HashMap;
 
 use crate::ids::{ReferenceId, ScopeId, VariableId};
+use crate::non_empty::assert_non_empty;
 use crate::primitive::AstNode;
 use crate::scope_type::ScopeType;
 
@@ -74,10 +75,7 @@ impl ScopeData {
     }
 
     pub fn insert_into_set(&mut self, name: String, id: VariableId) {
-        assert!(
-            !name.is_empty(),
-            "ScopeData.set key (variable name) must be non-empty"
-        );
+        assert_non_empty(&name, "ScopeData.set key (variable name)");
         self.set.insert(name, id);
     }
 

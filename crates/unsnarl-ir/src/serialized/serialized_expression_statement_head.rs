@@ -8,6 +8,7 @@
 use serde::Serialize;
 use unsnarl_oxc_parity::{AssignOperator, UpdateOperator};
 
+use crate::non_empty::assert_non_empty;
 use crate::primitive::Span;
 
 #[derive(Serialize)]
@@ -72,18 +73,12 @@ pub enum SerializedHeadExpression {
 
 impl SerializedHeadExpression {
     pub fn identifier(name: String) -> Self {
-        assert!(
-            !name.is_empty(),
-            "SerializedHeadExpression::Identifier.name must be non-empty"
-        );
+        assert_non_empty(&name, "SerializedHeadExpression::Identifier.name");
         Self::Identifier { name }
     }
 
     pub fn member(object: SerializedHeadExpression, property: String) -> Self {
-        assert!(
-            !property.is_empty(),
-            "SerializedHeadExpression::Member.property must be non-empty"
-        );
+        assert_non_empty(&property, "SerializedHeadExpression::Member.property");
         Self::Member {
             object: Box::new(object),
             property,
