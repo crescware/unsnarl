@@ -87,7 +87,6 @@ pub fn build_scope(
                 scope,
                 &ctx.subgraph_owner_var,
                 &ctx.variable_map,
-                &ctx.expression_statement_containers_by_offset,
                 &ctx.source_index,
             );
             let idx = arena.push_subgraph(sg_descriptor);

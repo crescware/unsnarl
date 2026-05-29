@@ -28,12 +28,12 @@ use oxc_ast::ast::{
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
-use oxc_span::Span;
+use oxc_span::{GetSpan, Span};
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf16CodeUnitOffset, Utf8ByteOffset};
+use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::{BlockContext, CallbackArgument};
 use unsnarl_ir::scope_type::ScopeType;
@@ -43,6 +43,7 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::annotations_impl::AnnotationsImpl;
 use crate::block_context_of::block_context_of;
+use crate::build_head_expression::build_callee_head;
 use crate::case_exits_function::case_exits_function;
 use crate::case_falls_through::case_falls_through;
 use crate::collect_abrupt_statements::collect_abrupt_statements;
@@ -165,32 +166,15 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         self.path_entries.last().map(|e| &e.node)
     }
 
-    /// Walk the path stack upward to find the nearest enclosing
-    /// `ExpressionStatement` and return its start offset in UTF-16
-    /// code units. Skip synthetic arrow-body expression statements,
-    /// mirroring the existing handling in
-    /// [`Self::fire_reference`].
-    fn enclosing_expression_statement_offset(&self) -> Option<Utf16CodeUnitOffset> {
-        self.path
-            .iter()
-            .enumerate()
-            .rev()
-            .find_map(|(i, f)| match &f.kind {
-                AstKind::ExpressionStatement(es) => {
-                    if is_synthetic_arrow_body_expression_statement(&self.path, i) {
-                        None
-                    } else {
-                        Some(self.index.span_at(Utf8ByteOffset(es.span.start)).offset)
-                    }
-                }
-                _ => None,
-            })
-    }
-
     /// Build a [`CallbackArgument`] annotation when a function scope
     /// is the `arg_index`-th argument of an enclosing
-    /// `CallExpression` / `NewExpression` that itself sits inside an
-    /// `ExpressionStatement`. Returns `None` otherwise.
+    /// `CallExpression` / `NewExpression`. Returns `None` otherwise.
+    ///
+    /// The annotation captures only the structural fact: the enclosing
+    /// call's `callee` head subtree and the `arg_index`. Whether the
+    /// callback is hosted by a statement-level CallProxy wrapper is a
+    /// visual-graph rendering concern resolved there, so no statement
+    /// position is recorded here.
     fn callback_argument_for(
         &self,
         scope_type: ScopeType,
@@ -214,16 +198,17 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         if self.current_key() != Some("arguments") {
             return None;
         }
-        let arg_index = self.current_arg_index()?;
-        let statement_offset = self.enclosing_expression_statement_offset()?;
-        let call_start_offset = self.index.span_at(Utf8ByteOffset(parent.span.start)).offset;
-        let call_end_offset = self.index.span_at(Utf8ByteOffset(parent.span.end)).offset;
-        Some(CallbackArgument::new(
-            statement_offset,
-            call_start_offset,
-            call_end_offset,
-            arg_index as u32,
-        ))
+        let arg_index = self.current_arg_index()? as u32;
+        // The parent path frame is the enclosing call; read its
+        // `callee` subtree directly so the label does not depend on a
+        // surrounding `ExpressionStatement` head being present.
+        let callee = match self.path.last().map(|f| &f.kind) {
+            Some(AstKind::CallExpression(call)) => &call.callee,
+            Some(AstKind::NewExpression(new_expr)) => &new_expr.callee,
+            _ => return None,
+        };
+        let callee_head = build_callee_head(callee, callee.span());
+        Some(CallbackArgument::new(callee_head, arg_index))
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches

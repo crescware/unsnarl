@@ -88,7 +88,13 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "callbackArgument": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "identifier",
+          "name": "wrap"
+        },
+        "argIndex": 0
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

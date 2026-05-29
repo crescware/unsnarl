@@ -90,6 +90,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useCallback",
+            "argIndex": 0
+          },
           "elements": []
         },
         {
@@ -101,6 +105,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useCallback",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "subgraph",
@@ -133,6 +141,10 @@
           "direction": "RL",
           "ownerNodeId": null,
           "ownerName": "",
+          "callbackArg": {
+            "callee": "useCallback",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "subgraph",

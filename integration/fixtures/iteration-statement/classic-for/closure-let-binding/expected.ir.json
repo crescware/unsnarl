@@ -186,9 +186,14 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 66,
-        "callStartOffset": 66,
-        "callEndOffset": 83,
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "identifier",
+            "name": "fns"
+          },
+          "property": "push"
+        },
         "argIndex": 0
       },
       "fallsThrough": false,

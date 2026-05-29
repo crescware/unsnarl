@@ -16,7 +16,7 @@
 use std::collections::HashMap;
 
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
-use unsnarl_ir::serialized::SerializedScope;
+use unsnarl_ir::serialized::{SerializedExpressionStatementContainer, SerializedScope};
 
 use crate::direction::Direction;
 use crate::visual_node::{SyntheticVisualNode, VisualNode};
@@ -42,10 +42,11 @@ fn make_if_test_anchor(
 }
 
 /// Look up (or create on first sight) the `CallProxy` wrapper
-/// subgraph for the ExpressionStatement at `stmt_offset`. Returns
-/// `None` when the statement has no `ExpressionStatementContainer`
-/// registered -- callers should fall through to default handling
-/// in that case.
+/// subgraph for `statement`. Taking the
+/// [`SerializedExpressionStatementContainer`] by reference -- the one
+/// [`ExpressionStatementIndex::enclosing`] just returned -- means the
+/// wrapper's id, `callName`, and span lines come straight off a known
+/// statement; there is no offset to look back up and no miss to guard.
 ///
 /// First-sight allocation appends the wrapper to `container` at
 /// the call site, so the wrapper lands in the same source-order
@@ -59,20 +60,17 @@ fn ensure_call_proxy_wrapper(
     ctx: &BuilderContext<'_>,
     container: Container,
     call_proxy_by_stmt_offset: &mut HashMap<u32, SubgraphIdx>,
-    stmt_offset: u32,
-) -> Option<SubgraphIdx> {
+    statement: &SerializedExpressionStatementContainer,
+) -> SubgraphIdx {
+    let stmt_offset = statement.start_span.offset.0;
     if let Some(&idx) = call_proxy_by_stmt_offset.get(&stmt_offset) {
-        return Some(idx);
+        return idx;
     }
-    let container_ref = ctx
-        .expression_statement_containers_by_offset
-        .get(&stmt_offset)
-        .copied()?;
     let id = expression_statement_node_id(stmt_offset);
-    let name = render_head_expression(&container_ref.head, &ctx.source_index);
-    let start_line = container_ref.start_span.line.0;
-    let end_line = if container_ref.end_span.line.0 != start_line {
-        Some(container_ref.end_span.line.0)
+    let name = render_head_expression(&statement.head, &ctx.source_index);
+    let start_line = statement.start_span.line.0;
+    let end_line = if statement.end_span.line.0 != start_line {
+        Some(statement.end_span.line.0)
     } else {
         None
     };
@@ -87,7 +85,7 @@ fn ensure_call_proxy_wrapper(
     // emitting a separate leaf `expr_stmt_<offset>` node.
     state.expression_statement_by_offset.insert(stmt_offset, id);
     call_proxy_by_stmt_offset.insert(stmt_offset, idx);
-    Some(idx)
+    idx
 }
 
 fn push_if_test_anchor(
@@ -189,27 +187,42 @@ pub fn build_children(
         // The wrapper is created on first sight (so it lands at the
         // first callback's source position) and reused for any
         // later siblings that share the same statement offset.
-        if let Some(cb) = child.callback_argument.as_ref() {
-            let stmt_offset = cb.statement_offset().0;
-            if let Some(wrapper_idx) = ensure_call_proxy_wrapper(
-                arena,
-                state,
-                ctx,
-                container,
-                &mut call_proxy_by_stmt_offset,
-                stmt_offset,
-            ) {
+        if child.callback_argument.is_some() {
+            // The CallProxy wrapper is a rendering construct that
+            // reuses the `expr_stmt_<offset>` leaf, so it fires when
+            // the callback's block span is contained by some registered
+            // (non-synthetic) `ExpressionStatement` -- that is what
+            // `enclosing` actually tests, not "is this callback's own
+            // call statement-level?". The two coincide when the
+            // callback's own call is the nearest enclosing statement,
+            // but a variable-bound / returned callback nested inside an
+            // outer statement-level call's body is also contained and so
+            // also routes into that outer statement's wrapper. That
+            // correlation is a visual-layer concern: resolve it here from
+            // the `ExpressionStatement` spans the builder already owns,
+            // rather than reading it off the IR annotation.
+            if let Some(statement) = ctx
+                .expression_statement_index
+                .enclosing(child.block.span.offset.0, child.block.end_span.offset.0)
+            {
+                let wrapper_idx = ensure_call_proxy_wrapper(
+                    arena,
+                    state,
+                    ctx,
+                    container,
+                    &mut call_proxy_by_stmt_offset,
+                    statement,
+                );
                 build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
                 i += 1;
                 continue;
             }
-            // No matching ExpressionStatementContainer was registered
-            // (e.g. the analyzer fired the annotation but no
-            // reference inside that statement reached the
-            // visual-graph layer to populate the container map).
-            // Fall through to default handling so the function scope
-            // still lands somewhere instead of being silently
-            // dropped.
+            // No registered `ExpressionStatement` contains this
+            // callback's block span (e.g. a top-level variable-bound or
+            // returned callback with no enclosing statement-level call),
+            // so it gets no CallProxy wrapper -- only the
+            // `<callee>(args[N])` label from `describe_subgraph`. Fall
+            // through to default handling.
         }
         let ckey = branch_container_key(child);
         let Some(key) = ckey.as_deref() else {

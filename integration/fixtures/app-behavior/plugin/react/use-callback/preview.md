@@ -25,7 +25,7 @@ flowchart RL
       direction RL
       n_scope_1_start_57["start<br/>L3"]
       n_scope_1_inc_98["inc<br/>L4"]
-      subgraph s_scope_2["(anonymous)<br/>L4"]
+      subgraph s_scope_2["useCallback(args[0])<br/>L4"]
         direction RL
         n_scope_2_n_117["n<br/>L4"]
         subgraph s_return_scope_0_Counter_44_131_140["return L4"]

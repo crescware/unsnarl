@@ -136,9 +136,10 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 85,
-        "callStartOffset": 85,
-        "callEndOffset": 211,
+        "callee": {
+          "kind": "identifier",
+          "name": "useEffect"
+        },
         "argIndex": 0
       },
       "fallsThrough": false,

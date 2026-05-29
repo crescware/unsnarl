@@ -18,7 +18,7 @@ flowchart RL
   n_scope_0_console_22["global console"]
   subgraph expr_stmt_0["outer()<br/>L1-3"]
     direction RL
-    subgraph s_scope_1["(anonymous)<br/>L1-3"]
+    subgraph s_scope_1["inner(args[0])<br/>L1-3"]
       direction RL
       expr_stmt_22["console.log()<br/>L2"]
     end

@@ -10,9 +10,7 @@ use std::collections::HashMap;
 
 use unsnarl_ir::primitive::SourceIndex;
 use unsnarl_ir::scope::block_context::BlockContext;
-use unsnarl_ir::serialized::{
-    SerializedExpressionStatementContainer, SerializedScope, SerializedVariable,
-};
+use unsnarl_ir::serialized::{SerializedScope, SerializedVariable};
 
 use crate::direction::Direction;
 use crate::visual_subgraph::{
@@ -21,7 +19,6 @@ use crate::visual_subgraph::{
 };
 
 use super::control_subgraph_kind_of::control_subgraph_kind_of;
-use super::find_call_callee_in_head::find_call_callee_in_head;
 use super::is_class_subgraph::is_class_subgraph;
 use super::is_function_subgraph::is_function_subgraph;
 use super::node_id::node_id;
@@ -32,10 +29,6 @@ pub fn describe_subgraph(
     scope: &SerializedScope,
     subgraph_owner_var: &HashMap<String, String>,
     variable_map: &HashMap<&str, &SerializedVariable>,
-    expression_statement_containers_by_offset: &HashMap<
-        u32,
-        &SerializedExpressionStatementContainer,
-    >,
     source_index: &SourceIndex<'_>,
 ) -> VisualSubgraph {
     let id = subgraph_scope_id(scope);
@@ -61,36 +54,18 @@ pub fn describe_subgraph(
             Direction::RL,
         );
         sg.end_line = end_line;
-        // When the scope is the i-th argument of an
-        // ExpressionStatement-level call (per the analyzer's
-        // `CallbackArgument` annotation), attach `callbackArg` so
-        // the mermaid emitter can label the subgraph as
-        // `<callee>(args[<i>])`. The annotation carries the
-        // enclosing call's `(start, end)` span pair; the matching
-        // `Call`/`New` node inside the statement's head provides the
-        // callee subtree to render. Chained shapes such as
-        // `a.b().c(cb)` resolve to the specific call's callee
-        // because the end offset disambiguates every nested call
-        // sharing the chain root's `span.start`. Skip silently when
-        // no matching call is found (e.g. an unrecognised parent
-        // shape that fell back to `Raw`); the subgraph then keeps
-        // the existing `(anonymous)` rendering.
+        // When the scope is the i-th argument of a call (per the
+        // analyzer's `CallbackArgument` annotation), attach
+        // `callbackArg` so the mermaid emitter can label the subgraph
+        // as `<callee>(args[<i>])`. The annotation now carries the
+        // call's `callee` head subtree directly, so the label renders
+        // for any call-argument function -- variable-bound, returned,
+        // or nested -- not just `ExpressionStatement`-level ones.
         if let Some(cb) = scope.callback_argument.as_ref() {
-            if let Some(container) = expression_statement_containers_by_offset
-                .get(&cb.statement_offset().0)
-                .copied()
-            {
-                if let Some(callee_node) = find_call_callee_in_head(
-                    &container.head,
-                    cb.call_start_offset(),
-                    cb.call_end_offset(),
-                ) {
-                    sg.callback_arg = Some(FunctionCallbackArg {
-                        callee: render_head_expression(callee_node, source_index),
-                        arg_index: cb.arg_index(),
-                    });
-                }
-            }
+            sg.callback_arg = Some(FunctionCallbackArg {
+                callee: render_head_expression(&cb.callee, source_index),
+                arg_index: cb.arg_index,
+            });
         }
         return sg.into();
     }

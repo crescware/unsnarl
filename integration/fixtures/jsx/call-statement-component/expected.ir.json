@@ -87,9 +87,10 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 65,
-        "callStartOffset": 65,
-        "callEndOffset": 184,
+        "callee": {
+          "kind": "identifier",
+          "name": "wrap"
+        },
         "argIndex": 0
       },
       "fallsThrough": false,

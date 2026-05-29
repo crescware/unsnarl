@@ -94,9 +94,10 @@
       "functionExpressionScope": false,
       "blockContext": null,
       "callbackArgument": {
-        "statementOffset": 39,
-        "callStartOffset": 39,
-        "callEndOffset": 90,
+        "callee": {
+          "kind": "identifier",
+          "name": "run"
+        },
         "argIndex": 0
       },
       "fallsThrough": false,

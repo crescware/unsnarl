@@ -135,7 +135,13 @@
       "through": [],
       "functionExpressionScope": false,
       "blockContext": null,
-      "callbackArgument": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "identifier",
+          "name": "useMemo"
+        },
+        "argIndex": 0
+      },
       "fallsThrough": false,
       "exitsFunction": false,
       "nestingDepths": {

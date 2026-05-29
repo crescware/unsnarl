@@ -1,70 +1,35 @@
 //! Scope-side annotation marking a function scope as the `arg_index`-th
-//! argument of an enclosing `CallExpression` (or `NewExpression`) that
-//! itself stands at `ExpressionStatement` level.
+//! argument of an enclosing `CallExpression` (or `NewExpression`).
 //!
-//! Populated by the analyzer when a function scope is detected to be
-//! a direct argument of a call whose enclosing statement is an
-//! `ExpressionStatement`; consumed by the visual-graph builder to
-//! group such function scopes under a single call-proxy subgraph
-//! and by the mermaid emitter to label them with their argument
-//! position.
+//! Re-abstracted for #220: the annotation carries only the **structural
+//! fact** that AST analysis can establish -- the call's `callee` head
+//! subtree and the zero-based `arg_index`. It says nothing about how
+//! the function is rendered.
 //!
-//! `statement_offset` matches the `start_span.offset` of the
-//! enclosing `ExpressionStatement` (the same offset used to key the
-//! synthetic call-proxy element). `call_start_offset` /
-//! `call_end_offset` carry the enclosing `CallExpression` /
-//! `NewExpression`'s own span; the **pair** is required to identify
-//! "which call in the chain" because a chained shape such as
-//! `a.b().c(cb)` has every nested `CallExpression` sharing the chain
-//! root's `span.start`, so `call_start_offset` alone does not
-//! disambiguate. Consumers look up the matching `Call` / `New` node
-//! inside the corresponding `ExpressionStatementContainer.head` (whose
-//! own `Call` / `New` variants carry the same span pair) and render
-//! its `callee` subtree directly -- no callee text is duplicated into
-//! this annotation. `arg_index` is the zero-based slot in the call's
-//! `arguments` list.
+//! Whether a callback is hosted by a statement-level CallProxy wrapper
+//! (and under which `expr_stmt_<offset>` it groups) is a visual-graph
+//! rendering concern, resolved there from the `ExpressionStatement`
+//! spans the visual-graph builder already owns -- not encoded here.
+//! Keeping that correlation out of the IR is what lets each layer carry
+//! the minimum it needs: the IR the structure, the visual graph the
+//! layout.
+//!
+//! Like [`crate::reference::ExpressionStatementContainer`], the
+//! in-memory shape (this type) carries the UTF-8 [`HeadExpression`]
+//! while the on-disk
+//! [`crate::serialized::SerializedCallbackArgument`] carries the
+//! span-based `SerializedHeadExpression`; the conversion happens at
+//! serialize time.
 
-use serde::Serialize;
+use crate::reference::expression_statement_head::HeadExpression;
 
-use crate::primitive::Utf16CodeUnitOffset;
-
-#[derive(Clone, Serialize)]
-#[serde(rename_all = "camelCase")]
 pub struct CallbackArgument {
-    pub statement_offset: Utf16CodeUnitOffset,
-    pub call_start_offset: Utf16CodeUnitOffset,
-    pub call_end_offset: Utf16CodeUnitOffset,
+    pub callee: HeadExpression,
     pub arg_index: u32,
 }
 
 impl CallbackArgument {
-    pub fn new(
-        statement_offset: Utf16CodeUnitOffset,
-        call_start_offset: Utf16CodeUnitOffset,
-        call_end_offset: Utf16CodeUnitOffset,
-        arg_index: u32,
-    ) -> Self {
-        Self {
-            statement_offset,
-            call_start_offset,
-            call_end_offset,
-            arg_index,
-        }
-    }
-
-    pub fn statement_offset(&self) -> Utf16CodeUnitOffset {
-        self.statement_offset
-    }
-
-    pub fn call_start_offset(&self) -> Utf16CodeUnitOffset {
-        self.call_start_offset
-    }
-
-    pub fn call_end_offset(&self) -> Utf16CodeUnitOffset {
-        self.call_end_offset
-    }
-
-    pub fn arg_index(&self) -> u32 {
-        self.arg_index
+    pub fn new(callee: HeadExpression, arg_index: u32) -> Self {
+        Self { callee, arg_index }
     }
 }

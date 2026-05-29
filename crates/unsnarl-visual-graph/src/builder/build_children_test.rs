@@ -1,20 +1,20 @@
 //! Sibling tests for [`build_children`].
 
-use unsnarl_ir::primitive::Utf16CodeUnitOffset;
-use unsnarl_ir::scope::CallbackArgument;
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::serialized::serialized_scope::SerializedBlock;
 use unsnarl_ir::serialized::{
-    SerializedExpressionStatementContainer, SerializedHeadExpression, SerializedScope,
+    SerializedCallbackArgument, SerializedExpressionStatementContainer, SerializedHeadExpression,
+    SerializedReference, SerializedScope,
 };
 use unsnarl_oxc_parity::AstType;
 
 use super::build_children;
 use crate::builder::arena::{BuildArena, Container, ElementHandle, NodeIdx, SubgraphIdx};
 use crate::builder::builder_fixtures::{
-    base_builder_context, base_serialized_scope, empty_serialized_ir, other_block_context,
-    scope_id, span_offset_line,
+    base_builder_context, base_serialized_reference, base_serialized_scope, empty_serialized_ir,
+    other_block_context, scope_id, span_offset_line,
 };
+use crate::builder::expression_statement_index::ExpressionStatementIndex;
 use crate::builder::state::BuildState;
 use crate::visual_node::{SyntheticNodeKind, VisualNode};
 use crate::visual_subgraph::{ControlSubgraphKind, OwnedExtras, OwnedSubgraphKind, VisualSubgraph};
@@ -272,12 +272,14 @@ fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) ->
     let mut s = scope_with_upper(id, upper);
     s.r#type = ScopeType::Function;
     s.block = block(stmt_offset, 1, stmt_offset + 10, 3);
-    s.callback_argument = Some(CallbackArgument::new(
-        Utf16CodeUnitOffset(stmt_offset),
-        Utf16CodeUnitOffset(stmt_offset),
-        Utf16CodeUnitOffset(stmt_offset + 20),
+    // The CallProxy wrapper is driven by span containment against the
+    // registered ExpressionStatement containers, not by a field on the
+    // annotation -- the scope's block span (set above to start at
+    // `stmt_offset`) is what correlates it to its statement.
+    s.callback_argument = Some(SerializedCallbackArgument {
+        callee: SerializedHeadExpression::identifier("cb".to_string()),
         arg_index,
-    ));
+    });
     s
 }
 
@@ -299,6 +301,21 @@ fn expr_stmt_container(
     }
 }
 
+/// Wrap each container in a reference so it can drive an
+/// [`ExpressionStatementIndex`] -- the same shape `build` consumes
+/// from `ir.references`. The returned Vec must outlive the
+/// `BuilderContext` it is indexed into.
+fn refs_for(containers: Vec<SerializedExpressionStatementContainer>) -> Vec<SerializedReference> {
+    containers
+        .into_iter()
+        .map(|c| {
+            let mut r = base_serialized_reference();
+            r.expression_statement_container = Some(c);
+            r
+        })
+        .collect()
+}
+
 #[test]
 fn sibling_callbacks_for_the_same_statement_share_one_call_proxy_wrapper() {
     let mut ir = empty_serialized_ir();
@@ -311,10 +328,13 @@ fn sibling_callbacks_for_the_same_statement_share_one_call_proxy_wrapper() {
     ir.scopes.push(cb_a);
     ir.scopes.push(cb_b);
 
-    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "run");
+    let refs = refs_for(vec![expr_stmt_container(
+        stmt_offset,
+        stmt_offset + 20,
+        "run",
+    )]);
     let mut ctx = base_builder_context(&ir);
-    ctx.expression_statement_containers_by_offset
-        .insert(stmt_offset, &container);
+    ctx.expression_statement_index = ExpressionStatementIndex::build(&refs);
 
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
@@ -370,8 +390,8 @@ fn falls_through_to_default_handling_when_no_matching_container_is_registered() 
     ir.scopes.push(outer);
     ir.scopes.push(cb);
 
-    // Deliberately omit the container from
-    // `expression_statement_containers_by_offset`.
+    // Deliberately leave the `ExpressionStatementIndex` empty so no
+    // statement encloses the callback's block span.
     let ctx = base_builder_context(&ir);
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
@@ -402,13 +422,12 @@ fn distinct_statement_offsets_get_distinct_call_proxy_wrappers() {
     ir.scopes.push(cb_a);
     ir.scopes.push(cb_b);
 
-    let c100 = expr_stmt_container(100, 120, "first");
-    let c200 = expr_stmt_container(200, 220, "second");
+    let refs = refs_for(vec![
+        expr_stmt_container(100, 120, "first"),
+        expr_stmt_container(200, 220, "second"),
+    ]);
     let mut ctx = base_builder_context(&ir);
-    ctx.expression_statement_containers_by_offset
-        .insert(100, &c100);
-    ctx.expression_statement_containers_by_offset
-        .insert(200, &c200);
+    ctx.expression_statement_index = ExpressionStatementIndex::build(&refs);
 
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
@@ -454,10 +473,13 @@ fn call_proxy_wrapper_lands_at_first_callback_position_preserving_sibling_order(
     ir.scopes.push(cb);
     ir.scopes.push(after);
 
-    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "run");
+    let refs = refs_for(vec![expr_stmt_container(
+        stmt_offset,
+        stmt_offset + 20,
+        "run",
+    )]);
     let mut ctx = base_builder_context(&ir);
-    ctx.expression_statement_containers_by_offset
-        .insert(stmt_offset, &container);
+    ctx.expression_statement_index = ExpressionStatementIndex::build(&refs);
 
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
@@ -509,10 +531,13 @@ fn callback_at_the_end_appends_wrapper_after_earlier_siblings() {
     ir.scopes.push(before);
     ir.scopes.push(cb);
 
-    let container = expr_stmt_container(stmt_offset, stmt_offset + 20, "tail");
+    let refs = refs_for(vec![expr_stmt_container(
+        stmt_offset,
+        stmt_offset + 20,
+        "tail",
+    )]);
     let mut ctx = base_builder_context(&ir);
-    ctx.expression_statement_containers_by_offset
-        .insert(stmt_offset, &container);
+    ctx.expression_statement_index = ExpressionStatementIndex::build(&refs);
 
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
