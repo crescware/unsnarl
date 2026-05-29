@@ -209,6 +209,38 @@ fn class_declaration_creates_class_scope_inheriting_parent_strictness() {
     });
 }
 
+/// `is_strict` is derived from the analysis-level source type alone
+/// and never reads `ScopeFlags::StrictMode`, so an inline
+/// `"use strict"` directive in a Script does not flip the root (or its
+/// descendants) to strict.
+#[test]
+fn script_root_ignores_inline_use_strict_directive() {
+    with_scopes(
+        "\"use strict\";\nfunction f() {}",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            assert!(!scopes[root()].is_strict);
+            let f = scopes[root()].child_scopes[0];
+            assert!(!scopes[f].is_strict);
+        },
+    );
+}
+
+/// `is_strict` is copied from each scope's `upper`, so the root's
+/// strictness reaches arbitrarily deep descendants unchanged: every
+/// scope of a Module is strict, every scope of a Script is sloppy.
+#[test]
+fn is_strict_propagates_through_nested_scopes() {
+    let code = "function f() { { { let z; } } }";
+    with_scopes(code, Language::Js, SourceType::Module, |scopes| {
+        assert!(scopes.iter().all(|s| s.is_strict));
+    });
+    with_scopes(code, Language::Js, SourceType::Script, |scopes| {
+        assert!(scopes.iter().all(|s| !s.is_strict));
+    });
+}
+
 #[test]
 fn for_statement_creates_for_scope() {
     with_scopes(
@@ -285,6 +317,48 @@ fn switch_case_nested_block_attaches_to_synthetic_case_scope() {
             // The `default:` arm has no nested scopes.
             let case_two = scopes[switch].child_scopes[1];
             assert!(scopes[case_two].child_scopes.is_empty());
+        },
+    );
+}
+
+/// The synthetic case rows are pushed immediately after the switch's
+/// own row, so they occupy the next `cases.len()` IR ids in source
+/// order.
+#[test]
+fn switch_case_scopes_occupy_contiguous_ids_after_switch() {
+    with_scopes(
+        "switch (k) { case 1: break; case 2: break; default: break; }",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            let switch = scopes[root()].child_scopes[0];
+            let cases = &scopes[switch].child_scopes;
+            assert_eq!(cases.len(), 3);
+            for (offset, &case_id) in cases.iter().enumerate() {
+                assert_eq!(case_id, ScopeId::from_usize(switch.index() + 1 + offset));
+            }
+        },
+    );
+}
+
+/// When several cases each carry a nested scope, every nested scope is
+/// rerouted to its *own* case by span containment — not to the bare
+/// switch and not to a sibling case.
+#[test]
+fn switch_reroutes_each_nested_scope_to_its_own_case() {
+    with_scopes(
+        "switch (k) { case 1: { let a; } case 2: { let b; } default: { let c; } }",
+        Language::Js,
+        SourceType::Script,
+        |scopes| {
+            let switch = scopes[root()].child_scopes[0];
+            assert_eq!(scopes[switch].child_scopes.len(), 3);
+            for &case_id in &scopes[switch].child_scopes {
+                assert_eq!(scopes[case_id].child_scopes.len(), 1);
+                let inner = scopes[case_id].child_scopes[0];
+                assert!(matches!(scopes[inner].r#type, ScopeType::Block));
+                assert!(scopes[inner].upper == Some(case_id));
+            }
         },
     );
 }
