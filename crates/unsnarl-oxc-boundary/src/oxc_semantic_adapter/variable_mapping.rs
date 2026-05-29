@@ -235,22 +235,6 @@ pub(crate) fn build_variables(
         }
     }
 
-    // Per-case `variables` lists must end up in declaration order;
-    // re-parenting above can interleave cases. Re-sort each case's
-    // binding list by symbol declaration span so the output matches
-    // the parity baseline.
-    for cases in switch_cases.values() {
-        for (_, case_ir) in cases {
-            scopes[*case_ir].variables.sort_by_key(|v| {
-                variables[*v]
-                    .identifiers
-                    .first()
-                    .map(|i| i.span.start)
-                    .unwrap_or(0)
-            });
-        }
-    }
-
     VariableMappingResult {
         variables,
         symbol_to_variable,
