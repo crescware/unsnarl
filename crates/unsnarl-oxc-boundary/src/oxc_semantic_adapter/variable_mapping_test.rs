@@ -218,9 +218,17 @@ fn non_root_scope_bindings_follow_source_order_after_arguments() {
 }
 
 /// Bindings reparented into a synthetic per-`SwitchCase` Block scope
-/// must also surface in source order. The two `let`s share one case
-/// and are written in non-alphabetical source order, so an
-/// alphabetical or raw HashMap ordering would be caught.
+/// must surface in source order. The two `let`s share one case and are
+/// written in non-alphabetical source order, so a final alphabetical or
+/// raw HashMap ordering would be caught.
+///
+/// This pins the *outcome* (reparented case-local bindings emerge in
+/// source order), not the per-case re-sort site in isolation. The
+/// per-scope sort (`variable_mapping.rs:193`) already orders the switch
+/// scope's bindings by span before reparenting, and a single case spans
+/// one contiguous range, so the per-case re-sort
+/// (`variable_mapping.rs:242`) is a no-op for this fixture: removing only
+/// the re-sort leaves this test green.
 #[test]
 fn switch_case_block_bindings_follow_source_order() {
     with_arena(
