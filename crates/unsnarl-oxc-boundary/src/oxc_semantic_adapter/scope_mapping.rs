@@ -11,22 +11,18 @@
 //!
 //! `is_strict` cannot read off [`ScopeFlags::StrictMode`] directly:
 //! [`crate::parser::OxcParser`] always parses with
-//! `oxc_span::SourceType::with_module(true)` so module-only syntax
-//! (top-level `await`, `import` / `export`) keeps parsing under
-//! [`crate::parser::SourceType::Script`], and as a consequence the
-//! root scope's [`ScopeFlags::StrictMode`] is set for every input
-//! regardless of the boundary's analysis-level source type. Sidestep
-//! the problem by computing `is_strict` purely from the
-//! analysis-level source type at the root (Module ⇒ true, Script ⇒
-//! false) and propagating it down via parent inheritance, ignoring
-//! inline `"use strict"` directives and class-body auto-strictness.
+//! `oxc_span::SourceType::with_module(true)`, so the root scope's
+//! [`ScopeFlags::StrictMode`] is set for every input regardless of the
+//! boundary's analysis-level source type. It is instead derived from
+//! the analysis-level source type at the root and propagated by parent
+//! inheritance (see `scope_mapping_test`).
 //!
-//! `variable_scope` is computed inline. `Scoping::scope_descendants_from_root`
-//! iterates scopes in DFS order so each parent's row is already in
-//! place when a child is pushed, letting the child either point at
-//! itself (if its flags make it a `var`-creating scope) or copy the
-//! parent's `variable_scope`. `child_scopes` is then filled in a
-//! second pass once every scope's `upper` is set.
+//! `variable_scope` is computed inline: `Scoping::scope_descendants_from_root`
+//! iterates scopes in DFS order, so each parent's row is already in
+//! place when a child is pushed and the child can resolve its
+//! `variable_scope` from the parent's (see `scope_mapping_test`).
+//! `child_scopes` is then filled in a second pass once every scope's
+//! `upper` is set.
 //!
 //! `variables` / `references` / `through` stay empty here; the
 //! respective entity passes (`variable_mapping`, `reference_mapping`)
@@ -56,15 +52,11 @@
 //!
 //! `oxc_semantic` does not allocate a scope per `SwitchCase` — the
 //! cases share their enclosing `SwitchStatement`'s scope. The parity
-//! baseline creates a separate `Block` scope per case (anchored to
-//! the `SwitchCase` AST node) so block-scoped declarations stay
-//! contained within their case. This module synthesises those `Block`
-//! scopes immediately after each `SwitchStatement` IR row is emitted:
-//! the cases occupy the next `cases.len()` IR ids. Any oxc-derived
-//! scope whose `Scoping` parent is the `SwitchStatement` is re-routed
-//! to the case whose span encloses its anchor (computed in
-//! [`upper_for`]), keeping each case's nested scopes parented to the
-//! synthetic case row instead of the bare switch.
+//! baseline instead creates a separate `Block` scope per case (anchored
+//! to the `SwitchCase` AST node) so block-scoped declarations stay
+//! contained within their case. This module synthesises those rows and
+//! re-routes each oxc-derived child of the switch to the owning case
+//! (mechanics in [`upper_for`]; behaviour pinned by `scope_mapping_test`).
 //!
 //! ## `ClassFieldInitializer`
 //!
