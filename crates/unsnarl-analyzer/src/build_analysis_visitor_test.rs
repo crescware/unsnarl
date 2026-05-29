@@ -400,9 +400,9 @@ fn function_inside_object_property_value_slot_reports_value_block_context_key() 
 }
 
 /// Owned summary of a scope's `callback_argument` for assertions:
-/// `(arg_index, statement_offset, rendered_callee)`. `None` when the
-/// scope carries no annotation.
-type CbArgSummary = (u32, Option<u32>, String);
+/// `(arg_index, rendered_callee)`. `None` when the scope carries no
+/// annotation.
+type CbArgSummary = (u32, String);
 
 /// Render a callee [`HeadExpression`] to a compact string for
 /// assertions -- a test-local stand-in for the visual-graph
@@ -422,11 +422,7 @@ fn render_callee(head: &unsnarl_ir::reference::HeadExpression) -> String {
 }
 
 fn summarize(cb: &unsnarl_ir::scope::CallbackArgument) -> CbArgSummary {
-    (
-        cb.arg_index,
-        cb.statement_offset.map(|o| o.0),
-        render_callee(&cb.callee),
-    )
+    (cb.arg_index, render_callee(&cb.callee))
 }
 
 fn callback_arg_summaries_for_function_scopes(source: &str) -> Vec<Option<CbArgSummary>> {
@@ -460,38 +456,32 @@ fn callback_arg_for_first_function_scope(source: &str) -> Option<CbArgSummary> {
 #[test]
 fn callback_argument_is_set_for_a_function_passed_as_a_direct_call_argument() {
     let value = callback_arg_for_first_function_scope("run(() => {});\n");
-    let (arg_index, statement_offset, callee) =
+    let (arg_index, callee) =
         value.expect("a function literal in arg 0 of a call must carry a callback_argument");
     assert_eq!(arg_index, 0);
     assert_eq!(callee, "run");
-    // `run(...)` sits at ExpressionStatement level, so the CallProxy
-    // wrapper key is present (the statement starts at offset 0).
-    assert_eq!(statement_offset, Some(0));
 }
 
 #[test]
 fn callback_argument_uses_zero_based_index_for_later_argument_slots() {
     // The arrow is arg 1 of `run`, not arg 0.
-    let (arg_index, _, _) = callback_arg_for_first_function_scope("run(a, () => {});\n")
+    let (arg_index, _) = callback_arg_for_first_function_scope("run(a, () => {});\n")
         .expect("arg 1 callback must be annotated");
     assert_eq!(arg_index, 1);
 }
 
 #[test]
-fn callback_argument_is_set_without_statement_offset_inside_a_variable_declarator() {
+fn callback_argument_is_set_for_a_callback_bound_to_a_variable() {
     // The call sits in a VariableDeclarator initializer, not an
-    // ExpressionStatement. The annotation still fires (so the label
-    // renders), but `statement_offset` is `None` -- no CallProxy
-    // wrapper is synthesised for it.
+    // ExpressionStatement. The annotation still fires for any
+    // call-argument function -- the structural fact does not depend on
+    // statement position. (Whether a CallProxy wrapper is rendered is
+    // decided later in the visual-graph layer, not encoded here.)
     let value = callback_arg_for_first_function_scope("const x = run(() => {});\n");
-    let (arg_index, statement_offset, callee) =
+    let (arg_index, callee) =
         value.expect("a variable-bound callback must still carry a callback_argument");
     assert_eq!(arg_index, 0);
     assert_eq!(callee, "run");
-    assert_eq!(
-        statement_offset, None,
-        "a non-ExpressionStatement call must not carry a CallProxy statement_offset"
-    );
 }
 
 #[test]
@@ -515,7 +505,7 @@ fn callback_argument_is_set_for_a_constructor_callback() {
     // analyzer treats `new Service(cb)` the same as `service(cb)`
     // for callback-arg purposes.
     let value = callback_arg_for_first_function_scope("new Service(() => {});\n");
-    let (arg_index, _, callee) = value.expect("a constructor callback must be annotated");
+    let (arg_index, callee) = value.expect("a constructor callback must be annotated");
     assert_eq!(arg_index, 0);
     assert_eq!(callee, "Service");
 }
@@ -531,7 +521,7 @@ fn callback_argument_captures_distinct_callees_for_calls_in_a_chain() {
     let callees: Vec<String> = callback_arg_summaries_for_function_scopes(source)
         .into_iter()
         .flatten()
-        .map(|(_, _, callee)| callee)
+        .map(|(_, callee)| callee)
         .collect();
     assert_eq!(
         callees,

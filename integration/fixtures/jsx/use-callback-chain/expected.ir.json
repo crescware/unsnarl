@@ -146,8 +146,7 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0,
-        "statementOffset": null
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -194,8 +193,7 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0,
-        "statementOffset": null
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -242,8 +240,7 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0,
-        "statementOffset": null
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

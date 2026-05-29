@@ -194,8 +194,7 @@
           },
           "property": "push"
         },
-        "argIndex": 0,
-        "statementOffset": 66
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

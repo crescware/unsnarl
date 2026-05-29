@@ -69,15 +69,19 @@ pub struct BuilderContext<'a> {
     /// reference inside the IR whose `expression_statement_container`
     /// targets that offset`.
     ///
-    /// Built once per fixture by scanning `ir.references`. Consumed
-    /// by the CallProxy wrapper builder
-    /// (`build_children::ensure_call_proxy_wrapper`) to render the
-    /// wrapper subgraph's `callName` and span lines for an
-    /// `ExpressionStatement`-level call -- no need to re-walk the
-    /// references list per scope. (The `callbackArg.callee` label is
-    /// now self-contained in the scope's
-    /// [`unsnarl_ir::scope::CallbackArgument`] and no longer reads
-    /// this map.)
+    /// Built once per fixture by scanning `ir.references`. Owns the
+    /// visual layer's whole notion of "where the ExpressionStatements
+    /// are", consumed by `build_children`:
+    /// - `enclosing_statement_offset` correlates a callback function
+    ///   scope to the statement that hosts its CallProxy wrapper
+    ///   (span containment), and
+    /// - `ensure_call_proxy_wrapper` renders that wrapper's `callName`
+    ///   and span lines.
+    ///
+    /// Keeping this correlation here -- rather than as an offset baked
+    /// into the IR `callbackArgument` -- is what lets the IR carry only
+    /// the structural `{ callee, argIndex }` and the visual layer carry
+    /// the layout.
     pub expression_statement_containers_by_offset:
         HashMap<u32, &'a SerializedExpressionStatementContainer>,
 }

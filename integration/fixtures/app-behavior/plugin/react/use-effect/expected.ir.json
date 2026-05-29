@@ -150,8 +150,7 @@
           "kind": "identifier",
           "name": "useEffect"
         },
-        "argIndex": 0,
-        "statementOffset": 110
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

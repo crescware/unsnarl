@@ -182,7 +182,6 @@ pub fn serialize_scope(
             .map(|cb| SerializedCallbackArgument {
                 callee: serialize_head_expression(&cb.callee, index),
                 arg_index: cb.arg_index,
-                statement_offset: cb.statement_offset,
             }),
         falls_through: ann.falls_through,
         exits_function: ann.exits_function,

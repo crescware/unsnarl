@@ -92,8 +92,7 @@
           "kind": "identifier",
           "name": "inner"
         },
-        "argIndex": 0,
-        "statementOffset": 0
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

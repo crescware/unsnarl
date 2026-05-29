@@ -98,8 +98,7 @@
           "kind": "identifier",
           "name": "run"
         },
-        "argIndex": 0,
-        "statementOffset": 39
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -147,8 +146,7 @@
           "kind": "identifier",
           "name": "run"
         },
-        "argIndex": 1,
-        "statementOffset": 39
+        "argIndex": 1
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -196,8 +194,7 @@
           "kind": "identifier",
           "name": "run"
         },
-        "argIndex": 2,
-        "statementOffset": 39
+        "argIndex": 2
       },
       "fallsThrough": false,
       "exitsFunction": false,

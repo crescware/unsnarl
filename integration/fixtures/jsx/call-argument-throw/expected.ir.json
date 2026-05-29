@@ -93,8 +93,7 @@
           "kind": "identifier",
           "name": "wrap"
         },
-        "argIndex": 0,
-        "statementOffset": null
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

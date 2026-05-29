@@ -160,8 +160,7 @@
           },
           "property": "then"
         },
-        "argIndex": 0,
-        "statementOffset": 47
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -250,8 +249,7 @@
           },
           "property": "catch"
         },
-        "argIndex": 0,
-        "statementOffset": 47
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,

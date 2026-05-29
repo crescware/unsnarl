@@ -33,7 +33,7 @@ use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
-use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf16CodeUnitOffset, Utf8ByteOffset};
+use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
 use unsnarl_ir::scope::{BlockContext, CallbackArgument};
 use unsnarl_ir::scope_type::ScopeType;
@@ -166,39 +166,15 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         self.path_entries.last().map(|e| &e.node)
     }
 
-    /// Walk the path stack upward to find the nearest enclosing
-    /// `ExpressionStatement` and return its start offset in UTF-16
-    /// code units. Skip synthetic arrow-body expression statements,
-    /// mirroring the existing handling in
-    /// [`Self::fire_reference`].
-    fn enclosing_expression_statement_offset(&self) -> Option<Utf16CodeUnitOffset> {
-        self.path
-            .iter()
-            .enumerate()
-            .rev()
-            .find_map(|(i, f)| match &f.kind {
-                AstKind::ExpressionStatement(es) => {
-                    if is_synthetic_arrow_body_expression_statement(&self.path, i) {
-                        None
-                    } else {
-                        Some(self.index.span_at(Utf8ByteOffset(es.span.start)).offset)
-                    }
-                }
-                _ => None,
-            })
-    }
-
     /// Build a [`CallbackArgument`] annotation when a function scope
     /// is the `arg_index`-th argument of an enclosing
     /// `CallExpression` / `NewExpression`. Returns `None` otherwise.
     ///
-    /// The annotation is self-contained: it captures the enclosing
-    /// call's `callee` head subtree directly, so the labeller can
-    /// render `<callee>(args[N])` for **any** call-argument function,
-    /// not just those at `ExpressionStatement` level. `statement_offset`
-    /// is the CallProxy wrapper key and is `Some` only when the call
-    /// sits inside an `ExpressionStatement`; variable-bound / returned /
-    /// nested callbacks carry `None` and receive only the label.
+    /// The annotation captures only the structural fact: the enclosing
+    /// call's `callee` head subtree and the `arg_index`. Whether the
+    /// callback is hosted by a statement-level CallProxy wrapper is a
+    /// visual-graph rendering concern resolved there, so no statement
+    /// position is recorded here.
     fn callback_argument_for(
         &self,
         scope_type: ScopeType,
@@ -232,12 +208,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             _ => return None,
         };
         let callee_head = build_callee_head(callee, callee.span());
-        let statement_offset = self.enclosing_expression_statement_offset();
-        Some(CallbackArgument::new(
-            callee_head,
-            arg_index,
-            statement_offset,
-        ))
+        Some(CallbackArgument::new(callee_head, arg_index))
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches

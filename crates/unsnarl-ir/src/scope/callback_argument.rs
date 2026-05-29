@@ -1,23 +1,18 @@
 //! Scope-side annotation marking a function scope as the `arg_index`-th
 //! argument of an enclosing `CallExpression` (or `NewExpression`).
 //!
-//! Re-abstracted for #220: the annotation is now self-contained. It
-//! carries the call's `callee` head subtree and the zero-based
-//! `arg_index`, so the visual-graph labeller can render
-//! `<callee>(args[<arg_index>])` for **any** call-argument function,
-//! independent of whether the enclosing call sits at
-//! `ExpressionStatement` level. Previously the callee text was
-//! recovered indirectly from the reference-side
-//! `ExpressionStatementContainer.head`, which only existed for
-//! `ExpressionStatement`-level calls and left variable-bound /
-//! returned / nested callbacks rendering as `(anonymous)`.
+//! Re-abstracted for #220: the annotation carries only the **structural
+//! fact** that AST analysis can establish -- the call's `callee` head
+//! subtree and the zero-based `arg_index`. It says nothing about how
+//! the function is rendered.
 //!
-//! `statement_offset` is `Some` only when the enclosing call is an
-//! `ExpressionStatement`-level call. The CallProxy wrapper (which
-//! reuses the `expr_stmt_<offset>` leaf to group callback bodies) is
-//! an `ExpressionStatement`-specific mechanism and keys off this
-//! offset; non-statement callbacks carry `None` and receive only the
-//! label, never a wrapper.
+//! Whether a callback is hosted by a statement-level CallProxy wrapper
+//! (and under which `expr_stmt_<offset>` it groups) is a visual-graph
+//! rendering concern, resolved there from the `ExpressionStatement`
+//! spans the visual-graph builder already owns -- not encoded here.
+//! Keeping that correlation out of the IR is what lets each layer carry
+//! the minimum it needs: the IR the structure, the visual graph the
+//! layout.
 //!
 //! Like [`crate::reference::ExpressionStatementContainer`], the
 //! in-memory shape (this type) carries the UTF-8 [`HeadExpression`]
@@ -26,25 +21,15 @@
 //! span-based `SerializedHeadExpression`; the conversion happens at
 //! serialize time.
 
-use crate::primitive::Utf16CodeUnitOffset;
 use crate::reference::expression_statement_head::HeadExpression;
 
 pub struct CallbackArgument {
     pub callee: HeadExpression,
     pub arg_index: u32,
-    pub statement_offset: Option<Utf16CodeUnitOffset>,
 }
 
 impl CallbackArgument {
-    pub fn new(
-        callee: HeadExpression,
-        arg_index: u32,
-        statement_offset: Option<Utf16CodeUnitOffset>,
-    ) -> Self {
-        Self {
-            callee,
-            arg_index,
-            statement_offset,
-        }
+    pub fn new(callee: HeadExpression, arg_index: u32) -> Self {
+        Self { callee, arg_index }
     }
 }

@@ -142,8 +142,7 @@
           "kind": "identifier",
           "name": "run"
         },
-        "argIndex": 0,
-        "statementOffset": 47
+        "argIndex": 0
       },
       "fallsThrough": false,
       "exitsFunction": false,
