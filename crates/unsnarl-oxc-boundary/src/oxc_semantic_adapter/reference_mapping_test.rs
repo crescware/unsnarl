@@ -719,3 +719,52 @@ fn switch_case_reparenting_preserves_source_order() {
         },
     );
 }
+
+/// `sort_reference_lists_by_source_order` sorts each scope's `through`
+/// list as well, not only its `references`. Through entries are pushed
+/// per category: the named-function-expression self-name `inner`
+/// (re-emitted as an implicit global on the `synthetic_unresolved`
+/// branch of the resolved loop) is pushed before the plain unresolved
+/// global `glob` (the later unresolved loop). For
+/// `function outer() { glob; const f = function inner() { return inner; }; }`
+/// both implicit globals walk the `through` chain up through `outer`, so
+/// `outer.through` is inserted in category order `[inner, glob]` but the
+/// trailing sort leaves it in source order `[glob, inner]`.
+#[test]
+fn through_lists_are_sorted_by_source_offset() {
+    with_arena(
+        "function outer() { glob; const f = function inner() { return inner; }; }",
+        Language::Js,
+        SourceType::Script,
+        |b| {
+            let outer = b.scopes[root()].child_scopes[0];
+            let ordered: Vec<(&str, u32)> = b.scopes[outer]
+                .through
+                .iter()
+                .map(|&id| {
+                    (
+                        b.references[id].identifier.name(),
+                        b.references[id].identifier.span.start,
+                    )
+                })
+                .collect();
+            // Only the two implicit globals (`glob`, `inner`) populate a
+            // `through` entry passing through `outer`; resolved bindings
+            // (`outer`, `f`) do not.
+            assert_eq!(ordered.len(), 2);
+            let spans: Vec<u32> = ordered.iter().map(|&(_, s)| s).collect();
+            let mut sorted = spans.clone();
+            sorted.sort_unstable();
+            assert_eq!(
+                spans, sorted,
+                "scope.through must be ascending by source offset, got {ordered:?}"
+            );
+            // Source order is `glob` then `inner` — the reverse of the
+            // per-category insertion order, so this pins that the sort ran.
+            assert_eq!(
+                ordered.iter().map(|&(n, _)| n).collect::<Vec<_>>(),
+                vec!["glob", "inner"],
+            );
+        },
+    );
+}
