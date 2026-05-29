@@ -1,0 +1,154 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx/call-statement-component/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_wrap_9",
+      "name": "wrap",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "wrap"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Box_39",
+      "name": "Box",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "Box"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Text_44",
+      "name": "Text",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "NamedImportBinding",
+      "importedName": "Text"
+    },
+    {
+      "type": "subgraph",
+      "id": "expr_stmt_65",
+      "kind": "call-proxy",
+      "line": 4,
+      "endLine": 10,
+      "direction": "RL",
+      "callName": "wrap()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 4,
+          "endLine": 10,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "wrap",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_title_71",
+              "name": "title",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "node",
+              "id": "n_scope_1_body_86",
+              "name": "body",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "mod___hoc",
+      "kind": "SyntheticModuleSource",
+      "name": "./hoc",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    },
+    {
+      "type": "node",
+      "id": "mod___ui",
+      "kind": "SyntheticModuleSource",
+      "name": "./ui",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_wrap_9",
+      "to": "expr_stmt_65",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_Box_39",
+      "to": "expr_stmt_65",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_title_71",
+      "to": "expr_stmt_65",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_Text_44",
+      "to": "expr_stmt_65",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_body_86",
+      "to": "expr_stmt_65",
+      "label": "read"
+    },
+    {
+      "from": "mod___hoc",
+      "to": "n_scope_0_wrap_9",
+      "label": "read"
+    },
+    {
+      "from": "mod___ui",
+      "to": "n_scope_0_Box_39",
+      "label": "read"
+    },
+    {
+      "from": "mod___ui",
+      "to": "n_scope_0_Text_44",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

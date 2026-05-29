@@ -1,4 +1,3 @@
-0	4	integration/fixtures/jsx/memo-component/input.tsx:0 module
 1	1	integration/fixtures/jsx/memo-component/input.tsx:1 memo
 1	0	integration/fixtures/jsx/memo-component/input.tsx:1 react
 1	1	integration/fixtures/jsx/memo-component/input.tsx:2 Box
@@ -7,4 +6,8 @@
 0	1	integration/fixtures/jsx/memo-component/input.tsx:4 unused Panel
 1	0	integration/fixtures/jsx/memo-component/input.tsx:4 title
 1	0	integration/fixtures/jsx/memo-component/input.tsx:4 body
-8	8	9 total
+0	1	integration/fixtures/jsx/memo-component/input.tsx:6 Box
+0	1	integration/fixtures/jsx/memo-component/input.tsx:6 title
+0	1	integration/fixtures/jsx/memo-component/input.tsx:7 Text
+0	1	integration/fixtures/jsx/memo-component/input.tsx:7 body
+8	8	12 total

@@ -1,21 +1,21 @@
 {
   "version": 1,
   "source": {
-    "path": "integration/fixtures/jsx/memo-component/input.tsx",
+    "path": "integration/fixtures/jsx/call-argument-component/input.tsx",
     "language": "tsx"
   },
   "direction": "RL",
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_memo_9",
-      "name": "memo",
+      "id": "n_scope_0_wrap_9",
+      "name": "wrap",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
       "unused": false,
       "kind": "NamedImportBinding",
-      "importedName": "memo"
+      "importedName": "wrap"
     },
     {
       "type": "node",
@@ -41,7 +41,7 @@
     },
     {
       "type": "node",
-      "id": "n_scope_0_Panel_76",
+      "id": "n_scope_0_Panel_78",
       "name": "Panel",
       "line": 4,
       "endLine": null,
@@ -62,7 +62,7 @@
       "elements": [
         {
           "type": "node",
-          "id": "n_scope_1_title_90",
+          "id": "n_scope_1_title_92",
           "name": "title",
           "line": 4,
           "endLine": null,
@@ -72,7 +72,7 @@
         },
         {
           "type": "node",
-          "id": "n_scope_1_body_105",
+          "id": "n_scope_1_body_107",
           "name": "body",
           "line": 4,
           "endLine": null,
@@ -82,7 +82,7 @@
         },
         {
           "type": "subgraph",
-          "id": "s_return_scope_1_126_200",
+          "id": "s_return_scope_1_128_202",
           "kind": "return",
           "line": 5,
           "endLine": 9,
@@ -134,9 +134,9 @@
     },
     {
       "type": "node",
-      "id": "mod_react",
+      "id": "mod___hoc",
       "kind": "SyntheticModuleSource",
-      "name": "react",
+      "name": "./hoc",
       "line": 1,
       "endLine": null,
       "isJsxElement": false,
@@ -144,9 +144,9 @@
     },
     {
       "type": "node",
-      "id": "mod_ui",
+      "id": "mod___ui",
       "kind": "SyntheticModuleSource",
-      "name": "ui",
+      "name": "./ui",
       "line": 2,
       "endLine": null,
       "isJsxElement": false,
@@ -155,8 +155,8 @@
   ],
   "edges": [
     {
-      "from": "n_scope_0_memo_9",
-      "to": "n_scope_0_Panel_76",
+      "from": "n_scope_0_wrap_9",
+      "to": "n_scope_0_Panel_78",
       "label": "read,call"
     },
     {
@@ -165,7 +165,7 @@
       "label": "read"
     },
     {
-      "from": "n_scope_1_title_90",
+      "from": "n_scope_1_title_92",
       "to": "ret_use_ref_3",
       "label": "read"
     },
@@ -175,22 +175,22 @@
       "label": "read"
     },
     {
-      "from": "n_scope_1_body_105",
+      "from": "n_scope_1_body_107",
       "to": "ret_use_ref_5",
       "label": "read"
     },
     {
-      "from": "mod_react",
-      "to": "n_scope_0_memo_9",
+      "from": "mod___hoc",
+      "to": "n_scope_0_wrap_9",
       "label": "read"
     },
     {
-      "from": "mod_ui",
+      "from": "mod___ui",
       "to": "n_scope_0_Box_39",
       "label": "read"
     },
     {
-      "from": "mod_ui",
+      "from": "mod___ui",
       "to": "n_scope_0_Text_44",
       "label": "read"
     }

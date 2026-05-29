@@ -53,16 +53,20 @@ pub struct BuildState {
     /// fnB() {}`) so `find_host_subgraph` can fall back to the
     /// owning function when no scope-direct hit is found.
     pub function_subgraph_by_fn: HashMap<String, SubgraphIdx>,
-    /// `owner var id → completion span key → SubgraphIdx`. Tracks
-    /// the per-function Return subgraph created on first
-    /// `ensure_return_use_node` hit so subsequent returns inside
-    /// the same statement reuse the same wrapping subgraph.
+    /// `host key → completion span key → SubgraphIdx`. The host key
+    /// is the owner var id when the enclosing function is owned by a
+    /// variable, or the host scope id (`find_host_scope_id`) for an
+    /// owner-var-less callback. Tracks the per-function Return
+    /// subgraph created on first `ensure_return_use_node` hit so
+    /// subsequent returns inside the same statement reuse the same
+    /// wrapping subgraph.
     pub return_subgraphs_by_fn: HashMap<String, HashMap<String, SubgraphIdx>>,
     /// Set of ref ids whose return-use node has already been
     /// emitted. Prevents duplicate nodes when the same ref is
     /// visited from multiple call paths.
     pub return_use_added: HashSet<String>,
-    /// Same as `return_subgraphs_by_fn` but for `throw` completions.
+    /// Same as `return_subgraphs_by_fn` (including the owner-var /
+    /// host-scope-id host key) but for `throw` completions.
     pub throw_subgraphs_by_fn: HashMap<String, HashMap<String, SubgraphIdx>>,
     /// Same as `return_use_added` but for `throw` completions.
     pub throw_use_added: HashSet<String>,
