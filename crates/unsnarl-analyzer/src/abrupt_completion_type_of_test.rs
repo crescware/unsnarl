@@ -361,6 +361,99 @@ fn nested_labeled_inner_collapses_inner_break() {
 }
 
 #[test]
+fn labeled_statement_with_bare_break_propagates() {
+    // ECMA §14.13.4 step 3 only collapses Break / Continue with a
+    // `[[Target]]`. A bare `break;` carries no target, so
+    // `matches_label` never matches it and the Break completion
+    // propagates through the labelled wrapper unchanged.
+    // (oxc's parser is permissive about a bare break outside an
+    // iteration / switch; the analyzer just walks what it gets.)
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { break; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Break]));
+}
+
+#[test]
+fn labeled_statement_with_non_matching_continue_target_propagates() {
+    // Symmetric to the non-matching break case: a continue whose
+    // `[[Target]]` is some other label does not match this
+    // LabelledStatement's label and propagates the Continue
+    // completion through unchanged.
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { continue inner; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Continue]));
+}
+
+#[test]
+fn labeled_statement_with_bare_continue_propagates() {
+    // A bare `continue;` carries no `[[Target]]`, so it never
+    // matches the label and the Continue completion propagates.
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: { continue; } }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    let res = abrupt_completion_type_of(labeled).expect("Some");
+    assert!(types_match(&res, &[CompletionType::Continue]));
+}
+
+#[test]
+fn labeled_statement_around_if_without_alternate_yields_none() {
+    // Combination of the IfStatement alternate-required branch with a
+    // labelled wrapper. `outer: if (x) break outer;` has no
+    // `alternate`, so `compute_outcomes` returns `None` for the body
+    // (a path falls through), and the labelled wrapper inherits that
+    // normal completion — the matching break never gets a chance to
+    // collapse because the body completion is already normal.
+    let alloc = Allocator::default();
+    let program = parse_ts(&alloc, "function f() { outer: if (x) break outer; }");
+    let func = match first_stmt(&program) {
+        Statement::FunctionDeclaration(f) => f,
+        _ => unreachable!(),
+    };
+    let labeled = func
+        .body
+        .as_ref()
+        .expect("function declaration has a body (test fixture is not abstract)")
+        .statements
+        .last()
+        .expect("test source has at least one statement in the function body");
+    assert!(abrupt_completion_type_of(labeled).is_none());
+}
+
+#[test]
 fn labeled_statement_collapses_only_matching_branch_of_if() {
     // `outer: if (x) break outer; else return;`. Both branches
     // are abrupt; the matching break collapses but the return
