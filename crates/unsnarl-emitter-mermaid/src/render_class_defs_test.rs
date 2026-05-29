@@ -285,6 +285,79 @@ fn edge_target_assignments_follow_palette_slot_order_regardless_of_set_iteration
 }
 
 #[test]
+fn edge_target_assignments_within_a_single_slot_follow_that_slots_emit_order() {
+    // The doc promises "depth-then-emit-order": across slots is the
+    // depth half, and WITHIN a slot the assignments follow the Vec's
+    // emit order. Three ids share slot 0 in a fixed Vec order; only a
+    // subset are edge targets, supplied in a scrambled set. The output
+    // must follow the Vec order (wrap_s_fn before s_late), skipping the
+    // non-target s_mid, regardless of how the set iterates.
+    let mut lines: Vec<String> = Vec::new();
+    let mut nest_map: HashMap<usize, Vec<String>> = HashMap::new();
+    nest_map.insert(
+        0,
+        vec![
+            "wrap_s_fn".to_string(),
+            "s_mid".to_string(),
+            "s_late".to_string(),
+        ],
+    );
+    let targets: HashSet<String> = HashSet::from(["s_late".to_string(), "wrap_s_fn".to_string()]);
+    render_class_defs(&[], &[], &nest_map, &targets, &DARK_THEME, &mut lines);
+    let assignments: Vec<&String> = lines
+        .iter()
+        .filter(|v| v.contains("edgeTargetSubgraph;"))
+        .collect();
+    assert_eq!(
+        assignments,
+        vec![
+            &"  class wrap_s_fn edgeTargetSubgraph;".to_string(),
+            &"  class s_late edgeTargetSubgraph;".to_string(),
+        ]
+    );
+}
+
+#[test]
+fn edge_target_class_lines_line_up_in_the_same_id_order_as_the_nest_class_lines() {
+    // The doc's core claim: edge-target `class` lines "line up under
+    // their matching `class … nestL<N>` line". With every id an edge
+    // target, the id sequence of the `edgeTargetSubgraph` assignments
+    // must equal the id sequence of the `nestL<N>` assignments across
+    // both depth (slots) and emit order (within a slot).
+    let mut lines: Vec<String> = Vec::new();
+    let mut nest_map: HashMap<usize, Vec<String>> = HashMap::new();
+    nest_map.insert(0, vec!["wrap_s_fn".to_string(), "s_fn".to_string()]);
+    nest_map.insert(1, vec!["s_mid".to_string()]);
+    nest_map.insert(2, vec!["s_inner_a".to_string(), "s_inner_b".to_string()]);
+    let targets: HashSet<String> = HashSet::from([
+        "wrap_s_fn".to_string(),
+        "s_fn".to_string(),
+        "s_mid".to_string(),
+        "s_inner_a".to_string(),
+        "s_inner_b".to_string(),
+    ]);
+    render_class_defs(&[], &[], &nest_map, &targets, &DARK_THEME, &mut lines);
+    let ids_for = |suffix: &str| -> Vec<String> {
+        lines
+            .iter()
+            .filter(|v| v.ends_with(&format!(" {suffix};")))
+            .filter_map(|v| v.split_whitespace().nth(1).map(str::to_string))
+            .collect::<Vec<String>>()
+    };
+    let nest_ids: Vec<String> = lines
+        .iter()
+        .filter(|v| v.contains(" nestL"))
+        .filter(|v| v.contains("  class "))
+        .filter_map(|v| v.split_whitespace().nth(1).map(str::to_string))
+        .collect();
+    assert_eq!(
+        nest_ids,
+        vec!["wrap_s_fn", "s_fn", "s_mid", "s_inner_a", "s_inner_b"]
+    );
+    assert_eq!(ids_for("edgeTargetSubgraph"), nest_ids);
+}
+
+#[test]
 fn edge_target_assignments_skip_ids_outside_the_palette_slots() {
     // Only `s_mapped` has a nest_map entry; `s_unmapped` lives
     // deeper than the palette so it never received a `nestL<N>` slot
