@@ -31,6 +31,7 @@ flowchart RL
   n_scope_1_start_57 -->|read| n_scope_1_inc_98
   n_scope_0_button_162 -->|read| ret_use_ref_6
   n_scope_1_inc_98 -->|read,call| ret_use_ref_7
+  s_scope_2 -->|useCallback| n_scope_1_inc_98
   mod_react["module react<br/>L1"]
   mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;

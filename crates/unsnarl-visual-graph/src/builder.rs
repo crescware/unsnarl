@@ -16,6 +16,7 @@ pub mod context;
 pub mod control_subgraph_kind_of;
 pub mod describe_subgraph;
 pub mod edge_label_of_ref;
+pub mod emit_callback_result_edges;
 pub mod enclosing_function_var;
 pub mod ensure_beyond_depth_stub;
 pub mod ensure_expression_statement_node;

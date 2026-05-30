@@ -200,6 +200,11 @@
       "label": "read,call"
     },
     {
+      "from": "s_scope_2",
+      "to": "n_scope_1_inc_98",
+      "label": "useCallback"
+    },
+    {
       "from": "mod_react",
       "to": "n_scope_0_useCallback_9",
       "label": "read"

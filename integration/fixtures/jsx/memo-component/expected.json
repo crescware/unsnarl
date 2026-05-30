@@ -184,6 +184,11 @@
       "label": "read"
     },
     {
+      "from": "s_scope_1",
+      "to": "n_scope_0_Panel_76",
+      "label": "memo"
+    },
+    {
       "from": "mod_react",
       "to": "n_scope_0_memo_9",
       "label": "read"

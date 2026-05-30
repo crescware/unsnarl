@@ -1,0 +1,226 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/arrow/callback-result-edge/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_items_6",
+      "name": "items",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_ids_32",
+      "name": "ids",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_out_70",
+      "name": "out",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_run_105",
+      "name": "run",
+      "line": 7,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 3,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "callbackArg": {
+        "callee": "items.map",
+        "argIndex": 0
+      },
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_v_49",
+          "name": "v",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_1_55_60",
+          "kind": "return",
+          "line": 3,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnArgumentReference",
+              "name": "v",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "function",
+      "line": 5,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": null,
+      "ownerName": "",
+      "callbackArg": {
+        "callee": "run",
+        "argIndex": 0
+      },
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_2_v_81",
+          "name": "v",
+          "line": 5,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_2_87_92",
+          "kind": "return",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnArgumentReference",
+              "name": "v",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_3",
+      "kind": "function",
+      "line": 7,
+      "endLine": 9,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_run_105",
+      "ownerName": "run",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_3_cb_109",
+          "name": "cb",
+          "line": 7,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_run_105_140_153",
+          "kind": "return",
+          "line": 8,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_7",
+              "kind": "ReturnArgumentReference",
+              "name": "cb",
+              "line": 8,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_items_6",
+      "to": "n_scope_0_ids_32",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_49",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_run_105",
+      "to": "n_scope_0_out_70",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_2_v_81",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_cb_109",
+      "to": "ret_use_ref_7",
+      "label": "read,call"
+    },
+    {
+      "from": "s_scope_1",
+      "to": "n_scope_0_ids_32",
+      "label": "map"
+    },
+    {
+      "from": "s_scope_2",
+      "to": "n_scope_0_out_70",
+      "label": "run"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

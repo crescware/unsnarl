@@ -28,6 +28,7 @@ use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
 use super::context::{BuildVisualGraphOptions, BuilderContext};
 use super::edge_label_of_ref::edge_label_of_ref;
+use super::emit_callback_result_edges::emit_callback_result_edges;
 use super::enclosing_function_var::enclosing_function_var_borrowed;
 use super::ensure_expression_statement_node::ensure_expression_statement_node;
 use super::expression_statement_index::ExpressionStatementIndex;
@@ -231,6 +232,10 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
     {
         let _span = unsnarl_instrumentation::span!("emit_reference_edges");
         emit_reference_edges(&mut arena, &mut state, &ctx, &var_var_ids);
+    }
+    {
+        let _span = unsnarl_instrumentation::span!("emit_callback_result_edges");
+        emit_callback_result_edges(&mut state, &ctx);
     }
 
     let needs_module_root = state.edges.iter().any(|e| e.to == MODULE_ROOT_ID);
