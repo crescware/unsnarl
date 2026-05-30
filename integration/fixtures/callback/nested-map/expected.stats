@@ -1,0 +1,7 @@
+1	0	integration/fixtures/callback/nested-map/input.ts:1 matrix
+0	0	integration/fixtures/callback/nested-map/input.ts:2 unused xs
+1	0	integration/fixtures/callback/nested-map/input.ts:2 row
+1	0	integration/fixtures/callback/nested-map/input.ts:2 c
+0	1	integration/fixtures/callback/nested-map/input.ts:2 c
+0	1	integration/fixtures/callback/nested-map/input.ts:2 row
+3	2	6 total
