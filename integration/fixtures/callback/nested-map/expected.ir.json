@@ -183,16 +183,16 @@
         },
         "argIndex": 0,
         "host": {
-          "kind": "variableDeclarator",
+          "kind": "return",
           "startSpan": {
             "line": 2,
-            "column": 11,
-            "offset": 44
+            "column": 31,
+            "offset": 64
           },
           "endSpan": {
             "line": 2,
-            "column": 53,
-            "offset": 86
+            "column": 52,
+            "offset": 85
           },
           "head": {
             "kind": "call",
@@ -200,19 +200,19 @@
               "kind": "member",
               "object": {
                 "kind": "identifier",
-                "name": "matrix"
+                "name": "row"
               },
               "property": "map"
             },
             "startSpan": {
               "line": 2,
-              "column": 11,
-              "offset": 44
+              "column": 31,
+              "offset": 64
             },
             "endSpan": {
               "line": 2,
-              "column": 53,
-              "offset": 86
+              "column": 52,
+              "offset": 85
             }
           }
         }

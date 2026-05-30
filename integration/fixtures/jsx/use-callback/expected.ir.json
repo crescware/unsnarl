@@ -222,32 +222,36 @@
         },
         "argIndex": 0,
         "host": {
-          "kind": "variableDeclarator",
+          "kind": "return",
           "startSpan": {
             "line": 4,
-            "column": 14,
-            "offset": 70
+            "column": 45,
+            "offset": 101
           },
           "endSpan": {
             "line": 4,
-            "column": 71,
-            "offset": 127
+            "column": 66,
+            "offset": 122
           },
           "head": {
             "kind": "call",
             "callee": {
-              "kind": "identifier",
-              "name": "useCallback"
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "arr"
+              },
+              "property": "map"
             },
             "startSpan": {
               "line": 4,
-              "column": 14,
-              "offset": 70
+              "column": 45,
+              "offset": 101
             },
             "endSpan": {
               "line": 4,
-              "column": 71,
-              "offset": 127
+              "column": 66,
+              "offset": 122
             }
           }
         }
@@ -350,11 +354,11 @@
         },
         "argIndex": 0,
         "host": {
-          "kind": "variableDeclarator",
+          "kind": "return",
           "startSpan": {
             "line": 5,
-            "column": 14,
-            "offset": 143
+            "column": 33,
+            "offset": 162
           },
           "endSpan": {
             "line": 5,
@@ -362,11 +366,19 @@
             "offset": 183
           },
           "head": {
-            "kind": "raw",
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "arr"
+              },
+              "property": "map"
+            },
             "startSpan": {
               "line": 5,
-              "column": 14,
-              "offset": 143
+              "column": 33,
+              "offset": 162
             },
             "endSpan": {
               "line": 5,

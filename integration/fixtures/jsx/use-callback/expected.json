@@ -96,67 +96,58 @@
                 },
                 {
                   "type": "subgraph",
-                  "id": "s_scope_3",
-                  "kind": "function",
+                  "id": "call_proxy_101",
+                  "kind": "call-proxy",
                   "line": 4,
-                  "endLine": 4,
+                  "endLine": null,
                   "direction": "RL",
-                  "ownerNodeId": null,
-                  "ownerName": "",
-                  "callbackArg": {
-                    "callee": "arr.map",
-                    "argIndex": 0
-                  },
+                  "callName": "arr.map()",
                   "elements": [
                     {
-                      "type": "node",
-                      "id": "n_scope_3_n_110",
-                      "name": "n",
-                      "line": 4,
-                      "endLine": null,
-                      "isJsxElement": false,
-                      "unused": false,
-                      "kind": "FormalParameter"
-                    },
-                    {
                       "type": "subgraph",
-                      "id": "s_return_scope_0_C_44_116_121",
-                      "kind": "return",
+                      "id": "s_scope_3",
+                      "kind": "function",
                       "line": 4,
-                      "endLine": null,
+                      "endLine": 4,
                       "direction": "RL",
+                      "ownerNodeId": null,
+                      "ownerName": "",
+                      "callbackArg": {
+                        "callee": "arr.map",
+                        "argIndex": 0
+                      },
                       "elements": [
                         {
                           "type": "node",
-                          "id": "ret_use_ref_4",
-                          "kind": "ReturnArgumentReference",
+                          "id": "n_scope_3_n_110",
                           "name": "n",
                           "line": 4,
                           "endLine": null,
                           "isJsxElement": false,
-                          "unused": false
+                          "unused": false,
+                          "kind": "FormalParameter"
+                        },
+                        {
+                          "type": "subgraph",
+                          "id": "s_return_scope_0_C_44_116_121",
+                          "kind": "return",
+                          "line": 4,
+                          "endLine": null,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "node",
+                              "id": "ret_use_ref_4",
+                              "kind": "ReturnArgumentReference",
+                              "name": "n",
+                              "line": 4,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            }
+                          ]
                         }
                       ]
-                    }
-                  ]
-                },
-                {
-                  "type": "subgraph",
-                  "id": "s_return_scope_0_C_44_101_122",
-                  "kind": "return",
-                  "line": 4,
-                  "endLine": null,
-                  "direction": "RL",
-                  "elements": [
-                    {
-                      "type": "node",
-                      "id": "ret_use_ref_3",
-                      "kind": "ReturnArgumentReference",
-                      "name": "arr",
-                      "line": 4,
-                      "endLine": null,
-                      "isJsxElement": false,
-                      "unused": false
                     }
                   ]
                 }
@@ -186,67 +177,58 @@
             },
             {
               "type": "subgraph",
-              "id": "s_scope_5",
-              "kind": "function",
+              "id": "call_proxy_162",
+              "kind": "call-proxy",
               "line": 5,
-              "endLine": 5,
+              "endLine": null,
               "direction": "RL",
-              "ownerNodeId": null,
-              "ownerName": "",
-              "callbackArg": {
-                "callee": "arr.map",
-                "argIndex": 0
-              },
+              "callName": "arr.map()",
               "elements": [
                 {
-                  "type": "node",
-                  "id": "n_scope_5_n_171",
-                  "name": "n",
-                  "line": 5,
-                  "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false,
-                  "kind": "FormalParameter"
-                },
-                {
                   "type": "subgraph",
-                  "id": "s_return_scope_1_fnB_137_177_182",
-                  "kind": "return",
+                  "id": "s_scope_5",
+                  "kind": "function",
                   "line": 5,
-                  "endLine": null,
+                  "endLine": 5,
                   "direction": "RL",
+                  "ownerNodeId": null,
+                  "ownerName": "",
+                  "callbackArg": {
+                    "callee": "arr.map",
+                    "argIndex": 0
+                  },
                   "elements": [
                     {
                       "type": "node",
-                      "id": "ret_use_ref_7",
-                      "kind": "ReturnArgumentReference",
+                      "id": "n_scope_5_n_171",
                       "name": "n",
                       "line": 5,
                       "endLine": null,
                       "isJsxElement": false,
-                      "unused": false
+                      "unused": false,
+                      "kind": "FormalParameter"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_return_scope_1_fnB_137_177_182",
+                      "kind": "return",
+                      "line": 5,
+                      "endLine": null,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "ret_use_ref_7",
+                          "kind": "ReturnArgumentReference",
+                          "name": "n",
+                          "line": 5,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ]
                     }
                   ]
-                }
-              ]
-            },
-            {
-              "type": "subgraph",
-              "id": "s_return_scope_1_fnB_137_162_183",
-              "kind": "return",
-              "line": 5,
-              "endLine": null,
-              "direction": "RL",
-              "elements": [
-                {
-                  "type": "node",
-                  "id": "ret_use_ref_6",
-                  "kind": "ReturnArgumentReference",
-                  "name": "arr",
-                  "line": 5,
-                  "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
                 }
               ]
             }
@@ -273,7 +255,7 @@
     },
     {
       "from": "n_scope_2_arr_83",
-      "to": "ret_use_ref_3",
+      "to": "call_proxy_101",
       "label": "read"
     },
     {
@@ -283,7 +265,7 @@
     },
     {
       "from": "n_scope_4_arr_144",
-      "to": "ret_use_ref_6",
+      "to": "call_proxy_162",
       "label": "read"
     },
     {

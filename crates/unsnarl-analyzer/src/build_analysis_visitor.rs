@@ -254,6 +254,25 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                         &ae.right,
                     ));
                 }
+                AstKind::ArrowFunctionExpression(arrow) => {
+                    // An expression-body arrow (`(x) => expr`) implicitly
+                    // returns its body, so a callback inside that body is
+                    // hosted by the body expression -- the same span
+                    // `find_completion` reports for the body's references,
+                    // so the visual layer can route them to the proxy.
+                    // A block-body arrow is a function boundary: any host
+                    // would have been hit deeper, so stop.
+                    return match frame.arrow_body {
+                        Some(b) if !b.is_block => arrow.get_expression().map(|expr| {
+                            self.build_callback_host(CallbackHostKind::Return, b.span, expr)
+                        }),
+                        _ => None,
+                    };
+                }
+                // Other function / class boundaries: the callback is
+                // inside another function whose own host would have been
+                // hit earlier, so do not cross out.
+                AstKind::Function(_) | AstKind::Class(_) => return None,
                 AstKind::ExpressionStatement(_) => return None,
                 _ => {}
             }
