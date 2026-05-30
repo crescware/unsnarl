@@ -23,21 +23,27 @@ flowchart RL
     n_scope_0_C_44["unused C()<br/>L3"]
     subgraph s_scope_1["C()<br/>L3-7"]
       direction RL
-      n_scope_1_fnA_64["unused fnA<br/>L4"]
-      subgraph s_scope_2["useCallback(args[0])<br/>L4"]
-        direction RL
-        n_scope_2_arr_83["arr<br/>L4"]
-        subgraph s_scope_3["arr.map(args[0])<br/>L4"]
+      subgraph wrap_call_proxy_ref_2[" "]
+        direction TB
+        n_scope_1_fnA_64["unused fnA<br/>L4"]
+        subgraph call_proxy_ref_2["useCallback<br/>L4"]
           direction RL
-          n_scope_3_n_110["n<br/>L4"]
-          subgraph s_return_scope_0_C_44_116_121["return L4"]
+          subgraph s_scope_2["useCallback(args[0])<br/>L4"]
             direction RL
-            ret_use_ref_4["n<br/>L4"]
+            n_scope_2_arr_83["arr<br/>L4"]
+            subgraph s_scope_3["arr.map(args[0])<br/>L4"]
+              direction RL
+              n_scope_3_n_110["n<br/>L4"]
+              subgraph s_return_scope_0_C_44_116_121["return L4"]
+                direction RL
+                ret_use_ref_4["n<br/>L4"]
+              end
+            end
+            subgraph s_return_scope_0_C_44_101_122["return L4"]
+              direction RL
+              ret_use_ref_3["arr<br/>L4"]
+            end
           end
-        end
-        subgraph s_return_scope_0_C_44_101_122["return L4"]
-          direction RL
-          ret_use_ref_3["arr<br/>L4"]
         end
       end
       subgraph wrap_s_scope_4[" "]
@@ -62,7 +68,7 @@ flowchart RL
       end
     end
   end
-  n_scope_0_useCallback_9 -->|read,call| n_scope_1_fnA_64
+  n_scope_0_useCallback_9 -->|read,call| call_proxy_ref_2
   n_scope_2_arr_83 -->|read| ret_use_ref_3
   n_scope_3_n_110 -->|read| ret_use_ref_4
   n_scope_4_arr_144 -->|read| ret_use_ref_6
@@ -71,19 +77,23 @@ flowchart RL
   mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class s_return_scope_0_C_44_116_121 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class s_scope_2 nestL3;
+  class wrap_call_proxy_ref_2 nestL3;
   class wrap_s_scope_4 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
-  class s_scope_3 nestL4;
-  class s_return_scope_0_C_44_101_122 nestL4;
+  class call_proxy_ref_2 nestL4;
   class s_scope_4 nestL4;
   classDef nestL5 fill:#364666,stroke:transparent;
-  class s_return_scope_0_C_44_116_121 nestL5;
+  class s_scope_2 nestL5;
   class s_scope_5 nestL5;
   class s_return_scope_1_fnB_137_162_183 nestL5;
   classDef nestL6 fill:#3f5175,stroke:transparent;
+  class s_scope_3 nestL6;
+  class s_return_scope_0_C_44_101_122 nestL6;
   class s_return_scope_1_fnB_137_177_182 nestL6;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_ref_2 edgeTargetSubgraph;
 ```

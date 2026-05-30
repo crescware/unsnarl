@@ -25,12 +25,15 @@ use crate::visual_subgraph::OwnedVisualSubgraph;
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
+use super::callback_downstream_target::{callback_result_target, CallbackResultTarget};
 use super::context::BuilderContext;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::if_container_subgraph_id::if_container_subgraph_id;
 use super::if_test_node_id::if_test_node_id;
 use super::line_for_offset::line_for_offset;
+use super::node_id::node_id;
 use super::render_head_expression::render_head_expression;
+use super::sanitize::sanitize;
 use super::state::BuildState;
 
 fn make_if_test_anchor(
@@ -85,6 +88,66 @@ fn ensure_call_proxy_wrapper(
     // emitting a separate leaf `expr_stmt_<offset>` node.
     state.expression_statement_by_offset.insert(stmt_offset, id);
     call_proxy_by_stmt_offset.insert(stmt_offset, idx);
+    idx
+}
+
+/// Look up (or create on first sight) the result-bound `CallProxy`
+/// wrapper for a callback whose call result is bound to a variable
+/// (`const xs = arr.map(cb)`), the non-statement counterpart of
+/// [`ensure_call_proxy_wrapper`].
+///
+/// The proxy contains the callback bodies; it carries the result
+/// variable's node id as its `owner_node_id`, so the emitter bundles
+/// that variable node beside the proxy in a `wrap_` box -- the call
+/// result ↔ variable relationship shown by containment, not an edge.
+/// Multiple callbacks of the same call (`x.then(ok, err)`) share one
+/// proxy, keyed by the anchor reference whose owner is the result.
+///
+/// The proxy's line range is the callback body's span: the callee /
+/// `Member` head expression carries no span, and the proxy visually
+/// contains exactly that body, so the body span is the coherent range.
+fn ensure_result_call_proxy(
+    arena: &mut BuildArena,
+    state: &mut BuildState,
+    ctx: &BuilderContext<'_>,
+    container: Container,
+    call_proxy_by_anchor: &mut HashMap<String, SubgraphIdx>,
+    callback: &SerializedScope,
+    target: &CallbackResultTarget,
+) -> SubgraphIdx {
+    if let Some(&idx) = call_proxy_by_anchor.get(&target.anchor_ref_id) {
+        return idx;
+    }
+    let id = format!("call_proxy_{}", sanitize(&target.anchor_ref_id));
+    // Inputs of this call own the result variable; their init-time
+    // owner edges retarget from the result-variable node to this proxy
+    // (see `result_proxy_by_var`).
+    state
+        .result_proxy_by_var
+        .insert(target.owner_var_id.clone(), id.clone());
+    let name = callback
+        .callback_argument
+        .as_ref()
+        .map(|cb| render_head_expression(&cb.callee, &ctx.source_index))
+        .unwrap_or_default();
+    let start_line = callback.block.span.line.0;
+    let end_line = if callback.block.end_span.line.0 != start_line {
+        Some(callback.block.end_span.line.0)
+    } else {
+        None
+    };
+    let mut sg = OwnedVisualSubgraph::call_proxy_owned(
+        id,
+        start_line,
+        name,
+        node_id(&target.owner_var_id),
+        Vec::new(),
+        Direction::RL,
+    );
+    sg.end_line = end_line;
+    let idx = arena.push_subgraph(sg.into());
+    arena.append_child(container, ElementHandle::Subgraph(idx));
+    call_proxy_by_anchor.insert(target.anchor_ref_id.clone(), idx);
     idx
 }
 
@@ -144,6 +207,9 @@ pub fn build_children(
     // `[wrapper, block, block]` by a pre-pass that always appends
     // wrappers first.
     let mut call_proxy_by_stmt_offset: HashMap<u32, SubgraphIdx> = HashMap::new();
+    // `anchor reference id → result-bound CallProxy wrapper`, the
+    // non-statement counterpart of `call_proxy_by_stmt_offset`.
+    let mut call_proxy_by_anchor: HashMap<String, SubgraphIdx> = HashMap::new();
 
     let mut i = 0;
     while i < children.len() {
@@ -182,10 +248,31 @@ pub fn build_children(
                 i += 1;
                 continue;
             }
-            // No registered `ExpressionStatement` contains this
-            // callback's block span (e.g. a top-level variable-bound or
-            // returned callback with no enclosing statement-level call),
-            // so it gets no CallProxy wrapper -- only the
+            // Not a statement-level call, but the call's result is
+            // bound to a single variable (`const xs = arr.map(cb)`,
+            // `const v = useMemo(cb, deps)`). Wrap the callback in a
+            // result-bound CallProxy bundled with that variable, so the
+            // callback is contained by its call rather than left as a
+            // disconnected island -- the same containment as the
+            // statement path, only attached downstream to the result
+            // variable.
+            if let Some(target) = callback_result_target(child, ctx) {
+                let wrapper_idx = ensure_result_call_proxy(
+                    arena,
+                    state,
+                    ctx,
+                    container,
+                    &mut call_proxy_by_anchor,
+                    child,
+                    &target,
+                );
+                build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                i += 1;
+                continue;
+            }
+            // No statement and no single result variable (bare
+            // `return`, call-in-argument, computed receiver, ...): the
+            // callback gets no CallProxy wrapper -- only the
             // `<callee>(args[N])` label from `describe_subgraph`. Fall
             // through to default handling.
         }

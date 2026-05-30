@@ -71,55 +71,67 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_2",
-          "kind": "function",
+          "id": "call_proxy_ref_2",
+          "kind": "call-proxy",
           "line": 4,
-          "endLine": 4,
+          "endLine": null,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useCallback",
-            "argIndex": 0
-          },
+          "callName": "useCallback",
+          "ownerNodeId": "n_scope_1_inc_98",
           "elements": [
             {
-              "type": "node",
-              "id": "n_scope_2_n_117",
-              "name": "n",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "FormalParameter"
-            },
-            {
               "type": "subgraph",
-              "id": "s_return_scope_0_Counter_44_131_140",
-              "kind": "return",
+              "id": "s_scope_2",
+              "kind": "function",
               "line": 4,
-              "endLine": null,
+              "endLine": 4,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useCallback",
+                "argIndex": 0
+              },
               "elements": [
                 {
                   "type": "node",
-                  "id": "ret_use_ref_3",
-                  "kind": "ReturnArgumentReference",
+                  "id": "n_scope_2_n_117",
                   "name": "n",
                   "line": 4,
                   "endLine": null,
                   "isJsxElement": false,
-                  "unused": false
+                  "unused": false,
+                  "kind": "FormalParameter"
                 },
                 {
-                  "type": "node",
-                  "id": "ret_use_ref_4",
-                  "kind": "ReturnArgumentReference",
-                  "name": "start",
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_Counter_44_131_140",
+                  "kind": "return",
                   "line": 4,
                   "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_3",
+                      "kind": "ReturnArgumentReference",
+                      "name": "n",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    },
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_4",
+                      "kind": "ReturnArgumentReference",
+                      "name": "start",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }
@@ -171,7 +183,7 @@
   "edges": [
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "n_scope_1_inc_98",
+      "to": "call_proxy_ref_2",
       "label": "read,call"
     },
     {
@@ -186,7 +198,7 @@
     },
     {
       "from": "n_scope_1_start_57",
-      "to": "n_scope_1_inc_98",
+      "to": "call_proxy_ref_2",
       "label": "read"
     },
     {

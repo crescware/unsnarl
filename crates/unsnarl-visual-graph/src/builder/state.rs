@@ -122,6 +122,15 @@ pub struct BuildState {
     /// intentionally absent because they belong to their
     /// surrounding control subgraph, not the inner gated scope.
     pub node_id_origin_scope: HashMap<String, String>,
+    /// `result variable id → result-bound CallProxy id`. Recorded when
+    /// a `const xs = arr.map(cb)`-style call is wrapped in a
+    /// result-bound CallProxy. The call's inputs (receiver / callee /
+    /// non-callback args) own `xs`; their init-time owner edges are
+    /// retargeted from the `xs` node to the proxy border, so they read
+    /// "input → the call" while the call ↔ `xs` relationship is shown
+    /// by containment (the shared `wrap_` box) -- matching how a
+    /// statement-level call's inputs edge to its proxy.
+    pub result_proxy_by_var: HashMap<String, String>,
 }
 
 impl BuildState {

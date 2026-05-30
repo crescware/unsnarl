@@ -349,6 +349,28 @@ fn emit_let_chain_edges(state: &mut BuildState, ctx: &BuilderContext<'_>) {
     }
 }
 
+/// Retarget an owner edge from the result-variable node to its
+/// result-bound CallProxy border, when one exists.
+///
+/// Only the init-time owner edge lands on the variable's own node
+/// (`owner_target_id` returns `node_id(var)` when no prior write op
+/// exists); later reassignments target a write-op node and are left
+/// alone. So this redirects exactly the call's inputs (receiver /
+/// callee / args) to the proxy, leaving the call ↔ variable
+/// relationship to the containment wrapper.
+fn retarget_owner_target(
+    target_id: String,
+    owner_var_id: &str,
+    result_proxy_by_var: &HashMap<String, String>,
+) -> String {
+    if target_id == node_id(owner_var_id) {
+        if let Some(proxy) = result_proxy_by_var.get(owner_var_id) {
+            return proxy.clone();
+        }
+    }
+    target_id
+}
+
 fn emit_reference_edges(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -456,10 +478,14 @@ fn emit_reference_edges(
                     if owner_id.value() == resolved.value() {
                         continue;
                     }
-                    let target_id = owner_target_id(
+                    let target_id = retarget_owner_target(
+                        owner_target_id(
+                            owner_id.value(),
+                            r.identifier.span().offset.0,
+                            &ctx.write_ops_by_variable,
+                        ),
                         owner_id.value(),
-                        r.identifier.span().offset.0,
-                        &ctx.write_ops_by_variable,
+                        &state.result_proxy_by_var,
                     );
                     push_edge(
                         &mut state.emitted_edges,
@@ -517,10 +543,14 @@ fn emit_reference_edges(
                 if owner_id.value() == resolved.value() {
                     continue;
                 }
-                let target_id = owner_target_id(
+                let target_id = retarget_owner_target(
+                    owner_target_id(
+                        owner_id.value(),
+                        r.identifier.span().offset.0,
+                        &ctx.write_ops_by_variable,
+                    ),
                     owner_id.value(),
-                    r.identifier.span().offset.0,
-                    &ctx.write_ops_by_variable,
+                    &state.result_proxy_by_var,
                 );
                 for from_id in &from_ids {
                     push_edge(
