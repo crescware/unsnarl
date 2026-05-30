@@ -41,7 +41,6 @@ flowchart RL
   n_scope_1_title_92 -->|read| throw_use_ref_3
   n_scope_0_Text_44 -->|read| throw_use_ref_4
   n_scope_1_body_107 -->|read| throw_use_ref_5
-  s_scope_1 -->|wrap| n_scope_0_Panel_78
   mod___hoc["module ./hoc<br/>L1"]
   mod___ui["module ./ui<br/>L2"]
   mod___hoc -->|read| n_scope_0_wrap_9

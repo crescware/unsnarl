@@ -191,11 +191,6 @@
       "label": "read"
     },
     {
-      "from": "s_scope_2",
-      "to": "n_scope_1_value_94",
-      "label": "useMemo"
-    },
-    {
       "from": "mod_react",
       "to": "n_scope_0_useMemo_9",
       "label": "read"

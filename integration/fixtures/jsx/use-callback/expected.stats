@@ -1,7 +1,7 @@
 1	1	integration/fixtures/jsx/use-callback/input.tsx:1 useCallback
 1	0	integration/fixtures/jsx/use-callback/input.tsx:1 react
 0	0	integration/fixtures/jsx/use-callback/input.tsx:3 unused C
-0	2	integration/fixtures/jsx/use-callback/input.tsx:4 unused fnA
+0	1	integration/fixtures/jsx/use-callback/input.tsx:4 unused fnA
 1	0	integration/fixtures/jsx/use-callback/input.tsx:4 arr
 1	0	integration/fixtures/jsx/use-callback/input.tsx:4 n
 0	1	integration/fixtures/jsx/use-callback/input.tsx:4 n
@@ -11,4 +11,4 @@
 1	0	integration/fixtures/jsx/use-callback/input.tsx:5 n
 0	1	integration/fixtures/jsx/use-callback/input.tsx:5 n
 0	1	integration/fixtures/jsx/use-callback/input.tsx:5 arr
-6	7	13 total
+6	6	13 total

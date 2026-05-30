@@ -273,21 +273,6 @@
       "label": "read,call"
     },
     {
-      "from": "s_scope_2",
-      "to": "n_scope_1_a_67",
-      "label": "useCallback"
-    },
-    {
-      "from": "s_scope_3",
-      "to": "n_scope_1_b_105",
-      "label": "useCallback"
-    },
-    {
-      "from": "s_scope_4",
-      "to": "n_scope_1_c_150",
-      "label": "useCallback"
-    },
-    {
       "from": "mod_react",
       "to": "n_scope_0_useCallback_9",
       "label": "read"

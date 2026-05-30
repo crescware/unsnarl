@@ -67,7 +67,6 @@ flowchart RL
   n_scope_3_n_110 -->|read| ret_use_ref_4
   n_scope_4_arr_144 -->|read| ret_use_ref_6
   n_scope_5_n_171 -->|read| ret_use_ref_7
-  s_scope_2 -->|useCallback| n_scope_1_fnA_64
   mod_react["module react<br/>L1"]
   mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;
