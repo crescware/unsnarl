@@ -9,6 +9,7 @@
 
 use serde::Serialize;
 
+use crate::serialized::serialized_callback_host::SerializedCallbackHost;
 use crate::serialized::serialized_expression_statement_head::SerializedHeadExpression;
 
 #[derive(Serialize)]
@@ -16,4 +17,9 @@ use crate::serialized::serialized_expression_statement_head::SerializedHeadExpre
 pub struct SerializedCallbackArgument {
     pub callee: SerializedHeadExpression,
     pub arg_index: u32,
+    /// The binding / return / assignment whose value is this call.
+    /// Present for non-statement contexts; absent for statement-hosted
+    /// or host-less callbacks.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host: Option<SerializedCallbackHost>,
 }

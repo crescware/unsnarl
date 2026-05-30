@@ -12,7 +12,6 @@ pub mod branch_scope_of;
 pub mod build_children;
 pub mod build_scope;
 pub mod build_visual_graph;
-pub mod callback_downstream_target;
 pub mod context;
 pub mod control_subgraph_kind_of;
 pub mod describe_subgraph;

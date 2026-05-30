@@ -143,7 +143,37 @@
           "kind": "identifier",
           "name": "useMemo"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 4,
+            "column": 16,
+            "offset": 102
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 13,
+            "offset": 182
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useMemo"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 16,
+              "offset": 102
+            },
+            "endSpan": {
+              "line": 7,
+              "column": 13,
+              "offset": 182
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,

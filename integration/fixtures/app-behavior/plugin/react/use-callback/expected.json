@@ -71,12 +71,12 @@
         },
         {
           "type": "subgraph",
-          "id": "call_proxy_ref_2",
+          "id": "call_proxy_104",
           "kind": "call-proxy",
           "line": 4,
           "endLine": null,
           "direction": "RL",
-          "callName": "useCallback",
+          "callName": "useCallback()",
           "ownerNodeId": "n_scope_1_inc_98",
           "elements": [
             {
@@ -183,7 +183,7 @@
   "edges": [
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "call_proxy_ref_2",
+      "to": "call_proxy_104",
       "label": "read,call"
     },
     {
@@ -198,7 +198,7 @@
     },
     {
       "from": "n_scope_1_start_57",
-      "to": "call_proxy_ref_2",
+      "to": "call_proxy_104",
       "label": "read"
     },
     {

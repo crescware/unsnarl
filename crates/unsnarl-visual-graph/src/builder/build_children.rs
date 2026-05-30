@@ -16,7 +16,10 @@
 use std::collections::HashMap;
 
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
-use unsnarl_ir::serialized::{SerializedExpressionStatementContainer, SerializedScope};
+use unsnarl_ir::serialized::{
+    SerializedCallbackHost, SerializedCallbackHostKind, SerializedDefinition,
+    SerializedExpressionStatementContainer, SerializedScope,
+};
 
 use crate::direction::Direction;
 use crate::visual_node::{SyntheticVisualNode, VisualNode};
@@ -25,7 +28,6 @@ use crate::visual_subgraph::OwnedVisualSubgraph;
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
-use super::callback_downstream_target::{callback_result_target, CallbackResultTarget};
 use super::context::BuilderContext;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::if_container_subgraph_id::if_container_subgraph_id;
@@ -33,7 +35,6 @@ use super::if_test_node_id::if_test_node_id;
 use super::line_for_offset::line_for_offset;
 use super::node_id::node_id;
 use super::render_head_expression::render_head_expression;
-use super::sanitize::sanitize;
 use super::state::BuildState;
 
 fn make_if_test_anchor(
@@ -91,48 +92,64 @@ fn ensure_call_proxy_wrapper(
     idx
 }
 
-/// Look up (or create on first sight) the result-bound `CallProxy`
-/// wrapper for a callback whose call result is bound to a variable
-/// (`const xs = arr.map(cb)`), the non-statement counterpart of
+/// The variable a `VariableDeclarator`-host's call result is bound to:
+/// the variable in `scope` whose declarator init starts where the
+/// host's bound expression starts. They are the same AST node, so the
+/// start offsets match exactly.
+fn result_var_for_host(
+    host: &SerializedCallbackHost,
+    scope: &SerializedScope,
+    ctx: &BuilderContext<'_>,
+) -> Option<String> {
+    let init_start = host.start_span.offset.0;
+    scope.variables.iter().find_map(|vid| {
+        let v = ctx.variable_map.get(vid.value())?;
+        match v.defs.first()? {
+            SerializedDefinition::Variable(d) => {
+                (d.init()?.span.offset.0 == init_start).then(|| v.id.value().to_string())
+            }
+            _ => None,
+        }
+    })
+}
+
+/// Look up (or create on first sight) the `CallProxy` wrapper for a
+/// callback whose enclosing call's result is bound to `result_var`
+/// (`const xs = arr.map(cb)`, including a call nested in arguments
+/// `const x = foo(data.map(cb))`) -- the non-statement counterpart of
 /// [`ensure_call_proxy_wrapper`].
 ///
-/// The proxy contains the callback bodies; it carries the result
-/// variable's node id as its `owner_node_id`, so the emitter bundles
-/// that variable node beside the proxy in a `wrap_` box -- the call
-/// result ↔ variable relationship shown by containment, not an edge.
-/// Multiple callbacks of the same call (`x.then(ok, err)`) share one
-/// proxy, keyed by the anchor reference whose owner is the result.
-///
-/// The proxy's line range is the callback body's span: the callee /
-/// `Member` head expression carries no span, and the proxy visually
-/// contains exactly that body, so the body span is the coherent range.
-fn ensure_result_call_proxy(
+/// The proxy spans the host's bound expression and is labelled with its
+/// head, so it represents the whole bound call (`foo(...)`), not just
+/// the inner callback's call. It carries the result variable's node id
+/// as `owner_node_id`, so the emitter bundles that variable beside the
+/// proxy in a `wrap_` box -- the call ↔ variable relationship shown by
+/// containment, not an edge. Every callback within the same bound
+/// expression shares one proxy, keyed by the host's start offset.
+fn ensure_host_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
     ctx: &BuilderContext<'_>,
     container: Container,
-    call_proxy_by_anchor: &mut HashMap<String, SubgraphIdx>,
-    callback: &SerializedScope,
-    target: &CallbackResultTarget,
+    call_proxy_by_host: &mut HashMap<u32, SubgraphIdx>,
+    host: &SerializedCallbackHost,
+    result_var: &str,
 ) -> SubgraphIdx {
-    if let Some(&idx) = call_proxy_by_anchor.get(&target.anchor_ref_id) {
+    let key = host.start_span.offset.0;
+    if let Some(&idx) = call_proxy_by_host.get(&key) {
         return idx;
     }
-    let id = format!("call_proxy_{}", sanitize(&target.anchor_ref_id));
+    let id = format!("call_proxy_{key}");
     // Inputs of this call own the result variable; their init-time
     // owner edges retarget from the result-variable node to this proxy
     // (see `result_proxy_by_var`).
     state
         .result_proxy_by_var
-        .insert(target.owner_var_id.clone(), id.clone());
-    let name = callback
-        .callback_argument
-        .as_ref()
-        .map(|cb| render_head_expression(&cb.callee, &ctx.source_index))
-        .unwrap_or_default();
-    let start_line = callback.block.span.line.0;
-    let end_line = if callback.block.end_span.line.0 != start_line {
-        Some(callback.block.end_span.line.0)
+        .insert(result_var.to_string(), id.clone());
+    let name = render_head_expression(&host.head, &ctx.source_index);
+    let start_line = host.start_span.line.0;
+    let end_line = if host.end_span.line.0 != start_line {
+        Some(host.end_span.line.0)
     } else {
         None
     };
@@ -140,14 +157,14 @@ fn ensure_result_call_proxy(
         id,
         start_line,
         name,
-        node_id(&target.owner_var_id),
+        node_id(result_var),
         Vec::new(),
         Direction::RL,
     );
     sg.end_line = end_line;
     let idx = arena.push_subgraph(sg.into());
     arena.append_child(container, ElementHandle::Subgraph(idx));
-    call_proxy_by_anchor.insert(target.anchor_ref_id.clone(), idx);
+    call_proxy_by_host.insert(key, idx);
     idx
 }
 
@@ -207,9 +224,11 @@ pub fn build_children(
     // `[wrapper, block, block]` by a pre-pass that always appends
     // wrappers first.
     let mut call_proxy_by_stmt_offset: HashMap<u32, SubgraphIdx> = HashMap::new();
-    // `anchor reference id → result-bound CallProxy wrapper`, the
-    // non-statement counterpart of `call_proxy_by_stmt_offset`.
-    let mut call_proxy_by_anchor: HashMap<String, SubgraphIdx> = HashMap::new();
+    // `host start offset → result-bound CallProxy wrapper`, the
+    // non-statement counterpart of `call_proxy_by_stmt_offset`. Keyed
+    // by the host's bound-expression start so every callback within one
+    // binding (including nested argument calls) shares a single proxy.
+    let mut call_proxy_by_host: HashMap<u32, SubgraphIdx> = HashMap::new();
 
     let mut i = 0;
     while i < children.len() {
@@ -248,30 +267,38 @@ pub fn build_children(
                 i += 1;
                 continue;
             }
-            // Not a statement-level call, but the call's result is
-            // bound to a single variable (`const xs = arr.map(cb)`,
-            // `const v = useMemo(cb, deps)`). Wrap the callback in a
-            // result-bound CallProxy bundled with that variable, so the
-            // callback is contained by its call rather than left as a
-            // disconnected island -- the same containment as the
-            // statement path, only attached downstream to the result
-            // variable.
-            if let Some(target) = callback_result_target(child, ctx) {
-                let wrapper_idx = ensure_result_call_proxy(
-                    arena,
-                    state,
-                    ctx,
-                    container,
-                    &mut call_proxy_by_anchor,
-                    child,
-                    &target,
-                );
-                build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
-                i += 1;
-                continue;
+            // Not a statement-level call. If the call's result is bound
+            // to a variable (`const xs = arr.map(cb)`, including a call
+            // nested in arguments `const x = foo(data.map(cb))`), the
+            // host annotation gives the binding's bound expression --
+            // its span and label. Wrap the callback in a CallProxy
+            // spanning that whole bound expression, bundled with the
+            // result variable by containment, the same shape as the
+            // statement path.
+            if let Some(host) = child
+                .callback_argument
+                .as_ref()
+                .and_then(|cb| cb.host.as_ref())
+            {
+                if matches!(host.kind, SerializedCallbackHostKind::VariableDeclarator) {
+                    if let Some(result_var) = result_var_for_host(host, parent_scope, ctx) {
+                        let wrapper_idx = ensure_host_call_proxy(
+                            arena,
+                            state,
+                            ctx,
+                            container,
+                            &mut call_proxy_by_host,
+                            host,
+                            &result_var,
+                        );
+                        build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                        i += 1;
+                        continue;
+                    }
+                }
             }
-            // No statement and no single result variable (bare
-            // `return`, call-in-argument, computed receiver, ...): the
+            // No statement and no result-bound declarator host (bare
+            // `return`, assignment, computed receiver, ...): the
             // callback gets no CallProxy wrapper -- only the
             // `<callee>(args[N])` label from `describe_subgraph`. Fall
             // through to default handling.

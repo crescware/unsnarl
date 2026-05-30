@@ -19,12 +19,12 @@ use std::collections::HashMap;
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
     CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
-    ExportDefaultDeclaration, ExportNamedDeclaration, ExpressionStatement, ForInStatement,
-    ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference, IfStatement,
-    ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression, ObjectProperty,
-    PrivateFieldExpression, Program, ReturnStatement, SequenceExpression, StaticMemberExpression,
-    SwitchCase, SwitchStatement, ThrowStatement, TryStatement, UpdateExpression,
-    VariableDeclarator, WhileStatement,
+    ExportDefaultDeclaration, ExportNamedDeclaration, Expression, ExpressionStatement,
+    ForInStatement, ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference,
+    IfStatement, ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression,
+    ObjectProperty, PrivateFieldExpression, Program, ReturnStatement, SequenceExpression,
+    StaticMemberExpression, SwitchCase, SwitchStatement, ThrowStatement, TryStatement,
+    UpdateExpression, VariableDeclarator, WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
@@ -35,7 +35,7 @@ use unsnarl_annotations::{ReferenceAnnotation, ScopeAnnotation};
 use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths};
 use unsnarl_ir::primitive::{AstNode, SourceIndex, Utf8ByteOffset};
 use unsnarl_ir::scope::block_context::CaseClauseBlockContext;
-use unsnarl_ir::scope::{BlockContext, CallbackArgument};
+use unsnarl_ir::scope::{BlockContext, CallbackArgument, CallbackHost, CallbackHostKind};
 use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::{IrArena, ReferenceId, ScopeId};
 use unsnarl_oxc_boundary::materialise::ast_node_of;
@@ -43,7 +43,7 @@ use unsnarl_oxc_parity::AstType;
 
 use crate::annotations_impl::AnnotationsImpl;
 use crate::block_context_of::block_context_of;
-use crate::build_head_expression::build_callee_head;
+use crate::build_head_expression::{build_callee_head, build_head_expression};
 use crate::case_exits_function::case_exits_function;
 use crate::case_falls_through::case_falls_through;
 use crate::collect_abrupt_statements::collect_abrupt_statements;
@@ -208,7 +208,52 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             _ => return None,
         };
         let callee_head = build_callee_head(callee, callee.span());
-        Some(CallbackArgument::new(callee_head, arg_index))
+        Some(CallbackArgument::new(
+            callee_head,
+            arg_index,
+            self.callback_host(),
+        ))
+    }
+
+    /// Find the binding / return / assignment whose value is the
+    /// callback's enclosing call, walking the path outward. Stops at
+    /// (and yields `None` for) an `ExpressionStatement` -- those
+    /// callbacks are grouped by the visual layer's statement spans, so
+    /// no host is recorded. The host's bound expression (the declarator
+    /// init / return argument / assignment RHS) supplies the containing
+    /// CallProxy's span and label.
+    fn callback_host(&self) -> Option<CallbackHost> {
+        for frame in self.path.iter().rev() {
+            match &frame.kind {
+                AstKind::VariableDeclarator(vd) => {
+                    return vd.init.as_ref().map(|init| {
+                        self.build_callback_host(CallbackHostKind::VariableDeclarator, init)
+                    });
+                }
+                AstKind::ReturnStatement(rs) => {
+                    return rs
+                        .argument
+                        .as_ref()
+                        .map(|arg| self.build_callback_host(CallbackHostKind::Return, arg));
+                }
+                AstKind::AssignmentExpression(ae) => {
+                    return Some(self.build_callback_host(CallbackHostKind::Assignment, &ae.right));
+                }
+                AstKind::ExpressionStatement(_) => return None,
+                _ => {}
+            }
+        }
+        None
+    }
+
+    fn build_callback_host(&self, kind: CallbackHostKind, expr: &Expression<'_>) -> CallbackHost {
+        let span = expr.span();
+        CallbackHost {
+            kind,
+            start_offset: Utf8ByteOffset(span.start),
+            end_offset: Utf8ByteOffset(span.end),
+            head: build_head_expression(Some(expr), span),
+        }
     }
 
     /// Fill the `ScopeAnnotation` row for a scope whose block matches

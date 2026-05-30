@@ -52,12 +52,12 @@
     },
     {
       "type": "subgraph",
-      "id": "call_proxy_ref_1",
+      "id": "call_proxy_84",
       "kind": "call-proxy",
       "line": 4,
       "endLine": 10,
       "direction": "RL",
-      "callName": "memo",
+      "callName": "memo()",
       "ownerNodeId": "n_scope_0_Panel_76",
       "elements": [
         {
@@ -172,7 +172,7 @@
   "edges": [
     {
       "from": "n_scope_0_memo_9",
-      "to": "call_proxy_ref_1",
+      "to": "call_proxy_84",
       "label": "read,call"
     },
     {

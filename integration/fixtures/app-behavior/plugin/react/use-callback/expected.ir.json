@@ -142,7 +142,37 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 4,
+            "column": 14,
+            "offset": 104
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 60,
+            "offset": 150
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useCallback"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 14,
+              "offset": 104
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 60,
+              "offset": 150
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,

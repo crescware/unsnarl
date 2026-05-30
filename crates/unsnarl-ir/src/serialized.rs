@@ -3,6 +3,7 @@
 pub mod reference_id;
 pub mod scope_id;
 pub mod serialized_callback_argument;
+pub mod serialized_callback_host;
 pub mod serialized_definition;
 pub mod serialized_expression_statement_head;
 pub mod serialized_ir;
@@ -14,6 +15,7 @@ pub mod variable_id;
 pub use reference_id::SerializedReferenceId;
 pub use scope_id::SerializedScopeId;
 pub use serialized_callback_argument::SerializedCallbackArgument;
+pub use serialized_callback_host::{SerializedCallbackHost, SerializedCallbackHostKind};
 pub use serialized_definition::{
     DefinitionName, DefinitionNode, ImportBindingDefaultDef, ImportBindingNamedDef,
     ImportBindingNamespaceDef, SerializedDefinition, SimpleDef, SimpleDefType, VariableDef,

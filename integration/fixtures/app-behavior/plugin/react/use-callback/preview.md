@@ -24,10 +24,10 @@ flowchart RL
     subgraph s_scope_1["Counter()<br/>L3-6"]
       direction RL
       n_scope_1_start_57["start<br/>L3"]
-      subgraph wrap_call_proxy_ref_2[" "]
+      subgraph wrap_call_proxy_104[" "]
         direction TB
         n_scope_1_inc_98["inc<br/>L4"]
-        subgraph call_proxy_ref_2["useCallback<br/>L4"]
+        subgraph call_proxy_104["useCallback()<br/>L4"]
           direction RL
           subgraph s_scope_2["useCallback(args[0])<br/>L4"]
             direction RL
@@ -47,10 +47,10 @@ flowchart RL
       end
     end
   end
-  n_scope_0_useCallback_9 -->|read,call| call_proxy_ref_2
+  n_scope_0_useCallback_9 -->|read,call| call_proxy_104
   n_scope_2_n_117 -->|read| ret_use_ref_3
   n_scope_1_start_57 -->|read| ret_use_ref_4
-  n_scope_1_start_57 -->|read| call_proxy_ref_2
+  n_scope_1_start_57 -->|read| call_proxy_104
   n_scope_0_button_162 -->|read| ret_use_ref_6
   n_scope_1_inc_98 -->|read,call| ret_use_ref_7
   mod_react["module react<br/>L1"]
@@ -60,14 +60,14 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class wrap_call_proxy_ref_2 nestL3;
+  class wrap_call_proxy_104 nestL3;
   class s_return_scope_0_Counter_44_154_187 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
-  class call_proxy_ref_2 nestL4;
+  class call_proxy_104 nestL4;
   classDef nestL5 fill:#364666,stroke:transparent;
   class s_scope_2 nestL5;
   classDef nestL6 fill:#3f5175,stroke:transparent;
   class s_return_scope_0_Counter_44_131_140 nestL6;
   classDef edgeTargetSubgraph stroke:#888;
-  class call_proxy_ref_2 edgeTargetSubgraph;
+  class call_proxy_104 edgeTargetSubgraph;
 ```

@@ -317,6 +317,7 @@ fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) ->
     s.callback_argument = Some(SerializedCallbackArgument {
         callee: SerializedHeadExpression::identifier("cb".to_string()),
         arg_index,
+        host: None,
     });
     s
 }

@@ -6,9 +6,11 @@ use std::sync::atomic::{AtomicU64, Ordering};
 use unsnarl_annotations::Annotations;
 use unsnarl_instrumentation::{count_if_verbose, record_elapsed_ns, timing_start, verbose};
 use unsnarl_ir::primitive::{SourceIndex, Utf8ByteOffset};
+use unsnarl_ir::scope::CallbackHostKind;
 use unsnarl_ir::serialized::{
-    SerializedBlock, SerializedCallbackArgument, SerializedReferenceId, SerializedScope,
-    SerializedScopeId, SerializedVariableId,
+    SerializedBlock, SerializedCallbackArgument, SerializedCallbackHost,
+    SerializedCallbackHostKind, SerializedReferenceId, SerializedScope, SerializedScopeId,
+    SerializedVariableId,
 };
 use unsnarl_ir::{IrArena, ReferenceId, ScopeId, VariableId};
 
@@ -182,6 +184,18 @@ pub fn serialize_scope(
             .map(|cb| SerializedCallbackArgument {
                 callee: serialize_head_expression(&cb.callee, index),
                 arg_index: cb.arg_index,
+                host: cb.host.as_ref().map(|h| SerializedCallbackHost {
+                    kind: match h.kind {
+                        CallbackHostKind::VariableDeclarator => {
+                            SerializedCallbackHostKind::VariableDeclarator
+                        }
+                        CallbackHostKind::Return => SerializedCallbackHostKind::Return,
+                        CallbackHostKind::Assignment => SerializedCallbackHostKind::Assignment,
+                    },
+                    start_span: index.span_at(h.start_offset),
+                    end_span: index.span_at(h.end_offset),
+                    head: serialize_head_expression(&h.head, index),
+                }),
             }),
         falls_through: ann.falls_through,
         exits_function: ann.exits_function,

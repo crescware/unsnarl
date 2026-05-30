@@ -83,12 +83,12 @@
         },
         {
           "type": "subgraph",
-          "id": "call_proxy_ref_2",
+          "id": "call_proxy_71",
           "kind": "call-proxy",
           "line": 4,
           "endLine": null,
           "direction": "RL",
-          "callName": "useCallback",
+          "callName": "useCallback()",
           "ownerNodeId": "n_scope_1_a_67",
           "elements": [
             {
@@ -110,12 +110,12 @@
         },
         {
           "type": "subgraph",
-          "id": "call_proxy_ref_4",
+          "id": "call_proxy_109",
           "kind": "call-proxy",
           "line": 5,
           "endLine": null,
           "direction": "RL",
-          "callName": "useCallback",
+          "callName": "useCallback()",
           "ownerNodeId": "n_scope_1_b_105",
           "elements": [
             {
@@ -158,12 +158,12 @@
         },
         {
           "type": "subgraph",
-          "id": "call_proxy_ref_8",
+          "id": "call_proxy_154",
           "kind": "call-proxy",
           "line": 6,
           "endLine": null,
           "direction": "RL",
-          "callName": "useCallback",
+          "callName": "useCallback()",
           "ownerNodeId": "n_scope_1_c_150",
           "elements": [
             {
@@ -260,12 +260,12 @@
   "edges": [
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "call_proxy_ref_2",
+      "to": "call_proxy_71",
       "label": "read,call"
     },
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "call_proxy_ref_4",
+      "to": "call_proxy_109",
       "label": "read,call"
     },
     {
@@ -275,12 +275,12 @@
     },
     {
       "from": "n_scope_1_a_67",
-      "to": "call_proxy_ref_4",
+      "to": "call_proxy_109",
       "label": "read"
     },
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "call_proxy_ref_8",
+      "to": "call_proxy_154",
       "label": "read,call"
     },
     {
@@ -290,7 +290,7 @@
     },
     {
       "from": "n_scope_1_b_105",
-      "to": "call_proxy_ref_8",
+      "to": "call_proxy_154",
       "label": "read"
     },
     {
