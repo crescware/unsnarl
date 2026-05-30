@@ -122,6 +122,13 @@ pub struct BuildState {
     /// intentionally absent because they belong to their
     /// surrounding control subgraph, not the inner gated scope.
     pub node_id_origin_scope: HashMap<String, String>,
+    /// `return-span key ("start-end") → CallProxy id`. Recorded when a
+    /// `return <call>(cb)` is wrapped in a CallProxy containing the
+    /// callback. The return-completion inputs (the call's receiver /
+    /// callee / args) route to this proxy instead of a return-use node,
+    /// so the returned call's callback is contained rather than left as
+    /// an island.
+    pub return_proxy_by_span: HashMap<String, String>,
     /// `result variable id → result-bound CallProxy id`. Recorded when
     /// a `const xs = arr.map(cb)`-style call is wrapped in a
     /// result-bound CallProxy. The call's inputs (receiver / callee /

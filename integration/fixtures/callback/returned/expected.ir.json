@@ -1,0 +1,376 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/returned/input.ts",
+    "language": "ts"
+  },
+  "raw": "function doubleAll(items: number[]) {\n  return items.map((v) => v * 2);\n}\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 74
+        }
+      },
+      "variables": [
+        "scope#0:doubleAll@9"
+      ],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 1,
+          "offset": 73
+        }
+      },
+      "variables": [
+        "scope#1:items@19"
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 2,
+          "column": 19,
+          "offset": 57
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 31,
+          "offset": 69
+        }
+      },
+      "variables": [
+        "scope#2:v@58"
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "identifier",
+            "name": "items"
+          },
+          "property": "map"
+        },
+        "argIndex": 0,
+        "host": {
+          "kind": "return",
+          "startSpan": {
+            "line": 2,
+            "column": 2,
+            "offset": 40
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 33,
+            "offset": 71
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "items"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 9,
+              "offset": 47
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 32,
+              "offset": 70
+            }
+          }
+        }
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 2,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:doubleAll@9",
+      "name": "doubleAll",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 9,
+          "offset": 9
+        }
+      ],
+      "references": [],
+      "defs": [
+        {
+          "name": {
+            "name": "doubleAll",
+            "span": {
+              "line": 1,
+              "column": 9,
+              "offset": 9
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:items@19",
+      "name": "items",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 19,
+          "offset": 19
+        }
+      ],
+      "references": [
+        "ref#0"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "items",
+            "span": {
+              "line": 1,
+              "column": 19,
+              "offset": 19
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:v@58",
+      "name": "v",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 20,
+          "offset": 58
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v",
+            "span": {
+              "line": 2,
+              "column": 20,
+              "offset": 58
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 2,
+              "column": 19,
+              "offset": 57
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "items",
+        "span": {
+          "line": 2,
+          "column": 9,
+          "offset": 47
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:items@19",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 2,
+          "column": 2,
+          "offset": 40
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 33,
+          "offset": 71
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 2,
+          "column": 26,
+          "offset": 64
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:v@58",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 2,
+          "column": 26,
+          "offset": 64
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 31,
+          "offset": 69
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:doubleAll@9"
+  ],
+  "diagnostics": []
+}

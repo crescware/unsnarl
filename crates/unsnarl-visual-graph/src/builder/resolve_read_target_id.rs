@@ -38,15 +38,27 @@ pub fn resolve_read_target_id(
         return id.to_string();
     }
     match &r.completion {
-        SerializedCompletion::Return { .. } => ensure_return_use_node(
-            arena,
-            state,
-            ctx,
-            enclosing_fn_var_id,
-            enclosing_fn_scope_id,
-            r,
-        )
-        .unwrap_or_else(|| MODULE_ROOT_ID.to_string()),
+        SerializedCompletion::Return {
+            start_span,
+            end_span,
+        } => {
+            // A `return <call>(cb)` is wrapped in a CallProxy that
+            // contains the callback; the returned call's inputs land on
+            // that proxy's border rather than a return-use node.
+            let container_key = format!("{}-{}", start_span.offset.0, end_span.offset.0);
+            if let Some(proxy) = state.return_proxy_by_span.get(&container_key) {
+                return proxy.clone();
+            }
+            ensure_return_use_node(
+                arena,
+                state,
+                ctx,
+                enclosing_fn_var_id,
+                enclosing_fn_scope_id,
+                r,
+            )
+            .unwrap_or_else(|| MODULE_ROOT_ID.to_string())
+        }
         SerializedCompletion::Throw { .. } => ensure_throw_use_node(
             arena,
             state,

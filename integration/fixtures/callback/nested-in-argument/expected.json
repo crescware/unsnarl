@@ -1,0 +1,119 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/nested-in-argument/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_items_53",
+      "name": "items",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_wrapped_78",
+      "name": "wrapped",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_wrap_88",
+      "name": "wrap",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "call_proxy_88",
+      "kind": "call-proxy",
+      "line": 3,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "wrap()",
+      "ownerNodeId": "n_scope_0_wrapped_78",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 3,
+          "endLine": 3,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "items.map",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_v_104",
+              "name": "v",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_110_115",
+              "kind": "return",
+              "line": 3,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_4",
+                  "kind": "ReturnArgumentReference",
+                  "name": "v",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_wrap_88",
+      "to": "call_proxy_88",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_items_53",
+      "to": "call_proxy_88",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_104",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

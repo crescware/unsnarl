@@ -226,18 +226,33 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         for frame in self.path.iter().rev() {
             match &frame.kind {
                 AstKind::VariableDeclarator(vd) => {
+                    // The declarator init's span is the bound expression
+                    // and matches the variable's serialized init offset,
+                    // so the visual layer can pair them.
                     return vd.init.as_ref().map(|init| {
-                        self.build_callback_host(CallbackHostKind::VariableDeclarator, init)
+                        self.build_callback_host(
+                            CallbackHostKind::VariableDeclarator,
+                            init.span(),
+                            init,
+                        )
                     });
                 }
                 AstKind::ReturnStatement(rs) => {
-                    return rs
-                        .argument
-                        .as_ref()
-                        .map(|arg| self.build_callback_host(CallbackHostKind::Return, arg));
+                    // Span the whole `return ...;` so it matches the
+                    // reference completion span (`find_completion` keys on
+                    // the ReturnStatement node), letting the visual layer
+                    // route the returned call's inputs to this proxy. The
+                    // label still comes from the returned expression.
+                    return rs.argument.as_ref().map(|arg| {
+                        self.build_callback_host(CallbackHostKind::Return, rs.span(), arg)
+                    });
                 }
                 AstKind::AssignmentExpression(ae) => {
-                    return Some(self.build_callback_host(CallbackHostKind::Assignment, &ae.right));
+                    return Some(self.build_callback_host(
+                        CallbackHostKind::Assignment,
+                        ae.right.span(),
+                        &ae.right,
+                    ));
                 }
                 AstKind::ExpressionStatement(_) => return None,
                 _ => {}
@@ -246,13 +261,17 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         None
     }
 
-    fn build_callback_host(&self, kind: CallbackHostKind, expr: &Expression<'_>) -> CallbackHost {
-        let span = expr.span();
+    fn build_callback_host(
+        &self,
+        kind: CallbackHostKind,
+        span: Span,
+        head_expr: &Expression<'_>,
+    ) -> CallbackHost {
         CallbackHost {
             kind,
             start_offset: Utf8ByteOffset(span.start),
             end_offset: Utf8ByteOffset(span.end),
-            head: build_head_expression(Some(expr), span),
+            head: build_head_expression(Some(head_expr), head_expr.span()),
         }
     }
 

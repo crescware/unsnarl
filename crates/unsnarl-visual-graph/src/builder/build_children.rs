@@ -168,6 +168,45 @@ fn ensure_host_call_proxy(
     idx
 }
 
+/// Look up (or create on first sight) the `CallProxy` wrapper for a
+/// callback returned from a function (`return arr.map(cb)`).
+///
+/// Unlike the variable-declarator case there is no result variable to
+/// bundle with, so the proxy carries no owner. It spans the returned
+/// expression and contains the callback; the return-completion inputs
+/// (the call's receiver / callee / args) route to it via
+/// `return_proxy_by_span` instead of a return-use node, so the returned
+/// call's callback is contained rather than left as an island.
+fn ensure_return_call_proxy(
+    arena: &mut BuildArena,
+    state: &mut BuildState,
+    ctx: &BuilderContext<'_>,
+    container: Container,
+    call_proxy_by_host: &mut HashMap<u32, SubgraphIdx>,
+    host: &SerializedCallbackHost,
+) -> SubgraphIdx {
+    let key = host.start_span.offset.0;
+    if let Some(&idx) = call_proxy_by_host.get(&key) {
+        return idx;
+    }
+    let id = format!("call_proxy_{key}");
+    let container_key = format!("{}-{}", host.start_span.offset.0, host.end_span.offset.0);
+    state.return_proxy_by_span.insert(container_key, id.clone());
+    let name = render_head_expression(&host.head, &ctx.source_index);
+    let start_line = host.start_span.line.0;
+    let end_line = if host.end_span.line.0 != start_line {
+        Some(host.end_span.line.0)
+    } else {
+        None
+    };
+    let mut sg = OwnedVisualSubgraph::call_proxy(id, start_line, name, Vec::new(), Direction::RL);
+    sg.end_line = end_line;
+    let idx = arena.push_subgraph(sg.into());
+    arena.append_child(container, ElementHandle::Subgraph(idx));
+    call_proxy_by_host.insert(key, idx);
+    idx
+}
+
 /// Place the IfStatement's test anchor at the head of the consequent
 /// subgraph it gates. `else` is the fallback path and carries no
 /// test. A consequent that collapsed past the depth threshold builds
@@ -295,6 +334,19 @@ pub fn build_children(
                         i += 1;
                         continue;
                     }
+                }
+                if matches!(host.kind, SerializedCallbackHostKind::Return) {
+                    let wrapper_idx = ensure_return_call_proxy(
+                        arena,
+                        state,
+                        ctx,
+                        container,
+                        &mut call_proxy_by_host,
+                        host,
+                    );
+                    build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                    i += 1;
+                    continue;
                 }
             }
             // No statement and no result-bound declarator host (bare
