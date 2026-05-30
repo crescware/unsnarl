@@ -32,6 +32,7 @@ use super::context::BuilderContext;
 use super::expression_statement_node_id::expression_statement_node_id;
 use super::if_container_subgraph_id::if_container_subgraph_id;
 use super::if_test_node_id::if_test_node_id;
+use super::is_collapsed::is_collapsed;
 use super::line_for_offset::line_for_offset;
 use super::node_id::node_id;
 use super::render_head_expression::render_head_expression;
@@ -276,7 +277,13 @@ pub fn build_children(
         // The wrapper is created on first sight (so it lands at the
         // first callback's source position) and reused for any
         // later siblings that share the same statement offset.
-        if child.callback_argument.is_some() {
+        //
+        // A callback collapsed past the depth ceiling builds no
+        // subgraph, so wrapping it would leave an empty CallProxy husk
+        // with its inputs dangling on it. Skip the wrapper and let the
+        // default path record the collapse (a BeyondDepth stub in this
+        // container) instead.
+        if child.callback_argument.is_some() && !is_collapsed(child, ctx.depths.as_ref()) {
             // The CallProxy wrapper is a rendering construct that
             // reuses the `expr_stmt_<offset>` leaf, so it fires when
             // the callback's block span is contained by some registered

@@ -1,0 +1,146 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/nested-map/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_matrix_6",
+      "name": "matrix",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_xs_39",
+      "name": "xs",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "call_proxy_44",
+      "kind": "call-proxy",
+      "line": 2,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "matrix.map()",
+      "ownerNodeId": "n_scope_0_xs_39",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 2,
+          "endLine": 2,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "matrix.map",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_row_56",
+              "name": "row",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "call_proxy_64",
+              "kind": "call-proxy",
+              "line": 2,
+              "endLine": null,
+              "direction": "RL",
+              "callName": "row.map()",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_2",
+                  "kind": "function",
+                  "line": 2,
+                  "endLine": 2,
+                  "direction": "RL",
+                  "ownerNodeId": null,
+                  "ownerName": "",
+                  "callbackArg": {
+                    "callee": "row.map",
+                    "argIndex": 0
+                  },
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "n_scope_2_c_73",
+                      "name": "c",
+                      "line": 2,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false,
+                      "kind": "FormalParameter"
+                    },
+                    {
+                      "type": "subgraph",
+                      "id": "s_return_scope_2_79_84",
+                      "kind": "return",
+                      "line": 2,
+                      "endLine": null,
+                      "direction": "RL",
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "ret_use_ref_4",
+                          "kind": "ReturnArgumentReference",
+                          "name": "c",
+                          "line": 2,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_matrix_6",
+      "to": "call_proxy_44",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_row_56",
+      "to": "call_proxy_64",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_c_73",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
