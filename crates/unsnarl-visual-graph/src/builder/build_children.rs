@@ -18,7 +18,7 @@ use std::collections::HashMap;
 use unsnarl_ir::primitive::{SourceIndex, Utf16CodeUnitOffset};
 use unsnarl_ir::serialized::{
     SerializedCallbackHost, SerializedCallbackHostKind, SerializedDefinition,
-    SerializedExpressionStatementContainer, SerializedScope,
+    SerializedExpressionStatementContainer, SerializedHeadExpression, SerializedScope,
 };
 
 use crate::direction::Direction;
@@ -303,6 +303,111 @@ fn ensure_assignment_call_proxy(
     idx
 }
 
+/// The `Call` / `New` nodes of a head expression's receiver chain,
+/// outermost first. `arr.map(f).filter(g)` parses as
+/// `(((arr.map)(f)).filter)(g)`, so the head is the outer `filter`
+/// `Call` whose callee's object is the inner `map` `Call`; descending
+/// through each `Call`'s `Member` callee object yields
+/// `[filter-call, map-call]`. Only the *receiver* chain is followed
+/// (a `Member` object that is itself a `Call`); arguments are not part
+/// of the head, so a call nested as an argument (`foo(items.map(cb))`)
+/// contributes no inner node here and is left to its single host proxy.
+fn receiver_call_chain(head: &SerializedHeadExpression) -> Vec<&SerializedHeadExpression> {
+    let mut out = Vec::new();
+    let mut node = head;
+    while let SerializedHeadExpression::Call { callee, .. }
+    | SerializedHeadExpression::New { callee, .. } = node
+    {
+        out.push(node);
+        match callee.as_ref() {
+            SerializedHeadExpression::Member { object, .. } => node = object,
+            _ => break,
+        }
+    }
+    out
+}
+
+/// UTF-16 start/end offsets and start/end lines of a `Call` / `New`
+/// head node. `None` for any other kind.
+fn call_node_extent(node: &SerializedHeadExpression) -> Option<(u32, u32, u32, Option<u32>)> {
+    let (start_span, end_span) = match node {
+        SerializedHeadExpression::Call {
+            start_span,
+            end_span,
+            ..
+        }
+        | SerializedHeadExpression::New {
+            start_span,
+            end_span,
+            ..
+        } => (start_span, end_span),
+        _ => return None,
+    };
+    let start_line = start_span.line.0;
+    let end_line = (end_span.line.0 != start_line).then_some(end_span.line.0);
+    Some((start_span.offset.0, end_span.offset.0, start_line, end_line))
+}
+
+/// The proxy a callback should be built into, given its host proxy
+/// (the outermost, host-bound call). For a method chain
+/// `arr.map(f).filter(g)` the callbacks `f` and `g` belong to *different*
+/// calls; placing both in the single host proxy would merge two distinct
+/// block scopes. Walking the host head's receiver chain, each callback is
+/// routed into the innermost call whose span contains its block, with a
+/// nested `CallProxy` created per inner call -- so `filter`'s callback
+/// stays in the host proxy while `map`'s callback descends into a nested
+/// `arr.map()` proxy. A single (non-chained) call has only the outermost
+/// node, so its callback stays in the host proxy unchanged.
+fn callback_chain_target(
+    arena: &mut BuildArena,
+    ctx: &BuilderContext<'_>,
+    host_proxy: SubgraphIdx,
+    host_head: &SerializedHeadExpression,
+    block_start: u32,
+    block_end: u32,
+    nested_call_proxy: &mut HashMap<(u32, u32), SubgraphIdx>,
+) -> SubgraphIdx {
+    let mut parent = host_proxy;
+    let mut target = host_proxy;
+    for (depth, &call_node) in receiver_call_chain(host_head).iter().enumerate() {
+        let Some((start_offset, end_offset, start_line, end_line)) = call_node_extent(call_node)
+        else {
+            break;
+        };
+        // Calls are listed outermost first; once one no longer contains
+        // the callback block, no deeper (narrower) call can either.
+        if !(start_offset <= block_start && block_end <= end_offset) {
+            break;
+        }
+        if depth == 0 {
+            // The outermost call is the host's bound expression itself,
+            // already materialised as the host proxy.
+            nested_call_proxy
+                .entry((start_offset, end_offset))
+                .or_insert(host_proxy);
+        } else if let Some(&idx) = nested_call_proxy.get(&(start_offset, end_offset)) {
+            target = idx;
+        } else {
+            // One inner call of the chain gets its own nested CallProxy,
+            // labelled with the call head itself (`arr.map()`), distinct
+            // from the host proxy's whole-chain label
+            // (`arr.map().filter()`). Keyed by call span so every callback
+            // of that call shares it.
+            let id = format!("call_proxy_{start_offset}_{end_offset}");
+            let name = render_head_expression(call_node, &ctx.source_index);
+            let mut sg =
+                OwnedVisualSubgraph::call_proxy(id, start_line, name, Vec::new(), Direction::RL);
+            sg.end_line = end_line;
+            let idx = arena.push_subgraph(sg.into());
+            arena.append_child(Container::Subgraph(parent), ElementHandle::Subgraph(idx));
+            nested_call_proxy.insert((start_offset, end_offset), idx);
+            target = idx;
+        }
+        parent = target;
+    }
+    target
+}
+
 /// Place the IfStatement's test anchor at the head of the consequent
 /// subgraph it gates. `else` is the fallback path and carries no
 /// test. A consequent that collapsed past the depth threshold builds
@@ -364,6 +469,11 @@ pub fn build_children(
     // by the host's bound-expression start so every callback within one
     // binding (including nested argument calls) shares a single proxy.
     let mut call_proxy_by_host: HashMap<u32, SubgraphIdx> = HashMap::new();
+    // `(call start, call end) → nested CallProxy` for the inner calls of
+    // a method chain (`arr.map(f).filter(g)`). Keyed by call span so the
+    // map / filter calls each get their own proxy nested inside the host
+    // proxy, keeping `f` and `g` in distinct block scopes.
+    let mut nested_call_proxy: HashMap<(u32, u32), SubgraphIdx> = HashMap::new();
 
     let mut i = 0;
     while i < children.len() {
@@ -414,7 +524,16 @@ pub fn build_children(
                             host,
                             &binding,
                         );
-                        build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                        let target = callback_chain_target(
+                            arena,
+                            ctx,
+                            wrapper_idx,
+                            &host.head,
+                            child.block.span.offset.0,
+                            child.block.end_span.offset.0,
+                            &mut nested_call_proxy,
+                        );
+                        build_scope(arena, state, ctx, child, Container::Subgraph(target));
                         i += 1;
                         continue;
                     }
@@ -469,7 +588,16 @@ pub fn build_children(
                             host,
                             &result_var,
                         );
-                        build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                        let target = callback_chain_target(
+                            arena,
+                            ctx,
+                            wrapper_idx,
+                            &host.head,
+                            child.block.span.offset.0,
+                            child.block.end_span.offset.0,
+                            &mut nested_call_proxy,
+                        );
+                        build_scope(arena, state, ctx, child, Container::Subgraph(target));
                         i += 1;
                         continue;
                     }
@@ -483,7 +611,16 @@ pub fn build_children(
                         &mut call_proxy_by_host,
                         host,
                     );
-                    build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                    let target = callback_chain_target(
+                        arena,
+                        ctx,
+                        wrapper_idx,
+                        &host.head,
+                        child.block.span.offset.0,
+                        child.block.end_span.offset.0,
+                        &mut nested_call_proxy,
+                    );
+                    build_scope(arena, state, ctx, child, Container::Subgraph(target));
                     i += 1;
                     continue;
                 }
