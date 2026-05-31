@@ -138,6 +138,17 @@ pub struct BuildState {
     /// by containment (the shared `wrap_` box) -- matching how a
     /// statement-level call's inputs edge to its proxy.
     pub result_proxy_by_var: HashMap<String, String>,
+    /// `write-op node id → reassignment-bound CallProxy id`. The
+    /// assignment counterpart of `result_proxy_by_var`: recorded when a
+    /// `y = arr.map(cb)` reassignment is wrapped in a CallProxy owned by
+    /// the write-op node. The call's inputs (receiver / callee /
+    /// non-callback args) land on that write-op node via
+    /// `owner_target_id`; their owner edges are retargeted from the
+    /// write-op node to the proxy border, so they read "input → the
+    /// call" while the call ↔ write relationship is shown by containment
+    /// (the shared `wrap_` box) -- mirroring the declarator case keyed
+    /// on the result variable's own node.
+    pub result_proxy_by_write_op: HashMap<String, String>,
 }
 
 impl BuildState {

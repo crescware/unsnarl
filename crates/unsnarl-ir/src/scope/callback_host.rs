@@ -34,4 +34,13 @@ pub struct CallbackHost {
     pub end_offset: Utf8ByteOffset,
     /// Head of the bound expression, rendered as the proxy's label.
     pub head: HeadExpression,
+    /// For an [`CallbackHostKind::Assignment`] whose left-hand side is a
+    /// plain identifier (`y = arr.map(cb)`), the offset of that target
+    /// identifier. The visual layer maps it to the reassignment's
+    /// write-op node and bundles the CallProxy with that node -- the
+    /// call ↔ variable relationship shown by containment, mirroring the
+    /// declarator case. `None` for declarator / return hosts and for
+    /// non-identifier assignment targets (member / destructuring), which
+    /// carry no single write-op node.
+    pub target_offset: Option<Utf8ByteOffset>,
 }

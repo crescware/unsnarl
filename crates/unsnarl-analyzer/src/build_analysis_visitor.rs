@@ -17,8 +17,8 @@
 use std::collections::HashMap;
 
 use oxc_ast::ast::{
-    ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
-    CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
+    ArrowFunctionExpression, AssignmentExpression, AssignmentTarget, BindingIdentifier,
+    BlockStatement, CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
     ExportDefaultDeclaration, ExportNamedDeclaration, Expression, ExpressionStatement,
     ForInStatement, ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference,
     IfStatement, ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression,
@@ -234,6 +234,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                             CallbackHostKind::VariableDeclarator,
                             init.span(),
                             init,
+                            None,
                         )
                     });
                 }
@@ -244,14 +245,27 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     // route the returned call's inputs to this proxy. The
                     // label still comes from the returned expression.
                     return rs.argument.as_ref().map(|arg| {
-                        self.build_callback_host(CallbackHostKind::Return, rs.span(), arg)
+                        self.build_callback_host(CallbackHostKind::Return, rs.span(), arg, None)
                     });
                 }
                 AstKind::AssignmentExpression(ae) => {
+                    // Record the left-hand side's offset only for a plain
+                    // identifier target (`y = arr.map(cb)`); the visual
+                    // layer maps it to the reassignment's write-op node to
+                    // bundle the proxy with that node. Member /
+                    // destructuring targets carry no single write-op node,
+                    // so they stay `None` and fall back to a bare proxy.
+                    let target_offset = match &ae.left {
+                        AssignmentTarget::AssignmentTargetIdentifier(id) => {
+                            Some(Utf8ByteOffset(id.span.start))
+                        }
+                        _ => None,
+                    };
                     return Some(self.build_callback_host(
                         CallbackHostKind::Assignment,
                         ae.right.span(),
                         &ae.right,
+                        target_offset,
                     ));
                 }
                 AstKind::ArrowFunctionExpression(arrow) => {
@@ -264,7 +278,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     // would have been hit deeper, so stop.
                     return match frame.arrow_body {
                         Some(b) if !b.is_block => arrow.get_expression().map(|expr| {
-                            self.build_callback_host(CallbackHostKind::Return, b.span, expr)
+                            self.build_callback_host(CallbackHostKind::Return, b.span, expr, None)
                         }),
                         _ => None,
                     };
@@ -285,12 +299,14 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         kind: CallbackHostKind,
         span: Span,
         head_expr: &Expression<'_>,
+        target_offset: Option<Utf8ByteOffset>,
     ) -> CallbackHost {
         CallbackHost {
             kind,
             start_offset: Utf8ByteOffset(span.start),
             end_offset: Utf8ByteOffset(span.end),
             head: build_head_expression(Some(head_expr), head_expr.span()),
+            target_offset,
         }
     }
 

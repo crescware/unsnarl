@@ -195,6 +195,7 @@ pub fn serialize_scope(
                     start_span: index.span_at(h.start_offset),
                     end_span: index.span_at(h.end_offset),
                     head: serialize_head_expression(&h.head, index),
+                    target_span: h.target_offset.map(|o| index.span_at(o)),
                 }),
             }),
         falls_through: ann.falls_through,
