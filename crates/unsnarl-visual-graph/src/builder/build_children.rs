@@ -564,7 +564,20 @@ pub fn build_children(
                     &mut call_proxy_by_stmt_offset,
                     statement,
                 );
-                build_scope(arena, state, ctx, child, Container::Subgraph(wrapper_idx));
+                // A statement-level method chain (`arr.map(f).filter(g);`)
+                // merges its callbacks into one statement proxy just like
+                // the bound case; split them the same way, using the
+                // statement head's receiver chain.
+                let target = callback_chain_target(
+                    arena,
+                    ctx,
+                    wrapper_idx,
+                    &statement.head,
+                    child.block.span.offset.0,
+                    child.block.end_span.offset.0,
+                    &mut nested_call_proxy,
+                );
+                build_scope(arena, state, ctx, child, Container::Subgraph(target));
                 i += 1;
                 continue;
             }
