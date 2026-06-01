@@ -501,6 +501,82 @@ fn attach_test_anchor_to_consequent(
     state.if_test_anchor_by_offset.insert(offset.0, id);
 }
 
+/// Point a collapsed call+callback's host edges at the BeyondDepth stub
+/// that stands in for its omitted body. Depth pruning *thins the
+/// drawing*: it omits the callback's interior, but the call's
+/// relationship must survive. [`build_scope`]'s collapse branch has just
+/// emitted the `((...))` stub (recorded in `collapsed_anchor_by_root`);
+/// here we register that stub wherever the non-collapsed path would have
+/// registered the call's CallProxy, so the receiver / binding reads land
+/// on `((...))` instead of a return-use node minted as if the receiver
+/// itself were the result. No CallProxy box is created -- pruning should
+/// remove drawing, not add it.
+///
+/// The dispatch order mirrors the non-collapsed callback handling:
+/// reassignment first, then the enclosing statement, then the
+/// declarator / return hosts.
+fn route_collapsed_callback_to_stub(
+    state: &mut BuildState,
+    ctx: &BuilderContext<'_>,
+    child: &SerializedScope,
+    host: Option<&SerializedCallbackHost>,
+    parent_scope: &SerializedScope,
+) {
+    let Some(stub) = state
+        .collapsed_anchor_by_root
+        .get(child.id.value())
+        .cloned()
+    else {
+        return;
+    };
+    if let Some(host) = host {
+        if matches!(host.kind, SerializedCallbackHostKind::Assignment) {
+            if let Some(write_op_node) = write_op_node_for_assignment(host, ctx) {
+                push_edge(
+                    &mut state.emitted_edges,
+                    &mut state.edges,
+                    &stub,
+                    "read",
+                    &write_op_node,
+                );
+                state.result_proxy_by_write_op.insert(write_op_node, stub);
+                return;
+            }
+        }
+    }
+    if let Some(statement) = ctx
+        .expression_statement_index
+        .enclosing(child.block.span.offset.0, child.block.end_span.offset.0)
+    {
+        state
+            .expression_statement_by_offset
+            .insert(statement.start_span.offset.0, stub);
+        return;
+    }
+    let Some(host) = host else {
+        return;
+    };
+    match host.kind {
+        SerializedCallbackHostKind::VariableDeclarator => {
+            if let Some(result_var) = result_var_for_host(host, parent_scope, ctx) {
+                push_edge(
+                    &mut state.emitted_edges,
+                    &mut state.edges,
+                    &stub,
+                    "read",
+                    &node_id(&result_var),
+                );
+                state.result_proxy_by_var.insert(result_var, stub);
+            }
+        }
+        SerializedCallbackHostKind::Return => {
+            let key = format!("{}-{}", host.start_span.offset.0, host.end_span.offset.0);
+            state.return_proxy_by_span.insert(key, stub);
+        }
+        SerializedCallbackHostKind::Assignment => {}
+    }
+}
+
 pub fn build_children(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -543,17 +619,26 @@ pub fn build_children(
     let mut i = 0;
     while i < children.len() {
         let child = children[i];
+        // A callback collapsed past the depth ceiling has its interior
+        // omitted. Building a CallProxy here would either leave an empty
+        // husk or add a box -- the opposite of what pruning is for. Let
+        // `build_scope` record the collapse and emit the BeyondDepth stub,
+        // then point the call's host edges at that stub so the receiver /
+        // binding relationship survives as `<input> -> ((...))` instead of
+        // being re-minted onto a return-use node.
+        if let Some(cb) = child.callback_argument.as_ref() {
+            if is_collapsed(child, ctx.depths.as_ref()) {
+                build_scope(arena, state, ctx, child, container);
+                route_collapsed_callback_to_stub(state, ctx, child, cb.host.as_ref(), parent_scope);
+                i += 1;
+                continue;
+            }
+        }
         // Callback-arg children route into a `CallProxy` wrapper.
         // The wrapper is created on first sight (so it lands at the
         // first callback's source position) and reused for any
         // later siblings that share the same statement offset.
-        //
-        // A callback collapsed past the depth ceiling builds no
-        // subgraph, so wrapping it would leave an empty CallProxy husk
-        // with its inputs dangling on it. Skip the wrapper and let the
-        // default path record the collapse (a BeyondDepth stub in this
-        // container) instead.
-        if child.callback_argument.is_some() && !is_collapsed(child, ctx.depths.as_ref()) {
+        if child.callback_argument.is_some() {
             let host = child
                 .callback_argument
                 .as_ref()
