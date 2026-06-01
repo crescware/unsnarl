@@ -1,6 +1,6 @@
 1	0	integration/fixtures/callback/nested-in-argument/input.ts:0 wrap
 1	0	integration/fixtures/callback/nested-in-argument/input.ts:2 items
-0	0	integration/fixtures/callback/nested-in-argument/input.ts:3 unused wrapped
+0	1	integration/fixtures/callback/nested-in-argument/input.ts:3 unused wrapped
 1	0	integration/fixtures/callback/nested-in-argument/input.ts:3 v
 0	1	integration/fixtures/callback/nested-in-argument/input.ts:3 v
-3	1	5 total
+3	2	5 total

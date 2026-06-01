@@ -1,0 +1,7 @@
+0	0	integration/fixtures/callback/chained-returned/input.ts:1 unused compute
+1	0	integration/fixtures/callback/chained-returned/input.ts:1 arr
+1	0	integration/fixtures/callback/chained-returned/input.ts:2 v
+0	1	integration/fixtures/callback/chained-returned/input.ts:2 v
+1	0	integration/fixtures/callback/chained-returned/input.ts:2 v
+0	1	integration/fixtures/callback/chained-returned/input.ts:2 v
+3	2	6 total

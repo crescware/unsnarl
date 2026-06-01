@@ -1,0 +1,8 @@
+1	0	integration/fixtures/callback/chained-reassigned/input.ts:1 arr
+1	0	integration/fixtures/callback/chained-reassigned/input.ts:2 unused xs
+0	2	integration/fixtures/callback/chained-reassigned/input.ts:3 xs
+1	0	integration/fixtures/callback/chained-reassigned/input.ts:3 v
+0	1	integration/fixtures/callback/chained-reassigned/input.ts:3 v
+1	0	integration/fixtures/callback/chained-reassigned/input.ts:3 v
+0	1	integration/fixtures/callback/chained-reassigned/input.ts:3 v
+4	4	7 total

@@ -1,7 +1,7 @@
 1	0	integration/fixtures/callback/reassigned-nested/input.ts:1 arr
 1	0	integration/fixtures/callback/reassigned-nested/input.ts:2 unused mapped
 0	0	integration/fixtures/callback/reassigned-nested/input.ts:3 unused result
-0	1	integration/fixtures/callback/reassigned-nested/input.ts:3 mapped
+0	2	integration/fixtures/callback/reassigned-nested/input.ts:3 mapped
 1	0	integration/fixtures/callback/reassigned-nested/input.ts:3 v
 0	1	integration/fixtures/callback/reassigned-nested/input.ts:3 v
-3	2	6 total
+3	3	6 total

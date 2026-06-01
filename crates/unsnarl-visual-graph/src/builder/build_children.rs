@@ -35,6 +35,7 @@ use super::if_test_node_id::if_test_node_id;
 use super::is_collapsed::is_collapsed;
 use super::line_for_offset::line_for_offset;
 use super::node_id::node_id;
+use super::push_edge::push_edge;
 use super::render_head_expression::render_head_expression;
 use super::state::BuildState;
 use super::write_op_node_id::write_op_node_id;
@@ -123,11 +124,13 @@ fn result_var_for_host(
 ///
 /// The proxy spans the host's bound expression and is labelled with its
 /// head, so it represents the whole bound call (`foo(...)`), not just
-/// the inner callback's call. It carries the result variable's node id
-/// as `owner_node_id`, so the emitter bundles that variable beside the
-/// proxy in a `wrap_` box -- the call ↔ variable relationship shown by
-/// containment, not an edge. Every callback within the same bound
-/// expression shares one proxy, keyed by the host's start offset.
+/// the inner callback's call. The call ↔ result-variable relationship is
+/// drawn as an edge -- `call_proxy -->|read| <result-var node>`, the same
+/// `read` a plain `const b = a` binding produces -- so the result
+/// variable stays an ordinary sibling node and the dataflow backbone
+/// reads `arr -> arr.map() -> a -> ...` unbroken. Every callback within
+/// the same bound expression shares one proxy, keyed by the host's start
+/// offset.
 fn ensure_host_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -148,6 +151,15 @@ fn ensure_host_call_proxy(
     state
         .result_proxy_by_var
         .insert(result_var.to_string(), id.clone());
+    // Bind the call result to the result variable with an edge from the
+    // proxy border, completing the backbone `<input> -> proxy -> <var>`.
+    push_edge(
+        &mut state.emitted_edges,
+        &mut state.edges,
+        &id,
+        "read",
+        &node_id(result_var),
+    );
     let name = render_head_expression(&host.head, &ctx.source_index);
     let start_line = host.start_span.line.0;
     let end_line = if host.end_span.line.0 != start_line {
@@ -155,14 +167,7 @@ fn ensure_host_call_proxy(
     } else {
         None
     };
-    let mut sg = OwnedVisualSubgraph::call_proxy_owned(
-        id,
-        start_line,
-        name,
-        node_id(result_var),
-        Vec::new(),
-        Direction::RL,
-    );
+    let mut sg = OwnedVisualSubgraph::call_proxy(id, start_line, name, Vec::new(), Direction::RL);
     sg.end_line = end_line;
     let idx = arena.push_subgraph(sg.into());
     arena.append_child(container, ElementHandle::Subgraph(idx));
@@ -242,14 +247,15 @@ fn write_op_node_for_assignment(
 /// [`ensure_host_call_proxy`].
 ///
 /// Unlike the declarator case the result variable's own node lives at
-/// its declaration site, elsewhere in the graph; bundling it here would
-/// pull it out of position. The reassignment's *write-op* node lives at
-/// the assignment site instead, so the proxy carries that node as its
-/// owner: the emitter bundles the write-op node beside the proxy in a
-/// `wrap_` box, and the call's inputs retarget from the write-op node to
-/// the proxy border (see `result_proxy_by_write_op`). The result is
-/// `wrap[write | call_proxy "arr.map()"]`, parallel to the declarator's
-/// `wrap[var | call_proxy]`.
+/// its declaration site, elsewhere in the graph. The reassignment's
+/// *write-op* node lives at the assignment site instead, so the binding
+/// is drawn from the proxy to that write-op node --
+/// `call_proxy -->|read| <write-op node>` -- while the call's inputs
+/// retarget from the write-op node to the proxy border (see
+/// `result_proxy_by_write_op`). The result is the same
+/// `<input> -> arr.map() -> <write>` backbone as the declarator's
+/// `<input> -> arr.map() -> <var>`, keyed on the write-op node rather
+/// than the result variable's own node.
 fn ensure_assignment_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -267,6 +273,16 @@ fn ensure_assignment_call_proxy(
     state
         .result_proxy_by_write_op
         .insert(binding.write_op_node.clone(), id.clone());
+    // Bind the call result to the reassignment's write-op node with an
+    // edge from the proxy border, the same backbone shape the declarator
+    // case draws to the result variable's own node.
+    push_edge(
+        &mut state.emitted_edges,
+        &mut state.edges,
+        &id,
+        "read",
+        &binding.write_op_node,
+    );
     // When the reassignment is itself an ExpressionStatement, claim that
     // statement's offset so the callback's statement-contained reads
     // (its return-completed body, owner-less) route into this proxy
@@ -288,14 +304,7 @@ fn ensure_assignment_call_proxy(
     } else {
         None
     };
-    let mut sg = OwnedVisualSubgraph::call_proxy_owned(
-        id,
-        start_line,
-        name,
-        binding.write_op_node.clone(),
-        Vec::new(),
-        Direction::RL,
-    );
+    let mut sg = OwnedVisualSubgraph::call_proxy(id, start_line, name, Vec::new(), Direction::RL);
     sg.end_line = end_line;
     let idx = arena.push_subgraph(sg.into());
     arena.append_child(container, ElementHandle::Subgraph(idx));
@@ -348,28 +357,48 @@ fn call_node_extent(node: &SerializedHeadExpression) -> Option<(u32, u32, u32, O
     Some((start_span.offset.0, end_span.offset.0, start_line, end_line))
 }
 
+/// The host call a chain of callbacks routes against: the outermost
+/// proxy already materialised for it and the head expression whose
+/// receiver chain drives the per-call split.
+struct ChainHost<'a> {
+    proxy: SubgraphIdx,
+    head: &'a SerializedHeadExpression,
+}
+
 /// The proxy a callback should be built into, given its host proxy
-/// (the outermost, host-bound call). For a method chain
-/// `arr.map(f).filter(g)` the callbacks `f` and `g` belong to *different*
-/// calls; placing both in the single host proxy would merge two distinct
-/// block scopes. Walking the host head's receiver chain, each callback is
-/// routed into the innermost call whose span contains its block, with a
-/// nested `CallProxy` created per inner call -- so `filter`'s callback
-/// stays in the host proxy while `map`'s callback descends into a nested
-/// `arr.map()` proxy. A single (non-chained) call has only the outermost
-/// node, so its callback stays in the host proxy unchanged.
+/// (the outermost, host-bound call), and -- as a side effect -- the
+/// sibling backbone of `CallProxy`es a method chain expands into.
+///
+/// For a method chain `arr.map(f).filter(g)` the callbacks `f` and `g`
+/// belong to *different* calls. Each call that hosts a callback gets its
+/// own `CallProxy`; the per-call proxies are laid out as **siblings** of
+/// the host (in `container`) and wired together by `read` edges that
+/// mirror the receiver chain -- `arr.map()` feeds `arr.map().filter()` --
+/// instead of being nested. That is the same dataflow-by-edge rule the
+/// result binding uses, so a chain reads as one straight backbone
+/// (`arr -> arr.map() -> arr.map().filter() -> ...`) rather than a stack
+/// of boxes. `f` is routed into the innermost call's proxy (`arr.map()`),
+/// `g` into the host proxy (`arr.map().filter()`). A single (non-chained)
+/// call has only the outermost node, so its callback stays in the host
+/// proxy and no extra proxy or edge is created.
+///
+/// The receiver edge points from the inner proxy to its outer neighbour
+/// (the call whose receiver it is). The chain's input -- the innermost
+/// receiver, e.g. `arr` -- is routed to the innermost proxy by the caller
+/// via the host's result routing (see [`innermost_chain_proxy_id`]).
 fn callback_chain_target(
     arena: &mut BuildArena,
+    state: &mut BuildState,
     ctx: &BuilderContext<'_>,
-    host_proxy: SubgraphIdx,
-    host_head: &SerializedHeadExpression,
-    block_start: u32,
-    block_end: u32,
+    container: Container,
+    host: ChainHost<'_>,
+    block: (u32, u32),
     nested_call_proxy: &mut HashMap<(u32, u32), SubgraphIdx>,
 ) -> SubgraphIdx {
-    let mut parent = host_proxy;
-    let mut target = host_proxy;
-    for (depth, &call_node) in receiver_call_chain(host_head).iter().enumerate() {
+    let (block_start, block_end) = block;
+    let mut parent = host.proxy;
+    let mut target = host.proxy;
+    for (depth, &call_node) in receiver_call_chain(host.head).iter().enumerate() {
         let Some((start_offset, end_offset, start_line, end_line)) = call_node_extent(call_node)
         else {
             break;
@@ -384,28 +413,64 @@ fn callback_chain_target(
             // already materialised as the host proxy.
             nested_call_proxy
                 .entry((start_offset, end_offset))
-                .or_insert(host_proxy);
+                .or_insert(host.proxy);
         } else if let Some(&idx) = nested_call_proxy.get(&(start_offset, end_offset)) {
             target = idx;
         } else {
-            // One inner call of the chain gets its own nested CallProxy,
+            // One inner call of the chain gets its own CallProxy, a
+            // sibling of the host (appended to `container`, not nested),
             // labelled with the call head itself (`arr.map()`), distinct
             // from the host proxy's whole-chain label
             // (`arr.map().filter()`). Keyed by call span so every callback
-            // of that call shares it.
+            // of that call shares it. A `read` edge from this proxy to its
+            // receiver's proxy (`parent`, the next call out) carries the
+            // chain's dataflow by edge -- the same way the result binding
+            // is drawn -- so the chain renders as a straight backbone.
             let id = format!("call_proxy_{start_offset}_{end_offset}");
             let name = render_head_expression(call_node, &ctx.source_index);
-            let mut sg =
-                OwnedVisualSubgraph::call_proxy(id, start_line, name, Vec::new(), Direction::RL);
+            let mut sg = OwnedVisualSubgraph::call_proxy(
+                id.clone(),
+                start_line,
+                name,
+                Vec::new(),
+                Direction::RL,
+            );
             sg.end_line = end_line;
             let idx = arena.push_subgraph(sg.into());
-            arena.append_child(Container::Subgraph(parent), ElementHandle::Subgraph(idx));
+            arena.append_child(container, ElementHandle::Subgraph(idx));
+            let parent_id = arena.subgraph(parent).descriptor.id().to_string();
+            push_edge(
+                &mut state.emitted_edges,
+                &mut state.edges,
+                &id,
+                "read",
+                &parent_id,
+            );
             nested_call_proxy.insert((start_offset, end_offset), idx);
             target = idx;
         }
         parent = target;
     }
     target
+}
+
+/// The id of the innermost `CallProxy` actually created for a method
+/// chain -- the deepest call in `head`'s receiver chain that a callback
+/// landed in. The chain's input (the innermost receiver, e.g. `arr`) is
+/// re-pointed here so the backbone reads `arr -> arr.map() -> ...` rather
+/// than skipping straight to the outermost call. Returns the host proxy
+/// id for a single (non-chained) call, which makes the caller's re-point
+/// a no-op there.
+fn innermost_chain_proxy_id(
+    arena: &BuildArena,
+    head: &SerializedHeadExpression,
+    nested_call_proxy: &HashMap<(u32, u32), SubgraphIdx>,
+) -> Option<String> {
+    receiver_call_chain(head).iter().rev().find_map(|node| {
+        let (start_offset, end_offset, _, _) = call_node_extent(node)?;
+        let idx = nested_call_proxy.get(&(start_offset, end_offset))?;
+        Some(arena.subgraph(*idx).descriptor.id().to_string())
+    })
 }
 
 /// Place the IfStatement's test anchor at the head of the consequent
@@ -526,13 +591,26 @@ pub fn build_children(
                         );
                         let target = callback_chain_target(
                             arena,
+                            state,
                             ctx,
-                            wrapper_idx,
-                            &host.head,
-                            child.block.span.offset.0,
-                            child.block.end_span.offset.0,
+                            container,
+                            ChainHost {
+                                proxy: wrapper_idx,
+                                head: &host.head,
+                            },
+                            (child.block.span.offset.0, child.block.end_span.offset.0),
                             &mut nested_call_proxy,
                         );
+                        // Route the chain's input (the innermost receiver)
+                        // to the innermost proxy so the backbone runs
+                        // `arr -> arr.map() -> ... -> [write]`.
+                        if let Some(inner) =
+                            innermost_chain_proxy_id(arena, &host.head, &nested_call_proxy)
+                        {
+                            state
+                                .result_proxy_by_write_op
+                                .insert(binding.write_op_node.clone(), inner);
+                        }
                         build_scope(arena, state, ctx, child, Container::Subgraph(target));
                         i += 1;
                         continue;
@@ -565,18 +643,34 @@ pub fn build_children(
                     statement,
                 );
                 // A statement-level method chain (`arr.map(f).filter(g);`)
-                // merges its callbacks into one statement proxy just like
-                // the bound case; split them the same way, using the
-                // statement head's receiver chain.
+                // splits its callbacks into a sibling backbone the same
+                // way the bound case does, using the statement head's
+                // receiver chain.
                 let target = callback_chain_target(
                     arena,
+                    state,
                     ctx,
-                    wrapper_idx,
-                    &statement.head,
-                    child.block.span.offset.0,
-                    child.block.end_span.offset.0,
+                    container,
+                    ChainHost {
+                        proxy: wrapper_idx,
+                        head: &statement.head,
+                    },
+                    (child.block.span.offset.0, child.block.end_span.offset.0),
                     &mut nested_call_proxy,
                 );
+                // Route the chain's receiver read (e.g. `arr`) to the
+                // innermost proxy so the backbone runs
+                // `arr -> arr.map() -> ...`. The callbacks' returns no
+                // longer ride this claim -- they resolve to per-call
+                // return-use nodes (see `resolve_read_target_id`) -- so
+                // re-pointing it only moves the receiver, not the bodies.
+                if let Some(inner) =
+                    innermost_chain_proxy_id(arena, &statement.head, &nested_call_proxy)
+                {
+                    state
+                        .expression_statement_by_offset
+                        .insert(statement.start_span.offset.0, inner);
+                }
                 build_scope(arena, state, ctx, child, Container::Subgraph(target));
                 i += 1;
                 continue;
@@ -603,13 +697,24 @@ pub fn build_children(
                         );
                         let target = callback_chain_target(
                             arena,
+                            state,
                             ctx,
-                            wrapper_idx,
-                            &host.head,
-                            child.block.span.offset.0,
-                            child.block.end_span.offset.0,
+                            container,
+                            ChainHost {
+                                proxy: wrapper_idx,
+                                head: &host.head,
+                            },
+                            (child.block.span.offset.0, child.block.end_span.offset.0),
                             &mut nested_call_proxy,
                         );
+                        // Route the chain's input (the innermost receiver)
+                        // to the innermost proxy so the backbone runs
+                        // `arr -> arr.map() -> ... -> xs`.
+                        if let Some(inner) =
+                            innermost_chain_proxy_id(arena, &host.head, &nested_call_proxy)
+                        {
+                            state.result_proxy_by_var.insert(result_var.clone(), inner);
+                        }
                         build_scope(arena, state, ctx, child, Container::Subgraph(target));
                         i += 1;
                         continue;
@@ -626,13 +731,26 @@ pub fn build_children(
                     );
                     let target = callback_chain_target(
                         arena,
+                        state,
                         ctx,
-                        wrapper_idx,
-                        &host.head,
-                        child.block.span.offset.0,
-                        child.block.end_span.offset.0,
+                        container,
+                        ChainHost {
+                            proxy: wrapper_idx,
+                            head: &host.head,
+                        },
+                        (child.block.span.offset.0, child.block.end_span.offset.0),
                         &mut nested_call_proxy,
                     );
+                    // Route the chain's input (the innermost receiver) to
+                    // the innermost proxy so the returned call's backbone
+                    // runs `arr -> arr.map() -> ...` into the return proxy.
+                    if let Some(inner) =
+                        innermost_chain_proxy_id(arena, &host.head, &nested_call_proxy)
+                    {
+                        let container_key =
+                            format!("{}-{}", host.start_span.offset.0, host.end_span.offset.0);
+                        state.return_proxy_by_span.insert(container_key, inner);
+                    }
                     build_scope(arena, state, ctx, child, Container::Subgraph(target));
                     i += 1;
                     continue;

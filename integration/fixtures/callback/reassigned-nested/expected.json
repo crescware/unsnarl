@@ -58,7 +58,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "arr.map()",
-      "ownerNodeId": "wr_ref_3",
       "elements": [
         {
           "type": "subgraph",
@@ -110,6 +109,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_66",
+      "to": "wr_ref_3",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_mapped_27",
       "to": "wr_ref_3",

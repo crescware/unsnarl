@@ -80,7 +80,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "arr.map()",
-      "ownerNodeId": "n_scope_0_a_29",
       "elements": [
         {
           "type": "subgraph",
@@ -138,7 +137,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "a.map()",
-      "ownerNodeId": "n_scope_0_b_62",
       "elements": [
         {
           "type": "subgraph",
@@ -196,7 +194,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "b.map()",
-      "ownerNodeId": "n_scope_0_c_93",
       "elements": [
         {
           "type": "subgraph",
@@ -254,7 +251,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "c.map()",
-      "ownerNodeId": "n_scope_0_d_124",
       "elements": [
         {
           "type": "subgraph",
@@ -312,7 +308,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "d.map()",
-      "ownerNodeId": "n_scope_0_e_155",
       "elements": [
         {
           "type": "subgraph",
@@ -364,6 +359,31 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_33",
+      "to": "n_scope_0_a_29",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_66",
+      "to": "n_scope_0_b_62",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_97",
+      "to": "n_scope_0_c_93",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_128",
+      "to": "n_scope_0_d_124",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_159",
+      "to": "n_scope_0_e_155",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_arr_6",
       "to": "call_proxy_33",

@@ -1,9 +1,9 @@
 1	0	integration/fixtures/callback/chained-triple/input.ts:1 arr
-0	0	integration/fixtures/callback/chained-triple/input.ts:2 unused xs
+0	1	integration/fixtures/callback/chained-triple/input.ts:2 unused xs
 1	0	integration/fixtures/callback/chained-triple/input.ts:2 v
 0	1	integration/fixtures/callback/chained-triple/input.ts:2 v
 1	0	integration/fixtures/callback/chained-triple/input.ts:2 v
 0	1	integration/fixtures/callback/chained-triple/input.ts:2 v
 1	0	integration/fixtures/callback/chained-triple/input.ts:2 v
 0	1	integration/fixtures/callback/chained-triple/input.ts:2 v
-4	3	8 total
+4	4	8 total

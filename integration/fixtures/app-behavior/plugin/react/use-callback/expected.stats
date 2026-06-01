@@ -3,10 +3,10 @@
 1	0	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:1 react
 0	0	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:3 unused Counter
 2	0	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:3 start
-1	0	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:4 inc
+1	1	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:4 inc
 1	0	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:4 n
 0	1	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:4 n
 0	1	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:4 start
 0	1	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:5 button
 0	1	integration/fixtures/app-behavior/plugin/react/use-callback/input.tsx:5 inc
-7	5	11 total
+7	6	11 total

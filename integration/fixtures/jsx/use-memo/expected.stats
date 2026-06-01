@@ -3,9 +3,9 @@
 1	0	integration/fixtures/jsx/use-memo/input.tsx:1 react
 0	0	integration/fixtures/jsx/use-memo/input.tsx:3 unused Counter
 2	0	integration/fixtures/jsx/use-memo/input.tsx:3 start
-1	0	integration/fixtures/jsx/use-memo/input.tsx:4 value
+1	1	integration/fixtures/jsx/use-memo/input.tsx:4 value
 1	1	integration/fixtures/jsx/use-memo/input.tsx:5 doubled
 0	1	integration/fixtures/jsx/use-memo/input.tsx:6 doubled
 0	1	integration/fixtures/jsx/use-memo/input.tsx:8 button
 0	1	integration/fixtures/jsx/use-memo/input.tsx:8 value
-7	5	10 total
+7	6	10 total

@@ -9,13 +9,20 @@ flowchart RL
       direction RL
       n_scope_1_title_71["title<br/>L4"]
       n_scope_1_body_86["body<br/>L4"]
+      subgraph s_return_scope_1_107_181["return L5-9"]
+        direction RL
+        ret_use_ref_1["&lt;Box&gt;<br/>L6-8"]
+        ret_use_ref_2["title<br/>L6"]
+        ret_use_ref_3["&lt;Text&gt;<br/>L7"]
+        ret_use_ref_4["body<br/>L7"]
+      end
     end
   end
   n_scope_0_wrap_9 -->|read,call| expr_stmt_65
-  n_scope_0_Box_39 -->|read| expr_stmt_65
-  n_scope_1_title_71 -->|read| expr_stmt_65
-  n_scope_0_Text_44 -->|read| expr_stmt_65
-  n_scope_1_body_86 -->|read| expr_stmt_65
+  n_scope_0_Box_39 -->|read| ret_use_ref_1
+  n_scope_1_title_71 -->|read| ret_use_ref_2
+  n_scope_0_Text_44 -->|read| ret_use_ref_3
+  n_scope_1_body_86 -->|read| ret_use_ref_4
   mod___hoc["module ./hoc<br/>L1"]
   mod___ui["module ./ui<br/>L2"]
   mod___hoc -->|read| n_scope_0_wrap_9
@@ -25,5 +32,7 @@ flowchart RL
   class expr_stmt_65 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_1_107_181 nestL3;
   classDef edgeTargetSubgraph stroke:#888;
   class expr_stmt_65 edgeTargetSubgraph;

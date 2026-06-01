@@ -36,7 +36,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "items.map()",
-      "ownerNodeId": "n_scope_0_ids_31",
       "elements": [
         {
           "type": "subgraph",
@@ -88,6 +87,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_37",
+      "to": "n_scope_0_ids_31",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_items_6",
       "to": "call_proxy_37",

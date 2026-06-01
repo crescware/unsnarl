@@ -68,7 +68,6 @@
           "endLine": null,
           "direction": "RL",
           "callName": "useCallback()",
-          "ownerNodeId": "n_scope_1_fnA_64",
           "elements": [
             {
               "type": "subgraph",
@@ -248,6 +247,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_70",
+      "to": "n_scope_1_fnA_64",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_useCallback_9",
       "to": "call_proxy_70",

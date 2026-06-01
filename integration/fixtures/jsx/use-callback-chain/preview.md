@@ -25,42 +25,33 @@ flowchart RL
     n_scope_0_Comp_44["unused Comp()<br/>L3"]
     subgraph s_scope_1["Comp()<br/>L3-8"]
       direction RL
-      subgraph wrap_call_proxy_71[" "]
-        direction TB
-        n_scope_1_a_67["a<br/>L4"]
-        subgraph call_proxy_71["useCallback()<br/>L4"]
+      n_scope_1_a_67["a<br/>L4"]
+      n_scope_1_b_105["b<br/>L5"]
+      n_scope_1_c_150["c<br/>L6"]
+      subgraph call_proxy_71["useCallback()<br/>L4"]
+        direction RL
+        subgraph s_scope_2["useCallback(args[0])<br/>L4"]
           direction RL
-          subgraph s_scope_2["useCallback(args[0])<br/>L4"]
+          elk_empty_s_scope_2["No nodes"]
+        end
+      end
+      subgraph call_proxy_109["useCallback()<br/>L5"]
+        direction RL
+        subgraph s_scope_3["useCallback(args[0])<br/>L5"]
+          direction RL
+          subgraph s_return_scope_0_Comp_44_127_134["return L5"]
             direction RL
-            elk_empty_s_scope_2["No nodes"]
+            ret_use_ref_5["a<br/>L5"]
           end
         end
       end
-      subgraph wrap_call_proxy_109[" "]
-        direction TB
-        n_scope_1_b_105["b<br/>L5"]
-        subgraph call_proxy_109["useCallback()<br/>L5"]
+      subgraph call_proxy_154["useCallback()<br/>L6"]
+        direction RL
+        subgraph s_scope_4["useCallback(args[0])<br/>L6"]
           direction RL
-          subgraph s_scope_3["useCallback(args[0])<br/>L5"]
+          subgraph s_return_scope_0_Comp_44_172_179["return L6"]
             direction RL
-            subgraph s_return_scope_0_Comp_44_127_134["return L5"]
-              direction RL
-              ret_use_ref_5["a<br/>L5"]
-            end
-          end
-        end
-      end
-      subgraph wrap_call_proxy_154[" "]
-        direction TB
-        n_scope_1_c_150["c<br/>L6"]
-        subgraph call_proxy_154["useCallback()<br/>L6"]
-          direction RL
-          subgraph s_scope_4["useCallback(args[0])<br/>L6"]
-            direction RL
-            subgraph s_return_scope_0_Comp_44_172_179["return L6"]
-              direction RL
-              ret_use_ref_9["b<br/>L6"]
-            end
+            ret_use_ref_9["b<br/>L6"]
           end
         end
       end
@@ -72,6 +63,9 @@ flowchart RL
       end
     end
   end
+  call_proxy_71 -->|read| n_scope_1_a_67
+  call_proxy_109 -->|read| n_scope_1_b_105
+  call_proxy_154 -->|read| n_scope_1_c_150
   n_scope_0_useCallback_9 -->|read,call| call_proxy_71
   n_scope_0_useCallback_9 -->|read,call| call_proxy_109
   n_scope_1_a_67 -->|read,call| ret_use_ref_5
@@ -89,21 +83,17 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class wrap_call_proxy_71 nestL3;
-  class wrap_call_proxy_109 nestL3;
-  class wrap_call_proxy_154 nestL3;
+  class call_proxy_71 nestL3;
+  class call_proxy_109 nestL3;
+  class call_proxy_154 nestL3;
   class s_return_scope_0_Comp_44_189_231 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
-  class call_proxy_71 nestL4;
-  class call_proxy_109 nestL4;
-  class call_proxy_154 nestL4;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  class s_scope_4 nestL4;
   classDef nestL5 fill:#364666,stroke:transparent;
-  class s_scope_2 nestL5;
-  class s_scope_3 nestL5;
-  class s_scope_4 nestL5;
-  classDef nestL6 fill:#3f5175,stroke:transparent;
-  class s_return_scope_0_Comp_44_127_134 nestL6;
-  class s_return_scope_0_Comp_44_172_179 nestL6;
+  class s_return_scope_0_Comp_44_127_134 nestL5;
+  class s_return_scope_0_Comp_44_172_179 nestL5;
   classDef edgeTargetSubgraph stroke:#888;
   class call_proxy_71 edgeTargetSubgraph;
   class call_proxy_109 edgeTargetSubgraph;

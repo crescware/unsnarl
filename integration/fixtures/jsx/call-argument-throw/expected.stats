@@ -3,11 +3,11 @@
 1	1	integration/fixtures/jsx/call-argument-throw/input.tsx:2 Box
 1	1	integration/fixtures/jsx/call-argument-throw/input.tsx:2 Text
 2	0	integration/fixtures/jsx/call-argument-throw/input.tsx:2 ./ui
-0	0	integration/fixtures/jsx/call-argument-throw/input.tsx:4 unused Panel
+0	1	integration/fixtures/jsx/call-argument-throw/input.tsx:4 unused Panel
 1	0	integration/fixtures/jsx/call-argument-throw/input.tsx:4 title
 1	0	integration/fixtures/jsx/call-argument-throw/input.tsx:4 body
 0	1	integration/fixtures/jsx/call-argument-throw/input.tsx:6 Box
 0	1	integration/fixtures/jsx/call-argument-throw/input.tsx:6 title
 0	1	integration/fixtures/jsx/call-argument-throw/input.tsx:7 Text
 0	1	integration/fixtures/jsx/call-argument-throw/input.tsx:7 body
-8	7	12 total
+8	8	12 total

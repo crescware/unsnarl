@@ -58,7 +58,6 @@
       "endLine": 10,
       "direction": "RL",
       "callName": "memo()",
-      "ownerNodeId": "n_scope_0_Panel_76",
       "elements": [
         {
           "type": "subgraph",
@@ -170,6 +169,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_84",
+      "to": "n_scope_0_Panel_76",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_memo_9",
       "to": "call_proxy_84",

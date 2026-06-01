@@ -45,7 +45,12 @@ fn read_ref_with(completion: unsnarl_ir::serialized::SerializedCompletion) -> Se
 }
 
 #[test]
-fn returns_expr_stmt_id_verbatim() {
+fn return_completion_prefers_return_use_over_expr_stmt_id() {
+    // A returned value resolves to its return-use node even when the read
+    // also sits inside an ExpressionStatement: an arrow's implicit return
+    // in a statement-level method chain belongs to its own call, not the
+    // enclosing statement. The `Normal` case still short-circuits to the
+    // expr-stmt id (see `returns_expr_stmt_id_verbatim_even_when_enclosing_fn_is_none`).
     let ir = empty_serialized_ir();
     let ctx = base_builder_context(&ir);
     let mut arena = BuildArena::new();
@@ -60,7 +65,7 @@ fn returns_expr_stmt_id_verbatim() {
         None,
         &r,
     );
-    assert_eq!(result, "expr_42");
+    assert_eq!(result, "ret_use_r1");
 }
 
 #[test]
@@ -83,7 +88,10 @@ fn returns_expr_stmt_id_verbatim_even_when_enclosing_fn_is_none() {
 }
 
 #[test]
-fn expr_stmt_short_circuit_produces_no_return_side_effects() {
+fn return_completion_creates_return_use_despite_expr_stmt_id() {
+    // The return-use side effect (a Return subgraph + node in the host)
+    // fires for a Return completion even when an expr-stmt id is present,
+    // because the return-use target now takes precedence over the claim.
     let ir = empty_serialized_ir();
     let ctx = base_builder_context(&ir);
     let mut arena = BuildArena::new();
@@ -98,8 +106,11 @@ fn expr_stmt_short_circuit_produces_no_return_side_effects() {
         None,
         &r,
     );
-    assert!(state.return_subgraphs_by_fn.is_empty());
-    assert!(arena.subgraph(host).children.is_empty());
+    assert_eq!(
+        state.return_subgraphs_by_fn.get("fnVar").map(|m| m.len()),
+        Some(1)
+    );
+    assert_eq!(arena.subgraph(host).children.len(), 1);
 }
 
 #[test]

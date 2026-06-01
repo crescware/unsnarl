@@ -23,23 +23,20 @@ flowchart RL
     n_scope_0_C_44["unused C()<br/>L3"]
     subgraph s_scope_1["C()<br/>L3-7"]
       direction RL
-      subgraph wrap_call_proxy_70[" "]
-        direction TB
-        n_scope_1_fnA_64["unused fnA<br/>L4"]
-        subgraph call_proxy_70["useCallback()<br/>L4"]
+      n_scope_1_fnA_64["unused fnA<br/>L4"]
+      subgraph call_proxy_70["useCallback()<br/>L4"]
+        direction RL
+        subgraph s_scope_2["useCallback(args[0])<br/>L4"]
           direction RL
-          subgraph s_scope_2["useCallback(args[0])<br/>L4"]
+          n_scope_2_arr_83["arr<br/>L4"]
+          subgraph call_proxy_101["arr.map()<br/>L4"]
             direction RL
-            n_scope_2_arr_83["arr<br/>L4"]
-            subgraph call_proxy_101["arr.map()<br/>L4"]
+            subgraph s_scope_3["arr.map(args[0])<br/>L4"]
               direction RL
-              subgraph s_scope_3["arr.map(args[0])<br/>L4"]
+              n_scope_3_n_110["n<br/>L4"]
+              subgraph s_return_scope_0_C_44_116_121["return L4"]
                 direction RL
-                n_scope_3_n_110["n<br/>L4"]
-                subgraph s_return_scope_0_C_44_116_121["return L4"]
-                  direction RL
-                  ret_use_ref_4["n<br/>L4"]
-                end
+                ret_use_ref_4["n<br/>L4"]
               end
             end
           end
@@ -66,6 +63,7 @@ flowchart RL
       end
     end
   end
+  call_proxy_70 -->|read| n_scope_1_fnA_64
   n_scope_0_useCallback_9 -->|read,call| call_proxy_70
   n_scope_2_arr_83 -->|read| call_proxy_101
   n_scope_3_n_110 -->|read| ret_use_ref_4
@@ -75,25 +73,24 @@ flowchart RL
   mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
-  class s_scope_3 nestL1;
+  class s_return_scope_0_C_44_116_121 nestL1;
   class s_return_scope_1_fnB_137_177_182 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
-  class s_return_scope_0_C_44_116_121 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
-  class wrap_call_proxy_70 nestL3;
+  class call_proxy_70 nestL3;
   class wrap_s_scope_4 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
-  class call_proxy_70 nestL4;
+  class s_scope_2 nestL4;
   class s_scope_4 nestL4;
   classDef nestL5 fill:#364666,stroke:transparent;
-  class s_scope_2 nestL5;
+  class call_proxy_101 nestL5;
   class call_proxy_162 nestL5;
   classDef nestL6 fill:#3f5175,stroke:transparent;
-  class call_proxy_101 nestL6;
+  class s_scope_3 nestL6;
   class s_scope_5 nestL6;
   classDef edgeTargetSubgraph stroke:#888;
   class call_proxy_70 edgeTargetSubgraph;
-  class call_proxy_162 edgeTargetSubgraph;
   class call_proxy_101 edgeTargetSubgraph;
+  class call_proxy_162 edgeTargetSubgraph;
 ```

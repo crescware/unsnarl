@@ -1,17 +1,17 @@
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:1 arr
-1	0	integration/fixtures/callback/sequential-bindings/input.ts:2 a
+1	1	integration/fixtures/callback/sequential-bindings/input.ts:2 a
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:2 v
 0	1	integration/fixtures/callback/sequential-bindings/input.ts:2 v
-1	0	integration/fixtures/callback/sequential-bindings/input.ts:3 b
+1	1	integration/fixtures/callback/sequential-bindings/input.ts:3 b
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:3 v
 0	1	integration/fixtures/callback/sequential-bindings/input.ts:3 v
-1	0	integration/fixtures/callback/sequential-bindings/input.ts:4 c
+1	1	integration/fixtures/callback/sequential-bindings/input.ts:4 c
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:4 v
 0	1	integration/fixtures/callback/sequential-bindings/input.ts:4 v
-1	0	integration/fixtures/callback/sequential-bindings/input.ts:5 d
+1	1	integration/fixtures/callback/sequential-bindings/input.ts:5 d
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:5 v
 0	1	integration/fixtures/callback/sequential-bindings/input.ts:5 v
-0	0	integration/fixtures/callback/sequential-bindings/input.ts:6 unused e
+0	1	integration/fixtures/callback/sequential-bindings/input.ts:6 unused e
 1	0	integration/fixtures/callback/sequential-bindings/input.ts:6 v
 0	1	integration/fixtures/callback/sequential-bindings/input.ts:6 v
-10	5	16 total
+10	10	16 total

@@ -58,7 +58,6 @@
       "endLine": 10,
       "direction": "RL",
       "callName": "wrap()",
-      "ownerNodeId": "n_scope_0_Panel_78",
       "elements": [
         {
           "type": "subgraph",
@@ -170,6 +169,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_86",
+      "to": "n_scope_0_Panel_78",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_wrap_9",
       "to": "call_proxy_86",

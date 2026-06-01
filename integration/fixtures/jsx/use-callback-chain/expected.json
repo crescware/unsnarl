@@ -89,7 +89,6 @@
           "endLine": null,
           "direction": "RL",
           "callName": "useCallback()",
-          "ownerNodeId": "n_scope_1_a_67",
           "elements": [
             {
               "type": "subgraph",
@@ -116,7 +115,6 @@
           "endLine": null,
           "direction": "RL",
           "callName": "useCallback()",
-          "ownerNodeId": "n_scope_1_b_105",
           "elements": [
             {
               "type": "subgraph",
@@ -164,7 +162,6 @@
           "endLine": null,
           "direction": "RL",
           "callName": "useCallback()",
-          "ownerNodeId": "n_scope_1_c_150",
           "elements": [
             {
               "type": "subgraph",
@@ -258,6 +255,21 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_71",
+      "to": "n_scope_1_a_67",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_109",
+      "to": "n_scope_1_b_105",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_154",
+      "to": "n_scope_1_c_150",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_useCallback_9",
       "to": "call_proxy_71",

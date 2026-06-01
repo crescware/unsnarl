@@ -47,7 +47,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "items.map()",
-      "ownerNodeId": "wr_ref_2",
       "elements": [
         {
           "type": "subgraph",
@@ -72,6 +71,26 @@
               "isJsxElement": false,
               "unused": false,
               "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_63_68",
+              "kind": "return",
+              "line": 3,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_4",
+                  "kind": "ReturnArgumentReference",
+                  "name": "v",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
             }
           ]
         }
@@ -79,6 +98,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_46",
+      "to": "wr_ref_2",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_ids_29",
       "to": "wr_ref_2",
@@ -91,7 +115,7 @@
     },
     {
       "from": "n_scope_1_v_57",
-      "to": "call_proxy_46",
+      "to": "ret_use_ref_4",
       "label": "read"
     }
   ],

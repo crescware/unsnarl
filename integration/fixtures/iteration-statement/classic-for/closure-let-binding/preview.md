@@ -28,7 +28,10 @@ flowchart RL
         direction RL
         subgraph s_scope_3["fns.push(args[0])<br/>L3"]
           direction RL
-          elk_empty_s_scope_3["No nodes"]
+          subgraph s_return_scope_3_81_82["return L3"]
+            direction RL
+            ret_use_ref_5["q<br/>L3"]
+          end
         end
       end
     end
@@ -36,7 +39,7 @@ flowchart RL
   n_scope_1_q_43 -->|set| wr_ref_3
   n_scope_1_q_43 -->|read| for_test_scope_0_34
   n_scope_0_fns_6 -->|read| expr_stmt_66
-  wr_ref_3 -->|read| expr_stmt_66
+  wr_ref_3 -->|read| ret_use_ref_5
   n_scope_0_console_87 -->|read| expr_stmt_87
   n_scope_0_fns_6 -->|read| expr_stmt_87
   expr_stmt_87["console.log()<br/>L5"]
@@ -48,8 +51,8 @@ flowchart RL
   class expr_stmt_66 nestL3;
   classDef nestL4 fill:#2d3b57,stroke:transparent;
   class s_scope_3 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_3_81_82 nestL5;
   classDef edgeTargetSubgraph stroke:#888;
   class expr_stmt_66 edgeTargetSubgraph;
-  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
-  class elk_empty_s_scope_3 elkEmptyPlaceholder;
 ```

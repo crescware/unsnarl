@@ -66,14 +66,6 @@ pub enum OwnedExtras {
     CallProxy {
         #[serde(rename = "callName")]
         call_name: String,
-        /// Result-variable node id when the call's result is bound to
-        /// a variable (`const xs = arr.map(cb)`). Drives the same
-        /// emitter wrapper as `Function`'s `owner_node_id`, bundling
-        /// the result-variable node beside the call subgraph by
-        /// containment. `None` for statement-level calls (no result
-        /// binding), keeping their JSON unchanged.
-        #[serde(rename = "ownerNodeId", skip_serializing_if = "Option::is_none")]
-        owner_node_id: Option<String>,
     },
 }
 
@@ -243,32 +235,6 @@ impl OwnedVisualSubgraph {
             OwnedSubgraphKind::CallProxy,
             OwnedExtras::CallProxy {
                 call_name: call_name.into(),
-                owner_node_id: None,
-            },
-            elements,
-            direction,
-        )
-    }
-
-    /// Call-proxy whose call result is bound to a variable. Carries
-    /// the result-variable node id so the emitter wraps the variable
-    /// node beside this subgraph (containment), the same way a named
-    /// `Function` subgraph is wrapped with its owner node.
-    pub fn call_proxy_owned(
-        id: impl Into<String>,
-        line: u32,
-        call_name: impl Into<String>,
-        owner_node_id: impl Into<String>,
-        elements: Vec<VisualElement>,
-        direction: Direction,
-    ) -> Self {
-        Self::base(
-            id,
-            line,
-            OwnedSubgraphKind::CallProxy,
-            OwnedExtras::CallProxy {
-                call_name: call_name.into(),
-                owner_node_id: Some(owner_node_id.into()),
             },
             elements,
             direction,
@@ -645,12 +611,14 @@ impl VisualSubgraph {
 
     /// `ownerNodeId` (JSON field), present only on `Function`
     /// subgraphs (the FunctionDeclaration's node id when the
-    /// function is named, `None` for anonymous functions).
+    /// function is named, `None` for anonymous functions). A
+    /// result-bound `CallProxy` shows its call ↔ binding relationship
+    /// by an edge (`call_proxy -->|read| <binding node>`), not by an
+    /// owner-wrapper, so it carries no owner.
     pub fn owner_node_id(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
                 OwnedExtras::Function { owner_node_id, .. } => owner_node_id.as_deref(),
-                OwnedExtras::CallProxy { owner_node_id, .. } => owner_node_id.as_deref(),
                 _ => None,
             },
             Self::Control(_) => None,

@@ -36,7 +36,6 @@
       "endLine": null,
       "direction": "RL",
       "callName": "matrix.map()",
-      "ownerNodeId": "n_scope_0_xs_39",
       "elements": [
         {
           "type": "subgraph",
@@ -98,6 +97,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_44",
+      "to": "n_scope_0_xs_39",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_matrix_6",
       "to": "call_proxy_44",

@@ -1,0 +1,52 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_compute_9["unused compute()<br/>L1"]
+    subgraph s_scope_1["compute()<br/>L1-3"]
+      direction RL
+      n_scope_1_arr_17["arr<br/>L1"]
+      subgraph call_proxy_36["arr.map().filter()<br/>L2"]
+        direction RL
+        subgraph s_scope_3["arr.map().filter(args[0])<br/>L2"]
+          direction RL
+          n_scope_3_v_73["v<br/>L2"]
+          subgraph s_return_scope_0_compute_9_79_84["return L2"]
+            direction RL
+            ret_use_ref_2["v<br/>L2"]
+          end
+        end
+      end
+      subgraph call_proxy_43_64["arr.map()<br/>L2"]
+        direction RL
+        subgraph s_scope_2["arr.map(args[0])<br/>L2"]
+          direction RL
+          n_scope_2_v_52["v<br/>L2"]
+          subgraph s_return_scope_0_compute_9_58_63["return L2"]
+            direction RL
+            ret_use_ref_1["v<br/>L2"]
+          end
+        end
+      end
+    end
+  end
+  call_proxy_43_64 -->|read| call_proxy_36
+  n_scope_1_arr_17 -->|read| call_proxy_43_64
+  n_scope_2_v_52 -->|read| ret_use_ref_1
+  n_scope_3_v_73 -->|read| ret_use_ref_2
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class call_proxy_36 nestL3;
+  class call_proxy_43_64 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_3 nestL4;
+  class s_scope_2 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_0_compute_9_79_84 nestL5;
+  class s_return_scope_0_compute_9_58_63 nestL5;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_36 edgeTargetSubgraph;
+  class call_proxy_43_64 edgeTargetSubgraph;

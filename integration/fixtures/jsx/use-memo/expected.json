@@ -77,7 +77,6 @@
           "endLine": 7,
           "direction": "RL",
           "callName": "useMemo()",
-          "ownerNodeId": "n_scope_1_value_94",
           "elements": [
             {
               "type": "subgraph",
@@ -172,6 +171,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_102",
+      "to": "n_scope_1_value_94",
+      "label": "read"
+    },
     {
       "from": "n_scope_0_useMemo_9",
       "to": "call_proxy_102",

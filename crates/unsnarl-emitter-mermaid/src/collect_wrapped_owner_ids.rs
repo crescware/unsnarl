@@ -1,11 +1,12 @@
 //! Walks an element tree and collects every owner-carrying
 //! subgraph's owner-node id into the supplied set.
 //!
-//! A subgraph carries an owner node when it is a named `Function`
-//! (owner = the FunctionName node) or a result-bound `CallProxy`
-//! (owner = the result-variable node). That owner node is absorbed
-//! into a wrapper subgraph alongside the body, so it must NOT also be
-//! emitted as a sibling node at its declaring scope.
+//! A subgraph carries an owner node only when it is a named `Function`
+//! (owner = the FunctionName node). That owner node is absorbed into a
+//! wrapper subgraph alongside the body, so it must NOT also be emitted
+//! as a sibling node at its declaring scope. (A result-bound
+//! `CallProxy` instead links to its binding node by edge, so it carries
+//! no owner and contributes nothing here.)
 
 use std::collections::HashSet;
 
