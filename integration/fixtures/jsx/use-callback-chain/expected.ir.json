@@ -146,7 +146,37 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 71
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 36,
+            "offset": 95
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useCallback"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 12,
+              "offset": 71
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 36,
+              "offset": 95
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -193,7 +223,37 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 5,
+            "column": 12,
+            "offset": 109
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 43,
+            "offset": 140
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useCallback"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 12,
+              "offset": 109
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 43,
+              "offset": 140
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -240,7 +300,37 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 6,
+            "column": 12,
+            "offset": 154
+          },
+          "endSpan": {
+            "line": 6,
+            "column": 43,
+            "offset": 185
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useCallback"
+            },
+            "startSpan": {
+              "line": 6,
+              "column": 12,
+              "offset": 154
+            },
+            "endSpan": {
+              "line": 6,
+              "column": 43,
+              "offset": 185
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,

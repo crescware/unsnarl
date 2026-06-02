@@ -317,6 +317,7 @@ fn callback_fn_scope(id: &str, upper: &str, stmt_offset: u32, arg_index: u32) ->
     s.callback_argument = Some(SerializedCallbackArgument {
         callee: SerializedHeadExpression::identifier("cb".to_string()),
         arg_index,
+        host: None,
     });
     s
 }
@@ -385,7 +386,7 @@ fn sibling_callbacks_for_the_same_statement_share_one_call_proxy_wrapper() {
         panic!("expected owned subgraph");
     };
     assert!(matches!(o.kind, OwnedSubgraphKind::CallProxy));
-    let OwnedExtras::CallProxy { call_name } = &o.extras else {
+    let OwnedExtras::CallProxy { call_name, .. } = &o.extras else {
         panic!("expected CallProxy extras");
     };
     assert_eq!(call_name, "run()");
@@ -477,7 +478,7 @@ fn distinct_statement_offsets_get_distinct_call_proxy_wrappers() {
         .iter()
         .filter_map(|idx| match descriptor_of(&arena, *idx) {
             VisualSubgraph::Owned(o) => match o.extras {
-                OwnedExtras::CallProxy { call_name } => Some(call_name),
+                OwnedExtras::CallProxy { call_name, .. } => Some(call_name),
                 _ => None,
             },
             _ => None,

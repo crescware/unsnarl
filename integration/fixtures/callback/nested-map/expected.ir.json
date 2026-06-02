@@ -1,0 +1,584 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/nested-map/input.ts",
+    "language": "ts"
+  },
+  "raw": "const matrix = [[1, 2], [3, 4]];\nconst xs = matrix.map((row) => row.map((c) => c * 2));\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 88
+        }
+      },
+      "variables": [
+        "scope#0:matrix@6",
+        "scope#0:xs@39"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 2,
+          "column": 22,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 52,
+          "offset": 85
+        }
+      },
+      "variables": [
+        "scope#1:row@56"
+      ],
+      "references": [
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "identifier",
+            "name": "matrix"
+          },
+          "property": "map"
+        },
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 2,
+            "column": 11,
+            "offset": 44
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 53,
+            "offset": 86
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "matrix"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 11,
+              "offset": 44
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 53,
+              "offset": 86
+            }
+          }
+        }
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 2,
+          "column": 39,
+          "offset": 72
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 51,
+          "offset": 84
+        }
+      },
+      "variables": [
+        "scope#2:c@73"
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "identifier",
+            "name": "row"
+          },
+          "property": "map"
+        },
+        "argIndex": 0,
+        "host": {
+          "kind": "return",
+          "startSpan": {
+            "line": 2,
+            "column": 31,
+            "offset": 64
+          },
+          "endSpan": {
+            "line": 2,
+            "column": 52,
+            "offset": 85
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "row"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 2,
+              "column": 31,
+              "offset": 64
+            },
+            "endSpan": {
+              "line": 2,
+              "column": 52,
+              "offset": 85
+            }
+          }
+        }
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 2,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:matrix@6",
+      "name": "matrix",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "matrix",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 1,
+              "column": 15,
+              "offset": 15
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:xs@39",
+      "name": "xs",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 6,
+          "offset": 39
+        }
+      ],
+      "references": [
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "xs",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 39
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 6,
+              "offset": 39
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 33
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "CallExpression",
+            "span": {
+              "line": 2,
+              "column": 11,
+              "offset": 44
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:row@56",
+      "name": "row",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 23,
+          "offset": 56
+        }
+      ],
+      "references": [
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "row",
+            "span": {
+              "line": 2,
+              "column": 23,
+              "offset": 56
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 2,
+              "column": 22,
+              "offset": 55
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:c@73",
+      "name": "c",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 40,
+          "offset": 73
+        }
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "c",
+            "span": {
+              "line": 2,
+              "column": 40,
+              "offset": 73
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 2,
+              "column": 39,
+              "offset": 72
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "matrix",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:matrix@6",
+      "owners": [
+        "scope#0:matrix@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "xs",
+        "span": {
+          "line": 2,
+          "column": 6,
+          "offset": 39
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:xs@39",
+      "owners": [
+        "scope#0:xs@39"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "matrix",
+        "span": {
+          "line": 2,
+          "column": 11,
+          "offset": 44
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:matrix@6",
+      "owners": [
+        "scope#0:xs@39"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "row",
+        "span": {
+          "line": 2,
+          "column": 31,
+          "offset": 64
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:row@56",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 2,
+          "column": 31,
+          "offset": 64
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 52,
+          "offset": 85
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "c",
+        "span": {
+          "line": 2,
+          "column": 46,
+          "offset": 79
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:c@73",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 2,
+          "column": 46,
+          "offset": 79
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 51,
+          "offset": 84
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:xs@39"
+  ],
+  "diagnostics": []
+}

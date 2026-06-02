@@ -1,0 +1,42 @@
+# integration/fixtures/callback/nested-map/input.ts
+
+## Input
+
+```ts
+const matrix = [[1, 2], [3, 4]];
+const xs = matrix.map((row) => row.map((c) => c * 2));
+```
+
+## Query
+
+```sh
+--depth 1
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_matrix_6["matrix<br/>L1"]
+  n_scope_0_xs_39["unused xs<br/>L2"]
+  subgraph call_proxy_44["matrix.map()<br/>L2"]
+    direction RL
+    subgraph s_scope_1["matrix.map(args[0])<br/>L2"]
+      direction RL
+      n_scope_1_row_56["row<br/>L2"]
+      beyond_depth_s_scope_1((...))
+    end
+  end
+  call_proxy_44 -->|read| n_scope_0_xs_39
+  n_scope_0_matrix_6 -->|read| call_proxy_44
+  n_scope_1_row_56 -.->|read| beyond_depth_s_scope_1
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_1 boundaryStub;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class call_proxy_44 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_44 edgeTargetSubgraph;
+```

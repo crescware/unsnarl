@@ -239,19 +239,15 @@ for (const dir of fixtureDirs) {
   const variants = readVariants(relDir);
   for (const v of variants) {
     const varDir = `${dir}/${variantDirName(v.kind, v.slug)}`;
-    try {
-      Deno.statSync(varDir);
-    } catch {
-      continue;
-    }
+    // Bootstrap from the manifest: create the variant directory and its
+    // baselines on first sight, so declaring a variant in `variants.json`
+    // is sufficient. `uns --out-file` writes each baseline, creating it
+    // if absent. (Previously a missing directory or file was silently
+    // skipped, which meant a newly declared variant produced nothing.)
+    Deno.mkdirSync(varDir, { recursive: true });
     const extraFlags = buildVariantFlags(v);
     for (const b of VARIANT_BASELINES) {
       const outFile = `${varDir}/${b.fileName}`;
-      try {
-        Deno.statSync(outFile);
-      } catch {
-        continue;
-      }
       const ok = await runUns([
         "-f", b.format, ...extraFlags, "--out-file", outFile, relInput,
       ]);

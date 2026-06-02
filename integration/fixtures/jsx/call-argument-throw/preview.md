@@ -24,19 +24,23 @@ flowchart RL
   n_scope_0_Box_39["import Box<br/>L2"]
   n_scope_0_Text_44["import Text<br/>L2"]
   n_scope_0_Panel_78["unused Panel<br/>L4"]
-  subgraph s_scope_1["wrap(args[0])<br/>L4-10"]
+  subgraph call_proxy_86["wrap()<br/>L4-10"]
     direction RL
-    n_scope_1_title_92["title<br/>L4"]
-    n_scope_1_body_107["body<br/>L4"]
-    subgraph s_throw_scope_1_128_201["throw L5-9"]
+    subgraph s_scope_1["wrap(args[0])<br/>L4-10"]
       direction RL
-      throw_use_ref_2["&lt;Box&gt;<br/>L6-8"]
-      throw_use_ref_3["title<br/>L6"]
-      throw_use_ref_4["&lt;Text&gt;<br/>L7"]
-      throw_use_ref_5["body<br/>L7"]
+      n_scope_1_title_92["title<br/>L4"]
+      n_scope_1_body_107["body<br/>L4"]
+      subgraph s_throw_scope_1_128_201["throw L5-9"]
+        direction RL
+        throw_use_ref_2["&lt;Box&gt;<br/>L6-8"]
+        throw_use_ref_3["title<br/>L6"]
+        throw_use_ref_4["&lt;Text&gt;<br/>L7"]
+        throw_use_ref_5["body<br/>L7"]
+      end
     end
   end
-  n_scope_0_wrap_9 -->|read,call| n_scope_0_Panel_78
+  call_proxy_86 -->|read| n_scope_0_Panel_78
+  n_scope_0_wrap_9 -->|read,call| call_proxy_86
   n_scope_0_Box_39 -->|read| throw_use_ref_2
   n_scope_1_title_92 -->|read| throw_use_ref_3
   n_scope_0_Text_44 -->|read| throw_use_ref_4
@@ -47,7 +51,11 @@ flowchart RL
   mod___ui -->|read| n_scope_0_Box_39
   mod___ui -->|read| n_scope_0_Text_44
   classDef nestL1 fill:#11192a,stroke:transparent;
-  class s_scope_1 nestL1;
+  class call_proxy_86 nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
-  class s_throw_scope_1_128_201 nestL2;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_throw_scope_1_128_201 nestL3;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_86 edgeTargetSubgraph;
 ```

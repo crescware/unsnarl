@@ -22,14 +22,24 @@
 //! serialize time.
 
 use crate::reference::expression_statement_head::HeadExpression;
+use crate::scope::callback_host::CallbackHost;
 
 pub struct CallbackArgument {
     pub callee: HeadExpression,
     pub arg_index: u32,
+    /// The binding / return / assignment whose value is this call, when
+    /// there is one. `None` for statement-hosted callbacks (recoverable
+    /// from the `ExpressionStatement` spans) and callbacks with no
+    /// recognised host.
+    pub host: Option<CallbackHost>,
 }
 
 impl CallbackArgument {
-    pub fn new(callee: HeadExpression, arg_index: u32) -> Self {
-        Self { callee, arg_index }
+    pub fn new(callee: HeadExpression, arg_index: u32, host: Option<CallbackHost>) -> Self {
+        Self {
+            callee,
+            arg_index,
+            host,
+        }
     }
 }

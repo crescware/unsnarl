@@ -1,0 +1,6 @@
+1	0	integration/fixtures/callback/reassigned-method/input.ts:1 items
+1	0	integration/fixtures/callback/reassigned-method/input.ts:2 unused ids
+0	2	integration/fixtures/callback/reassigned-method/input.ts:3 ids
+1	0	integration/fixtures/callback/reassigned-method/input.ts:3 v
+0	1	integration/fixtures/callback/reassigned-method/input.ts:3 v
+3	3	5 total

@@ -1,0 +1,41 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_arr_6["arr<br/>L1"]
+  subgraph expr_stmt_23["arr.map().filter()<br/>L2"]
+    direction RL
+    subgraph s_scope_2["arr.map().filter(args[0])<br/>L2"]
+      direction RL
+      n_scope_2_v_53["v<br/>L2"]
+      subgraph s_return_scope_2_59_64["return L2"]
+        direction RL
+        ret_use_ref_3["v<br/>L2"]
+      end
+    end
+  end
+  subgraph call_proxy_23_44["arr.map()<br/>L2"]
+    direction RL
+    subgraph s_scope_1["arr.map(args[0])<br/>L2"]
+      direction RL
+      n_scope_1_v_32["v<br/>L2"]
+      subgraph s_return_scope_1_38_43["return L2"]
+        direction RL
+        ret_use_ref_2["v<br/>L2"]
+      end
+    end
+  end
+  call_proxy_23_44 -->|read| expr_stmt_23
+  n_scope_0_arr_6 -->|read| call_proxy_23_44
+  n_scope_1_v_32 -->|read| ret_use_ref_2
+  n_scope_2_v_53 -->|read| ret_use_ref_3
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class expr_stmt_23 nestL1;
+  class call_proxy_23_44 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_2 nestL2;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_2_59_64 nestL3;
+  class s_return_scope_1_38_43 nestL3;
+  classDef edgeTargetSubgraph stroke:#888;
+  class expr_stmt_23 edgeTargetSubgraph;
+  class call_proxy_23_44 edgeTargetSubgraph;

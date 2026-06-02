@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/chained-statement/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_arr_6",
+      "name": "arr",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "expr_stmt_23",
+      "kind": "call-proxy",
+      "line": 2,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "arr.map().filter()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "kind": "function",
+          "line": 2,
+          "endLine": 2,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "arr.map().filter",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_2_v_53",
+              "name": "v",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_2_59_64",
+              "kind": "return",
+              "line": 2,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_3",
+                  "kind": "ReturnArgumentReference",
+                  "name": "v",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "call_proxy_23_44",
+      "kind": "call-proxy",
+      "line": 2,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "arr.map()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 2,
+          "endLine": 2,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "arr.map",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_v_32",
+              "name": "v",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_38_43",
+              "kind": "return",
+              "line": 2,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_2",
+                  "kind": "ReturnArgumentReference",
+                  "name": "v",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "call_proxy_23_44",
+      "to": "expr_stmt_23",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_arr_6",
+      "to": "call_proxy_23_44",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_32",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v_53",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

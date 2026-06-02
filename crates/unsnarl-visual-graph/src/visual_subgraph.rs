@@ -611,7 +611,8 @@ impl VisualSubgraph {
 
     /// `ownerNodeId` (JSON field), present only on `Function`
     /// subgraphs (the FunctionDeclaration's node id when the
-    /// function is named, `None` for anonymous functions).
+    /// function is named, `None` for anonymous functions). Every other
+    /// kind, including `CallProxy`, carries no owner and returns `None`.
     pub fn owner_node_id(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
@@ -669,7 +670,7 @@ impl VisualSubgraph {
     pub fn call_name(&self) -> Option<&str> {
         match self {
             Self::Owned(s) => match &s.extras {
-                OwnedExtras::CallProxy { call_name } => Some(call_name.as_str()),
+                OwnedExtras::CallProxy { call_name, .. } => Some(call_name.as_str()),
                 _ => None,
             },
             Self::Control(_) => None,

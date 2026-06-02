@@ -1,0 +1,35 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_doubleAll_9["unused doubleAll()<br/>L1"]
+    subgraph s_scope_1["doubleAll()<br/>L1-3"]
+      direction RL
+      n_scope_1_items_19["items<br/>L1"]
+      subgraph call_proxy_40["items.map()<br/>L2"]
+        direction RL
+        subgraph s_scope_2["items.map(args[0])<br/>L2"]
+          direction RL
+          n_scope_2_v_58["v<br/>L2"]
+          subgraph s_return_scope_0_doubleAll_9_64_69["return L2"]
+            direction RL
+            ret_use_ref_1["v<br/>L2"]
+          end
+        end
+      end
+    end
+  end
+  n_scope_1_items_19 -->|read| call_proxy_40
+  n_scope_2_v_58 -->|read| ret_use_ref_1
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class call_proxy_40 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_0_doubleAll_9_64_69 nestL5;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_40 edgeTargetSubgraph;

@@ -1,0 +1,999 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/chained-reassigned/input.ts",
+    "language": "ts"
+  },
+  "raw": "const arr = [1, 2, 3];\nlet xs = [0];\nxs = arr.map((v) => v + 1).filter((v) => v > 0);\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1",
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 86
+        }
+      },
+      "variables": [
+        "scope#0:arr@6",
+        "scope#0:xs@27"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 3,
+          "column": 13,
+          "offset": 50
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 25,
+          "offset": 62
+        }
+      },
+      "variables": [
+        "scope#1:v@51"
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "identifier",
+            "name": "arr"
+          },
+          "property": "map"
+        },
+        "argIndex": 0,
+        "host": {
+          "kind": "assignment",
+          "startSpan": {
+            "line": 3,
+            "column": 5,
+            "offset": 42
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 47,
+            "offset": 84
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "call",
+                "callee": {
+                  "kind": "member",
+                  "object": {
+                    "kind": "identifier",
+                    "name": "arr"
+                  },
+                  "property": "map"
+                },
+                "startSpan": {
+                  "line": 3,
+                  "column": 5,
+                  "offset": 42
+                },
+                "endSpan": {
+                  "line": 3,
+                  "column": 26,
+                  "offset": 63
+                }
+              },
+              "property": "filter"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          },
+          "targetSpan": {
+            "line": 3,
+            "column": 0,
+            "offset": 37
+          }
+        }
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "ArrowFunctionExpression",
+        "span": {
+          "line": 3,
+          "column": 34,
+          "offset": 71
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 46,
+          "offset": 83
+        }
+      },
+      "variables": [
+        "scope#2:v@72"
+      ],
+      "references": [
+        "ref#5"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": {
+        "callee": {
+          "kind": "member",
+          "object": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "arr"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 26,
+              "offset": 63
+            }
+          },
+          "property": "filter"
+        },
+        "argIndex": 0,
+        "host": {
+          "kind": "assignment",
+          "startSpan": {
+            "line": 3,
+            "column": 5,
+            "offset": 42
+          },
+          "endSpan": {
+            "line": 3,
+            "column": 47,
+            "offset": 84
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "call",
+                "callee": {
+                  "kind": "member",
+                  "object": {
+                    "kind": "identifier",
+                    "name": "arr"
+                  },
+                  "property": "map"
+                },
+                "startSpan": {
+                  "line": 3,
+                  "column": 5,
+                  "offset": 42
+                },
+                "endSpan": {
+                  "line": 3,
+                  "column": 26,
+                  "offset": 63
+                }
+              },
+              "property": "filter"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          },
+          "targetSpan": {
+            "line": 3,
+            "column": 0,
+            "offset": 37
+          }
+        }
+      },
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:arr@6",
+      "name": "arr",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "arr",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 1,
+              "column": 12,
+              "offset": 12
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:xs@27",
+      "name": "xs",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 4,
+          "offset": 27
+        }
+      ],
+      "references": [
+        "ref#1",
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "xs",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 27
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 2,
+              "column": 4,
+              "offset": 27
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 23
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "ArrayExpression",
+            "span": {
+              "line": 2,
+              "column": 9,
+              "offset": 32
+            }
+          },
+          "declarationKind": "let"
+        }
+      ]
+    },
+    {
+      "id": "scope#1:v@51",
+      "name": "v",
+      "scope": "scope#1",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 14,
+          "offset": 51
+        }
+      ],
+      "references": [
+        "ref#4"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v",
+            "span": {
+              "line": 3,
+              "column": 14,
+              "offset": 51
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 13,
+              "offset": 50
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    },
+    {
+      "id": "scope#2:v@72",
+      "name": "v",
+      "scope": "scope#2",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 35,
+          "offset": 72
+        }
+      ],
+      "references": [
+        "ref#5"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "v",
+            "span": {
+              "line": 3,
+              "column": 35,
+              "offset": 72
+            }
+          },
+          "node": {
+            "type": "ArrowFunctionExpression",
+            "span": {
+              "line": 3,
+              "column": 34,
+              "offset": 71
+            }
+          },
+          "parent": null,
+          "type": "Parameter"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "arr",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:arr@6",
+      "owners": [
+        "scope#0:arr@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "xs",
+        "span": {
+          "line": 2,
+          "column": 4,
+          "offset": 27
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:xs@27",
+      "owners": [
+        "scope#0:xs@27"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "xs",
+        "span": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:xs@27",
+      "owners": [
+        "scope#0:xs@27"
+      ],
+      "init": false,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 48,
+          "offset": 85
+        },
+        "head": {
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "xs"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 37
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 2,
+              "offset": 39
+            }
+          },
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "member",
+                "object": {
+                  "kind": "call",
+                  "callee": {
+                    "kind": "member",
+                    "object": {
+                      "kind": "identifier",
+                      "name": "arr"
+                    },
+                    "property": "map"
+                  },
+                  "startSpan": {
+                    "line": 3,
+                    "column": 5,
+                    "offset": 42
+                  },
+                  "endSpan": {
+                    "line": 3,
+                    "column": 26,
+                    "offset": 63
+                  }
+                },
+                "property": "filter"
+              },
+              "startSpan": {
+                "line": 3,
+                "column": 5,
+                "offset": 42
+              },
+              "endSpan": {
+                "line": 3,
+                "column": 47,
+                "offset": 84
+              }
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "arr",
+        "span": {
+          "line": 3,
+          "column": 5,
+          "offset": 42
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:arr@6",
+      "owners": [
+        "scope#0:xs@27"
+      ],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": true
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 48,
+          "offset": 85
+        },
+        "head": {
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "xs"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 37
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 2,
+              "offset": 39
+            }
+          },
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "member",
+                "object": {
+                  "kind": "call",
+                  "callee": {
+                    "kind": "member",
+                    "object": {
+                      "kind": "identifier",
+                      "name": "arr"
+                    },
+                    "property": "map"
+                  },
+                  "startSpan": {
+                    "line": 3,
+                    "column": 5,
+                    "offset": 42
+                  },
+                  "endSpan": {
+                    "line": 3,
+                    "column": 26,
+                    "offset": 63
+                  }
+                },
+                "property": "filter"
+              },
+              "startSpan": {
+                "line": 3,
+                "column": 5,
+                "offset": 42
+              },
+              "endSpan": {
+                "line": 3,
+                "column": 47,
+                "offset": 84
+              }
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#4",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 3,
+          "column": 20,
+          "offset": 57
+        }
+      },
+      "from": "scope#1",
+      "resolved": "scope#1:v@51",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 3,
+          "column": 20,
+          "offset": 57
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 25,
+          "offset": 62
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 48,
+          "offset": 85
+        },
+        "head": {
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "xs"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 37
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 2,
+              "offset": 39
+            }
+          },
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "member",
+                "object": {
+                  "kind": "call",
+                  "callee": {
+                    "kind": "member",
+                    "object": {
+                      "kind": "identifier",
+                      "name": "arr"
+                    },
+                    "property": "map"
+                  },
+                  "startSpan": {
+                    "line": 3,
+                    "column": 5,
+                    "offset": 42
+                  },
+                  "endSpan": {
+                    "line": 3,
+                    "column": 26,
+                    "offset": 63
+                  }
+                },
+                "property": "filter"
+              },
+              "startSpan": {
+                "line": 3,
+                "column": 5,
+                "offset": 42
+              },
+              "endSpan": {
+                "line": 3,
+                "column": 47,
+                "offset": 84
+              }
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#5",
+      "identifier": {
+        "name": "v",
+        "span": {
+          "line": 3,
+          "column": 41,
+          "offset": 78
+        }
+      },
+      "from": "scope#2",
+      "resolved": "scope#2:v@72",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "return",
+        "startSpan": {
+          "line": 3,
+          "column": 41,
+          "offset": 78
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 46,
+          "offset": 83
+        }
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 48,
+          "offset": 85
+        },
+        "head": {
+          "kind": "assign",
+          "operator": "=",
+          "left": {
+            "head": {
+              "kind": "identifier",
+              "name": "xs"
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 0,
+              "offset": 37
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 2,
+              "offset": 39
+            }
+          },
+          "right": {
+            "head": {
+              "kind": "call",
+              "callee": {
+                "kind": "member",
+                "object": {
+                  "kind": "call",
+                  "callee": {
+                    "kind": "member",
+                    "object": {
+                      "kind": "identifier",
+                      "name": "arr"
+                    },
+                    "property": "map"
+                  },
+                  "startSpan": {
+                    "line": 3,
+                    "column": 5,
+                    "offset": 42
+                  },
+                  "endSpan": {
+                    "line": 3,
+                    "column": 26,
+                    "offset": 63
+                  }
+                },
+                "property": "filter"
+              },
+              "startSpan": {
+                "line": 3,
+                "column": 5,
+                "offset": 42
+              },
+              "endSpan": {
+                "line": 3,
+                "column": 47,
+                "offset": 84
+              }
+            },
+            "startSpan": {
+              "line": 3,
+              "column": 5,
+              "offset": 42
+            },
+            "endSpan": {
+              "line": 3,
+              "column": 47,
+              "offset": 84
+            }
+          }
+        }
+      }
+    }
+  ],
+  "unusedVariableIds": [
+    "scope#0:xs@27"
+  ],
+  "diagnostics": []
+}

@@ -52,85 +52,96 @@
     },
     {
       "type": "subgraph",
-      "id": "s_scope_1",
-      "kind": "function",
+      "id": "call_proxy_86",
+      "kind": "call-proxy",
       "line": 4,
       "endLine": 10,
       "direction": "RL",
-      "ownerNodeId": null,
-      "ownerName": "",
-      "callbackArg": {
-        "callee": "wrap",
-        "argIndex": 0
-      },
+      "callName": "wrap()",
       "elements": [
         {
-          "type": "node",
-          "id": "n_scope_1_title_92",
-          "name": "title",
-          "line": 4,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false,
-          "kind": "FormalParameter"
-        },
-        {
-          "type": "node",
-          "id": "n_scope_1_body_107",
-          "name": "body",
-          "line": 4,
-          "endLine": null,
-          "isJsxElement": false,
-          "unused": false,
-          "kind": "FormalParameter"
-        },
-        {
           "type": "subgraph",
-          "id": "s_return_scope_1_128_202",
-          "kind": "return",
-          "line": 5,
-          "endLine": 9,
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 4,
+          "endLine": 10,
           "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "wrap",
+            "argIndex": 0
+          },
           "elements": [
             {
               "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnArgumentReference",
-              "name": "Box",
-              "line": 6,
-              "endLine": 8,
-              "isJsxElement": true,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_3",
-              "kind": "ReturnArgumentReference",
+              "id": "n_scope_1_title_92",
               "name": "title",
-              "line": 6,
+              "line": 4,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false
+              "unused": false,
+              "kind": "FormalParameter"
             },
             {
               "type": "node",
-              "id": "ret_use_ref_4",
-              "kind": "ReturnArgumentReference",
-              "name": "Text",
-              "line": 7,
-              "endLine": null,
-              "isJsxElement": true,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_5",
-              "kind": "ReturnArgumentReference",
+              "id": "n_scope_1_body_107",
               "name": "body",
-              "line": 7,
+              "line": 4,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_128_202",
+              "kind": "return",
+              "line": 5,
+              "endLine": 9,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_2",
+                  "kind": "ReturnArgumentReference",
+                  "name": "Box",
+                  "line": 6,
+                  "endLine": 8,
+                  "isJsxElement": true,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_3",
+                  "kind": "ReturnArgumentReference",
+                  "name": "title",
+                  "line": 6,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_4",
+                  "kind": "ReturnArgumentReference",
+                  "name": "Text",
+                  "line": 7,
+                  "endLine": null,
+                  "isJsxElement": true,
+                  "unused": false
+                },
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_5",
+                  "kind": "ReturnArgumentReference",
+                  "name": "body",
+                  "line": 7,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
             }
           ]
         }
@@ -159,8 +170,13 @@
   ],
   "edges": [
     {
-      "from": "n_scope_0_wrap_9",
+      "from": "call_proxy_86",
       "to": "n_scope_0_Panel_78",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_wrap_9",
+      "to": "call_proxy_86",
       "label": "read,call"
     },
     {

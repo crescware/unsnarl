@@ -60,46 +60,57 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_2",
-          "kind": "function",
+          "id": "call_proxy_102",
+          "kind": "call-proxy",
           "line": 4,
           "endLine": 7,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useMemo",
-            "argIndex": 0
-          },
+          "callName": "useMemo()",
           "elements": [
             {
-              "type": "node",
-              "id": "n_scope_2_doubled_128",
-              "name": "doubled",
-              "line": 5,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false,
-              "kind": "ConstBinding",
-              "initIsFunction": false
-            },
-            {
               "type": "subgraph",
-              "id": "s_return_scope_0_Counter_40_153_168",
-              "kind": "return",
-              "line": 6,
-              "endLine": null,
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 4,
+              "endLine": 7,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useMemo",
+                "argIndex": 0
+              },
               "elements": [
                 {
                   "type": "node",
-                  "id": "ret_use_ref_5",
-                  "kind": "ReturnArgumentReference",
+                  "id": "n_scope_2_doubled_128",
                   "name": "doubled",
-                  "line": 6,
+                  "line": 5,
                   "endLine": null,
                   "isJsxElement": false,
-                  "unused": false
+                  "unused": false,
+                  "kind": "ConstBinding",
+                  "initIsFunction": false
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_Counter_40_153_168",
+                  "kind": "return",
+                  "line": 6,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_5",
+                      "kind": "ReturnArgumentReference",
+                      "name": "doubled",
+                      "line": 6,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }
@@ -139,6 +150,11 @@
     }
   ],
   "edges": [
+    {
+      "from": "call_proxy_102",
+      "to": "n_scope_1_value_94",
+      "label": "read"
+    },
     {
       "from": "n_scope_1_start_53",
       "to": "n_scope_2_doubled_128",

@@ -557,3 +557,41 @@ fn callback_argument_captures_distinct_callees_for_calls_in_a_chain() {
         );
     });
 }
+
+#[test]
+fn callback_in_an_assignment_target_is_not_hosted_by_the_assignment() {
+    // The callback computes the *target* key on the left of `=`
+    // (`out[[].findIndex(cb)] = 9`), so its call is not the assignment's
+    // value. It must carry no host: hosting it would describe the
+    // unrelated right-hand side (`9`). With no host the visual layer
+    // groups it via the enclosing statement instead.
+    with_callback_args("out[[].findIndex((v) => v > 0)] = 9;\n", |args| {
+        let cb = args[0].expect("the findIndex callback must be annotated");
+        assert!(
+            cb.host.is_none(),
+            "a callback in the assignment target must not be hosted by the assignment",
+        );
+    });
+}
+
+#[test]
+fn callback_on_an_assignment_value_is_hosted_by_the_assignment() {
+    // Counterpart: when the callback's call IS the assignment's value
+    // (`ys = [1].map(cb)`), it carries an Assignment host, and a plain
+    // identifier target records its offset.
+    with_callback_args("ys = [1].map((v) => v + 1);\n", |args| {
+        let cb = args[0].expect("the map callback must be annotated");
+        let host = cb
+            .host
+            .as_ref()
+            .expect("a callback bound as an assignment's value must carry a host");
+        assert!(matches!(
+            host.kind,
+            unsnarl_ir::scope::CallbackHostKind::Assignment
+        ));
+        assert!(
+            host.target_offset.is_some(),
+            "a plain-identifier assignment target records its offset"
+        );
+    });
+}

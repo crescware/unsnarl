@@ -1,0 +1,39 @@
+# integration/fixtures/callback/result-bound-method/input.ts
+
+## Input
+
+```ts
+const items = [1, 2, 3];
+const ids = items.map((v) => v + 1);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_items_6["items<br/>L1"]
+  n_scope_0_ids_31["unused ids<br/>L2"]
+  subgraph call_proxy_37["items.map()<br/>L2"]
+    direction RL
+    subgraph s_scope_1["items.map(args[0])<br/>L2"]
+      direction RL
+      n_scope_1_v_48["v<br/>L2"]
+      subgraph s_return_scope_1_54_59["return L2"]
+        direction RL
+        ret_use_ref_3["v<br/>L2"]
+      end
+    end
+  end
+  call_proxy_37 -->|read| n_scope_0_ids_31
+  n_scope_0_items_6 -->|read| call_proxy_37
+  n_scope_1_v_48 -->|read| ret_use_ref_3
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class call_proxy_37 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_1_54_59 nestL3;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_37 edgeTargetSubgraph;
+```

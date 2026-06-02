@@ -1,0 +1,5 @@
+{
+  "variants": [
+    { "kind": "depth", "slug": "1", "depths": { "uniform": 1 } }
+  ]
+}

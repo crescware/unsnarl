@@ -93,7 +93,37 @@
           "kind": "identifier",
           "name": "wrap"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 4,
+            "column": 21,
+            "offset": 86
+          },
+          "endSpan": {
+            "line": 10,
+            "column": 2,
+            "offset": 204
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "wrap"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 21,
+              "offset": 86
+            },
+            "endSpan": {
+              "line": 10,
+              "column": 2,
+              "offset": 204
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,

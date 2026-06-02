@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/reassigned-nested/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_arr_6",
+      "name": "arr",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_mapped_27",
+      "name": "mapped",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "LetBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_47",
+      "name": "result",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_3",
+      "kind": "WriteReference",
+      "name": "mapped",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": "let"
+    },
+    {
+      "type": "subgraph",
+      "id": "call_proxy_66",
+      "kind": "call-proxy",
+      "line": 3,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "arr.map()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 3,
+          "endLine": 3,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "arr.map",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_v_75",
+              "name": "v",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_return_scope_1_81_86",
+              "kind": "return",
+              "line": 3,
+              "endLine": null,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ret_use_ref_5",
+                  "kind": "ReturnArgumentReference",
+                  "name": "v",
+                  "line": 3,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "call_proxy_66",
+      "to": "wr_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_mapped_27",
+      "to": "wr_ref_3",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_arr_6",
+      "to": "call_proxy_66",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_75",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

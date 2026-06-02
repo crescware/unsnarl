@@ -137,7 +137,37 @@
           "kind": "identifier",
           "name": "useCallback"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "variableDeclarator",
+          "startSpan": {
+            "line": 4,
+            "column": 14,
+            "offset": 70
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 71,
+            "offset": 127
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "identifier",
+              "name": "useCallback"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 14,
+              "offset": 70
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 71,
+              "offset": 127
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -190,7 +220,41 @@
           },
           "property": "map"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "return",
+          "startSpan": {
+            "line": 4,
+            "column": 45,
+            "offset": 101
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 66,
+            "offset": 122
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "arr"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 4,
+              "column": 45,
+              "offset": 101
+            },
+            "endSpan": {
+              "line": 4,
+              "column": 66,
+              "offset": 122
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,
@@ -288,7 +352,41 @@
           },
           "property": "map"
         },
-        "argIndex": 0
+        "argIndex": 0,
+        "host": {
+          "kind": "return",
+          "startSpan": {
+            "line": 5,
+            "column": 33,
+            "offset": 162
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 54,
+            "offset": 183
+          },
+          "head": {
+            "kind": "call",
+            "callee": {
+              "kind": "member",
+              "object": {
+                "kind": "identifier",
+                "name": "arr"
+              },
+              "property": "map"
+            },
+            "startSpan": {
+              "line": 5,
+              "column": 33,
+              "offset": 162
+            },
+            "endSpan": {
+              "line": 5,
+              "column": 54,
+              "offset": 183
+            }
+          }
+        }
       },
       "fallsThrough": false,
       "exitsFunction": false,

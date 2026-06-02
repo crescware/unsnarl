@@ -122,6 +122,24 @@ pub struct BuildState {
     /// intentionally absent because they belong to their
     /// surrounding control subgraph, not the inner gated scope.
     pub node_id_origin_scope: HashMap<String, String>,
+    /// `return-span key ("start-end") → CallProxy id`, for a
+    /// `return <call>(cb)`. The return completion's inputs route to this
+    /// proxy instead of minting a return-use node, so the returned
+    /// call's callback is not stranded as a disconnected island.
+    pub return_proxy_by_span: HashMap<String, String>,
+    /// `result variable id → result-bound CallProxy id`, for
+    /// `const xs = arr.map(cb)`. The call's inputs are redirected from
+    /// the `xs` node to the proxy, so the dataflow backbone reads
+    /// `input → the call → xs` instead of the inputs pointing straight
+    /// at `xs`.
+    pub result_proxy_by_var: HashMap<String, String>,
+    /// `write-op node id → reassignment-bound CallProxy id`, the
+    /// assignment counterpart of `result_proxy_by_var` for
+    /// `y = arr.map(cb)`. Keyed on the reassignment's write-op node
+    /// because the result variable's own node lives at its declaration
+    /// site, elsewhere in the graph; the same `input → the call → write`
+    /// redirection then applies.
+    pub result_proxy_by_write_op: HashMap<String, String>,
 }
 
 impl BuildState {

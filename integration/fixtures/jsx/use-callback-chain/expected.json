@@ -83,50 +83,72 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_2",
-          "kind": "function",
+          "id": "call_proxy_71",
+          "kind": "call-proxy",
           "line": 4,
-          "endLine": 4,
+          "endLine": null,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useCallback",
-            "argIndex": 0
-          },
-          "elements": []
-        },
-        {
-          "type": "subgraph",
-          "id": "s_scope_3",
-          "kind": "function",
-          "line": 5,
-          "endLine": 5,
-          "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useCallback",
-            "argIndex": 0
-          },
+          "callName": "useCallback()",
           "elements": [
             {
               "type": "subgraph",
-              "id": "s_return_scope_0_Comp_44_127_134",
-              "kind": "return",
-              "line": 5,
-              "endLine": null,
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 4,
+              "endLine": 4,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useCallback",
+                "argIndex": 0
+              },
+              "elements": []
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "call_proxy_109",
+          "kind": "call-proxy",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "callName": "useCallback()",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "kind": "function",
+              "line": 5,
+              "endLine": 5,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useCallback",
+                "argIndex": 0
+              },
               "elements": [
                 {
-                  "type": "node",
-                  "id": "ret_use_ref_5",
-                  "kind": "ReturnArgumentReference",
-                  "name": "a",
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_Comp_44_127_134",
+                  "kind": "return",
                   "line": 5,
                   "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_5",
+                      "kind": "ReturnArgumentReference",
+                      "name": "a",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }
@@ -134,35 +156,46 @@
         },
         {
           "type": "subgraph",
-          "id": "s_scope_4",
-          "kind": "function",
+          "id": "call_proxy_154",
+          "kind": "call-proxy",
           "line": 6,
-          "endLine": 6,
+          "endLine": null,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "useCallback",
-            "argIndex": 0
-          },
+          "callName": "useCallback()",
           "elements": [
             {
               "type": "subgraph",
-              "id": "s_return_scope_0_Comp_44_172_179",
-              "kind": "return",
+              "id": "s_scope_4",
+              "kind": "function",
               "line": 6,
-              "endLine": null,
+              "endLine": 6,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "useCallback",
+                "argIndex": 0
+              },
               "elements": [
                 {
-                  "type": "node",
-                  "id": "ret_use_ref_9",
-                  "kind": "ReturnArgumentReference",
-                  "name": "b",
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_Comp_44_172_179",
+                  "kind": "return",
                   "line": 6,
                   "endLine": null,
-                  "isJsxElement": false,
-                  "unused": false
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_9",
+                      "kind": "ReturnArgumentReference",
+                      "name": "b",
+                      "line": 6,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }
@@ -223,13 +256,28 @@
   ],
   "edges": [
     {
-      "from": "n_scope_0_useCallback_9",
+      "from": "call_proxy_71",
       "to": "n_scope_1_a_67",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_109",
+      "to": "n_scope_1_b_105",
+      "label": "read"
+    },
+    {
+      "from": "call_proxy_154",
+      "to": "n_scope_1_c_150",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_useCallback_9",
+      "to": "call_proxy_71",
       "label": "read,call"
     },
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "n_scope_1_b_105",
+      "to": "call_proxy_109",
       "label": "read,call"
     },
     {
@@ -239,12 +287,12 @@
     },
     {
       "from": "n_scope_1_a_67",
-      "to": "n_scope_1_b_105",
+      "to": "call_proxy_109",
       "label": "read"
     },
     {
       "from": "n_scope_0_useCallback_9",
-      "to": "n_scope_1_c_150",
+      "to": "call_proxy_154",
       "label": "read,call"
     },
     {
@@ -254,7 +302,7 @@
     },
     {
       "from": "n_scope_1_b_105",
-      "to": "n_scope_1_c_150",
+      "to": "call_proxy_154",
       "label": "read"
     },
     {
