@@ -1,12 +1,6 @@
-//! Serialized counterpart of [`crate::scope::CallbackHost`].
-//!
-//! `start_span` / `end_span` cover the host's bound expression (the
-//! declarator init / return argument / assignment RHS); the visual
-//! graph uses them as the containing CallProxy's extent. `head` renders
-//! the proxy label. `target_span` is present only for an `Assignment`
-//! host with a plain-identifier left-hand side; the visual graph maps
-//! it to the reassignment's write-op node so the proxy can be bundled
-//! with that node by containment.
+//! Serialized counterpart of [`crate::scope::CallbackHost`]: the same
+//! annotation with byte offsets resolved to [`Span`]s at serialize time.
+//! See [`crate::scope::CallbackHost`] for what each field means.
 
 use serde::Serialize;
 

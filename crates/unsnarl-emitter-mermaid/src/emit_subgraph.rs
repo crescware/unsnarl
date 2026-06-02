@@ -1,10 +1,8 @@
 //! Emits a subgraph block, wrapping it with its owner node when one
 //! is known. Only a named `Function` carries an owner (the
 //! FunctionName node); it expresses the owner ↔ subgraph relationship
-//! by containment in a shared `wrap_<id>` box. A result-bound
-//! `CallProxy` shows its call ↔ binding relationship by an edge
-//! instead, so it carries no owner and falls through to a plain
-//! subgraph here.
+//! by containment in a shared `wrap_<id>` box. Everything else carries
+//! no owner and falls through to a plain subgraph here.
 
 use unsnarl_visual_graph::visual_subgraph::VisualSubgraph;
 

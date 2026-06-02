@@ -122,32 +122,23 @@ pub struct BuildState {
     /// intentionally absent because they belong to their
     /// surrounding control subgraph, not the inner gated scope.
     pub node_id_origin_scope: HashMap<String, String>,
-    /// `return-span key ("start-end") → CallProxy id`. Recorded when a
-    /// `return <call>(cb)` is wrapped in a CallProxy containing the
-    /// callback. The return-completion inputs (the call's receiver /
-    /// callee / args) route to this proxy instead of a return-use node,
-    /// so the returned call's callback is contained rather than left as
-    /// an island.
+    /// `return-span key ("start-end") → CallProxy id`, for a
+    /// `return <call>(cb)`. The return completion's inputs route to this
+    /// proxy instead of minting a return-use node, so the returned
+    /// call's callback is not stranded as a disconnected island.
     pub return_proxy_by_span: HashMap<String, String>,
-    /// `result variable id → result-bound CallProxy id`. Recorded when
-    /// a `const xs = arr.map(cb)`-style call is wrapped in a
-    /// result-bound CallProxy. The call's inputs (receiver / callee /
-    /// non-callback args) own `xs`; their init-time owner edges are
-    /// retargeted from the `xs` node to the proxy border, so they read
-    /// "input → the call" while the call ↔ `xs` relationship is shown
-    /// by containment (the shared `wrap_` box) -- matching how a
-    /// statement-level call's inputs edge to its proxy.
+    /// `result variable id → result-bound CallProxy id`, for
+    /// `const xs = arr.map(cb)`. The call's inputs are redirected from
+    /// the `xs` node to the proxy, so the dataflow backbone reads
+    /// `input → the call → xs` instead of the inputs pointing straight
+    /// at `xs`.
     pub result_proxy_by_var: HashMap<String, String>,
-    /// `write-op node id → reassignment-bound CallProxy id`. The
-    /// assignment counterpart of `result_proxy_by_var`: recorded when a
-    /// `y = arr.map(cb)` reassignment is wrapped in a CallProxy owned by
-    /// the write-op node. The call's inputs (receiver / callee /
-    /// non-callback args) land on that write-op node via
-    /// `owner_target_id`; their owner edges are retargeted from the
-    /// write-op node to the proxy border, so they read "input → the
-    /// call" while the call ↔ write relationship is shown by containment
-    /// (the shared `wrap_` box) -- mirroring the declarator case keyed
-    /// on the result variable's own node.
+    /// `write-op node id → reassignment-bound CallProxy id`, the
+    /// assignment counterpart of `result_proxy_by_var` for
+    /// `y = arr.map(cb)`. Keyed on the reassignment's write-op node
+    /// because the result variable's own node lives at its declaration
+    /// site, elsewhere in the graph; the same `input → the call → write`
+    /// redirection then applies.
     pub result_proxy_by_write_op: HashMap<String, String>,
 }
 

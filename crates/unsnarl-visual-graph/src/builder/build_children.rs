@@ -116,21 +116,19 @@ fn result_var_for_host(
     })
 }
 
-/// Look up (or create on first sight) the `CallProxy` wrapper for a
-/// callback whose enclosing call's result is bound to `result_var`
+/// Look up (or create on first sight) the `CallProxy` for a callback
+/// whose enclosing call's result is bound to `result_var`
 /// (`const xs = arr.map(cb)`, including a call nested in arguments
 /// `const x = foo(data.map(cb))`) -- the non-statement counterpart of
 /// [`ensure_call_proxy_wrapper`].
 ///
-/// The proxy spans the host's bound expression and is labelled with its
-/// head, so it represents the whole bound call (`foo(...)`), not just
-/// the inner callback's call. The call ↔ result-variable relationship is
-/// drawn as an edge -- `call_proxy -->|read| <result-var node>`, the same
-/// `read` a plain `const b = a` binding produces -- so the result
-/// variable stays an ordinary sibling node and the dataflow backbone
-/// reads `arr -> arr.map() -> a -> ...` unbroken. Every callback within
-/// the same bound expression shares one proxy, keyed by the host's start
-/// offset.
+/// The proxy is labelled with the host head, so it stands for the whole
+/// bound call (`foo(...)`), not just the inner callback's call. The
+/// result feeds the bound variable through the same `read` a plain
+/// `const b = a` produces, which keeps the variable an ordinary sibling
+/// node and the dataflow backbone (`arr -> arr.map() -> a -> ...`)
+/// unbroken instead of nesting boxes. Every callback within the bound
+/// expression shares one proxy, keyed by the host's start offset.
 fn ensure_host_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -175,15 +173,12 @@ fn ensure_host_call_proxy(
     idx
 }
 
-/// Look up (or create on first sight) the `CallProxy` wrapper for a
-/// callback returned from a function (`return arr.map(cb)`).
+/// Look up (or create on first sight) the `CallProxy` for a callback
+/// returned from a function (`return arr.map(cb)`).
 ///
-/// Unlike the variable-declarator case there is no result variable to
-/// bundle with, so the proxy carries no owner. It spans the returned
-/// expression and contains the callback; the return-completion inputs
-/// (the call's receiver / callee / args) route to it via
-/// `return_proxy_by_span` instead of a return-use node, so the returned
-/// call's callback is contained rather than left as an island.
+/// The return completion's inputs (the call's receiver / callee / args)
+/// route here via `return_proxy_by_span` instead of a return-use node,
+/// so the returned call's callback is not stranded as an island.
 fn ensure_return_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -214,10 +209,10 @@ fn ensure_return_call_proxy(
     idx
 }
 
-/// What a reassignment `y = arr.map(cb)` binds its CallProxy to: the
-/// write-op node the proxy is bundled with (owner) and, when the
-/// reassignment is itself an ExpressionStatement, that statement's
-/// offset (so the proxy claims it).
+/// What a reassignment `y = arr.map(cb)` ties its CallProxy to: the
+/// reassignment's write-op node, and -- when the reassignment is itself
+/// an ExpressionStatement -- that statement's offset, so the proxy can
+/// claim it.
 struct ReassignmentBinding {
     write_op_node: String,
     stmt_offset: Option<u32>,
@@ -227,9 +222,9 @@ struct ReassignmentBinding {
 /// left-hand side is a plain identifier. The host carries the target
 /// identifier's offset (`target_span`); the matching Write `WriteOp`
 /// shares that offset (both are the write reference's identifier
-/// offset), so its `ref_id` yields the `wr_<ref_id>` node the proxy is
-/// bundled with. `None` for member / destructuring targets (no
-/// `target_span`) or if no write op is found at that offset.
+/// offset), so its `ref_id` yields the `wr_<ref_id>` node. `None` for
+/// member / destructuring targets (no `target_span`) or if no write op
+/// is found at that offset.
 fn write_op_node_for_assignment(
     host: &SerializedCallbackHost,
     ctx: &BuilderContext<'_>,
@@ -241,21 +236,16 @@ fn write_op_node_for_assignment(
         .map(|op| write_op_node_id(&op.ref_id))
 }
 
-/// Look up (or create on first sight) the `CallProxy` wrapper for a
-/// callback whose enclosing call's result is reassigned to an existing
-/// variable (`y = arr.map(cb)`) -- the reassignment counterpart of
+/// Look up (or create on first sight) the `CallProxy` for a callback
+/// whose enclosing call's result is reassigned to an existing variable
+/// (`y = arr.map(cb)`) -- the reassignment counterpart of
 /// [`ensure_host_call_proxy`].
 ///
-/// Unlike the declarator case the result variable's own node lives at
-/// its declaration site, elsewhere in the graph. The reassignment's
-/// *write-op* node lives at the assignment site instead, so the binding
-/// is drawn from the proxy to that write-op node --
-/// `call_proxy -->|read| <write-op node>` -- while the call's inputs
-/// retarget from the write-op node to the proxy border (see
-/// `result_proxy_by_write_op`). The result is the same
-/// `<input> -> arr.map() -> <write>` backbone as the declarator's
-/// `<input> -> arr.map() -> <var>`, keyed on the write-op node rather
-/// than the result variable's own node.
+/// It keys on the reassignment's *write-op* node rather than the result
+/// variable's own node, because that node lives at the variable's
+/// declaration site, elsewhere in the graph. The backbone is then the
+/// same `input -> arr.map() -> write` shape the declarator case gives at
+/// the variable's own node.
 fn ensure_assignment_call_proxy(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -644,16 +634,15 @@ pub fn build_children(
                 .as_ref()
                 .and_then(|cb| cb.host.as_ref());
             // A reassignment host (`y = arr.map(cb)`) takes priority over
-            // the enclosing-statement path below. The statement
-            // `y = arr.map(cb);` is itself an ExpressionStatement, so the
-            // statement path would label the proxy `y = arr.map()` and
-            // strand the receiver on the write-op node. Wrapping by the
-            // assignment instead -- a CallProxy owned by the write-op node
-            // -- renders reassignment parallel to declaration
-            // (`const xs = arr.map(cb)`): wrap[write | call_proxy]. Only a
-            // plain-identifier target resolves to a single write-op node;
-            // member / destructuring targets carry no `target_span` and
-            // fall through to the statement / island paths.
+            // the enclosing-statement path below: `y = arr.map(cb);` is
+            // itself an ExpressionStatement, so the statement path would
+            // label the proxy `y = arr.map()` and strand the receiver on
+            // the write-op node. Handling it as an assignment instead
+            // keeps reassignment parallel to declaration
+            // (`const xs = arr.map(cb)`). Only a plain-identifier target
+            // resolves to a single write-op node; member / destructuring
+            // targets carry no `target_span` and fall through to the
+            // statement / island paths.
             if let Some(host) = host {
                 if matches!(host.kind, SerializedCallbackHostKind::Assignment) {
                     if let Some(write_op_node) = write_op_node_for_assignment(host, ctx) {
@@ -763,11 +752,8 @@ pub fn build_children(
             // Not a statement-level call. If the call's result is bound
             // to a variable (`const xs = arr.map(cb)`, including a call
             // nested in arguments `const x = foo(data.map(cb))`), the
-            // host annotation gives the binding's bound expression --
-            // its span and label. Wrap the callback in a CallProxy
-            // spanning that whole bound expression, bundled with the
-            // result variable by containment, the same shape as the
-            // statement path.
+            // host annotation names the bound expression to wrap and
+            // label.
             if let Some(host) = host {
                 if matches!(host.kind, SerializedCallbackHostKind::VariableDeclarator) {
                     if let Some(result_var) = result_var_for_host(host, parent_scope, ctx) {

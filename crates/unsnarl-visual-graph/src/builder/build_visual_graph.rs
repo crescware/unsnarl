@@ -349,20 +349,11 @@ fn emit_let_chain_edges(state: &mut BuildState, ctx: &BuilderContext<'_>) {
     }
 }
 
-/// Retarget an owner edge from the result-variable node (declaration)
-/// or the reassignment write-op node to its bound CallProxy border,
-/// when one exists.
-///
-/// Two shapes feed a call's result into a binding:
-/// - `const xs = arr.map(cb)` -- the init-time owner edge lands on the
-///   variable's own node (`owner_target_id` returns `node_id(var)` when
-///   no prior write op exists), redirected via `result_proxy_by_var`.
-/// - `y = arr.map(cb)` -- the owner edge lands on the reassignment's
-///   write-op node, redirected via `result_proxy_by_write_op`.
-///
-/// Either way this redirects exactly the call's inputs (receiver /
-/// callee / args) to the proxy, leaving the call ↔ variable
-/// relationship to the containment wrapper.
+/// Redirect a call's init-time owner edge from the binding node it lands
+/// on -- the result variable's own node for `const xs = arr.map(cb)`, or
+/// the reassignment write-op node for `y = arr.map(cb)` -- to the bound
+/// CallProxy, when one exists. This is what makes the call's inputs read
+/// `input → the call` rather than pointing straight at the binding.
 fn retarget_owner_target(
     target_id: String,
     owner_var_id: &str,

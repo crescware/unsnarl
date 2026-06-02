@@ -27,11 +27,10 @@ use crate::scope::callback_host::CallbackHost;
 pub struct CallbackArgument {
     pub callee: HeadExpression,
     pub arg_index: u32,
-    /// The binding / return / assignment whose value is this call,
-    /// when there is one. Drives the containment CallProxy for
-    /// non-statement contexts; `None` for statement-hosted callbacks
-    /// (handled via the ExpressionStatement path) and callbacks with
-    /// no recognised host.
+    /// The binding / return / assignment whose value is this call, when
+    /// there is one. `None` for statement-hosted callbacks (recoverable
+    /// from the `ExpressionStatement` spans) and callbacks with no
+    /// recognised host.
     pub host: Option<CallbackHost>,
 }
 

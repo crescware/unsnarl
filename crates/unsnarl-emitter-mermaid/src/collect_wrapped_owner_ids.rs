@@ -4,9 +4,8 @@
 //! A subgraph carries an owner node only when it is a named `Function`
 //! (owner = the FunctionName node). That owner node is absorbed into a
 //! wrapper subgraph alongside the body, so it must NOT also be emitted
-//! as a sibling node at its declaring scope. (A result-bound
-//! `CallProxy` instead links to its binding node by edge, so it carries
-//! no owner and contributes nothing here.)
+//! as a sibling node at its declaring scope. Subgraphs without an owner
+//! contribute nothing here.
 
 use std::collections::HashSet;
 
