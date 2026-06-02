@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_Fragment_9",
-      "name": "Fragment",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "Fragment"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Hello_79",
       "name": "Hello",
       "line": 7,
@@ -155,14 +144,26 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod_react",
-      "kind": "SyntheticModuleSource",
-      "name": "react",
+      "type": "subgraph",
+      "id": "sg_react",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "react",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_Fragment_9",
+          "name": "Fragment",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "Fragment"
+        }
+      ]
     }
   ],
   "edges": [
@@ -189,11 +190,6 @@
     {
       "from": "n_scope_0_App_196",
       "to": "n_scope_0_root_237",
-      "label": "read"
-    },
-    {
-      "from": "mod_react",
-      "to": "n_scope_0_Fragment_9",
       "label": "read"
     }
   ],

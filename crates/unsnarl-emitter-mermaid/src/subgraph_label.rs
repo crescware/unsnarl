@@ -168,6 +168,14 @@ fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<Str
             out.push_str("block ");
             line_range_label_into(out, sg);
         }
+        SubgraphKind::Module => {
+            // The module header names the import source only; unlike
+            // every other subgraph kind it carries no `L<start>-<end>`
+            // range, because an import source is not a contiguous span
+            // the way a function or block body is.
+            out.push_str("module ");
+            escape_into(out, sg.module_source().unwrap_or(""));
+        }
     }
 }
 

@@ -51,7 +51,7 @@ fn skips_synthetic_node_kinds() {
     let mut state = base_render_state();
     let mut g = base_graph();
     g.elements = vec![
-        synthetic("mod_a", SyntheticNodeKind::SyntheticModuleSource),
+        synthetic("import_a", SyntheticNodeKind::SyntheticImportIntermediate),
         binding("n_b"),
         synthetic(MODULE_ROOT_ID, SyntheticNodeKind::SyntheticModuleSink),
     ];

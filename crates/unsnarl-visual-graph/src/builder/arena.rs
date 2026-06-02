@@ -16,6 +16,8 @@
 //! (`&mut Vec<VisualElement>` vs `&mut VisualSubgraph`) through
 //! every helper.
 
+use std::collections::HashSet;
+
 use crate::visual_element::VisualElement;
 use crate::visual_node::VisualNode;
 use crate::visual_subgraph::VisualSubgraph;
@@ -120,6 +122,20 @@ impl BuildArena {
             Container::Root => self.root_children.insert(0, handle),
             Container::Subgraph(idx) => self.subgraphs[idx.0].children.insert(0, handle),
         }
+    }
+
+    /// Drop every root-level node handle whose index is in `ids`,
+    /// preserving the order of the survivors. Used when re-parenting
+    /// import bindings out of the root list and into their module
+    /// subgraph: the binding nodes are first emitted at the root by
+    /// `build_scope`, then moved under the subgraph here. Without the
+    /// detach they would be finalized twice (once at root, once in the
+    /// subgraph) and the second visit would panic.
+    pub fn detach_root_nodes(&mut self, ids: &HashSet<NodeIdx>) {
+        self.root_children.retain(|handle| match handle {
+            ElementHandle::Node(idx) => !ids.contains(idx),
+            ElementHandle::Subgraph(_) => true,
+        });
     }
 
     /// Move every node + subgraph into `Vec<VisualElement>`s rooted

@@ -18,7 +18,6 @@ const Comp = () => {
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_useCallback_9["import useCallback<br/>L1"]
   n_scope_0_button_197["global button"]
   subgraph wrap_s_scope_1[" "]
     direction TB
@@ -63,6 +62,10 @@ flowchart RL
       end
     end
   end
+  subgraph sg_react["module react"]
+    direction RL
+    n_scope_0_useCallback_9["import useCallback<br/>L1"]
+  end
   call_proxy_71 -->|read| n_scope_1_a_67
   call_proxy_109 -->|read| n_scope_1_b_105
   call_proxy_154 -->|read| n_scope_1_c_150
@@ -76,10 +79,9 @@ flowchart RL
   n_scope_0_button_197 -->|read| ret_use_ref_11
   n_scope_1_c_150 -->|read| ret_use_ref_12
   n_scope_1_c_150 -->|read,call| ret_use_ref_13
-  mod_react["module react<br/>L1"]
-  mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class sg_react nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

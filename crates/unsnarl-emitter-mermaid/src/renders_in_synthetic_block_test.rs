@@ -67,9 +67,6 @@ fn node_of_kind(kind: NodeKind) -> VisualNode {
         NodeKind::SyntheticModuleSink => VisualNode::Synthetic(base_simple_synthetic(
             SyntheticNodeKind::SyntheticModuleSink,
         )),
-        NodeKind::SyntheticModuleSource => VisualNode::Synthetic(base_simple_synthetic(
-            SyntheticNodeKind::SyntheticModuleSource,
-        )),
         NodeKind::SyntheticImportIntermediate => VisualNode::Synthetic(base_simple_synthetic(
             SyntheticNodeKind::SyntheticImportIntermediate,
         )),
@@ -102,11 +99,6 @@ fn check(kind: NodeKind, expected: bool) {
 #[test]
 fn synthetic_module_sink_renders_in_synthetic_block() {
     check(NodeKind::SyntheticModuleSink, true);
-}
-
-#[test]
-fn synthetic_module_source_renders_in_synthetic_block() {
-    check(NodeKind::SyntheticModuleSource, true);
 }
 
 #[test]

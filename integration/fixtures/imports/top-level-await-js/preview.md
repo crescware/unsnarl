@@ -12,9 +12,12 @@ const y = await x();
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_x_9["import x<br/>L1"]
   n_scope_0_y_35["unused y<br/>L2"]
+  subgraph sg_node_fs["module node:fs"]
+    direction RL
+    n_scope_0_x_9["import x<br/>L1"]
+  end
   n_scope_0_x_9 -->|read,call| n_scope_0_y_35
-  mod_node_fs["module node:fs<br/>L1"]
-  mod_node_fs -->|read| n_scope_0_x_9
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class sg_node_fs nestL1;
 ```

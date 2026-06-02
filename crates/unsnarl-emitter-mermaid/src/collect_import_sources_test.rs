@@ -24,17 +24,14 @@ fn binding(id: &str, kind: BindingNodeKind) -> VisualNode {
 }
 
 #[test]
-fn collects_ids_of_module_source_and_import_intermediate_nodes() {
-    let a = synthetic("mod_a", SyntheticNodeKind::SyntheticModuleSource);
+fn collects_ids_of_import_intermediate_nodes() {
     let b = synthetic("import_b", SyntheticNodeKind::SyntheticImportIntermediate);
     let x: VisualNode = crate::mermaid_fixtures::base_const_binding().into();
     let mut map: HashMap<String, &VisualNode> = HashMap::new();
-    map.insert("mod_a".to_string(), &a);
     map.insert("import_b".to_string(), &b);
     map.insert("n_x".to_string(), &x);
-    let mut got: Vec<String> = collect_import_sources(&map).into_iter().collect();
-    got.sort();
-    assert_eq!(got, vec!["import_b".to_string(), "mod_a".to_string()]);
+    let got: Vec<String> = collect_import_sources(&map).into_iter().collect();
+    assert_eq!(got, vec!["import_b".to_string()]);
 }
 
 #[test]

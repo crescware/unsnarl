@@ -68,10 +68,6 @@ pub fn node_head_into(out: &mut String, n: &VisualNode) {
                 escape_into(out, n.name());
             }
         },
-        NodeKind::SyntheticModuleSource => {
-            out.push_str("module ");
-            escape_into(out, n.name());
-        }
         NodeKind::SyntheticImportIntermediate => {
             out.push_str("import ");
             escape_into(out, n.name());

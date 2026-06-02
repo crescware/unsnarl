@@ -23,19 +23,21 @@ console.log(a);
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_used_9["import used<br/>L1"]
-  n_scope_0_neverCalled_15["unused import neverCalled<br/>L1"]
   n_scope_0_legacy_49["var legacy<br/>L3"]
   n_scope_0_a_67["a<br/>L4"]
   n_scope_0_ignored_83["unused ignored<br/>L5"]
   n_scope_0_console_98["global console"]
+  subgraph sg_module["module module"]
+    direction RL
+    n_scope_0_used_9["import used<br/>L1"]
+    n_scope_0_neverCalled_15["unused import neverCalled<br/>L1"]
+  end
   n_scope_0_used_9 -->|read| n_scope_0_a_67
   n_scope_0_console_98 -->|read| expr_stmt_98
   n_scope_0_a_67 -->|read| expr_stmt_98
   expr_stmt_98["console.log()<br/>L7"]
-  mod_module["module module<br/>L1"]
-  mod_module -->|read| n_scope_0_used_9
-  mod_module -->|read| n_scope_0_neverCalled_15
   classDef varNode stroke-dasharray:5 5;
   class n_scope_0_legacy_49 varNode;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class sg_module nestL1;
 ```

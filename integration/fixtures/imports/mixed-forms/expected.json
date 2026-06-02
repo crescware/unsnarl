@@ -8,48 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_def_7",
-      "name": "def",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "DefaultImportBinding"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_named_41",
-      "name": "named",
-      "line": 2,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "named"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_renamed_57",
-      "name": "renamed",
-      "line": 2,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "other"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_ns_98",
-      "name": "ns",
-      "line": 3,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamespaceImportBinding"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_a_131",
       "name": "a",
       "line": 5,
@@ -93,44 +51,89 @@
       "initIsFunction": false
     },
     {
-      "type": "node",
-      "id": "mod_some_default",
-      "kind": "SyntheticModuleSource",
-      "name": "some-default",
+      "type": "subgraph",
+      "id": "sg_some_default",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "some-default",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_def_7",
+          "name": "def",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "DefaultImportBinding"
+        }
+      ]
     },
     {
-      "type": "node",
-      "id": "mod_some_named",
-      "kind": "SyntheticModuleSource",
-      "name": "some-named",
+      "type": "subgraph",
+      "id": "sg_some_named",
+      "kind": "module",
       "line": 2,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "some-named",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_named_41",
+          "name": "named",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "named"
+        },
+        {
+          "type": "node",
+          "id": "import_some_named__other",
+          "kind": "SyntheticImportIntermediate",
+          "name": "other",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_renamed_57",
+          "name": "renamed",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "other"
+        }
+      ]
     },
     {
-      "type": "node",
-      "id": "mod_some_namespace",
-      "kind": "SyntheticModuleSource",
-      "name": "some-namespace",
+      "type": "subgraph",
+      "id": "sg_some_namespace",
+      "kind": "module",
       "line": 3,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
-    },
-    {
-      "type": "node",
-      "id": "import_some_named__other",
-      "kind": "SyntheticImportIntermediate",
-      "name": "other",
-      "line": 2,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "some-namespace",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_ns_98",
+          "name": "ns",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamespaceImportBinding"
+        }
+      ]
     }
   ],
   "edges": [
@@ -155,28 +158,8 @@
       "label": "read"
     },
     {
-      "from": "mod_some_default",
-      "to": "n_scope_0_def_7",
-      "label": "read"
-    },
-    {
-      "from": "mod_some_named",
-      "to": "n_scope_0_named_41",
-      "label": "read"
-    },
-    {
-      "from": "mod_some_named",
-      "to": "import_some_named__other",
-      "label": "read"
-    },
-    {
       "from": "import_some_named__other",
       "to": "n_scope_0_renamed_57",
-      "label": "read"
-    },
-    {
-      "from": "mod_some_namespace",
-      "to": "n_scope_0_ns_98",
       "label": "read"
     }
   ],

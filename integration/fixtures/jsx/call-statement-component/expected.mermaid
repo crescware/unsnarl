@@ -1,8 +1,5 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_wrap_9["import wrap<br/>L1"]
-  n_scope_0_Box_39["import Box<br/>L2"]
-  n_scope_0_Text_44["import Text<br/>L2"]
   subgraph expr_stmt_65["wrap()<br/>L4-10"]
     direction RL
     subgraph s_scope_1["wrap(args[0])<br/>L4-10"]
@@ -18,18 +15,24 @@ flowchart RL
       end
     end
   end
+  subgraph sg___hoc["module ./hoc"]
+    direction RL
+    n_scope_0_wrap_9["import wrap<br/>L1"]
+  end
+  subgraph sg___ui["module ./ui"]
+    direction RL
+    n_scope_0_Box_39["import Box<br/>L2"]
+    n_scope_0_Text_44["import Text<br/>L2"]
+  end
   n_scope_0_wrap_9 -->|read,call| expr_stmt_65
   n_scope_0_Box_39 -->|read| ret_use_ref_1
   n_scope_1_title_71 -->|read| ret_use_ref_2
   n_scope_0_Text_44 -->|read| ret_use_ref_3
   n_scope_1_body_86 -->|read| ret_use_ref_4
-  mod___hoc["module ./hoc<br/>L1"]
-  mod___ui["module ./ui<br/>L2"]
-  mod___hoc -->|read| n_scope_0_wrap_9
-  mod___ui -->|read| n_scope_0_Box_39
-  mod___ui -->|read| n_scope_0_Text_44
   classDef nestL1 fill:#11192a,stroke:transparent;
   class expr_stmt_65 nestL1;
+  class sg___hoc nestL1;
+  class sg___ui nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

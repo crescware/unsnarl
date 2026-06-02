@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_useEffect_9",
-      "name": "useEffect",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "useEffect"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Counter_42",
       "name": "Counter",
       "line": 3,
@@ -159,14 +148,26 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod_react",
-      "kind": "SyntheticModuleSource",
-      "name": "react",
+      "type": "subgraph",
+      "id": "sg_react",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "react",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_useEffect_9",
+          "name": "useEffect",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "useEffect"
+        }
+      ]
     }
   ],
   "edges": [
@@ -213,11 +214,6 @@
     {
       "from": "n_scope_1_start_55",
       "to": "ret_use_ref_10",
-      "label": "read"
-    },
-    {
-      "from": "mod_react",
-      "to": "n_scope_0_useEffect_9",
       "label": "read"
     }
   ],

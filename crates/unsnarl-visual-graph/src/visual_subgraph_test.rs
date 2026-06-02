@@ -37,6 +37,31 @@ fn function_subgraph_emits_kind_early_and_elements_last() {
 }
 
 #[test]
+fn module_subgraph_carries_module_source_before_elements() {
+    let sg = OwnedVisualSubgraph::module("sg_m", 1, "./utils/helper", Vec::new(), Direction::RL);
+    let text = serde_json::to_string_pretty(&sg).expect("serialize");
+    assert_eq!(
+        text,
+        r#"{
+  "type": "subgraph",
+  "id": "sg_m",
+  "kind": "module",
+  "line": 1,
+  "endLine": null,
+  "direction": "RL",
+  "moduleSource": "./utils/helper",
+  "elements": []
+}"#
+    );
+    let sg: VisualSubgraph = sg.into();
+    assert_eq!(sg.module_source(), Some("./utils/helper"));
+    assert!(matches!(
+        sg.kind(),
+        crate::subgraph_kind::SubgraphKind::Module
+    ));
+}
+
+#[test]
 fn class_subgraph_carries_class_name_before_elements() {
     let sg = OwnedVisualSubgraph {
         end_line: Some(4),

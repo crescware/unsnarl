@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_useEffect_9",
-      "name": "useEffect",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "useEffect"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Comp_42",
       "name": "Comp",
       "line": 3,
@@ -120,14 +109,26 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod_react",
-      "kind": "SyntheticModuleSource",
-      "name": "react",
+      "type": "subgraph",
+      "id": "sg_react",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "react",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_useEffect_9",
+          "name": "useEffect",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "useEffect"
+        }
+      ]
     }
   ],
   "edges": [
@@ -159,11 +160,6 @@
     {
       "from": "n_scope_1_name_52",
       "to": "expr_stmt_85",
-      "label": "read"
-    },
-    {
-      "from": "mod_react",
-      "to": "n_scope_0_useEffect_9",
       "label": "read"
     }
   ],

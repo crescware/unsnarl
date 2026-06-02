@@ -8,28 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_used_9",
-      "name": "used",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "used"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_neverCalled_15",
-      "name": "neverCalled",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": true,
-      "kind": "NamedImportBinding",
-      "importedName": "neverCalled"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_legacy_49",
       "name": "legacy",
       "line": 3,
@@ -82,14 +60,37 @@
       "unused": false
     },
     {
-      "type": "node",
-      "id": "mod_module",
-      "kind": "SyntheticModuleSource",
-      "name": "module",
+      "type": "subgraph",
+      "id": "sg_module",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "module",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_used_9",
+          "name": "used",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "used"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_neverCalled_15",
+          "name": "neverCalled",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": true,
+          "kind": "NamedImportBinding",
+          "importedName": "neverCalled"
+        }
+      ]
     }
   ],
   "edges": [
@@ -106,16 +107,6 @@
     {
       "from": "n_scope_0_a_67",
       "to": "expr_stmt_98",
-      "label": "read"
-    },
-    {
-      "from": "mod_module",
-      "to": "n_scope_0_used_9",
-      "label": "read"
-    },
-    {
-      "from": "mod_module",
-      "to": "n_scope_0_neverCalled_15",
       "label": "read"
     }
   ],

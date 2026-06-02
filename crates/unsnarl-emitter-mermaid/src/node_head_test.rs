@@ -66,16 +66,6 @@ fn synthetic_implicit_global_formats_as_global_name() {
 }
 
 #[test]
-fn synthetic_module_source_formats_as_module_name() {
-    let n: VisualNode = SyntheticVisualNode {
-        name: "./mod".to_string(),
-        ..base_simple_synthetic(SyntheticNodeKind::SyntheticModuleSource)
-    }
-    .into();
-    assert_eq!(node_head(&n), "module ./mod");
-}
-
-#[test]
 fn synthetic_import_intermediate_formats_as_import_name() {
     let n: VisualNode = SyntheticVisualNode {
         name: "named".to_string(),

@@ -146,6 +146,16 @@ fn child_subgraphs_of(sg: &VisualSubgraph) -> Vec<&VisualSubgraph> {
         .collect()
 }
 
+fn child_nodes_of(sg: &VisualSubgraph) -> Vec<&VisualNode> {
+    sg.elements()
+        .iter()
+        .filter_map(|e| match e {
+            VisualElement::Node(n) => Some(n),
+            _ => None,
+        })
+        .collect()
+}
+
 // ---- top-level structure ----
 
 #[test]
@@ -628,48 +638,62 @@ fn non_jsx_return_use_stays_is_jsx_element_false_end_line_null() {
 // ---- imports ----
 
 #[test]
-fn default_imports_get_single_module_source_and_read_edge_to_local_binding() {
+fn default_imports_become_a_module_subgraph_containing_the_local_binding() {
     let g = build_ts("import def from 'lib';\nvoid def;\n");
-    let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
-    assert_eq!(module_source.name(), "lib");
-    let def = node_by_name(&g, "def").expect("test source declares the named node");
-    assert!(g
-        .edges
+    let modules = find_subgraphs(&g, SubgraphKind::Module);
+    assert_eq!(modules.len(), 1);
+    assert_eq!(modules[0].module_source(), Some("lib"));
+    let names: Vec<_> = child_nodes_of(modules[0])
         .iter()
-        .any(|e| e.from == module_source.id() && e.to == def.id()));
+        .map(|n| n.name())
+        .collect();
+    assert!(names.contains(&"def"));
+    // Containment replaces the old `module -> binding` edge: nothing
+    // points into the local binding anymore.
+    let def = node_by_name(&g, "def").expect("test source declares the named node");
+    assert!(edges_to(&g, def.id()).is_empty());
 }
 
 #[test]
-fn renamed_named_imports_introduce_intermediate_carrying_original_name() {
+fn renamed_named_imports_keep_the_intermediate_inside_the_module_subgraph() {
     let g = build_ts("import { other as renamed } from 'lib';\nvoid renamed;\n");
     let intermediates = find_nodes(&g, NodeKind::SyntheticImportIntermediate);
     assert_eq!(intermediates.len(), 1);
     assert_eq!(intermediates[0].name(), "other");
-    let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
     let renamed = node_by_name(&g, "renamed").expect("test source declares the named node");
+    let modules = find_subgraphs(&g, SubgraphKind::Module);
+    assert_eq!(modules.len(), 1);
+    // Both the original-name intermediate and the renamed local live
+    // inside the module subgraph.
+    let child_ids: Vec<&str> = child_nodes_of(modules[0]).iter().map(|n| n.id()).collect();
+    assert!(child_ids.contains(&intermediates[0].id()));
+    assert!(child_ids.contains(&renamed.id()));
+    // The intermediate -> local edge survives; the old
+    // `module -> intermediate` edge is gone.
     assert!(g
         .edges
         .iter()
-        .any(|e| e.from == module_source.id() && e.to == intermediates[0].id()));
-    assert!(g
-        .edges
-        .iter()
-        .any(|e| e.from == intermediates[0].id() && e.to == renamed.id()));
+        .any(|e| e.from == intermediates[0].id() && e.to == renamed.id() && e.label == "read"));
+    assert!(edges_to(&g, intermediates[0].id()).is_empty());
 }
 
 #[test]
-fn namespace_imports_point_directly_from_module_to_local_binding() {
+fn namespace_imports_contain_the_local_binding_with_no_intermediate() {
     let g = build_ts("import * as ns from 'lib';\nvoid ns;\n");
     assert_eq!(
         find_nodes(&g, NodeKind::SyntheticImportIntermediate).len(),
         0
     );
-    let module_source = find_nodes(&g, NodeKind::SyntheticModuleSource)[0];
-    let ns = node_by_name(&g, "ns").expect("test source declares the named node");
-    assert!(g
-        .edges
+    let modules = find_subgraphs(&g, SubgraphKind::Module);
+    assert_eq!(modules.len(), 1);
+    assert_eq!(modules[0].module_source(), Some("lib"));
+    let names: Vec<_> = child_nodes_of(modules[0])
         .iter()
-        .any(|e| e.from == module_source.id() && e.to == ns.id()));
+        .map(|n| n.name())
+        .collect();
+    assert!(names.contains(&"ns"));
+    let ns = node_by_name(&g, "ns").expect("test source declares the named node");
+    assert!(edges_to(&g, ns.id()).is_empty());
 }
 
 // ---- predicate references ----

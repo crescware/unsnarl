@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_useCallback_9",
-      "name": "useCallback",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "useCallback"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Comp_44",
       "name": "Comp",
       "line": 3,
@@ -244,14 +233,26 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod_react",
-      "kind": "SyntheticModuleSource",
-      "name": "react",
+      "type": "subgraph",
+      "id": "sg_react",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "react",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_useCallback_9",
+          "name": "useCallback",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "useCallback"
+        }
+      ]
     }
   ],
   "edges": [
@@ -319,11 +320,6 @@
       "from": "n_scope_1_c_150",
       "to": "ret_use_ref_13",
       "label": "read,call"
-    },
-    {
-      "from": "mod_react",
-      "to": "n_scope_0_useCallback_9",
-      "label": "read"
     }
   ],
   "boundaryEdges": [],

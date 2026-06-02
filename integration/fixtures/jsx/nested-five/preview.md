@@ -35,11 +35,6 @@ function Main() {
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_A_9["import A<br/>L1"]
-  n_scope_0_B_12["import B<br/>L1"]
-  n_scope_0_C_15["import C<br/>L1"]
-  n_scope_0_D_18["import D<br/>L1"]
-  n_scope_0_E_21["import E<br/>L1"]
   subgraph wrap_s_scope_1[" "]
     direction TB
     n_scope_0_Main_54["unused Main()<br/>L3"]
@@ -65,6 +60,14 @@ flowchart RL
       end
     end
   end
+  subgraph sg_components["module components"]
+    direction RL
+    n_scope_0_A_9["import A<br/>L1"]
+    n_scope_0_B_12["import B<br/>L1"]
+    n_scope_0_C_15["import C<br/>L1"]
+    n_scope_0_D_18["import D<br/>L1"]
+    n_scope_0_E_21["import E<br/>L1"]
+  end
   n_scope_0_A_9 -->|read| ret_use_ref_5
   n_scope_1_v_71 -->|read| ret_use_ref_6
   n_scope_0_B_12 -->|read| ret_use_ref_7
@@ -75,14 +78,9 @@ flowchart RL
   n_scope_1_y_122 -->|read| ret_use_ref_12
   n_scope_0_E_21 -->|read| ret_use_ref_13
   n_scope_1_z_139 -->|read| ret_use_ref_14
-  mod_components["module components<br/>L1"]
-  mod_components -->|read| n_scope_0_A_9
-  mod_components -->|read| n_scope_0_B_12
-  mod_components -->|read| n_scope_0_C_15
-  mod_components -->|read| n_scope_0_D_18
-  mod_components -->|read| n_scope_0_E_21
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class sg_components nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

@@ -268,6 +268,32 @@ fn call_proxy_label_includes_end_line_when_call_spans_multiple_lines() {
 }
 
 #[test]
+fn module_label_names_the_source_without_a_line_range() {
+    let sg: VisualSubgraph = OwnedVisualSubgraph::module(
+        "sg___utils_helper",
+        1,
+        "./utils/helper",
+        Vec::new(),
+        Direction::RL,
+    )
+    .into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), false),
+        "module ./utils/helper"
+    );
+}
+
+#[test]
+fn module_label_appends_kind_under_debug() {
+    let sg: VisualSubgraph =
+        OwnedVisualSubgraph::module("sg_m", 2, "m", Vec::new(), Direction::RL).into();
+    assert_eq!(
+        subgraph_label(&sg, &empty_map(), true),
+        "module m<br/>module"
+    );
+}
+
+#[test]
 fn debug_true_if_else_container_surfaces_the_kind_even_when_the_prefix_differs() {
     let sg: VisualSubgraph = OwnedVisualSubgraph {
         extras: OwnedExtras::IfElseContainer { has_else: true },

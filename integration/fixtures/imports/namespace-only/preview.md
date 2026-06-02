@@ -13,9 +13,12 @@ const x = ns;
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_ns_12["import ns<br/>L1"]
   n_scope_0_x_32["unused x<br/>L3"]
+  subgraph sg_m["module m"]
+    direction RL
+    n_scope_0_ns_12["import ns<br/>L1"]
+  end
   n_scope_0_ns_12 -->|read| n_scope_0_x_32
-  mod_m["module m<br/>L1"]
-  mod_m -->|read| n_scope_0_ns_12
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class sg_m nestL1;
 ```

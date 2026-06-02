@@ -38,7 +38,7 @@ fn emits_only_synthetic_top_level_nodes() {
     let mut state = base_render_state();
     let mut g = base_graph();
     g.elements = vec![
-        synthetic("mod_a", SyntheticNodeKind::SyntheticModuleSource),
+        synthetic("import_a", SyntheticNodeKind::SyntheticImportIntermediate),
         binding("n_a"),
         synthetic("import_b", SyntheticNodeKind::SyntheticImportIntermediate),
         synthetic(MODULE_ROOT_ID, SyntheticNodeKind::SyntheticModuleSink),
@@ -49,8 +49,8 @@ fn emits_only_synthetic_top_level_nodes() {
     assert_eq!(
         got,
         vec![
+            "import_a".to_string(),
             "import_b".to_string(),
-            "mod_a".to_string(),
             MODULE_ROOT_ID.to_string(),
         ]
     );
@@ -70,7 +70,10 @@ fn preserves_graph_element_order() {
     let mut state = base_render_state();
     let mut g = base_graph();
     g.elements = vec![
-        synthetic("mod_first", SyntheticNodeKind::SyntheticModuleSource),
+        synthetic(
+            "import_first",
+            SyntheticNodeKind::SyntheticImportIntermediate,
+        ),
         synthetic(
             "import_second",
             SyntheticNodeKind::SyntheticImportIntermediate,
@@ -80,6 +83,6 @@ fn preserves_graph_element_order() {
     let got: Vec<String> = state.lines.iter().map(|v| head_of(v)).collect();
     assert_eq!(
         got,
-        vec!["mod_first".to_string(), "import_second".to_string()]
+        vec!["import_first".to_string(), "import_second".to_string()]
     );
 }

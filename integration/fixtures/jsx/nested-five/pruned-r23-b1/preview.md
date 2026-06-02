@@ -42,7 +42,6 @@ function Main() {
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
   %% pruning roots 23=1 ancestors=1 descendants=0
-  n_scope_0_A_9["import A<br/>L1"]
   subgraph s_scope_1["Main()<br/>L3-25"]
     direction RL
     subgraph s_return_scope_0_Main_54_151_331["return L10-24"]
@@ -50,13 +49,14 @@ flowchart RL
       ret_use_ref_5["&lt;A&gt;<br/>L11-23"]
     end
   end
+  subgraph sg_components["module components"]
+    direction RL
+    n_scope_0_A_9["import A<br/>L1"]
+  end
   n_scope_0_A_9 -->|read| ret_use_ref_5
-  boundary_stub_1((...))
-  boundary_stub_1 -.->|read| n_scope_0_A_9
-  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
-  class boundary_stub_1 boundaryStub;
   classDef nestL1 fill:#11192a,stroke:transparent;
   class s_scope_1 nestL1;
+  class sg_components nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_return_scope_0_Main_54_151_331 nestL2;
 ```

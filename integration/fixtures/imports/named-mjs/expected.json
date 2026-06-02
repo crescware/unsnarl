@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_x_9",
-      "name": "x",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "x"
-    },
-    {
-      "type": "node",
       "id": "expr_stmt_23",
       "kind": "SyntheticExpressionStatement",
       "name": "x",
@@ -28,25 +17,32 @@
       "unused": false
     },
     {
-      "type": "node",
-      "id": "mod_m",
-      "kind": "SyntheticModuleSource",
-      "name": "m",
+      "type": "subgraph",
+      "id": "sg_m",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "m",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_x_9",
+          "name": "x",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "x"
+        }
+      ]
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_x_9",
       "to": "expr_stmt_23",
-      "label": "read"
-    },
-    {
-      "from": "mod_m",
-      "to": "n_scope_0_x_9",
       "label": "read"
     }
   ],

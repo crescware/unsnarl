@@ -43,6 +43,8 @@ pub enum SubgraphKind {
     Throw,
     #[serde(rename = "block")]
     Block,
+    #[serde(rename = "module")]
+    Module,
 }
 
 impl SubgraphKind {
@@ -69,6 +71,7 @@ impl SubgraphKind {
             Self::Return => "return",
             Self::Throw => "throw",
             Self::Block => "block",
+            Self::Module => "module",
         }
     }
 }

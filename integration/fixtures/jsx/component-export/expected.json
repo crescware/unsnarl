@@ -8,17 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_Sub_9",
-      "name": "Sub",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "Sub"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Main_46",
       "name": "Main",
       "line": 3,
@@ -60,25 +49,32 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod___sub",
-      "kind": "SyntheticModuleSource",
-      "name": "./sub",
+      "type": "subgraph",
+      "id": "sg___sub",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "./sub",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_Sub_9",
+          "name": "Sub",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "Sub"
+        }
+      ]
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_Sub_9",
       "to": "ret_use_ref_0",
-      "label": "read"
-    },
-    {
-      "from": "mod___sub",
-      "to": "n_scope_0_Sub_9",
       "label": "read"
     }
   ],
