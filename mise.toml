@@ -43,6 +43,10 @@ run = "deno run --allow-read --allow-run scripts/npm-publish.ts"
 description = "Shortcut for `mise run npm:publish -- --dry-run`. Runs both publishes in dry-run mode; nothing is actually pushed to npm."
 run = "deno run --allow-read --allow-run scripts/npm-publish.ts --dry-run"
 
+[tasks."release"]
+description = "Run the post-merge release sequence as one command so the GitHub Release can never be skipped: dry-run publish (gate on exit code only) -> `git tag vX.Y.Z` on HEAD (the merge commit) + push -> real npm:publish -> `gh release create vX.Y.Z --generate-notes --verify-tag` (plus `--prerelease` for a pre-release version). Does NOT bump or merge the bump PR; run it after the bump PR is merged and pulled so HEAD is the commit to tag. If the Release already exists it exits 0 without touching anything. npm-publish.ts is invoked as a subprocess with inherited stdio so npm's passkey browser flow keeps working."
+run = "deno run --allow-read --allow-run scripts/release.ts"
+
 [tasks."bump"]
 description = "Align every version field (Cargo.toml [workspace.package].version, package.json version + optionalDependencies.unsnarl-darwin-arm64, npm/unsnarl-darwin-arm64/package.json version) AND both publishConfig.tag fields (root + sub-package) to match the version passed as the argument, then regenerate Cargo.lock. The publishConfig.tag is derived from the semver pre-release id: no prerelease -> `latest`, `-rc.*` -> `rc`, anything else (e.g. `-beta.*`, `-alpha.*`) -> `beta`. Usage: `mise run bump -- 0.3.0-rc.2`. This is the only sanctioned way to set the project version; it does NOT auto-increment, it just aligns everything to the argument."
 run = "deno run --allow-read --allow-write --allow-run scripts/bump-version.ts"
