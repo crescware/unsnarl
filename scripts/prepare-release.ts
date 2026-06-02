@@ -56,6 +56,18 @@ async function capture(cmd: string, args: string[]): Promise<{ code: number; out
   return { code, out: dec.decode(stdout).trim() };
 }
 
+// Like capture() but a non-zero exit is fatal: abort the whole run
+// instead of silently returning an empty string. Use this wherever a
+// failed command means the world is not as assumed (so the guard does
+// not pass by accident). Use the raw capture() -- which exposes
+// `code` -- only where a non-zero exit is itself the expected signal,
+// e.g. `git rev-parse --verify --quiet` probing for a branch.
+async function captureOk(label: string, cmd: string, args: string[]): Promise<string> {
+  const { code, out } = await capture(cmd, args);
+  if (code !== 0) abort(`${label} failed (exit ${code})`);
+  return out;
+}
+
 // Run a command with the parent's stdio inherited (so git/gh prompts
 // work) and abort the whole run on a non-zero exit.
 async function run(label: string, cmd: string, args: string[]): Promise<void> {
@@ -111,14 +123,18 @@ function readPkg(path: string): Pkg {
     abort("gh (GitHub CLI) not found on PATH");
   }
 
-  const branch = await capture("git", ["rev-parse", "--abbrev-ref", "HEAD"]);
-  if (branch.out !== "main") abort(`must run on main (currently on ${branch.out})`);
-  const status = await capture("git", ["status", "--porcelain"]);
-  if (status.out !== "") abort("working tree is not clean");
+  const branch = await captureOk("git rev-parse --abbrev-ref HEAD", "git", [
+    "rev-parse",
+    "--abbrev-ref",
+    "HEAD",
+  ]);
+  if (branch !== "main") abort(`must run on main (currently on ${branch})`);
+  const status = await captureOk("git status --porcelain", "git", ["status", "--porcelain"]);
+  if (status !== "") abort("working tree is not clean");
   await run("fetch", "git", ["fetch", "origin", "main"]);
-  const local = await capture("git", ["rev-parse", "HEAD"]);
-  const remote = await capture("git", ["rev-parse", "origin/main"]);
-  if (local.out !== remote.out) abort("local main is not in sync with origin/main (pull first)");
+  const local = await captureOk("git rev-parse HEAD", "git", ["rev-parse", "HEAD"]);
+  const remote = await captureOk("git rev-parse origin/main", "git", ["rev-parse", "origin/main"]);
+  if (local !== remote) abort("local main is not in sync with origin/main (pull first)");
 }
 
 // --- read the current version (for commit message + diff verify) -------
@@ -154,7 +170,7 @@ const EXPECTED = new Set([
   "package.json",
   "npm/unsnarl-darwin-arm64/package.json",
 ]);
-const changed = (await capture("git", ["status", "--porcelain"])).out
+const changed = (await captureOk("git status --porcelain", "git", ["status", "--porcelain"]))
   .split("\n")
   .filter((l) => l.length > 0)
   .map((l) => l.slice(3)); // strip the 2-char status + space
@@ -182,7 +198,7 @@ if (!new RegExp(`\\[workspace\\.package\\]\\nversion = "${esc}"`).test(cargoToml
 }
 
 // (c) every changed diff line is purely version/tag text.
-const diff = (await capture("git", ["diff"])).out;
+const diff = await captureOk("git diff", "git", ["diff"]);
 const tokens = [oldVersion, target, oldTag, newTag];
 for (const line of diff.split("\n")) {
   if (!/^[+-]/.test(line)) continue; // context / blank lines
