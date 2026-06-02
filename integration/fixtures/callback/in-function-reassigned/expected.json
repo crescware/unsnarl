@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/in-function-reassigned/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_arr_6",
+      "name": "arr",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_f_32",
+      "name": "f",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 2,
+      "endLine": 6,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_32",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_ys_44",
+          "name": "ys",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "LetBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "wr_ref_2",
+          "kind": "WriteReference",
+          "name": "ys",
+          "line": 4,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "declarationKind": "let"
+        },
+        {
+          "type": "subgraph",
+          "id": "call_proxy_61",
+          "kind": "call-proxy",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "callName": "arr.map()",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "arr.map",
+                "argIndex": 0
+              },
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "n_scope_2_v_70",
+                  "name": "v",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false,
+                  "kind": "FormalParameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_0_f_32_76_81",
+                  "kind": "return",
+                  "line": 4,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_4",
+                      "kind": "ReturnArgumentReference",
+                      "name": "v",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_32_86_96",
+          "kind": "return",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnArgumentReference",
+              "name": "ys",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "call_proxy_61",
+      "to": "wr_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_ys_44",
+      "to": "wr_ref_2",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_arr_6",
+      "to": "call_proxy_61",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_2_v_70",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "wr_ref_2",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,29 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_arr_6["arr<br/>L1"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_f_32["unused f()<br/>L2"]
+    subgraph s_scope_1["f()<br/>L2-6"]
+      direction RL
+      n_scope_1_ys_44["let ys<br/>L3"]
+      wr_ref_2(["let ys<br/>L4"])
+      beyond_depth_s_scope_1((...))
+      subgraph s_return_scope_0_f_32_86_96["return L5"]
+        direction RL
+        ret_use_ref_5["ys<br/>L5"]
+      end
+    end
+  end
+  beyond_depth_s_scope_1 -.->|read| wr_ref_2
+  n_scope_1_ys_44 -->|set| wr_ref_2
+  n_scope_0_arr_6 -.->|read| beyond_depth_s_scope_1
+  wr_ref_2 -->|read| ret_use_ref_5
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_1 boundaryStub;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_return_scope_0_f_32_86_96 nestL3;

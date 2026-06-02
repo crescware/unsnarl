@@ -1,0 +1,103 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/callback/in-function-result-bound/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_arr_6",
+      "name": "arr",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_f_32",
+      "name": "f",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 2,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_f_32",
+      "ownerName": "f",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_xs_46",
+          "name": "xs",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "beyond_depth_s_scope_1",
+          "kind": "SyntheticBeyondDepth",
+          "name": "...",
+          "line": 2,
+          "endLine": 5,
+          "isJsxElement": false,
+          "unused": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_f_32_76_86",
+          "kind": "return",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnArgumentReference",
+              "name": "xs",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "beyond_depth_s_scope_1",
+      "to": "n_scope_1_xs_46",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_arr_6",
+      "to": "beyond_depth_s_scope_1",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_xs_46",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

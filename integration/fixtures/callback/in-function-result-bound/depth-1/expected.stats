@@ -1,0 +1,6 @@
+1	0	integration/fixtures/callback/in-function-result-bound/input.ts:1 arr
+0	0	integration/fixtures/callback/in-function-result-bound/input.ts:2 unused f
+1	1	integration/fixtures/callback/in-function-result-bound/input.ts:2 ...
+1	1	integration/fixtures/callback/in-function-result-bound/input.ts:3 xs
+0	1	integration/fixtures/callback/in-function-result-bound/input.ts:4 xs
+3	3	5 total
