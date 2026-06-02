@@ -46,14 +46,22 @@ if (!VERSION_RE.test(target)) {
 
 const dec = new TextDecoder();
 
-// Capture a command's trimmed stdout + exit code (no inherited stdio).
-async function capture(cmd: string, args: string[]): Promise<{ code: number; out: string }> {
+// Capture a command's stdout + exit code (no inherited stdio). `out` is
+// trimmed for the common "read one value" case; `raw` is the verbatim
+// stdout for callers where leading/trailing bytes are significant (e.g.
+// `git status --porcelain`, whose records begin with a status code that
+// can itself start with a space).
+async function capture(
+  cmd: string,
+  args: string[],
+): Promise<{ code: number; out: string; raw: string }> {
   const { code, stdout } = await new Deno.Command(cmd, {
     args,
     stdout: "piped",
     stderr: "piped",
   }).output();
-  return { code, out: dec.decode(stdout).trim() };
+  const raw = dec.decode(stdout);
+  return { code, out: raw.trim(), raw };
 }
 
 // Like capture() but a non-zero exit is fatal: abort the whole run
@@ -66,6 +74,17 @@ async function captureOk(label: string, cmd: string, args: string[]): Promise<st
   const { code, out } = await capture(cmd, args);
   if (code !== 0) abort(`${label} failed (exit ${code})`);
   return out;
+}
+
+// Like captureOk but returns stdout verbatim (no trim). Use where
+// leading/trailing bytes carry meaning -- chiefly `git status
+// --porcelain`, whose first record begins with the status code's left
+// column (a space for a working-tree-only change, e.g. " M"); trimming
+// would swallow it and shift that record's path parse by one byte.
+async function captureRawOk(label: string, cmd: string, args: string[]): Promise<string> {
+  const { code, raw } = await capture(cmd, args);
+  if (code !== 0) abort(`${label} failed (exit ${code})`);
+  return raw;
 }
 
 // Run a command with the parent's stdio inherited (so git/gh prompts
@@ -170,10 +189,25 @@ const EXPECTED = new Set([
   "package.json",
   "npm/unsnarl-darwin-arm64/package.json",
 ]);
-const changed = (await captureOk("git status --porcelain", "git", ["status", "--porcelain"]))
-  .split("\n")
-  .filter((l) => l.length > 0)
-  .map((l) => l.slice(3)); // strip the 2-char status + space
+// A `git status --porcelain` record is `XY PATH`: a 2-column status code,
+// one separator space, then the path. Read it NUL-terminated (`-z`) so
+// records split cleanly and paths are never quoted, and capture it raw so
+// the leading status column survives. Derive the path from that structure
+// -- not a bare offset -- and abort on any record that does not match, so
+// a format surprise fails loudly instead of silently truncating a name.
+const PORCELAIN_RECORD = /^.. (.*)$/s; // XY, separator space, then PATH
+const changed = (await captureRawOk("git status --porcelain -z", "git", [
+  "status",
+  "--porcelain",
+  "-z",
+]))
+  .split("\0")
+  .filter((record) => record.length > 0)
+  .map((record) => {
+    const m = PORCELAIN_RECORD.exec(record);
+    if (!m) abort(`could not parse git status record: ${JSON.stringify(record)}`);
+    return m[1];
+  });
 if (changed.length === 0) abort("bump produced no changes");
 for (const f of changed) {
   if (!EXPECTED.has(f)) abort(`unexpected file changed by bump: ${f}`);
