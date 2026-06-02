@@ -23,8 +23,9 @@ their usual justification applies.
 `crates/no-allow-dead-code` is a workspace member whose only purpose is
 to scan every `.rs` file under the workspace and panic if one of the
 forbidden patterns is found. It runs automatically as part of the
-project's standard verification command (`cargo test --workspace`) and
-can also be invoked directly:
+project's verification command, `mise run check`, which tests every
+workspace member — this crate included. To run only this crate's tests
+(the scan plus the scanner's own unit tests):
 
 ```sh
 mise run check:no-allow-dead-code
