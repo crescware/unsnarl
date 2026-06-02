@@ -49,7 +49,11 @@ mise run check
 ```
 
 `mise run check` runs the canonical chain a single time — `cargo fmt --all`,
-then `cargo clippy --workspace --all-targets -- -D warnings`, then
-`cargo test -p <member>` for every workspace member (the `no-allow-dead-code`
-crate is one of those members, so its scan runs here too). Do not run the
-underlying `cargo` commands by hand.
+then `cargo clippy --workspace --all-targets --verbose -- -D warnings`, then a
+single `cargo test --workspace --no-fail-fast --verbose` whose combined output
+is split back into one log per crate (the `no-allow-dead-code` crate is one of
+those workspace members, so its scan runs here too). The single workspace test
+run replaced an older per-member `cargo test -p <member>` loop that recompiled
+the shared crates against each other; folding it into one run resolves features
+once so each crate compiles a single time. Do not run the underlying `cargo`
+commands by hand.
