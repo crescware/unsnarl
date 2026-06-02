@@ -289,8 +289,14 @@ policy, derive policy) are documented under `docs/`.
 The project-defined check that must pass before any change is committed:
 
 ```sh
-cargo fmt --all && cargo clippy --workspace --all-targets -- -D warnings && cargo test --workspace
+mise run check
 ```
+
+It runs `cargo fmt --all`, then `cargo clippy --workspace --all-targets -- -D
+warnings`, then `cargo test -p <member>` for every workspace member — once
+each — writing a separate log per step / per crate under `target/check/`
+(git-ignored) and printing a compact PASS/FAIL summary. Read the saved
+per-crate log instead of re-running to see more detail.
 
 ## Scripts
 
@@ -299,13 +305,14 @@ Workspace tasks are defined in `mise.toml` and invoked via
 
 | Task                       | Description                                                                                                                |
 | -------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `check`                    | Run the full verification once (`cargo fmt --all` → `clippy -D warnings` → `cargo test -p <member>` for every workspace member), write a separate log per step / crate under `target/check/`, and print a PASS/FAIL summary. The command to use day-to-day and before committing. |
+| `check:no-allow-dead-code` | Run only the `no-allow-dead-code` crate's tests — the workspace-wide dead-code-suppression scan plus the scanner's own unit tests (see `docs/dead-code-policy.md`). |
 | `build`                    | Release-build the `uns` CLI binary to `target/release/uns`.                                                                |
 | `parity`                   | Run the parity harness against `integration/fixtures/**/expected.*`.                                                       |
 | `emit:ir`                  | Convenience runner for `uns -f ir` on the forwarded arguments.                                                             |
 | `bench:node-modules`       | Run `uns` against every `.js`/`.ts` file under `fixtures/bench/node_modules` and rank by per-file wall-clock time.         |
 | `regen:fixtures`           | Regenerate every `expected.*` / `preview.md` baseline under `integration/fixtures/` via the Rust CLI.                      |
 | `cov`                      | Build with `-Cinstrument-coverage`, run `cargo test --workspace`, and emit a per-file llvm-cov report under `target/coverage/`. |
-| `check:no-allow-dead-code` | Scan the source tree for forbidden `#[allow(dead_code)]` / `#[expect(dead_code)]` attributes (see `docs/dead-code-policy.md`). |
 | `bump`                     | Align every version field (Cargo + npm) AND both `publishConfig.tag` entries to the argument: `mise run bump -- 0.3.1`. The tag is derived from the semver pre-release id (no prerelease → `latest`, `-rc.*` → `rc`, anything else → `beta`). |
 | `npm:build-darwin-arm64`   | Cross-compile the `aarch64-apple-darwin` release and stage it into `npm/unsnarl-darwin-arm64/bin/uns`. Triggered by the npm `prepack` hook. |
 | `npm:publish`              | Publish `unsnarl-darwin-arm64` then `unsnarl` to npm. Each package's dist-tag is read from its own `publishConfig.tag` and passed via `--tag`. |
@@ -318,4 +325,3 @@ Workspace tasks are defined in `mise.toml` and invoked via
 - **Parser / AST**: [oxc][oxc] (`oxc_parser` / `oxc_ast` / `oxc_ast_visit`).
 - **Task runner**: [mise](https://mise.jdx.dev/) pins the toolchain and exposes the workspace tasks above.
 - **Helper scripts**: Deno TypeScript modules under `scripts/`.
-- **Lint / format / test**: `cargo clippy -D warnings`, `cargo fmt`, `cargo test --workspace`.

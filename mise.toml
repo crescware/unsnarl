@@ -19,9 +19,13 @@ deno = "2"
 # command should add a new `scripts/<name>.ts` rather than inline a
 # heredoc here, and should not introduce a fresh root-level `.sh`.
 
+[tasks."check"]
+description = "Run the canonical verification EXACTLY ONCE and summarize it. Steps: cargo fmt --all -> cargo clippy --workspace --all-targets -- -D warnings -> the per-member tests (cargo test -p <member> for every workspace member, with no-allow-dead-code treated as just one ordinary member -- no special casing). Each step / crate writes a SEPARATE full log under target/check/ (git-ignored) -- so a failure points at the crate that owns it -- and a compact summary (per-step PASS/FAIL, per-crate test passed/failed counts, failing test names) is printed. Read this instead of running cargo fmt/clippy/test by hand, and on failure read the saved per-crate log under target/check/ rather than re-running. Use it both day-to-day and before committing / opening a PR."
+run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/check.ts"
+
 [tasks."check:no-allow-dead-code"]
-description = "Fail if any `#[allow(dead_code)]` / `#[expect(dead_code)]` is present in the Rust source tree."
-run = "cargo test -p no-allow-dead-code workspace_has_no_dead_code_suppression"
+description = "Run the `no-allow-dead-code` crate's tests: the workspace-wide dead-code-suppression scan plus the scanner's own unit tests (`cargo test -p no-allow-dead-code`). `mise run check` covers this crate by testing it as one of the workspace members (not by invoking this task); run this standalone to check just the dead-code policy (see docs/dead-code-policy.md)."
+run = "cargo test -p no-allow-dead-code"
 
 [tasks."build"]
 description = "Build the `uns` CLI binary in release mode. Output: target/release/uns."
