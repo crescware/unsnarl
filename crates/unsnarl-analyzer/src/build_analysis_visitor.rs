@@ -202,27 +202,28 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
         // The parent path frame is the enclosing call; read its
         // `callee` subtree directly so the label does not depend on a
         // surrounding `ExpressionStatement` head being present.
-        let callee = match self.path.last().map(|f| &f.kind) {
-            Some(AstKind::CallExpression(call)) => &call.callee,
-            Some(AstKind::NewExpression(new_expr)) => &new_expr.callee,
+        let (callee, call_span) = match self.path.last().map(|f| &f.kind) {
+            Some(AstKind::CallExpression(call)) => (&call.callee, call.span),
+            Some(AstKind::NewExpression(new_expr)) => (&new_expr.callee, new_expr.span),
             _ => return None,
         };
         let callee_head = build_callee_head(callee, callee.span());
         Some(CallbackArgument::new(
             callee_head,
             arg_index,
-            self.callback_host(),
+            self.callback_host(call_span),
         ))
     }
 
     /// Find the binding / return / assignment whose value is the
-    /// callback's enclosing call, walking the path outward. Stops at
-    /// (and yields `None` for) an `ExpressionStatement` -- those
-    /// callbacks are grouped by the visual layer's statement spans, so
-    /// no host is recorded. The host's bound expression (the declarator
-    /// init / return argument / assignment RHS) supplies the containing
-    /// CallProxy's span and label.
-    fn callback_host(&self) -> Option<CallbackHost> {
+    /// callback's enclosing call, walking the path outward.
+    ///
+    /// Yields `None` at an `ExpressionStatement` (those callbacks are
+    /// recovered downstream from the statement spans) and, for an
+    /// `AssignmentExpression`, only when the callback's call is the
+    /// assignment's *value* rather than its target. `callback_call_span`
+    /// (the enclosing call's span) drives that value-vs-target check.
+    fn callback_host(&self, callback_call_span: Span) -> Option<CallbackHost> {
         for frame in self.path.iter().rev() {
             match &frame.kind {
                 AstKind::VariableDeclarator(vd) => {
@@ -249,12 +250,21 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     });
                 }
                 AstKind::AssignmentExpression(ae) => {
-                    // Record the left-hand side's offset only for a plain
-                    // identifier target (`y = arr.map(cb)`); the visual
-                    // layer maps it to the reassignment's write-op node to
-                    // bundle the proxy with that node. Member /
-                    // destructuring targets carry no single write-op node,
-                    // so they stay `None` and fall back to a bare proxy.
+                    // Host the callback only when its call is in the
+                    // assignment's value (`ae.right`). A callback in the
+                    // *target* on the left -- a computed-member key or a
+                    // destructuring default, e.g. `obj[arr.map(cb)] = x` --
+                    // is not the assignment's value, so it gets no host and
+                    // is left to the statement / island path. Otherwise the
+                    // host would describe the unrelated `ae.right`.
+                    let rhs = ae.right.span();
+                    if callback_call_span.start < rhs.start || callback_call_span.end > rhs.end {
+                        return None;
+                    }
+                    // Record the target identifier's offset only for a
+                    // plain-identifier LHS (`y = arr.map(cb)`); member /
+                    // destructuring targets have no single target
+                    // identifier, so they stay `None`.
                     let target_offset = match &ae.left {
                         AssignmentTarget::AssignmentTargetIdentifier(id) => {
                             Some(Utf8ByteOffset(id.span.start))
@@ -263,7 +273,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     };
                     return Some(self.build_callback_host(
                         CallbackHostKind::Assignment,
-                        ae.right.span(),
+                        rhs,
                         &ae.right,
                         target_offset,
                     ));
