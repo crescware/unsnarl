@@ -65,6 +65,29 @@ async function run(label: string, cmd: string, args: string[]): Promise<void> {
   }
 }
 
+// --- guard: gh available + authenticated, checked up front ----------
+// The GitHub Release is the LAST step, but it runs only after the
+// irreversible `npm publish` and the tag push. A missing or
+// unauthenticated gh would otherwise surface there -- leaving exactly
+// the "published to npm but no Release" state this script exists to
+// prevent. The existing-release check below also leans on gh and reads
+// any non-zero `gh release view` as "release absent", so verifying auth
+// here keeps an auth failure from masquerading as absence.
+try {
+  const auth = await new Deno.Command("gh", {
+    args: ["auth", "status"],
+    stdout: "null",
+    stderr: "null",
+  }).output();
+  if (!auth.success) {
+    console.error("[release] gh is not authenticated (run `gh auth login`); aborting");
+    Deno.exit(1);
+  }
+} catch {
+  console.error("[release] gh (GitHub CLI) not found on PATH; aborting");
+  Deno.exit(1);
+}
+
 const version = readVersion();
 const tag = `v${version}`;
 // semver pre-release identifier present (e.g. "0.4.0-beta.0") -> mark

@@ -1,7 +1,7 @@
 #!/usr/bin/env -S deno run --allow-read --allow-write --allow-run
 // Align every version field across the workspace + npm packages
 // to the version string passed as the first argument, then
-// regenerate Cargo.lock by running `cargo build -p unsnarl`.
+// regenerate Cargo.lock by running `cargo metadata`.
 //
 // This is the only sanctioned way to set the project version.
 // Editing by hand is error-prone because six fields must be kept
@@ -126,15 +126,23 @@ for (const pkgJson of [
 }
 
 console.error("");
-console.error("Regenerating Cargo.lock via `cargo build -p unsnarl`...");
+console.error("Regenerating Cargo.lock via `cargo metadata`...");
+// `cargo metadata` resolves dependencies and rewrites Cargo.lock as a
+// side effect WITHOUT compiling anything, so it refreshes the lock in a
+// fraction of a second; a full `cargo build` would recompile the whole
+// workspace just to update the lock. It preserves the already-locked
+// versions and only rewrites the bumped workspace members, so the
+// resulting Cargo.lock diff stays purely version lines (which the
+// prepare-release purity check relies on). Its stdout is the metadata
+// JSON, which we discard; stderr carries any resolver errors.
 const status = await new Deno.Command("cargo", {
-  args: ["build", "-p", "unsnarl"],
+  args: ["metadata", "--format-version", "1"],
   stdin: "inherit",
-  stdout: "inherit",
+  stdout: "null",
   stderr: "inherit",
 }).spawn().status;
 if (!status.success) {
-  console.error("cargo build failed; Cargo.lock may not be regenerated");
+  console.error("cargo metadata failed; Cargo.lock may not be regenerated");
   Deno.exit(1);
 }
 
