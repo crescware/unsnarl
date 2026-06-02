@@ -8,39 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_wrap_9",
-      "name": "wrap",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "wrap"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_Box_39",
-      "name": "Box",
-      "line": 2,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "Box"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_Text_44",
-      "name": "Text",
-      "line": 2,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "Text"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Panel_78",
       "name": "Panel",
       "line": 4,
@@ -148,24 +115,59 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod___hoc",
-      "kind": "SyntheticModuleSource",
-      "name": "./hoc",
+      "type": "subgraph",
+      "id": "sg___hoc",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "./hoc",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_wrap_9",
+          "name": "wrap",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "wrap"
+        }
+      ]
     },
     {
-      "type": "node",
-      "id": "mod___ui",
-      "kind": "SyntheticModuleSource",
-      "name": "./ui",
+      "type": "subgraph",
+      "id": "sg___ui",
+      "kind": "module",
       "line": 2,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "./ui",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_Box_39",
+          "name": "Box",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "Box"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_Text_44",
+          "name": "Text",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "Text"
+        }
+      ]
     }
   ],
   "edges": [
@@ -197,21 +199,6 @@
     {
       "from": "n_scope_1_body_107",
       "to": "ret_use_ref_5",
-      "label": "read"
-    },
-    {
-      "from": "mod___hoc",
-      "to": "n_scope_0_wrap_9",
-      "label": "read"
-    },
-    {
-      "from": "mod___ui",
-      "to": "n_scope_0_Box_39",
-      "label": "read"
-    },
-    {
-      "from": "mod___ui",
-      "to": "n_scope_0_Text_44",
       "label": "read"
     }
   ],

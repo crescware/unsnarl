@@ -3,8 +3,8 @@
 //! walks the module / global root scope through `build_scope`,
 //! emits let-chain edges from the precomputed `WriteOp` lists,
 //! processes per-reference edges (read / write / owner / predicate
-//! / completion), wires module sources and import intermediates,
-//! flushes pending loop-test anchors into their host subgraphs,
+//! / completion), groups import bindings into per-source module
+//! subgraphs, flushes pending loop-test anchors into their host subgraphs,
 //! marks unused variables, and finally collapses edges that crossed
 //! the depth-pruning boundary.
 
@@ -22,8 +22,9 @@ use crate::direction::Direction;
 use crate::visual_edge::VisualEdge;
 use crate::visual_graph::VisualGraph;
 use crate::visual_node::SyntheticVisualNode;
+use crate::visual_subgraph::OwnedVisualSubgraph;
 
-use super::arena::{BuildArena, Container, ElementHandle};
+use super::arena::{BuildArena, Container, ElementHandle, NodeIdx};
 use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
 use super::context::{BuildVisualGraphOptions, BuilderContext};
@@ -613,156 +614,127 @@ fn emit_reference_edges(
     }
 }
 
+/// Groups every import binding (and any renamed-import intermediate)
+/// under a per-source module subgraph, mirroring how functions /
+/// classes / control blocks become subgraphs everywhere else. The
+/// binding nodes are emitted at the module root by `build_scope`;
+/// here they are re-parented into the subgraph and the old
+/// `module -> binding` edge is replaced by containment. The only
+/// surviving import edge is `intermediate -> local` for renamed named
+/// imports, which keeps the original-name node wired to its local
+/// alias inside the subgraph.
 fn emit_module_and_intermediate(
     arena: &mut BuildArena,
     state: &mut BuildState,
     ctx: &BuilderContext<'_>,
 ) {
-    struct ModuleNode {
+    struct ModuleSubgraph {
         id: String,
-        line: u32,
         source: String,
-    }
-    struct Intermediate {
-        id: String,
-        name: String,
         line: u32,
+        children: Vec<ElementHandle>,
+        // Original exported names that already have an intermediate
+        // node in this subgraph, so a second alias of the same name
+        // reuses it rather than emitting a duplicate.
+        intermediates: HashSet<String>,
     }
-    // Preserve insertion order for deterministic on-disk output.
-    let mut module_nodes_order: Vec<String> = Vec::new();
-    let mut module_nodes: HashMap<String, ModuleNode> = HashMap::new();
-    let mut intermediates_order: Vec<String> = Vec::new();
-    let mut intermediates: HashMap<String, Intermediate> = HashMap::new();
+    // Preserve import-source insertion order for deterministic output.
+    let mut order: Vec<String> = Vec::new();
+    let mut modules: HashMap<String, ModuleSubgraph> = HashMap::new();
+
+    // Index the binding nodes `build_scope` already emitted so the
+    // re-parent step can find their arena handle by id.
+    let mut node_idx_by_id: HashMap<String, NodeIdx> = HashMap::new();
+    for (i, n) in arena.nodes.iter().enumerate() {
+        node_idx_by_id.insert(n.id().to_string(), NodeIdx(i));
+    }
+
+    // Binding handles moved off the root list into a subgraph.
+    let mut moved: HashSet<NodeIdx> = HashSet::new();
 
     for v in &ctx.ir.variables {
         let Some(def) = v.defs.first() else {
             continue;
         };
-        let (import_source, import_kind, imported_name, parent_line, node_line) = match def {
+        let (source, kind, imported_name, parent_line, node_line) = match def {
             SerializedDefinition::ImportBindingNamed(d) => (
-                Some(d.import_source().to_string()),
-                Some("named"),
+                d.import_source().to_string(),
+                "named",
                 Some(d.imported_name().to_string()),
                 d.parent().map(|p| p.span.line.0).unwrap_or(0),
                 d.node().span.line.0,
             ),
             SerializedDefinition::ImportBindingDefault(d) => (
-                Some(d.import_source().to_string()),
-                Some("default"),
+                d.import_source().to_string(),
+                "default",
                 None,
                 d.parent().map(|p| p.span.line.0).unwrap_or(0),
                 d.node().span.line.0,
             ),
             SerializedDefinition::ImportBindingNamespace(d) => (
-                Some(d.import_source().to_string()),
-                Some("namespace"),
+                d.import_source().to_string(),
+                "namespace",
                 None,
                 d.parent().map(|p| p.span.line.0).unwrap_or(0),
                 d.node().span.line.0,
             ),
-            _ => (None, None, None, 0, 0),
-        };
-        let Some(source) = import_source else {
-            continue;
-        };
-        if let std::collections::hash_map::Entry::Vacant(slot) = module_nodes.entry(source.clone())
-        {
-            module_nodes_order.push(source.clone());
-            slot.insert(ModuleNode {
-                id: format!("mod_{}", sanitize(&source)),
-                line: parent_line,
-                source: source.clone(),
-            });
-        }
-        if import_kind == Some("named") {
-            if let Some(name) = imported_name.as_ref() {
-                if Some(v.name()) != Some(name.as_str()) {
-                    let key = intermediate_key(&source, name);
-                    if let std::collections::hash_map::Entry::Vacant(slot) =
-                        intermediates.entry(key.clone())
-                    {
-                        intermediates_order.push(key.clone());
-                        slot.insert(Intermediate {
-                            id: format!("import_{}", sanitize(&key)),
-                            name: name.clone(),
-                            line: node_line,
-                        });
-                    }
-                }
-            }
-        }
-    }
-
-    for key in &module_nodes_order {
-        let m = &module_nodes[key];
-        let node =
-            SyntheticVisualNode::module_source(m.id.clone(), m.source.clone(), m.line).into();
-        let idx = arena.push_node(node);
-        arena.append_child(Container::Root, ElementHandle::Node(idx));
-    }
-    for key in &intermediates_order {
-        let inter = &intermediates[key];
-        let node = SyntheticVisualNode::import_intermediate(
-            inter.id.clone(),
-            inter.name.clone(),
-            inter.line,
-        )
-        .into();
-        let idx = arena.push_node(node);
-        arena.append_child(Container::Root, ElementHandle::Node(idx));
-    }
-    for v in &ctx.ir.variables {
-        let Some(def) = v.defs.first() else {
-            continue;
-        };
-        let (source, kind, imported) = match def {
-            SerializedDefinition::ImportBindingNamed(d) => (
-                d.import_source().to_string(),
-                "named",
-                Some(d.imported_name().to_string()),
-            ),
-            SerializedDefinition::ImportBindingDefault(d) => {
-                (d.import_source().to_string(), "default", None)
-            }
-            SerializedDefinition::ImportBindingNamespace(d) => {
-                (d.import_source().to_string(), "namespace", None)
-            }
             _ => continue,
         };
-        let Some(mod_node) = module_nodes.get(&source) else {
+
+        let entry = modules.entry(source.clone()).or_insert_with(|| {
+            order.push(source.clone());
+            ModuleSubgraph {
+                id: format!("sg_{}", sanitize(&source)),
+                source: source.clone(),
+                line: parent_line,
+                children: Vec::new(),
+                intermediates: HashSet::new(),
+            }
+        });
+
+        let local_id = node_id(v.id.value());
+        let Some(&local_idx) = node_idx_by_id.get(&local_id) else {
             continue;
         };
-        let local_id = node_id(v.id.value());
-        let is_renamed = kind == "named" && imported.as_deref().is_some_and(|n| n != v.name());
+
+        let is_renamed = kind == "named" && imported_name.as_deref().is_some_and(|n| n != v.name());
         if is_renamed {
-            if let Some(name) = imported.as_ref() {
-                let key = intermediate_key(&source, name);
-                if let Some(inter) = intermediates.get(&key) {
-                    push_edge(
-                        &mut state.emitted_edges,
-                        &mut state.edges,
-                        &mod_node.id,
-                        "read",
-                        &inter.id,
-                    );
-                    push_edge(
-                        &mut state.emitted_edges,
-                        &mut state.edges,
-                        &inter.id,
-                        "read",
-                        &local_id,
-                    );
-                    continue;
-                }
+            let name = imported_name.as_deref().unwrap_or_default();
+            let key = intermediate_key(&source, name);
+            let inter_id = format!("import_{}", sanitize(&key));
+            if entry.intermediates.insert(name.to_string()) {
+                let inter_node =
+                    SyntheticVisualNode::import_intermediate(inter_id.clone(), name, node_line)
+                        .into();
+                let inter_idx = arena.push_node(inter_node);
+                entry.children.push(ElementHandle::Node(inter_idx));
             }
+            push_edge(
+                &mut state.emitted_edges,
+                &mut state.edges,
+                &inter_id,
+                "read",
+                &local_id,
+            );
         }
-        push_edge(
-            &mut state.emitted_edges,
-            &mut state.edges,
-            &mod_node.id,
-            "read",
-            &local_id,
-        );
+        entry.children.push(ElementHandle::Node(local_idx));
+        moved.insert(local_idx);
+    }
+
+    // Drop the re-parented bindings from the root list, then attach
+    // each module subgraph (with its collected children) at the root
+    // in import-source order.
+    arena.detach_root_nodes(&moved);
+
+    for key in &order {
+        let m = modules.remove(key).expect("module recorded in order");
+        let descriptor =
+            OwnedVisualSubgraph::module(m.id, m.line, m.source, Vec::new(), Direction::RL).into();
+        let sg_idx = arena.push_subgraph(descriptor);
+        for child in m.children {
+            arena.append_child(Container::Subgraph(sg_idx), child);
+        }
+        arena.append_child(Container::Root, ElementHandle::Subgraph(sg_idx));
     }
 }
 

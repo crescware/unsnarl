@@ -5,6 +5,8 @@
 //! order of the rendered subgraphs is checked separately by the
 //! sibling tests at the crate root (`visual_subgraph_test.rs`).
 
+use std::collections::HashSet;
+
 use super::{BuildArena, Container, ElementHandle};
 use crate::direction::Direction;
 use crate::visual_element::VisualElement;
@@ -97,6 +99,33 @@ fn nested_subgraphs_preserve_handle_tree() {
         panic!("expected inner subgraph inside outer");
     };
     assert_eq!(inner.elements()[0].id(), "leaf");
+}
+
+#[test]
+fn detach_root_nodes_reparents_a_binding_into_a_subgraph_without_double_finalize() {
+    let mut arena = BuildArena::new();
+    // Two bindings emitted at the root, as `build_scope` would.
+    let keep = arena.push_node(binding_node("keep", "keep"));
+    let moved = arena.push_node(binding_node("moved", "moved"));
+    arena.append_child(Container::Root, ElementHandle::Node(keep));
+    arena.append_child(Container::Root, ElementHandle::Node(moved));
+    // Re-parent `moved` under a freshly-created module subgraph.
+    let mut detach: HashSet<_> = HashSet::new();
+    detach.insert(moved);
+    arena.detach_root_nodes(&detach);
+    let sg = arena.push_subgraph(owned_subgraph("sg"));
+    arena.append_child(Container::Subgraph(sg), ElementHandle::Node(moved));
+    arena.append_child(Container::Root, ElementHandle::Subgraph(sg));
+    // `moved` must be finalized exactly once (inside the subgraph),
+    // never twice -- a double visit would panic in `finalize_handle`.
+    let rendered = arena.finalize_root();
+    assert_eq!(rendered.len(), 2);
+    assert_eq!(rendered[0].id(), "keep");
+    let VisualElement::Subgraph(sg) = &rendered[1] else {
+        panic!("second root child should be the subgraph");
+    };
+    assert_eq!(sg.elements().len(), 1);
+    assert_eq!(sg.elements()[0].id(), "moved");
 }
 
 #[test]

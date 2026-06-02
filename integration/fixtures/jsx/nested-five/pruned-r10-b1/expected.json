@@ -7,61 +7,6 @@
   "direction": "RL",
   "elements": [
     {
-      "type": "node",
-      "id": "n_scope_0_A_9",
-      "name": "A",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "A"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_B_12",
-      "name": "B",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "B"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_C_15",
-      "name": "C",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "C"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_D_18",
-      "name": "D",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "D"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_E_21",
-      "name": "E",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "E"
-    },
-    {
       "type": "subgraph",
       "id": "s_scope_1",
       "kind": "function",
@@ -237,6 +182,72 @@
           ]
         }
       ]
+    },
+    {
+      "type": "subgraph",
+      "id": "sg_components",
+      "kind": "module",
+      "line": 1,
+      "endLine": null,
+      "direction": "RL",
+      "moduleSource": "components",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_A_9",
+          "name": "A",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "A"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_B_12",
+          "name": "B",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "B"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_C_15",
+          "name": "C",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "C"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_D_18",
+          "name": "D",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "D"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_E_21",
+          "name": "E",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "E"
+        }
+      ]
     }
   ],
   "edges": [
@@ -291,33 +302,7 @@
       "label": "read"
     }
   ],
-  "boundaryEdges": [
-    {
-      "inside": "n_scope_0_A_9",
-      "direction": "in",
-      "label": "read"
-    },
-    {
-      "inside": "n_scope_0_B_12",
-      "direction": "in",
-      "label": "read"
-    },
-    {
-      "inside": "n_scope_0_C_15",
-      "direction": "in",
-      "label": "read"
-    },
-    {
-      "inside": "n_scope_0_D_18",
-      "direction": "in",
-      "label": "read"
-    },
-    {
-      "inside": "n_scope_0_E_21",
-      "direction": "in",
-      "label": "read"
-    }
-  ],
+  "boundaryEdges": [],
   "pruning": {
     "roots": [
       {

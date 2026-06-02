@@ -16,7 +16,6 @@ const Counter = ({ start }: { start: number }) => {
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_useCallback_9["import useCallback<br/>L1"]
   n_scope_0_button_162["global button"]
   subgraph wrap_s_scope_1[" "]
     direction TB
@@ -44,6 +43,10 @@ flowchart RL
       end
     end
   end
+  subgraph sg_react["module react"]
+    direction RL
+    n_scope_0_useCallback_9["import useCallback<br/>L1"]
+  end
   call_proxy_104 -->|read| n_scope_1_inc_98
   n_scope_0_useCallback_9 -->|read,call| call_proxy_104
   n_scope_2_n_117 -->|read| ret_use_ref_3
@@ -51,10 +54,9 @@ flowchart RL
   n_scope_1_start_57 -->|read| call_proxy_104
   n_scope_0_button_162 -->|read| ret_use_ref_6
   n_scope_1_inc_98 -->|read,call| ret_use_ref_7
-  mod_react["module react<br/>L1"]
-  mod_react -->|read| n_scope_0_useCallback_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class sg_react nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

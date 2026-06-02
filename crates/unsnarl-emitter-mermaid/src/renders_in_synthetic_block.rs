@@ -8,7 +8,6 @@ pub fn renders_in_synthetic_block(n: &VisualNode) -> bool {
     matches!(
         n.kind(),
         NodeKind::SyntheticModuleSink
-            | NodeKind::SyntheticModuleSource
             | NodeKind::SyntheticImportIntermediate
             | NodeKind::SyntheticExpressionStatement
     )

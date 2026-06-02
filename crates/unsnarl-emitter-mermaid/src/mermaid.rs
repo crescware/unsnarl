@@ -136,19 +136,19 @@ fn render_mermaid(
         debug,
     };
 
-    // Emit top-level "tree" nodes (anything that isn't a synthetic
-    // top-level import/module/sink), then top-level subgraphs,
-    // then synthetic top-level nodes -- preserves the historical
-    // Mermaid output ordering and keeps the module/intermediate
-    // cluster grouped near the import edges.
+    // Emit top-level "tree" nodes (anything that doesn't render in
+    // the trailing synthetic block), then top-level subgraphs
+    // (function / class / control clusters plus the per-import-source
+    // module subgraphs), then the remaining synthetic top-level nodes
+    // -- preserves the historical Mermaid output ordering.
     render_top_level_nodes(&mut state, graph);
     render_top_level_subgraphs(&mut state, graph);
 
-    // Edges originating from an import-side synthetic node (as
-    // selected by `collect_import_sources`) are import edges and
-    // rendered after the synthetic node block. Edges that merely
-    // point INTO a synthetic node (e.g. `n_x -->|read| module_root`)
-    // stay with the body edges to preserve the historical ordering.
+    // Edges originating from an import intermediate (as selected by
+    // `collect_import_sources`) are import edges and rendered after
+    // the synthetic node block. Edges that merely point INTO a
+    // synthetic node (e.g. `n_x -->|read| module_root`) stay with the
+    // body edges to preserve the historical ordering.
     let import_sources = collect_import_sources(&state.node_map);
     let (body_edges, import_edges) = split_edges(&graph.edges, &import_sources);
     push_edge_lines(

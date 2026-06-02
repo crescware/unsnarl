@@ -438,7 +438,7 @@ fn encodes_amp_lt_gt_in_case_labels_with_html_entities() {
 }
 
 #[test]
-fn expands_import_declarations_into_module_intermediate_nodes() {
+fn expands_import_declarations_into_module_subgraphs() {
     let out = emit(
         &[
             "import def from 'some-default';",
@@ -451,33 +451,28 @@ fn expands_import_declarations_into_module_intermediate_nodes() {
         ]
         .join("\n"),
     );
-    assert!(out.contains("mod_some_default[\"module some-default<br/>L1\"]"));
-    assert!(out.contains("mod_some_named[\"module some-named<br/>L2\"]"));
-    assert!(out.contains("mod_some_namespace[\"module some-namespace<br/>L3\"]"));
+    // Each import source becomes a module subgraph; the header names
+    // the source and carries no line range.
+    assert!(out.contains(r#"subgraph sg_some_default["module some-default"]"#));
+    assert!(out.contains(r#"subgraph sg_some_named["module some-named"]"#));
+    assert!(out.contains(r#"subgraph sg_some_namespace["module some-namespace"]"#));
+    // The renamed import keeps its original-name intermediate, and the
+    // intermediate -> local edge survives inside the subgraph.
     assert!(matches(
         &out,
         r#"import_some_named__other\["import other<br/>L2"\]"#
     ));
     assert!(matches(
         &out,
-        r"mod_some_default -->\|read\| n_scope_0_def_"
-    ));
-    assert!(matches(
-        &out,
-        r"mod_some_named -->\|read\| n_scope_0_named_"
-    ));
-    assert!(matches(
-        &out,
-        r"mod_some_named -->\|read\| import_some_named__other"
-    ));
-    assert!(matches(
-        &out,
         r"import_some_named__other -->\|read\| n_scope_0_renamed_"
     ));
-    assert!(matches(
-        &out,
-        r"mod_some_namespace -->\|read\| n_scope_0_ns_"
-    ));
+    // The old `mod_*` source nodes and their `module -> binding` edges
+    // are gone -- containment replaces them.
+    assert!(!out.contains("mod_some_default"));
+    assert!(!out.contains("mod_some_named"));
+    assert!(!out.contains("mod_some_namespace"));
+    assert!(!matches(&out, r"mod_\w+ -->"));
+    // Local binding labels are unchanged.
     assert!(out.contains("\"import ns<br/>"));
     assert!(out.contains("\"import def<br/>"));
     assert!(out.contains("\"import named<br/>"));

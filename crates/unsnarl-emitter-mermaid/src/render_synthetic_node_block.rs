@@ -1,5 +1,5 @@
 //! Emits the trailing "synthetic node" block (module sinks /
-//! sources / intermediates / expression statements).
+//! import intermediates / expression statements).
 
 use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_graph::VisualGraph;

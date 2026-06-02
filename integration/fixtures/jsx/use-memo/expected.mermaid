@@ -1,6 +1,5 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_useMemo_9["import useMemo<br/>L1"]
   n_scope_0_button_194["global button"]
   subgraph wrap_s_scope_1[" "]
     direction TB
@@ -27,6 +26,10 @@ flowchart RL
       end
     end
   end
+  subgraph sg_react["module react"]
+    direction RL
+    n_scope_0_useMemo_9["import useMemo<br/>L1"]
+  end
   call_proxy_102 -->|read| n_scope_1_value_94
   n_scope_0_useMemo_9 -->|read,call| call_proxy_102
   n_scope_1_start_53 -->|read| n_scope_2_doubled_128
@@ -34,10 +37,9 @@ flowchart RL
   n_scope_1_start_53 -->|read| call_proxy_102
   n_scope_0_button_194 -->|read| ret_use_ref_7
   n_scope_1_value_94 -->|read| ret_use_ref_8
-  mod_react["module react<br/>L1"]
-  mod_react -->|read| n_scope_0_useMemo_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
+  class sg_react nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

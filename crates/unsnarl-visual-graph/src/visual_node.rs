@@ -265,7 +265,6 @@ pub enum SyntheticNodeKind {
     SyntheticForInStatementHeader,
     SyntheticForOfStatementHeader,
     SyntheticModuleSink,
-    SyntheticModuleSource,
     SyntheticImportIntermediate,
     SyntheticExpressionStatement,
     SyntheticBeyondDepth,
@@ -343,16 +342,6 @@ impl SyntheticVisualNode {
             name,
             line,
             SyntheticNodeKind::ThrowArgumentReference,
-            SyntheticExtras::None {},
-        )
-    }
-
-    pub fn module_source(id: impl Into<String>, name: impl Into<String>, line: u32) -> Self {
-        Self::base(
-            id,
-            name,
-            line,
-            SyntheticNodeKind::SyntheticModuleSource,
             SyntheticExtras::None {},
         )
     }
@@ -596,7 +585,6 @@ impl VisualNode {
                     NodeKind::SyntheticForOfStatementHeader
                 }
                 SyntheticNodeKind::SyntheticModuleSink => NodeKind::SyntheticModuleSink,
-                SyntheticNodeKind::SyntheticModuleSource => NodeKind::SyntheticModuleSource,
                 SyntheticNodeKind::SyntheticImportIntermediate => {
                     NodeKind::SyntheticImportIntermediate
                 }

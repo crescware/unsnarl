@@ -20,9 +20,6 @@ export const Panel = memo((title: string, body: string) => {
 ```mermaid
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_memo_9["import memo<br/>L1"]
-  n_scope_0_Box_39["import Box<br/>L2"]
-  n_scope_0_Text_44["import Text<br/>L2"]
   n_scope_0_Panel_76["unused Panel<br/>L4"]
   subgraph call_proxy_84["memo()<br/>L4-10"]
     direction RL
@@ -39,19 +36,25 @@ flowchart RL
       end
     end
   end
+  subgraph sg_react["module react"]
+    direction RL
+    n_scope_0_memo_9["import memo<br/>L1"]
+  end
+  subgraph sg_ui["module ui"]
+    direction RL
+    n_scope_0_Box_39["import Box<br/>L2"]
+    n_scope_0_Text_44["import Text<br/>L2"]
+  end
   call_proxy_84 -->|read| n_scope_0_Panel_76
   n_scope_0_memo_9 -->|read,call| call_proxy_84
   n_scope_0_Box_39 -->|read| ret_use_ref_2
   n_scope_1_title_90 -->|read| ret_use_ref_3
   n_scope_0_Text_44 -->|read| ret_use_ref_4
   n_scope_1_body_105 -->|read| ret_use_ref_5
-  mod_react["module react<br/>L1"]
-  mod_ui["module ui<br/>L2"]
-  mod_react -->|read| n_scope_0_memo_9
-  mod_ui -->|read| n_scope_0_Box_39
-  mod_ui -->|read| n_scope_0_Text_44
   classDef nestL1 fill:#11192a,stroke:transparent;
   class call_proxy_84 nestL1;
+  class sg_react nestL1;
+  class sg_ui nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;

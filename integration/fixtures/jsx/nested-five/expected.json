@@ -8,61 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_A_9",
-      "name": "A",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "A"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_B_12",
-      "name": "B",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "B"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_C_15",
-      "name": "C",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "C"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_D_18",
-      "name": "D",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "D"
-    },
-    {
-      "type": "node",
-      "id": "n_scope_0_E_21",
-      "name": "E",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "NamedImportBinding",
-      "importedName": "E"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_Main_54",
       "name": "Main",
       "line": 3,
@@ -249,14 +194,70 @@
       ]
     },
     {
-      "type": "node",
-      "id": "mod_components",
-      "kind": "SyntheticModuleSource",
-      "name": "components",
+      "type": "subgraph",
+      "id": "sg_components",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "components",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_A_9",
+          "name": "A",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "A"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_B_12",
+          "name": "B",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "B"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_C_15",
+          "name": "C",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "C"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_D_18",
+          "name": "D",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "D"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_0_E_21",
+          "name": "E",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "NamedImportBinding",
+          "importedName": "E"
+        }
+      ]
     }
   ],
   "edges": [
@@ -308,31 +309,6 @@
     {
       "from": "n_scope_1_z_139",
       "to": "ret_use_ref_14",
-      "label": "read"
-    },
-    {
-      "from": "mod_components",
-      "to": "n_scope_0_A_9",
-      "label": "read"
-    },
-    {
-      "from": "mod_components",
-      "to": "n_scope_0_B_12",
-      "label": "read"
-    },
-    {
-      "from": "mod_components",
-      "to": "n_scope_0_C_15",
-      "label": "read"
-    },
-    {
-      "from": "mod_components",
-      "to": "n_scope_0_D_18",
-      "label": "read"
-    },
-    {
-      "from": "mod_components",
-      "to": "n_scope_0_E_21",
       "label": "read"
     }
   ],

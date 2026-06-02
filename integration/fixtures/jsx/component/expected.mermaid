@@ -1,6 +1,5 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_Fragment_9["import Fragment<br/>L1"]
   n_scope_0_root_237["unused root<br/>L15"]
   n_scope_0_span_125["global span"]
   subgraph wrap_s_scope_1[" "]
@@ -28,16 +27,19 @@ flowchart RL
       end
     end
   end
+  subgraph sg_react["module react"]
+    direction RL
+    n_scope_0_Fragment_9["import Fragment<br/>L1"]
+  end
   n_scope_0_Fragment_9 -->|read| ret_use_ref_1
   n_scope_0_span_125 -->|read| ret_use_ref_2
   n_scope_1_props_88 -->|read| ret_use_ref_3
   n_scope_0_Hello_79 -->|read| ret_use_ref_5
   n_scope_0_App_196 -->|read| n_scope_0_root_237
-  mod_react["module react<br/>L1"]
-  mod_react -->|read| n_scope_0_Fragment_9
   classDef nestL1 fill:#11192a,stroke:transparent;
   class wrap_s_scope_1 nestL1;
   class wrap_s_scope_2 nestL1;
+  class sg_react nestL1;
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   class s_scope_2 nestL2;

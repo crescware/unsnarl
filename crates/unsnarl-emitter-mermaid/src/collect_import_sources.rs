@@ -9,11 +9,8 @@ use unsnarl_visual_graph::visual_node::VisualNode;
 pub fn collect_import_sources(node_map: &HashMap<String, &VisualNode>) -> HashSet<String> {
     let mut out = HashSet::new();
     for (id, n) in node_map {
-        match n.kind() {
-            NodeKind::SyntheticModuleSource | NodeKind::SyntheticImportIntermediate => {
-                out.insert(id.clone());
-            }
-            _ => {}
+        if matches!(n.kind(), NodeKind::SyntheticImportIntermediate) {
+            out.insert(id.clone());
         }
     }
     out

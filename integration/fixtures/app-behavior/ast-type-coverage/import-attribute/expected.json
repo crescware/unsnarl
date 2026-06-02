@@ -8,16 +8,6 @@
   "elements": [
     {
       "type": "node",
-      "id": "n_scope_0_x_7",
-      "name": "x",
-      "line": 1,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false,
-      "kind": "DefaultImportBinding"
-    },
-    {
-      "type": "node",
       "id": "n_scope_0_type_25",
       "name": "type",
       "line": 0,
@@ -37,14 +27,25 @@
       "unused": false
     },
     {
-      "type": "node",
-      "id": "mod_y",
-      "kind": "SyntheticModuleSource",
-      "name": "y",
+      "type": "subgraph",
+      "id": "sg_y",
+      "kind": "module",
       "line": 1,
       "endLine": null,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "moduleSource": "y",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_0_x_7",
+          "name": "x",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "DefaultImportBinding"
+        }
+      ]
     }
   ],
   "edges": [
@@ -56,11 +57,6 @@
     {
       "from": "n_scope_0_x_7",
       "to": "module_root",
-      "label": "read"
-    },
-    {
-      "from": "mod_y",
-      "to": "n_scope_0_x_7",
       "label": "read"
     }
   ],

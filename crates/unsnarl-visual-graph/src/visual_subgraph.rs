@@ -38,13 +38,18 @@ pub enum OwnedSubgraphKind {
     Throw,
     #[serde(rename = "if-else-container")]
     IfElseContainer,
+    #[serde(rename = "module")]
+    Module,
 }
 
 /// Tail fields the "owned" shape carries *before* `elements`.
 /// Function/Class/IfElseContainer each have their own. Return /
 /// Throw carry none. `CallProxy` carries the rendered call head
 /// text used as the subgraph's display name (e.g. `"run()"`,
-/// `"console.log()"`).
+/// `"console.log()"`). `Module` carries the original import source
+/// specifier (e.g. `"./utils/helper"`, `"../lib/mod.js"`) so the
+/// mermaid emitter can render the `module <source>` header even
+/// though the subgraph's id is the sanitized `sg_<source>` form.
 #[derive(Clone, Serialize)]
 #[serde(untagged)]
 pub enum OwnedExtras {
@@ -66,6 +71,10 @@ pub enum OwnedExtras {
     CallProxy {
         #[serde(rename = "callName")]
         call_name: String,
+    },
+    Module {
+        #[serde(rename = "moduleSource")]
+        module_source: String,
     },
 }
 
@@ -302,6 +311,31 @@ impl OwnedVisualSubgraph {
             line,
             OwnedSubgraphKind::Throw,
             OwnedExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
+    /// Import-source subgraph: groups every local binding (and any
+    /// renamed-import intermediate) that an `import ... from
+    /// "<source>"` statement introduces. `module_source` is the raw
+    /// specifier text; the id is the sanitized `sg_<source>` form,
+    /// which is lossy, so the source is carried separately for the
+    /// `module <source>` header.
+    pub fn module(
+        id: impl Into<String>,
+        line: u32,
+        module_source: impl Into<String>,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::Module,
+            OwnedExtras::Module {
+                module_source: module_source.into(),
+            },
             elements,
             direction,
         )
@@ -585,6 +619,7 @@ impl VisualSubgraph {
                 OwnedSubgraphKind::Return => SubgraphKind::Return,
                 OwnedSubgraphKind::Throw => SubgraphKind::Throw,
                 OwnedSubgraphKind::IfElseContainer => SubgraphKind::IfElseContainer,
+                OwnedSubgraphKind::Module => SubgraphKind::Module,
             },
             Self::Control(s) => match s.kind {
                 ControlSubgraphKind::Case => SubgraphKind::Case,
@@ -671,6 +706,19 @@ impl VisualSubgraph {
         match self {
             Self::Owned(s) => match &s.extras {
                 OwnedExtras::CallProxy { call_name, .. } => Some(call_name.as_str()),
+                _ => None,
+            },
+            Self::Control(_) => None,
+        }
+    }
+
+    /// `moduleSource` (JSON field), present only on `Module`
+    /// subgraphs. The raw import specifier text the mermaid emitter
+    /// renders as the `module <source>` header.
+    pub fn module_source(&self) -> Option<&str> {
+        match self {
+            Self::Owned(s) => match &s.extras {
+                OwnedExtras::Module { module_source } => Some(module_source.as_str()),
                 _ => None,
             },
             Self::Control(_) => None,

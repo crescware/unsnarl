@@ -1,6 +1,5 @@
 1	0	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:0 button
-1	1	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:1 useMemo
-1	0	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:1 react
+1	0	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:1 useMemo
 0	0	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:3 unused Counter
 2	0	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:3 start
 1	1	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:4 value
@@ -8,4 +7,4 @@
 0	1	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:6 doubled
 0	1	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:8 button
 0	1	integration/fixtures/app-behavior/plugin/react/use-memo/input.tsx:8 value
-7	6	10 total
+6	5	9 total

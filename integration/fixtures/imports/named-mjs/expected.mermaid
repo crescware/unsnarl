@@ -1,7 +1,10 @@
 %%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
 flowchart RL
-  n_scope_0_x_9["import x<br/>L1"]
+  subgraph sg_m["module m"]
+    direction RL
+    n_scope_0_x_9["import x<br/>L1"]
+  end
   n_scope_0_x_9 -->|read| expr_stmt_23
   expr_stmt_23["x<br/>L2"]
-  mod_m["module m<br/>L1"]
-  mod_m -->|read| n_scope_0_x_9
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class sg_m nestL1;
