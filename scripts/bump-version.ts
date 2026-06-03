@@ -114,10 +114,12 @@ const tag = preReleaseId === null
   ? "rc"
   : "beta";
 
-for (const pkgJson of [
-  "package.json",
-  "npm/unsnarl-darwin-arm64/package.json",
-]) {
+for (
+  const pkgJson of [
+    "package.json",
+    "npm/unsnarl-darwin-arm64/package.json",
+  ]
+) {
   replaceOnce(
     pkgJson,
     /("publishConfig":\s*\{[^}]*?"tag":\s*)"[^"]+"/s,

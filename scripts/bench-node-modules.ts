@@ -39,7 +39,9 @@ function dirExists(path: string): boolean {
 ensureFile(UNS_BIN, "run `mise run build` first");
 
 if (!dirExists(TARGET_DIR)) {
-  console.error("fixtures/bench/node_modules not found — running pnpm install …");
+  console.error(
+    "fixtures/bench/node_modules not found — running pnpm install …",
+  );
   const install = new Deno.Command("pnpm", {
     args: ["install"],
     cwd: BENCH_PKG,
@@ -104,7 +106,9 @@ for (const abs of files) {
     const rate = i / wall;
     const eta = (total - i) / rate;
     console.error(
-      `progress: ${i}/${total} (${rate.toFixed(1)} files/s, eta ${eta.toFixed(0)}s)`,
+      `progress: ${i}/${total} (${rate.toFixed(1)} files/s, eta ${
+        eta.toFixed(0)
+      }s)`,
     );
   }
 }
@@ -132,7 +136,9 @@ rankingLines.push("rank   elapsed_ms   exit   path");
 for (let r = 0; r < Math.min(TOP_N, rows.length); r++) {
   const row = rows[r];
   rankingLines.push(
-    `${String(r + 1).padStart(4)}   ${row.ms.toFixed(3).padStart(10)}   ${String(row.code).padStart(4)}   ${relOf(row.path)}`,
+    `${String(r + 1).padStart(4)}   ${row.ms.toFixed(3).padStart(10)}   ${
+      String(row.code).padStart(4)
+    }   ${relOf(row.path)}`,
   );
 }
 Deno.writeTextFileSync(`${WORK}/ranking.txt`, rankingLines.join("\n") + "\n");
@@ -143,11 +149,11 @@ const sortedAsc = rows.map((r) => r.ms).sort((a, b) => a - b);
 const median = sortedAsc.length === 0
   ? 0
   : sortedAsc.length % 2 === 1
-    ? sortedAsc[(sortedAsc.length - 1) >> 1]
-    : (sortedAsc[sortedAsc.length / 2 - 1] + sortedAsc[sortedAsc.length / 2]) / 2;
-const p95 = sortedAsc.length === 0
-  ? 0
-  : sortedAsc[Math.min(sortedAsc.length - 1, Math.floor(sortedAsc.length * 0.95))];
+  ? sortedAsc[(sortedAsc.length - 1) >> 1]
+  : (sortedAsc[sortedAsc.length / 2 - 1] + sortedAsc[sortedAsc.length / 2]) / 2;
+const p95 = sortedAsc.length === 0 ? 0 : sortedAsc[
+  Math.min(sortedAsc.length - 1, Math.floor(sortedAsc.length * 0.95))
+];
 const nonzero = rows.filter((r) => r.code !== 0).length;
 
 const summaryLines = [
@@ -158,11 +164,14 @@ const summaryLines = [
   `mean_ms_per_file=${meanMs.toFixed(3)}`,
   `median_ms=${median.toFixed(3)}`,
   `p95_ms=${p95.toFixed(3)}`,
-  `max_ms=${rows.length > 0 ? rows[0].ms.toFixed(3) : "0"}\t${rows.length > 0 ? relOf(rows[0].path) : ""}`,
+  `max_ms=${rows.length > 0 ? rows[0].ms.toFixed(3) : "0"}\t${
+    rows.length > 0 ? relOf(rows[0].path) : ""
+  }`,
 ];
 const summary = summaryLines.join("\n") + "\n";
 Deno.stdout.writeSync(new TextEncoder().encode(summary));
 Deno.writeTextFileSync(`${WORK}/summary.txt`, summary);
 
-const preview = rankingLines.slice(0, 1 + 1 + Math.min(TOP_N, 20)).join("\n") + "\n";
+const preview = rankingLines.slice(0, 1 + 1 + Math.min(TOP_N, 20)).join("\n") +
+  "\n";
 Deno.stdout.writeSync(new TextEncoder().encode("\n" + preview));

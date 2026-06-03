@@ -40,7 +40,9 @@ if (!target) {
 // Same shape bump-version.ts accepts.
 const VERSION_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
 if (!VERSION_RE.test(target)) {
-  console.error(`'${target}' is not a valid semver string (expected e.g. 0.4.0-beta.1)`);
+  console.error(
+    `'${target}' is not a valid semver string (expected e.g. 0.4.0-beta.1)`,
+  );
   Deno.exit(1);
 }
 
@@ -70,7 +72,11 @@ async function capture(
 // not pass by accident). Use the raw capture() -- which exposes
 // `code` -- only where a non-zero exit is itself the expected signal,
 // e.g. `git rev-parse --verify --quiet` probing for a branch.
-async function captureOk(label: string, cmd: string, args: string[]): Promise<string> {
+async function captureOk(
+  label: string,
+  cmd: string,
+  args: string[],
+): Promise<string> {
   const { code, out } = await capture(cmd, args);
   if (code !== 0) abort(`${label} failed (exit ${code})`);
   return out;
@@ -81,7 +87,11 @@ async function captureOk(label: string, cmd: string, args: string[]): Promise<st
 // --porcelain`, whose first record begins with the status code's left
 // column (a space for a working-tree-only change, e.g. " M"); trimming
 // would swallow it and shift that record's path parse by one byte.
-async function captureRawOk(label: string, cmd: string, args: string[]): Promise<string> {
+async function captureRawOk(
+  label: string,
+  cmd: string,
+  args: string[],
+): Promise<string> {
   const { code, raw } = await capture(cmd, args);
   if (code !== 0) abort(`${label} failed (exit ${code})`);
   return raw;
@@ -112,7 +122,9 @@ function abort(msg: string): never {
 // no pre-release -> "latest"; "rc" pre-release -> "rc"; otherwise
 // ("beta"/"alpha"/...) -> "beta".
 function tagFor(version: string): string {
-  const pre = version.includes("-") ? version.split("-", 2)[1].split(".", 1)[0] : null;
+  const pre = version.includes("-")
+    ? version.split("-", 2)[1].split(".", 1)[0]
+    : null;
   return pre === null ? "latest" : pre === "rc" ? "rc" : "beta";
 }
 
@@ -148,12 +160,23 @@ function readPkg(path: string): Pkg {
     "HEAD",
   ]);
   if (branch !== "main") abort(`must run on main (currently on ${branch})`);
-  const status = await captureOk("git status --porcelain", "git", ["status", "--porcelain"]);
+  const status = await captureOk("git status --porcelain", "git", [
+    "status",
+    "--porcelain",
+  ]);
   if (status !== "") abort("working tree is not clean");
   await run("fetch", "git", ["fetch", "origin", "main"]);
-  const local = await captureOk("git rev-parse HEAD", "git", ["rev-parse", "HEAD"]);
-  const remote = await captureOk("git rev-parse origin/main", "git", ["rev-parse", "origin/main"]);
-  if (local !== remote) abort("local main is not in sync with origin/main (pull first)");
+  const local = await captureOk("git rev-parse HEAD", "git", [
+    "rev-parse",
+    "HEAD",
+  ]);
+  const remote = await captureOk("git rev-parse origin/main", "git", [
+    "rev-parse",
+    "origin/main",
+  ]);
+  if (local !== remote) {
+    abort("local main is not in sync with origin/main (pull first)");
+  }
 }
 
 // --- read the current version (for commit message + diff verify) -------
@@ -166,7 +189,12 @@ const oldTag = tagFor(oldVersion);
 const newTag = tagFor(target);
 
 // --- create the release branch -----------------------------------------
-const exists = await capture("git", ["rev-parse", "--verify", "--quiet", branch]);
+const exists = await capture("git", [
+  "rev-parse",
+  "--verify",
+  "--quiet",
+  branch,
+]);
 if (exists.code === 0) abort(`branch ${branch} already exists`);
 await run("branch", "git", ["switch", "-c", branch]);
 
@@ -205,7 +233,9 @@ const changed = (await captureRawOk("git status --porcelain -z", "git", [
   .filter((record) => record.length > 0)
   .map((record) => {
     const m = PORCELAIN_RECORD.exec(record);
-    if (!m) abort(`could not parse git status record: ${JSON.stringify(record)}`);
+    if (!m) {
+      abort(`could not parse git status record: ${JSON.stringify(record)}`);
+    }
     return m[1];
   });
 if (changed.length === 0) abort("bump produced no changes");
@@ -218,16 +248,26 @@ const root = readPkg("package.json");
 const sub = readPkg("npm/unsnarl-darwin-arm64/package.json");
 const cargoToml = Deno.readTextFileSync(`${REPO_ROOT}/Cargo.toml`);
 const esc = target.replace(/[.+]/g, "\\$&");
-if (root.version !== target) abort(`package.json version is ${root.version}, expected ${target}`);
+if (root.version !== target) {
+  abort(`package.json version is ${root.version}, expected ${target}`);
+}
 if (root.optionalDependencies?.["unsnarl-darwin-arm64"] !== target) {
   abort("package.json optionalDependencies.unsnarl-darwin-arm64 mismatch");
 }
 if (root.publishConfig?.tag !== newTag) {
-  abort(`package.json publishConfig.tag is ${root.publishConfig?.tag}, expected ${newTag}`);
+  abort(
+    `package.json publishConfig.tag is ${root.publishConfig?.tag}, expected ${newTag}`,
+  );
 }
-if (sub.version !== target) abort(`sub-package version is ${sub.version}, expected ${target}`);
-if (sub.publishConfig?.tag !== newTag) abort("sub-package publishConfig.tag mismatch");
-if (!new RegExp(`\\[workspace\\.package\\]\\nversion = "${esc}"`).test(cargoToml)) {
+if (sub.version !== target) {
+  abort(`sub-package version is ${sub.version}, expected ${target}`);
+}
+if (sub.publishConfig?.tag !== newTag) {
+  abort("sub-package publishConfig.tag mismatch");
+}
+if (
+  !new RegExp(`\\[workspace\\.package\\]\\nversion = "${esc}"`).test(cargoToml)
+) {
   abort(`Cargo.toml [workspace.package].version is not ${target}`);
 }
 

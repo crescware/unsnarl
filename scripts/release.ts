@@ -57,7 +57,10 @@ async function run(label: string, cmd: string, args: string[]): Promise<void> {
 // Capture a command's stdout + exit code (no inherited stdio), used by
 // the on-latest-main guard to read git plumbing output (branch name,
 // commit hashes, porcelain status).
-async function capture(cmd: string, args: string[]): Promise<{ code: number; out: string }> {
+async function capture(
+  cmd: string,
+  args: string[],
+): Promise<{ code: number; out: string }> {
   const { code, stdout } = await new Deno.Command(cmd, {
     args,
     stdout: "piped",
@@ -69,7 +72,11 @@ async function capture(cmd: string, args: string[]): Promise<{ code: number; out
 // Like capture() but a non-zero exit aborts the whole release: a failed
 // git query means the world is not as the guard assumes, so the guard
 // must not pass by accident on an empty string.
-async function captureOk(label: string, cmd: string, args: string[]): Promise<string> {
+async function captureOk(
+  label: string,
+  cmd: string,
+  args: string[],
+): Promise<string> {
   const { code, out } = await capture(cmd, args);
   if (code !== 0) {
     console.error(`[release] ${label} failed (exit ${code}); aborting`);
@@ -107,7 +114,9 @@ async function assertGhAuthenticated(): Promise<void> {
       stderr: "null",
     }).output();
     if (!auth.success) {
-      console.error("[release] gh is not authenticated (run `gh auth login`); aborting");
+      console.error(
+        "[release] gh is not authenticated (run `gh auth login`); aborting",
+      );
       Deno.exit(1);
     }
   } catch {
@@ -145,7 +154,13 @@ async function stopIfReleaseExists(tag: string): Promise<void> {
 
 // Dry-run the publish; only its exit code gates the rest, not its output.
 async function dryRunPublish(): Promise<void> {
-  await run("dry-run", "deno", ["run", "--allow-read", "--allow-run", PUBLISH, "--dry-run"]);
+  await run("dry-run", "deno", [
+    "run",
+    "--allow-read",
+    "--allow-run",
+    PUBLISH,
+    "--dry-run",
+  ]);
 }
 
 // Re-verify, immediately before the irreversible tag/push, that we are on
@@ -164,19 +179,28 @@ async function guardOnLatestMain(): Promise<void> {
     console.error(`[release] not on main (currently on '${branch}'); aborting`);
     Deno.exit(1);
   }
-  const status = await captureOk("git status --porcelain", "git", ["status", "--porcelain"]);
+  const status = await captureOk("git status --porcelain", "git", [
+    "status",
+    "--porcelain",
+  ]);
   if (status !== "") {
     console.error("[release] working tree is not clean; aborting");
     Deno.exit(1);
   }
   await run("fetch", "git", ["fetch", "origin", "main"]);
-  const local = await captureOk("git rev-parse HEAD", "git", ["rev-parse", "HEAD"]);
-  const remote = await captureOk("git rev-parse origin/main", "git", ["rev-parse", "origin/main"]);
+  const local = await captureOk("git rev-parse HEAD", "git", [
+    "rev-parse",
+    "HEAD",
+  ]);
+  const remote = await captureOk("git rev-parse origin/main", "git", [
+    "rev-parse",
+    "origin/main",
+  ]);
   if (local !== remote) {
     console.error(
-      `[release] local main (${local.slice(0, 9)}) is not in sync with origin/main (${
-        remote.slice(0, 9)
-      }); aborting`,
+      `[release] local main (${
+        local.slice(0, 9)
+      }) is not in sync with origin/main (${remote.slice(0, 9)}); aborting`,
     );
     Deno.exit(1);
   }
@@ -199,7 +223,10 @@ async function publishForReal(): Promise<void> {
 // is added when the version carries a semver pre-release identifier (e.g.
 // "0.4.0-beta.0"), mirroring npm-publish.ts treating any non-`latest`
 // dist-tag as a pre-release line.
-async function createGitHubRelease(tag: string, isPrerelease: boolean): Promise<void> {
+async function createGitHubRelease(
+  tag: string,
+  isPrerelease: boolean,
+): Promise<void> {
   const args = ["release", "create", tag, "--generate-notes", "--verify-tag"];
   if (isPrerelease) args.push("--prerelease");
   await run("release", "gh", args);
@@ -221,7 +248,9 @@ async function main(): Promise<void> {
   await publishForReal();
   await createGitHubRelease(tag, isPrerelease);
 
-  console.error(`[release] done: ${tag} published to npm and released on GitHub`);
+  console.error(
+    `[release] done: ${tag} published to npm and released on GitHub`,
+  );
 }
 
 await main();

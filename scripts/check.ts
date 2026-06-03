@@ -61,7 +61,10 @@ Deno.mkdirSync(WORK, { recursive: true });
 
 const dec = new TextDecoder();
 
-async function runCargo(args: string[], log: string): Promise<{ ok: boolean; output: string }> {
+async function runCargo(
+  args: string[],
+  log: string,
+): Promise<{ ok: boolean; output: string }> {
   // Capture stdout + stderr together: cargo test writes results to
   // stdout, clippy writes diagnostics to stderr, and we want one
   // faithful log per step regardless of which stream a tool picked.
@@ -76,7 +79,10 @@ async function runCargo(args: string[], log: string): Promise<{ ok: boolean; out
   return { ok: code === 0, output };
 }
 
-async function runMerged(cmd: string, log: string): Promise<{ ok: boolean; output: string }> {
+async function runMerged(
+  cmd: string,
+  log: string,
+): Promise<{ ok: boolean; output: string }> {
   // The test phase needs stderr and stdout interleaved in the order
   // they were emitted: the `Running ...` / `Doc-tests ...` headers go
   // to stderr while each binary's `test result: ...` block goes to
@@ -97,17 +103,23 @@ async function runMerged(cmd: string, log: string): Promise<{ ok: boolean; outpu
   return { ok: code === 0, output };
 }
 
-function testCounts(output: string): { passed: number; failed: number; failedNames: string[] } {
+function testCounts(
+  output: string,
+): { passed: number; failed: number; failedNames: string[] } {
   let passed = 0;
   let failed = 0;
   // One "test result:" line per test binary; sum across the crate's
   // unit + integration + doc test binaries.
-  for (const m of output.matchAll(/test result: \w+\. (\d+) passed; (\d+) failed/g)) {
+  for (
+    const m of output.matchAll(/test result: \w+\. (\d+) passed; (\d+) failed/g)
+  ) {
     passed += Number(m[1]);
     failed += Number(m[2]);
   }
   const failedNames: string[] = [];
-  for (const m of output.matchAll(/^test (.+) \.\.\. FAILED$/gm)) failedNames.push(m[1]);
+  for (const m of output.matchAll(/^test (.+) \.\.\. FAILED$/gm)) {
+    failedNames.push(m[1]);
+  }
   return { passed, failed, failedNames };
 }
 
@@ -208,7 +220,13 @@ function splitByBinary(
 const summary: string[] = [];
 const failures: { label: string; log: string; output: string }[] = [];
 
-function record(ok: boolean, label: string, detail: string, log: string, output: string) {
+function record(
+  ok: boolean,
+  label: string,
+  detail: string,
+  log: string,
+  output: string,
+) {
   summary.push(`  ${ok ? "PASS" : "FAIL"}  ${label.padEnd(30)}${detail}`);
   if (!ok) failures.push({ label, log, output });
 }
@@ -251,7 +269,15 @@ console.error(`[check] writing step logs to ${WORK}/`);
   const t0 = performance.now();
   const log = `${WORK}/clippy.log`;
   const { ok, output } = await runCargo(
-    ["clippy", "--workspace", "--all-targets", "--verbose", "--", "-D", "warnings"],
+    [
+      "clippy",
+      "--workspace",
+      "--all-targets",
+      "--verbose",
+      "--",
+      "-D",
+      "warnings",
+    ],
     log,
   );
   record(ok, "clippy", secsSince(t0), log, output);
@@ -280,9 +306,13 @@ console.error(`[check] writing step logs to ${WORK}/`);
     finish();
   }
 
-  const byPkg = new Map<string, { lines: string[]; passed: number; failed: number; failedNames: string[] }>();
+  const byPkg = new Map<
+    string,
+    { lines: string[]; passed: number; failed: number; failedNames: string[] }
+  >();
   for (const seg of segments) {
-    const e = byPkg.get(seg.pkg) ?? { lines: [], passed: 0, failed: 0, failedNames: [] };
+    const e = byPkg.get(seg.pkg) ??
+      { lines: [], passed: 0, failed: 0, failedNames: [] };
     e.lines.push(...seg.lines);
     const c = testCounts(seg.lines.join("\n"));
     e.passed += c.passed;
@@ -296,7 +326,13 @@ console.error(`[check] writing step logs to ${WORK}/`);
     const text = e.lines.join("\n");
     const log = `${WORK}/test-${pkg}.log`;
     Deno.writeTextFileSync(log, text);
-    record(e.failed === 0, `test ${pkg}`, `${e.passed} passed, ${e.failed} failed`, log, text);
+    record(
+      e.failed === 0,
+      `test ${pkg}`,
+      `${e.passed} passed, ${e.failed} failed`,
+      log,
+      text,
+    );
     for (const n of e.failedNames) summary.push(`        ✗ ${n}`);
   }
   summary.push(`        (workspace test phase ${secsSince(t0)})`);
@@ -305,7 +341,13 @@ console.error(`[check] writing step logs to ${WORK}/`);
   // it (e.g. a binary aborted before printing a summary) -- surface it
   // rather than report all-green.
   if (!runOk && ![...byPkg.values()].some((e) => e.failed > 0)) {
-    record(false, "test (cargo)", "non-zero exit; see combined log", combinedLog, output);
+    record(
+      false,
+      "test (cargo)",
+      "non-zero exit; see combined log",
+      combinedLog,
+      output,
+    );
   }
 }
 
