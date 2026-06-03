@@ -27,11 +27,12 @@
 // runs the SAME guards as a real run (clean main in sync with origin/main,
 // gh authenticated) and EVERY local step for real -- create the branch,
 // bump, verify, commit -- and skips ONLY the two steps that reach an
-// external service: `git push` and `gh pr create`. The bump is therefore
-// left committed on the local `release-x.y.z` branch; discard it with
-// `git switch main && git branch -D release-x.y.z`. (Identical guards are
-// deliberate: rehearsing from the wrong branch or a stale main would be
-// misleading and accident-prone.)
+// external service: `git push` and `gh pr create`. It then cleans up after
+// itself -- switching back to main and deleting the release branch -- so a
+// successful rehearsal leaves NO trace. (Identical guards are deliberate:
+// rehearsing from the wrong branch or a stale main would be misleading and
+// accident-prone. If a step fails before cleanup the branch is left as-is
+// for inspection, since abort exits immediately.)
 //
 // The run order is the order `main()` calls its step functions at the
 // bottom of this file; each step's own doc comment explains what it does
@@ -362,6 +363,15 @@ async function commitPushAndOpenPr(
   ]);
 }
 
+// Undo a dry-run's local branch + commit: switch back to main and
+// force-delete the release branch (it was never merged), leaving the repo
+// exactly as the dry-run found it. Reached only on a successful dry-run --
+// if an earlier step aborts, the branch is left in place for inspection.
+async function discardDryRunBranch(branch: string): Promise<void> {
+  await run("switch-main", "git", ["switch", "main"]);
+  await run("delete-branch", "git", ["branch", "-D", branch]);
+}
+
 // --- orchestration: this call order IS the prepare-release sequence -----
 async function main(): Promise<void> {
   const { target, dryRun } = parseArgs();
@@ -384,10 +394,16 @@ async function main(): Promise<void> {
   await verifyBumpIsVersionOnly(target, oldVersion, oldTag, newTag);
   await commitPushAndOpenPr(branch, oldVersion, target, dryRun);
 
+  if (dryRun) {
+    await discardDryRunBranch(branch);
+    console.error(
+      `[prepare-release] dry-run done: ran branch/bump/verify/commit locally, skipped push + PR (the external sends), and cleaned up -- back on main, ${branch} deleted, no trace (${oldVersion} -> ${target})`,
+    );
+    return;
+  }
+
   console.error(
-    dryRun
-      ? `[prepare-release] dry-run done: committed "Bump ${oldVersion} -> ${target}" on local branch ${branch}; push + PR skipped. Discard with: git switch main && git branch -D ${branch}`
-      : `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
+    `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
   );
 }
 
