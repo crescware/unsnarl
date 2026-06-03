@@ -23,6 +23,15 @@
 // Guard: must run on a clean `main` that is in sync with origin/main.
 // Does NOT run `mise run check` (by request) and does NOT merge the PR.
 //
+// Pass `--dry-run` to rehearse without outward effects: it still runs the
+// bump and the mechanical verify (so the no-look safety net is exercised),
+// then reverts the bump and prints what a real run would commit / push /
+// open -- creating no branch, commit, push, or PR. A dry-run only requires
+// a clean working tree; it skips the gh-auth and on-main/in-sync checks,
+// which gate the branch/commit/push/PR a dry-run never performs. (If the
+// verify itself fails, the bump is left in place for inspection -- abort
+// exits immediately, so the revert does not run.)
+//
 // The run order is the order `main()` calls its step functions at the
 // bottom of this file; each step's own doc comment explains what it does
 // and why. Any step aborts the whole run on failure, so later steps
@@ -30,6 +39,7 @@
 //
 // Usage (via mise):
 //   mise run prepare-release -- 0.4.0-beta.1
+//   mise run prepare-release -- 0.4.0-beta.1 --dry-run
 
 // Script lives at `scripts/prepare-release.ts`; the repo root is two
 // `/`s up.
@@ -131,14 +141,26 @@ function readPkg(path: string): Pkg {
   return JSON.parse(Deno.readTextFileSync(`${REPO_ROOT}/${path}`)) as Pkg;
 }
 
+// The exact set of files `bump` rewrites: the workspace + npm version
+// fields, plus the Cargo.lock it regenerates. The verify keys its "only
+// these changed" check off this list, and the dry-run revert restores
+// exactly these.
+const BUMP_FILES = [
+  "Cargo.toml",
+  "Cargo.lock",
+  "package.json",
+  "npm/unsnarl-darwin-arm64/package.json",
+];
+
 // --- steps (called in order by main()) ----------------------------------
 
-// Read and validate the target version from argv -- the same shape
-// bump-version.ts accepts.
-function parseTargetVersion(): string {
-  const target = Deno.args[0];
+// Read and validate argv: the target version (the same shape
+// bump-version.ts accepts) and an optional `--dry-run` flag.
+function parseArgs(): { target: string; dryRun: boolean } {
+  const dryRun = Deno.args.includes("--dry-run");
+  const target = Deno.args.find((a) => a !== "--dry-run");
   if (!target) {
-    console.error("usage: prepare-release.ts <new-version>");
+    console.error("usage: prepare-release.ts <new-version> [--dry-run]");
     Deno.exit(1);
   }
   const VERSION_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
@@ -148,7 +170,7 @@ function parseTargetVersion(): string {
     );
     Deno.exit(1);
   }
-  return target;
+  return { target, dryRun };
 }
 
 // gh must be installed AND authenticated, checked up front: the PR is the
@@ -167,20 +189,30 @@ async function assertGhAuthenticated(): Promise<void> {
   }
 }
 
-// Must run on a clean main that is in sync with origin/main, so the branch
-// is cut from -- and the bump diff measured against -- the real tip.
-async function guardCleanMainInSync(): Promise<void> {
+// The working tree must be clean before we touch it: `bump` rewrites
+// tracked files in place, and both the mechanical verify and the dry-run
+// revert assume those edits are the ONLY changes present. Required in both
+// real and dry-run modes.
+async function requireCleanWorktree(): Promise<void> {
+  const status = await captureOk("git status --porcelain", "git", [
+    "status",
+    "--porcelain",
+  ]);
+  if (status !== "") abort("working tree is not clean");
+}
+
+// A real run must be on main, in sync with origin/main, so the branch is
+// cut from -- and the bump diff measured against -- the real tip. The
+// clean-tree half is requireCleanWorktree(), shared with dry-run; a
+// dry-run skips this on-main/in-sync check since it neither branches nor
+// pushes.
+async function guardOnMainInSync(): Promise<void> {
   const branch = await captureOk("git rev-parse --abbrev-ref HEAD", "git", [
     "rev-parse",
     "--abbrev-ref",
     "HEAD",
   ]);
   if (branch !== "main") abort(`must run on main (currently on ${branch})`);
-  const status = await captureOk("git status --porcelain", "git", [
-    "status",
-    "--porcelain",
-  ]);
-  if (status !== "") abort("working tree is not clean");
   await run("fetch", "git", ["fetch", "origin", "main"]);
   const local = await captureOk("git rev-parse HEAD", "git", [
     "rev-parse",
@@ -228,6 +260,14 @@ async function runBump(target: string): Promise<void> {
   ]);
 }
 
+// Undo the working-tree edits `bump` made, returning the tree to its
+// pre-bump state. Used by the dry-run after a successful verify. Safe
+// because requireCleanWorktree() ran first, so these files held no other
+// changes; `git restore` on an unmodified file is a no-op.
+async function restoreBumpedFiles(): Promise<void> {
+  await run("restore", "git", ["restore", ...BUMP_FILES]);
+}
+
 // Verify the bump mechanically (no human eyeballs the diff): (a) only the
 // expected files changed, (b) every version/tag field now holds the new
 // value, (c) every changed diff line is purely version/tag text.
@@ -238,12 +278,7 @@ async function verifyBumpIsVersionOnly(
   newTag: string,
 ): Promise<void> {
   // (a) only the expected files changed.
-  const EXPECTED = new Set([
-    "Cargo.toml",
-    "Cargo.lock",
-    "package.json",
-    "npm/unsnarl-darwin-arm64/package.json",
-  ]);
+  const EXPECTED = new Set(BUMP_FILES);
   // A `git status --porcelain` record is `XY PATH`: a 2-column status code,
   // one separator space, then the path. Read it NUL-terminated (`-z`) so
   // records split cleanly and paths are never quoted, and capture it raw so
@@ -339,18 +374,43 @@ async function commitPushAndOpenPr(
 
 // --- orchestration: this call order IS the prepare-release sequence -----
 async function main(): Promise<void> {
-  const target = parseTargetVersion();
-  await assertGhAuthenticated();
-  await guardCleanMainInSync();
+  const { target, dryRun } = parseArgs();
+
+  await requireCleanWorktree();
+  if (dryRun) {
+    console.error(
+      "[prepare-release] dry-run: skipping gh-auth and the on-main/in-sync checks",
+    );
+  } else {
+    await assertGhAuthenticated();
+    await guardOnMainInSync();
+  }
 
   const oldVersion = readOldVersion(target);
   const branch = `release-${target}`;
   const oldTag = tagFor(oldVersion);
   const newTag = tagFor(target);
 
-  await createReleaseBranch(branch);
+  if (dryRun) {
+    console.error(`[prepare-release] dry-run: would create branch ${branch}`);
+  } else {
+    await createReleaseBranch(branch);
+  }
+
   await runBump(target);
   await verifyBumpIsVersionOnly(target, oldVersion, oldTag, newTag);
+
+  if (dryRun) {
+    // Verify passed -> the bump is a clean version-only change. Revert it
+    // so the rehearsal leaves no trace, and print what a real run would do
+    // next instead of committing / pushing / opening the PR.
+    await restoreBumpedFiles();
+    console.error(
+      `[prepare-release] dry-run: bump verified as version-only and reverted; a real run would commit "Bump ${oldVersion} -> ${target}", push ${branch}, and open the PR`,
+    );
+    return;
+  }
+
   await commitPushAndOpenPr(branch, oldVersion, target);
 
   console.error(
