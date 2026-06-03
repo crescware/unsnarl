@@ -23,6 +23,11 @@
 // Guard: must run on a clean `main` that is in sync with origin/main.
 // Does NOT run `mise run check` (by request) and does NOT merge the PR.
 //
+// The run order is the order `main()` calls its step functions at the
+// bottom of this file; each step's own doc comment explains what it does
+// and why. Any step aborts the whole run on failure, so later steps
+// never run.
+//
 // Usage (via mise):
 //   mise run prepare-release -- 0.4.0-beta.1
 
@@ -32,21 +37,9 @@ const SCRIPT_PATH = new URL(import.meta.url).pathname;
 const REPO_ROOT = SCRIPT_PATH.split("/").slice(0, -2).join("/");
 Deno.chdir(REPO_ROOT);
 
-const target = Deno.args[0];
-if (!target) {
-  console.error("usage: prepare-release.ts <new-version>");
-  Deno.exit(1);
-}
-// Same shape bump-version.ts accepts.
-const VERSION_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
-if (!VERSION_RE.test(target)) {
-  console.error(
-    `'${target}' is not a valid semver string (expected e.g. 0.4.0-beta.1)`,
-  );
-  Deno.exit(1);
-}
-
 const dec = new TextDecoder();
+
+// --- small helpers ------------------------------------------------------
 
 // Capture a command's stdout + exit code (no inherited stdio). `out` is
 // trimmed for the common "read one value" case; `raw` is the verbatim
@@ -138,11 +131,30 @@ function readPkg(path: string): Pkg {
   return JSON.parse(Deno.readTextFileSync(`${REPO_ROOT}/${path}`)) as Pkg;
 }
 
-// --- guard: gh available + authed, clean main in sync with origin/main -
-{
-  // gh must be installed AND authenticated, checked up front: the PR is
-  // the last step, so a missing or unauthenticated gh would otherwise
-  // only surface after we have already branched, committed and pushed.
+// --- steps (called in order by main()) ----------------------------------
+
+// Read and validate the target version from argv -- the same shape
+// bump-version.ts accepts.
+function parseTargetVersion(): string {
+  const target = Deno.args[0];
+  if (!target) {
+    console.error("usage: prepare-release.ts <new-version>");
+    Deno.exit(1);
+  }
+  const VERSION_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$/;
+  if (!VERSION_RE.test(target)) {
+    console.error(
+      `'${target}' is not a valid semver string (expected e.g. 0.4.0-beta.1)`,
+    );
+    Deno.exit(1);
+  }
+  return target;
+}
+
+// gh must be installed AND authenticated, checked up front: the PR is the
+// last step, so a missing or unauthenticated gh would otherwise only
+// surface after we have already branched, committed and pushed.
+async function assertGhAuthenticated(): Promise<void> {
   try {
     const auth = await new Deno.Command("gh", {
       args: ["auth", "status"],
@@ -153,7 +165,11 @@ function readPkg(path: string): Pkg {
   } catch {
     abort("gh (GitHub CLI) not found on PATH");
   }
+}
 
+// Must run on a clean main that is in sync with origin/main, so the branch
+// is cut from -- and the bump diff measured against -- the real tip.
+async function guardCleanMainInSync(): Promise<void> {
   const branch = await captureOk("git rev-parse --abbrev-ref HEAD", "git", [
     "rev-parse",
     "--abbrev-ref",
@@ -179,124 +195,167 @@ function readPkg(path: string): Pkg {
   }
 }
 
-// --- read the current version (for commit message + diff verify) -------
-const oldVersion = readPkg("package.json").version;
-if (!oldVersion) abort("package.json: version is missing");
-if (oldVersion === target) abort(`package.json is already at ${target}`);
+// Read the current version from package.json (used for the commit message
+// and the diff verification) and refuse to "bump" to the same value.
+function readOldVersion(target: string): string {
+  const oldVersion = readPkg("package.json").version;
+  if (!oldVersion) abort("package.json: version is missing");
+  if (oldVersion === target) abort(`package.json is already at ${target}`);
+  return oldVersion;
+}
 
-const branch = `release-${target}`;
-const oldTag = tagFor(oldVersion);
-const newTag = tagFor(target);
+// Create the release branch, refusing to clobber an existing one.
+async function createReleaseBranch(branch: string): Promise<void> {
+  const exists = await capture("git", [
+    "rev-parse",
+    "--verify",
+    "--quiet",
+    branch,
+  ]);
+  if (exists.code === 0) abort(`branch ${branch} already exists`);
+  await run("branch", "git", ["switch", "-c", branch]);
+}
 
-// --- create the release branch -----------------------------------------
-const exists = await capture("git", [
-  "rev-parse",
-  "--verify",
-  "--quiet",
-  branch,
-]);
-if (exists.code === 0) abort(`branch ${branch} already exists`);
-await run("branch", "git", ["switch", "-c", branch]);
+// Run `bump` (bump-version.ts), which also regenerates Cargo.lock.
+async function runBump(target: string): Promise<void> {
+  await run("bump", "deno", [
+    "run",
+    "--allow-read",
+    "--allow-write",
+    "--allow-run",
+    `${REPO_ROOT}/scripts/bump-version.ts`,
+    target,
+  ]);
+}
 
-// --- bump (regenerates Cargo.lock too) ---------------------------------
-await run("bump", "deno", [
-  "run",
-  "--allow-read",
-  "--allow-write",
-  "--allow-run",
-  `${REPO_ROOT}/scripts/bump-version.ts`,
-  target,
-]);
+// Verify the bump mechanically (no human eyeballs the diff): (a) only the
+// expected files changed, (b) every version/tag field now holds the new
+// value, (c) every changed diff line is purely version/tag text.
+async function verifyBumpIsVersionOnly(
+  target: string,
+  oldVersion: string,
+  oldTag: string,
+  newTag: string,
+): Promise<void> {
+  // (a) only the expected files changed.
+  const EXPECTED = new Set([
+    "Cargo.toml",
+    "Cargo.lock",
+    "package.json",
+    "npm/unsnarl-darwin-arm64/package.json",
+  ]);
+  // A `git status --porcelain` record is `XY PATH`: a 2-column status code,
+  // one separator space, then the path. Read it NUL-terminated (`-z`) so
+  // records split cleanly and paths are never quoted, and capture it raw so
+  // the leading status column survives. Derive the path from that structure
+  // -- not a bare offset -- and abort on any record that does not match, so
+  // a format surprise fails loudly instead of silently truncating a name.
+  const PORCELAIN_RECORD = /^.. (.*)$/s; // XY, separator space, then PATH
+  const changed = (await captureRawOk("git status --porcelain -z", "git", [
+    "status",
+    "--porcelain",
+    "-z",
+  ]))
+    .split("\0")
+    .filter((record) => record.length > 0)
+    .map((record) => {
+      const m = PORCELAIN_RECORD.exec(record);
+      if (!m) {
+        abort(`could not parse git status record: ${JSON.stringify(record)}`);
+      }
+      return m[1];
+    });
+  if (changed.length === 0) abort("bump produced no changes");
+  for (const f of changed) {
+    if (!EXPECTED.has(f)) abort(`unexpected file changed by bump: ${f}`);
+  }
 
-// --- verify the bump mechanically (no human eyeballs the diff) ---------
+  // (b) every version / tag field now holds the new value.
+  const root = readPkg("package.json");
+  const sub = readPkg("npm/unsnarl-darwin-arm64/package.json");
+  const cargoToml = Deno.readTextFileSync(`${REPO_ROOT}/Cargo.toml`);
+  const esc = target.replace(/[.+]/g, "\\$&");
+  if (root.version !== target) {
+    abort(`package.json version is ${root.version}, expected ${target}`);
+  }
+  if (root.optionalDependencies?.["unsnarl-darwin-arm64"] !== target) {
+    abort("package.json optionalDependencies.unsnarl-darwin-arm64 mismatch");
+  }
+  if (root.publishConfig?.tag !== newTag) {
+    abort(
+      `package.json publishConfig.tag is ${root.publishConfig?.tag}, expected ${newTag}`,
+    );
+  }
+  if (sub.version !== target) {
+    abort(`sub-package version is ${sub.version}, expected ${target}`);
+  }
+  if (sub.publishConfig?.tag !== newTag) {
+    abort("sub-package publishConfig.tag mismatch");
+  }
+  if (
+    !new RegExp(`\\[workspace\\.package\\]\\nversion = "${esc}"`).test(
+      cargoToml,
+    )
+  ) {
+    abort(`Cargo.toml [workspace.package].version is not ${target}`);
+  }
 
-// (a) only the expected files changed.
-const EXPECTED = new Set([
-  "Cargo.toml",
-  "Cargo.lock",
-  "package.json",
-  "npm/unsnarl-darwin-arm64/package.json",
-]);
-// A `git status --porcelain` record is `XY PATH`: a 2-column status code,
-// one separator space, then the path. Read it NUL-terminated (`-z`) so
-// records split cleanly and paths are never quoted, and capture it raw so
-// the leading status column survives. Derive the path from that structure
-// -- not a bare offset -- and abort on any record that does not match, so
-// a format surprise fails loudly instead of silently truncating a name.
-const PORCELAIN_RECORD = /^.. (.*)$/s; // XY, separator space, then PATH
-const changed = (await captureRawOk("git status --porcelain -z", "git", [
-  "status",
-  "--porcelain",
-  "-z",
-]))
-  .split("\0")
-  .filter((record) => record.length > 0)
-  .map((record) => {
-    const m = PORCELAIN_RECORD.exec(record);
-    if (!m) {
-      abort(`could not parse git status record: ${JSON.stringify(record)}`);
+  // (c) every changed diff line is purely version/tag text.
+  const diff = await captureOk("git diff", "git", ["diff"]);
+  const tokens = [oldVersion, target, oldTag, newTag];
+  for (const line of diff.split("\n")) {
+    if (!/^[+-]/.test(line)) continue; // context / blank lines
+    if (/^(\+\+\+|---)/.test(line)) continue; // file headers
+    if (!tokens.some((t) => line.includes(t))) {
+      abort(`unexpected diff line (not version/tag): ${line}`);
     }
-    return m[1];
-  });
-if (changed.length === 0) abort("bump produced no changes");
-for (const f of changed) {
-  if (!EXPECTED.has(f)) abort(`unexpected file changed by bump: ${f}`);
-}
-
-// (b) every version / tag field now holds the new value.
-const root = readPkg("package.json");
-const sub = readPkg("npm/unsnarl-darwin-arm64/package.json");
-const cargoToml = Deno.readTextFileSync(`${REPO_ROOT}/Cargo.toml`);
-const esc = target.replace(/[.+]/g, "\\$&");
-if (root.version !== target) {
-  abort(`package.json version is ${root.version}, expected ${target}`);
-}
-if (root.optionalDependencies?.["unsnarl-darwin-arm64"] !== target) {
-  abort("package.json optionalDependencies.unsnarl-darwin-arm64 mismatch");
-}
-if (root.publishConfig?.tag !== newTag) {
-  abort(
-    `package.json publishConfig.tag is ${root.publishConfig?.tag}, expected ${newTag}`,
-  );
-}
-if (sub.version !== target) {
-  abort(`sub-package version is ${sub.version}, expected ${target}`);
-}
-if (sub.publishConfig?.tag !== newTag) {
-  abort("sub-package publishConfig.tag mismatch");
-}
-if (
-  !new RegExp(`\\[workspace\\.package\\]\\nversion = "${esc}"`).test(cargoToml)
-) {
-  abort(`Cargo.toml [workspace.package].version is not ${target}`);
-}
-
-// (c) every changed diff line is purely version/tag text.
-const diff = await captureOk("git diff", "git", ["diff"]);
-const tokens = [oldVersion, target, oldTag, newTag];
-for (const line of diff.split("\n")) {
-  if (!/^[+-]/.test(line)) continue; // context / blank lines
-  if (/^(\+\+\+|---)/.test(line)) continue; // file headers
-  if (!tokens.some((t) => line.includes(t))) {
-    abort(`unexpected diff line (not version/tag): ${line}`);
   }
 }
 
-// --- commit / push / open PR -------------------------------------------
-await run("add", "git", ["add", "-A"]);
-await run("commit", "git", ["commit", "-m", `Bump ${oldVersion} -> ${target}`]);
-await run("push", "git", ["push", "-u", "origin", branch]);
-await run("pr", "gh", [
-  "pr",
-  "create",
-  "--base",
-  "main",
-  "--title",
-  `Bump ${oldVersion} -> ${target}`,
-  "--body",
-  "Version-only bump produced by `mise run bump`.",
-]);
+// Commit the bump, push the branch, and open the PR.
+async function commitPushAndOpenPr(
+  branch: string,
+  oldVersion: string,
+  target: string,
+): Promise<void> {
+  await run("add", "git", ["add", "-A"]);
+  await run("commit", "git", [
+    "commit",
+    "-m",
+    `Bump ${oldVersion} -> ${target}`,
+  ]);
+  await run("push", "git", ["push", "-u", "origin", branch]);
+  await run("pr", "gh", [
+    "pr",
+    "create",
+    "--base",
+    "main",
+    "--title",
+    `Bump ${oldVersion} -> ${target}`,
+    "--body",
+    "Version-only bump produced by `mise run bump`.",
+  ]);
+}
 
-console.error(
-  `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
-);
+// --- orchestration: this call order IS the prepare-release sequence -----
+async function main(): Promise<void> {
+  const target = parseTargetVersion();
+  await assertGhAuthenticated();
+  await guardCleanMainInSync();
+
+  const oldVersion = readOldVersion(target);
+  const branch = `release-${target}`;
+  const oldTag = tagFor(oldVersion);
+  const newTag = tagFor(target);
+
+  await createReleaseBranch(branch);
+  await runBump(target);
+  await verifyBumpIsVersionOnly(target, oldVersion, oldTag, newTag);
+  await commitPushAndOpenPr(branch, oldVersion, target);
+
+  console.error(
+    `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
+  );
+}
+
+await main();
