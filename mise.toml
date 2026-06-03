@@ -27,6 +27,10 @@ run = "deno run --allow-read --allow-write --allow-run --allow-env scripts/check
 description = "Run the `no-allow-dead-code` crate's tests: the workspace-wide dead-code-suppression scan plus the scanner's own unit tests (`cargo test -p no-allow-dead-code`). `mise run check` covers this crate by testing it as one of the workspace members (not by invoking this task); run this standalone to check just the dead-code policy (see docs/dead-code-policy.md)."
 run = "cargo test -p no-allow-dead-code"
 
+[tasks."tidy:scripts"]
+description = "Format and type-check every Deno helper script under scripts/. Runs `deno fmt scripts/*.ts` (applies formatting in place) then `deno check scripts/*.ts` (type-checks each); the glob follows the flat scripts/<name>.ts convention. This is the Deno-side counterpart to `check`, which covers only the Rust workspace. Run it after editing any scripts/*.ts."
+run = "deno fmt scripts/*.ts && deno check scripts/*.ts"
+
 [tasks."build"]
 description = "Build the `uns` CLI binary in release mode. Output: target/release/uns."
 run = "cargo build --release -p unsnarl"
