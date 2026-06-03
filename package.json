@@ -1,6 +1,6 @@
 {
   "name": "unsnarl",
-  "version": "0.4.0-beta.1",
+  "version": "0.4.0-beta.2",
   "description": "Single-file ECMAScript / TypeScript scope and reference analyzer that emits a Mermaid flowchart and a deterministic IR (JSON).",
   "keywords": [
     "analyzer",
@@ -35,6 +35,6 @@
     "tag": "beta"
   },
   "optionalDependencies": {
-    "unsnarl-darwin-arm64": "0.4.0-beta.1"
+    "unsnarl-darwin-arm64": "0.4.0-beta.2"
   }
 }
