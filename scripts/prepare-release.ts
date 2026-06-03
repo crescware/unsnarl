@@ -23,15 +23,15 @@
 // Guard: must run on a clean `main` that is in sync with origin/main.
 // Does NOT run `mise run check` (by request) and does NOT merge the PR.
 //
-// Pass `--dry-run` to rehearse without outward effects: it runs the SAME
-// guards as a real run (clean main in sync with origin/main, gh
-// authenticated) and the same bump + mechanical verify (so the no-look
-// safety net is exercised), then reverts the bump and prints what a real
-// run would commit / push / open -- creating no branch, commit, push, or
-// PR. The guards are deliberately identical: rehearsing from the wrong
-// branch or a stale main would be misleading and accident-prone. (If the
-// verify itself fails, the bump is left in place for inspection -- abort
-// exits immediately, so the revert does not run.)
+// Pass `--dry-run` to rehearse without touching any external service. It
+// runs the SAME guards as a real run (clean main in sync with origin/main,
+// gh authenticated) and EVERY local step for real -- create the branch,
+// bump, verify, commit -- and skips ONLY the two steps that reach an
+// external service: `git push` and `gh pr create`. The bump is therefore
+// left committed on the local `release-x.y.z` branch; discard it with
+// `git switch main && git branch -D release-x.y.z`. (Identical guards are
+// deliberate: rehearsing from the wrong branch or a stale main would be
+// misleading and accident-prone.)
 //
 // The run order is the order `main()` calls its step functions at the
 // bottom of this file; each step's own doc comment explains what it does
@@ -142,17 +142,6 @@ function readPkg(path: string): Pkg {
   return JSON.parse(Deno.readTextFileSync(`${REPO_ROOT}/${path}`)) as Pkg;
 }
 
-// The exact set of files `bump` rewrites: the workspace + npm version
-// fields, plus the Cargo.lock it regenerates. The verify keys its "only
-// these changed" check off this list, and the dry-run revert restores
-// exactly these.
-const BUMP_FILES = [
-  "Cargo.toml",
-  "Cargo.lock",
-  "package.json",
-  "npm/unsnarl-darwin-arm64/package.json",
-];
-
 // --- steps (called in order by main()) ----------------------------------
 
 // Read and validate argv: the target version (the same shape
@@ -254,14 +243,6 @@ async function runBump(target: string): Promise<void> {
   ]);
 }
 
-// Undo the working-tree edits `bump` made, returning the tree to its
-// pre-bump state. Used by the dry-run after a successful verify. Safe
-// because requireCleanWorktree() ran first, so these files held no other
-// changes; `git restore` on an unmodified file is a no-op.
-async function restoreBumpedFiles(): Promise<void> {
-  await run("restore", "git", ["restore", ...BUMP_FILES]);
-}
-
 // Verify the bump mechanically (no human eyeballs the diff): (a) only the
 // expected files changed, (b) every version/tag field now holds the new
 // value, (c) every changed diff line is purely version/tag text.
@@ -272,7 +253,12 @@ async function verifyBumpIsVersionOnly(
   newTag: string,
 ): Promise<void> {
   // (a) only the expected files changed.
-  const EXPECTED = new Set(BUMP_FILES);
+  const EXPECTED = new Set([
+    "Cargo.toml",
+    "Cargo.lock",
+    "package.json",
+    "npm/unsnarl-darwin-arm64/package.json",
+  ]);
   // A `git status --porcelain` record is `XY PATH`: a 2-column status code,
   // one separator space, then the path. Read it NUL-terminated (`-z`) so
   // records split cleanly and paths are never quoted, and capture it raw so
@@ -341,11 +327,15 @@ async function verifyBumpIsVersionOnly(
   }
 }
 
-// Commit the bump, push the branch, and open the PR.
+// Commit the bump, then -- unless this is a dry-run -- push the branch and
+// open the PR. The commit is local and always happens; `git push` and
+// `gh pr create` are the only steps that reach an external service, so a
+// dry-run skips exactly those two (and prints what it withheld).
 async function commitPushAndOpenPr(
   branch: string,
   oldVersion: string,
   target: string,
+  dryRun: boolean,
 ): Promise<void> {
   await run("add", "git", ["add", "-A"]);
   await run("commit", "git", [
@@ -353,6 +343,12 @@ async function commitPushAndOpenPr(
     "-m",
     `Bump ${oldVersion} -> ${target}`,
   ]);
+  if (dryRun) {
+    console.error(
+      `[prepare-release] dry-run: skipping the external sends (\`git push\` of ${branch} and \`gh pr create\`)`,
+    );
+    return;
+  }
   await run("push", "git", ["push", "-u", "origin", branch]);
   await run("pr", "gh", [
     "pr",
@@ -381,30 +377,17 @@ async function main(): Promise<void> {
   const oldTag = tagFor(oldVersion);
   const newTag = tagFor(target);
 
-  if (dryRun) {
-    console.error(`[prepare-release] dry-run: would create branch ${branch}`);
-  } else {
-    await createReleaseBranch(branch);
-  }
-
+  // Every local step runs for real in both modes -- only the two external
+  // sends inside commitPushAndOpenPr are withheld for a dry-run.
+  await createReleaseBranch(branch);
   await runBump(target);
   await verifyBumpIsVersionOnly(target, oldVersion, oldTag, newTag);
-
-  if (dryRun) {
-    // Verify passed -> the bump is a clean version-only change. Revert it
-    // so the rehearsal leaves no trace, and print what a real run would do
-    // next instead of committing / pushing / opening the PR.
-    await restoreBumpedFiles();
-    console.error(
-      `[prepare-release] dry-run: bump verified as version-only and reverted; a real run would commit "Bump ${oldVersion} -> ${target}", push ${branch}, and open the PR`,
-    );
-    return;
-  }
-
-  await commitPushAndOpenPr(branch, oldVersion, target);
+  await commitPushAndOpenPr(branch, oldVersion, target, dryRun);
 
   console.error(
-    `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
+    dryRun
+      ? `[prepare-release] dry-run done: committed "Bump ${oldVersion} -> ${target}" on local branch ${branch}; push + PR skipped. Discard with: git switch main && git branch -D ${branch}`
+      : `[prepare-release] done: ${branch} pushed and PR opened (${oldVersion} -> ${target})`,
   );
 }
 
