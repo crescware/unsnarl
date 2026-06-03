@@ -44,7 +44,7 @@ description = "Shortcut for `mise run npm:publish -- --dry-run`. Runs both publi
 run = "deno run --allow-read --allow-run scripts/npm-publish.ts --dry-run"
 
 [tasks."release"]
-description = "Run the post-merge release sequence as one command so the GitHub Release can never be skipped: dry-run publish (gate on exit code only) -> `git tag vX.Y.Z` on HEAD (the merge commit) + push -> real npm:publish -> `gh release create vX.Y.Z --generate-notes --verify-tag` (plus `--prerelease` for a pre-release version). Does NOT bump or merge the bump PR; run it after the bump PR is merged and pulled so HEAD is the commit to tag. If the Release already exists it exits 0 without touching anything. npm-publish.ts is invoked as a subprocess with inherited stdio so npm's passkey browser flow keeps working."
+description = "Run the post-merge release sequence as one command so the GitHub Release can never be skipped: check out main + `git pull --ff-only origin main` -> dry-run publish (gate on exit code only) -> guard that we are on a clean main in sync with origin/main -> `git tag vX.Y.Z` on main's merge commit + push -> real npm:publish -> `gh release create vX.Y.Z --generate-notes --verify-tag` (plus `--prerelease` for a pre-release version). Does NOT bump or merge the bump PR; run it after the bump PR is merged -- it is fine to run from the `release-x.y.z` branch since the script checks out main and pulls itself. If the Release already exists it exits 0 without touching anything. npm-publish.ts is invoked as a subprocess with inherited stdio so npm's passkey browser flow keeps working."
 run = "deno run --allow-read --allow-run scripts/release.ts"
 
 [tasks."prepare-release"]
