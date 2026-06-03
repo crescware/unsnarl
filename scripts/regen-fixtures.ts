@@ -138,7 +138,8 @@ function variantDirName(kind: string, slug: string): string {
 }
 
 function needsPruning(kind: string): boolean {
-  return kind === "pruned" || kind === "pruned-depth" || kind === "pruned-highlight";
+  return kind === "pruned" || kind === "pruned-depth" ||
+    kind === "pruned-highlight";
 }
 
 function needsHighlight(kind: string): boolean {
@@ -249,7 +250,12 @@ for (const dir of fixtureDirs) {
     for (const b of VARIANT_BASELINES) {
       const outFile = `${varDir}/${b.fileName}`;
       const ok = await runUns([
-        "-f", b.format, ...extraFlags, "--out-file", outFile, relInput,
+        "-f",
+        b.format,
+        ...extraFlags,
+        "--out-file",
+        outFile,
+        relInput,
       ]);
       if (ok) generated++;
       else failed++;
@@ -266,7 +272,13 @@ for (const dir of fixtureDirs) {
         continue;
       }
       const ok = await runUns([
-        "-f", b.format, "--plugin", slug, "--out-file", outFile, relInput,
+        "-f",
+        b.format,
+        "--plugin",
+        slug,
+        "--out-file",
+        outFile,
+        relInput,
       ]);
       if (ok) generated++;
       else failed++;
@@ -274,7 +286,9 @@ for (const dir of fixtureDirs) {
   }
 
   if (i % 50 === 0) {
-    console.error(`progress: ${i}/${total} generated=${generated} failed=${failed}`);
+    console.error(
+      `progress: ${i}/${total} generated=${generated} failed=${failed}`,
+    );
   }
 }
 

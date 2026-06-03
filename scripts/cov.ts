@@ -50,7 +50,9 @@ async function captureStdout(cmd: string, args: string[]): Promise<string> {
   return new TextDecoder().decode(stdout);
 }
 
-async function locateLlvmTools(): Promise<{ profdata: string; llvmcov: string }> {
+async function locateLlvmTools(): Promise<
+  { profdata: string; llvmcov: string }
+> {
   const sysroot = (await captureStdout("rustc", ["--print", "sysroot"])).trim();
   const verbose = await captureStdout("rustc", ["-vV"]);
   const host = verbose.match(/^host:\s*(.+)$/m)?.[1].trim();
@@ -67,7 +69,9 @@ async function locateLlvmTools(): Promise<{ profdata: string; llvmcov: string }>
       if (!s.isFile) throw new Error("not a file");
     } catch {
       console.error(`missing ${bin}`);
-      console.error("install the rustup component:   rustup component add llvm-tools-preview");
+      console.error(
+        "install the rustup component:   rustup component add llvm-tools-preview",
+      );
       Deno.exit(1);
     }
   }
@@ -85,7 +89,9 @@ function rmrf(path: string) {
 function listProfraws(): string[] {
   const out: string[] = [];
   for (const e of Deno.readDirSync(PROF_DIR)) {
-    if (e.isFile && e.name.endsWith(".profraw")) out.push(`${PROF_DIR}/${e.name}`);
+    if (e.isFile && e.name.endsWith(".profraw")) {
+      out.push(`${PROF_DIR}/${e.name}`);
+    }
   }
   return out;
 }
@@ -237,7 +243,9 @@ if (filter) {
   // trailing TOTAL line so the filtered view is self-describing.
   const re = new RegExp(filter);
   const lines = report.split("\n");
-  const out = lines.filter((line, i) => i < 2 || re.test(line) || /^TOTAL/.test(line));
+  const out = lines.filter((line, i) =>
+    i < 2 || re.test(line) || /^TOTAL/.test(line)
+  );
   console.log(out.join("\n"));
 } else {
   Deno.stdout.writeSync(reportBytes);
