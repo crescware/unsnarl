@@ -23,12 +23,13 @@
 // Guard: must run on a clean `main` that is in sync with origin/main.
 // Does NOT run `mise run check` (by request) and does NOT merge the PR.
 //
-// Pass `--dry-run` to rehearse without outward effects: it still runs the
-// bump and the mechanical verify (so the no-look safety net is exercised),
-// then reverts the bump and prints what a real run would commit / push /
-// open -- creating no branch, commit, push, or PR. A dry-run only requires
-// a clean working tree; it skips the gh-auth and on-main/in-sync checks,
-// which gate the branch/commit/push/PR a dry-run never performs. (If the
+// Pass `--dry-run` to rehearse without outward effects: it runs the SAME
+// guards as a real run (clean main in sync with origin/main, gh
+// authenticated) and the same bump + mechanical verify (so the no-look
+// safety net is exercised), then reverts the bump and prints what a real
+// run would commit / push / open -- creating no branch, commit, push, or
+// PR. The guards are deliberately identical: rehearsing from the wrong
+// branch or a stale main would be misleading and accident-prone. (If the
 // verify itself fails, the bump is left in place for inspection -- abort
 // exits immediately, so the revert does not run.)
 //
@@ -189,30 +190,23 @@ async function assertGhAuthenticated(): Promise<void> {
   }
 }
 
-// The working tree must be clean before we touch it: `bump` rewrites
-// tracked files in place, and both the mechanical verify and the dry-run
-// revert assume those edits are the ONLY changes present. Required in both
-// real and dry-run modes.
-async function requireCleanWorktree(): Promise<void> {
-  const status = await captureOk("git status --porcelain", "git", [
-    "status",
-    "--porcelain",
-  ]);
-  if (status !== "") abort("working tree is not clean");
-}
-
-// A real run must be on main, in sync with origin/main, so the branch is
-// cut from -- and the bump diff measured against -- the real tip. The
-// clean-tree half is requireCleanWorktree(), shared with dry-run; a
-// dry-run skips this on-main/in-sync check since it neither branches nor
-// pushes.
-async function guardOnMainInSync(): Promise<void> {
+// Must run on a clean main that is in sync with origin/main, so the branch
+// is cut from -- and the bump diff measured against -- the real tip. A
+// dry-run runs this same guard: rehearsing from the wrong branch or a
+// stale main would be misleading and accident-prone, so it is held to the
+// identical preconditions even though it never branches or pushes.
+async function guardCleanMainInSync(): Promise<void> {
   const branch = await captureOk("git rev-parse --abbrev-ref HEAD", "git", [
     "rev-parse",
     "--abbrev-ref",
     "HEAD",
   ]);
   if (branch !== "main") abort(`must run on main (currently on ${branch})`);
+  const status = await captureOk("git status --porcelain", "git", [
+    "status",
+    "--porcelain",
+  ]);
+  if (status !== "") abort("working tree is not clean");
   await run("fetch", "git", ["fetch", "origin", "main"]);
   const local = await captureOk("git rev-parse HEAD", "git", [
     "rev-parse",
@@ -376,15 +370,11 @@ async function commitPushAndOpenPr(
 async function main(): Promise<void> {
   const { target, dryRun } = parseArgs();
 
-  await requireCleanWorktree();
-  if (dryRun) {
-    console.error(
-      "[prepare-release] dry-run: skipping gh-auth and the on-main/in-sync checks",
-    );
-  } else {
-    await assertGhAuthenticated();
-    await guardOnMainInSync();
-  }
+  // A dry-run is held to the same preconditions as a real run -- being on
+  // a clean, in-sync main -- so a rehearsal can never be run (and trusted)
+  // from the wrong branch or a stale main.
+  await assertGhAuthenticated();
+  await guardCleanMainInSync();
 
   const oldVersion = readOldVersion(target);
   const branch = `release-${target}`;
