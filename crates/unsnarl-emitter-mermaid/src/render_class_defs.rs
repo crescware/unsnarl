@@ -1,7 +1,7 @@
 //! Emits the trailing `classDef` / `class` lines that style boundary
 //! stubs, var nodes, per-depth nest fills, and the visible-border
-//! treatment for subgraphs whose perimeter is the terminus of an
-//! ordinary edge.
+//! treatment for subgraphs whose perimeter is the terminus *or* the
+//! origin of an ordinary edge.
 
 use std::collections::{HashMap, HashSet};
 
@@ -12,6 +12,7 @@ pub fn render_class_defs(
     var_ids: &[String],
     nest_class_map: &HashMap<usize, Vec<String>>,
     edge_target_subgraph_ids: &HashSet<String>,
+    edge_source_subgraph_ids: &HashSet<String>,
     theme: &ColorTheme,
     lines: &mut Vec<String>,
 ) {
@@ -43,6 +44,13 @@ pub fn render_class_defs(
     }
     emit_nest_class_defs(nest_class_map, theme, lines);
     emit_edge_target_subgraph_class_def(edge_target_subgraph_ids, nest_class_map, theme, lines);
+    emit_edge_source_subgraph_class_def(
+        edge_source_subgraph_ids,
+        edge_target_subgraph_ids,
+        nest_class_map,
+        theme,
+        lines,
+    );
 }
 
 /// When at least one subgraph is an edge terminus, emit a
@@ -76,6 +84,44 @@ fn emit_edge_target_subgraph_class_def(
         for id in ids {
             if edge_target_subgraph_ids.contains(id) {
                 lines.push(format!("  class {id} edgeTargetSubgraph;"));
+            }
+        }
+    }
+}
+
+/// Mirror of [`emit_edge_target_subgraph_class_def`] for subgraphs
+/// that are an edge *origin* rather than a terminus. A subgraph that
+/// is already an edge target keeps its `edgeTargetSubgraph` stroke
+/// and is skipped here, so the two classes never paint the same id
+/// twice and only source-*only* subgraphs receive
+/// `edgeSourceSubgraph`. Ids are iterated in the same
+/// depth-then-emit order the `nestL<N>` classDefs use so the new
+/// `class` lines stay deterministic.
+fn emit_edge_source_subgraph_class_def(
+    edge_source_subgraph_ids: &HashSet<String>,
+    edge_target_subgraph_ids: &HashSet<String>,
+    nest_class_map: &HashMap<usize, Vec<String>>,
+    theme: &ColorTheme,
+    lines: &mut Vec<String>,
+) {
+    let has_source_only = edge_source_subgraph_ids
+        .iter()
+        .any(|id| !edge_target_subgraph_ids.contains(id));
+    if !has_source_only {
+        return;
+    }
+    lines.push(format!(
+        "  classDef edgeSourceSubgraph stroke:{};",
+        theme.edge_source_subgraph.stroke
+    ));
+    let palette_length = theme.nest_palette.len();
+    for slot in 0..palette_length {
+        let Some(ids) = nest_class_map.get(&slot) else {
+            continue;
+        };
+        for id in ids {
+            if edge_source_subgraph_ids.contains(id) && !edge_target_subgraph_ids.contains(id) {
+                lines.push(format!("  class {id} edgeSourceSubgraph;"));
             }
         }
     }
