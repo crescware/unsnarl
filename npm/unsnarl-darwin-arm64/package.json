@@ -1,6 +1,6 @@
 {
   "name": "unsnarl-darwin-arm64",
-  "version": "0.4.0-beta.2",
+  "version": "0.4.0",
   "description": "Prebuilt unsnarl CLI binary for darwin-arm64.",
   "homepage": "https://github.com/crescware/unsnarl#readme",
   "bugs": {
@@ -23,7 +23,7 @@
   ],
   "publishConfig": {
     "access": "public",
-    "tag": "beta"
+    "tag": "latest"
   },
   "scripts": {
     "prepack": "mise run npm:build-darwin-arm64"
