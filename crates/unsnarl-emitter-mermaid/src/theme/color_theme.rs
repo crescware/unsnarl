@@ -36,6 +36,17 @@ pub struct EdgeTargetSubgraphColors {
     pub stroke: &'static str,
 }
 
+/// Stroke applied as a *second* class to subgraphs that appear as
+/// the *origin* (`from`) of at least one ordinary edge — the mirror
+/// of [`EdgeTargetSubgraphColors`] for the opposite endpoint, so an
+/// arrow leaving a subgraph draws the same visible border as one
+/// arriving. A subgraph that is already an edge target keeps its
+/// `edgeTargetSubgraph` stroke and is not styled again here, so the
+/// two classes never paint the same id twice.
+pub struct EdgeSourceSubgraphColors {
+    pub stroke: &'static str,
+}
+
 pub struct HighlightColors {
     pub fill: &'static str,
     pub stroke: &'static str,
@@ -53,6 +64,7 @@ pub struct ColorTheme {
     /// a target.
     pub nest_palette: &'static [NestPaletteEntry],
     pub edge_target_subgraph: EdgeTargetSubgraphColors,
+    pub edge_source_subgraph: EdgeSourceSubgraphColors,
     pub highlight: HighlightColors,
 }
 

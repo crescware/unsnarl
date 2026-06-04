@@ -16,6 +16,7 @@ use unsnarl_visual_graph::visual_element::VisualElement;
 use unsnarl_visual_graph::visual_graph::VisualGraph;
 use unsnarl_visual_graph::visual_node::VisualNode;
 
+use crate::collect_edge_source_subgraph_ids::collect_edge_source_subgraph_ids;
 use crate::collect_edge_target_subgraph_ids::collect_edge_target_subgraph_ids;
 use crate::collect_highlight_edge_indices::collect_highlight_edge_indices;
 use crate::collect_import_sources::collect_import_sources;
@@ -177,11 +178,13 @@ fn render_mermaid(
     let mut subgraph_ids: HashSet<String> = HashSet::new();
     collect_subgraph_ids(&graph.elements, &mut subgraph_ids);
     let edge_target_subgraph_ids = collect_edge_target_subgraph_ids(&graph.edges, &subgraph_ids);
+    let edge_source_subgraph_ids = collect_edge_source_subgraph_ids(&graph.edges, &subgraph_ids);
     render_class_defs(
         &stub_ids,
         &var_ids,
         &state.nest_class_map,
         &edge_target_subgraph_ids,
+        &edge_source_subgraph_ids,
         state.theme,
         &mut state.lines,
     );

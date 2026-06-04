@@ -61,4 +61,6 @@ flowchart RL
   class s_scope_2 nestL4;
   classDef nestL5 fill:#364666,stroke:transparent;
   class s_return_scope_0_Counter_40_153_168 nestL5;
+  classDef edgeSourceSubgraph stroke:#888;
+  class call_proxy_102 edgeSourceSubgraph;
 ```

@@ -5,6 +5,7 @@
 //! colors. Both are picked at the CLI / pipeline boundary and handed
 //! to [`MermaidEmitter`] at construction time.
 
+pub mod collect_edge_source_subgraph_ids;
 pub mod collect_edge_target_subgraph_ids;
 pub mod collect_highlight_edge_indices;
 pub mod collect_import_sources;

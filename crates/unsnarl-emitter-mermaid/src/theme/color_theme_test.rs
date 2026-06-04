@@ -3,8 +3,8 @@
 //! stops compiling and the test fails to build.
 
 use super::{
-    BoundaryStubColors, ColorTheme, EdgeTargetSubgraphColors, ElkEmptyPlaceholderColors,
-    HighlightColors, NestPaletteEntry, VarNodeColors,
+    BoundaryStubColors, ColorTheme, EdgeSourceSubgraphColors, EdgeTargetSubgraphColors,
+    ElkEmptyPlaceholderColors, HighlightColors, NestPaletteEntry, VarNodeColors,
 };
 
 static MIN_THEME: ColorTheme = ColorTheme {
@@ -25,6 +25,7 @@ static MIN_THEME: ColorTheme = ColorTheme {
         stroke: "#222",
     }],
     edge_target_subgraph: EdgeTargetSubgraphColors { stroke: "#333" },
+    edge_source_subgraph: EdgeSourceSubgraphColors { stroke: "#444" },
     highlight: HighlightColors {
         fill: "#ff0",
         stroke: "#cc0",
