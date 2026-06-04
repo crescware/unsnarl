@@ -33,7 +33,7 @@ use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_root_query::ParsedRootQuery;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
-use unsnarl_visual_graph::highlight::{collect_highlight_ids, HighlightRunOptions};
+use unsnarl_visual_graph::highlight::{collect_highlight_path_ids, HighlightRunOptions};
 use unsnarl_visual_graph::prune::{
     prune_visual_graph, resolve_ambiguous_queries, PruneOptions, RootQueryResolution,
 };
@@ -407,11 +407,12 @@ fn prepare_emit(
             HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
             // Queries mode (`-H <raw>`) uses the looser highlight matcher
             // so explicit highlight queries paint every occurrence of the
-            // identifier.
+            // identifier. POC (#90): the path / direction reachability
+            // collector handles point, `a..b`, and `a..+a/+b/+c` shapes;
+            // it resolves each endpoint's `LineOrName` ambiguity itself.
             HighlightRunOptions::Queries(queries) => {
                 let working = pruned_graph.as_ref().unwrap_or(&base);
-                let resolved = resolve_ambiguous_queries(working, queries);
-                collect_highlight_ids(working, &resolved.resolved)
+                collect_highlight_path_ids(working, queries)
             }
         }
     });

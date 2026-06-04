@@ -11,10 +11,10 @@
 //! `-H` alone follows whatever `-r` selects). `Queries` carries its
 //! own query list, which is what `-H <value>` produces.
 
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_root_query::RootQuery;
 
 #[derive(Clone)]
 pub enum HighlightRunOptions {
     Roots,
-    Queries(Vec<ParsedRootQuery>),
+    Queries(Vec<RootQuery>),
 }

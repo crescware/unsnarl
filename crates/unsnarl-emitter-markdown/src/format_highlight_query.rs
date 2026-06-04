@@ -9,7 +9,7 @@
 //! multi-token `-H "a,L7"` keeps its comma form rather than getting
 //! normalized.
 
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_root_query::RootQuery;
 use unsnarl_visual_graph::highlight::HighlightRunOptions;
 
 pub fn format_highlight_query(h: &HighlightRunOptions) -> String {
@@ -22,13 +22,10 @@ pub fn format_highlight_query(h: &HighlightRunOptions) -> String {
     }
 }
 
-fn query_raw(q: &ParsedRootQuery) -> &str {
+fn query_raw(q: &RootQuery) -> &str {
     match q {
-        ParsedRootQuery::Line { raw, .. }
-        | ParsedRootQuery::LineName { raw, .. }
-        | ParsedRootQuery::Range { raw, .. }
-        | ParsedRootQuery::RangeName { raw, .. }
-        | ParsedRootQuery::Name { raw, .. }
-        | ParsedRootQuery::LineOrName { raw, .. } => raw,
+        RootQuery::Single { raw, .. }
+        | RootQuery::Path { raw, .. }
+        | RootQuery::Direction { raw, .. } => raw,
     }
 }

@@ -25,7 +25,7 @@
 use std::ffi::OsString;
 use std::path::PathBuf;
 
-use unsnarl_root_query::parse_root_queries;
+use unsnarl_root_query::{parse_highlight_queries, parse_root_queries};
 
 use super::cli_color_theme::CliColorTheme;
 use super::cli_format::CliFormat;
@@ -429,7 +429,7 @@ impl Args {
         self.highlight = match raw_highlight {
             None => Highlight::Absent,
             Some(None) => Highlight::NoValue,
-            Some(Some(raw)) => match parse_root_queries(&raw) {
+            Some(Some(raw)) => match parse_highlight_queries(&raw) {
                 Ok(qs) => Highlight::Value(qs),
                 Err(msg) => return Err(ParseError::value_validation(msg)),
             },
