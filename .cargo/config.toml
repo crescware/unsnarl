@@ -1,0 +1,17 @@
+[build]
+# Cache compiled crates across invocations with sccache. cargo's own
+# freshness check already skips recompiling unchanged crates within one
+# checkout, but it goes cold on `cargo clean`, a branch switch, or a
+# profile change — exactly the cases where the workspace gets recompiled
+# from scratch. sccache replays cached object files for those, so a
+# re-run / post-clean / post-switch build is a cache replay instead of a
+# full recompile.
+#
+# `incremental = false` because sccache cannot cache incremental
+# compilation units; at this workspace's many-small-crates granularity,
+# crate-level caching across invocations is worth more than intra-crate
+# incremental within one. Applied globally (not just to `mise run check`)
+# so the IDE and the check share one artifact set instead of thrashing
+# each other's caches.
+rustc-wrapper = "sccache"
+incremental = false
