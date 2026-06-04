@@ -147,6 +147,7 @@ pub fn emit_ir_detailed(
                 resolutions: None,
                 depths: None,
                 highlight_ids: None,
+                highlight_point_ids: None,
                 highlight: None,
             },
         )
@@ -327,6 +328,7 @@ struct PreparedEmit {
     resolutions: Option<Vec<RootQueryResolution>>,
     per_query: Option<Vec<PrunePerQueryDetail>>,
     highlight_ids: Option<Vec<String>>,
+    highlight_point_ids: Option<Vec<String>>,
     highlight: Option<HighlightRunOptions>,
 }
 
@@ -396,32 +398,44 @@ fn prepare_emit(
         }
     }
 
-    let highlight_ids = highlight.map(|h| {
+    let highlight_selection = highlight.map(|h| {
         let _span = unsnarl_instrumentation::span!("highlight");
         match h {
             // Roots mode mirrors `-r`'s match set verbatim, so it inherits
             // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
             // and `-r counter -H` exclude the same use-site kinds). When
             // `-r` was not given the prune root set is empty — paint
-            // nothing.
-            HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
+            // nothing. Roots highlight is a point treatment, so every id
+            // is also a point id (radius-1 edge rule).
+            HighlightRunOptions::Roots => {
+                let ids = prune_root_ids.clone().unwrap_or_default();
+                let point_ids = ids.clone();
+                (ids, point_ids)
+            }
             // Queries mode (`-H <raw>`) uses the looser highlight matcher
             // so explicit highlight queries paint every occurrence of the
             // identifier. POC (#90): the path / direction reachability
             // collector handles point, `a..b`, and `a..+a/+b/+c` shapes;
-            // it resolves each endpoint's `LineOrName` ambiguity itself.
+            // it resolves each endpoint's `LineOrName` ambiguity itself and
+            // reports which ids are point hits (vs reachability hits).
             HighlightRunOptions::Queries(queries) => {
                 let working = pruned_graph.as_ref().unwrap_or(&base);
-                collect_highlight_path_ids(working, queries)
+                let sel = collect_highlight_path_ids(working, queries);
+                (sel.ids, sel.point_ids)
             }
         }
     });
+    let (highlight_ids, highlight_point_ids) = match highlight_selection {
+        Some((ids, point_ids)) => (Some(ids), Some(point_ids)),
+        None => (None, None),
+    };
 
     PreparedEmit {
         pruned_graph,
         resolutions: resolutions_out,
         per_query: per_query_out,
         highlight_ids,
+        highlight_point_ids,
         highlight: highlight.cloned(),
     }
 }
@@ -460,6 +474,7 @@ fn emit_pruning_aware_with(
             resolutions: None,
             per_query: None,
             highlight_ids: None,
+            highlight_point_ids: None,
             highlight: None,
         }
     };
@@ -476,6 +491,7 @@ fn emit_pruning_aware_with(
                 resolutions: prepared.resolutions,
                 depths: run.depths.cloned(),
                 highlight_ids: prepared.highlight_ids,
+                highlight_point_ids: prepared.highlight_point_ids,
                 highlight: prepared.highlight,
             },
         )

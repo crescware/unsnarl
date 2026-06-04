@@ -63,56 +63,79 @@ fn path(lhs: &str, rhs: &str) -> RootQuery {
 
 #[test]
 fn empty_queries_return_empty() {
-    assert!(collect_highlight_path_ids(&chain_graph(), &[]).is_empty());
+    let sel = collect_highlight_path_ids(&chain_graph(), &[]);
+    assert!(sel.ids.is_empty());
+    assert!(sel.point_ids.is_empty());
 }
 
 #[test]
-fn single_query_paints_only_the_matched_point() {
-    let ids = collect_highlight_path_ids(
+fn single_query_paints_only_the_matched_point_and_records_it_as_a_point_id() {
+    let sel = collect_highlight_path_ids(
         &chain_graph(),
         &[RootQuery::Single {
             query: name("b"),
             raw: "b".to_string(),
         }],
     );
-    assert_eq!(ids, vec!["n_b"]);
+    assert_eq!(sel.ids, vec!["n_b"]);
+    // A point query keeps the radius-1 edge rule, so the id is a point id.
+    assert_eq!(sel.point_ids, vec!["n_b"]);
 }
 
 #[test]
 fn direction_after_paints_the_forward_reachable_set_including_the_seed() {
-    let ids = collect_highlight_path_ids(&chain_graph(), &[direction("a", QueryDir::After)]);
-    // Walk order over the element tree.
-    assert_eq!(ids, vec!["n_a", "n_b", "n_c", "n_d"]);
+    let sel = collect_highlight_path_ids(&chain_graph(), &[direction("a", QueryDir::After)]);
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c", "n_d"]);
+    // Reachability hits are NOT point ids: edges paint both-endpoint only.
+    assert!(sel.point_ids.is_empty());
 }
 
 #[test]
 fn direction_before_paints_the_backward_reachable_set() {
-    let ids = collect_highlight_path_ids(&chain_graph(), &[direction("c", QueryDir::Before)]);
-    assert_eq!(ids, vec!["n_a", "n_b", "n_c"]);
+    let sel = collect_highlight_path_ids(&chain_graph(), &[direction("c", QueryDir::Before)]);
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c"]);
+    assert!(sel.point_ids.is_empty());
 }
 
 #[test]
 fn direction_context_paints_both_directions() {
-    let ids = collect_highlight_path_ids(&chain_graph(), &[direction("b", QueryDir::Context)]);
-    assert_eq!(ids, vec!["n_a", "n_b", "n_c", "n_d"]);
+    let sel = collect_highlight_path_ids(&chain_graph(), &[direction("b", QueryDir::Context)]);
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c", "n_d"]);
 }
 
 #[test]
 fn path_paints_the_nodes_between_the_two_endpoints_excluding_off_path_branches() {
-    let ids = collect_highlight_path_ids(&chain_graph(), &[path("a", "c")]);
+    let sel = collect_highlight_path_ids(&chain_graph(), &[path("a", "c")]);
     // n_d hangs off n_b but is not on any a<->c route.
-    assert_eq!(ids, vec!["n_a", "n_b", "n_c"]);
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c"]);
 }
 
 #[test]
 fn path_is_direction_independent() {
     let forward = collect_highlight_path_ids(&chain_graph(), &[path("a", "c")]);
     let backward = collect_highlight_path_ids(&chain_graph(), &[path("c", "a")]);
-    assert_eq!(forward, backward);
+    assert_eq!(forward.ids, backward.ids);
 }
 
 #[test]
 fn path_with_no_connecting_route_paints_nothing() {
-    let ids = collect_highlight_path_ids(&chain_graph(), &[path("a", "iso")]);
-    assert!(ids.is_empty());
+    let sel = collect_highlight_path_ids(&chain_graph(), &[path("a", "iso")]);
+    assert!(sel.ids.is_empty());
+}
+
+#[test]
+fn a_point_query_combined_with_a_direction_records_only_the_point_as_a_point_id() {
+    let sel = collect_highlight_path_ids(
+        &chain_graph(),
+        &[
+            RootQuery::Single {
+                query: name("d"),
+                raw: "d".to_string(),
+            },
+            direction("a", QueryDir::After),
+        ],
+    );
+    // Full set is the forward reach of a (a,b,c,d); only d is a point id.
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c", "n_d"]);
+    assert_eq!(sel.point_ids, vec!["n_d"]);
 }

@@ -43,6 +43,29 @@ pub fn render_highlight(
     }
 }
 
+/// Highlight subgraphs that sit on a path/direction (POC #90 judgment
+/// B). Subgraphs cannot be recolored by an inline `style` row the way
+/// nodes are, so they reuse the project's subgraph-coloring mechanism: a
+/// single `classDef` plus one `class` row per id. Emitted after the
+/// `nestL<N>` / edge-border classes so its stroke and fill win.
+pub fn render_highlight_subgraphs(
+    subgraph_ids: &[String],
+    theme: &ColorTheme,
+    lines: &mut Vec<String>,
+) {
+    if subgraph_ids.is_empty() {
+        return;
+    }
+    let h = &theme.highlight;
+    lines.push(format!(
+        "  classDef highlightSubgraph fill:{},stroke:{};",
+        h.fill, h.stroke
+    ));
+    for id in subgraph_ids {
+        lines.push(format!("  class {id} highlightSubgraph;"));
+    }
+}
+
 #[cfg(test)]
 #[path = "render_highlight_test.rs"]
 mod render_highlight_test;

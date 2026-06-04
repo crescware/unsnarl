@@ -1,32 +1,30 @@
 //! POC (issue #90) reachability collector for the richer highlight
 //! grammar.
 //!
-//! Given a list of [`RootQuery`] (point / path / direction), returns
-//! the ids of every visible node to highlight, computed over the
-//! VisualGraph's `edges` (post-pruning). This is decision 1-A from the
-//! design discussion: reachability rides the drawn graph, not the IR.
+//! Given a list of [`RootQuery`] (point / path / direction), returns a
+//! [`HighlightSelection`]: the ids to highlight plus the point-query
+//! subset. Reachability is computed over the VisualGraph's `edges`
+//! (post-pruning) — decision 1-A, the drawn graph not the IR.
 //!
 //! - `Single`  -> the existing point match (every node the endpoint
-//!   query matches).
+//!   query matches). Recorded in `point_ids` too, so the renderer keeps
+//!   the radius-1 'either endpoint' edge treatment for it.
 //! - `Direction { lhs, +a }` -> `lhs` plus every node forward-reachable
 //!   from it; `+b` backward; `+c` both.
 //! - `Path { lhs, rhs }` -> direction-independent: the union of nodes
 //!   on a directed path either way, expressed as the set intersection
-//!   `(reach_fwd(lhs) ∩ reach_bwd(rhs)) ∪ (reach_fwd(rhs) ∩
-//!   reach_bwd(lhs))`. No path *enumeration*, so cycles and fan-out
-//!   are handled for free.
+//!   `(reach_fwd(lhs) n reach_bwd(rhs)) u (reach_fwd(rhs) n
+//!   reach_bwd(lhs))`. No path *enumeration*, so cycles and fan-out are
+//!   handled for free.
 //!
-//! Empty results (an endpoint that matches nothing, or a `Path` with
-//! no connecting route) emit a stderr warning and contribute nothing,
+//! Reachability rides `graph.edges`, whose endpoints can be node *or*
+//! subgraph ids, and the emit walks the whole element tree — so a
+//! subgraph or a non-root-candidate node that sits on a path is part of
+//! the selection (judgment B), not silently dropped.
+//!
+//! Empty results (an endpoint that matches nothing, or a `Path` with no
+//! connecting route) emit a stderr warning and contribute nothing,
 //! leaving the exit code untouched (decision 3).
-//!
-//! Known POC gaps, deliberately left to surface in review:
-//! - The reachable set can contain subgraph ids and non-root-candidate
-//!   nodes that the final walk-order emit drops, so a path that travels
-//!   *through* a subgraph border paints the inner nodes but not the
-//!   subgraph itself (judgment B).
-//! - Edge painting still uses the existing "either endpoint" rule, so a
-//!   set boundary bleeds one edge outward (judgment A).
 
 use std::collections::{HashMap, HashSet};
 
@@ -36,21 +34,42 @@ use crate::highlight::node_matches_highlight_query::node_matches_highlight_query
 use crate::prune::iterate_visual_nodes::iterate_visual_nodes;
 use crate::prune::resolve_ambiguous_queries;
 use crate::visual_edge::VisualEdge;
+use crate::visual_element::VisualElement;
 use crate::visual_graph::VisualGraph;
 
-pub fn collect_highlight_path_ids(graph: &VisualGraph, queries: &[RootQuery]) -> Vec<String> {
+/// What to highlight, resolved against a graph.
+pub struct HighlightSelection {
+    /// Every id to highlight, in element-tree walk order (nodes and
+    /// subgraphs). The renderer styles these.
+    pub ids: Vec<String>,
+    /// The subset contributed by point (`Single`) queries. The renderer
+    /// keeps the radius-1 'either endpoint' edge rule for these; ids
+    /// that are *only* reachability hits paint an edge only when BOTH
+    /// endpoints are in the set (judgment A — no boundary bleed).
+    pub point_ids: Vec<String>,
+}
+
+pub fn collect_highlight_path_ids(
+    graph: &VisualGraph,
+    queries: &[RootQuery],
+) -> HighlightSelection {
     if queries.is_empty() {
-        return Vec::new();
+        return HighlightSelection {
+            ids: Vec::new(),
+            point_ids: Vec::new(),
+        };
     }
     let fwd = build_adjacency(&graph.edges, EdgeEnd::From);
     let bwd = build_adjacency(&graph.edges, EdgeEnd::To);
 
     let mut set: HashSet<String> = HashSet::new();
+    let mut point_set: HashSet<String> = HashSet::new();
     for q in queries {
         match q {
             RootQuery::Single { query, .. } => {
                 for id in seed_ids(graph, query) {
-                    set.insert(id);
+                    set.insert(id.clone());
+                    point_set.insert(id);
                 }
             }
             RootQuery::Direction { lhs, dir, raw, .. } => {
@@ -97,7 +116,13 @@ pub fn collect_highlight_path_ids(graph: &VisualGraph, queries: &[RootQuery]) ->
         }
     }
 
-    emit_in_walk_order(graph, &set)
+    let ids = emit_in_walk_order(graph, &set);
+    let point_ids = ids
+        .iter()
+        .filter(|id| point_set.contains(id.as_str()))
+        .cloned()
+        .collect();
+    HighlightSelection { ids, point_ids }
 }
 
 enum EdgeEnd {
@@ -106,8 +131,8 @@ enum EdgeEnd {
 }
 
 /// Build a directed adjacency map keyed by the chosen endpoint. The
-/// keys / values borrow the edge strings, so the map lives only as
-/// long as `edges`.
+/// keys / values borrow the edge strings, so the map lives only as long
+/// as `edges`.
 fn build_adjacency(edges: &[VisualEdge], key_on: EdgeEnd) -> HashMap<&str, Vec<&str>> {
     let mut adj: HashMap<&str, Vec<&str>> = HashMap::new();
     for e in edges {
@@ -164,19 +189,33 @@ fn seed_ids(graph: &VisualGraph, endpoint: &ParsedRootQuery) -> Vec<String> {
     ids
 }
 
-/// Emit the highlighted ids in `iterate_visual_nodes` walk order with
-/// duplicates removed, matching `collect_highlight_ids`'s contract so
-/// the emitter's byte output stays deterministic.
+/// Emit the highlighted ids in element-tree walk order with duplicates
+/// removed. Walks *every* element (nodes and subgraphs), so a subgraph
+/// or non-root-candidate node in the set is emitted too. For point
+/// queries the set holds only matched root-candidate nodes, so this
+/// reproduces `collect_highlight_ids`'s order byte-for-byte.
 fn emit_in_walk_order(graph: &VisualGraph, set: &HashSet<String>) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     let mut emitted: HashSet<String> = HashSet::new();
-    iterate_visual_nodes(&graph.elements, &mut |node| {
-        let id = node.id();
+    walk_elements(&graph.elements, set, &mut out, &mut emitted);
+    out
+}
+
+fn walk_elements(
+    elements: &[VisualElement],
+    set: &HashSet<String>,
+    out: &mut Vec<String>,
+    emitted: &mut HashSet<String>,
+) {
+    for el in elements {
+        let id = el.id();
         if set.contains(id) && emitted.insert(id.to_string()) {
             out.push(id.to_string());
         }
-    });
-    out
+        if let VisualElement::Subgraph(sg) = el {
+            walk_elements(sg.elements(), set, out, emitted);
+        }
+    }
 }
 
 fn warn_no_match(raw: &str) {

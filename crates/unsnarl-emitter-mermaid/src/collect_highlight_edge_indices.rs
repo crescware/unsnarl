@@ -1,6 +1,18 @@
 //! Walks body / import / boundary edges in the order the renderer
-//! emits them and returns the indices of edges that touch a
-//! highlighted node id.
+//! emits them and returns the indices of edges to paint.
+//!
+//! Two membership sets drive the decision (POC #90, judgment A):
+//! - `member`: every highlighted id. A body/import edge whose BOTH
+//!   endpoints are in `member` is an internal edge of a path/direction
+//!   set and paints.
+//! - `point`: the point (`Single`) subset. A body/import edge with
+//!   EITHER endpoint in `point` paints, preserving the radius-1
+//!   adjacency the original point highlight has always drawn.
+//!
+//! `point` is a subset of `member`, so a pure point highlight (where
+//! `member == point`) reduces to the historical either-endpoint rule.
+//! Boundary edges are pruning markers and never part of a reachability
+//! path, so they paint only for a point hit on the inside node.
 
 use std::collections::HashSet;
 
@@ -11,21 +23,27 @@ pub fn collect_highlight_edge_indices(
     body_edges: &[&VisualEdge],
     import_edges: &[&VisualEdge],
     boundary_edges: &[VisualBoundaryEdge],
-    highlight_ids: &HashSet<String>,
+    member: &HashSet<String>,
+    point: &HashSet<String>,
 ) -> Vec<usize> {
     let mut out: Vec<usize> = Vec::new();
-    if highlight_ids.is_empty() {
+    if member.is_empty() {
         return out;
     }
+    let paints = |e: &VisualEdge| -> bool {
+        (member.contains(&e.from) && member.contains(&e.to))
+            || point.contains(&e.from)
+            || point.contains(&e.to)
+    };
     let mut i = 0usize;
     for e in body_edges {
-        if highlight_ids.contains(&e.from) || highlight_ids.contains(&e.to) {
+        if paints(e) {
             out.push(i);
         }
         i += 1;
     }
     for e in import_edges {
-        if highlight_ids.contains(&e.from) || highlight_ids.contains(&e.to) {
+        if paints(e) {
             out.push(i);
         }
         i += 1;
@@ -36,7 +54,7 @@ pub fn collect_highlight_edge_indices(
                 inside
             }
         };
-        if highlight_ids.contains(inside) {
+        if point.contains(inside) {
             out.push(i);
         }
         i += 1;

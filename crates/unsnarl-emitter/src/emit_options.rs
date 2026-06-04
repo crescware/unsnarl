@@ -42,6 +42,14 @@ pub struct EmitOptions {
     /// order, and the order is fixed at construction time so emitted
     /// bytes stay stable against the IR parity baselines.
     pub highlight_ids: Option<Vec<String>>,
+    /// The subset of [`Self::highlight_ids`] contributed by point
+    /// (`Single`) queries. The mermaid renderer keeps the radius-1
+    /// "either endpoint" edge rule for these, while ids that are only
+    /// path/direction reachability hits paint an edge only when BOTH
+    /// endpoints are highlighted (POC #90, judgment A). `None` mirrors
+    /// `highlight_ids` being `None`; for roots-mode highlight it equals
+    /// `highlight_ids`.
+    pub highlight_point_ids: Option<Vec<String>>,
     /// Original highlight request, propagated so emitters that surface
     /// the CLI form (currently markdown) can reconstruct `-H` /
     /// `--highlight <queries>` in the rendered Query block. `None`

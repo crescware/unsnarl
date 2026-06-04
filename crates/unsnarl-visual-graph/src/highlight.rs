@@ -24,6 +24,6 @@ pub mod highlight_run_options;
 pub mod node_matches_highlight_query;
 
 pub use collect_highlight_ids::collect_highlight_ids;
-pub use collect_highlight_path_ids::collect_highlight_path_ids;
+pub use collect_highlight_path_ids::{collect_highlight_path_ids, HighlightSelection};
 pub use highlight_run_options::HighlightRunOptions;
 pub use node_matches_highlight_query::node_matches_highlight_query;

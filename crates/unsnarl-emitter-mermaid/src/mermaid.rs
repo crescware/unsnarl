@@ -26,7 +26,7 @@ use crate::collect_wrapped_owner_ids::collect_wrapped_owner_ids;
 use crate::push_edge_lines::push_edge_lines;
 use crate::render_boundary_edges::render_boundary_edges;
 use crate::render_class_defs::render_class_defs;
-use crate::render_highlight::render_highlight;
+use crate::render_highlight::{render_highlight, render_highlight_subgraphs};
 use crate::render_pruning_comment::render_pruning_comment;
 use crate::render_state::RenderState;
 use crate::render_synthetic_node_block::render_synthetic_node_block;
@@ -89,6 +89,7 @@ impl Emitter for MermaidEmitter {
             self.theme,
             opts.debug,
             opts.highlight_ids.as_deref(),
+            opts.highlight_point_ids.as_deref(),
         )
     }
 }
@@ -99,6 +100,7 @@ fn render_mermaid(
     theme: &'static ColorTheme,
     debug: bool,
     highlight_ids: Option<&[String]>,
+    highlight_point_ids: Option<&[String]>,
 ) -> String {
     // The strategy decides which renderer-specific lines (e.g. the
     // elk init directive) and which empty-subgraph patches are
@@ -190,14 +192,27 @@ fn render_mermaid(
     );
 
     if let Some(ids) = highlight_ids {
-        let id_lookup: HashSet<String> = ids.iter().cloned().collect();
+        // Member set: an edge between two reachability hits paints
+        // (both-endpoint). Point set: point (`Single`) hits keep the
+        // radius-1 either-endpoint rule. POC #90 judgments A.
+        let member: HashSet<String> = ids.iter().cloned().collect();
+        let point: HashSet<String> = highlight_point_ids.unwrap_or(&[]).iter().cloned().collect();
         let edge_indices = collect_highlight_edge_indices(
             &body_edges,
             &import_edges,
             &graph.boundary_edges,
-            &id_lookup,
+            &member,
+            &point,
         );
-        render_highlight(ids, &edge_indices, state.theme, &mut state.lines);
+        // Subgraph ids on a path are styled via a class (the proven
+        // subgraph-coloring mechanism); plain nodes use inline `style`.
+        // Judgment B.
+        let (node_ids, hi_subgraph_ids): (Vec<String>, Vec<String>) = ids
+            .iter()
+            .cloned()
+            .partition(|id| !subgraph_ids.contains(id.as_str()));
+        render_highlight(&node_ids, &edge_indices, state.theme, &mut state.lines);
+        render_highlight_subgraphs(&hi_subgraph_ids, state.theme, &mut state.lines);
     }
 
     for l in strategy.trailer_lines(&state.placeholder_ids, state.theme) {
