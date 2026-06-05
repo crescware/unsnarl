@@ -8,7 +8,7 @@ use crate::prune::{ResolvedAs, RootQueryResolution};
 use crate::visual_edge::VisualEdge;
 use crate::visual_element::VisualElement;
 use crate::visual_graph::VisualGraph;
-use crate::visual_node::{BindingVisualNode, VisualNode};
+use crate::visual_node::{BindingVisualNode, SyntheticVisualNode, VisualNode};
 
 fn node(id: &str, name: &str, line: u32) -> VisualNode {
     BindingVisualNode::const_binding(id, name, line).into()
@@ -280,4 +280,40 @@ fn a_line_or_name_endpoint_is_resolved_and_recorded_in_the_resolution_log() {
             resolved_as: ResolvedAs::Name,
         }]
     );
+}
+
+fn write_op_node(id: &str, name: &str, line: u32) -> VisualNode {
+    SyntheticVisualNode::write_reference(id, name, line).into()
+}
+
+fn return_use_node(id: &str, name: &str, line: u32) -> VisualNode {
+    SyntheticVisualNode::return_argument_reference(id, name, line).into()
+}
+
+// Highlight diverges from `-r/--roots` on purpose: pruning's name matcher
+// skips `WriteReference` / `ReturnArgumentReference` on a bare name query,
+// but a point highlight paints every place the identifier appears,
+// use-sites included. This pins that divergence at the collector level
+// (it used to live in the now-removed `collect_highlight_ids`).
+#[test]
+fn a_point_name_query_paints_write_and_return_use_sites_unlike_minus_r() {
+    let graph = graph_of(
+        vec![
+            node("n_decl", "counter", 1),
+            write_op_node("n_write", "counter", 2),
+            return_use_node("n_return", "counter", 3),
+            node("n_other", "other", 4),
+        ],
+        Vec::new(),
+    );
+    let sel = collect_highlight_path_ids(
+        &graph,
+        &[RootQuery::Single {
+            query: name("counter"),
+            raw: "counter".to_string(),
+        }],
+    );
+    assert_eq!(sel.ids, vec!["n_decl", "n_write", "n_return"]);
+    // A point query records every hit as a point id (radius-1 edge rule).
+    assert_eq!(sel.point_ids, vec!["n_decl", "n_write", "n_return"]);
 }

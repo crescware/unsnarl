@@ -8,9 +8,9 @@
 //!
 //! `highlight_ids` is a slice (not a `HashSet`) because the emitted
 //! `style` rows must be in element-tree walk order. The upstream
-//! `collect_highlight_ids` already produces ids in that order;
-//! `HashSet` has unspecified iteration order so it cannot be used
-//! to carry them through.
+//! highlight collector already produces ids in that order; `HashSet`
+//! has unspecified iteration order so it cannot be used to carry them
+//! through.
 
 use crate::theme::ColorTheme;
 

@@ -261,7 +261,7 @@ fn seed_ids(graph: &VisualGraph, query: &ParsedRootQuery) -> Vec<String> {
 /// removed. Walks *every* element (nodes and subgraphs), so a subgraph
 /// or non-root-candidate node in the set is emitted too. For point
 /// queries the set holds only matched root-candidate nodes, so this
-/// reproduces `collect_highlight_ids`'s order byte-for-byte.
+/// reproduces the classic point-highlight walk order byte-for-byte.
 fn emit_in_walk_order(graph: &VisualGraph, set: &HashSet<String>) -> Vec<String> {
     let mut out: Vec<String> = Vec::new();
     let mut emitted: HashSet<String> = HashSet::new();
