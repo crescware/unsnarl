@@ -3,14 +3,14 @@
 //! list.
 
 use serde::{Serialize, Serializer};
-use unsnarl_root_query::ParsedRootQuery;
+use unsnarl_root_query::RootQuery;
 
 #[derive(Debug, Default, PartialEq, Eq)]
 pub enum Highlight {
     #[default]
     Absent,
     NoValue,
-    Value(Vec<ParsedRootQuery>),
+    Value(Vec<RootQuery>),
 }
 
 impl Serialize for Highlight {

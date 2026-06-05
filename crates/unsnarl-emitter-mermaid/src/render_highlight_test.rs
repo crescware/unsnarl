@@ -1,4 +1,4 @@
-use super::render_highlight;
+use super::{render_highlight, render_highlight_subgraphs};
 use crate::theme::DARK_THEME;
 
 #[test]
@@ -45,4 +45,30 @@ fn skips_the_link_style_line_when_no_edge_indices_are_supplied() {
     let mut lines: Vec<String> = Vec::new();
     render_highlight(&ids, &[], &DARK_THEME, &mut lines);
     assert!(!lines.iter().any(|v| v.starts_with("  linkStyle")));
+}
+
+#[test]
+fn render_highlight_subgraphs_writes_nothing_for_an_empty_list() {
+    let mut lines: Vec<String> = Vec::new();
+    render_highlight_subgraphs(&[], &DARK_THEME, &mut lines);
+    assert!(lines.is_empty());
+}
+
+#[test]
+fn render_highlight_subgraphs_emits_a_classdef_then_one_class_line_per_id() {
+    let ids = vec!["s_outer".to_string(), "s_inner".to_string()];
+    let mut lines: Vec<String> = Vec::new();
+    render_highlight_subgraphs(&ids, &DARK_THEME, &mut lines);
+    let h = &DARK_THEME.highlight;
+    assert_eq!(
+        lines,
+        vec![
+            format!(
+                "  classDef highlightSubgraph fill:{},stroke:{};",
+                h.fill, h.stroke
+            ),
+            "  class s_outer highlightSubgraph;".to_string(),
+            "  class s_inner highlightSubgraph;".to_string(),
+        ]
+    );
 }

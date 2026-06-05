@@ -58,7 +58,7 @@ Exit codes: `0` success, `1` parse / runtime error, `2` argument error.
 | `-A`  | `--descendants <N>`      | Descendants generations — see Pruning                         |
 | `-B`  | `--ancestors <N>`        | Ancestors generations — see Pruning                           |
 | `-C`  | `--context <N>`          | `-A` and `-B` shorthand — see Pruning                         |
-| `-H`  | `--highlight [queries]`  | Highlight matching nodes + adjacent edges — see Highlighting  |
+| `-H`  | `--highlight [queries]`  | Highlight nodes / paths / directions — see Highlighting       |
 |       | `--depth <N>`            | Set both `--depth-function` and `--depth-block` — see Depth   |
 |       | `--depth-function <N>`   | Max function-scope nesting depth — see Depth                  |
 |       | `--depth-block <N>`      | Max block-scope nesting depth — see Depth                     |
@@ -149,9 +149,8 @@ emitted in full.
 ### Highlighting the visual graph
 
 Once the graph is pruned (or even without `-r`), `-H` / `--highlight` paints
-the matched nodes and every edge with at least one endpoint in that match
-set yellow. Highlighting is purely visual and only takes effect on the
-`mermaid` and `markdown` emitters.
+a chosen subset of the graph yellow. Highlighting is purely visual and only
+takes effect on the `mermaid` and `markdown` emitters.
 
 ```sh
 uns -r b -C 1 -H file.ts                 # highlight whatever -r selected
@@ -164,12 +163,53 @@ Two modes:
 - `-H` / `--highlight` with no value: the highlight set follows `-r/--roots`,
   i.e. every node that drove the pruning is painted yellow.
 - `-H <queries>` / `--highlight <queries>`: the highlight uses its own
-  query list (same grammar as `-r`); the `-r` matches stay uncolored.
+  comma-separated query list; the `-r` matches stay uncolored.
 
 Because `-H` accepts an optional value, write `--highlight=foo` (or place
 the file before the flag) when the next argument would otherwise be parsed
 as the value, e.g. `uns -H foo.ts` interprets `foo.ts` as the highlight
 query, not as the input file.
+
+#### Point, path, and direction queries
+
+Each comma-separated `-H` query is one of three shapes:
+
+| query      | what it paints                                                 |
+| ---------- | -------------------------------------------------------------- |
+| `foo`      | the matched node(s) plus every adjacent edge (point, radius 1) |
+| `foo..bar` | every node on a route between `foo` and `bar`                  |
+| `foo..+a`  | `foo` plus everything reachable downstream (its descendants)   |
+| `foo..+b`  | `foo` plus everything reachable upstream (its ancestors)       |
+| `foo..+c`  | both directions — sugar for `foo..+a,foo..+b`                  |
+
+```sh
+uns -f mermaid -H 'render..+a' file.tsx       # render and everything it feeds
+uns -f mermaid -H 'value..+b' file.ts         # value and everything feeding it
+uns -f mermaid -H 'imported..sink' file.ts    # the route from one to the other
+```
+
+The `+a` / `+b` / `+c` direction tokens mirror the `-A` / `-B` / `-C`
+pruning flags, so there is nothing new to memorize: `+a` is descendants,
+`+b` is ancestors, `+c` is both.
+
+Either side of `..` is an ordinary query token (`foo`, `10:foo`, `9-13`,
+`9-13:foo`, `10`), the same grammar `-r` uses. `foo..bar` is
+direction-independent — the graph's own edge directions decide which way
+the route runs, so `foo..bar` and `bar..foo` paint the same nodes. To pin a
+direction, constrain an endpoint with a line range: `123:foo..123-9999:bar`
+keeps only a `bar` on line 123 or later, so the painted route runs in the
+descendant direction.
+
+For a path or direction query, an edge is painted only when *both* of its
+endpoints are in the highlight set, so the colored region stops exactly at
+the reachable set's boundary. (A point query keeps the original radius-1
+rule, painting any edge with at least one matched endpoint.)
+
+Reachability is computed over the displayed graph, so a query never paints
+anything that pruning or `--depth` already removed. If an endpoint matches
+no node, or a `foo..bar` path has no connecting route, a warning is written
+to stderr and the command still exits `0`. The `+aN` radius form (e.g.
+`+a3`) is reserved for a future release and currently rejected.
 
 ### Writing output
 

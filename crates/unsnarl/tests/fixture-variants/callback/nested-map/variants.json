@@ -1,6 +1,11 @@
 {
   "variants": [
     { "kind": "depth", "slug": "1", "depths": { "uniform": 1 } },
-    { "kind": "depth", "slug": "2", "depths": { "uniform": 2 } }
+    { "kind": "depth", "slug": "2", "depths": { "uniform": 2 } },
+    {
+      "kind": "highlight",
+      "slug": "matrix-after",
+      "highlight": { "mode": "queries", "raw": "matrix..+a" }
+    }
   ]
 }
