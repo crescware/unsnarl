@@ -567,6 +567,24 @@ fn highlight_serializes_as_parsed_root_query_array_when_inline_value_given() {
 }
 
 #[test]
+fn highlight_serializes_path_and_direction_queries_as_their_raw_token() {
+    // A point query keeps the historical `ParsedRootQuery` object shape;
+    // the new path (`a..b`) and direction (`c..+a`) shapes have no prior
+    // JSON contract, so `RootQuery`'s manual Serialize emits their raw
+    // token (issue #90).
+    let args = parse(&["uns", "--highlight=foo,a..b,c..+a"]);
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
+    assert_eq!(
+        v["highlight"],
+        serde_json::json!([
+            { "kind": "name", "name": "foo", "raw": "foo" },
+            "a..b",
+            "c..+a",
+        ]),
+    );
+}
+
+#[test]
 fn enum_fields_serialize_as_lowercase_strings() {
     let args = parse(&[
         "uns",
