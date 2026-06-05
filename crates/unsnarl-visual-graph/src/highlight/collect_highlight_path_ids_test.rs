@@ -165,6 +165,24 @@ fn a_direction_whose_seed_matches_nothing_warns_and_contributes_nothing() {
 }
 
 #[test]
+fn a_path_whose_endpoint_matches_nothing_warns_no_match_not_no_path() {
+    // `zzz` matches no node, so the path is NoMatch (an endpoint found
+    // nothing) — distinct from NoPath (both endpoints matched but no
+    // route connects them, the `a..iso` case). The two warnings carry
+    // different wording, so the `Path` NoMatch arm needs coverage of its
+    // own, separate from the `Direction` NoMatch and the `Path` NoPath
+    // cases.
+    let sel = collect_highlight_path_ids(&chain_graph(), &[path("a", "zzz")]);
+    assert!(sel.ids.is_empty());
+    assert_eq!(
+        sel.warnings,
+        vec![HighlightWarning::NoMatch {
+            raw: "a..zzz".to_string()
+        }]
+    );
+}
+
+#[test]
 fn a_point_query_that_matches_nothing_is_silent_like_the_classic_point_highlight() {
     let sel = collect_highlight_path_ids(
         &chain_graph(),
