@@ -142,6 +142,17 @@ fn path_with_no_connecting_route_paints_nothing_and_warns() {
 }
 
 #[test]
+fn a_connected_path_does_not_warn_when_a_prior_query_already_painted_its_nodes() {
+    // `a..c` paints {a,b,c}; `b..c` then adds no NEW node, yet b->c is a
+    // direct edge so the path IS connected. NoPath must key off this
+    // path's own connectivity, not the shared accumulator's length —
+    // otherwise the overlap triggers a spurious 'no connecting path'.
+    let sel = collect_highlight_path_ids(&chain_graph(), &[path("a", "c"), path("b", "c")]);
+    assert_eq!(sel.ids, vec!["n_a", "n_b", "n_c"]);
+    assert!(sel.warnings.is_empty());
+}
+
+#[test]
 fn a_direction_whose_seed_matches_nothing_warns_and_contributes_nothing() {
     let sel = collect_highlight_path_ids(&chain_graph(), &[direction("zzz", QueryDir::After)]);
     assert!(sel.ids.is_empty());

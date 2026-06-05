@@ -148,18 +148,26 @@ pub fn collect_highlight_path_ids(
                 let lb = reach(&bwd, &l);
                 let rf = reach(&fwd, &r);
                 let rb = reach(&bwd, &r);
-                let before = set.len();
+                // Connectivity is whether THIS path's intersection
+                // produced any node, tracked locally — not whether the
+                // shared accumulator grew. A path whose nodes a prior
+                // query already painted leaves the accumulator's length
+                // unchanged yet is genuinely connected, so a length
+                // check would warn `NoPath` falsely.
+                let mut connected = false;
                 for id in &lf {
                     if rb.contains(id) {
                         set.insert(id.clone());
+                        connected = true;
                     }
                 }
                 for id in &rf {
                     if lb.contains(id) {
                         set.insert(id.clone());
+                        connected = true;
                     }
                 }
-                if set.len() == before {
+                if !connected {
                     warnings.push(HighlightWarning::NoPath { raw: raw.clone() });
                 }
             }
