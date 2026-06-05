@@ -8,9 +8,9 @@
 //!
 //! `highlight_ids` is a slice (not a `HashSet`) because the emitted
 //! `style` rows must be in element-tree walk order. The upstream
-//! `collect_highlight_ids` already produces ids in that order;
-//! `HashSet` has unspecified iteration order so it cannot be used
-//! to carry them through.
+//! highlight collector already produces ids in that order; `HashSet`
+//! has unspecified iteration order so it cannot be used to carry them
+//! through.
 
 use crate::theme::ColorTheme;
 
@@ -40,6 +40,29 @@ pub fn render_highlight(
             "  linkStyle {list} stroke:{},stroke-width:{};",
             h.edge_stroke, h.edge_stroke_width
         ));
+    }
+}
+
+/// Highlight subgraphs that sit on a path/direction (issue #90,
+/// judgment B). Subgraphs cannot be recolored by an inline `style` row
+/// the way nodes are, so they reuse the project's subgraph-coloring
+/// mechanism: a single `classDef` plus one `class` row per id. Emitted
+/// after the `nestL<N>` / edge-border classes so its stroke and fill win.
+pub fn render_highlight_subgraphs(
+    subgraph_ids: &[String],
+    theme: &ColorTheme,
+    lines: &mut Vec<String>,
+) {
+    if subgraph_ids.is_empty() {
+        return;
+    }
+    let h = &theme.highlight;
+    lines.push(format!(
+        "  classDef highlightSubgraph fill:{},stroke:{};",
+        h.fill, h.stroke
+    ));
+    for id in subgraph_ids {
+        lines.push(format!("  class {id} highlightSubgraph;"));
     }
 }
 

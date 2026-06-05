@@ -33,7 +33,9 @@ use unsnarl_plugin::UnsnarlPlugin;
 use unsnarl_root_query::ParsedRootQuery;
 use unsnarl_visual_graph::builder::build_visual_graph::build_visual_graph;
 use unsnarl_visual_graph::builder::context::BuildVisualGraphOptions;
-use unsnarl_visual_graph::highlight::{collect_highlight_ids, HighlightRunOptions};
+use unsnarl_visual_graph::highlight::{
+    collect_highlight_path_ids, HighlightRunOptions, HighlightSelection, HighlightWarning,
+};
 use unsnarl_visual_graph::prune::{
     prune_visual_graph, resolve_ambiguous_queries, PruneOptions, RootQueryResolution,
 };
@@ -95,6 +97,10 @@ pub struct PipelineRunDetails {
     pub text: String,
     pub pruning: Option<Vec<PrunePerQueryDetail>>,
     pub resolutions: Option<Vec<RootQueryResolution>>,
+    /// No-match / no-path warnings raised by a `-H <queries>` path /
+    /// direction query, surfaced on stderr by the CLI layer. `None` on
+    /// every path that does not run the highlight collector.
+    pub highlight_warnings: Option<Vec<HighlightWarning>>,
     pub diagnostics: Vec<Diagnostic>,
 }
 
@@ -147,6 +153,7 @@ pub fn emit_ir_detailed(
                 resolutions: None,
                 depths: None,
                 highlight_ids: None,
+                highlight_point_ids: None,
                 highlight: None,
             },
         )
@@ -155,6 +162,7 @@ pub fn emit_ir_detailed(
         text,
         pruning: None,
         resolutions: None,
+        highlight_warnings: None,
         diagnostics,
     })
 }
@@ -317,16 +325,20 @@ struct EmitOptionsBase {
 }
 
 /// Output of the pre-emit visual-graph orchestration: the pruned
-/// graph (when `-r` was given), the `LineOrName` disambiguation log,
-/// the per-query match counts (so `emit-pruning-warnings` can flag
-/// `matched === 0` queries), the highlight id list (when `-H` was
-/// given), and the kept-as-given highlight request so the markdown
-/// emitter can reconstruct `-H` in the Query block.
+/// graph (when `-r` was given), the `LineOrName` disambiguation log
+/// (now also fed by `-H`'s `..` endpoints), the per-query match counts
+/// (so `emit-pruning-warnings` can flag `matched === 0` queries), the
+/// highlight id list (when `-H` was given) plus its point subset, the
+/// highlight no-match / no-path warnings, and the kept-as-given
+/// highlight request so the markdown emitter can reconstruct `-H` in
+/// the Query block.
 struct PreparedEmit {
     pruned_graph: Option<VisualGraph>,
     resolutions: Option<Vec<RootQueryResolution>>,
     per_query: Option<Vec<PrunePerQueryDetail>>,
     highlight_ids: Option<Vec<String>>,
+    highlight_point_ids: Option<Vec<String>>,
+    highlight_warnings: Option<Vec<HighlightWarning>>,
     highlight: Option<HighlightRunOptions>,
 }
 
@@ -396,31 +408,60 @@ fn prepare_emit(
         }
     }
 
-    let highlight_ids = highlight.map(|h| {
+    let mut highlight_ids: Option<Vec<String>> = None;
+    let mut highlight_point_ids: Option<Vec<String>> = None;
+    let mut highlight_warnings: Option<Vec<HighlightWarning>> = None;
+    if let Some(h) = highlight {
         let _span = unsnarl_instrumentation::span!("highlight");
-        match h {
+        let sel = match h {
             // Roots mode mirrors `-r`'s match set verbatim, so it inherits
             // `NAME_QUERY_EXCLUDED` for bare name queries (so `-r counter`
             // and `-r counter -H` exclude the same use-site kinds). When
             // `-r` was not given the prune root set is empty — paint
-            // nothing.
-            HighlightRunOptions::Roots => prune_root_ids.clone().unwrap_or_default(),
+            // nothing. Roots highlight is a point treatment, so every id
+            // is also a point id (radius-1 edge rule); it never resolves
+            // `..` endpoints or raises path warnings.
+            HighlightRunOptions::Roots => {
+                let ids = prune_root_ids.clone().unwrap_or_default();
+                HighlightSelection {
+                    point_ids: ids.clone(),
+                    ids,
+                    resolutions: Vec::new(),
+                    warnings: Vec::new(),
+                }
+            }
             // Queries mode (`-H <raw>`) uses the looser highlight matcher
             // so explicit highlight queries paint every occurrence of the
-            // identifier.
+            // identifier. The path / direction reachability collector
+            // (issue #90) handles point, `a..b`, and `a..+a/+b/+c` shapes:
+            // it batch-resolves each endpoint's `LineOrName` ambiguity,
+            // reports which ids are point hits (vs reachability hits), and
+            // returns no-match / no-path warnings for the CLI to print.
             HighlightRunOptions::Queries(queries) => {
                 let working = pruned_graph.as_ref().unwrap_or(&base);
-                let resolved = resolve_ambiguous_queries(working, queries);
-                collect_highlight_ids(working, &resolved.resolved)
+                collect_highlight_path_ids(working, queries)
             }
+        };
+        // Append the `..` endpoints' `LineOrName` resolutions after any
+        // pruning resolutions, so both the markdown Notice block and the
+        // stderr notice list a `10:foo` endpoint's line-vs-name decision.
+        if !sel.resolutions.is_empty() {
+            resolutions_out
+                .get_or_insert_with(Vec::new)
+                .extend(sel.resolutions);
         }
-    });
+        highlight_warnings = Some(sel.warnings);
+        highlight_point_ids = Some(sel.point_ids);
+        highlight_ids = Some(sel.ids);
+    }
 
     PreparedEmit {
         pruned_graph,
         resolutions: resolutions_out,
         per_query: per_query_out,
         highlight_ids,
+        highlight_point_ids,
+        highlight_warnings,
         highlight: highlight.cloned(),
     }
 }
@@ -459,11 +500,14 @@ fn emit_pruning_aware_with(
             resolutions: None,
             per_query: None,
             highlight_ids: None,
+            highlight_point_ids: None,
+            highlight_warnings: None,
             highlight: None,
         }
     };
     let resolutions_for_details = prepared.resolutions.clone();
     let per_query_for_details = prepared.per_query;
+    let highlight_warnings_for_details = prepared.highlight_warnings;
     let text = {
         let _span = unsnarl_instrumentation::span!("emit");
         emitter.emit(
@@ -475,6 +519,7 @@ fn emit_pruning_aware_with(
                 resolutions: prepared.resolutions,
                 depths: run.depths.cloned(),
                 highlight_ids: prepared.highlight_ids,
+                highlight_point_ids: prepared.highlight_point_ids,
                 highlight: prepared.highlight,
             },
         )
@@ -483,6 +528,7 @@ fn emit_pruning_aware_with(
         text,
         pruning: per_query_for_details,
         resolutions: resolutions_for_details,
+        highlight_warnings: highlight_warnings_for_details,
         diagnostics,
     })
 }

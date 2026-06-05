@@ -2,7 +2,7 @@ use std::path::Path;
 
 use super::*;
 use unsnarl_ir::{NestingDepth, SourceLine};
-use unsnarl_root_query::{GenerationCount, ParsedRootQuery};
+use unsnarl_root_query::{GenerationCount, ParsedRootQuery, RootQuery};
 
 use super::parse_error::ParseErrorKind;
 
@@ -192,8 +192,11 @@ fn highlight_with_inline_value_via_equals() {
     let args = parse(&["uns", "--highlight=foo", "x.ts"]);
     assert_eq!(
         args.highlight,
-        Highlight::Value(vec![ParsedRootQuery::Name {
-            name: "foo".to_string(),
+        Highlight::Value(vec![RootQuery::Single {
+            query: ParsedRootQuery::Name {
+                name: "foo".to_string(),
+                raw: "foo".to_string(),
+            },
             raw: "foo".to_string(),
         }]),
     );
@@ -205,8 +208,11 @@ fn highlight_short_consumes_next_token_as_value() {
     let args = parse(&["uns", "-H", "foo"]);
     assert_eq!(
         args.highlight,
-        Highlight::Value(vec![ParsedRootQuery::Name {
-            name: "foo".to_string(),
+        Highlight::Value(vec![RootQuery::Single {
+            query: ParsedRootQuery::Name {
+                name: "foo".to_string(),
+                raw: "foo".to_string(),
+            },
             raw: "foo".to_string(),
         }]),
     );
@@ -556,6 +562,24 @@ fn highlight_serializes_as_parsed_root_query_array_when_inline_value_given() {
         serde_json::json!([
             { "kind": "name", "name": "foo", "raw": "foo" },
             { "kind": "name", "name": "bar", "raw": "bar" },
+        ]),
+    );
+}
+
+#[test]
+fn highlight_serializes_path_and_direction_queries_as_their_raw_token() {
+    // A point query keeps the historical `ParsedRootQuery` object shape;
+    // the new path (`a..b`) and direction (`c..+a`) shapes have no prior
+    // JSON contract, so `RootQuery`'s manual Serialize emits their raw
+    // token (issue #90).
+    let args = parse(&["uns", "--highlight=foo,a..b,c..+a"]);
+    let v = serde_json::to_value(&args).expect("Args serialises to JSON via serde derive");
+    assert_eq!(
+        v["highlight"],
+        serde_json::json!([
+            { "kind": "name", "name": "foo", "raw": "foo" },
+            "a..b",
+            "c..+a",
         ]),
     );
 }

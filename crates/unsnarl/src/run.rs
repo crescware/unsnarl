@@ -23,8 +23,8 @@ use crate::cli::args::{
 use crate::cli::run_cli::{
     calc_source::{calc_source, ExecuteSource},
     cli_usage_error::CliUsageError,
-    emit_analyzer_warnings, emit_out_flag_notice, emit_pruning_warnings, emit_resolution_notices,
-    resolve_output_path, write_output,
+    emit_analyzer_warnings, emit_highlight_warnings, emit_out_flag_notice, emit_pruning_warnings,
+    emit_resolution_notices, resolve_output_path, write_output,
 };
 use crate::pipeline::plugin::default_registry;
 use crate::pipeline::prune::PruningRunOptions;
@@ -144,6 +144,7 @@ pub(crate) fn run_to(
 
     emit_resolution_notices(details.resolutions.as_deref(), err);
     emit_pruning_warnings(details.pruning.as_deref(), err);
+    emit_highlight_warnings(details.highlight_warnings.as_deref(), err);
     emit_analyzer_warnings(&details.diagnostics, err);
 
     match write_output(output_path.as_deref(), &details.text, out) {

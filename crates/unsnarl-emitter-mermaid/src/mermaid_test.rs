@@ -49,6 +49,7 @@ fn render(strategy: MermaidStrategy) -> String {
         &DARK_THEME,
         false,
         None,
+        None,
     )
 }
 
