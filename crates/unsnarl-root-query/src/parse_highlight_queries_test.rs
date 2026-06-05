@@ -70,3 +70,21 @@ fn a_generation_level_is_reserved_and_rejected() {
     // issue #90), so it must be rejected here.
     assert!(parse_highlight_queries("foo..+a3").is_err());
 }
+
+#[test]
+fn an_empty_value_is_rejected() {
+    // Mirrors `parse_root_queries`' `rejects_empty_value`: an empty
+    // `-H` value never produces a query list.
+    assert_eq!(
+        parse_highlight_queries(""),
+        Err("empty --highlight value".to_string())
+    );
+}
+
+#[test]
+fn an_empty_token_in_the_middle_is_rejected() {
+    // `split(',')` yields an empty token for `foo,,bar`; the per-token
+    // parse rejects it, so the whole value is rejected (mirrors
+    // `parse_root_queries`' `rejects_empty_token_in_middle`).
+    assert!(parse_highlight_queries("foo,,bar").is_err());
+}
