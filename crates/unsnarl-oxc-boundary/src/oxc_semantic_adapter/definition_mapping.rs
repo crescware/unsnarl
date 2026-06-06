@@ -52,7 +52,7 @@
 //! definitions for the symbols that survive into the IR via the
 //! main `iter_bindings_in` walk.
 
-use oxc_ast::ast::{ClassType, FunctionType, ModuleExportName, VariableDeclarationKind};
+use oxc_ast::ast::ModuleExportName;
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
 use oxc_semantic::Semantic;
@@ -62,10 +62,22 @@ use oxc_syntax::symbol::SymbolId;
 use unsnarl_ir::ids::{DefinitionId, VariableId};
 use unsnarl_ir::primitive::{AstIdentifier, AstNode};
 use unsnarl_ir::scope::{DefinitionData, VariableData};
-use unsnarl_ir::DefinitionType;
-use unsnarl_oxc_parity::{AstType, VariableDeclarationKind as IrVariableDeclarationKind};
+use unsnarl_oxc_parity::AstType;
 
-use crate::materialise::ast_node_of_expression;
+mod build_catch_clause_def;
+mod build_class_name_def;
+mod build_function_name_def;
+mod build_import_def;
+mod build_parameter_def;
+mod build_variable_def;
+mod function_ast_type;
+
+use build_catch_clause_def::build_catch_clause_def;
+use build_class_name_def::build_class_name_def;
+use build_function_name_def::build_function_name_def;
+use build_import_def::build_import_def;
+use build_parameter_def::build_parameter_def;
+use build_variable_def::build_variable_def;
 
 /// Walk every symbol's declaration sites and emit one
 /// `DefinitionData` per site. Cross-links the new def ids onto the
@@ -140,179 +152,6 @@ fn build_definition(
             None,
         )),
         _ => None,
-    }
-}
-
-fn build_variable_def(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    identifier: AstIdentifier,
-    node_id: oxc_syntax::node::NodeId,
-    vd: &oxc_ast::ast::VariableDeclarator<'_>,
-) -> DefinitionData {
-    let declarator_node = AstNode::new(AstType::VariableDeclarator, vd.span);
-    let init = vd.init.as_ref().map(ast_node_of_expression);
-    let (parent, declaration_kind) = match nodes.parent_kind(node_id) {
-        AstKind::VariableDeclaration(decl) => (
-            Some(AstNode::new(AstType::VariableDeclaration, decl.span)),
-            Some(ir_variable_declaration_kind(decl.kind)),
-        ),
-        _ => (None, None),
-    };
-    DefinitionData {
-        r#type: DefinitionType::Variable,
-        name: identifier,
-        node: declarator_node,
-        parent,
-        init,
-        declaration_kind,
-        import_source: None,
-        imported_name: None,
-    }
-}
-
-fn build_function_name_def(
-    identifier: AstIdentifier,
-    f: &oxc_ast::ast::Function<'_>,
-) -> DefinitionData {
-    DefinitionData {
-        r#type: DefinitionType::FunctionName,
-        name: identifier,
-        node: AstNode::new(function_ast_type(f), f.span),
-        parent: None,
-        init: None,
-        declaration_kind: None,
-        import_source: None,
-        imported_name: None,
-    }
-}
-
-fn build_class_name_def(identifier: AstIdentifier, c: &oxc_ast::ast::Class<'_>) -> DefinitionData {
-    let ty = match c.r#type {
-        ClassType::ClassDeclaration => AstType::ClassDeclaration,
-        ClassType::ClassExpression => AstType::ClassExpression,
-    };
-    DefinitionData {
-        r#type: DefinitionType::ClassName,
-        name: identifier,
-        node: AstNode::new(ty, c.span),
-        parent: None,
-        init: None,
-        declaration_kind: None,
-        import_source: None,
-        imported_name: None,
-    }
-}
-
-fn build_parameter_def(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    identifier: AstIdentifier,
-    node_id: oxc_syntax::node::NodeId,
-) -> Option<DefinitionData> {
-    let owner = enclosing_function_node(nodes, node_id)?;
-    Some(DefinitionData {
-        r#type: DefinitionType::Parameter,
-        name: identifier,
-        node: owner,
-        parent: None,
-        init: None,
-        declaration_kind: None,
-        import_source: None,
-        imported_name: None,
-    })
-}
-
-fn build_catch_clause_def(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    identifier: AstIdentifier,
-    node_id: oxc_syntax::node::NodeId,
-) -> Option<DefinitionData> {
-    let owner = enclosing_catch_clause_node(nodes, node_id)?;
-    Some(DefinitionData {
-        r#type: DefinitionType::CatchClause,
-        name: identifier,
-        node: owner,
-        parent: None,
-        init: None,
-        declaration_kind: None,
-        import_source: None,
-        imported_name: None,
-    })
-}
-
-fn build_import_def(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    identifier: AstIdentifier,
-    node_id: oxc_syntax::node::NodeId,
-    spec_node: AstNode,
-    imported_name: Option<String>,
-) -> DefinitionData {
-    let (parent, import_source) = match nodes.parent_kind(node_id) {
-        AstKind::ImportDeclaration(decl) => (
-            Some(AstNode::new(AstType::ImportDeclaration, decl.span)),
-            Some(decl.source.value.as_str().to_string()),
-        ),
-        _ => (None, None),
-    };
-    DefinitionData {
-        r#type: DefinitionType::ImportBinding,
-        name: identifier,
-        node: spec_node,
-        parent,
-        init: None,
-        declaration_kind: None,
-        import_source,
-        imported_name,
-    }
-}
-
-fn enclosing_function_node(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    node_id: oxc_syntax::node::NodeId,
-) -> Option<AstNode> {
-    for ancestor in nodes.ancestor_kinds(node_id) {
-        match ancestor {
-            AstKind::Function(f) => {
-                return Some(AstNode::new(function_ast_type(f), f.span));
-            }
-            AstKind::ArrowFunctionExpression(arrow) => {
-                return Some(AstNode::new(AstType::ArrowFunctionExpression, arrow.span));
-            }
-            _ => {}
-        }
-    }
-    None
-}
-
-fn enclosing_catch_clause_node(
-    nodes: &oxc_semantic::AstNodes<'_>,
-    node_id: oxc_syntax::node::NodeId,
-) -> Option<AstNode> {
-    for ancestor in nodes.ancestor_kinds(node_id) {
-        if let AstKind::CatchClause(c) = ancestor {
-            return Some(AstNode::new(AstType::CatchClause, c.span));
-        }
-    }
-    None
-}
-
-fn function_ast_type(f: &oxc_ast::ast::Function<'_>) -> AstType {
-    match f.r#type {
-        FunctionType::FunctionExpression | FunctionType::TSEmptyBodyFunctionExpression => {
-            AstType::FunctionExpression
-        }
-        FunctionType::FunctionDeclaration | FunctionType::TSDeclareFunction => {
-            AstType::FunctionDeclaration
-        }
-    }
-}
-
-fn ir_variable_declaration_kind(kind: VariableDeclarationKind) -> IrVariableDeclarationKind {
-    match kind {
-        VariableDeclarationKind::Var => IrVariableDeclarationKind::Var,
-        VariableDeclarationKind::Let => IrVariableDeclarationKind::Let,
-        VariableDeclarationKind::Const => IrVariableDeclarationKind::Const,
-        VariableDeclarationKind::Using => IrVariableDeclarationKind::Using,
-        VariableDeclarationKind::AwaitUsing => IrVariableDeclarationKind::AwaitUsing,
     }
 }
 
