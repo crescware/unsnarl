@@ -22,7 +22,12 @@ use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
 use oxc_syntax::scope::ScopeFlags;
 
-use unsnarl_ir::nesting_kind::{NestingDepth, NestingDepths, NestingKind};
+use unsnarl_ir::nesting_kind::{NestingDepths, NestingKind};
+
+mod counters;
+mod visitor_helpers;
+
+use counters::Counters;
 
 pub fn compute_nesting_depths(program: &Program<'_>) -> HashMap<u32, NestingDepths> {
     let mut visitor = NestingDepthVisitor::new();
@@ -59,115 +64,6 @@ enum ParentKind {
     Try,
     Catch,
     Other,
-}
-
-struct Counters {
-    function: u32,
-    r#if: u32,
-    r#for: u32,
-    r#while: u32,
-    switch: u32,
-    try_catch_finally: u32,
-    block: u32,
-}
-
-impl Counters {
-    fn zero() -> Self {
-        Self {
-            function: 0,
-            r#if: 0,
-            r#for: 0,
-            r#while: 0,
-            switch: 0,
-            try_catch_finally: 0,
-            block: 0,
-        }
-    }
-
-    fn inc(&mut self, kind: NestingKind) {
-        match kind {
-            NestingKind::Function => self.function += 1,
-            NestingKind::If => self.r#if += 1,
-            NestingKind::For => self.r#for += 1,
-            NestingKind::While => self.r#while += 1,
-            NestingKind::Switch => self.switch += 1,
-            NestingKind::TryCatchFinally => self.try_catch_finally += 1,
-            NestingKind::Block => self.block += 1,
-        }
-    }
-
-    fn dec(&mut self, kind: NestingKind) {
-        match kind {
-            NestingKind::Function => self.function -= 1,
-            NestingKind::If => self.r#if -= 1,
-            NestingKind::For => self.r#for -= 1,
-            NestingKind::While => self.r#while -= 1,
-            NestingKind::Switch => self.switch -= 1,
-            NestingKind::TryCatchFinally => self.try_catch_finally -= 1,
-            NestingKind::Block => self.block -= 1,
-        }
-    }
-
-    fn snapshot(&self) -> NestingDepths {
-        NestingDepths {
-            function: NestingDepth(self.function),
-            r#if: NestingDepth(self.r#if),
-            r#for: NestingDepth(self.r#for),
-            r#while: NestingDepth(self.r#while),
-            switch: NestingDepth(self.switch),
-            try_catch_finally: NestingDepth(self.try_catch_finally),
-            block: NestingDepth(self.block),
-        }
-    }
-}
-
-impl NestingDepthVisitor {
-    fn new() -> Self {
-        Self {
-            counters: Counters::zero(),
-            depths_by_offset: HashMap::new(),
-            enter_stack: Vec::new(),
-            parent_types: Vec::new(),
-            key_stack: Vec::new(),
-        }
-    }
-
-    fn classify_block(&self) -> Option<NestingKind> {
-        let parent = self.parent_types.last().copied();
-        let key = self.key_stack.last().copied().flatten();
-        let Some(parent) = parent else {
-            return Some(NestingKind::Block);
-        };
-        match (parent, key) {
-            (ParentKind::Function | ParentKind::Arrow, Some("body")) => None,
-            (ParentKind::If, Some("consequent") | Some("alternate")) => Some(NestingKind::If),
-            (ParentKind::For | ParentKind::ForIn | ParentKind::ForOf, Some("body")) => {
-                Some(NestingKind::For)
-            }
-            (ParentKind::While | ParentKind::DoWhile, Some("body")) => Some(NestingKind::While),
-            (ParentKind::Try, Some("block") | Some("finalizer")) => {
-                Some(NestingKind::TryCatchFinally)
-            }
-            (ParentKind::Catch, Some("body")) => Some(NestingKind::TryCatchFinally),
-            _ => Some(NestingKind::Block),
-        }
-    }
-
-    fn parent_kind_of(kind: &AstKind<'_>) -> ParentKind {
-        match kind {
-            AstKind::Function(_) => ParentKind::Function,
-            AstKind::ArrowFunctionExpression(_) => ParentKind::Arrow,
-            AstKind::IfStatement(_) => ParentKind::If,
-            AstKind::ForStatement(_) => ParentKind::For,
-            AstKind::ForInStatement(_) => ParentKind::ForIn,
-            AstKind::ForOfStatement(_) => ParentKind::ForOf,
-            AstKind::WhileStatement(_) => ParentKind::While,
-            AstKind::DoWhileStatement(_) => ParentKind::DoWhile,
-            AstKind::TryStatement(_) => ParentKind::Try,
-            AstKind::CatchClause(_) => ParentKind::Catch,
-            _ => ParentKind::Other,
-        }
-    }
 }
 
 impl<'a> Visit<'a> for NestingDepthVisitor {
