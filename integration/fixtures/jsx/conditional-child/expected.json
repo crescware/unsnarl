@@ -1,0 +1,148 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/jsx/conditional-child/input.tsx",
+    "language": "tsx"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_View_16",
+      "name": "View",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_div_102",
+      "name": "div",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_View_16",
+      "ownerName": "View",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_props_21",
+          "name": "props",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_on_60",
+          "name": "on",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_off_79",
+          "name": "off",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_View_16_94_139",
+          "kind": "return",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_2",
+              "kind": "ReturnArgumentReference",
+              "name": "div",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": true,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnArgumentReference",
+              "name": "props",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnArgumentReference",
+              "name": "on",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnArgumentReference",
+              "name": "off",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_div_102",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_props_21",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_on_60",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_off_79",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

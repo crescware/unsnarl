@@ -1,0 +1,7 @@
+1	0	integration/fixtures/expression-statement/conditional-chain/input.ts:1 score
+0	1	integration/fixtures/expression-statement/conditional-chain/input.ts:3 score > 90
+  ? "high"
+  : score > 60
+    ? "mid"
+    : "low"
+1	1	2 total

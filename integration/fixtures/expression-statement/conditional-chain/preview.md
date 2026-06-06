@@ -1,0 +1,27 @@
+# integration/fixtures/expression-statement/conditional-chain/input.ts
+
+## Input
+
+```ts
+const score = 75;
+
+score > 90
+  ? "high"
+  : score > 60
+    ? "mid"
+    : "low";
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_score_6["score<br/>L1"]
+  n_scope_0_score_6 -->|read| expr_stmt_19
+  expr_stmt_19["score &gt; 90
+  ? &quot;high&quot;
+  : score &gt; 60
+    ? &quot;mid&quot;
+    : &quot;low&quot;<br/>L3-7"]
+```
