@@ -69,8 +69,8 @@ use std::collections::HashMap;
 
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
-use oxc_semantic::{AstNodes, Scoping, Semantic};
-use oxc_span::{GetSpan, Span};
+use oxc_semantic::Semantic;
+use oxc_span::Span;
 use oxc_syntax::scope::{ScopeFlags, ScopeId as OxcScopeId};
 
 use unsnarl_ir::ids::ScopeId;
@@ -80,8 +80,17 @@ use unsnarl_ir::scope_type::ScopeType;
 use unsnarl_ir::Language;
 use unsnarl_oxc_parity::AstType;
 
-use crate::materialise::ast_node_of;
 use crate::parser::SourceType;
+
+mod build_anchor_node;
+mod is_filtered_out;
+mod is_merged_into_parent;
+mod upper_for;
+
+use build_anchor_node::build_anchor_node;
+use is_filtered_out::is_filtered_out;
+use is_merged_into_parent::is_merged_into_parent;
+use upper_for::upper_for;
 
 /// Output of [`build_scopes`]: the IR scope arena plus the
 /// `OxcScopeId → Option<IrScopeId>` translation that downstream passes
@@ -232,62 +241,6 @@ pub(crate) fn build_scopes<'a>(
     }
 }
 
-/// Build the `AstNode` recorded on a scope's `block` field, applying
-/// the TypeScript-only `Program` span normalisation when the scope's
-/// anchor is the root `Program`.
-///
-/// Background: npm `oxc-parser` exposes `program.start = 0` for
-/// `lang: "js" / "jsx"`, but for `lang: "ts" / "tsx"` it advances
-/// past any leading hashbang and leading line / block comments so
-/// `program.start` lands on the first directive / body statement.
-/// The Rust `oxc_parser` crate emits `Program.span.start = 0`
-/// unconditionally, so the adapter normalises the start here so the
-/// root `block.span` matches the parity baseline for TypeScript
-/// inputs whose source begins with comments / a hashbang (e.g.
-/// cytoscape.min.js).
-fn build_anchor_node(kind: &AstKind<'_>, language: Language) -> AstNode {
-    let mut node = ast_node_of(kind);
-    if matches!(kind, AstKind::Program(_)) && matches!(language, Language::Ts | Language::Tsx) {
-        if let AstKind::Program(program) = kind {
-            let normalised_start = program
-                .directives
-                .first()
-                .map(|d| d.span.start)
-                .or_else(|| program.body.first().map(|s| s.span().start))
-                .or_else(|| program.hashbang.as_ref().map(|h| h.span.end))
-                .unwrap_or(program.span.start);
-            node.span = Span::new(normalised_start, program.span.end);
-        }
-    }
-    node
-}
-
-/// Compute the IR `upper` for a non-merged, non-filtered oxc scope.
-///
-/// For most scopes the upper is the parent's translated IR id. When
-/// the parent's anchor is a `SwitchStatement`, the upper is rewired
-/// to the synthetic case `Block` scope whose span encloses this
-/// scope's anchor (see [`build_scopes`]'s `SwitchCase` synthesis).
-fn upper_for(
-    oxc_id: OxcScopeId,
-    scoping: &Scoping,
-    nodes: &AstNodes<'_>,
-    translation: &IndexVec<OxcScopeId, Option<ScopeId>>,
-    switch_info: &HashMap<OxcScopeId, SwitchInfo>,
-) -> Option<ScopeId> {
-    let parent_oxc = scoping.scope_parent_id(oxc_id)?;
-    let parent_ir = translation[parent_oxc]?;
-    if let Some(info) = switch_info.get(&parent_oxc) {
-        let anchor_span = nodes.kind(scoping.get_node_id(oxc_id)).span();
-        for (case_span, case_ir) in &info.cases {
-            if case_span.start <= anchor_span.start && anchor_span.end <= case_span.end {
-                return Some(*case_ir);
-            }
-        }
-    }
-    Some(parent_ir)
-}
-
 /// Derive the `ScopeType` for a scope from its anchor `AstKind` and
 /// `ScopeFlags`. The anchor is the source of truth for most cases —
 /// `oxc_semantic` uses empty flags for `BlockStatement` /
@@ -317,79 +270,6 @@ pub(crate) fn derive_scope_type(
         // BlockStatement, SwitchCase consequent, TS-only blocks, …
         _ => ScopeType::Block,
     }
-}
-
-/// Predicate: does this oxc scope have no IR row of its own, instead
-/// merging into the parent's row?
-///
-/// Three merge cases:
-///
-/// * Catch body `BlockStatement`: `oxc_semantic` emits a separate
-///   `BlockStatement` scope for `catch (e) { ... }`'s body block,
-///   while the parity baseline folds both the catch parameter and the
-///   body's declarations into a single `Catch` scope. The body block
-///   is detected by its parent in [`Scoping::scope_parent_id`] being
-///   a `CatchClause` scope.
-/// * `WithStatement`: `oxc_semantic` allocates a dedicated With scope
-///   (`ScopeFlags::With`), but the parity baseline carries no
-///   separate With scope row — the body's `BlockStatement` is
-///   parented directly under the enclosing scope. Mirror that by
-///   treating the `WithStatement` scope as merged into its parent;
-///   its body block scope (a regular `BlockStatement`) keeps its own
-///   IR row with the With's parent as its `upper`.
-/// * `StaticBlock`: `oxc_semantic` opens a fresh scope for
-///   `class C { static { ... } }`, but the parity baseline keeps the
-///   static block's body identifiers in the enclosing `Class` scope.
-///   Treat the `StaticBlock` as merged into its `Class` parent so
-///   references / bindings inside the static block surface on the
-///   class scope.
-fn is_merged_into_parent(oxc_id: OxcScopeId, scoping: &Scoping, nodes: &AstNodes<'_>) -> bool {
-    let kind = nodes.kind(scoping.get_node_id(oxc_id));
-    if matches!(kind, AstKind::WithStatement(_) | AstKind::StaticBlock(_)) {
-        return true;
-    }
-    let Some(parent) = scoping.scope_parent_id(oxc_id) else {
-        return false;
-    };
-    let parent_kind = nodes.kind(scoping.get_node_id(parent));
-    matches!(kind, AstKind::BlockStatement(_)) && matches!(parent_kind, AstKind::CatchClause(_))
-}
-
-/// Predicate: should this scope (and its entire subtree) be omitted
-/// from the IR scope tree?
-///
-/// `oxc_semantic` allocates a scope for several TypeScript type-only
-/// constructs (`type X = ...`, `interface X { ... }`, `namespace X
-/// { ... }`, mapped / conditional types). The parity baseline never
-/// emits a scope for them, so drop the scope's IR row outright.
-/// Filtering propagates to descendants in the calling loop via the
-/// inherited-filter check; the surrounding subtree is recognised via
-/// [`unsnarl_oxc_parity::is_type_only_subtree`].
-fn is_filtered_out(kind: &AstKind<'_>) -> bool {
-    if let AstKind::Function(func) = kind {
-        if matches!(
-            func.r#type,
-            oxc_ast::ast::FunctionType::TSDeclareFunction
-                | oxc_ast::ast::FunctionType::TSEmptyBodyFunctionExpression
-        ) {
-            return true;
-        }
-    }
-    matches!(
-        kind,
-        AstKind::TSModuleDeclaration(_)
-            | AstKind::TSTypeAliasDeclaration(_)
-            | AstKind::TSInterfaceDeclaration(_)
-            | AstKind::TSConditionalType(_)
-            | AstKind::TSMappedType(_)
-            | AstKind::TSEnumDeclaration(_)
-            | AstKind::TSEnumBody(_)
-            | AstKind::TSFunctionType(_)
-            | AstKind::TSConstructorType(_)
-            | AstKind::TSMethodSignature(_)
-            | AstKind::TSConstructSignatureDeclaration(_)
-            | AstKind::TSCallSignatureDeclaration(_)
-    )
 }
 
 fn is_var_creating(flags: ScopeFlags) -> bool {

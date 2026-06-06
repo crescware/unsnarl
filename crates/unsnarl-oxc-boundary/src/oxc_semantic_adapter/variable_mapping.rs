@@ -74,19 +74,35 @@
 
 use std::collections::{HashMap, HashSet};
 
-use oxc_ast::ast::{ClassType, FunctionType};
 use oxc_ast::AstKind;
 use oxc_index::IndexVec;
-use oxc_semantic::{Scoping, Semantic};
+use oxc_semantic::Semantic;
 use oxc_span::Span;
 use oxc_syntax::scope::ScopeId as OxcScopeId;
 use oxc_syntax::symbol::SymbolId;
 
 use unsnarl_ir::ids::{DefinitionId, ScopeId, VariableId};
-use unsnarl_ir::primitive::{AstIdentifier, AstNode};
 use unsnarl_ir::scope::{DefinitionData, ScopeData, VariableData};
-use unsnarl_ir::DefinitionType;
-use unsnarl_oxc_parity::AstType;
+
+mod build_identifiers;
+mod inner_class_declaration_name;
+mod is_type_only_function_declaration;
+mod is_typescript_parameter_property;
+mod is_under_type_only_declaration;
+mod named_function_expression_self_name;
+mod push_implicit_arguments;
+mod push_inner_class_name;
+mod reparent_binding_to_switch_case;
+
+use build_identifiers::build_identifiers;
+use inner_class_declaration_name::inner_class_declaration_name;
+use is_type_only_function_declaration::is_type_only_function_declaration;
+use is_typescript_parameter_property::is_typescript_parameter_property;
+use is_under_type_only_declaration::is_under_type_only_declaration;
+use named_function_expression_self_name::named_function_expression_self_name;
+use push_implicit_arguments::push_implicit_arguments;
+use push_inner_class_name::push_inner_class_name;
+use reparent_binding_to_switch_case::reparent_binding_to_switch_case;
 
 /// Output of [`build_variables`]: the IR variable arena, the
 /// `SymbolId → VariableId` projection, and the set of symbols that
@@ -240,224 +256,6 @@ pub(crate) fn build_variables(
         symbol_to_variable,
         synthetic_unresolved,
         inner_class_names,
-    }
-}
-
-/// Reparent a binding to the per-case Block scope inside a switch.
-///
-/// Only relocate when the binding's declaring scope IS the switch
-/// scope itself — i.e. `oxc_semantic` placed the binding directly on
-/// the switch row (a `let` / `const` / function declaration written
-/// directly under a `case` consequent with no wrapping block). In
-/// that situation the parity baseline expects the binding to live on
-/// the synthetic per-`SwitchCase` `Block` row, so the adapter picks
-/// the case-Block whose span contains the binding (falling back to
-/// the bare switch when the binding sits outside every case head).
-///
-/// Crucially, bindings whose `oxc_semantic` declaring scope is an
-/// *ancestor* of a switch must stay put. The motivating case is
-/// `function f() { switch (k) { case 1: var x; } }`: `var x` is
-/// hoisted to the function scope (matching ECMAScript semantics and
-/// `oxc_semantic`'s `Binder` for `VariableDeclarator`), so
-/// `iter_bindings_in(function_scope)` yields the symbol with
-/// `symbol_span` pointing inside the case. Reparenting it to the
-/// case-Block would silently move `x` out of the function scope's
-/// `set` / `variables`, breaking lookups from any code outside the
-/// switch.
-fn reparent_binding_to_switch_case(
-    ir_scope: ScopeId,
-    span: Span,
-    scopes: &IndexVec<ScopeId, ScopeData>,
-    switch_cases: &HashMap<ScopeId, Vec<(Span, ScopeId)>>,
-) -> ScopeId {
-    let Some(cases) = switch_cases.get(&ir_scope) else {
-        return ir_scope;
-    };
-    let switch_span = scopes[ir_scope].block.span;
-    if span.start < switch_span.start || span.end > switch_span.end {
-        return ir_scope;
-    }
-    for (case_span, case_ir) in cases {
-        if case_span.start <= span.start && span.end <= case_span.end {
-            return *case_ir;
-        }
-    }
-    ir_scope
-}
-
-/// If `anchor` is the `Function` node of a named function expression,
-/// return its self-name. Used by [`build_variables`] to detect the
-/// binding that must be skipped per the parity baseline (see the
-/// module header).
-fn named_function_expression_self_name<'a>(anchor: &'a AstKind<'_>) -> Option<&'a str> {
-    let AstKind::Function(func) = anchor else {
-        return None;
-    };
-    if !matches!(
-        func.r#type,
-        FunctionType::FunctionExpression | FunctionType::TSEmptyBodyFunctionExpression
-    ) {
-        return None;
-    }
-    func.id.as_ref().map(|id| id.name.as_str())
-}
-
-/// Returns true if `symbol_id`'s declaration node is a TypeScript
-/// parameter property — a `FormalParameter` (or `FormalParameterRest`)
-/// carrying `accessibility` / `readonly` / `override`. Those slots
-/// represent class fields rather than parameters, so the parity
-/// baseline does not record them as parameter bindings.
-fn is_typescript_parameter_property(
-    scoping: &Scoping,
-    nodes: &oxc_semantic::AstNodes<'_>,
-    symbol_id: SymbolId,
-) -> bool {
-    let kind = nodes.kind(scoping.symbol_declaration(symbol_id));
-    match kind {
-        AstKind::FormalParameter(fp) => fp.accessibility.is_some() || fp.readonly || fp.r#override,
-        _ => false,
-    }
-}
-
-/// Returns true if `symbol_id`'s declaration is a TypeScript
-/// type-only function (`declare function f(): void`, parsed by oxc as
-/// `Function { type: TSDeclareFunction, ... }`, or an overload
-/// signature parsed as `TSEmptyBodyFunctionExpression`). The parity
-/// baseline drops such functions, so the binding never makes it into
-/// the IR variable list.
-fn is_type_only_function_declaration(
-    scoping: &Scoping,
-    nodes: &oxc_semantic::AstNodes<'_>,
-    symbol_id: SymbolId,
-) -> bool {
-    let kind = nodes.kind(scoping.symbol_declaration(symbol_id));
-    let AstKind::Function(func) = kind else {
-        return false;
-    };
-    matches!(
-        func.r#type,
-        FunctionType::TSDeclareFunction | FunctionType::TSEmptyBodyFunctionExpression
-    )
-}
-
-/// Returns true if any ancestor of `symbol_id`'s declaration node is
-/// a TypeScript type-only construct that
-/// [`unsnarl_oxc_parity::is_type_only_subtree`] marks as type-only.
-/// The parity baseline never declares the inner binding in such
-/// subtrees, so the variable is omitted from the IR variable list.
-fn is_under_type_only_declaration(
-    scoping: &Scoping,
-    nodes: &oxc_semantic::AstNodes<'_>,
-    symbol_id: SymbolId,
-) -> bool {
-    let mut cur = scoping.symbol_declaration(symbol_id);
-    loop {
-        if matches!(
-            nodes.kind(cur),
-            AstKind::TSImportEqualsDeclaration(_)
-                | AstKind::TSExportAssignment(_)
-                | AstKind::TSNamespaceExportDeclaration(_)
-                | AstKind::TSInterfaceDeclaration(_)
-                | AstKind::TSTypeAliasDeclaration(_)
-                | AstKind::TSEnumDeclaration(_)
-                | AstKind::TSModuleDeclaration(_),
-        ) {
-            return true;
-        }
-        let next = nodes.parent_id(cur);
-        if next == cur {
-            return false;
-        }
-        cur = next;
-    }
-}
-
-/// If `anchor` is the `Class` node of a named class *declaration*,
-/// return `(name, id_span, class_span)`. Class *expressions* already
-/// receive an inner-name binding from `oxc_semantic`, so they return
-/// `None` here.
-fn inner_class_declaration_name<'a>(
-    anchor: &'a AstKind<'_>,
-) -> Option<(&'a str, oxc_span::Span, oxc_span::Span)> {
-    let AstKind::Class(class) = anchor else {
-        return None;
-    };
-    if !matches!(class.r#type, ClassType::ClassDeclaration) {
-        return None;
-    }
-    let id = class.id.as_ref()?;
-    Some((id.name.as_str(), id.span, class.span))
-}
-
-/// Synthesise the inner `ClassName` binding plus its `ClassName`
-/// definition for a class declaration. Returns the new `VariableId`
-/// so the caller can record it for the reference-mapping rebind pass.
-fn push_inner_class_name(
-    scopes: &mut IndexVec<ScopeId, ScopeData>,
-    variables: &mut IndexVec<VariableId, VariableData>,
-    definitions: &mut IndexVec<DefinitionId, DefinitionData>,
-    scope: ScopeId,
-    name: &str,
-    id_span: oxc_span::Span,
-    class_span: oxc_span::Span,
-) -> VariableId {
-    let identifier = AstIdentifier::new(AstType::Identifier, name.to_string(), id_span);
-    let var_id = variables.push(VariableData::new(
-        name.to_string(),
-        scope,
-        vec![identifier.clone()],
-        Vec::new(),
-        Vec::new(),
-    ));
-    scopes[scope].insert_into_set(name.to_string(), var_id);
-    scopes[scope].variables.push(var_id);
-    let def_id = definitions.push(DefinitionData {
-        r#type: DefinitionType::ClassName,
-        name: identifier,
-        node: AstNode::new(AstType::ClassDeclaration, class_span),
-        parent: None,
-        init: None,
-        declaration_kind: None,
-        import_source: None,
-        imported_name: None,
-    });
-    variables[var_id].defs.push(def_id);
-    var_id
-}
-
-fn push_implicit_arguments(
-    scopes: &mut IndexVec<ScopeId, ScopeData>,
-    variables: &mut IndexVec<VariableId, VariableData>,
-    scope: ScopeId,
-) {
-    let name = "arguments";
-    if scopes[scope].set().contains_key(name) {
-        return;
-    }
-    let var_id = variables.push(VariableData::new(
-        name.to_string(),
-        scope,
-        Vec::new(),
-        Vec::new(),
-        Vec::new(),
-    ));
-    scopes[scope].insert_into_set(name.to_string(), var_id);
-    scopes[scope].variables.push(var_id);
-}
-
-fn build_identifiers(scoping: &Scoping, symbol_id: SymbolId, name: &str) -> Vec<AstIdentifier> {
-    let redeclarations = scoping.symbol_redeclarations(symbol_id);
-    if redeclarations.is_empty() {
-        vec![AstIdentifier::new(
-            AstType::Identifier,
-            name.to_string(),
-            scoping.symbol_span(symbol_id),
-        )]
-    } else {
-        redeclarations
-            .iter()
-            .map(|r| AstIdentifier::new(AstType::Identifier, name.to_string(), r.span))
-            .collect()
     }
 }
 
