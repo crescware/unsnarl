@@ -57,3 +57,9 @@ run replaced an older per-member `cargo test -p <member>` loop that recompiled
 the shared crates against each other; folding it into one run resolves features
 once so each crate compiles a single time. Do not run the underlying `cargo`
 commands by hand.
+
+## Branch Naming
+
+Name a working branch `#<issue-number>/<kebab-case>` when it has a
+corresponding issue, and `<kebab-case>` when it does not. Do not add a
+`feat/` / `fix/` (or any other) type prefix.
