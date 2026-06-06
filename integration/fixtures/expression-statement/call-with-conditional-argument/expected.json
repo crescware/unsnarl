@@ -1,0 +1,87 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/call-with-conditional-argument/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_flag_6",
+      "name": "flag",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_left_25",
+      "name": "left",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_right_44",
+      "name": "right",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_console_60",
+      "name": "console",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_60",
+      "kind": "SyntheticExpressionStatement",
+      "name": "console.log()",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_console_60",
+      "to": "expr_stmt_60",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_flag_6",
+      "to": "expr_stmt_60",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_left_25",
+      "to": "expr_stmt_60",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_right_44",
+      "to": "expr_stmt_60",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/conditional-chain/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_score_6",
+      "name": "score",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_19",
+      "kind": "SyntheticExpressionStatement",
+      "name": "score > 90\n  ? \"high\"\n  : score > 60\n    ? \"mid\"\n    : \"low\"",
+      "line": 3,
+      "endLine": 7,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_score_6",
+      "to": "expr_stmt_19",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

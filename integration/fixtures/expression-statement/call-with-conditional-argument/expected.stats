@@ -1,0 +1,6 @@
+1	0	integration/fixtures/expression-statement/call-with-conditional-argument/input.ts:0 console
+1	0	integration/fixtures/expression-statement/call-with-conditional-argument/input.ts:1 flag
+1	0	integration/fixtures/expression-statement/call-with-conditional-argument/input.ts:2 left
+1	0	integration/fixtures/expression-statement/call-with-conditional-argument/input.ts:3 right
+0	4	integration/fixtures/expression-statement/call-with-conditional-argument/input.ts:5 console.log()
+4	4	5 total
