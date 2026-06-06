@@ -5,6 +5,7 @@
 //! them. The entry point is
 //! [`build_visual_graph::build_visual_graph`].
 
+pub mod apply_pending_loop_test_anchors;
 pub mod arena;
 pub mod branch_container_key;
 pub mod branch_merged_origins;
@@ -16,6 +17,9 @@ pub mod context;
 pub mod control_subgraph_kind_of;
 pub mod describe_subgraph;
 pub mod edge_label_of_ref;
+pub mod emit_let_chain_edges;
+pub mod emit_module_and_intermediate;
+pub mod emit_reference_edges;
 pub mod enclosing_function_var;
 pub mod ensure_beyond_depth_stub;
 pub mod ensure_expression_statement_node;
@@ -41,6 +45,7 @@ pub mod line_for_offset;
 pub mod loop_test_anchor;
 pub mod loop_test_node_id;
 pub mod make_variable_node;
+pub mod mark_unused;
 pub mod module_root_id;
 pub mod nesting_kind_of;
 pub mod node_id;
@@ -50,6 +55,7 @@ pub mod predicate_target_id;
 pub mod previous_fallthrough_case;
 pub mod push_edge;
 pub mod read_origins;
+pub mod redirect_edges_into_collapsed;
 pub mod render_head_expression;
 pub mod resolve_read_target_id;
 pub mod ret_use_node_id;
