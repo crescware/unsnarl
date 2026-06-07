@@ -30,75 +30,113 @@
     },
     {
       "type": "subgraph",
-      "id": "expr_stmt_48",
-      "kind": "call-proxy",
+      "id": "cont_ternary_scope_0_48",
+      "kind": "conditional-container",
       "line": 4,
       "endLine": null,
       "direction": "RL",
-      "callName": "enabled ? items.map((v) => v * 2) : items",
       "elements": [
         {
           "type": "subgraph",
           "id": "s_scope_1",
-          "kind": "function",
           "line": 4,
           "endLine": 4,
           "direction": "RL",
-          "ownerNodeId": null,
-          "ownerName": "",
-          "callbackArg": {
-            "callee": "items.map",
-            "argIndex": 0
-          },
           "elements": [
             {
               "type": "node",
-              "id": "n_scope_1_v_69",
-              "name": "v",
+              "id": "ternary_test_scope_0_48",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
               "line": 4,
               "endLine": null,
               "isJsxElement": false,
-              "unused": false,
-              "kind": "FormalParameter"
+              "unused": false
             },
             {
               "type": "subgraph",
-              "id": "s_return_scope_1_75_80",
-              "kind": "return",
+              "id": "s_scope_2",
+              "kind": "function",
               "line": 4,
-              "endLine": null,
+              "endLine": 4,
               "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "callbackArg": {
+                "callee": "items.map",
+                "argIndex": 0
+              },
               "elements": [
                 {
                   "type": "node",
-                  "id": "ret_use_ref_4",
-                  "kind": "ReturnArgumentReference",
+                  "id": "n_scope_2_v_69",
                   "name": "v",
                   "line": 4,
                   "endLine": null,
                   "isJsxElement": false,
-                  "unused": false
+                  "unused": false,
+                  "kind": "FormalParameter"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_2_75_80",
+                  "kind": "return",
+                  "line": 4,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_4",
+                      "kind": "ReturnArgumentReference",
+                      "name": "v",
+                      "line": 4,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
                 }
               ]
             }
-          ]
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
         }
       ]
+    },
+    {
+      "type": "node",
+      "id": "module_root",
+      "kind": "SyntheticModuleSink",
+      "name": "module",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_enabled_31",
-      "to": "expr_stmt_48",
+      "to": "ternary_test_scope_0_48",
       "label": "read"
     },
     {
       "from": "n_scope_0_items_6",
-      "to": "expr_stmt_48",
+      "to": "module_root",
       "label": "read"
     },
     {
-      "from": "n_scope_1_v_69",
+      "from": "n_scope_2_v_69",
       "to": "ret_use_ref_4",
       "label": "read"
     }

@@ -84,6 +84,11 @@ pub struct BuildState {
     /// statement family (`for` / `for-in` / `for-of`) shares this
     /// map; the anchor kind discriminates them.
     pub for_test_anchor_by_offset: HashMap<u32, String>,
+    /// `conditional-expression offset → test anchor node id`. Filled
+    /// by the ternary test push in `build_children` so
+    /// `predicate_target_id` can route reads to the corresponding
+    /// `ternary ?:` diamond node.
+    pub conditional_test_anchor_by_offset: HashMap<u32, String>,
     /// Anchors that must be `unshift` / `push`ed into their host
     /// subgraph at the very end of the build, after every other
     /// element has been added.

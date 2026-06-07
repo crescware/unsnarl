@@ -71,22 +71,51 @@
         },
         {
           "type": "subgraph",
+          "id": "cont_ternary_scope_1_84",
+          "kind": "conditional-container",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_84",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
           "id": "s_return_scope_0_pick_9_77_104",
           "kind": "return",
           "line": 4,
           "endLine": null,
           "direction": "RL",
           "elements": [
-            {
-              "type": "node",
-              "id": "ret_use_ref_2",
-              "kind": "ReturnArgumentReference",
-              "name": "flag",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
-              "unused": false
-            },
             {
               "type": "node",
               "id": "ret_use_ref_3",
@@ -115,7 +144,7 @@
   "edges": [
     {
       "from": "n_scope_1_flag_14",
-      "to": "ret_use_ref_2",
+      "to": "ternary_test_scope_1_84",
       "label": "read"
     },
     {

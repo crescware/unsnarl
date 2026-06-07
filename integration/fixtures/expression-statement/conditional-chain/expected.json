@@ -18,20 +18,94 @@
       "initIsFunction": false
     },
     {
-      "type": "node",
-      "id": "expr_stmt_19",
-      "kind": "SyntheticExpressionStatement",
-      "name": "score > 90\n  ? \"high\"\n  : score > 60\n    ? \"mid\"\n    : \"low\"",
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_19",
+      "kind": "conditional-container",
       "line": 3,
       "endLine": 7,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_19",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 5,
+          "endLine": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "cont_ternary_scope_2_45",
+              "kind": "conditional-container",
+              "line": 5,
+              "endLine": 7,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_3",
+                  "line": 6,
+                  "endLine": 6,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ternary_test_scope_2_45",
+                      "kind": "SyntheticConditionalTest",
+                      "name": "ternary-test",
+                      "line": 5,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ],
+                  "kind": "consequent"
+                },
+                {
+                  "type": "subgraph",
+                  "id": "s_scope_4",
+                  "line": 7,
+                  "endLine": 7,
+                  "direction": "RL",
+                  "elements": [],
+                  "kind": "alternate"
+                }
+              ]
+            }
+          ],
+          "kind": "alternate"
+        }
+      ]
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_score_6",
-      "to": "expr_stmt_19",
+      "to": "ternary_test_scope_0_19",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_score_6",
+      "to": "ternary_test_scope_2_45",
       "label": "read"
     }
   ],

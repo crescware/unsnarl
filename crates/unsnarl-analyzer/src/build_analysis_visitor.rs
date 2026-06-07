@@ -18,16 +18,17 @@ use std::collections::HashMap;
 
 use oxc_ast::ast::{
     ArrowFunctionExpression, AssignmentExpression, BindingIdentifier, BlockStatement,
-    CallExpression, CatchClause, Class, ComputedMemberExpression, DoWhileStatement,
-    ExportDefaultDeclaration, ExportNamedDeclaration, ExpressionStatement, ForInStatement,
-    ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference, IfStatement,
-    ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression, ObjectProperty,
-    PrivateFieldExpression, Program, ReturnStatement, SequenceExpression, StaticMemberExpression,
-    SwitchCase, SwitchStatement, ThrowStatement, TryStatement, UpdateExpression,
-    VariableDeclarator, WhileStatement,
+    CallExpression, CatchClause, Class, ComputedMemberExpression, ConditionalExpression,
+    DoWhileStatement, ExportDefaultDeclaration, ExportNamedDeclaration, ExpressionStatement,
+    ForInStatement, ForOfStatement, ForStatement, Function, IdentifierName, IdentifierReference,
+    IfStatement, ImportAttribute, JSXIdentifier, LabeledStatement, MetaProperty, NewExpression,
+    ObjectProperty, PrivateFieldExpression, Program, ReturnStatement, SequenceExpression,
+    StaticMemberExpression, SwitchCase, SwitchStatement, ThrowStatement, TryStatement,
+    UpdateExpression, VariableDeclarator, WhileStatement,
 };
 use oxc_ast::AstKind;
 use oxc_ast_visit::Visit;
+use oxc_span::GetSpan;
 use oxc_syntax::scope::ScopeFlags;
 
 use unsnarl_ir::nesting_kind::NestingDepths;
@@ -430,6 +431,33 @@ impl<'a, 'arena> Visit<'a> for BuildAnalysisVisitor<'a, 'arena> {
             self.visit_statement(alt);
             self.key_stack.pop();
         }
+        self.pop_path();
+    }
+
+    /// A ternary `cond ? a : b` is rendered with the same diamond-test
+    /// plus per-branch subgraph shape as `if` / `else`. The boundary
+    /// synthesises a `Block` scope per arm (anchored to the arm
+    /// expression's span); firing `fire_scope` on each arm span — with
+    /// `ConditionalExpression` already pushed onto the path and the slot
+    /// key set to `consequent` / `alternate` — stamps the matching
+    /// `blockContext` onto those synthetic scopes via `block_context_of`,
+    /// the same path `if` branches take. The `test` push lets
+    /// `find_predicate_container` route the test's reads to the diamond.
+    fn visit_conditional_expression(&mut self, it: &ConditionalExpression<'a>) {
+        let kind = AstKind::ConditionalExpression(self.alloc(it));
+        self.push_path(kind, None);
+        self.visit_span(&it.span);
+        self.key_stack.push(Some("test"));
+        self.visit_expression(&it.test);
+        self.key_stack.pop();
+        self.key_stack.push(Some("consequent"));
+        self.fire_scope(it.consequent.span(), &kind);
+        self.visit_expression(&it.consequent);
+        self.key_stack.pop();
+        self.key_stack.push(Some("alternate"));
+        self.fire_scope(it.alternate.span(), &kind);
+        self.visit_expression(&it.alternate);
+        self.key_stack.pop();
         self.pop_path();
     }
 

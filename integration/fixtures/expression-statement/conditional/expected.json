@@ -18,20 +18,49 @@
       "initIsFunction": false
     },
     {
-      "type": "node",
-      "id": "expr_stmt_23",
-      "kind": "SyntheticExpressionStatement",
-      "name": "enabled\n  ? \"the value selected when the condition is true, kept long on purpose\"\n  : \"the value selected when the condition is false, also kept long\"",
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_23",
+      "kind": "conditional-container",
       "line": 3,
       "endLine": 5,
-      "isJsxElement": false,
-      "unused": false
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_23",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 3,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
+        }
+      ]
     }
   ],
   "edges": [
     {
       "from": "n_scope_0_enabled_6",
-      "to": "expr_stmt_23",
+      "to": "ternary_test_scope_0_23",
       "label": "read"
     }
   ],

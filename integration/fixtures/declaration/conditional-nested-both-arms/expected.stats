@@ -1,0 +1,12 @@
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:1 c
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:2 a
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:3 b
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:4 p
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:5 q
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:6 r
+1	0	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:7 s
+0	4	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:8 unused x
+0	1	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:8 ternary-test
+0	1	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:8 ternary-test
+0	1	integration/fixtures/declaration/conditional-nested-both-arms/input.ts:8 ternary-test
+7	7	11 total

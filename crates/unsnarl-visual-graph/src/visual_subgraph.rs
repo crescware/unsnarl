@@ -42,6 +42,8 @@ pub enum OwnedSubgraphKind {
     Throw,
     #[serde(rename = "if-else-container")]
     IfElseContainer,
+    #[serde(rename = "conditional-container")]
+    ConditionalContainer,
     #[serde(rename = "module")]
     Module,
 }
@@ -140,6 +142,10 @@ pub enum ControlSubgraphKind {
     If,
     #[serde(rename = "else")]
     Else,
+    #[serde(rename = "consequent")]
+    Consequent,
+    #[serde(rename = "alternate")]
+    Alternate,
     #[serde(rename = "try")]
     Try,
     #[serde(rename = "catch")]

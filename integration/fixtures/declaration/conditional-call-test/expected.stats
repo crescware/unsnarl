@@ -1,0 +1,6 @@
+1	0	integration/fixtures/declaration/conditional-call-test/input.ts:1 getFlag
+1	0	integration/fixtures/declaration/conditional-call-test/input.ts:4 a
+1	0	integration/fixtures/declaration/conditional-call-test/input.ts:5 b
+0	2	integration/fixtures/declaration/conditional-call-test/input.ts:6 unused x
+0	1	integration/fixtures/declaration/conditional-call-test/input.ts:6 ternary-test
+3	3	5 total

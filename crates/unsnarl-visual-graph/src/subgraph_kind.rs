@@ -23,8 +23,14 @@ pub enum SubgraphKind {
     If,
     #[serde(rename = "else")]
     Else,
+    #[serde(rename = "consequent")]
+    Consequent,
+    #[serde(rename = "alternate")]
+    Alternate,
     #[serde(rename = "if-else-container")]
     IfElseContainer,
+    #[serde(rename = "conditional-container")]
+    ConditionalContainer,
     #[serde(rename = "try")]
     Try,
     #[serde(rename = "catch")]
@@ -61,7 +67,10 @@ impl SubgraphKind {
             Self::Case => "case",
             Self::If => "if",
             Self::Else => "else",
+            Self::Consequent => "consequent",
+            Self::Alternate => "alternate",
             Self::IfElseContainer => "if-else-container",
+            Self::ConditionalContainer => "conditional-container",
             Self::Try => "try",
             Self::Catch => "catch",
             Self::Finally => "finally",

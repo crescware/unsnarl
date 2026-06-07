@@ -24,6 +24,7 @@ use crate::visual_subgraph::OwnedVisualSubgraph;
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::attach_test_anchor_to_consequent::attach_test_anchor_to_consequent;
 use super::branch_container_key::branch_container_key;
+use super::build_conditional_group::build_conditional_group;
 use super::build_scope::build_scope;
 use super::callback_chain_target::{callback_chain_target, ChainHost};
 use super::context::BuilderContext;
@@ -312,7 +313,8 @@ pub fn build_children(
             i += 1;
             continue;
         };
-        if !key.starts_with("if:") {
+        let is_ternary = key.starts_with("ternary:");
+        if !key.starts_with("if:") && !is_ternary {
             build_scope(arena, state, ctx, child, container);
             i += 1;
             continue;
@@ -326,6 +328,11 @@ pub fn build_children(
             }
             group.push(next);
             j += 1;
+        }
+        if is_ternary {
+            build_conditional_group(arena, state, ctx, container, &group);
+            i = j;
+            continue;
         }
         if group.len() < 2 {
             let lone = group[0];

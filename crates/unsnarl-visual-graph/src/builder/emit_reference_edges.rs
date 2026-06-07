@@ -69,6 +69,7 @@ pub fn emit_reference_edges(
             while_test: &state.while_test_anchor_by_offset,
             do_while_test: &state.do_while_test_anchor_by_offset,
             for_test: &state.for_test_anchor_by_offset,
+            conditional_test: &state.conditional_test_anchor_by_offset,
         };
         let predicate_target = predicate_target_id_borrowed(r, &anchors);
         if let Some(target) = predicate_target {

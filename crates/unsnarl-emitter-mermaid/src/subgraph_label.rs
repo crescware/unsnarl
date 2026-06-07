@@ -124,12 +124,24 @@ fn base_label_into(out: &mut String, sg: &VisualSubgraph, node_map: &HashMap<Str
             out.push_str("else ");
             line_range_label_into(out, sg);
         }
+        SubgraphKind::Consequent => {
+            out.push_str("? then ");
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::Alternate => {
+            out.push_str(": else ");
+            line_range_label_into(out, sg);
+        }
         SubgraphKind::IfElseContainer => {
             if sg.has_else() {
                 out.push_str("if-else ");
             } else {
                 out.push_str("if ");
             }
+            line_range_label_into(out, sg);
+        }
+        SubgraphKind::ConditionalContainer => {
+            out.push_str("ternary ?: ");
             line_range_label_into(out, sg);
         }
         SubgraphKind::Try => {

@@ -1,0 +1,9 @@
+1	0	integration/fixtures/function/arrow/conditional-block-return/input.ts:1 left
+1	0	integration/fixtures/function/arrow/conditional-block-return/input.ts:2 right
+1	0	integration/fixtures/function/arrow/conditional-block-return/input.ts:4 pick
+1	0	integration/fixtures/function/arrow/conditional-block-return/input.ts:4 flag
+0	1	integration/fixtures/function/arrow/conditional-block-return/input.ts:5 ternary-test
+0	1	integration/fixtures/function/arrow/conditional-block-return/input.ts:5 left
+0	1	integration/fixtures/function/arrow/conditional-block-return/input.ts:5 right
+0	1	integration/fixtures/function/arrow/conditional-block-return/input.ts:8 unused result
+4	4	8 total

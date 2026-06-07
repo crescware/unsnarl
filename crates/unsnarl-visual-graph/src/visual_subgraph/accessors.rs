@@ -65,6 +65,7 @@ impl VisualSubgraph {
                 OwnedSubgraphKind::Return => SubgraphKind::Return,
                 OwnedSubgraphKind::Throw => SubgraphKind::Throw,
                 OwnedSubgraphKind::IfElseContainer => SubgraphKind::IfElseContainer,
+                OwnedSubgraphKind::ConditionalContainer => SubgraphKind::ConditionalContainer,
                 OwnedSubgraphKind::Module => SubgraphKind::Module,
             },
             Self::Control(s) => match s.kind {
@@ -72,6 +73,8 @@ impl VisualSubgraph {
                 ControlSubgraphKind::Switch => SubgraphKind::Switch,
                 ControlSubgraphKind::If => SubgraphKind::If,
                 ControlSubgraphKind::Else => SubgraphKind::Else,
+                ControlSubgraphKind::Consequent => SubgraphKind::Consequent,
+                ControlSubgraphKind::Alternate => SubgraphKind::Alternate,
                 ControlSubgraphKind::Try => SubgraphKind::Try,
                 ControlSubgraphKind::Catch => SubgraphKind::Catch,
                 ControlSubgraphKind::Finally => SubgraphKind::Finally,

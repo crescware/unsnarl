@@ -1,0 +1,169 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/arrow/conditional-block-return/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_left_6",
+      "name": "left",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_right_24",
+      "name": "right",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_pick_44",
+      "name": "pick",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": true
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_112",
+      "name": "result",
+      "line": 8,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 4,
+      "endLine": 6,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_pick_44",
+      "ownerName": "pick",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_flag_52",
+          "name": "flag",
+          "line": 4,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "cont_ternary_scope_1_81",
+          "kind": "conditional-container",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 5,
+              "endLine": 5,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_81",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 5,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 5,
+              "endLine": 5,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_pick_44_74_101",
+          "kind": "return",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_4",
+              "kind": "ReturnArgumentReference",
+              "name": "left",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "ret_use_ref_5",
+              "kind": "ReturnArgumentReference",
+              "name": "right",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_flag_52",
+      "to": "ternary_test_scope_1_81",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_left_6",
+      "to": "ret_use_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_right_24",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_pick_44",
+      "to": "n_scope_0_result_112",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

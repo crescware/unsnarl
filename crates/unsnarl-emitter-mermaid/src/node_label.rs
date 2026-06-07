@@ -34,6 +34,9 @@ fn base_label_into(out: &mut String, n: &VisualNode) {
         NodeKind::SyntheticSwitchStatementDiscriminant => {
             write!(out, "switch ()<br/>L{}", n.line()).expect("writing to String is infallible");
         }
+        NodeKind::SyntheticConditionalTest => {
+            write!(out, "ternary ?:<br/>L{}", n.line()).expect("writing to String is infallible");
+        }
         NodeKind::SyntheticWhileStatementTest => {
             write!(out, "while ()<br/>L{}", n.line()).expect("writing to String is infallible");
         }

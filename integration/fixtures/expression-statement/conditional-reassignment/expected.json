@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/conditional-reassignment/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_cond_6",
+      "name": "cond",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_25",
+      "name": "a",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_40",
+      "name": "b",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_x_53",
+      "name": "x",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "LetBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "wr_ref_4",
+      "kind": "WriteReference",
+      "name": "x",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "declarationKind": "let"
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_66",
+      "kind": "conditional-container",
+      "line": 5,
+      "endLine": null,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_66",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_x_53",
+      "to": "wr_ref_4",
+      "label": "set"
+    },
+    {
+      "from": "n_scope_0_cond_6",
+      "to": "ternary_test_scope_0_66",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_25",
+      "to": "wr_ref_4",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_40",
+      "to": "wr_ref_4",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -96,6 +96,22 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     AstKind::ExpressionStatement(es) => {
                         if is_synthetic_arrow_body_expression_statement(&self.path, i) {
                             None
+                        } else if matches!(
+                            es.expression,
+                            oxc_ast::ast::Expression::ConditionalExpression(_)
+                        ) {
+                            // A ternary `cond ? a : b;` renders as the
+                            // `ternary ?:` diamond plus `? then` / `: else`
+                            // branch subgraphs (an arm being a synthetic
+                            // scope). Emitting an ExpressionStatement
+                            // container too would duplicate the whole
+                            // statement as a verbatim Raw head node and
+                            // pull any arm-local callback into a
+                            // statement-level CallProxy instead of the
+                            // arm. Suppress it so the structure stands
+                            // alone — the arm values flow to their
+                            // consumer exactly as in any other context.
+                            None
                         } else {
                             Some(build_expression_statement_container(
                                 es.span,

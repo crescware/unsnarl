@@ -53,6 +53,7 @@ impl VisualNode {
                 SyntheticNodeKind::SyntheticSwitchStatementDiscriminant => {
                     NodeKind::SyntheticSwitchStatementDiscriminant
                 }
+                SyntheticNodeKind::SyntheticConditionalTest => NodeKind::SyntheticConditionalTest,
                 SyntheticNodeKind::SyntheticWhileStatementTest => {
                     NodeKind::SyntheticWhileStatementTest
                 }

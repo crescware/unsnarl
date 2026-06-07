@@ -58,7 +58,10 @@
       "type": "function",
       "isStrict": true,
       "upper": "scope#0",
-      "childScopes": [],
+      "childScopes": [
+        "scope#2",
+        "scope#3"
+      ],
       "variableScope": "scope#1",
       "block": {
         "type": "FunctionDeclaration",
@@ -93,6 +96,96 @@
       "exitsFunction": false,
       "nestingDepths": {
         "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "Identifier",
+        "span": {
+          "line": 4,
+          "column": 16,
+          "offset": 91
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 20,
+          "offset": 95
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "consequent",
+        "parentSpanOffset": 84,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#1",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "Identifier",
+        "span": {
+          "line": 4,
+          "column": 23,
+          "offset": 98
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 28,
+          "offset": 103
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "alternate",
+        "parentSpanOffset": 84,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
         "if": 0,
         "for": 0,
         "while": 0,
@@ -419,7 +512,10 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null,
+      "predicateContainer": {
+        "type": "ConditionalExpression",
+        "offset": 84
+      },
       "completion": {
         "type": "return",
         "startSpan": {

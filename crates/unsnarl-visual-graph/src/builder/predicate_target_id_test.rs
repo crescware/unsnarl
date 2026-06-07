@@ -10,17 +10,18 @@ use unsnarl_oxc_parity::PredicateContainerType;
 use super::{predicate_target_id, PredicateAnchorMaps};
 use crate::builder::builder_fixtures::{base_serialized_reference, predicate_container};
 
-fn empty_maps() -> [HashMap<u32, String>; 5] {
+fn empty_maps() -> [HashMap<u32, String>; 6] {
     Default::default()
 }
 
-fn anchors(maps: &[HashMap<u32, String>; 5]) -> PredicateAnchorMaps<'_> {
+fn anchors(maps: &[HashMap<u32, String>; 6]) -> PredicateAnchorMaps<'_> {
     PredicateAnchorMaps {
         if_test: &maps[0],
         switch_discriminant: &maps[1],
         while_test: &maps[2],
         do_while_test: &maps[3],
         for_test: &maps[4],
+        conditional_test: &maps[5],
     }
 }
 
@@ -92,6 +93,21 @@ fn do_while_statement_resolves_to_registered_anchor_by_offset() {
     assert_eq!(
         predicate_target_id(&r, &anchors(&maps)),
         Some("do_while_test_x".to_string())
+    );
+}
+
+#[test]
+fn conditional_expression_resolves_to_registered_anchor_by_offset() {
+    let mut r = base_serialized_reference();
+    r.predicate_container = Some(predicate_container(
+        PredicateContainerType::ConditionalExpression,
+        72,
+    ));
+    let mut maps = empty_maps();
+    maps[5].insert(72, "ternary_test_x".to_string());
+    assert_eq!(
+        predicate_target_id(&r, &anchors(&maps)),
+        Some("ternary_test_x".to_string())
     );
 }
 

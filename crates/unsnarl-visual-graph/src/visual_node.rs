@@ -96,6 +96,7 @@ pub enum SyntheticNodeKind {
     ThrowArgumentReference,
     SyntheticIfStatementTest,
     SyntheticSwitchStatementDiscriminant,
+    SyntheticConditionalTest,
     SyntheticWhileStatementTest,
     SyntheticDoWhileStatementTest,
     SyntheticForStatementHeader,

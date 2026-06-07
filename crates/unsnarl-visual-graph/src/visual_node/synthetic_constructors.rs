@@ -115,6 +115,16 @@ impl SyntheticVisualNode {
         )
     }
 
+    pub fn conditional_test(id: impl Into<String>, line: u32) -> Self {
+        Self::base(
+            id,
+            "ternary-test",
+            line,
+            SyntheticNodeKind::SyntheticConditionalTest,
+            SyntheticExtras::None {},
+        )
+    }
+
     pub fn while_statement_test(id: impl Into<String>, line: u32) -> Self {
         Self::base(
             id,

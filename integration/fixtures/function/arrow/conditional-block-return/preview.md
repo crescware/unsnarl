@@ -1,0 +1,64 @@
+# integration/fixtures/function/arrow/conditional-block-return/input.ts
+
+## Input
+
+```ts
+const left = "L";
+const right = "R";
+
+const pick = (flag: boolean) => {
+  return flag ? left : right;
+};
+
+const result = pick(true);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_left_6["left<br/>L1"]
+  n_scope_0_right_24["right<br/>L2"]
+  n_scope_0_result_112["unused result<br/>L8"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_pick_44["pick()<br/>L4"]
+    subgraph s_scope_1["pick()<br/>L4-6"]
+      direction RL
+      n_scope_1_flag_52["flag<br/>L4"]
+      subgraph cont_ternary_scope_1_81["ternary ?: L5"]
+        direction RL
+        subgraph s_scope_2["? then L5"]
+          direction RL
+          ternary_test_scope_1_81{"ternary ?:<br/>L5"}
+        end
+        subgraph s_scope_3[": else L5"]
+          direction RL
+          elk_empty_s_scope_3["No nodes"]
+        end
+      end
+      subgraph s_return_scope_0_pick_44_74_101["return L5"]
+        direction RL
+        ret_use_ref_4["left<br/>L5"]
+        ret_use_ref_5["right<br/>L5"]
+      end
+    end
+  end
+  n_scope_1_flag_52 -->|read| ternary_test_scope_1_81
+  n_scope_0_left_6 -->|read| ret_use_ref_4
+  n_scope_0_right_24 -->|read| ret_use_ref_5
+  n_scope_0_pick_44 -->|read,call| n_scope_0_result_112
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_1_81 nestL3;
+  class s_return_scope_0_pick_44_74_101 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
+```
