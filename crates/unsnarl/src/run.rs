@@ -9,7 +9,7 @@ use crate::cli::args::Args;
 use crate::cli::run_cli::{
     calc_source::calc_source, cli_usage_error::CliUsageError, emit_analyzer_warnings,
     emit_highlight_warnings, emit_out_flag_notice, emit_pruning_warnings, emit_resolution_notices,
-    resolve_output_path, write_output,
+    emit_stats_deprecation_notice, resolve_output_path, write_output,
 };
 use crate::pipeline::plugin::default_registry;
 
@@ -142,6 +142,10 @@ pub(crate) fn run_to(
     emit_pruning_warnings(details.pruning.as_deref(), err);
     emit_highlight_warnings(details.highlight_warnings.as_deref(), err);
     emit_analyzer_warnings(&details.diagnostics, err);
+    // Deprecation notice goes last, after every other warning, so the
+    // stats run closes with it. Post-pipeline placement also means it
+    // only fires once stats output is actually produced.
+    emit_stats_deprecation_notice(&args.format, err);
 
     match write_output(output_path.as_deref(), &details.text, out) {
         Ok(()) => 0,
