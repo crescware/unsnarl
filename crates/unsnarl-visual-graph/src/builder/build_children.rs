@@ -43,9 +43,9 @@ use super::state::BuildState;
 use super::write_op_node_for_assignment::write_op_node_for_assignment;
 
 /// The source span of `scope` when it is a synthesised ternary arm
-/// (`? then` / `: else`), else `None`. Lets the caller gate a ternary
-/// arm's result-proxy redirect to reads inside that arm (see
-/// `BuildState::result_proxy_arm_span`).
+/// (`? then` / `: else`), else `None`. Lets callers gate a ternary arm's
+/// proxy redirect to reads inside that arm (see
+/// `BuildState::result_proxy_arm_span` / `ternary_callback_arm_spans`).
 fn conditional_arm_span(scope: &SerializedScope) -> Option<(u32, u32)> {
     let c = scope.block_context.as_ref()?;
     if matches!(c.parent_type(), AstType::ConditionalExpression)
@@ -242,6 +242,15 @@ pub fn build_children(
                     state
                         .expression_statement_by_offset
                         .insert(statement.start_span.offset.0, inner);
+                }
+                // When this statement-hosted callback lives in a ternary
+                // arm (`enabled ? items.map(cb) : other;`), record the arm
+                // span so the sibling arm's plain value reads are not
+                // pulled onto this statement's container (they flow to the
+                // ternary's consumer instead — see
+                // `BuildState::ternary_callback_arm_spans`).
+                if let Some(span) = conditional_arm_span(parent_scope) {
+                    state.ternary_callback_arm_spans.push(span);
                 }
                 build_scope(arena, state, ctx, child, Container::Subgraph(target));
                 i += 1;

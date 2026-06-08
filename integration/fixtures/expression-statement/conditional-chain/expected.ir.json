@@ -353,7 +353,31 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 19
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 12,
+          "offset": 80
+        },
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 45
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 11,
+            "offset": 79
+          }
+        }
+      }
     },
     {
       "id": "ref#2",
@@ -383,7 +407,31 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 19
+        },
+        "endSpan": {
+          "line": 7,
+          "column": 12,
+          "offset": 80
+        },
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 5,
+            "column": 4,
+            "offset": 45
+          },
+          "endSpan": {
+            "line": 7,
+            "column": 11,
+            "offset": 79
+          }
+        }
+      }
     }
   ],
   "unusedVariableIds": [],

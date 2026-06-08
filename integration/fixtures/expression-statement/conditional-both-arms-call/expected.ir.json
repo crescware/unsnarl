@@ -416,7 +416,35 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
     },
     {
       "id": "ref#2",
@@ -443,7 +471,35 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
     },
     {
       "id": "ref#3",
@@ -470,7 +526,35 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
     }
   ],
   "unusedVariableIds": [],

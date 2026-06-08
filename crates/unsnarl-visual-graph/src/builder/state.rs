@@ -171,6 +171,15 @@ pub struct BuildState {
     /// arm hosting the call so the sibling arm's value keeps its edge to
     /// the write-op node.
     pub result_proxy_write_op_arm_span: HashMap<String, (u32, u32)>,
+    /// Source spans of ternary arms that host a statement-level CallProxy
+    /// for an arm callback (`enabled ? items.map(cb) : other;`, value
+    /// discarded). The arm's callback receiver routes to that proxy, but
+    /// a ternary arm's plain value reads (the sibling arm, or any
+    /// non-call arm) must not be pulled onto the statement's container —
+    /// they flow to the ternary's consumer (here the module sink). A read
+    /// inside a ternary arm is routed to the statement container only when
+    /// its offset falls in one of these hosting-arm spans.
+    pub ternary_callback_arm_spans: Vec<(u32, u32)>,
 }
 
 impl BuildState {

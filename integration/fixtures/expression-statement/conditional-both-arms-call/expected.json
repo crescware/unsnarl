@@ -97,16 +97,6 @@
           "kind": "alternate"
         }
       ]
-    },
-    {
-      "type": "node",
-      "id": "module_root",
-      "kind": "SyntheticModuleSink",
-      "name": "module",
-      "line": 0,
-      "endLine": null,
-      "isJsxElement": false,
-      "unused": false
     }
   ],
   "edges": [
@@ -114,16 +104,6 @@
       "from": "n_scope_0_cond_6",
       "to": "ternary_test_scope_0_55",
       "label": "read"
-    },
-    {
-      "from": "n_scope_0_doA_28",
-      "to": "module_root",
-      "label": "read,call"
-    },
-    {
-      "from": "n_scope_0_doB_46",
-      "to": "module_root",
-      "label": "read,call"
     }
   ],
   "boundaryEdges": [],

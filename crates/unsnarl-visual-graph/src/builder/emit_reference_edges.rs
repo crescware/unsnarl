@@ -3,6 +3,8 @@
 
 use std::collections::{HashMap, HashSet};
 
+use unsnarl_oxc_parity::AstType;
+
 use super::arena::{BuildArena, Container};
 use super::context::BuilderContext;
 use super::edge_label_of_ref::edge_label_of_ref;
@@ -27,6 +29,24 @@ pub fn emit_reference_edges(
     ctx: &BuilderContext<'_>,
     var_var_ids: &HashSet<&str>,
 ) {
+    // Start offsets of every `ConditionalExpression` (shared by its two
+    // arms via `parent_span_offset`). A statement whose container starts
+    // here is a *bare ternary statement* (`cond ? a : b;`) — its value is
+    // discarded — as opposed to a ternary nested in a consumer
+    // (`foo(cond ? a : b);`), whose arm values reach the consumer's
+    // container instead. Used below to drop a discarded ternary arm's
+    // spurious edge.
+    let ternary_stmt_starts: HashSet<u32> = ctx
+        .scope_map
+        .values()
+        .filter_map(|s| {
+            let c = s.block_context.as_ref()?;
+            (matches!(c.parent_type(), AstType::ConditionalExpression)
+                && (c.key() == "consequent" || c.key() == "alternate"))
+                .then(|| c.parent_span_offset().0)
+        })
+        .collect();
+
     for r in &ctx.ir.references {
         let Some(resolved) = r.resolved.as_ref() else {
             continue;
@@ -222,6 +242,27 @@ pub fn emit_reference_edges(
                 }
             }
         } else {
+            // A value read in a *bare ternary statement* (`cond ? a : b;`)
+            // is a discarded output of the ternary: no consumer, so it
+            // emits no edge — rather than a spurious edge to the module
+            // sink. The receiver of an arm's callback call is an input to
+            // that call (its arm hosts a CallProxy), so it is kept and
+            // routed to the proxy below. A ternary nested in a consumer
+            // (`foo(cond ? a : b);`) carries the consumer's container, not
+            // a ternary statement's, so its arm values still reach the
+            // consumer.
+            let off = r.identifier.span().offset.0;
+            let is_ternary_stmt = r
+                .expression_statement_container
+                .as_ref()
+                .is_some_and(|c| ternary_stmt_starts.contains(&c.start_span.offset.0));
+            let in_callback_arm = state
+                .ternary_callback_arm_spans
+                .iter()
+                .any(|&(s, e)| off >= s && off < e);
+            if is_ternary_stmt && !in_callback_arm {
+                continue;
+            }
             let enclosing_fn_var_id = enclosing_function_var_borrowed(
                 r.from.value(),
                 &ctx.scope_map,

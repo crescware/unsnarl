@@ -258,7 +258,31 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 3,
+          "column": 0,
+          "offset": 23
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 69,
+          "offset": 174
+        },
+        "head": {
+          "kind": "raw",
+          "startSpan": {
+            "line": 3,
+            "column": 0,
+            "offset": 23
+          },
+          "endSpan": {
+            "line": 5,
+            "column": 68,
+            "offset": 173
+          }
+        }
+      }
     }
   ],
   "unusedVariableIds": [],

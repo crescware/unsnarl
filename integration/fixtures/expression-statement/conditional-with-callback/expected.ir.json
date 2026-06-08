@@ -438,7 +438,39 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 48
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 42,
+          "offset": 90
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 33,
+            "offset": 81
+          }
+        }
+      }
     },
     {
       "id": "ref#3",
@@ -465,7 +497,39 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 48
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 42,
+          "offset": 90
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 33,
+            "offset": 81
+          }
+        }
+      }
     },
     {
       "id": "ref#4",
@@ -502,7 +566,39 @@
         }
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 48
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 42,
+          "offset": 90
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 33,
+            "offset": 81
+          }
+        }
+      }
     },
     {
       "id": "ref#5",
@@ -529,7 +625,39 @@
         "type": "normal"
       },
       "jsxElement": null,
-      "expressionStatementContainer": null
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 48
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 42,
+          "offset": 90
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 10,
+            "offset": 58
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 33,
+            "offset": 81
+          }
+        }
+      }
     }
   ],
   "unusedVariableIds": [],
