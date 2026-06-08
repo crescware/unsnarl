@@ -5,6 +5,7 @@ pub mod emit_highlight_warnings;
 pub mod emit_out_flag_notice;
 pub mod emit_pruning_warnings;
 pub mod emit_resolution_notices;
+pub mod emit_stats_deprecation_notice;
 pub mod resolve_output_path;
 pub mod write_output;
 
@@ -15,5 +16,6 @@ pub use emit_highlight_warnings::emit_highlight_warnings;
 pub use emit_out_flag_notice::emit_out_flag_notice;
 pub use emit_pruning_warnings::emit_pruning_warnings;
 pub use emit_resolution_notices::emit_resolution_notices;
+pub use emit_stats_deprecation_notice::emit_stats_deprecation_notice;
 pub use resolve_output_path::{derive_output_basename, resolve_output_path};
 pub use write_output::write_output;

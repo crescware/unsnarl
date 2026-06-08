@@ -173,7 +173,10 @@ fn stats_format_routes_to_stats_emitter() {
         .to_str()
         .expect("tempfile path utf-8")
         .to_string();
-    let out = capture_stdout(&["uns", "-f", "stats", &path]);
+    // `-f stats` now also emits a deprecation warning on stderr, so
+    // this uses `capture` (which does not assert empty stderr) rather
+    // than `capture_stdout`. stdout is still the bare TSV.
+    let (out, _err) = capture(&["uns", "-f", "stats", &path]);
     // The stats emitter writes a TSV row per node followed by a
     // `<N> total` summary; asserting on the trailing "total" line
     // is enough to distinguish the real emitter from the legacy
@@ -182,6 +185,37 @@ fn stats_format_routes_to_stats_emitter() {
     assert!(
         last.ends_with(" total"),
         "expected trailing total row, got: {last}"
+    );
+}
+
+#[test]
+fn stats_deprecation_warning_is_emitted_last_on_stderr() {
+    use std::io::Write;
+    let mut tmp = tempfile::Builder::new()
+        .suffix(".ts")
+        .tempfile()
+        .expect("create tempfile");
+    // `var` raises an analyzer warning, so stderr already carries a
+    // line ahead of the deprecation notice -- enough to prove the
+    // notice is emitted last rather than merely present.
+    writeln!(tmp, "var x = 1;").expect("write tempfile");
+    let path = tmp
+        .path()
+        .to_str()
+        .expect("tempfile path utf-8")
+        .to_string();
+
+    let (_out, err) = capture(&["uns", "-f", "stats", &path]);
+    let lines: Vec<&str> = err.lines().collect();
+
+    assert!(
+        lines.iter().any(|l| l.contains("declaration detected")),
+        "expected the var analyzer warning in stderr, got: {err}"
+    );
+    assert_eq!(
+        lines.last().copied(),
+        Some("uns: warning: '-f stats' is deprecated and will be removed in a future release; the 'uns stats' subcommand will replace it."),
+        "deprecation notice must be the last stderr line, got: {err}"
     );
 }
 
