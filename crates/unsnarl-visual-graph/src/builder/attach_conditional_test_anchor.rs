@@ -22,9 +22,10 @@ fn make_conditional_test_anchor(
 }
 
 /// Place the ternary's test diamond at the head of the consequent arm
-/// it gates. A consequent that collapsed past the depth threshold
-/// builds no subgraph; with nowhere to host the anchor it is dropped
-/// rather than leaking into the surrounding container.
+/// it gates. `build_conditional_group` calls this once per ternary,
+/// immediately after building the consequent's subgraph; a consequent
+/// arm is a control subgraph that never depth-collapses, so its subgraph
+/// is always registered by the time we look it up.
 pub fn attach_conditional_test_anchor(
     arena: &mut BuildArena,
     state: &mut BuildState,
@@ -32,15 +33,11 @@ pub fn attach_conditional_test_anchor(
     offset: Utf16CodeUnitOffset,
     source_index: &SourceIndex<'_>,
 ) {
-    if state
-        .conditional_test_anchor_by_offset
-        .contains_key(&offset.0)
-    {
-        return;
-    }
-    let Some(body_sg) = state.subgraph_by_scope.get(consequent.id.value()).copied() else {
-        return;
-    };
+    let body_sg = state
+        .subgraph_by_scope
+        .get(consequent.id.value())
+        .copied()
+        .expect("consequent arm subgraph must exist: a never-collapsed control subgraph just built by build_conditional_group");
     let parent_id = consequent.upper.as_ref().map(|s| s.value()).unwrap_or("");
     let id = conditional_test_node_id(parent_id, offset.0);
     let node = make_conditional_test_anchor(id.clone(), offset, source_index);

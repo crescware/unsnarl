@@ -81,10 +81,11 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     // and matches the variable's serialized init offset,
                     // so the visual layer can pair them.
                     return vd.init.as_ref().map(|init| {
+                        let head = head_source_for_call(init, callback_call_span);
                         self.build_callback_host(
                             CallbackHostKind::VariableDeclarator,
                             init.span(),
-                            init,
+                            head,
                             None,
                         )
                     });
@@ -96,7 +97,8 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     // route the returned call's inputs to this proxy. The
                     // label still comes from the returned expression.
                     return rs.argument.as_ref().map(|arg| {
-                        self.build_callback_host(CallbackHostKind::Return, rs.span(), arg, None)
+                        let head = head_source_for_call(arg, callback_call_span);
+                        self.build_callback_host(CallbackHostKind::Return, rs.span(), head, None)
                     });
                 }
                 AstKind::AssignmentExpression(ae) => {
@@ -121,10 +123,11 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                         }
                         _ => None,
                     };
+                    let head = head_source_for_call(&ae.right, callback_call_span);
                     return Some(self.build_callback_host(
                         CallbackHostKind::Assignment,
                         rhs,
-                        &ae.right,
+                        head,
                         target_offset,
                     ));
                 }
@@ -138,7 +141,8 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                     // would have been hit deeper, so stop.
                     return match frame.arrow_body {
                         Some(b) if !b.is_block => arrow.get_expression().map(|expr| {
-                            self.build_callback_host(CallbackHostKind::Return, b.span, expr, None)
+                            let head = head_source_for_call(expr, callback_call_span);
+                            self.build_callback_host(CallbackHostKind::Return, b.span, head, None)
                         }),
                         _ => None,
                     };
@@ -169,4 +173,29 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
             target_offset,
         }
     }
+}
+
+/// The expression whose head should label the callback's CallProxy.
+///
+/// Normally this is the host's whole bound expression (the declarator
+/// init / returned / assigned value). But when that value is a ternary
+/// `cond ? a : b`, the callback lives in exactly one arm and its value
+/// reaches the host *through* that arm — so the proxy must stand for the
+/// arm's own call (`items.map()`), not the whole `cond ? … : …` text,
+/// which would otherwise render as a raw head duplicating the
+/// `ternary ?:` container. Descend into the arm that contains the call
+/// (recursing for nested ternaries); the host span itself is kept by the
+/// caller so the result-variable pairing (by init offset) is unaffected.
+/// A call in the ternary's `test` matches no arm and falls back to the
+/// whole expression.
+fn head_source_for_call<'b, 'a>(bound: &'b Expression<'a>, call_span: Span) -> &'b Expression<'a> {
+    if let Expression::ConditionalExpression(cond) = bound {
+        for arm in [&cond.consequent, &cond.alternate] {
+            let s = arm.span();
+            if s.start <= call_span.start && call_span.end <= s.end {
+                return head_source_for_call(arm, call_span);
+            }
+        }
+    }
+    bound
 }

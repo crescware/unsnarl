@@ -132,12 +132,32 @@ pub struct BuildState {
     /// proxy instead of minting a return-use node, so the returned
     /// call's callback is not stranded as a disconnected island.
     pub return_proxy_by_span: HashMap<String, String>,
+    /// `return-span key → consequent/alternate arm source span`, the
+    /// `return c ? items.map(cb) : other` counterpart of
+    /// `result_proxy_arm_span`. Both arms of the ternary share the one
+    /// return completion span, so without gating the sibling arm's value
+    /// (`other`) would route to the call's return proxy too. When present
+    /// the proxy claims only reads inside the arm hosting the call; the
+    /// sibling arm falls through to its own return-use node.
+    pub return_proxy_arm_span: HashMap<String, (u32, u32)>,
     /// `result variable id → result-bound CallProxy id`, for
     /// `const xs = arr.map(cb)`. The call's inputs are redirected from
     /// the `xs` node to the proxy, so the dataflow backbone reads
     /// `input → the call → xs` instead of the inputs pointing straight
     /// at `xs`.
     pub result_proxy_by_var: HashMap<String, String>,
+    /// `result variable id → consequent/alternate arm source span` for a
+    /// CallProxy that lives inside a ternary arm
+    /// (`const xs = c ? items.map(cb) : other`). A ternary binds its
+    /// variable from *two* sources — the call in one arm and the other
+    /// arm's value — but `result_proxy_by_var` would redirect every read
+    /// owning `xs` to the call's proxy, wrongly pulling the sibling arm's
+    /// value (`other`) through the call. When an entry is present here the
+    /// redirect is gated to reads whose offset falls inside the arm that
+    /// hosts the call, so the sibling arm flows to `xs` directly. Absent
+    /// for ordinary (non-ternary) bindings, where the call is the sole
+    /// source and the unconditional redirect is correct.
+    pub result_proxy_arm_span: HashMap<String, (u32, u32)>,
     /// `write-op node id → reassignment-bound CallProxy id`, the
     /// assignment counterpart of `result_proxy_by_var` for
     /// `y = arr.map(cb)`. Keyed on the reassignment's write-op node
@@ -145,6 +165,12 @@ pub struct BuildState {
     /// site, elsewhere in the graph; the same `input → the call → write`
     /// redirection then applies.
     pub result_proxy_by_write_op: HashMap<String, String>,
+    /// `write-op node id → consequent/alternate arm source span`, the
+    /// reassignment (`y = c ? items.map(cb) : other`) counterpart of
+    /// `result_proxy_arm_span`. Gates the write-op proxy redirect to the
+    /// arm hosting the call so the sibling arm's value keeps its edge to
+    /// the write-op node.
+    pub result_proxy_write_op_arm_span: HashMap<String, (u32, u32)>,
 }
 
 impl BuildState {

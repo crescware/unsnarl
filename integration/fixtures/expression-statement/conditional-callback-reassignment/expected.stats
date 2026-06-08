@@ -1,0 +1,9 @@
+1	0	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:1 unused result
+1	0	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:2 items
+1	0	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:3 fallback
+1	0	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:4 enabled
+0	3	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:6 result
+0	1	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:6 ternary-test
+1	0	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:6 v
+0	1	integration/fixtures/expression-statement/conditional-callback-reassignment/input.ts:6 v
+5	5	8 total

@@ -136,8 +136,11 @@ pub fn emit_reference_edges(
                             &ctx.write_ops_by_variable,
                         ),
                         owner_id.value(),
+                        r.identifier.span().offset.0,
                         &state.result_proxy_by_var,
+                        &state.result_proxy_arm_span,
                         &state.result_proxy_by_write_op,
+                        &state.result_proxy_write_op_arm_span,
                     );
                     push_edge(
                         &mut state.emitted_edges,
@@ -202,8 +205,11 @@ pub fn emit_reference_edges(
                         &ctx.write_ops_by_variable,
                     ),
                     owner_id.value(),
+                    r.identifier.span().offset.0,
                     &state.result_proxy_by_var,
+                    &state.result_proxy_arm_span,
                     &state.result_proxy_by_write_op,
+                    &state.result_proxy_write_op_arm_span,
                 );
                 for from_id in &from_ids {
                     push_edge(
@@ -272,16 +278,38 @@ pub fn emit_reference_edges(
 fn retarget_owner_target(
     target_id: String,
     owner_var_id: &str,
+    ref_offset: u32,
     result_proxy_by_var: &HashMap<String, String>,
+    result_proxy_arm_span: &HashMap<String, (u32, u32)>,
     result_proxy_by_write_op: &HashMap<String, String>,
+    result_proxy_write_op_arm_span: &HashMap<String, (u32, u32)>,
 ) -> String {
     if target_id == node_id(owner_var_id) {
         if let Some(proxy) = result_proxy_by_var.get(owner_var_id) {
-            return proxy.clone();
+            // A ternary-arm proxy claims only reads inside the arm that
+            // hosts the call (`result_proxy_arm_span`); the sibling arm's
+            // value keeps its direct edge to the binding. Ordinary
+            // bindings record no span and redirect unconditionally.
+            if read_belongs_to_arm(result_proxy_arm_span.get(owner_var_id), ref_offset) {
+                return proxy.clone();
+            }
         }
     }
     if let Some(proxy) = result_proxy_by_write_op.get(&target_id) {
-        return proxy.clone();
+        // Same arm gating for a reassignment's write-op proxy.
+        if read_belongs_to_arm(result_proxy_write_op_arm_span.get(&target_id), ref_offset) {
+            return proxy.clone();
+        }
     }
     target_id
+}
+
+/// Whether a read at `ref_offset` is inside the ternary arm that hosts a
+/// gated CallProxy. `None` (no recorded arm — an ordinary, non-ternary
+/// binding) means the proxy claims every read unconditionally.
+fn read_belongs_to_arm(arm_span: Option<&(u32, u32)>, ref_offset: u32) -> bool {
+    match arm_span {
+        Some(&(start, end)) => ref_offset >= start && ref_offset < end,
+        None => true,
+    }
 }

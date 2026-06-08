@@ -3,9 +3,11 @@
 //! Mirrors the `IfElseContainer` path in [`super::build_children`]: the
 //! two arms (consequent, alternate) are grouped under a single owned
 //! container subgraph, and the test diamond is placed at the head of the
-//! consequent (`? then`) arm. A ternary always has both arms, but depth
-//! collapse can drop one — a lone surviving arm renders without the
-//! container, exactly as a bare `if` (no `else`) does.
+//! consequent (`? then`) arm. A ternary always has exactly these two
+//! arms — both are synthesised unconditionally (see
+//! `synthesise_conditional_arms`) and the synthetic arm scopes never
+//! depth-collapse — so, unlike `if` (which may lack an `else`), there is
+//! no lone-arm path.
 
 use unsnarl_ir::primitive::Utf16CodeUnitOffset;
 use unsnarl_ir::serialized::SerializedScope;
@@ -28,19 +30,6 @@ pub fn build_conditional_group(
     container: Container,
     group: &[&SerializedScope],
 ) {
-    // Depth collapse can leave a single arm; render it inline (no
-    // container), attaching the diamond only when it is the consequent.
-    if group.len() < 2 {
-        let lone = group[0];
-        let lone_offset = lone.block_context.as_ref().map(|c| c.parent_span_offset());
-        let is_consequent = lone.block_context.as_ref().map(|c| c.key()) == Some("consequent");
-        build_scope(arena, state, ctx, lone, container);
-        if let (Some(offset), true) = (lone_offset, is_consequent) {
-            attach_conditional_test_anchor(arena, state, lone, offset, &ctx.source_index);
-        }
-        return;
-    }
-
     let child = group[0];
     let offset = child
         .block_context

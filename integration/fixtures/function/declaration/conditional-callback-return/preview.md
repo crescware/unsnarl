@@ -1,0 +1,79 @@
+# integration/fixtures/function/declaration/conditional-callback-return/input.ts
+
+## Input
+
+```ts
+function pick(flag: boolean, items: number[], fallback: number[]) {
+  return flag ? items.map((v) => v * 2) : fallback;
+}
+
+const result = pick(true, [1, 2, 3], [0]);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_result_129["unused result<br/>L5"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_pick_9["pick()<br/>L1"]
+    subgraph s_scope_1["pick()<br/>L1-3"]
+      direction RL
+      n_scope_1_flag_14["flag<br/>L1"]
+      n_scope_1_items_29["items<br/>L1"]
+      n_scope_1_fallback_46["fallback<br/>L1"]
+      subgraph cont_ternary_scope_1_77["ternary ?: L2"]
+        direction RL
+        subgraph s_scope_2["? then L2"]
+          direction RL
+          ternary_test_scope_1_77{"ternary ?:<br/>L2"}
+          subgraph call_proxy_70["items.map()<br/>L2"]
+            direction RL
+            subgraph s_scope_3["items.map(args[0])<br/>L2"]
+              direction RL
+              n_scope_3_v_95["v<br/>L2"]
+              subgraph s_return_scope_0_pick_9_101_106["return L2"]
+                direction RL
+                ret_use_ref_2["v<br/>L2"]
+              end
+            end
+          end
+        end
+        subgraph s_scope_4[": else L2"]
+          direction RL
+          elk_empty_s_scope_4["No nodes"]
+        end
+      end
+      subgraph s_return_scope_0_pick_9_70_119["return L2"]
+        direction RL
+        ret_use_ref_3["fallback<br/>L2"]
+      end
+    end
+  end
+  n_scope_1_flag_14 -->|read| ternary_test_scope_1_77
+  n_scope_1_items_29 -->|read| call_proxy_70
+  n_scope_3_v_95 -->|read| ret_use_ref_2
+  n_scope_1_fallback_46 -->|read| ret_use_ref_3
+  n_scope_0_pick_9 -->|read,call| n_scope_0_result_129
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  class s_return_scope_0_pick_9_101_106 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_1_77 nestL3;
+  class s_return_scope_0_pick_9_70_119 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_4 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class call_proxy_70 nestL5;
+  classDef nestL6 fill:#3f5175,stroke:transparent;
+  class s_scope_3 nestL6;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_70 edgeTargetSubgraph;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_4 elkEmptyPlaceholder;
+```

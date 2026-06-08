@@ -1,0 +1,218 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/conditional-callback-return/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_pick_9",
+      "name": "pick",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_129",
+      "name": "result",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_pick_9",
+      "ownerName": "pick",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_flag_14",
+          "name": "flag",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_items_29",
+          "name": "items",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_fallback_46",
+          "name": "fallback",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "subgraph",
+          "id": "cont_ternary_scope_1_77",
+          "kind": "conditional-container",
+          "line": 2,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 2,
+              "endLine": 2,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_77",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 2,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                },
+                {
+                  "type": "subgraph",
+                  "id": "call_proxy_70",
+                  "kind": "call-proxy",
+                  "line": 2,
+                  "endLine": null,
+                  "direction": "RL",
+                  "callName": "items.map()",
+                  "elements": [
+                    {
+                      "type": "subgraph",
+                      "id": "s_scope_3",
+                      "kind": "function",
+                      "line": 2,
+                      "endLine": 2,
+                      "direction": "RL",
+                      "ownerNodeId": null,
+                      "ownerName": "",
+                      "callbackArg": {
+                        "callee": "items.map",
+                        "argIndex": 0
+                      },
+                      "elements": [
+                        {
+                          "type": "node",
+                          "id": "n_scope_3_v_95",
+                          "name": "v",
+                          "line": 2,
+                          "endLine": null,
+                          "isJsxElement": false,
+                          "unused": false,
+                          "kind": "FormalParameter"
+                        },
+                        {
+                          "type": "subgraph",
+                          "id": "s_return_scope_0_pick_9_101_106",
+                          "kind": "return",
+                          "line": 2,
+                          "endLine": null,
+                          "direction": "RL",
+                          "elements": [
+                            {
+                              "type": "node",
+                              "id": "ret_use_ref_2",
+                              "kind": "ReturnArgumentReference",
+                              "name": "v",
+                              "line": 2,
+                              "endLine": null,
+                              "isJsxElement": false,
+                              "unused": false
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_4",
+              "line": 2,
+              "endLine": 2,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_pick_9_70_119",
+          "kind": "return",
+          "line": 2,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_3",
+              "kind": "ReturnArgumentReference",
+              "name": "fallback",
+              "line": 2,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_flag_14",
+      "to": "ternary_test_scope_1_77",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_items_29",
+      "to": "call_proxy_70",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_3_v_95",
+      "to": "ret_use_ref_2",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_fallback_46",
+      "to": "ret_use_ref_3",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_pick_9",
+      "to": "n_scope_0_result_129",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

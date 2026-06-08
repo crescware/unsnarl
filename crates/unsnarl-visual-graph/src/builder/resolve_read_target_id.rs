@@ -53,8 +53,21 @@ pub fn resolve_read_target_id(
         // the callback; the returned call's inputs land on that proxy's
         // border rather than a return-use node.
         let container_key = format!("{}-{}", start_span.offset.0, end_span.offset.0);
-        if let Some(proxy) = state.return_proxy_by_span.get(&container_key) {
-            return proxy.clone();
+        if let Some(proxy) = state.return_proxy_by_span.get(&container_key).cloned() {
+            // For a returned ternary the proxy claims only reads inside
+            // the arm hosting the call; the sibling arm's value falls
+            // through to its own return-use node (see
+            // `BuildState::return_proxy_arm_span`).
+            let in_hosting_arm = match state.return_proxy_arm_span.get(&container_key) {
+                Some(&(start, end)) => {
+                    let off = r.identifier.span().offset.0;
+                    off >= start && off < end
+                }
+                None => true,
+            };
+            if in_hosting_arm {
+                return proxy;
+            }
         }
         if let Some(id) = ensure_return_use_node(
             arena,
