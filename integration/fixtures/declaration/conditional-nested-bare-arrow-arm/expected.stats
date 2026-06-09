@@ -1,0 +1,10 @@
+1	0	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:1 outer
+1	0	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:2 inner
+1	0	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:3 a
+1	0	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:4 b
+1	0	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:5 c
+0	2	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:6 unused x
+0	1	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:6 ternary-test
+0	1	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:6 ternary-test
+0	1	integration/fixtures/declaration/conditional-nested-bare-arrow-arm/input.ts:6 a
+5	5	9 total

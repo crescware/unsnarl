@@ -11,8 +11,10 @@
 //!   (`a ? b : c ? d : e`) nest — falling back to the expression's
 //!   enclosing scope; and
 //! * any pre-existing scope that falls inside an arm (e.g. a callback
-//!   arrow in `cond ? xs.map(f) : xs`) to that arm, so it renders within
-//!   the branch.
+//!   arrow in `cond ? xs.map(f) : xs`, or a bare arm that *is* a
+//!   function / arrow / class expression such as `cond ? () => a : b`,
+//!   whose scope span equals the arm's) to that arm, so it renders
+//!   within the branch.
 //!
 //! Only the *structure* is synthesised here — the arm subgraph frames and
 //! the nesting of arm-local scopes (callbacks, nested ternaries). The arm
@@ -138,9 +140,21 @@ fn innermost_enclosing_arm(
     best.map(|(_, id)| id)
 }
 
-/// Innermost arm whose span strictly contains `span` while itself being
-/// strictly contained by `upper_span` — i.e. an arm that sits between a
-/// scope and its current parent.
+/// Innermost arm that encloses `span` while itself being strictly
+/// contained by `upper_span` — i.e. an arm that sits between a scope and
+/// its current parent.
+///
+/// The arm→`span` containment is non-strict on purpose. When an arm is a
+/// bare (unparenthesised) function / arrow / class expression, the arm is
+/// anchored to that expression, so the synthetic arm scope's span equals
+/// the expression scope's own span byte-for-byte — yet we still want to
+/// pull the function/class scope into the arm rather than leave it
+/// floating in the enclosing scope (the empty-arm bug). Equal spans only
+/// ever arise here for such expression-anchored scopes: no other scope
+/// kind anchors to a bare expression that can stand as a ternary arm, so
+/// admitting equality needs no scope-kind guard. The arm→`upper_span`
+/// containment stays strict: an arm equal to (or wider than) the scope's
+/// current parent does not sit *between* the scope and that parent.
 fn innermost_arm_between(
     arms: &[(Span, ScopeId)],
     span: Span,
@@ -148,7 +162,7 @@ fn innermost_arm_between(
 ) -> Option<ScopeId> {
     let mut best: Option<(u32, ScopeId)> = None;
     for &(aspan, aid) in arms {
-        if !strictly_contains(aspan, span) || !strictly_contains(upper_span, aspan) {
+        if !contains(aspan, span) || !strictly_contains(upper_span, aspan) {
             continue;
         }
         let width = aspan.end - aspan.start;
@@ -159,11 +173,14 @@ fn innermost_arm_between(
     best.map(|(_, id)| id)
 }
 
+/// `outer` contains `inner`, identical spans included.
+fn contains(outer: Span, inner: Span) -> bool {
+    outer.start <= inner.start && inner.end <= outer.end
+}
+
 /// `outer` contains `inner` and the two spans are not identical.
 fn strictly_contains(outer: Span, inner: Span) -> bool {
-    outer.start <= inner.start
-        && inner.end <= outer.end
-        && (outer.start < inner.start || inner.end < outer.end)
+    contains(outer, inner) && (outer.start < inner.start || inner.end < outer.end)
 }
 
 #[cfg(test)]

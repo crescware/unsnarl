@@ -1,0 +1,34 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_flag_6["flag<br/>L1"]
+  n_scope_0_handler_25["unused handler<br/>L2"]
+  subgraph cont_ternary_scope_0_35["ternary ?: L2"]
+    direction RL
+    subgraph s_scope_1["? then L2"]
+      direction RL
+      ternary_test_scope_0_35{"ternary ?:<br/>L2"}
+      subgraph s_scope_2["class (anonymous)<br/>L2"]
+        direction RL
+        elk_empty_s_scope_2["No nodes"]
+      end
+    end
+    subgraph s_scope_3[": else L2"]
+      direction RL
+      subgraph s_scope_4["class (anonymous)<br/>L2"]
+        direction RL
+        elk_empty_s_scope_4["No nodes"]
+      end
+    end
+  end
+  n_scope_0_flag_6 -->|read| ternary_test_scope_0_35
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_35 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_3 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class s_scope_2 nestL3;
+  class s_scope_4 nestL3;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;
+  class elk_empty_s_scope_4 elkEmptyPlaceholder;

@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/conditional-bare-function-arm/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_flag_6",
+      "name": "flag",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_25",
+      "name": "a",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_40",
+      "name": "b",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_handler_55",
+      "name": "handler",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_65",
+      "kind": "conditional-container",
+      "line": 4,
+      "endLine": 10,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "line": 5,
+          "endLine": 7,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_65",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "kind": "function",
+              "line": 5,
+              "endLine": 7,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_2_94_103",
+                  "kind": "return",
+                  "line": 6,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_5",
+                      "kind": "ReturnArgumentReference",
+                      "name": "a",
+                      "line": 6,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 8,
+          "endLine": 10,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_4",
+              "kind": "function",
+              "line": 8,
+              "endLine": 10,
+              "direction": "RL",
+              "ownerNodeId": null,
+              "ownerName": "",
+              "elements": [
+                {
+                  "type": "subgraph",
+                  "id": "s_return_scope_4_134_143",
+                  "kind": "return",
+                  "line": 9,
+                  "endLine": null,
+                  "direction": "RL",
+                  "elements": [
+                    {
+                      "type": "node",
+                      "id": "ret_use_ref_6",
+                      "kind": "ReturnArgumentReference",
+                      "name": "b",
+                      "line": 9,
+                      "endLine": null,
+                      "isJsxElement": false,
+                      "unused": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "kind": "alternate"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_flag_6",
+      "to": "ternary_test_scope_0_65",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_25",
+      "to": "ret_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_40",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}
