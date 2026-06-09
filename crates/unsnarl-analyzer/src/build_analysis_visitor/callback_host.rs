@@ -199,3 +199,7 @@ fn head_source_for_call<'b, 'a>(bound: &'b Expression<'a>, call_span: Span) -> &
     }
     bound
 }
+
+#[cfg(test)]
+#[path = "callback_host_test.rs"]
+mod callback_host_test;
