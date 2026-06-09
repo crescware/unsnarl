@@ -179,3 +179,7 @@ fn ternary_statement_head_expr<'e>(expr: &'e Expression<'e>) -> &'e Expression<'
     }
     expr
 }
+
+#[cfg(test)]
+#[path = "fire_reference_test.rs"]
+mod fire_reference_test;

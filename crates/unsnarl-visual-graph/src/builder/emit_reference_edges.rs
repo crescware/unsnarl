@@ -354,3 +354,7 @@ fn read_belongs_to_arm(arm_span: Option<&(u32, u32)>, ref_offset: u32) -> bool {
         None => true,
     }
 }
+
+#[cfg(test)]
+#[path = "emit_reference_edges_test.rs"]
+mod emit_reference_edges_test;
