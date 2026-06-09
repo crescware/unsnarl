@@ -1,0 +1,4 @@
+1	0	integration/fixtures/declaration/conditional-bare-class-arm/input.ts:1 flag
+0	0	integration/fixtures/declaration/conditional-bare-class-arm/input.ts:2 unused handler
+0	1	integration/fixtures/declaration/conditional-bare-class-arm/input.ts:2 ternary-test
+1	1	3 total

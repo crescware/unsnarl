@@ -1,0 +1,8 @@
+1	0	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:1 flag
+1	0	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:2 a
+1	0	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:3 b
+0	0	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:4 unused handler
+0	1	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:4 ternary-test
+0	1	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:4 a
+0	1	integration/fixtures/declaration/conditional-bare-arrow-arm/input.ts:4 b
+3	3	7 total
