@@ -113,3 +113,16 @@ fn innermost_arm_between_rejects_arm_outside_parent() {
         None
     );
 }
+
+#[test]
+fn innermost_arm_between_rejects_arm_equal_to_parent() {
+    // Pins the asymmetric guard: the arm->span check is non-strict
+    // (equal spans pull the scope into the arm), but the arm->upper_span
+    // check stays strict, so an arm whose span equals the scope's current
+    // parent does not sit "between" them and must be rejected.
+    let arms = vec![(span(20, 30), sid(9))];
+    assert_eq!(
+        innermost_arm_between(&arms, span(20, 30), span(20, 30)),
+        None
+    );
+}
