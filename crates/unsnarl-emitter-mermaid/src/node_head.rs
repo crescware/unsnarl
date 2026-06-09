@@ -121,6 +121,7 @@ pub fn node_head_into(out: &mut String, n: &VisualNode) {
         | NodeKind::ThrowArgumentReference
         | NodeKind::SyntheticIfStatementTest
         | NodeKind::SyntheticSwitchStatementDiscriminant
+        | NodeKind::SyntheticConditionalTest
         | NodeKind::SyntheticWhileStatementTest
         | NodeKind::SyntheticDoWhileStatementTest
         | NodeKind::SyntheticForStatementHeader

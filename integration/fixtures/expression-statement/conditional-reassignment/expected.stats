@@ -1,0 +1,7 @@
+1	0	integration/fixtures/expression-statement/conditional-reassignment/input.ts:1 cond
+1	0	integration/fixtures/expression-statement/conditional-reassignment/input.ts:2 a
+1	0	integration/fixtures/expression-statement/conditional-reassignment/input.ts:3 b
+1	0	integration/fixtures/expression-statement/conditional-reassignment/input.ts:4 unused x
+0	3	integration/fixtures/expression-statement/conditional-reassignment/input.ts:5 x
+0	1	integration/fixtures/expression-statement/conditional-reassignment/input.ts:5 ternary-test
+4	4	6 total

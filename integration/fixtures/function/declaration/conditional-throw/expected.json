@@ -1,0 +1,187 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/declaration/conditional-throw/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_check_9",
+      "name": "check",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_Error_48",
+      "name": "Error",
+      "line": 0,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "SyntheticImplicitGlobal"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 5,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_check_9",
+      "ownerName": "check",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_flag_15",
+          "name": "flag",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_40",
+          "name": "a",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_68",
+          "name": "b",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "cont_ternary_scope_1_96",
+          "kind": "conditional-container",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_96",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_throw_scope_0_check_9_90_109",
+          "kind": "throw",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "throw_use_ref_5",
+              "kind": "ThrowArgumentReference",
+              "name": "a",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            },
+            {
+              "type": "node",
+              "id": "throw_use_ref_6",
+              "kind": "ThrowArgumentReference",
+              "name": "b",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "node",
+      "id": "expr_stmt_113",
+      "kind": "SyntheticExpressionStatement",
+      "name": "check()",
+      "line": 7,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_Error_48",
+      "to": "n_scope_1_a_40",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_0_Error_48",
+      "to": "n_scope_1_b_68",
+      "label": "read,call"
+    },
+    {
+      "from": "n_scope_1_flag_15",
+      "to": "ternary_test_scope_1_96",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_40",
+      "to": "throw_use_ref_5",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_68",
+      "to": "throw_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_check_9",
+      "to": "expr_stmt_113",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

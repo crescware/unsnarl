@@ -17,6 +17,7 @@ use std::collections::HashMap;
 
 use unsnarl_ir::primitive::Utf16CodeUnitOffset;
 use unsnarl_ir::serialized::{SerializedCallbackHostKind, SerializedScope};
+use unsnarl_oxc_parity::AstType;
 
 use crate::direction::Direction;
 use crate::visual_subgraph::OwnedVisualSubgraph;
@@ -24,6 +25,7 @@ use crate::visual_subgraph::OwnedVisualSubgraph;
 use super::arena::{BuildArena, Container, ElementHandle, SubgraphIdx};
 use super::attach_test_anchor_to_consequent::attach_test_anchor_to_consequent;
 use super::branch_container_key::branch_container_key;
+use super::build_conditional_group::build_conditional_group;
 use super::build_scope::build_scope;
 use super::callback_chain_target::{callback_chain_target, ChainHost};
 use super::context::BuilderContext;
@@ -39,6 +41,21 @@ use super::result_var_for_host::result_var_for_host;
 use super::route_collapsed_callback_to_stub::route_collapsed_callback_to_stub;
 use super::state::BuildState;
 use super::write_op_node_for_assignment::write_op_node_for_assignment;
+
+/// The source span of `scope` when it is a synthesised ternary arm
+/// (`? then` / `: else`), else `None`. Lets callers gate a ternary arm's
+/// proxy redirect to reads inside that arm (see
+/// `BuildState::result_proxy_arm_span` / `ternary_callback_arm_spans`).
+fn conditional_arm_span(scope: &SerializedScope) -> Option<(u32, u32)> {
+    let c = scope.block_context.as_ref()?;
+    if matches!(c.parent_type(), AstType::ConditionalExpression)
+        && (c.key() == "consequent" || c.key() == "alternate")
+    {
+        Some((scope.block.span.offset.0, scope.block.end_span.offset.0))
+    } else {
+        None
+    }
+}
 
 pub fn build_children(
     arena: &mut BuildArena,
@@ -154,6 +171,14 @@ pub fn build_children(
                         if let Some(inner) =
                             innermost_chain_proxy_id(arena, &host.head, &nested_call_proxy)
                         {
+                            // Gate a ternary-arm reassignment proxy to its
+                            // hosting arm so the sibling arm's value keeps
+                            // its edge to the write-op node.
+                            if let Some(span) = conditional_arm_span(parent_scope) {
+                                state
+                                    .result_proxy_write_op_arm_span
+                                    .insert(binding.write_op_node.clone(), span);
+                            }
                             state
                                 .result_proxy_by_write_op
                                 .insert(binding.write_op_node.clone(), inner);
@@ -218,6 +243,15 @@ pub fn build_children(
                         .expression_statement_by_offset
                         .insert(statement.start_span.offset.0, inner);
                 }
+                // When this statement-hosted callback lives in a ternary
+                // arm (`enabled ? items.map(cb) : other;`), record the arm
+                // span so the sibling arm's plain value reads are not
+                // pulled onto this statement's container (they flow to the
+                // ternary's consumer instead — see
+                // `BuildState::ternary_callback_arm_spans`).
+                if let Some(span) = conditional_arm_span(parent_scope) {
+                    state.ternary_callback_arm_spans.push(span);
+                }
                 build_scope(arena, state, ctx, child, Container::Subgraph(target));
                 i += 1;
                 continue;
@@ -258,6 +292,13 @@ pub fn build_children(
                             innermost_chain_proxy_id(arena, &host.head, &nested_call_proxy)
                         {
                             state.result_proxy_by_var.insert(result_var.clone(), inner);
+                            // A ternary binds `xs` from two arms; gate the
+                            // proxy redirect to the arm that hosts the call
+                            // so the sibling arm's value reaches `xs`
+                            // directly instead of through the call.
+                            if let Some(span) = conditional_arm_span(parent_scope) {
+                                state.result_proxy_arm_span.insert(result_var.clone(), span);
+                            }
                         }
                         build_scope(arena, state, ctx, child, Container::Subgraph(target));
                         i += 1;
@@ -293,6 +334,15 @@ pub fn build_children(
                     {
                         let container_key =
                             format!("{}-{}", host.start_span.offset.0, host.end_span.offset.0);
+                        // A returned ternary shares one completion span
+                        // across both arms; gate the proxy to the arm
+                        // hosting the call so the sibling arm's value gets
+                        // its own return-use node.
+                        if let Some(span) = conditional_arm_span(parent_scope) {
+                            state
+                                .return_proxy_arm_span
+                                .insert(container_key.clone(), span);
+                        }
                         state.return_proxy_by_span.insert(container_key, inner);
                     }
                     build_scope(arena, state, ctx, child, Container::Subgraph(target));
@@ -312,7 +362,8 @@ pub fn build_children(
             i += 1;
             continue;
         };
-        if !key.starts_with("if:") {
+        let is_ternary = key.starts_with("ternary:");
+        if !key.starts_with("if:") && !is_ternary {
             build_scope(arena, state, ctx, child, container);
             i += 1;
             continue;
@@ -326,6 +377,11 @@ pub fn build_children(
             }
             group.push(next);
             j += 1;
+        }
+        if is_ternary {
+            build_conditional_group(arena, state, ctx, container, &group);
+            i = j;
+            continue;
         }
         if group.len() < 2 {
             let lone = group[0];

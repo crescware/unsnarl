@@ -24,9 +24,9 @@ pub fn node_syntax_into(out: &mut String, n: &VisualNode, debug: bool) {
         // stand in for "more graph keeps going past this rendered
         // boundary". Neither variant quotes the inner label.
         NodeKind::SyntheticModuleSink | NodeKind::SyntheticBeyondDepth => ("((", "))"),
-        NodeKind::SyntheticIfStatementTest | NodeKind::SyntheticSwitchStatementDiscriminant => {
-            ("{\"", "\"}")
-        }
+        NodeKind::SyntheticIfStatementTest
+        | NodeKind::SyntheticSwitchStatementDiscriminant
+        | NodeKind::SyntheticConditionalTest => ("{\"", "\"}"),
         _ => ("[\"", "\"]"),
     };
     out.push_str(open);

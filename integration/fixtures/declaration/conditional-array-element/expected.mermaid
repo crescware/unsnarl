@@ -1,0 +1,27 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_cond_6["cond<br/>L1"]
+  n_scope_0_a_25["a<br/>L2"]
+  n_scope_0_b_40["b<br/>L3"]
+  n_scope_0_arr_55["unused arr<br/>L4"]
+  subgraph cont_ternary_scope_0_62["ternary ?: L4"]
+    direction RL
+    subgraph s_scope_1["? then L4"]
+      direction RL
+      ternary_test_scope_0_62{"ternary ?:<br/>L4"}
+    end
+    subgraph s_scope_2[": else L4"]
+      direction RL
+      elk_empty_s_scope_2["No nodes"]
+    end
+  end
+  n_scope_0_cond_6 -->|read| ternary_test_scope_0_62
+  n_scope_0_a_25 -->|read| n_scope_0_arr_55
+  n_scope_0_b_40 -->|read| n_scope_0_arr_55
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_62 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_2 nestL2;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_2 elkEmptyPlaceholder;

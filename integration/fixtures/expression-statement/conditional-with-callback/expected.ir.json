@@ -12,7 +12,8 @@
       "isStrict": true,
       "upper": null,
       "childScopes": [
-        "scope#1"
+        "scope#1",
+        "scope#3"
       ],
       "variableScope": "scope#0",
       "block": {
@@ -58,11 +59,58 @@
     },
     {
       "id": "scope#1",
-      "type": "function",
+      "type": "block",
       "isStrict": true,
       "upper": "scope#0",
+      "childScopes": [
+        "scope#2"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "CallExpression",
+        "span": {
+          "line": 4,
+          "column": 10,
+          "offset": 58
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 33,
+          "offset": 81
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "consequent",
+        "parentSpanOffset": 48,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#1",
       "childScopes": [],
-      "variableScope": "scope#1",
+      "variableScope": "scope#2",
       "block": {
         "type": "ArrowFunctionExpression",
         "span": {
@@ -77,7 +125,7 @@
         }
       },
       "variables": [
-        "scope#1:v@69"
+        "scope#2:v@69"
       ],
       "references": [
         "ref#4"
@@ -100,6 +148,51 @@
       "exitsFunction": false,
       "nestingDepths": {
         "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Identifier",
+        "span": {
+          "line": 4,
+          "column": 36,
+          "offset": 84
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 41,
+          "offset": 89
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "alternate",
+        "parentSpanOffset": 48,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
         "if": 0,
         "for": 0,
         "while": 0,
@@ -221,9 +314,9 @@
       ]
     },
     {
-      "id": "scope#1:v@69",
+      "id": "scope#2:v@69",
       "name": "v",
-      "scope": "scope#1",
+      "scope": "scope#2",
       "identifiers": [
         {
           "line": 4,
@@ -337,7 +430,10 @@
         "call": false,
         "receiver": false
       },
-      "predicateContainer": null,
+      "predicateContainer": {
+        "type": "ConditionalExpression",
+        "offset": 48
+      },
       "completion": {
         "type": "normal"
       },
@@ -354,16 +450,24 @@
           "offset": 90
         },
         "head": {
-          "kind": "raw",
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
           "startSpan": {
             "line": 4,
-            "column": 0,
-            "offset": 48
+            "column": 10,
+            "offset": 58
           },
           "endSpan": {
             "line": 4,
-            "column": 41,
-            "offset": 89
+            "column": 33,
+            "offset": 81
           }
         }
       }
@@ -405,16 +509,24 @@
           "offset": 90
         },
         "head": {
-          "kind": "raw",
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
           "startSpan": {
             "line": 4,
-            "column": 0,
-            "offset": 48
+            "column": 10,
+            "offset": 58
           },
           "endSpan": {
             "line": 4,
-            "column": 41,
-            "offset": 89
+            "column": 33,
+            "offset": 81
           }
         }
       }
@@ -429,8 +541,8 @@
           "offset": 75
         }
       },
-      "from": "scope#1",
-      "resolved": "scope#1:v@69",
+      "from": "scope#2",
+      "resolved": "scope#2:v@69",
       "owners": [],
       "init": false,
       "flags": {
@@ -466,16 +578,24 @@
           "offset": 90
         },
         "head": {
-          "kind": "raw",
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
           "startSpan": {
             "line": 4,
-            "column": 0,
-            "offset": 48
+            "column": 10,
+            "offset": 58
           },
           "endSpan": {
             "line": 4,
-            "column": 41,
-            "offset": 89
+            "column": 33,
+            "offset": 81
           }
         }
       }
@@ -517,16 +637,24 @@
           "offset": 90
         },
         "head": {
-          "kind": "raw",
+          "kind": "call",
+          "callee": {
+            "kind": "member",
+            "object": {
+              "kind": "identifier",
+              "name": "items"
+            },
+            "property": "map"
+          },
           "startSpan": {
             "line": 4,
-            "column": 0,
-            "offset": 48
+            "column": 10,
+            "offset": 58
           },
           "endSpan": {
             "line": 4,
-            "column": 41,
-            "offset": 89
+            "column": 33,
+            "offset": 81
           }
         }
       }

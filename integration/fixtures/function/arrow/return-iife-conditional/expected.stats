@@ -1,0 +1,9 @@
+1	0	integration/fixtures/function/arrow/return-iife-conditional/input.ts:1 pick
+1	0	integration/fixtures/function/arrow/return-iife-conditional/input.ts:1 flag
+1	0	integration/fixtures/function/arrow/return-iife-conditional/input.ts:2 left
+1	0	integration/fixtures/function/arrow/return-iife-conditional/input.ts:3 right
+0	1	integration/fixtures/function/arrow/return-iife-conditional/input.ts:5 ternary-test
+0	1	integration/fixtures/function/arrow/return-iife-conditional/input.ts:5 left
+0	1	integration/fixtures/function/arrow/return-iife-conditional/input.ts:5 right
+0	1	integration/fixtures/function/arrow/return-iife-conditional/input.ts:9 unused result
+4	4	8 total

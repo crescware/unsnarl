@@ -1,6 +1,7 @@
 //! `fire_reference`: fill the `ReferenceAnnotation` row for an
 //! identifier-shaped node whose span matches an arena reference.
 
+use oxc_ast::ast::Expression;
 use oxc_ast::AstKind;
 use oxc_span::Span;
 
@@ -97,9 +98,19 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                         if is_synthetic_arrow_body_expression_statement(&self.path, i) {
                             None
                         } else {
+                            // For a ternary statement the head is taken from
+                            // the arm that holds a call (e.g. `items.map()`),
+                            // not the whole `cond ? a : b` text: the call's
+                            // CallProxy renders inside the arm, and a ternary
+                            // arm's plain value reads are gated away from this
+                            // container in the visual layer (so no verbatim
+                            // Raw head is emitted alongside the `ternary ?:`
+                            // structure). The statement span is unchanged, so
+                            // the index keying is unaffected.
+                            let head_expr = ternary_statement_head_expr(&es.expression);
                             Some(build_expression_statement_container(
                                 es.span,
-                                Some(&es.expression),
+                                Some(head_expr),
                             ))
                         }
                     }
@@ -146,4 +157,25 @@ fn is_synthetic_arrow_body_expression_statement(path: &[PathFrame<'_>], i: usize
         .as_ref()
         .map(|b| !b.is_block)
         .unwrap_or(false)
+}
+
+/// The sub-expression whose head should label a ternary statement's
+/// CallProxy: the arm that holds a call (`cond ? items.map(cb) : x` →
+/// `items.map(cb)`), recursing through nested ternaries. A non-ternary
+/// statement, or a ternary with no call arm, yields the expression
+/// itself; a value-only ternary's reads never target the resulting Raw
+/// head, since the visual layer routes a ternary arm's plain values to
+/// their consumer rather than this container.
+fn ternary_statement_head_expr<'e>(expr: &'e Expression<'e>) -> &'e Expression<'e> {
+    let Expression::ConditionalExpression(cond) = expr else {
+        return expr;
+    };
+    for arm in [&cond.consequent, &cond.alternate] {
+        match arm {
+            Expression::CallExpression(_) | Expression::NewExpression(_) => return arm,
+            Expression::ConditionalExpression(_) => return ternary_statement_head_expr(arm),
+            _ => {}
+        }
+    }
+    expr
 }

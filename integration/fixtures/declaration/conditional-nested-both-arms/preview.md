@@ -1,0 +1,84 @@
+# integration/fixtures/declaration/conditional-nested-both-arms/input.ts
+
+## Input
+
+```ts
+const c = true;
+const a = true;
+const b = false;
+const p = "p";
+const q = "q";
+const r = "r";
+const s = "s";
+const x = c ? (a ? p : q) : (b ? r : s);
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_c_6["c<br/>L1"]
+  n_scope_0_a_22["a<br/>L2"]
+  n_scope_0_b_38["b<br/>L3"]
+  n_scope_0_p_55["p<br/>L4"]
+  n_scope_0_q_70["q<br/>L5"]
+  n_scope_0_r_85["r<br/>L6"]
+  n_scope_0_s_100["s<br/>L7"]
+  n_scope_0_x_115["unused x<br/>L8"]
+  subgraph cont_ternary_scope_0_119["ternary ?: L8"]
+    direction RL
+    subgraph s_scope_1["? then L8"]
+      direction RL
+      ternary_test_scope_0_119{"ternary ?:<br/>L8"}
+      subgraph cont_ternary_scope_1_124["ternary ?: L8"]
+        direction RL
+        subgraph s_scope_2["? then L8"]
+          direction RL
+          ternary_test_scope_1_124{"ternary ?:<br/>L8"}
+        end
+        subgraph s_scope_3[": else L8"]
+          direction RL
+          elk_empty_s_scope_3["No nodes"]
+        end
+      end
+    end
+    subgraph s_scope_4[": else L8"]
+      direction RL
+      subgraph cont_ternary_scope_4_138["ternary ?: L8"]
+        direction RL
+        subgraph s_scope_5["? then L8"]
+          direction RL
+          ternary_test_scope_4_138{"ternary ?:<br/>L8"}
+        end
+        subgraph s_scope_6[": else L8"]
+          direction RL
+          elk_empty_s_scope_6["No nodes"]
+        end
+      end
+    end
+  end
+  n_scope_0_c_6 -->|read| ternary_test_scope_0_119
+  n_scope_0_a_22 -->|read| ternary_test_scope_1_124
+  n_scope_0_p_55 -->|read| n_scope_0_x_115
+  n_scope_0_q_70 -->|read| n_scope_0_x_115
+  n_scope_0_b_38 -->|read| ternary_test_scope_4_138
+  n_scope_0_r_85 -->|read| n_scope_0_x_115
+  n_scope_0_s_100 -->|read| n_scope_0_x_115
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_119 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_4 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_1_124 nestL3;
+  class cont_ternary_scope_4_138 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  class s_scope_5 nestL4;
+  class s_scope_6 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
+  class elk_empty_s_scope_6 elkEmptyPlaceholder;
+```

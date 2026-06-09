@@ -70,6 +70,45 @@
         },
         {
           "type": "subgraph",
+          "id": "cont_ternary_scope_1_107",
+          "kind": "conditional-container",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_107",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
           "id": "s_return_scope_0_View_16_94_139",
           "kind": "return",
           "line": 4,
@@ -84,16 +123,6 @@
               "line": 4,
               "endLine": null,
               "isJsxElement": true,
-              "unused": false
-            },
-            {
-              "type": "node",
-              "id": "ret_use_ref_3",
-              "kind": "ReturnArgumentReference",
-              "name": "props",
-              "line": 4,
-              "endLine": null,
-              "isJsxElement": false,
               "unused": false
             },
             {
@@ -129,7 +158,7 @@
     },
     {
       "from": "n_scope_1_props_21",
-      "to": "ret_use_ref_3",
+      "to": "ternary_test_scope_1_107",
       "label": "read"
     },
     {

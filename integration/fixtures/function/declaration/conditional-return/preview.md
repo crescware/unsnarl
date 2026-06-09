@@ -26,15 +26,25 @@ flowchart RL
       n_scope_1_flag_14["flag<br/>L1"]
       n_scope_1_left_39["left<br/>L2"]
       n_scope_1_right_61["right<br/>L3"]
+      subgraph cont_ternary_scope_1_84["ternary ?: L4"]
+        direction RL
+        subgraph s_scope_2["? then L4"]
+          direction RL
+          ternary_test_scope_1_84{"ternary ?:<br/>L4"}
+        end
+        subgraph s_scope_3[": else L4"]
+          direction RL
+          elk_empty_s_scope_3["No nodes"]
+        end
+      end
       subgraph s_return_scope_0_pick_9_77_104["return L4"]
         direction RL
-        ret_use_ref_2["flag<br/>L4"]
         ret_use_ref_3["left<br/>L4"]
         ret_use_ref_4["right<br/>L4"]
       end
     end
   end
-  n_scope_1_flag_14 -->|read| ret_use_ref_2
+  n_scope_1_flag_14 -->|read| ternary_test_scope_1_84
   n_scope_1_left_39 -->|read| ret_use_ref_3
   n_scope_1_right_61 -->|read| ret_use_ref_4
   n_scope_0_pick_9 -->|read,call| n_scope_0_result_114
@@ -43,5 +53,11 @@ flowchart RL
   classDef nestL2 fill:#1a2538,stroke:transparent;
   class s_scope_1 nestL2;
   classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_1_84 nestL3;
   class s_return_scope_0_pick_9_77_104 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
 ```

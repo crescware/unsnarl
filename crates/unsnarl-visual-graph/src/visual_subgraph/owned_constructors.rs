@@ -109,6 +109,26 @@ impl OwnedVisualSubgraph {
         )
     }
 
+    /// Wrapping container for a ternary `cond ? a : b`, the
+    /// expression-level analogue of [`Self::if_else_container`]. A
+    /// ternary always has both arms, so — unlike the if/else container's
+    /// `has_else` — no extra flag is carried.
+    pub fn conditional_container(
+        id: impl Into<String>,
+        line: u32,
+        elements: Vec<VisualElement>,
+        direction: Direction,
+    ) -> Self {
+        Self::base(
+            id,
+            line,
+            OwnedSubgraphKind::ConditionalContainer,
+            OwnedExtras::None {},
+            elements,
+            direction,
+        )
+    }
+
     pub fn return_subgraph(
         id: impl Into<String>,
         line: u32,

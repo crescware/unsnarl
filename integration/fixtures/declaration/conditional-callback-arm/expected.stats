@@ -1,0 +1,8 @@
+1	0	integration/fixtures/declaration/conditional-callback-arm/input.ts:1 items
+1	0	integration/fixtures/declaration/conditional-callback-arm/input.ts:2 fallback
+1	0	integration/fixtures/declaration/conditional-callback-arm/input.ts:3 enabled
+0	2	integration/fixtures/declaration/conditional-callback-arm/input.ts:5 unused result
+0	1	integration/fixtures/declaration/conditional-callback-arm/input.ts:5 ternary-test
+1	0	integration/fixtures/declaration/conditional-callback-arm/input.ts:5 v
+0	1	integration/fixtures/declaration/conditional-callback-arm/input.ts:5 v
+4	4	7 total

@@ -7,15 +7,19 @@
 
 pub mod apply_pending_loop_test_anchors;
 pub mod arena;
+pub mod attach_conditional_test_anchor;
 pub mod attach_test_anchor_to_consequent;
 pub mod branch_container_key;
 pub mod branch_merged_origins;
 pub mod branch_scope_of;
 pub mod build_children;
+pub mod build_conditional_group;
 pub mod build_scope;
 pub mod build_visual_graph;
 pub mod call_node_extent;
 pub mod callback_chain_target;
+pub mod conditional_container_subgraph_id;
+pub mod conditional_test_node_id;
 pub mod context;
 pub mod control_subgraph_kind_of;
 pub mod describe_subgraph;

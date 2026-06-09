@@ -2,7 +2,7 @@
 1	0	integration/fixtures/function/arrow/conditional-body/input.ts:2 right
 1	0	integration/fixtures/function/arrow/conditional-body/input.ts:4 pick
 1	0	integration/fixtures/function/arrow/conditional-body/input.ts:4 enabled
-0	1	integration/fixtures/function/arrow/conditional-body/input.ts:4 enabled
+0	1	integration/fixtures/function/arrow/conditional-body/input.ts:4 ternary-test
 0	1	integration/fixtures/function/arrow/conditional-body/input.ts:4 left
 0	1	integration/fixtures/function/arrow/conditional-body/input.ts:4 right
 0	1	integration/fixtures/function/arrow/conditional-body/input.ts:6 unused result

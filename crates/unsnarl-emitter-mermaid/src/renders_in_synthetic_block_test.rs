@@ -49,6 +49,9 @@ fn node_of_kind(kind: NodeKind) -> VisualNode {
         NodeKind::SyntheticSwitchStatementDiscriminant => VisualNode::Synthetic(
             base_simple_synthetic(SyntheticNodeKind::SyntheticSwitchStatementDiscriminant),
         ),
+        NodeKind::SyntheticConditionalTest => VisualNode::Synthetic(base_simple_synthetic(
+            SyntheticNodeKind::SyntheticConditionalTest,
+        )),
         NodeKind::SyntheticWhileStatementTest => VisualNode::Synthetic(base_simple_synthetic(
             SyntheticNodeKind::SyntheticWhileStatementTest,
         )),
@@ -189,4 +192,9 @@ fn return_argument_reference_does_not_render_in_synthetic_block() {
 #[test]
 fn throw_argument_reference_does_not_render_in_synthetic_block() {
     check(NodeKind::ThrowArgumentReference, false);
+}
+
+#[test]
+fn synthetic_conditional_test_does_not_render_in_synthetic_block() {
+    check(NodeKind::SyntheticConditionalTest, false);
 }

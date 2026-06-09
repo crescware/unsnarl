@@ -2,7 +2,7 @@
 1	0	integration/fixtures/function/declaration/conditional-return/input.ts:1 flag
 1	0	integration/fixtures/function/declaration/conditional-return/input.ts:2 left
 1	0	integration/fixtures/function/declaration/conditional-return/input.ts:3 right
-0	1	integration/fixtures/function/declaration/conditional-return/input.ts:4 flag
+0	1	integration/fixtures/function/declaration/conditional-return/input.ts:4 ternary-test
 0	1	integration/fixtures/function/declaration/conditional-return/input.ts:4 left
 0	1	integration/fixtures/function/declaration/conditional-return/input.ts:4 right
 0	1	integration/fixtures/function/declaration/conditional-return/input.ts:7 unused result

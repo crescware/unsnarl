@@ -1,5 +1,6 @@
 1	0	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:0 cond
 1	0	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:0 a
 1	0	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:0 b
-0	3	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:1 unused x
-3	3	4 total
+0	2	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:1 unused x
+0	1	integration/fixtures/app-behavior/ast-type-coverage/conditional-expression/input.ts:1 ternary-test
+3	3	5 total

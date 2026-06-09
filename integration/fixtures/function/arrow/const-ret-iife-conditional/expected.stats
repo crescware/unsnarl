@@ -1,0 +1,11 @@
+1	0	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:1 pick
+1	0	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:1 expr
+1	0	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:2 a
+1	0	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:3 b
+1	0	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:4 ret
+0	1	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:4 ternary-test
+0	1	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:4 a
+0	1	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:4 b
+0	1	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:5 ret
+0	1	integration/fixtures/function/arrow/const-ret-iife-conditional/input.ts:8 unused result
+5	5	10 total

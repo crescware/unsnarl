@@ -3,6 +3,8 @@
 
 use std::collections::{HashMap, HashSet};
 
+use unsnarl_oxc_parity::AstType;
+
 use super::arena::{BuildArena, Container};
 use super::context::BuilderContext;
 use super::edge_label_of_ref::edge_label_of_ref;
@@ -27,6 +29,24 @@ pub fn emit_reference_edges(
     ctx: &BuilderContext<'_>,
     var_var_ids: &HashSet<&str>,
 ) {
+    // Start offsets of every `ConditionalExpression` (shared by its two
+    // arms via `parent_span_offset`). A statement whose container starts
+    // here is a *bare ternary statement* (`cond ? a : b;`) — its value is
+    // discarded — as opposed to a ternary nested in a consumer
+    // (`foo(cond ? a : b);`), whose arm values reach the consumer's
+    // container instead. Used below to drop a discarded ternary arm's
+    // spurious edge.
+    let ternary_stmt_starts: HashSet<u32> = ctx
+        .scope_map
+        .values()
+        .filter_map(|s| {
+            let c = s.block_context.as_ref()?;
+            (matches!(c.parent_type(), AstType::ConditionalExpression)
+                && (c.key() == "consequent" || c.key() == "alternate"))
+                .then(|| c.parent_span_offset().0)
+        })
+        .collect();
+
     for r in &ctx.ir.references {
         let Some(resolved) = r.resolved.as_ref() else {
             continue;
@@ -69,6 +89,7 @@ pub fn emit_reference_edges(
             while_test: &state.while_test_anchor_by_offset,
             do_while_test: &state.do_while_test_anchor_by_offset,
             for_test: &state.for_test_anchor_by_offset,
+            conditional_test: &state.conditional_test_anchor_by_offset,
         };
         let predicate_target = predicate_target_id_borrowed(r, &anchors);
         if let Some(target) = predicate_target {
@@ -135,8 +156,11 @@ pub fn emit_reference_edges(
                             &ctx.write_ops_by_variable,
                         ),
                         owner_id.value(),
+                        r.identifier.span().offset.0,
                         &state.result_proxy_by_var,
+                        &state.result_proxy_arm_span,
                         &state.result_proxy_by_write_op,
+                        &state.result_proxy_write_op_arm_span,
                     );
                     push_edge(
                         &mut state.emitted_edges,
@@ -201,8 +225,11 @@ pub fn emit_reference_edges(
                         &ctx.write_ops_by_variable,
                     ),
                     owner_id.value(),
+                    r.identifier.span().offset.0,
                     &state.result_proxy_by_var,
+                    &state.result_proxy_arm_span,
                     &state.result_proxy_by_write_op,
+                    &state.result_proxy_write_op_arm_span,
                 );
                 for from_id in &from_ids {
                     push_edge(
@@ -215,6 +242,27 @@ pub fn emit_reference_edges(
                 }
             }
         } else {
+            // A value read in a *bare ternary statement* (`cond ? a : b;`)
+            // is a discarded output of the ternary: no consumer, so it
+            // emits no edge — rather than a spurious edge to the module
+            // sink. The receiver of an arm's callback call is an input to
+            // that call (its arm hosts a CallProxy), so it is kept and
+            // routed to the proxy below. A ternary nested in a consumer
+            // (`foo(cond ? a : b);`) carries the consumer's container, not
+            // a ternary statement's, so its arm values still reach the
+            // consumer.
+            let off = r.identifier.span().offset.0;
+            let is_ternary_stmt = r
+                .expression_statement_container
+                .as_ref()
+                .is_some_and(|c| ternary_stmt_starts.contains(&c.start_span.offset.0));
+            let in_callback_arm = state
+                .ternary_callback_arm_spans
+                .iter()
+                .any(|&(s, e)| off >= s && off < e);
+            if is_ternary_stmt && !in_callback_arm {
+                continue;
+            }
             let enclosing_fn_var_id = enclosing_function_var_borrowed(
                 r.from.value(),
                 &ctx.scope_map,
@@ -271,16 +319,38 @@ pub fn emit_reference_edges(
 fn retarget_owner_target(
     target_id: String,
     owner_var_id: &str,
+    ref_offset: u32,
     result_proxy_by_var: &HashMap<String, String>,
+    result_proxy_arm_span: &HashMap<String, (u32, u32)>,
     result_proxy_by_write_op: &HashMap<String, String>,
+    result_proxy_write_op_arm_span: &HashMap<String, (u32, u32)>,
 ) -> String {
     if target_id == node_id(owner_var_id) {
         if let Some(proxy) = result_proxy_by_var.get(owner_var_id) {
-            return proxy.clone();
+            // A ternary-arm proxy claims only reads inside the arm that
+            // hosts the call (`result_proxy_arm_span`); the sibling arm's
+            // value keeps its direct edge to the binding. Ordinary
+            // bindings record no span and redirect unconditionally.
+            if read_belongs_to_arm(result_proxy_arm_span.get(owner_var_id), ref_offset) {
+                return proxy.clone();
+            }
         }
     }
     if let Some(proxy) = result_proxy_by_write_op.get(&target_id) {
-        return proxy.clone();
+        // Same arm gating for a reassignment's write-op proxy.
+        if read_belongs_to_arm(result_proxy_write_op_arm_span.get(&target_id), ref_offset) {
+            return proxy.clone();
+        }
     }
     target_id
+}
+
+/// Whether a read at `ref_offset` is inside the ternary arm that hosts a
+/// gated CallProxy. `None` (no recorded arm — an ordinary, non-ternary
+/// binding) means the proxy claims every read unconditionally.
+fn read_belongs_to_arm(arm_span: Option<&(u32, u32)>, ref_offset: u32) -> bool {
+    match arm_span {
+        Some(&(start, end)) => ref_offset >= start && ref_offset < end,
+        None => true,
+    }
 }

@@ -4,7 +4,8 @@
 //! Walks the path leaf -> root tracking the slot key the previous
 //! step occupied; reports the first ancestor whose `(type, key)`
 //! pair identifies it as the predicate of an `if` / `switch` /
-//! `while` / `do`-`while` / `for*` statement. The trailing `parent`
+//! `while` / `do`-`while` / `for*` statement or the test of a
+//! ternary `?:` `ConditionalExpression`. The trailing `parent`
 //! / `key` check covers the case where the reference itself is the
 //! predicate slot of the immediate parent (the visitor has already
 //! popped the predicate-owner off the path).
@@ -62,6 +63,9 @@ fn predicate_container_for(ty: &AstType, key: Option<&str>) -> Option<PredicateC
         }
         (AstType::ForInStatement, k) if LOOP_HEADER_KEYS_FOR_OF_IN.contains(&k) => {
             Some(PredicateContainerType::ForInStatement)
+        }
+        (AstType::ConditionalExpression, "test") => {
+            Some(PredicateContainerType::ConditionalExpression)
         }
         _ => None,
     }

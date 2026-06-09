@@ -58,6 +58,16 @@
 //! re-routes each oxc-derived child of the switch to the owning case
 //! (mechanics in [`upper_for`]; behaviour pinned by `scope_mapping_test`).
 //!
+//! ## `ConditionalExpression` arm synthesis
+//!
+//! A ternary `cond ? a : b` owns no oxc scope at all — its arms share
+//! the enclosing scope. After the main walk,
+//! [`synthesise_conditional_arms`] appends one `Block` scope per arm
+//! (anchored to the arm expression's span) and re-parents arms / inner
+//! scopes by span containment so each arm renders as its own branch,
+//! the same shape `if` / `else` produce. The resulting `conditional_arms`
+//! list drives the reference / variable re-parenting downstream.
+//!
 //! ## `ClassFieldInitializer`
 //!
 //! Absent intentionally: the parity fixtures' `expected.ir.json`
@@ -85,11 +95,13 @@ use crate::parser::SourceType;
 mod build_anchor_node;
 mod is_filtered_out;
 mod is_merged_into_parent;
+mod synthesise_conditional_arms;
 mod upper_for;
 
 use build_anchor_node::build_anchor_node;
 use is_filtered_out::is_filtered_out;
 use is_merged_into_parent::is_merged_into_parent;
+use synthesise_conditional_arms::synthesise_conditional_arms;
 use upper_for::upper_for;
 
 /// Output of [`build_scopes`]: the IR scope arena plus the
@@ -221,6 +233,12 @@ pub(crate) fn build_scopes<'a>(
             switch_info.insert(oxc_id, SwitchInfo { cases });
         }
     }
+
+    // Ternaries own no oxc scope, so their arms are synthesised after
+    // the main walk (which only visits real scopes) and re-parented by
+    // span containment. This must run before the `child_scopes` rebuild
+    // below so the synthetic arm rows participate in the tree.
+    synthesise_conditional_arms(semantic, &mut scopes, &translation);
 
     for raw_index in 0..scopes.len() {
         let ir_id = ScopeId::from_usize(raw_index);

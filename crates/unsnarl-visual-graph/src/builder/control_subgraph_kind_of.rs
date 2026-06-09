@@ -33,6 +33,11 @@ fn kind_from_block_context(ctx: Option<&BlockContext>) -> Option<ControlSubgraph
             "alternate" => Some(ControlSubgraphKind::Else),
             _ => Some(ControlSubgraphKind::Block),
         },
+        AstType::ConditionalExpression => match key {
+            "consequent" => Some(ControlSubgraphKind::Consequent),
+            "alternate" => Some(ControlSubgraphKind::Alternate),
+            _ => Some(ControlSubgraphKind::Block),
+        },
         AstType::SwitchStatement if key == "cases" => Some(ControlSubgraphKind::Case),
         AstType::WhileStatement if key == "body" => Some(ControlSubgraphKind::While),
         AstType::DoWhileStatement if key == "body" => Some(ControlSubgraphKind::DoWhile),

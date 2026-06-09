@@ -1,0 +1,6 @@
+1	0	integration/fixtures/declaration/conditional-member-test/input.ts:1 config
+1	0	integration/fixtures/declaration/conditional-member-test/input.ts:2 a
+1	0	integration/fixtures/declaration/conditional-member-test/input.ts:3 b
+0	2	integration/fixtures/declaration/conditional-member-test/input.ts:4 unused x
+0	1	integration/fixtures/declaration/conditional-member-test/input.ts:4 ternary-test
+3	3	5 total

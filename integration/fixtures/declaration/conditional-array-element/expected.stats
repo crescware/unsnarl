@@ -1,0 +1,6 @@
+1	0	integration/fixtures/declaration/conditional-array-element/input.ts:1 cond
+1	0	integration/fixtures/declaration/conditional-array-element/input.ts:2 a
+1	0	integration/fixtures/declaration/conditional-array-element/input.ts:3 b
+0	2	integration/fixtures/declaration/conditional-array-element/input.ts:4 unused arr
+0	1	integration/fixtures/declaration/conditional-array-element/input.ts:4 ternary-test
+3	3	5 total

@@ -1,0 +1,562 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/conditional-both-arms-call/input.ts",
+    "language": "ts"
+  },
+  "raw": "const cond = true;\nfunction doA() {}\nfunction doB() {}\ncond ? doA() : doB();\n",
+  "scopes": [
+    {
+      "id": "scope#0",
+      "type": "module",
+      "isStrict": true,
+      "upper": null,
+      "childScopes": [
+        "scope#1",
+        "scope#2",
+        "scope#3",
+        "scope#4"
+      ],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "Program",
+        "span": {
+          "line": 1,
+          "column": 0,
+          "offset": 0
+        },
+        "endSpan": {
+          "line": 5,
+          "column": 0,
+          "offset": 77
+        }
+      },
+      "variables": [
+        "scope#0:cond@6",
+        "scope#0:doA@28",
+        "scope#0:doB@46"
+      ],
+      "references": [
+        "ref#0",
+        "ref#1",
+        "ref#2",
+        "ref#3"
+      ],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#1",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#1",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 2,
+          "column": 0,
+          "offset": 19
+        },
+        "endSpan": {
+          "line": 2,
+          "column": 17,
+          "offset": 36
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#2",
+      "type": "function",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#2",
+      "block": {
+        "type": "FunctionDeclaration",
+        "span": {
+          "line": 3,
+          "column": 0,
+          "offset": 37
+        },
+        "endSpan": {
+          "line": 3,
+          "column": 17,
+          "offset": 54
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": null,
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 1,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#3",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "CallExpression",
+        "span": {
+          "line": 4,
+          "column": 7,
+          "offset": 62
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 12,
+          "offset": 67
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "consequent",
+        "parentSpanOffset": 55,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    },
+    {
+      "id": "scope#4",
+      "type": "block",
+      "isStrict": true,
+      "upper": "scope#0",
+      "childScopes": [],
+      "variableScope": "scope#0",
+      "block": {
+        "type": "CallExpression",
+        "span": {
+          "line": 4,
+          "column": 15,
+          "offset": 70
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 20,
+          "offset": 75
+        }
+      },
+      "variables": [],
+      "references": [],
+      "through": [],
+      "functionExpressionScope": false,
+      "blockContext": {
+        "kind": "other",
+        "parentType": "ConditionalExpression",
+        "key": "alternate",
+        "parentSpanOffset": 55,
+        "ifChainRootOffset": null
+      },
+      "callbackArgument": null,
+      "fallsThrough": false,
+      "exitsFunction": false,
+      "nestingDepths": {
+        "function": 0,
+        "if": 0,
+        "for": 0,
+        "while": 0,
+        "switch": 0,
+        "try-catch-finally": 0,
+        "block": 0
+      },
+      "abruptStatements": []
+    }
+  ],
+  "variables": [
+    {
+      "id": "scope#0:cond@6",
+      "name": "cond",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      ],
+      "references": [
+        "ref#0",
+        "ref#1"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "cond",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "node": {
+            "type": "VariableDeclarator",
+            "span": {
+              "line": 1,
+              "column": 6,
+              "offset": 6
+            }
+          },
+          "parent": {
+            "type": "VariableDeclaration",
+            "span": {
+              "line": 1,
+              "column": 0,
+              "offset": 0
+            }
+          },
+          "type": "Variable",
+          "init": {
+            "type": "Literal",
+            "span": {
+              "line": 1,
+              "column": 13,
+              "offset": 13
+            }
+          },
+          "declarationKind": "const"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:doA@28",
+      "name": "doA",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 2,
+          "column": 9,
+          "offset": 28
+        }
+      ],
+      "references": [
+        "ref#2"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "doA",
+            "span": {
+              "line": 2,
+              "column": 9,
+              "offset": 28
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 2,
+              "column": 0,
+              "offset": 19
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    },
+    {
+      "id": "scope#0:doB@46",
+      "name": "doB",
+      "scope": "scope#0",
+      "identifiers": [
+        {
+          "line": 3,
+          "column": 9,
+          "offset": 46
+        }
+      ],
+      "references": [
+        "ref#3"
+      ],
+      "defs": [
+        {
+          "name": {
+            "name": "doB",
+            "span": {
+              "line": 3,
+              "column": 9,
+              "offset": 46
+            }
+          },
+          "node": {
+            "type": "FunctionDeclaration",
+            "span": {
+              "line": 3,
+              "column": 0,
+              "offset": 37
+            }
+          },
+          "parent": null,
+          "type": "FunctionName"
+        }
+      ]
+    }
+  ],
+  "references": [
+    {
+      "id": "ref#0",
+      "identifier": {
+        "name": "cond",
+        "span": {
+          "line": 1,
+          "column": 6,
+          "offset": 6
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:cond@6",
+      "owners": [
+        "scope#0:cond@6"
+      ],
+      "init": true,
+      "flags": {
+        "read": false,
+        "write": true,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": null
+    },
+    {
+      "id": "ref#1",
+      "identifier": {
+        "name": "cond",
+        "span": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:cond@6",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": false,
+        "receiver": false
+      },
+      "predicateContainer": {
+        "type": "ConditionalExpression",
+        "offset": 55
+      },
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#2",
+      "identifier": {
+        "name": "doA",
+        "span": {
+          "line": 4,
+          "column": 7,
+          "offset": 62
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:doA@28",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
+    },
+    {
+      "id": "ref#3",
+      "identifier": {
+        "name": "doB",
+        "span": {
+          "line": 4,
+          "column": 15,
+          "offset": 70
+        }
+      },
+      "from": "scope#0",
+      "resolved": "scope#0:doB@46",
+      "owners": [],
+      "init": false,
+      "flags": {
+        "read": true,
+        "write": false,
+        "call": true,
+        "receiver": false
+      },
+      "predicateContainer": null,
+      "completion": {
+        "type": "normal"
+      },
+      "jsxElement": null,
+      "expressionStatementContainer": {
+        "startSpan": {
+          "line": 4,
+          "column": 0,
+          "offset": 55
+        },
+        "endSpan": {
+          "line": 4,
+          "column": 21,
+          "offset": 76
+        },
+        "head": {
+          "kind": "call",
+          "callee": {
+            "kind": "identifier",
+            "name": "doA"
+          },
+          "startSpan": {
+            "line": 4,
+            "column": 7,
+            "offset": 62
+          },
+          "endSpan": {
+            "line": 4,
+            "column": 12,
+            "offset": 67
+          }
+        }
+      }
+    }
+  ],
+  "unusedVariableIds": [],
+  "diagnostics": []
+}

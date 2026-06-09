@@ -1,0 +1,48 @@
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_Error_48["global Error"]
+  subgraph wrap_s_scope_1[" "]
+    direction TB
+    n_scope_0_check_9["check()<br/>L1"]
+    subgraph s_scope_1["check()<br/>L1-5"]
+      direction RL
+      n_scope_1_flag_15["flag<br/>L1"]
+      n_scope_1_a_40["a<br/>L2"]
+      n_scope_1_b_68["b<br/>L3"]
+      subgraph cont_ternary_scope_1_96["ternary ?: L4"]
+        direction RL
+        subgraph s_scope_2["? then L4"]
+          direction RL
+          ternary_test_scope_1_96{"ternary ?:<br/>L4"}
+        end
+        subgraph s_scope_3[": else L4"]
+          direction RL
+          elk_empty_s_scope_3["No nodes"]
+        end
+      end
+      subgraph s_throw_scope_0_check_9_90_109["throw L4"]
+        direction RL
+        throw_use_ref_5["a<br/>L4"]
+        throw_use_ref_6["b<br/>L4"]
+      end
+    end
+  end
+  n_scope_0_Error_48 -->|read,call| n_scope_1_a_40
+  n_scope_0_Error_48 -->|read,call| n_scope_1_b_68
+  n_scope_1_flag_15 -->|read| ternary_test_scope_1_96
+  n_scope_1_a_40 -->|read| throw_use_ref_5
+  n_scope_1_b_68 -->|read| throw_use_ref_6
+  n_scope_0_check_9 -->|read,call| expr_stmt_113
+  expr_stmt_113["check()<br/>L7"]
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class wrap_s_scope_1 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_1_96 nestL3;
+  class s_throw_scope_0_check_9_90_109 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  class s_scope_3 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;

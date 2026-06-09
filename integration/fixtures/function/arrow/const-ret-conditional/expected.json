@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/function/arrow/const-ret-conditional/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_pick_9",
+      "name": "pick",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_116",
+      "name": "result",
+      "line": 8,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 1,
+      "endLine": 6,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_pick_9",
+      "ownerName": "pick",
+      "elements": [
+        {
+          "type": "node",
+          "id": "n_scope_1_expr_14",
+          "name": "expr",
+          "line": 1,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "FormalParameter"
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_a_39",
+          "name": "a",
+          "line": 2,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_b_56",
+          "name": "b",
+          "line": 3,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "node",
+          "id": "n_scope_1_ret_73",
+          "name": "ret",
+          "line": 4,
+          "endLine": null,
+          "isJsxElement": false,
+          "unused": false,
+          "kind": "ConstBinding",
+          "initIsFunction": false
+        },
+        {
+          "type": "subgraph",
+          "id": "cont_ternary_scope_1_79",
+          "kind": "conditional-container",
+          "line": 4,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "subgraph",
+              "id": "s_scope_2",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [
+                {
+                  "type": "node",
+                  "id": "ternary_test_scope_1_79",
+                  "kind": "SyntheticConditionalTest",
+                  "name": "ternary-test",
+                  "line": 4,
+                  "endLine": null,
+                  "isJsxElement": false,
+                  "unused": false
+                }
+              ],
+              "kind": "consequent"
+            },
+            {
+              "type": "subgraph",
+              "id": "s_scope_3",
+              "line": 4,
+              "endLine": 4,
+              "direction": "RL",
+              "elements": [],
+              "kind": "alternate"
+            }
+          ]
+        },
+        {
+          "type": "subgraph",
+          "id": "s_return_scope_0_pick_9_95_106",
+          "kind": "return",
+          "line": 5,
+          "endLine": null,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ret_use_ref_6",
+              "kind": "ReturnArgumentReference",
+              "name": "ret",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_1_expr_14",
+      "to": "ternary_test_scope_1_79",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_a_39",
+      "to": "n_scope_1_ret_73",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_b_56",
+      "to": "n_scope_1_ret_73",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_ret_73",
+      "to": "ret_use_ref_6",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_pick_9",
+      "to": "n_scope_0_result_116",
+      "label": "read,call"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,7 @@
+1	0	integration/fixtures/declaration/conditional-logical-test/input.ts:1 a
+1	0	integration/fixtures/declaration/conditional-logical-test/input.ts:2 b
+1	0	integration/fixtures/declaration/conditional-logical-test/input.ts:3 p
+1	0	integration/fixtures/declaration/conditional-logical-test/input.ts:4 q
+0	2	integration/fixtures/declaration/conditional-logical-test/input.ts:5 unused x
+0	2	integration/fixtures/declaration/conditional-logical-test/input.ts:5 ternary-test
+4	4	6 total

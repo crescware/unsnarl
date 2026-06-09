@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/conditional-member-test/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_config_6",
+      "name": "config",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_40",
+      "name": "a",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_55",
+      "name": "b",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_x_70",
+      "name": "x",
+      "line": 4,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_74",
+      "kind": "conditional-container",
+      "line": 4,
+      "endLine": null,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_74",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_config_6",
+      "to": "ternary_test_scope_0_74",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_40",
+      "to": "n_scope_0_x_70",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_55",
+      "to": "n_scope_0_x_70",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

@@ -1,0 +1,64 @@
+# integration/fixtures/declaration/conditional-callback-arm/input.ts
+
+## Input
+
+```ts
+const items = [1, 2, 3];
+const fallback = [0];
+const enabled = true;
+
+const result = enabled ? items.map((v) => v * 2) : fallback;
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_items_6["items<br/>L1"]
+  n_scope_0_fallback_31["fallback<br/>L2"]
+  n_scope_0_enabled_53["enabled<br/>L3"]
+  n_scope_0_result_76["unused result<br/>L5"]
+  subgraph cont_ternary_scope_0_85["ternary ?: L5"]
+    direction RL
+    subgraph s_scope_1["? then L5"]
+      direction RL
+      ternary_test_scope_0_85{"ternary ?:<br/>L5"}
+      subgraph call_proxy_85["items.map()<br/>L5"]
+        direction RL
+        subgraph s_scope_2["items.map(args[0])<br/>L5"]
+          direction RL
+          n_scope_2_v_106["v<br/>L5"]
+          subgraph s_return_scope_2_112_117["return L5"]
+            direction RL
+            ret_use_ref_6["v<br/>L5"]
+          end
+        end
+      end
+    end
+    subgraph s_scope_3[": else L5"]
+      direction RL
+      elk_empty_s_scope_3["No nodes"]
+    end
+  end
+  call_proxy_85 -->|read| n_scope_0_result_76
+  n_scope_0_enabled_53 -->|read| ternary_test_scope_0_85
+  n_scope_0_items_6 -->|read| call_proxy_85
+  n_scope_2_v_106 -->|read| ret_use_ref_6
+  n_scope_0_fallback_31 -->|read| n_scope_0_result_76
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_85 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_3 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class call_proxy_85 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_2 nestL4;
+  classDef nestL5 fill:#364666,stroke:transparent;
+  class s_return_scope_2_112_117 nestL5;
+  classDef edgeTargetSubgraph stroke:#888;
+  class call_proxy_85 edgeTargetSubgraph;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_3 elkEmptyPlaceholder;
+```

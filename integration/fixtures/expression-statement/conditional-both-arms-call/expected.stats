@@ -1,0 +1,5 @@
+1	0	integration/fixtures/expression-statement/conditional-both-arms-call/input.ts:1 cond
+0	0	integration/fixtures/expression-statement/conditional-both-arms-call/input.ts:2 doA
+0	0	integration/fixtures/expression-statement/conditional-both-arms-call/input.ts:3 doB
+0	1	integration/fixtures/expression-statement/conditional-both-arms-call/input.ts:4 ternary-test
+1	1	4 total
