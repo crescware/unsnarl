@@ -276,15 +276,17 @@ fn collapsed_consequent_drops_the_if_test_anchor() {
     // With no subgraph to host the if-test anchor, the anchor must be
     // dropped rather than leaking into the surrounding container.
     let mut ir = empty_serialized_ir();
-    let mut cons = if_branch("c", "outer", "consequent", 5);
-    cons.nesting_depths = NestingDepths::uniform(NestingDepth(2));
+    let cons = if_branch("c", "outer", "consequent", 5);
     let mut outer = base_serialized_scope("outer");
     outer.child_scopes = vec![scope_id("c")];
     ir.scopes.push(outer);
     ir.scopes.push(cons);
 
     let mut ctx = base_builder_context(&ir);
-    ctx.depths = Some(NestingDepths::uniform(NestingDepth(1)));
+    // `cons` is an `if`-consequent Block one rendered `If` step deep
+    // (it is the only `if` arm in the tree). Pin the ceiling at zero
+    // so its `If` count of 1 exceeds it and the scope collapses.
+    ctx.depths = Some(NestingDepths::uniform(NestingDepth(0)));
     let mut arena = BuildArena::new();
     let mut state = BuildState::new();
     build_children(&mut arena, &mut state, &ctx, &ir.scopes[0], Container::Root);

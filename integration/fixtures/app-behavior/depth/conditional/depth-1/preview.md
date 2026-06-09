@@ -1,0 +1,67 @@
+# integration/fixtures/app-behavior/depth/conditional/input.ts
+
+## Input
+
+```ts
+const a = true;
+const b = true;
+const c = true;
+const d = true;
+const e = true;
+const f = true;
+
+const r = a ? 1 : b ? 2 : c ? 3 : d ? 4 : e ? 5 : f ? 6 : 7;
+console.log(r);
+```
+
+## Query
+
+```sh
+--depth 1
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_a_6["a<br/>L1"]
+  n_scope_0_b_22["b<br/>L2"]
+  n_scope_0_c_38["c<br/>L3"]
+  n_scope_0_d_54["d<br/>L4"]
+  n_scope_0_e_70["e<br/>L5"]
+  n_scope_0_f_86["f<br/>L6"]
+  n_scope_0_r_103["r<br/>L8"]
+  n_scope_0_console_158["global console"]
+  subgraph cont_ternary_scope_0_107["ternary ?: L8"]
+    direction RL
+    subgraph s_scope_1["? then L8"]
+      direction RL
+      ternary_test_scope_0_107{"ternary ?:<br/>L8"}
+    end
+    subgraph s_scope_2[": else L8"]
+      direction RL
+      beyond_depth_s_scope_2((...))
+      subgraph cont_ternary_scope_2_115["ternary ?: L8"]
+        direction RL
+        elk_empty_cont_ternary_scope_2_115["No nodes"]
+      end
+    end
+  end
+  n_scope_0_a_6 -->|read| ternary_test_scope_0_107
+  n_scope_0_b_22 -.->|read| beyond_depth_s_scope_2
+  n_scope_0_console_158 -->|read| expr_stmt_158
+  n_scope_0_r_103 -->|read| expr_stmt_158
+  expr_stmt_158["console.log()<br/>L9"]
+  classDef boundaryStub stroke:#888,stroke-dasharray:3 3,color:#888;
+  class beyond_depth_s_scope_2 boundaryStub;
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_107 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_2 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_2_115 nestL3;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_cont_ternary_scope_2_115 elkEmptyPlaceholder;
+```

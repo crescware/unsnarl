@@ -59,6 +59,14 @@ pub struct BuilderContext<'a> {
     /// `is_collapsed` returns false for every scope and the full
     /// graph is rendered.
     pub depths: Option<NestingDepths>,
+    /// Per-scope `NestingDepths` derived from the subgraph hierarchy
+    /// the visual layer will actually render, not from the AST. This
+    /// is the input `is_collapsed` consults so synthesised subgraphs
+    /// (e.g. ternary arms) are counted on the same footing as
+    /// AST-anchored ones. Built by `compute_rendered_nesting_depths`.
+    /// Key shape (`String`) matches `subgraph_owner_var` for the same
+    /// reason — the builder owns the values.
+    pub rendered_nesting_depths: HashMap<String, NestingDepths>,
     /// Precomputed line-start / UTF-16 index over `ir.raw`. Lookups
     /// such as `line_for_offset(offset)` resolve in `O(log lines)`
     /// rather than re-scanning `raw` from byte 0 each call.
