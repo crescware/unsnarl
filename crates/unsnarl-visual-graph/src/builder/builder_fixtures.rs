@@ -311,6 +311,8 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
             branch_scopes_by_container.entry(ckey).or_default().push(s);
         }
     }
+    let rendered_nesting_depths =
+        super::compute_rendered_nesting_depths::compute_rendered_nesting_depths(ir);
     BuilderContext {
         ir,
         variable_map,
@@ -322,6 +324,7 @@ pub(crate) fn base_builder_context(ir: &SerializedIR) -> BuilderContext<'_> {
         sorted_cases_by_container: HashMap::new(),
         branch_scopes_by_container,
         depths: None,
+        rendered_nesting_depths,
         source_index: unsnarl_ir::primitive::SourceIndex::build(&ir.raw),
         expression_statement_index:
             super::expression_statement_index::ExpressionStatementIndex::empty(),

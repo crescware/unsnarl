@@ -54,7 +54,11 @@ pub fn build_scope(
     scope: &SerializedScope,
     container: Container,
 ) {
-    if is_collapsed(scope, ctx.depths.as_ref()) {
+    let rendered = ctx
+        .rendered_nesting_depths
+        .get(scope.id.value())
+        .expect("rendered nesting depths are precomputed for every scope reachable from the root");
+    if is_collapsed(scope, rendered, ctx.depths.as_ref()) {
         let _t = TimingScope::start("build_scope::collapsed_branch");
         record_collapsed_descendants(state, ctx, scope, scope.id.value());
         let owner_var_id = ctx.subgraph_owner_var.get(scope.id.value()).cloned();

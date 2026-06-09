@@ -26,6 +26,7 @@ use super::apply_pending_loop_test_anchors::apply_pending_loop_test_anchors;
 use super::arena::{BuildArena, Container, ElementHandle};
 use super::branch_container_key::branch_container_key;
 use super::build_scope::build_scope;
+use super::compute_rendered_nesting_depths::compute_rendered_nesting_depths;
 use super::context::{BuildVisualGraphOptions, BuilderContext};
 use super::emit_let_chain_edges::emit_let_chain_edges;
 use super::emit_module_and_intermediate::emit_module_and_intermediate;
@@ -181,6 +182,8 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
 
     let expression_statement_index = ExpressionStatementIndex::build(&ir.references);
 
+    let rendered_nesting_depths = compute_rendered_nesting_depths(ir);
+
     let ctx = BuilderContext {
         ir,
         variable_map,
@@ -192,6 +195,7 @@ pub fn build_visual_graph(ir: &SerializedIR, opts: &BuildVisualGraphOptions) -> 
         sorted_cases_by_container,
         branch_scopes_by_container,
         depths: opts.depths.clone(),
+        rendered_nesting_depths,
         source_index: SourceIndex::build(&ir.raw),
         expression_statement_index,
     };

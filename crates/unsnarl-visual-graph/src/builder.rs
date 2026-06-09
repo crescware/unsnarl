@@ -18,6 +18,7 @@ pub mod build_scope;
 pub mod build_visual_graph;
 pub mod call_node_extent;
 pub mod callback_chain_target;
+pub mod compute_rendered_nesting_depths;
 pub mod conditional_container_subgraph_id;
 pub mod conditional_test_node_id;
 pub mod context;

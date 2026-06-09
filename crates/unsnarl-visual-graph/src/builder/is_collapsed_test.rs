@@ -1,6 +1,6 @@
-//! Drives the depth-gating predicate directly: only the recorded
-//! `nesting_depths[kind]` is compared against the matching threshold,
-//! and only when `depths` is provided. Module / function-expression
+//! Drives the depth-gating predicate directly: the supplied `rendered`
+//! depths are compared kind-by-kind against the matching threshold,
+//! and only when `ceiling` is provided. Module / function-expression
 //! scopes never collapse because `nesting_kind_of` returns `None` for
 //! them.
 
@@ -58,49 +58,75 @@ fn uniform(n: u32) -> NestingDepths {
 }
 
 #[test]
-fn returns_false_when_depths_option_is_absent() {
-    let mut scope = base_scope();
-    scope.nesting_depths.function = NestingDepth(99);
-    assert!(!is_collapsed(&scope, None));
+fn returns_false_when_ceiling_is_absent() {
+    let scope = base_scope();
+    let rendered = uniform(99);
+    assert!(!is_collapsed(&scope, &rendered, None));
 }
 
 #[test]
-fn returns_false_when_depth_equals_threshold() {
-    let mut scope = base_scope();
-    scope.nesting_depths.function = NestingDepth(1);
-    let depths = uniform(1);
-    assert!(!is_collapsed(&scope, Some(&depths)));
+fn returns_false_when_rendered_equals_ceiling() {
+    let scope = base_scope();
+    let mut rendered = uniform(0);
+    rendered.function = NestingDepth(1);
+    let ceiling = uniform(1);
+    assert!(!is_collapsed(&scope, &rendered, Some(&ceiling)));
 }
 
 #[test]
-fn returns_true_when_nesting_kind_depth_strictly_exceeds_threshold() {
-    let mut scope = base_scope();
-    scope.nesting_depths.function = NestingDepth(2);
-    let depths = uniform(1);
-    assert!(is_collapsed(&scope, Some(&depths)));
+fn returns_true_when_rendered_strictly_exceeds_ceiling() {
+    let scope = base_scope();
+    let mut rendered = uniform(0);
+    rendered.function = NestingDepth(2);
+    let ceiling = uniform(1);
+    assert!(is_collapsed(&scope, &rendered, Some(&ceiling)));
 }
 
 #[test]
 fn each_nesting_kind_is_checked_independently() {
     let mut scope = base_scope();
     scope.r#type = ScopeType::For;
-    scope.nesting_depths.function = NestingDepth(99);
-    scope.nesting_depths.r#for = NestingDepth(1);
+    let mut rendered = uniform(0);
+    rendered.function = NestingDepth(99);
+    rendered.r#for = NestingDepth(1);
 
-    let mut depths = uniform(10);
-    depths.r#for = NestingDepth(1);
-    assert!(!is_collapsed(&scope, Some(&depths)));
+    let mut ceiling = uniform(10);
+    ceiling.r#for = NestingDepth(1);
+    assert!(!is_collapsed(&scope, &rendered, Some(&ceiling)));
 
     let mut tighter = uniform(10);
     tighter.r#for = NestingDepth(0);
-    assert!(is_collapsed(&scope, Some(&tighter)));
+    assert!(is_collapsed(&scope, &rendered, Some(&tighter)));
 }
 
 #[test]
 fn non_counted_scopes_never_collapse() {
     let mut scope = base_scope();
     scope.function_expression_scope = true;
-    scope.nesting_depths = uniform(99);
-    let depths = uniform(0);
-    assert!(!is_collapsed(&scope, Some(&depths)));
+    let rendered = uniform(99);
+    let ceiling = uniform(0);
+    assert!(!is_collapsed(&scope, &rendered, Some(&ceiling)));
+}
+
+#[test]
+fn ternary_arm_block_scope_collapses_under_block_ceiling() {
+    use unsnarl_ir::scope::block_context::{BlockContext, OtherBlockContext};
+
+    let mut scope = base_scope();
+    scope.r#type = ScopeType::Block;
+    scope.block_context = Some(BlockContext::Other(OtherBlockContext::new(
+        AstType::ConditionalExpression,
+        "consequent".to_string(),
+        Utf16CodeUnitOffset(0),
+        None,
+    )));
+
+    let mut rendered = uniform(0);
+    rendered.block = NestingDepth(2);
+    let mut ceiling = uniform(10);
+    ceiling.block = NestingDepth(1);
+    assert!(is_collapsed(&scope, &rendered, Some(&ceiling)));
+
+    ceiling.block = NestingDepth(2);
+    assert!(!is_collapsed(&scope, &rendered, Some(&ceiling)));
 }

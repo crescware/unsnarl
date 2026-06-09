@@ -107,7 +107,10 @@ pub fn build_children(
         // binding relationship survives as `<input> -> ((...))` instead of
         // being re-minted onto a return-use node.
         if let Some(cb) = child.callback_argument.as_ref() {
-            if is_collapsed(child, ctx.depths.as_ref()) {
+            let rendered = ctx.rendered_nesting_depths.get(child.id.value()).expect(
+                "rendered nesting depths are precomputed for every scope reachable from the root",
+            );
+            if is_collapsed(child, rendered, ctx.depths.as_ref()) {
                 build_scope(arena, state, ctx, child, container);
                 route_collapsed_callback_to_stub(state, ctx, child, cb.host.as_ref(), parent_scope);
                 i += 1;
