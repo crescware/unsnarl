@@ -96,6 +96,19 @@ fn parenthesized_ternary_consequent_call_is_chosen() {
 }
 
 #[test]
+fn doubly_parenthesized_ternary_consequent_call_is_chosen() {
+    // Two wrapping layers (`((…))`): the parser keeps one
+    // `ParenthesizedExpression` per pair (`preserve_parens` on), so
+    // `strip_parens`' loop must iterate twice before the conditional is
+    // reached. The call arm is then chosen exactly as in the single-
+    // and zero-paren forms — pinning the multi-level strip (issue #276).
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "((cond ? items.map(cb) : x));";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program), "items.map(cb)");
+}
+
+#[test]
 fn parenthesized_nested_ternary_arm_recurses_to_its_call() {
     // The parenthesized counterpart of
     // `nested_ternary_arm_recurses_to_its_call`: the wrapping
@@ -137,6 +150,21 @@ fn parenthesized_conditional_start_points_at_inner_conditional() {
         .expect("a parenthesized conditional records its inner start");
     // Just past the opening paren, at the ConditionalExpression itself.
     assert_eq!(off.0, 1);
+    assert!(src[off.0 as usize..].starts_with("cond ? a : b"));
+}
+
+#[test]
+fn doubly_parenthesized_conditional_start_points_at_inner_conditional() {
+    // `strip_parens`' loop peels both `(` layers, so the recorded start
+    // lands on the ConditionalExpression itself — two bytes past the
+    // outer paren, not on the inner `(`. A single-strip regression would
+    // leave a `ParenthesizedExpression` here and yield `None`.
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "((cond ? a : b));";
+    let program = parse_ts(&alloc, src);
+    let off = parenthesized_conditional_start(expression_of(&program))
+        .expect("a doubly-parenthesized conditional records its inner start");
+    assert_eq!(off.0, 2);
     assert!(src[off.0 as usize..].starts_with("cond ? a : b"));
 }
 
