@@ -179,21 +179,24 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
 ///
 /// Normally this is the host's whole bound expression (the declarator
 /// init / returned / assigned value). But when that value is a ternary
-/// `cond ? a : b`, the callback lives in exactly one arm and its value
-/// reaches the host *through* that arm — so the proxy must stand for the
-/// arm's own call (`items.map()`), not the whole `cond ? … : …` text,
-/// which would otherwise render as a raw head duplicating the
-/// `ternary ?:` container. Descend into the arm that contains the call
-/// (recursing for nested ternaries); the host span itself is kept by the
-/// caller so the result-variable pairing (by init offset) is unaffected.
-/// A call in the ternary's `test` matches no arm and falls back to the
-/// whole expression.
+/// `cond ? a : b`, the callback lives in exactly one part — the `test`,
+/// the `consequent`, or the `alternate` — so the proxy must stand for
+/// that part's own call (`items.map()`), not the whole `cond ? … : …`
+/// text, which would otherwise render as a raw head duplicating the
+/// `ternary ?:` container. This holds even when the call is the ternary's
+/// `test` (`items.map(cb) ? a : b`): the proxy still stands for
+/// `items.map()`. The arms' results reach the host as the binding's
+/// value while the test's does not, but that distinction is carried by
+/// the host span (the whole ternary, kept by the caller for the
+/// result-variable pairing by init offset), not by this head label.
+/// Descend into the part that contains the call (recursing for nested
+/// ternaries).
 fn head_source_for_call<'b, 'a>(bound: &'b Expression<'a>, call_span: Span) -> &'b Expression<'a> {
     if let Expression::ConditionalExpression(cond) = bound {
-        for arm in [&cond.consequent, &cond.alternate] {
-            let s = arm.span();
+        for part in [&cond.test, &cond.consequent, &cond.alternate] {
+            let s = part.span();
             if s.start <= call_span.start && call_span.end <= s.end {
-                return head_source_for_call(arm, call_span);
+                return head_source_for_call(part, call_span);
             }
         }
     }

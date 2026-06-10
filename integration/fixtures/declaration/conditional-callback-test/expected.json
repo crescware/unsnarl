@@ -1,0 +1,159 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/declaration/conditional-callback-test/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_items_6",
+      "name": "items",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_a_31",
+      "name": "a",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_b_46",
+      "name": "b",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_result_62",
+      "name": "result",
+      "line": 5,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": true,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "subgraph",
+      "id": "call_proxy_71",
+      "kind": "call-proxy",
+      "line": 5,
+      "endLine": null,
+      "direction": "RL",
+      "callName": "items.map()",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_1",
+          "kind": "function",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "ownerNodeId": null,
+          "ownerName": "",
+          "callbackArg": {
+            "callee": "items.map",
+            "argIndex": 0
+          },
+          "elements": [
+            {
+              "type": "node",
+              "id": "n_scope_1_v_82",
+              "name": "v",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false,
+              "kind": "FormalParameter"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_71",
+      "kind": "conditional-container",
+      "line": 5,
+      "endLine": null,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_2",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_71",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 5,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 5,
+          "endLine": 5,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "call_proxy_71",
+      "to": "n_scope_0_result_62",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_items_6",
+      "to": "ternary_test_scope_0_71",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_1_v_82",
+      "to": "ternary_test_scope_0_71",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_a_31",
+      "to": "call_proxy_71",
+      "label": "read"
+    },
+    {
+      "from": "n_scope_0_b_46",
+      "to": "call_proxy_71",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

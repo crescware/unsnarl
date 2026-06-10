@@ -1,17 +1,16 @@
 //! Sibling tests for [`head_source_for_call`].
 //!
-//! The helper descends a ternary `bound` expression into whichever arm
-//! contains the callback's enclosing call (by span containment),
-//! recursing for nested ternaries, so the CallProxy is labelled by the
-//! arm's own call rather than the whole `cond ? … : …` text. Each branch
-//! is pinned by parsing a one-statement program, locating the call's
-//! byte span by its source text, and slicing the source by the returned
-//! head span.
+//! The helper descends a ternary `bound` expression into whichever part
+//! — `test`, `consequent`, or `alternate` — contains the callback's
+//! enclosing call (by span containment), recursing for nested ternaries,
+//! so the CallProxy is labelled by that part's own call rather than the
+//! whole `cond ? … : …` text. Each branch is pinned by parsing a
+//! one-statement program, locating the call's byte span by its source
+//! text, and slicing the source by the returned head span.
 //!
-//! The fallback when the call sits in the ternary's `test` position
-//! (matching no arm, so the whole expression is returned) has undefined
-//! expected behaviour tracked in issue #278 and is intentionally not
-//! asserted here.
+//! A call in the ternary's `test` position (`items.map(cb) ? a : b`)
+//! descends into the test just as the arms do, so its head is the test's
+//! own call rather than the whole expression (issue #278).
 
 use oxc_ast::ast::{Expression, Program, Statement};
 use oxc_span::{GetSpan, Span};
@@ -58,6 +57,17 @@ fn call_in_consequent_descends_into_that_arm() {
 fn call_in_alternate_descends_into_that_arm() {
     let alloc = oxc_allocator::Allocator::default();
     let src = "cond ? x : items.map(cb);";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program, "items.map(cb)"), "items.map(cb)");
+}
+
+#[test]
+fn call_in_test_descends_into_the_test() {
+    // `items.map(cb) ? a : b`: the callback's call is the ternary's
+    // test, so the head is the test's own call -- the proxy stands for
+    // `items.map()`, not the whole `cond ? … : …` text (issue #278).
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "items.map(cb) ? a : b;";
     let program = parse_ts(&alloc, src);
     assert_eq!(head_slice(src, &program, "items.map(cb)"), "items.map(cb)");
 }
