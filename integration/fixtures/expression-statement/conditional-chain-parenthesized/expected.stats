@@ -1,0 +1,4 @@
+2	0	integration/fixtures/expression-statement/conditional-chain-parenthesized/input.ts:1 score
+0	1	integration/fixtures/expression-statement/conditional-chain-parenthesized/input.ts:3 ternary-test
+0	1	integration/fixtures/expression-statement/conditional-chain-parenthesized/input.ts:5 ternary-test
+2	2	3 total

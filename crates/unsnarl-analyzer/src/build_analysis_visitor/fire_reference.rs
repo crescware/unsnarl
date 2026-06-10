@@ -3,7 +3,7 @@
 
 use oxc_ast::ast::Expression;
 use oxc_ast::AstKind;
-use oxc_span::Span;
+use oxc_span::{GetSpan, Span};
 
 use unsnarl_annotations::ReferenceAnnotation;
 use unsnarl_ir::primitive::Utf8ByteOffset;
@@ -111,6 +111,7 @@ impl<'a, 'arena> BuildAnalysisVisitor<'a, 'arena> {
                             Some(build_expression_statement_container(
                                 es.span,
                                 Some(head_expr),
+                                parenthesized_conditional_start(&es.expression),
                             ))
                         }
                     }
@@ -161,13 +162,18 @@ fn is_synthetic_arrow_body_expression_statement(path: &[PathFrame<'_>], i: usize
 
 /// The sub-expression whose head should label a ternary statement's
 /// CallProxy: the arm that holds a call (`cond ? items.map(cb) : x` →
-/// `items.map(cb)`), recursing through nested ternaries. A non-ternary
-/// statement, or a ternary with no call arm, yields the expression
-/// itself; a value-only ternary's reads never target the resulting Raw
-/// head, since the visual layer routes a ternary arm's plain values to
-/// their consumer rather than this container.
+/// `items.map(cb)`), recursing through nested ternaries. Wrapping
+/// parentheses are stripped first, so `(cond ? a() : b())` is handled
+/// identically to its unparenthesized form (issue #276). A non-ternary
+/// statement yields the expression *as given* (parentheses intact —
+/// a parenthesized non-conditional's head is out of scope here); a
+/// ternary with no call arm yields the parenthesis-stripped
+/// conditional. A value-only ternary's reads never target the
+/// resulting Raw head, since the visual layer routes a ternary arm's
+/// plain values to their consumer rather than this container.
 fn ternary_statement_head_expr<'e>(expr: &'e Expression<'e>) -> &'e Expression<'e> {
-    let Expression::ConditionalExpression(cond) = expr else {
+    let inner = strip_parens(expr);
+    let Expression::ConditionalExpression(cond) = inner else {
         return expr;
     };
     for arm in [&cond.consequent, &cond.alternate] {
@@ -177,7 +183,37 @@ fn ternary_statement_head_expr<'e>(expr: &'e Expression<'e>) -> &'e Expression<'
             _ => {}
         }
     }
+    inner
+}
+
+/// Strip any wrapping `ParenthesizedExpression`s, returning the
+/// innermost expression. `(x)` and `((x))` both reduce to `x`; an
+/// unparenthesized expression is returned unchanged. The parser keeps
+/// these nodes (`preserve_parens` defaults on), so a parenthesized
+/// ternary is a `ParenthesizedExpression` wrapping a
+/// `ConditionalExpression` rather than the conditional itself.
+fn strip_parens<'e>(mut expr: &'e Expression<'e>) -> &'e Expression<'e> {
+    while let Expression::ParenthesizedExpression(p) = expr {
+        expr = &p.expression;
+    }
     expr
+}
+
+/// Start of the inner `ConditionalExpression` for a *parenthesized*
+/// bare ternary statement (`(cond ? a : b);`), or `None` otherwise.
+///
+/// A parenthesized statement's span starts at `(`, so its container
+/// `start_offset` no longer coincides with the `ConditionalExpression`
+/// start that the visual layer keys bare-ternary detection on. This
+/// recovers that inner start. `None` for an unparenthesized expression
+/// (start already correct) and for a parenthesized non-conditional
+/// (not a ternary, so detection does not apply) — keeping both out of
+/// the serialized IR so existing baselines are unchanged.
+fn parenthesized_conditional_start(expr: &Expression<'_>) -> Option<Utf8ByteOffset> {
+    let inner = strip_parens(expr);
+    let stripped_parens = inner.span().start != expr.span().start;
+    (stripped_parens && matches!(inner, Expression::ConditionalExpression(_)))
+        .then(|| Utf8ByteOffset(inner.span().start))
 }
 
 #[cfg(test)]

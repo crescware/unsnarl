@@ -339,6 +339,7 @@ fn expr_stmt_container(
             start_span: span_offset_line(start, 1),
             end_span: span_offset_line(end, 3),
         },
+        expression_start_span: None,
     }
 }
 

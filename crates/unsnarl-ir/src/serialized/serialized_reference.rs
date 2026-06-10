@@ -56,6 +56,11 @@ pub struct SerializedExpressionStatementContainer {
     pub start_span: Span,
     pub end_span: Span,
     pub head: SerializedHeadExpression,
+    /// Inner `ConditionalExpression` start for a parenthesized bare
+    /// ternary statement (`(cond ? a : b);`); omitted otherwise. See
+    /// [`crate::reference::ExpressionStatementContainer::expression_start_offset`].
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_start_span: Option<Span>,
 }
 
 /// Reference-side completion in serialized (span-based) form.

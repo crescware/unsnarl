@@ -30,12 +30,14 @@ pub fn emit_reference_edges(
     var_var_ids: &HashSet<&str>,
 ) {
     // Start offsets of every `ConditionalExpression` (shared by its two
-    // arms via `parent_span_offset`). A statement whose container starts
+    // arms via `parent_span_offset`). A statement whose container keys
     // here is a *bare ternary statement* (`cond ? a : b;`) — its value is
     // discarded — as opposed to a ternary nested in a consumer
     // (`foo(cond ? a : b);`), whose arm values reach the consumer's
     // container instead. Used below to drop a discarded ternary arm's
-    // spurious edge.
+    // spurious edge. The container key is its `expression_start_span`
+    // when present (a parenthesized bare ternary, whose statement span
+    // opens at `(`), else its statement start.
     let ternary_stmt_starts: HashSet<u32> = ctx
         .scope_map
         .values()
@@ -252,10 +254,23 @@ pub fn emit_reference_edges(
             // a ternary statement's, so its arm values still reach the
             // consumer.
             let off = r.identifier.span().offset.0;
-            let is_ternary_stmt = r
-                .expression_statement_container
-                .as_ref()
-                .is_some_and(|c| ternary_stmt_starts.contains(&c.start_span.offset.0));
+            let is_ternary_stmt = r.expression_statement_container.as_ref().is_some_and(|c| {
+                // A parenthesized bare ternary statement
+                // (`(cond ? a : b);`) opens its container span at `(`,
+                // so its `start_span` no longer lands on the
+                // ConditionalExpression start collected above. Key the
+                // lookup on `expression_start_span` — the inner
+                // conditional's start — when the analyzer recorded one;
+                // the unparenthesized form has none and keys on the
+                // statement start exactly as before (issue #276).
+                let key = c
+                    .expression_start_span
+                    .as_ref()
+                    .unwrap_or(&c.start_span)
+                    .offset
+                    .0;
+                ternary_stmt_starts.contains(&key)
+            });
             let in_callback_arm = state
                 .ternary_callback_arm_spans
                 .iter()

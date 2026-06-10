@@ -32,11 +32,13 @@ pub fn nearest_expression_statement(path: &[PathEntry]) -> Option<&PathEntry> {
 pub fn build_expression_statement_container(
     statement_span: Span,
     expression: Option<&Expression<'_>>,
+    expression_start_offset: Option<Utf8ByteOffset>,
 ) -> ExpressionStatementContainer {
     ExpressionStatementContainer {
         start_offset: Utf8ByteOffset(statement_span.start),
         end_offset: Utf8ByteOffset(statement_span.end),
         head: build_head_expression(expression, statement_span),
+        expression_start_offset,
     }
 }
 

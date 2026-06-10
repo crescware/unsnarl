@@ -30,6 +30,7 @@ fn ref_with_head(
         start_span: span_offset_line(start_offset, start_line),
         end_span: span_offset_line(end_offset, end_line),
         head,
+        expression_start_span: None,
     });
     r
 }

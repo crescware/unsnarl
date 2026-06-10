@@ -206,6 +206,7 @@ pub fn serialize_reference(
             start_span,
             end_span,
             head,
+            expression_start_span: c.expression_start_offset.map(|o| index.span_at(o)),
         }
     });
 
