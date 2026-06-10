@@ -1,0 +1,6 @@
+1	0	integration/fixtures/expression-statement/conditional-with-callback-parenthesized/input.ts:1 items
+1	0	integration/fixtures/expression-statement/conditional-with-callback-parenthesized/input.ts:2 enabled
+0	1	integration/fixtures/expression-statement/conditional-with-callback-parenthesized/input.ts:4 ternary-test
+1	0	integration/fixtures/expression-statement/conditional-with-callback-parenthesized/input.ts:4 v
+0	1	integration/fixtures/expression-statement/conditional-with-callback-parenthesized/input.ts:4 v
+3	2	5 total

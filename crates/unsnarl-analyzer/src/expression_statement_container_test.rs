@@ -61,9 +61,10 @@ fn build_container_uses_statement_span_and_head_from_expression() {
         Statement::ExpressionStatement(es) => es,
         _ => unreachable!(),
     };
-    let container = build_expression_statement_container(stmt.span, Some(&stmt.expression));
+    let container = build_expression_statement_container(stmt.span, Some(&stmt.expression), None);
     assert_eq!(container.start_offset.0, stmt.span.start);
     assert_eq!(container.end_offset.0, stmt.span.end);
+    assert!(container.expression_start_offset.is_none());
     assert!(matches!(
         container.head,
         HeadExpression::Identifier { ref name } if name == "foo"
@@ -82,13 +83,13 @@ fn build_container_falls_back_to_raw_when_expression_is_unrecognised() {
         Statement::ExpressionStatement(es) => es,
         _ => unreachable!(),
     };
-    let container = build_expression_statement_container(stmt.span, Some(&stmt.expression));
+    let container = build_expression_statement_container(stmt.span, Some(&stmt.expression), None);
     assert!(matches!(container.head, HeadExpression::Raw { .. }));
 }
 
 #[test]
 fn build_container_falls_back_to_raw_when_expression_missing() {
-    let container = build_expression_statement_container(Span::new(5, 10), None);
+    let container = build_expression_statement_container(Span::new(5, 10), None, None);
     match container.head {
         HeadExpression::Raw {
             start_offset,
@@ -99,4 +100,12 @@ fn build_container_falls_back_to_raw_when_expression_missing() {
         }
         _ => panic!("expected raw head"),
     }
+}
+
+#[test]
+fn build_container_records_supplied_expression_start_offset() {
+    use unsnarl_ir::Utf8ByteOffset;
+    let container =
+        build_expression_statement_container(Span::new(0, 10), None, Some(Utf8ByteOffset(1)));
+    assert_eq!(container.expression_start_offset, Some(Utf8ByteOffset(1)));
 }

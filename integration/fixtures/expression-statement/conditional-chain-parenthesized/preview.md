@@ -1,0 +1,56 @@
+# integration/fixtures/expression-statement/conditional-chain-parenthesized/input.ts
+
+## Input
+
+```ts
+const score = 75;
+
+(score > 90
+  ? "high"
+  : score > 60
+    ? "mid"
+    : "low");
+```
+
+## Mermaid
+
+```mermaid
+%%{init: {"flowchart": {"defaultRenderer": "elk"}}}%%
+flowchart RL
+  n_scope_0_score_6["score<br/>L1"]
+  subgraph cont_ternary_scope_0_20["ternary ?: L3-7"]
+    direction RL
+    subgraph s_scope_1["? then L4"]
+      direction RL
+      ternary_test_scope_0_20{"ternary ?:<br/>L3"}
+    end
+    subgraph s_scope_2[": else L5-7"]
+      direction RL
+      subgraph cont_ternary_scope_2_46["ternary ?: L5-7"]
+        direction RL
+        subgraph s_scope_3["? then L6"]
+          direction RL
+          ternary_test_scope_2_46{"ternary ?:<br/>L5"}
+        end
+        subgraph s_scope_4[": else L7"]
+          direction RL
+          elk_empty_s_scope_4["No nodes"]
+        end
+      end
+    end
+  end
+  n_scope_0_score_6 -->|read| ternary_test_scope_0_20
+  n_scope_0_score_6 -->|read| ternary_test_scope_2_46
+  classDef nestL1 fill:#11192a,stroke:transparent;
+  class cont_ternary_scope_0_20 nestL1;
+  classDef nestL2 fill:#1a2538,stroke:transparent;
+  class s_scope_1 nestL2;
+  class s_scope_2 nestL2;
+  classDef nestL3 fill:#243047,stroke:transparent;
+  class cont_ternary_scope_2_46 nestL3;
+  classDef nestL4 fill:#2d3b57,stroke:transparent;
+  class s_scope_3 nestL4;
+  class s_scope_4 nestL4;
+  classDef elkEmptyPlaceholder fill:transparent,stroke:transparent;
+  class elk_empty_s_scope_4 elkEmptyPlaceholder;
+```

@@ -16,7 +16,7 @@ use oxc_span::GetSpan;
 
 use crate::analyzer_fixtures::parse_ts;
 
-use super::ternary_statement_head_expr;
+use super::{parenthesized_conditional_start, ternary_statement_head_expr};
 
 fn expression_of<'a>(program: &'a Program<'a>) -> &'a Expression<'a> {
     match program.body.first().expect("one statement") {
@@ -82,4 +82,76 @@ fn ternary_with_no_call_arm_yields_the_expression_itself() {
     let src = "cond ? a : b;";
     let program = parse_ts(&alloc, src);
     assert_eq!(head_slice(src, &program), "cond ? a : b");
+}
+
+#[test]
+fn parenthesized_ternary_consequent_call_is_chosen() {
+    // Parentheses around the whole ternary are stripped before the
+    // arm scan, so the call arm is chosen exactly as in the
+    // unparenthesized form (issue #276).
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(cond ? items.map(cb) : x);";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program), "items.map(cb)");
+}
+
+#[test]
+fn parenthesized_nested_ternary_arm_recurses_to_its_call() {
+    // The parenthesized counterpart of
+    // `nested_ternary_arm_recurses_to_its_call`: the wrapping
+    // parentheses are stripped, then the helper recurses through the
+    // inner ternary to its call — the most complex paren + recursion
+    // path (issue #276).
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(cond ? inner ? deep.map(cb) : y : z);";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program), "deep.map(cb)");
+}
+
+#[test]
+fn parenthesized_value_only_ternary_yields_the_stripped_conditional() {
+    // No call arm: the head is the conditional with the wrapping
+    // parentheses stripped, not the verbatim `(cond ? a : b)`.
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(cond ? a : b);";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program), "cond ? a : b");
+}
+
+#[test]
+fn parenthesized_non_ternary_yields_the_expression_as_given() {
+    // A parenthesized non-conditional is out of scope here: its head
+    // keeps the surrounding parentheses, unchanged from before.
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(items.map(cb));";
+    let program = parse_ts(&alloc, src);
+    assert_eq!(head_slice(src, &program), "(items.map(cb))");
+}
+
+#[test]
+fn parenthesized_conditional_start_points_at_inner_conditional() {
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(cond ? a : b);";
+    let program = parse_ts(&alloc, src);
+    let off = parenthesized_conditional_start(expression_of(&program))
+        .expect("a parenthesized conditional records its inner start");
+    // Just past the opening paren, at the ConditionalExpression itself.
+    assert_eq!(off.0, 1);
+    assert!(src[off.0 as usize..].starts_with("cond ? a : b"));
+}
+
+#[test]
+fn parenthesized_conditional_start_is_none_for_unparenthesized_conditional() {
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "cond ? a : b;";
+    let program = parse_ts(&alloc, src);
+    assert!(parenthesized_conditional_start(expression_of(&program)).is_none());
+}
+
+#[test]
+fn parenthesized_conditional_start_is_none_for_parenthesized_non_conditional() {
+    let alloc = oxc_allocator::Allocator::default();
+    let src = "(foo());";
+    let program = parse_ts(&alloc, src);
+    assert!(parenthesized_conditional_start(expression_of(&program)).is_none());
 }

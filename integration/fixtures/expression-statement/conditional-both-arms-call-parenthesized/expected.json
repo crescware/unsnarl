@@ -1,0 +1,111 @@
+{
+  "version": 1,
+  "source": {
+    "path": "integration/fixtures/expression-statement/conditional-both-arms-call-parenthesized/input.ts",
+    "language": "ts"
+  },
+  "direction": "RL",
+  "elements": [
+    {
+      "type": "node",
+      "id": "n_scope_0_cond_6",
+      "name": "cond",
+      "line": 1,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "ConstBinding",
+      "initIsFunction": false
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_doA_28",
+      "name": "doA",
+      "line": 2,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "node",
+      "id": "n_scope_0_doB_46",
+      "name": "doB",
+      "line": 3,
+      "endLine": null,
+      "isJsxElement": false,
+      "unused": false,
+      "kind": "FunctionDeclaration"
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_1",
+      "kind": "function",
+      "line": 2,
+      "endLine": 2,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_doA_28",
+      "ownerName": "doA",
+      "elements": []
+    },
+    {
+      "type": "subgraph",
+      "id": "s_scope_2",
+      "kind": "function",
+      "line": 3,
+      "endLine": 3,
+      "direction": "RL",
+      "ownerNodeId": "n_scope_0_doB_46",
+      "ownerName": "doB",
+      "elements": []
+    },
+    {
+      "type": "subgraph",
+      "id": "cont_ternary_scope_0_56",
+      "kind": "conditional-container",
+      "line": 4,
+      "endLine": null,
+      "direction": "RL",
+      "elements": [
+        {
+          "type": "subgraph",
+          "id": "s_scope_3",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [
+            {
+              "type": "node",
+              "id": "ternary_test_scope_0_56",
+              "kind": "SyntheticConditionalTest",
+              "name": "ternary-test",
+              "line": 4,
+              "endLine": null,
+              "isJsxElement": false,
+              "unused": false
+            }
+          ],
+          "kind": "consequent"
+        },
+        {
+          "type": "subgraph",
+          "id": "s_scope_4",
+          "line": 4,
+          "endLine": 4,
+          "direction": "RL",
+          "elements": [],
+          "kind": "alternate"
+        }
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "n_scope_0_cond_6",
+      "to": "ternary_test_scope_0_56",
+      "label": "read"
+    }
+  ],
+  "boundaryEdges": [],
+  "pruning": null
+}

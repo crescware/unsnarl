@@ -13,6 +13,7 @@ fn container(start: u32, end: u32) -> SerializedExpressionStatementContainer {
         end_span: span_offset_line(end, 1),
         // The head is irrelevant to containment; only the spans matter.
         head: SerializedHeadExpression::identifier("x".to_string()),
+        expression_start_span: None,
     }
 }
 
